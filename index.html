@@ -3,186 +3,289 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, viewport-fit=cover">
-  <title>Wroomer.pl - Darmowe ogłoszenia motoryzacyjne | Auta, części, motocykle</title>
-  <meta name="description" content="Wroomer.pl - darmowe ogłoszenia motoryzacyjne. Dodaj ogłoszenie auta za darmo.">
+  <title>Wroomer.pl - Darmowe ogłoszenia motoryzacyjne</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = { theme: { extend: { fontFamily: { sans: ['Inter','system-ui','sans-serif'] } } } }
-  </script>
+  <script>tailwind.config={theme:{extend:{fontFamily:{sans:['Inter','system-ui','sans-serif']}}}}</script>
   <style>
     *{font-family:'Inter',system-ui,sans-serif}
+    .line-clamp-2{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
     .scrollbar-hide{-ms-overflow-style:none;scrollbar-width:none}.scrollbar-hide::-webkit-scrollbar{display:none}
   </style>
 </head>
-<body class="bg-[#f8f9fa]">
+<body class="bg-[#f5f5f7] antialiased">
   <div id="root"></div>
 
   <script type="text/babel">
     const { useState, useEffect, useMemo } = React;
 
     const MOCK_ADS = [
-      { id: 1, title: "BMW 320d F30 2018 - Idealny stan", brand: "BMW", model: "3", year: 2018, price: 65900, mileage: 89000, fuel: "Diesel", gearbox: "Automatyczna", power: 190, location: "Warszawa", description: "Zadbany, serwisowany w ASO, bezwypadkowy.", image: "https://images.unsplash.com/photo-1555215695-3004980ad54e?w=600", createdAt: new Date().toISOString() },
-      { id: 2, title: "Audi A4 B9 2.0 TFSI 2019", brand: "Audi", model: "A4", year: 2019, price: 78900, mileage: 67000, fuel: "Benzyna", gearbox: "Automatyczna", power: 190, location: "Kraków", description: "Pierwszy właściciel, pełna historia serwisowa.", image: "https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=600", createdAt: new Date().toISOString() },
-      { id: 3, title: "VW Golf VII 1.5 TSI 2020", brand: "Volkswagen", model: "Golf", year: 2020, price: 54900, mileage: 45000, fuel: "Benzyna", gearbox: "Manualna", power: 150, location: "Wrocław", description: "Bardzo zadbany, garażowany.", image: "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=600", createdAt: new Date().toISOString() },
+      { id: 1, title: "BMW 320d F30 2018", brand: "BMW", model: "3 Series", year: 2018, price: 65900, mileage: 89000, fuel: "Diesel", gearbox: "Automatyczna", power: 190, location: "Warszawa", description: "Zadbany egzemplarz, serwisowany w ASO BMW. Bezwypadkowy, pierwszy właściciel w Polsce. Pełna historia serwisowa, książka serwisowa. Stan techniczny i wizualny bardzo dobry. Opony letnie + zimowe na alufelgach. Możliwość sprawdzenia na stacji diagnostycznej.", image: "https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800", images: ["https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800","https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=800","https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800"], owner: "Marek K.", phone: "600 123 456", createdAt: "2 godziny temu" },
+      { id: 2, title: "Audi A4 B9 2.0 TFSI 2019", brand: "Audi", model: "A4", year: 2019, price: 78900, mileage: 67000, fuel: "Benzyna", gearbox: "Automatyczna", power: 190, location: "Kraków", description: "Audi A4 w wersji Avant. S-line, wirtualny kokpit, LED matrix, masaże, nagłośnienie Bang & Olufsen. Auto z polskiego salonu, gwarancja do 2026.", image: "https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=800", images: ["https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=800","https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800"], owner: "Auto-Kompleks", phone: "500 987 654", createdAt: "5 godzin temu" },
+      { id: 3, title: "VW Golf VII 1.5 TSI 2020", brand: "Volkswagen", model: "Golf", year: 2020, price: 54900, mileage: 45000, fuel: "Benzyna", gearbox: "Manualna", power: 150, location: "Wrocław", description: "Golf w idealnym stanie, garażowany, niepalący. Nowe opony, rozrząd zrobiony przy 40k.", image: "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800", images: ["https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800"], owner: "Piotr W.", phone: "600 111 222", createdAt: "1 dzień temu" },
+      { id: 4, title: "Mercedes C200 W205 2017", brand: "Mercedes", model: "C-Klasa", year: 2017, price: 72900, mileage: 95000, fuel: "Benzyna", gearbox: "Automatyczna", power: 184, location: "Gdańsk", description: "AMG Line, panorama, Burmester. Zadbany.", image: "https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=800", images: ["https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=800"], owner: "Anna M.", phone: "600 333 444", createdAt: "1 dzień temu" },
+      { id: 5, title: "Skoda Octavia 2.0 TDI 2021", brand: "Skoda", model: "Octavia", year: 2021, price: 62900, mileage: 38000, fuel: "Diesel", gearbox: "Manualna", power: 150, location: "Poznań", description: "Kombi, bardzo oszczędna, 5.2l/100km. Klimatyzacja, CarPlay.", image: "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=800", images: ["https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=800"], owner: "Tomasz L.", phone: "600 555 666", createdAt: "2 dni temu" },
+      { id: 6, title: "Toyota Corolla 1.8 Hybrid 2022", brand: "Toyota", model: "Corolla", year: 2022, price: 79900, mileage: 22000, fuel: "Hybryda", gearbox: "Automatyczna", power: 122, location: "Katowice", description: "Hybryda, 3.8l/100km w mieście. Gwarancja Toyota do 2027.", image: "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=800", images: ["https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=800"], owner: "Salon Toyota", phone: "600 777 888", createdAt: "3 dni temu" },
     ];
 
     function App() {
       const [ads, setAds] = useState(() => {
-        try {
-          const saved = localStorage.getItem('wroomer_ads_final');
-          return saved ? JSON.parse(saved) : MOCK_ADS;
-        } catch(e){ return MOCK_ADS; }
+        try { const s = localStorage.getItem('wroomer_ads_v3'); return s ? JSON.parse(s) : MOCK_ADS; } catch(e){ return MOCK_ADS; }
       });
       const [search, setSearch] = useState('');
+      const [selected, setSelected] = useState(null);
       const [showAdd, setShowAdd] = useState(false);
-      const [form, setForm] = useState({ title: '', brand: '', model: '', year: 2020, price: '', mileage: '', fuel: 'Benzyna', gearbox: 'Manualna', power: '', location: '', description: '' });
+      const [form, setForm] = useState({ brand: '', model: '', year: 2020, price: '', mileage: '', fuel: 'Benzyna', gearbox: 'Manualna', power: '', location: '', title: '', description: '' });
+      const [mobileMenu, setMobileMenu] = useState(false);
+      const [imgIdx, setImgIdx] = useState(0);
 
-      useEffect(() => {
-        try { localStorage.setItem('wroomer_ads_final', JSON.stringify(ads)); } catch(e){}
-      }, [ads]);
+      useEffect(() => { try { localStorage.setItem('wroomer_ads_v3', JSON.stringify(ads)); } catch(e){} }, [ads]);
+      useEffect(() => { if(selected) setImgIdx(0); }, [selected]);
+      useEffect(() => { document.body.style.overflow = selected || showAdd ? 'hidden' : ''; return () => document.body.style.overflow = ''; }, [selected, showAdd]);
 
       const filtered = useMemo(() => {
-        const s = search.toLowerCase();
+        const s = search.toLowerCase().trim();
         if(!s) return ads;
-        return ads.filter(a => 
-          a.title.toLowerCase().includes(s) || 
-          a.brand.toLowerCase().includes(s) || 
-          a.model.toLowerCase().includes(s) ||
-          a.location.toLowerCase().includes(s)
-        );
+        return ads.filter(a => `${a.title} ${a.brand} ${a.model} ${a.location}`.toLowerCase().includes(s));
       }, [ads, search]);
 
       const handleAdd = (e) => {
         e.preventDefault();
         const newAd = {
           id: Date.now(),
-          title: form.title || `${form.brand} ${form.model} ${form.year}`,
-          brand: form.brand,
-          model: form.model,
+          title: form.title || `${form.brand} ${form.model} ${form.year}`.trim() || 'Nowe ogłoszenie',
+          brand: form.brand || 'Inne',
+          model: form.model || '',
           year: parseInt(form.year) || 2020,
           price: parseInt(form.price) || 0,
           mileage: parseInt(form.mileage) || 0,
           fuel: form.fuel,
           gearbox: form.gearbox,
           power: parseInt(form.power) || 0,
-          location: form.location,
-          description: form.description,
-          image: `https://picsum.photos/seed/${Date.now()}/600/400`,
-          createdAt: new Date().toISOString()
+          location: form.location || 'Polska',
+          description: form.description || 'Brak opisu.',
+          image: `https://picsum.photos/seed/${Date.now()}/800/600`,
+          images: [`https://picsum.photos/seed/${Date.now()}/800/600`],
+          owner: 'Ty',
+          phone: 'Twój numer',
+          createdAt: 'Teraz'
         };
         setAds([newAd, ...ads]);
         setShowAdd(false);
-        setForm({ title: '', brand: '', model: '', year: 2020, price: '', mileage: '', fuel: 'Benzyna', gearbox: 'Manualna', power: '', location: '', description: '' });
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        setForm({ brand: '', model: '', year: 2020, price: '', mileage: '', fuel: 'Benzyna', gearbox: 'Manualna', power: '', location: '', title: '', description: '' });
+        setSelected(newAd);
       };
 
       return (
         <div className="min-h-screen">
-          <header className="sticky top-0 z-40 bg-black text-white border-b border-neutral-800">
-            <div className="max-w-[1280px] mx-auto px-4 h-[64px] flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-[#ffea00] rounded-md flex items-center justify-center font-black text-black">W</div>
-                <div className="font-black text-[20px] tracking-tight">WROOMER<span className="text-[#ffea00]">.PL</span></div>
-                <div className="hidden md:flex ml-8 gap-6 text-[13px] font-medium text-neutral-400">
-                  <span className="text-white">Ogłoszenia</span>
-                  <span>Dealerzy</span>
-                  <span>Wycena</span>
+          <header className="sticky top-0 z-30 bg-black text-white border-b border-neutral-800">
+            <div className="max-w-[1280px] mx-auto px-3 md:px-4 h-[56px] md:h-[60px] flex items-center justify-between">
+              <div className="flex items-center gap-2 md:gap-3">
+                <button onClick={()=>setMobileMenu(!mobileMenu)} className="md:hidden w-8 h-8 flex items-center justify-center">☰</button>
+                <div className="flex items-center gap-2 cursor-pointer" onClick={()=>setSelected(null)}>
+                  <div className="w-7 h-7 md:w-8 md:h-8 bg-[#ffea00] rounded-[6px] flex items-center justify-center font-black text-black text-[14px]">W</div>
+                  <div className="font-black text-[16px] md:text-[18px] tracking-tight">WROOMER<span className="text-[#ffea00]">.PL</span></div>
+                </div>
+                <div className="hidden lg:flex ml-6 gap-5 text-[13px] font-medium text-neutral-400">
+                  <button onClick={()=>{setSelected(null); window.scrollTo(0,0)}} className="text-white">Ogłoszenia</button>
+                  <span className="hover:text-white cursor-pointer">Dealerzy</span>
+                  <span className="hover:text-white cursor-pointer">Wycena</span>
                 </div>
               </div>
-              <div className="flex items-center gap-3">
-                <button onClick={() => setShowAdd(true)} className="bg-[#ffea00] text-black px-4 py-2 rounded-md font-bold text-[14px] hover:bg-[#ffe000]">+ Dodaj ogłoszenie</button>
+              <div className="flex items-center gap-2">
+                <button onClick={()=>setShowAdd(true)} className="bg-[#ffea00] text-black px-3 md:px-4 py-1.5 md:py-2 rounded-[8px] font-bold text-[12px] md:text-[13px] hover:bg-[#ffe000] transition-colors">+ Dodaj</button>
               </div>
             </div>
+            {mobileMenu && (
+              <div className="md:hidden bg-[#111] border-t border-neutral-800 px-4 py-3 flex gap-4 text-[13px] text-neutral-300">
+                <button onClick={()=>{setSelected(null); setMobileMenu(false)}} className="text-white font-semibold">Ogłoszenia</button>
+                <span>Dealerzy</span><span>Wycena</span>
+              </div>
+            )}
           </header>
 
           <div className="bg-black text-white">
-            <div className="max-w-[1280px] mx-auto px-4 py-12 md:py-16">
-              <div className="max-w-[720px]">
-                <h1 className="text-[36px] md:text-[52px] font-black leading-[0.95] tracking-tight mb-4">Darmowe ogłoszenia<br/><span className="text-[#ffea00]">motoryzacyjne</span></h1>
-                <p className="text-neutral-400 text-[16px] md:text-[18px] mb-8">Dodaj ogłoszenie auta, części lub motocykla za darmo. Bez prowizji, bez limitów. {ads.length} ogłoszeń.</p>
-                <div className="flex gap-3 max-w-[520px]">
-                  <input value={search} onChange={e=>setSearch(e.target.value)} placeholder="Szukaj: BMW, Audi, Warszawa..." className="flex-1 bg-[#111] border border-neutral-800 rounded-lg px-4 py-3 text-[15px] text-white placeholder-neutral-500 focus:outline-none focus:border-[#ffea00]" />
-                  <button className="bg-white text-black px-6 py-3 rounded-lg font-bold text-[14px]">Szukaj</button>
+            <div className="max-w-[1280px] mx-auto px-3 md:px-4 py-8 md:py-12">
+              <div className="max-w-[640px]">
+                <h1 className="text-[28px] md:text-[44px] font-black leading-[0.95] tracking-tight mb-3">Darmowe ogłoszenia<br/><span className="text-[#ffea00]">motoryzacyjne</span></h1>
+                <p className="text-neutral-400 text-[14px] md:text-[16px] mb-6">Dodaj auto za darmo. Bez prowizji. <span className="text-white font-semibold">{ads.length} ogłoszeń</span> • Firefox ready</p>
+                <div className="flex gap-2">
+                  <div className="flex-1 relative">
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-500 text-[14px]">🔍</span>
+                    <input value={search} onChange={e=>setSearch(e.target.value)} placeholder="Szukaj: BMW, Warszawa, Diesel..." className="w-full bg-[#1a1a1a] border border-neutral-800 rounded-[10px] pl-9 pr-3 py-2.5 md:py-3 text-[14px] text-white placeholder-neutral-500 focus:outline-none focus:border-[#ffea00]/50 focus:bg-[#222]" />
+                  </div>
+                  <button className="bg-white text-black px-4 md:px-6 py-2.5 md:py-3 rounded-[10px] font-bold text-[13px] md:text-[14px] hover:bg-neutral-100">Szukaj</button>
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="max-w-[1280px] mx-auto px-4 py-8">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-[20px] font-bold">Najnowsze ogłoszenia <span className="text-neutral-400 font-normal text-[14px] ml-2">({filtered.length})</span></h2>
-              <div className="text-[13px] text-neutral-500">Sortowanie: Najnowsze</div>
+          <div className="max-w-[1280px] mx-auto px-3 md:px-4 py-4 md:py-6">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-[15px] md:text-[17px] font-bold">Najnowsze <span className="text-neutral-400 font-normal ml-1">({filtered.length})</span></h2>
+              <div className="hidden md:flex gap-2 text-[12px]">
+                <span className="bg-black text-white px-3 py-1 rounded-full">Wszystkie</span>
+                <span className="bg-white border px-3 py-1 rounded-full">Do 50k zł</span>
+                <span className="bg-white border px-3 py-1 rounded-full">Diesel</span>
+              </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2.5 md:gap-4">
               {filtered.map(ad => (
-                <div key={ad.id} className="bg-white border border-neutral-200 rounded-xl overflow-hidden hover:shadow-lg transition-shadow">
-                  <div className="aspect-[16/10] bg-neutral-100 relative overflow-hidden">
-                    <img src={ad.image} alt={ad.title} className="w-full h-full object-cover" loading="lazy" />
-                    <div className="absolute top-3 left-3 bg-black text-white text-[11px] font-bold px-2 py-1 rounded">{ad.fuel} • {ad.year}</div>
-                    <div className="absolute top-3 right-3 bg-[#ffea00] text-black text-[11px] font-bold px-2 py-1 rounded">{ad.location}</div>
+                <div key={ad.id} onClick={()=>setSelected(ad)} className="group bg-white border border-neutral-200 rounded-[12px] md:rounded-[14px] overflow-hidden hover:border-black hover:shadow-[0_8px_24px_rgba(0,0,0,0.08)] transition-all cursor-pointer">
+                  <div className="aspect-[4/3] bg-neutral-100 relative overflow-hidden">
+                    <img src={ad.image} alt={ad.title} className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-300" loading="lazy" />
+                    <div className="absolute top-2 left-2 bg-black/80 backdrop-blur text-white text-[10px] font-bold px-2 py-1 rounded-[6px]">{ad.year}</div>
+                    <div className="absolute bottom-2 left-2 bg-[#ffea00] text-black text-[10px] font-bold px-2 py-1 rounded-[6px]">{ad.mileage.toLocaleString('pl-PL')} km</div>
                   </div>
-                  <div className="p-4">
-                    <div className="font-bold text-[16px] leading-tight mb-1 line-clamp-2">{ad.title}</div>
-                    <div className="text-[13px] text-neutral-500 mb-3">{ad.brand} • {ad.mileage.toLocaleString('pl-PL')} km • {ad.gearbox}</div>
-                    <div className="flex items-center justify-between">
-                      <div className="text-[20px] font-black">{ad.price.toLocaleString('pl-PL')} zł</div>
-                      <button className="text-[13px] font-semibold border border-neutral-200 rounded-md px-3 py-1.5 hover:bg-black hover:text-white hover:border-black transition-colors">Szczegóły</button>
+                  <div className="p-2.5 md:p-3">
+                    <div className="font-bold text-[12px] md:text-[13px] leading-[1.25] line-clamp-2 min-h-[32px]">{ad.title}</div>
+                    <div className="text-[11px] text-neutral-500 mt-1 truncate">{ad.fuel} • {ad.gearbox} • {ad.power} KM</div>
+                    <div className="flex items-center justify-between mt-2.5">
+                      <div className="font-black text-[14px] md:text-[15px]">{ad.price.toLocaleString('pl-PL')} zł</div>
+                      <div className="text-[10px] text-neutral-400 truncate max-w-[70px]">{ad.location}</div>
                     </div>
                   </div>
                 </div>
               ))}
             </div>
-
-            {filtered.length === 0 && (
-              <div className="text-center py-20 text-neutral-400">
-                <div className="text-[48px] mb-4">🔍</div>
-                <div className="text-[16px] font-medium">Brak ogłoszeń dla "{search}"</div>
-              </div>
-            )}
           </div>
 
-          {showAdd && (
-            <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-              <div className="bg-white rounded-2xl w-full max-w-[560px] max-h-[90vh] overflow-auto">
-                <div className="sticky top-0 bg-white border-b p-5 flex items-center justify-between rounded-t-2xl">
-                  <div className="font-bold text-[18px]">Dodaj ogłoszenie</div>
-                  <button onClick={()=>setShowAdd(false)} className="w-8 h-8 rounded-full bg-neutral-100 flex items-center justify-center">✕</button>
+          {selected && (
+            <div className="fixed inset-0 z-50 bg-white md:bg-black/70 md:backdrop-blur-sm overflow-auto">
+              <div className="min-h-screen md:min-h-0 md:flex md:items-center md:justify-center md:p-4">
+                <div className="bg-white w-full md:max-w-[980px] md:rounded-[20px] md:overflow-hidden md:max-h-[90vh] md:flex md:flex-col">
+                  <div className="sticky top-0 z-10 bg-white border-b md:border-0 flex items-center justify-between p-3 md:p-4">
+                    <button onClick={()=>setSelected(null)} className="flex items-center gap-2 text-[13px] font-semibold">
+                      <span className="w-7 h-7 rounded-full bg-black text-white flex items-center justify-center">←</span>
+                      <span className="hidden md:inline">Wróć</span>
+                      <span className="md:hidden">Wróć do ogłoszeń</span>
+                    </button>
+                    <div className="flex items-center gap-2">
+                      <button className="w-8 h-8 rounded-full bg-neutral-100 flex items-center justify-center text-[14px]">♡</button>
+                      <button className="w-8 h-8 rounded-full bg-neutral-100 flex items-center justify-center text-[14px]">↗</button>
+                      <button onClick={()=>setSelected(null)} className="md:hidden w-8 h-8 rounded-full bg-neutral-900 text-white flex items-center justify-center">✕</button>
+                    </div>
+                  </div>
+
+                  <div className="md:overflow-auto md:flex">
+                    <div className="md:w-[58%]">
+                      <div className="aspect-[4/3] md:aspect-[16/11] bg-neutral-100 relative">
+                        <img src={selected.images?.[imgIdx] || selected.image} alt={selected.title} className="w-full h-full object-cover" />
+                        <div className="absolute bottom-3 left-3 right-3 flex justify-between items-end">
+                          <div className="flex gap-1.5">
+                            {(selected.images || [selected.image]).map((_, i) => (
+                              <button key={i} onClick={()=>setImgIdx(i)} className={`w-1.5 h-1.5 rounded-full ${i===imgIdx ? 'bg-white w-6' : 'bg-white/50'}`}></button>
+                            ))}
+                          </div>
+                          <div className="bg-black/70 backdrop-blur text-white text-[11px] px-2 py-1 rounded-full">{imgIdx+1}/{(selected.images || [selected.image]).length}</div>
+                        </div>
+                        {selected.images?.length > 1 && (
+                          <>
+                            <button onClick={()=>setImgIdx((imgIdx-1+(selected.images.length))%selected.images.length)} className="absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 bg-black/50 backdrop-blur text-white rounded-full flex items-center justify-center">‹</button>
+                            <button onClick={()=>setImgIdx((imgIdx+1)%selected.images.length)} className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 bg-black/50 backdrop-blur text-white rounded-full flex items-center justify-center">›</button>
+                          </>
+                        )}
+                      </div>
+                      {selected.images?.length > 1 && (
+                        <div className="hidden md:flex gap-2 p-3 overflow-auto scrollbar-hide">
+                          {selected.images.map((img, i) => (
+                            <button key={i} onClick={()=>setImgIdx(i)} className={`flex-shrink-0 w-20 h-14 rounded-lg overflow-hidden border-2 ${i===imgIdx ? 'border-black' : 'border-transparent'}`}>
+                              <img src={img} className="w-full h-full object-cover" />
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="md:w-[42%] p-4 md:p-6 md:overflow-auto">
+                      <div className="flex items-start justify-between gap-3 mb-3">
+                        <h1 className="text-[20px] md:text-[22px] font-black leading-tight">{selected.title}</h1>
+                        <div className="text-[11px] text-neutral-500 whitespace-nowrap mt-1">{selected.createdAt}</div>
+                      </div>
+
+                      <div className="text-[26px] font-black mb-4">{selected.price.toLocaleString('pl-PL')} zł <span className="text-[13px] font-normal text-neutral-500">• do negocjacji</span></div>
+
+                      <div className="grid grid-cols-3 gap-2 mb-5">
+                        {[
+                          { k: 'Rok', v: selected.year },
+                          { k: 'Przebieg', v: `${selected.mileage.toLocaleString('pl-PL')} km` },
+                          { k: 'Moc', v: `${selected.power} KM` },
+                          { k: 'Paliwo', v: selected.fuel },
+                          { k: 'Skrzynia', v: selected.gearbox },
+                          { k: 'Lokalizacja', v: selected.location },
+                        ].map(item => (
+                          <div key={item.k} className="bg-[#f5f5f7] rounded-[10px] p-2.5">
+                            <div className="text-[10px] font-semibold text-neutral-500 uppercase tracking-wide">{item.k}</div>
+                            <div className="text-[13px] font-bold mt-0.5 truncate">{item.v}</div>
+                          </div>
+                        ))}
+                      </div>
+
+                      <div className="mb-5">
+                        <div className="font-bold text-[13px] mb-2">Opis</div>
+                        <div className="text-[13px] leading-[1.6] text-neutral-700 whitespace-pre-wrap">{selected.description}</div>
+                      </div>
+
+                      <div className="bg-black text-white rounded-[14px] p-4 flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 bg-[#ffea00] rounded-full flex items-center justify-center font-black text-black">{selected.owner[0]}</div>
+                          <div>
+                            <div className="font-bold text-[13px]">{selected.owner}</div>
+                            <div className="text-[11px] text-neutral-400">{selected.location} • Prywatny</div>
+                          </div>
+                        </div>
+                        <a href={`tel:${selected.phone.replace(/ /g,'')}`} className="bg-white text-black font-bold text-[13px] px-4 py-2 rounded-full">Zadzwoń</a>
+                      </div>
+
+                      <div className="mt-4 grid grid-cols-2 gap-2">
+                        <a href={`tel:${selected.phone.replace(/ /g,'')}`} className="bg-[#ffea00] text-black font-bold text-[14px] py-3 rounded-[12px] text-center">📞 {selected.phone}</a>
+                        <button className="bg-[#f5f5f7] font-semibold text-[14px] py-3 rounded-[12px]">💬 Napisz</button>
+                      </div>
+
+                      <div className="mt-6 text-[11px] text-neutral-400 text-center">ID: {selected.id} • Bezpieczne zakupy • Zgłoś ogłoszenie</div>
+                    </div>
+                  </div>
                 </div>
-                <form onSubmit={handleAdd} className="p-5 space-y-4">
-                  <div className="grid grid-cols-2 gap-3">
-                    <div><label className="text-[12px] font-semibold text-neutral-600">Marka *</label><input required value={form.brand} onChange={e=>setForm({...form, brand: e.target.value})} placeholder="np. BMW" className="w-full mt-1 border border-neutral-200 rounded-lg px-3 py-2.5 text-[14px]" /></div>
-                    <div><label className="text-[12px] font-semibold text-neutral-600">Model *</label><input required value={form.model} onChange={e=>setForm({...form, model: e.target.value})} placeholder="np. 320d" className="w-full mt-1 border border-neutral-200 rounded-lg px-3 py-2.5 text-[14px]" /></div>
-                  </div>
-                  <div><label className="text-[12px] font-semibold text-neutral-600">Tytuł ogłoszenia</label><input value={form.title} onChange={e=>setForm({...form, title: e.target.value})} placeholder="np. BMW 320d F30 2018 - Idealny stan" className="w-full mt-1 border border-neutral-200 rounded-lg px-3 py-2.5 text-[14px]" /></div>
-                  <div className="grid grid-cols-3 gap-3">
-                    <div><label className="text-[12px] font-semibold text-neutral-600">Rok</label><input type="number" value={form.year} onChange={e=>setForm({...form, year: e.target.value})} className="w-full mt-1 border border-neutral-200 rounded-lg px-3 py-2.5 text-[14px]" /></div>
-                    <div><label className="text-[12px] font-semibold text-neutral-600">Cena (zł)</label><input type="number" value={form.price} onChange={e=>setForm({...form, price: e.target.value})} placeholder="65900" className="w-full mt-1 border border-neutral-200 rounded-lg px-3 py-2.5 text-[14px]" /></div>
-                    <div><label className="text-[12px] font-semibold text-neutral-600">Przebieg</label><input type="number" value={form.mileage} onChange={e=>setForm({...form, mileage: e.target.value})} placeholder="89000" className="w-full mt-1 border border-neutral-200 rounded-lg px-3 py-2.5 text-[14px]" /></div>
-                  </div>
-                  <div className="grid grid-cols-2 gap-3">
-                    <div><label className="text-[12px] font-semibold text-neutral-600">Paliwo</label><select value={form.fuel} onChange={e=>setForm({...form, fuel: e.target.value})} className="w-full mt-1 border border-neutral-200 rounded-lg px-3 py-2.5 text-[14px]"><option>Benzyna</option><option>Diesel</option><option>LPG</option><option>Hybryda</option><option>Elektryczny</option></select></div>
-                    <div><label className="text-[12px] font-semibold text-neutral-600">Skrzynia</label><select value={form.gearbox} onChange={e=>setForm({...form, gearbox: e.target.value})} className="w-full mt-1 border border-neutral-200 rounded-lg px-3 py-2.5 text-[14px]"><option>Manualna</option><option>Automatyczna</option></select></div>
-                  </div>
-                  <div className="grid grid-cols-2 gap-3">
-                    <div><label className="text-[12px] font-semibold text-neutral-600">Moc (KM)</label><input type="number" value={form.power} onChange={e=>setForm({...form, power: e.target.value})} placeholder="190" className="w-full mt-1 border border-neutral-200 rounded-lg px-3 py-2.5 text-[14px]" /></div>
-                    <div><label className="text-[12px] font-semibold text-neutral-600">Lokalizacja</label><input value={form.location} onChange={e=>setForm({...form, location: e.target.value})} placeholder="Warszawa" className="w-full mt-1 border border-neutral-200 rounded-lg px-3 py-2.5 text-[14px]" /></div>
-                  </div>
-                  <div><label className="text-[12px] font-semibold text-neutral-600">Opis</label><textarea value={form.description} onChange={e=>setForm({...form, description: e.target.value})} rows="3" placeholder="Opisz stan auta..." className="w-full mt-1 border border-neutral-200 rounded-lg px-3 py-2.5 text-[14px]"></textarea></div>
-                  <button type="submit" className="w-full bg-[#ffea00] text-black font-bold py-3 rounded-lg hover:bg-[#ffe000]">Dodaj ogłoszenie za darmo</button>
-                  <div className="text-[11px] text-neutral-500 text-center">Ogłoszenie zapisze się lokalnie w przeglądarce. Bez prowizji.</div>
-                </form>
               </div>
             </div>
           )}
 
-          <footer className="border-t mt-12 py-8 text-center text-[13px] text-neutral-500">
-            © 2026 Wroomer.pl - Darmowe ogłoszenia motoryzacyjne. Bez prowizji. • Wersja naprawiona dla Firefox
-          </footer>
+          {showAdd && (
+            <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-end md:items-center justify-center p-0 md:p-4">
+              <div className="bg-white w-full md:max-w-[560px] rounded-t-[20px] md:rounded-[20px] max-h-[92vh] md:max-h-[90vh] overflow-auto">
+                <div className="sticky top-0 bg-white border-b px-5 py-4 flex items-center justify-between">
+                  <div className="font-bold text-[16px]">Dodaj ogłoszenie</div>
+                  <button onClick={()=>setShowAdd(false)} className="w-8 h-8 rounded-full bg-neutral-100 flex items-center justify-center">✕</button>
+                </div>
+                <form onSubmit={handleAdd} className="p-5 space-y-4 pb-[max(20px,env(safe-area-inset-bottom))]">
+                  <div className="grid grid-cols-2 gap-3">
+                    <div><label className="text-[11px] font-bold uppercase tracking-wide text-neutral-500">Marka *</label><input required value={form.brand} onChange={e=>setForm({...form, brand: e.target.value})} placeholder="BMW" className="w-full mt-1.5 border rounded-[10px] px-3 py-2.5 text-[14px] focus:outline-none focus:border-black" /></div>
+                    <div><label className="text-[11px] font-bold uppercase tracking-wide text-neutral-500">Model *</label><input required value={form.model} onChange={e=>setForm({...form, model: e.target.value})} placeholder="320d" className="w-full mt-1.5 border rounded-[10px] px-3 py-2.5 text-[14px] focus:outline-none focus:border-black" /></div>
+                  </div>
+                  <div><label className="text-[11px] font-bold uppercase tracking-wide text-neutral-500">Tytuł</label><input value={form.title} onChange={e=>setForm({...form, title: e.target.value})} placeholder="BMW 320d F30 2018 - Idealny stan" className="w-full mt-1.5 border rounded-[10px] px-3 py-2.5 text-[14px]" /></div>
+                  <div className="grid grid-cols-3 gap-2">
+                    <div><label className="text-[11px] font-bold uppercase tracking-wide text-neutral-500">Rok</label><input type="number" value={form.year} onChange={e=>setForm({...form, year: e.target.value})} className="w-full mt-1.5 border rounded-[10px] px-3 py-2.5 text-[14px]" /></div>
+                    <div><label className="text-[11px] font-bold uppercase tracking-wide text-neutral-500">Cena</label><input type="number" value={form.price} onChange={e=>setForm({...form, price: e.target.value})} placeholder="65900" className="w-full mt-1.5 border rounded-[10px] px-3 py-2.5 text-[14px]" /></div>
+                    <div><label className="text-[11px] font-bold uppercase tracking-wide text-neutral-500">Przebieg</label><input type="number" value={form.mileage} onChange={e=>setForm({...form, mileage: e.target.value})} placeholder="89000" className="w-full mt-1.5 border rounded-[10px] px-3 py-2.5 text-[14px]" /></div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div><label className="text-[11px] font-bold uppercase tracking-wide text-neutral-500">Paliwo</label><select value={form.fuel} onChange={e=>setForm({...form, fuel: e.target.value})} className="w-full mt-1.5 border rounded-[10px] px-3 py-2.5 text-[14px]"><option>Benzyna</option><option>Diesel</option><option>LPG</option><option>Hybryda</option><option>Elektryczny</option></select></div>
+                    <div><label className="text-[11px] font-bold uppercase tracking-wide text-neutral-500">Skrzynia</label><select value={form.gearbox} onChange={e=>setForm({...form, gearbox: e.target.value})} className="w-full mt-1.5 border rounded-[10px] px-3 py-2.5 text-[14px]"><option>Manualna</option><option>Automatyczna</option></select></div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div><label className="text-[11px] font-bold uppercase tracking-wide text-neutral-500">Moc (KM)</label><input type="number" value={form.power} onChange={e=>setForm({...form, power: e.target.value})} className="w-full mt-1.5 border rounded-[10px] px-3 py-2.5 text-[14px]" /></div>
+                    <div><label className="text-[11px] font-bold uppercase tracking-wide text-neutral-500">Miasto</label><input value={form.location} onChange={e=>setForm({...form, location: e.target.value})} placeholder="Warszawa" className="w-full mt-1.5 border rounded-[10px] px-3 py-2.5 text-[14px]" /></div>
+                  </div>
+                  <div><label className="text-[11px] font-bold uppercase tracking-wide text-neutral-500">Opis</label><textarea value={form.description} onChange={e=>setForm({...form, description: e.target.value})} rows="3" placeholder="Opisz auto..." className="w-full mt-1.5 border rounded-[10px] px-3 py-2.5 text-[14px]"></textarea></div>
+                  <button type="submit" className="w-full bg-[#ffea00] text-black font-bold py-3.5 rounded-[12px]">Dodaj ogłoszenie za darmo</button>
+                </form>
+              </div>
+            </div>
+          )}
         </div>
       );
     }
