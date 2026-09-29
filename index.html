@@ -66,7 +66,6 @@ function App() {
   const [searchModel, setSearchModel] = useState('');
   const [searchFuel, setSearchFuel] = useState('');
   const [searchLocation, setSearchLocation] = useState('');
-  const [searchText, setSearchText] = useState('');
   const [selected, setSelected] = useState(null);
   const [showAdd, setShowAdd] = useState(false);
   const [showAuth, setShowAuth] = useState(null);
@@ -79,7 +78,6 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
   const fileInputRef = useRef(null);
   const touchStartX = useRef(0);
-  const touchEndX = useRef(0);
 
   useEffect(() => { const t = setTimeout(() => setIsLoading(false), 600); return () => clearTimeout(t); }, []);
   useEffect(() => { try { localStorage.setItem('wroomer_ads_final', JSON.stringify(ads)); } catch(e){} }, [ads]);
@@ -87,7 +85,6 @@ function App() {
   useEffect(() => { try { if(currentUser) localStorage.setItem('wroomer_current_user', JSON.stringify(currentUser)); else localStorage.removeItem('wroomer_current_user'); } catch(e){} }, [currentUser]);
   useEffect(() => { if(selected) setImgIdx(0); }, [selected]);
   useEffect(() => { document.body.style.overflow = selected || showAdd || showAuth || showConfirm || showFilters ? 'hidden' : ''; return () => document.body.style.overflow = ''; }, [selected, showAdd, showAuth, showConfirm, showFilters]);
-
   useEffect(() => {
     const handleEsc = (e) => {
       if(e.key === 'Escape') {
@@ -104,23 +101,21 @@ function App() {
 
   const availableModels = useMemo(() => { if(!searchBrand) return []; return BRAND_MODELS[searchBrand] || []; }, [searchBrand]);
   const availableModelsForForm = useMemo(() => { if(!form.brand) return []; return BRAND_MODELS[form.brand] || []; }, [form.brand]);
-
   const filtered = useMemo(() => {
     return ads.filter(ad => {
       if(searchBrand && ad.brand !== searchBrand) return false;
       if(searchModel && ad.model !== searchModel) return false;
       if(searchFuel && ad.fuel !== searchFuel) return false;
       if(searchLocation && !ad.location.toLowerCase().includes(searchLocation.toLowerCase())) return false;
-      if(searchText) { const s = searchText.toLowerCase(); if(!`${ad.title} ${ad.brand} ${ad.model}`.toLowerCase().includes(s)) return false; }
       return true;
     });
-  }, [ads, searchBrand, searchModel, searchFuel, searchLocation, searchText]);
+  }, [ads, searchBrand, searchModel, searchFuel, searchLocation]);
 
   const onTouchStart = (e) => { touchStartX.current = e.touches[0].clientX; };
-  const onTouchMove = (e) => { touchEndX.current = e.touches[0].clientX; };
-  const onTouchEnd = () => {
+  const onTouchEnd = (e) => {
     if(!selected) return;
-    const diff = touchStartX.current - touchEndX.current;
+    const endX = e.changedTouches[0].clientX;
+    const diff = touchStartX.current - endX;
     if(Math.abs(diff) > 50) {
       if(diff > 0) setImgIdx((imgIdx+1)%selected.images.length);
       else setImgIdx((imgIdx-1+selected.images.length)%selected.images.length);
@@ -145,10 +140,10 @@ function App() {
     setShowAuth(null); setAuthForm({ email: '', password: '', name: '' });
   };
   const handleImageUpload = (e) => {
-    const files = Array.from(e.target.files);
+    const files = Array.from(e.target.files || []);
     if(form.images.length + files.length > 5) { alert('Limit 5 zdjęć!'); return; }
     files.forEach(file => {
-      if(file.size > 5*1024*1024) { alert(file.name + ' za duży (max 5MB)'); return; }
+      if(file.size > 5*1024*1024) { alert(file.name + ' za duży'); return; }
       const reader = new FileReader();
       reader.onload = (ev) => { setForm(prev => { if(prev.images.length >= 5) return prev; return { ...prev, images: [...prev.images, ev.target.result] }; }); };
       reader.readAsDataURL(file);
@@ -175,7 +170,7 @@ function App() {
     setForm({ brand: '', model: '', year: 2020, price: '', mileage: '', fuel: 'Benzyna', gearbox: 'Manualna', power: '', location: '', title: '', description: '', images: [] });
     setSelected(newAd);
   };
-  const clearFilters = () => { setSearchBrand(''); setSearchModel(''); setSearchFuel(''); setSearchLocation(''); setSearchText(''); setShowFilters(false); };
+  const clearFilters = () => { setSearchBrand(''); setSearchModel(''); setSearchFuel(''); setSearchLocation(''); setShowFilters(false); };
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -187,7 +182,7 @@ function App() {
           </div>
           <div className="flex items-center gap-2">
             <button onClick={()=>setShowFilters(true)} className="lg:hidden bg-[#222] border border-neutral-700 text-white px-3 py-2 rounded-[10px] font-bold text-[13px] flex items-center gap-1.5" style={{minHeight: '44px'}}>
-              <span>🔍</span> Filtry {(searchBrand || searchModel) && <span className="bg-[#ffea00] text-black text-[10px] w-5 h-5 rounded-full flex items-center justify-center ml-1">!</span>}
+              🔍 Filtry {(searchBrand || searchModel) && <span className="bg-[#ffea00] text-black text-[10px] w-5 h-5 rounded-full flex items-center justify-center ml-1">!</span>}
             </button>
             {currentUser ? (
               <><span className="hidden md:block text-[12px] max-w-[80px] truncate">{currentUser.name}</span><button onClick={()=>setCurrentUser(null)} className="text-[12px] text-neutral-400 px-2 hidden md:block" style={{minHeight: '44px'}}>Wyloguj</button><button onClick={handleAddClick} className="bg-[#ffea00] text-black px-4 py-2 rounded-[10px] font-bold text-[13px]" style={{minHeight: '44px'}}>+ Dodaj</button></>
@@ -211,7 +206,7 @@ function App() {
             {searchBrand && <div className="bg-[#ffea00] text-black text-[11px] font-bold px-3 py-1.5 rounded-full">{searchBrand} {searchModel && '• ' + searchModel}</div>}
             {(searchBrand || searchModel || searchFuel || searchLocation) && <button onClick={clearFilters} className="text-[11px] text-neutral-500 hover:text-black underline" style={{minHeight: '44px'}}>Wyczyść filtry ✕</button>}
           </div>
-          <div className="text-[11px] text-neutral-400 hidden md:block">Kliknij kafelek → powiększenie • ESC / klik w tło / X = zamknij</div>
+          <div className="text-[11px] text-neutral-400 hidden md:block">Kliknij kafelek → powiększenie • ESC / tło / X = zamknij</div>
         </div>
       </div>
 
@@ -254,10 +249,6 @@ function App() {
                   <label className="text-[11px] font-bold uppercase text-neutral-500 mb-1.5 block">Miasto</label>
                   <input value={searchLocation} onChange={e=>setSearchLocation(e.target.value)} placeholder="Warszawa" className="w-full bg-[#1a1a1a] border border-neutral-800 rounded-[12px] px-3 py-3 text-[14px] text-white" style={{minHeight: '44px'}} />
                 </div>
-              </div>
-              <div className="pt-2 flex gap-2">
-                <div className="flex-1 bg-[#1a1a1a] rounded-[12px] px-3 py-3 border border-neutral-800"><div className="text-[10px] text-neutral-500 uppercase font-bold">Znaleziono</div><div className="text-[20px] font-black text-[#ffea00]">{filtered.length}</div></div>
-                <button onClick={clearFilters} className="bg-white text-black font-bold text-[14px] px-6 rounded-[12px]" style={{minHeight: '44px'}}>Reset</button>
               </div>
             </div>
           </div>
@@ -341,7 +332,7 @@ function App() {
               </div>
               <div className="flex-1 overflow-auto md:flex">
                 <div className="md:w-[62%] bg-black relative flex flex-col">
-                  <div className="aspect-[4/3] md:aspect-[16/12] relative overflow-hidden bg-neutral-900" onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd}>
+                  <div className="aspect-[4/3] md:aspect-[16/12] relative overflow-hidden bg-neutral-900" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
                     <img src={selected.images?.[imgIdx] || selected.image} alt={selected.title} className="w-full h-full object-contain md:object-cover" />
                     <button onClick={()=>setImgIdx((imgIdx-1+selected.images.length)%selected.images.length)} className="absolute left-3 top-1/2 -translate-y-1/2 w-11 h-11 bg-white/90 hover:bg-white rounded-full flex items-center justify-center shadow-xl text-[20px] font-bold" style={{minHeight: '44px', minWidth: '44px'}}>‹</button>
                     <button onClick={()=>setImgIdx((imgIdx+1)%selected.images.length)} className="absolute right-3 top-1/2 -translate-y-1/2 w-11 h-11 bg-white/90 hover:bg-white rounded-full flex items-center justify-center shadow-xl text-[20px] font-bold" style={{minHeight: '44px', minWidth: '44px'}}>›</button>
@@ -354,7 +345,6 @@ function App() {
                         </div>
                         <div className="bg-white/90 text-black text-[12px] font-bold px-3 py-1 rounded-full">{imgIdx+1} / {(selected.images || [selected.image]).length}</div>
                       </div>
-                      <div className="text-[11px] text-white/70 mt-2 md:hidden">Swipe ← → • Kliknij tło / X / ESC aby zamknąć</div>
                     </div>
                   </div>
                   <div className="p-3 bg-[#111] border-t border-neutral-800">
@@ -397,7 +387,7 @@ function App() {
                     <button onClick={()=>setSelected(null)} className="w-full bg-black text-white font-bold py-4 rounded-[14px] text-[15px] flex items-center justify-center gap-2 shadow-lg hover:bg-neutral-900 active:scale-[0.98] transition-all" style={{minHeight: '52px'}}>
                       <span className="text-[18px]">✕</span> Zamknij ogłoszenie
                     </button>
-                    <div className="text-center text-[11px] text-neutral-500">Kliknij poza ogłoszeniem • Naciśnij ESC • Swipe w dół na mobile</div>
+                    <div className="text-center text-[11px] text-neutral-500">Kliknij poza ogłoszeniem • Naciśnij ESC</div>
                   </div>
                 </div>
               </div>
