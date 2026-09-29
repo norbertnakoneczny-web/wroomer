@@ -2,471 +2,391 @@
 <html lang="pl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, viewport-fit=cover">
-  <title>Wroomer.pl - Darmowe ogłoszenia</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+  <title>Wroomer.pl</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/htm@3.1.1/dist/htm.umd.js"></script>
   <style>
     *{font-family:'Inter',system-ui,sans-serif; -webkit-tap-highlight-color: transparent;}
     .line-clamp-2{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-    input[type="file"]{display:none} select{appearance:none}
-    @keyframes scaleIn { from { opacity: 0; transform: scale(0.92); } to { opacity: 1; transform: scale(1); } }
-    @keyframes shimmer { 0% { transform: translateX(-100%) } 100% { transform: translateX(100%) } }
-    .skeleton { position: relative; overflow: hidden; background: #e5e5e5; }
-    .skeleton::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent); animation: shimmer 1.5s infinite; }
-    .bottom-sheet { transform: translateY(100%); transition: transform 0.32s cubic-bezier(0.32,0.72,0,1); }
-    .bottom-sheet.open { transform: translateY(0); }
+    input[type=file]{display:none}
+    @keyframes scaleIn{from{opacity:0;transform:scale(.92)}to{opacity:1;transform:scale(1)}}
+    @keyframes shimmer{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+    .skeleton{position:relative;overflow:hidden;background:#e5e5e5}
+    .skeleton::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.6),transparent);animation:shimmer 1.5s infinite}
+    .bottom-sheet{transform:translateY(100%);transition:transform .32s cubic-bezier(.32,.72,0,1)}
+    .bottom-sheet.open{transform:translateY(0)}
   </style>
 </head>
-<body class="bg-[#f5f5f7]"><div id="root"></div>
-<script type="text/babel">
+<body class="bg-[#f5f5f7]">
+<div id="root"></div>
+<script>
 const { useState, useEffect, useMemo, useRef } = React;
+const h = htm.bind(React.createElement);
+
 const BRAND_MODELS = {
-  "BMW": ["1 Series", "2 Series", "3 Series", "4 Series", "5 Series", "7 Series", "X1", "X3", "X5", "X6", "M3", "M4"],
-  "Audi": ["A1", "A3", "A4", "A5", "A6", "A8", "Q3", "Q5", "Q7", "Q8", "e-tron"],
-  "Volkswagen": ["Golf", "Passat", "Tiguan", "T-Roc", "Arteon", "Polo", "ID.4", "ID.3", "Caddy"],
-  "Mercedes": ["A-Klasa", "C-Klasa", "E-Klasa", "S-Klasa", "GLA", "GLC", "GLE", "GLS", "CLA"],
-  "Skoda": ["Octavia", "Superb", "Kodiaq", "Karoq", "Fabia", "Scala", "Enyaq"],
-  "Toyota": ["Corolla", "Camry", "RAV4", "Yaris", "C-HR", "Hilux", "Supra"],
-  "Ford": ["Focus", "Fiesta", "Kuga", "Puma", "Mondeo", "Mustang", "Ranger"],
-  "Opel": ["Astra", "Corsa", "Insignia", "Mokka", "Grandland", "Crossland"],
-  "Renault": ["Clio", "Megane", "Captur", "Kadjar", "Talisman", "Zoe"],
-  "Peugeot": ["208", "308", "3008", "5008", "2008", "508"]
+  "BMW": ["1 Series","2 Series","3 Series","4 Series","5 Series","7 Series","X1","X3","X5","X6","M3","M4"],
+  "Audi": ["A1","A3","A4","A5","A6","A8","Q3","Q5","Q7","Q8","e-tron"],
+  "Volkswagen": ["Golf","Passat","Tiguan","T-Roc","Arteon","Polo","ID.4","ID.3","Caddy"],
+  "Mercedes": ["A-Klasa","C-Klasa","E-Klasa","S-Klasa","GLA","GLC","GLE","GLS","CLA"],
+  "Skoda": ["Octavia","Superb","Kodiaq","Karoq","Fabia","Scala","Enyaq"],
+  "Toyota": ["Corolla","Camry","RAV4","Yaris","C-HR","Hilux","Supra"],
+  "Ford": ["Focus","Fiesta","Kuga","Puma","Mondeo","Mustang","Ranger"],
+  "Opel": ["Astra","Corsa","Insignia","Mokka","Grandland","Crossland"],
+  "Renault": ["Clio","Megane","Captur","Kadjar","Talisman","Zoe"],
+  "Peugeot": ["208","308","3008","5008","2008","508"]
 };
 
 const MOCK_ADS = [
-  { id: 1, title: "BMW 320d F30 2018 - ASO, bezwypadkowy", brand: "BMW", model: "3 Series", year: 2018, price: 65900, mileage: 89000, fuel: "Diesel", gearbox: "Automatyczna", power: 190, location: "Warszawa", description: "Zadbany, serwisowany w ASO BMW, bezwypadkowy, pierwszy właściciel.", image: "https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800", images: ["https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800","https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=800","https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800","https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=800","https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=800"], owner: "Marek K.", ownerEmail: "marek@example.com", phone: "600 123 456", createdAt: "2h temu" },
-  { id: 2, title: "Audi A4 B9 S-line 2.0 TFSI 2019", brand: "Audi", model: "A4", year: 2019, price: 78900, mileage: 67000, fuel: "Benzyna", gearbox: "Automatyczna", power: 190, location: "Kraków", description: "S-line, virtual cockpit, LED matrix.", image: "https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=800", images: ["https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=800","https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=800","https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800","https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800","https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800"], owner: "Auto-Kompleks", ownerEmail: "kontakt@autokompleks.pl", phone: "500 987 654", createdAt: "5h temu" },
-  { id: 3, title: "VW Golf VII 1.5 TSI Highline 2020", brand: "Volkswagen", model: "Golf", year: 2020, price: 54900, mileage: 45000, fuel: "Benzyna", gearbox: "Manualna", power: 150, location: "Wrocław", description: "Garażowany, niepalący, nowe opony.", image: "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800", images: ["https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800","https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800","https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=800","https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=800","https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=800"], owner: "Piotr W.", ownerEmail: "piotr@example.com", phone: "600 111 222", createdAt: "1 dzień temu" },
-  { id: 4, title: "Mercedes C200 AMG Line W205 2017", brand: "Mercedes", model: "C-Klasa", year: 2017, price: 72900, mileage: 95000, fuel: "Benzyna", gearbox: "Automatyczna", power: 184, location: "Gdańsk", description: "AMG Line, panorama, Burmester.", image: "https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=800", images: ["https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=800","https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800","https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800","https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=800","https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800"], owner: "Anna M.", ownerEmail: "anna@example.com", phone: "600 333 444", createdAt: "1 dzień temu" },
-  { id: 5, title: "Skoda Octavia 2.0 TDI Style 2021 Kombi", brand: "Skoda", model: "Octavia", year: 2021, price: 62900, mileage: 38000, fuel: "Diesel", gearbox: "Manualna", power: 150, location: "Poznań", description: "Kombi, 5.2l/100km.", image: "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=800", images: ["https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=800","https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=800","https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800","https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=800","https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=800"], owner: "Tomasz L.", ownerEmail: "tomasz@example.com", phone: "600 555 666", createdAt: "2 dni temu" },
-  { id: 6, title: "Toyota Corolla 1.8 Hybrid 2022", brand: "Toyota", model: "Corolla", year: 2022, price: 79900, mileage: 22000, fuel: "Hybryda", gearbox: "Automatyczna", power: 122, location: "Katowice", description: "Gwarancja do 2027.", image: "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=800", images: ["https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=800","https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800","https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=800","https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800","https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=800"], owner: "Salon Toyota", ownerEmail: "toyota@example.com", phone: "600 777 888", createdAt: "3 dni temu" },
-  { id: 7, title: "Ford Focus ST-Line 1.5 EcoBoost 2019", brand: "Ford", model: "Focus", year: 2019, price: 42900, mileage: 78000, fuel: "Benzyna", gearbox: "Manualna", power: 150, location: "Łódź", description: "ST-Line, 18 cali.", image: "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800", images: ["https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800","https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800","https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=800","https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=800","https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=800"], owner: "Krzysztof B.", ownerEmail: "krzys@example.com", phone: "600 999 000", createdAt: "4 dni temu" },
-  { id: 8, title: "Opel Astra Innovation 1.6 CDTI 2018", brand: "Opel", model: "Astra", year: 2018, price: 38900, mileage: 92000, fuel: "Diesel", gearbox: "Manualna", power: 136, location: "Szczecin", description: "4.5l/100km, LED.", image: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800", images: ["https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800","https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=800","https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800","https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800","https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=800"], owner: "Michał S.", ownerEmail: "michal@example.com", phone: "600 111 333", createdAt: "5 dni temu" },
-  { id: 9, title: "BMW X5 xDrive30d G05 2019 Panorama", brand: "BMW", model: "X5", year: 2019, price: 145900, mileage: 67000, fuel: "Diesel", gearbox: "Automatyczna", power: 265, location: "Warszawa", description: "Panorama, Harman Kardon, 360.", image: "https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800", images: ["https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800","https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=800","https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=800","https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=800","https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800"], owner: "Prestige Cars", ownerEmail: "prestige@example.com", phone: "600 222 333", createdAt: "6h temu" },
-  { id: 10, title: "Audi Q5 2.0 TFSI quattro 2020", brand: "Audi", model: "Q5", year: 2020, price: 98900, mileage: 54000, fuel: "Benzyna", gearbox: "Automatyczna", power: 245, location: "Kraków", description: "quattro, S-line.", image: "https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=800", images: ["https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=800","https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800","https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800","https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=800","https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800"], owner: "Audi Centrum", ownerEmail: "audi@example.com", phone: "500 111 222", createdAt: "8h temu" },
-  { id: 11, title: "Mercedes GLC 220d 4MATIC 2018", brand: "Mercedes", model: "GLC", year: 2018, price: 89900, mileage: 88000, fuel: "Diesel", gearbox: "Automatyczna", power: 170, location: "Gdańsk", description: "AMG Line, Burmester.", image: "https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=800", images: ["https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=800","https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800","https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=800","https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=800","https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800"], owner: "Anna M.", ownerEmail: "anna@example.com", phone: "600 333 444", createdAt: "12h temu" },
-  { id: 12, title: "Skoda Kodiaq 7-osobowy 4x4 2019", brand: "Skoda", model: "Kodiaq", year: 2019, price: 75900, mileage: 72000, fuel: "Diesel", gearbox: "Automatyczna", power: 150, location: "Poznań", description: "7-osobowy, Canton.", image: "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=800", images: ["https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=800","https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=800","https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800","https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=800","https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800"], owner: "Tomasz L.", ownerEmail: "tomasz@example.com", phone: "600 555 666", createdAt: "1 dzień temu" },
-  { id: 13, title: "Toyota RAV4 Hybrid AWD 2021", brand: "Toyota", model: "RAV4", year: 2021, price: 109900, mileage: 35000, fuel: "Hybryda", gearbox: "Automatyczna", power: 222, location: "Katowice", description: "Gwarancja do 2031.", image: "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=800", images: ["https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=800","https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800","https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=800","https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800","https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=800"], owner: "Salon Toyota", ownerEmail: "toyota@example.com", phone: "600 777 888", createdAt: "2 dni temu" },
-  { id: 14, title: "VW Tiguan R-Line 4Motion 2020", brand: "Volkswagen", model: "Tiguan", year: 2020, price: 84900, mileage: 48000, fuel: "Diesel", gearbox: "Automatyczna", power: 150, location: "Wrocław", description: "R-Line, IQ Light.", image: "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800", images: ["https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800","https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800","https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=800","https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=800","https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=800"], owner: "Piotr W.", ownerEmail: "piotr@example.com", phone: "600 111 222", createdAt: "2 dni temu" },
-  { id: 15, title: "Renault Clio Intens 1.0 TCe 2021", brand: "Renault", model: "Clio", year: 2021, price: 42900, mileage: 28000, fuel: "Benzyna", gearbox: "Manualna", power: 100, location: "Łódź", description: "Intens, Bose.", image: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800", images: ["https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800","https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=800","https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=800","https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800","https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=800"], owner: "Renault Salon", ownerEmail: "renault@example.com", phone: "600 444 555", createdAt: "3 dni temu" },
-  { id: 16, title: "Peugeot 3008 GT Line 1.5 2019", brand: "Peugeot", model: "3008", year: 2019, price: 67900, mileage: 65000, fuel: "Diesel", gearbox: "Automatyczna", power: 130, location: "Szczecin", description: "GT Line, Focal.", image: "https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800", images: ["https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800","https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=800","https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800","https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=800","https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=800"], owner: "Peugeot Dealer", ownerEmail: "peugeot@example.com", phone: "600 666 777", createdAt: "4 dni temu" },
-  { id: 17, title: "BMW M3 Competition 510KM 2021", brand: "BMW", model: "M3", year: 2021, price: 329900, mileage: 18000, fuel: "Benzyna", gearbox: "Automatyczna", power: 510, location: "Warszawa", description: "Ceramika, karbon.", image: "https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800", images: ["https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800","https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=800","https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=800","https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800","https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800"], owner: "M Cars", ownerEmail: "mcars@example.com", phone: "600 888 999", createdAt: "1h temu" },
-  { id: 18, title: "Ford Mustang GT V8 421KM 2018", brand: "Ford", model: "Mustang", year: 2018, price: 119900, mileage: 45000, fuel: "Benzyna", gearbox: "Automatyczna", power: 421, location: "Gdańsk", description: "V8 5.0, Recaro.", image: "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800", images: ["https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800","https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=800","https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800","https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800","https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=800"], owner: "Mustang Garage", ownerEmail: "mustang@example.com", phone: "600 123 789", createdAt: "3h temu" },
+  { id:1, title:"BMW 320d F30 2018 - ASO", brand:"BMW", model:"3 Series", year:2018, price:65900, mileage:89000, fuel:"Diesel", gearbox:"Automatyczna", power:190, location:"Warszawa", description:"Zadbany, ASO, bezwypadkowy.", image:"https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800", images:["https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800","https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=800","https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800","https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=800","https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=800"], owner:"Marek K.", ownerEmail:"marek@example.com", phone:"600 123 456", createdAt:"2h temu"},
+  { id:2, title:"Audi A4 B9 S-line 2019", brand:"Audi", model:"A4", year:2019, price:78900, mileage:67000, fuel:"Benzyna", gearbox:"Automatyczna", power:190, location:"Kraków", description:"S-line, virtual cockpit.", image:"https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=800", images:["https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=800","https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=800","https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800","https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800","https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=800"], owner:"Auto-Kompleks", ownerEmail:"kontakt@autokompleks.pl", phone:"500 987 654", createdAt:"5h temu"},
+  { id:3, title:"VW Golf VII Highline 2020", brand:"Volkswagen", model:"Golf", year:2020, price:54900, mileage:45000, fuel:"Benzyna", gearbox:"Manualna", power:150, location:"Wrocław", description:"Garażowany.", image:"https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800", images:["https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800","https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800","https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=800","https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=800","https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=800"], owner:"Piotr W.", ownerEmail:"piotr@example.com", phone:"600 111 222", createdAt:"1 dzień temu"},
+  { id:4, title:"Mercedes C200 AMG 2017", brand:"Mercedes", model:"C-Klasa", year:2017, price:72900, mileage:95000, fuel:"Benzyna", gearbox:"Automatyczna", power:184, location:"Gdańsk", description:"AMG Line.", image:"https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=800", images:["https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=800","https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800","https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800","https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=800","https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800"], owner:"Anna M.", ownerEmail:"anna@example.com", phone:"600 333 444", createdAt:"1 dzień temu"},
+  { id:5, title:"Skoda Octavia Style 2021 Kombi", brand:"Skoda", model:"Octavia", year:2021, price:62900, mileage:38000, fuel:"Diesel", gearbox:"Manualna", power:150, location:"Poznań", description:"Kombi.", image:"https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=800", images:["https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=800","https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=800","https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800","https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=800","https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=800"], owner:"Tomasz L.", ownerEmail:"tomasz@example.com", phone:"600 555 666", createdAt:"2 dni temu"},
+  { id:6, title:"Toyota Corolla Hybrid 2022", brand:"Toyota", model:"Corolla", year:2022, price:79900, mileage:22000, fuel:"Hybryda", gearbox:"Automatyczna", power:122, location:"Katowice", description:"Gwarancja.", image:"https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=800", images:["https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=800","https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800","https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=800","https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800","https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=800"], owner:"Salon Toyota", ownerEmail:"toyota@example.com", phone:"600 777 888", createdAt:"3 dni temu"},
+  { id:7, title:"Ford Focus ST-Line 2019", brand:"Ford", model:"Focus", year:2019, price:42900, mileage:78000, fuel:"Benzyna", gearbox:"Manualna", power:150, location:"Łódź", description:"ST-Line.", image:"https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800", images:["https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800","https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800","https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=800","https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=800","https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=800"], owner:"Krzysztof B.", ownerEmail:"krzys@example.com", phone:"600 999 000", createdAt:"4 dni temu"},
+  { id:8, title:"Opel Astra Innovation 2018", brand:"Opel", model:"Astra", year:2018, price:38900, mileage:92000, fuel:"Diesel", gearbox:"Manualna", power:136, location:"Szczecin", description:"4.5l.", image:"https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800", images:["https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800","https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=800","https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800","https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800","https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=800"], owner:"Michał S.", ownerEmail:"michal@example.com", phone:"600 111 333", createdAt:"5 dni temu"},
+  { id:9, title:"BMW X5 xDrive30d 2019", brand:"BMW", model:"X5", year:2019, price:145900, mileage:67000, fuel:"Diesel", gearbox:"Automatyczna", power:265, location:"Warszawa", description:"Panorama.", image:"https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800", images:["https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800","https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=800","https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=800","https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=800","https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800"], owner:"Prestige", ownerEmail:"prestige@example.com", phone:"600 222 333", createdAt:"6h temu"},
+  { id:10, title:"Audi Q5 quattro 2020", brand:"Audi", model:"Q5", year:2020, price:98900, mileage:54000, fuel:"Benzyna", gearbox:"Automatyczna", power:245, location:"Kraków", description:"quattro.", image:"https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=800", images:["https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=800","https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800","https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800","https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=800","https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800"], owner:"Audi", ownerEmail:"audi@example.com", phone:"500 111 222", createdAt:"8h temu"},
+  { id:11, title:"Mercedes GLC 220d 2018", brand:"Mercedes", model:"GLC", year:2018, price:89900, mileage:88000, fuel:"Diesel", gearbox:"Automatyczna", power:170, location:"Gdańsk", description:"AMG Line.", image:"https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=800", images:["https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=800","https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800","https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=800","https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=800","https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800"], owner:"Anna M.", ownerEmail:"anna@example.com", phone:"600 333 444", createdAt:"12h temu"},
+  { id:12, title:"Skoda Kodiaq 7-osob 2019", brand:"Skoda", model:"Kodiaq", year:2019, price:75900, mileage:72000, fuel:"Diesel", gearbox:"Automatyczna", power:150, location:"Poznań", description:"7-osob.", image:"https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=800", images:["https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=800","https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=800","https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800","https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=800","https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800"], owner:"Tomasz L.", ownerEmail:"tomasz@example.com", phone:"600 555 666", createdAt:"1 dzień temu"},
+  { id:13, title:"Toyota RAV4 Hybrid AWD 2021", brand:"Toyota", model:"RAV4", year:2021, price:109900, mileage:35000, fuel:"Hybryda", gearbox:"Automatyczna", power:222, location:"Katowice", description:"Gwarancja.", image:"https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=800", images:["https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=800","https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800","https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=800","https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800","https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=800"], owner:"Salon Toyota", ownerEmail:"toyota@example.com", phone:"600 777 888", createdAt:"2 dni temu"},
+  { id:14, title:"VW Tiguan R-Line 2020", brand:"Volkswagen", model:"Tiguan", year:2020, price:84900, mileage:48000, fuel:"Diesel", gearbox:"Automatyczna", power:150, location:"Wrocław", description:"R-Line.", image:"https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800", images:["https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800","https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800","https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=800","https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=800","https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=800"], owner:"Piotr W.", ownerEmail:"piotr@example.com", phone:"600 111 222", createdAt:"2 dni temu"},
+  { id:15, title:"Renault Clio Intens 2021", brand:"Renault", model:"Clio", year:2021, price:42900, mileage:28000, fuel:"Benzyna", gearbox:"Manualna", power:100, location:"Łódź", description:"Intens.", image:"https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800", images:["https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800","https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=800","https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=800","https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800","https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=800"], owner:"Renault", ownerEmail:"renault@example.com", phone:"600 444 555", createdAt:"3 dni temu"},
+  { id:16, title:"Peugeot 3008 GT Line 2019", brand:"Peugeot", model:"3008", year:2019, price:67900, mileage:65000, fuel:"Diesel", gearbox:"Automatyczna", power:130, location:"Szczecin", description:"GT Line.", image:"https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800", images:["https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800","https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=800","https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800","https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=800","https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=800"], owner:"Peugeot", ownerEmail:"peugeot@example.com", phone:"600 666 777", createdAt:"4 dni temu"},
+  { id:17, title:"BMW M3 Competition 2021", brand:"BMW", model:"M3", year:2021, price:329900, mileage:18000, fuel:"Benzyna", gearbox:"Automatyczna", power:510, location:"Warszawa", description:"Ceramika.", image:"https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800", images:["https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800","https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=800","https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=800","https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800","https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800"], owner:"M Cars", ownerEmail:"mcars@example.com", phone:"600 888 999", createdAt:"1h temu"},
+  { id:18, title:"Ford Mustang GT V8 2018", brand:"Ford", model:"Mustang", year:2018, price:119900, mileage:45000, fuel:"Benzyna", gearbox:"Automatyczna", power:421, location:"Gdańsk", description:"V8.", image:"https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800", images:["https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800","https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=800","https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800","https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800","https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=800"], owner:"Mustang", ownerEmail:"mustang@example.com", phone:"600 123 789", createdAt:"3h temu"},
 ];
 
-function App() {
-  const [ads, setAds] = useState(() => { try { const s = localStorage.getItem('wroomer_ads_final'); return s ? JSON.parse(s) : MOCK_ADS; } catch(e){ return MOCK_ADS; } });
-  const [users, setUsers] = useState(() => { try { const s = localStorage.getItem('wroomer_users'); return s ? JSON.parse(s) : []; } catch(e){ return []; } });
-  const [currentUser, setCurrentUser] = useState(() => { try { const s = localStorage.getItem('wroomer_current_user'); return s ? JSON.parse(s) : null; } catch(e){ return null; } });
-  const [searchBrand, setSearchBrand] = useState('');
-  const [searchModel, setSearchModel] = useState('');
-  const [searchFuel, setSearchFuel] = useState('');
-  const [searchLocation, setSearchLocation] = useState('');
-  const [searchText, setSearchText] = useState('');
-  const [selected, setSelected] = useState(null);
-  const [showAdd, setShowAdd] = useState(false);
-  const [showAuth, setShowAuth] = useState(null);
-  const [showConfirm, setShowConfirm] = useState(null);
-  const [showFilters, setShowFilters] = useState(false);
-  const [authForm, setAuthForm] = useState({ email: '', password: '', name: '' });
-  const [form, setForm] = useState({ brand: '', model: '', year: 2020, price: '', mileage: '', fuel: 'Benzyna', gearbox: 'Manualna', power: '', location: '', title: '', description: '', images: [] });
-  const [imgIdx, setImgIdx] = useState(0);
-  const [error, setError] = useState('');
-  const [isLoading, setIsLoading] = useState(true);
-  const fileInputRef = useRef(null);
-  const touchStartX = useRef(0);
-  const touchEndX = useRef(0);
+function App(){
+  const [ads,setAds]=useState(()=>{try{const s=localStorage.getItem('wroomer_ads_final2');return s?JSON.parse(s):MOCK_ADS;}catch(e){return MOCK_ADS;}});
+  const [users,setUsers]=useState(()=>{try{const s=localStorage.getItem('wroomer_users');return s?JSON.parse(s):[];}catch(e){return [];}});
+  const [currentUser,setCurrentUser]=useState(()=>{try{const s=localStorage.getItem('wroomer_current_user');return s?JSON.parse(s):null;}catch(e){return null;}});
+  const [searchBrand,setSearchBrand]=useState('');
+  const [searchModel,setSearchModel]=useState('');
+  const [searchFuel,setSearchFuel]=useState('');
+  const [searchLocation,setSearchLocation]=useState('');
+  const [selected,setSelected]=useState(null);
+  const [showAdd,setShowAdd]=useState(false);
+  const [showAuth,setShowAuth]=useState(null);
+  const [showConfirm,setShowConfirm]=useState(null);
+  const [showFilters,setShowFilters]=useState(false);
+  const [authForm,setAuthForm]=useState({email:'',password:'',name:''});
+  const [form,setForm]=useState({brand:'',model:'',year:2020,price:'',mileage:'',fuel:'Benzyna',gearbox:'Manualna',power:'',location:'',title:'',description:'',images:[]});
+  const [imgIdx,setImgIdx]=useState(0);
+  const [error,setError]=useState('');
+  const [isLoading,setIsLoading]=useState(true);
+  const fileInputRef=useRef(null);
+  const touchStartX=useRef(0);
 
-  useEffect(() => { const t = setTimeout(() => setIsLoading(false), 600); return () => clearTimeout(t); }, []);
-  useEffect(() => { try { localStorage.setItem('wroomer_ads_final', JSON.stringify(ads)); } catch(e){} }, [ads]);
-  useEffect(() => { try { localStorage.setItem('wroomer_users', JSON.stringify(users)); } catch(e){} }, [users]);
-  useEffect(() => { try { if(currentUser) localStorage.setItem('wroomer_current_user', JSON.stringify(currentUser)); else localStorage.removeItem('wroomer_current_user'); } catch(e){} }, [currentUser]);
-  useEffect(() => { if(selected) setImgIdx(0); }, [selected]);
-  useEffect(() => { document.body.style.overflow = selected || showAdd || showAuth || showConfirm || showFilters ? 'hidden' : ''; return () => document.body.style.overflow = ''; }, [selected, showAdd, showAuth, showConfirm, showFilters]);
+  useEffect(()=>{const t=setTimeout(()=>setIsLoading(false),500);return()=>clearTimeout(t);},[]);
+  useEffect(()=>{try{localStorage.setItem('wroomer_ads_final2',JSON.stringify(ads));}catch(e){}},[ads]);
+  useEffect(()=>{try{localStorage.setItem('wroomer_users',JSON.stringify(users));}catch(e){}},[users]);
+  useEffect(()=>{try{if(currentUser)localStorage.setItem('wroomer_current_user',JSON.stringify(currentUser));else localStorage.removeItem('wroomer_current_user');}catch(e){}},[currentUser]);
+  useEffect(()=>{if(selected)setImgIdx(0);},[selected]);
+  useEffect(()=>{document.body.style.overflow=selected||showAdd||showAuth||showConfirm||showFilters?'hidden':'';return()=>{document.body.style.overflow='';};},[selected,showAdd,showAuth,showConfirm,showFilters]);
 
-  useEffect(() => {
-    const handleEsc = (e) => {
-      if(e.key === 'Escape') {
-        if(selected) setSelected(null);
-        else if(showFilters) setShowFilters(false);
-        else if(showConfirm) setShowConfirm(null);
-        else if(showAdd) setShowAdd(false);
-        else if(showAuth) setShowAuth(null);
-      }
-    };
-    window.addEventListener('keydown', handleEsc);
-    return () => window.removeEventListener('keydown', handleEsc);
-  }, [selected, showFilters, showConfirm, showAdd, showAuth]);
+  // SAFARI FIX: ESC + history handling for back button
+  useEffect(()=>{
+    const handleEsc=(e)=>{if(e.key==='Escape'){if(selected) closeAd(); else if(showFilters) setShowFilters(false); else if(showConfirm) setShowConfirm(null); else if(showAdd) setShowAdd(false); else if(showAuth) setShowAuth(null);}};
+    window.addEventListener('keydown',handleEsc);
+    return()=>window.removeEventListener('keydown',handleEsc);
+  },[selected,showFilters,showConfirm,showAdd,showAuth]);
 
-  const availableModels = useMemo(() => { if(!searchBrand) return []; return BRAND_MODELS[searchBrand] || []; }, [searchBrand]);
-  const availableModelsForForm = useMemo(() => { if(!form.brand) return []; return BRAND_MODELS[form.brand] || []; }, [form.brand]);
-
-  const filtered = useMemo(() => {
-    return ads.filter(ad => {
-      if(searchBrand && ad.brand !== searchBrand) return false;
-      if(searchModel && ad.model !== searchModel) return false;
-      if(searchFuel && ad.fuel !== searchFuel) return false;
-      if(searchLocation && !ad.location.toLowerCase().includes(searchLocation.toLowerCase())) return false;
-      if(searchText) { const s = searchText.toLowerCase(); if(!`${ad.title} ${ad.brand} ${ad.model}`.toLowerCase().includes(s)) return false; }
-      return true;
-    });
-  }, [ads, searchBrand, searchModel, searchFuel, searchLocation, searchText]);
-
-  const onTouchStart = (e) => { touchStartX.current = e.touches[0].clientX; };
-  const onTouchMove = (e) => { touchEndX.current = e.touches[0].clientX; };
-  const onTouchEnd = () => {
-    if(!selected) return;
-    const diff = touchStartX.current - touchEndX.current;
-    if(Math.abs(diff) > 50) {
-      if(diff > 0) setImgIdx((imgIdx+1)%selected.images.length);
-      else setImgIdx((imgIdx-1+selected.images.length)%selected.images.length);
+  // BACK BUTTON HANDLING - push state when opening ad
+  const openAd=(ad)=>{
+    setSelected(ad);
+    try{
+      history.pushState({adId: ad.id}, '', '#ogloszenie-'+ad.id);
+    }catch(e){}
+  };
+  const closeAd=()=>{
+    setSelected(null);
+    try{
+      if(location.hash.startsWith('#ogloszenie-')) history.back();
+      else history.replaceState(null,'',location.pathname);
+    }catch(e){
+      try{history.replaceState(null,'',location.pathname);}catch(e2){}
     }
   };
+  useEffect(()=>{
+    const onPopState=(e)=>{
+      // If we have an ad open and user pressed back, close it and stay on main page
+      if(selected){
+        setSelected(null);
+      }
+    };
+    window.addEventListener('popstate',onPopState);
+    return()=>window.removeEventListener('popstate',onPopState);
+  },[selected]);
 
-  const handleRegister = (e) => {
+  // On load, check if hash contains ad
+  useEffect(()=>{
+    const hash=location.hash;
+    if(hash.startsWith('#ogloszenie-')){
+      const id=parseInt(hash.replace('#ogloszenie-',''));
+      const ad=ads.find(a=>a.id===id);
+      if(ad) setSelected(ad);
+    }
+  },[]);
+
+  const availableModels=useMemo(()=>{if(!searchBrand) return []; return BRAND_MODELS[searchBrand]||[];},[searchBrand]);
+  const availableModelsForForm=useMemo(()=>{if(!form.brand) return []; return BRAND_MODELS[form.brand]||[];},[form.brand]);
+  const filtered=useMemo(()=>{return ads.filter(ad=>{if(searchBrand&&ad.brand!==searchBrand) return false; if(searchModel&&ad.model!==searchModel) return false; if(searchFuel&&ad.fuel!==searchFuel) return false; if(searchLocation&&!ad.location.toLowerCase().includes(searchLocation.toLowerCase())) return false; return true;});},[ads,searchBrand,searchModel,searchFuel,searchLocation]);
+
+  const clearFilters=()=>{setSearchBrand('');setSearchModel('');setSearchFuel('');setSearchLocation('');setShowFilters(false);};
+
+  const handleRegister=(e)=>{
     e.preventDefault(); setError('');
-    if(!authForm.email || !authForm.password || !authForm.name) { setError('Wypełnij wszystkie pola'); return; }
-    if(users.find(u => u.email.toLowerCase() === authForm.email.toLowerCase())) { setError('Użytkownik już istnieje'); return; }
-    if(authForm.password.length < 6) { setError('Hasło min. 6 znaków'); return; }
-    const newUser = { id: Date.now(), email: authForm.email.toLowerCase(), name: authForm.name, password: authForm.password };
-    setUsers([...users, newUser]);
-    setCurrentUser({ id: newUser.id, email: newUser.email, name: newUser.name });
-    setShowAuth(null); setAuthForm({ email: '', password: '', name: '' });
+    if(!authForm.email||!authForm.password||!authForm.name){setError('Wypełnij wszystkie pola');return;}
+    if(users.find(u=>u.email.toLowerCase()===authForm.email.toLowerCase())){setError('Użytkownik już istnieje');return;}
+    if(authForm.password.length<6){setError('Hasło min. 6 znaków');return;}
+    const newUser={id:Date.now(),email:authForm.email.toLowerCase(),name:authForm.name,password:authForm.password};
+    setUsers([...users,newUser]);
+    setCurrentUser({id:newUser.id,email:newUser.email,name:newUser.name});
+    setShowAuth(null); setAuthForm({email:'',password:'',name:''});
   };
-  const handleLogin = (e) => {
+  const handleLogin=(e)=>{
     e.preventDefault(); setError('');
-    const user = users.find(u => u.email.toLowerCase() === authForm.email.toLowerCase() && u.password === authForm.password);
-    if(!user) { setError('Nieprawidłowy e-mail lub hasło'); return; }
-    setCurrentUser({ id: user.id, email: user.email, name: user.name });
-    setShowAuth(null); setAuthForm({ email: '', password: '', name: '' });
+    const user=users.find(u=>u.email.toLowerCase()===authForm.email.toLowerCase()&&u.password===authForm.password);
+    if(!user){setError('Nieprawidłowy e-mail lub hasło');return;}
+    setCurrentUser({id:user.id,email:user.email,name:user.name});
+    setShowAuth(null); setAuthForm({email:'',password:'',name:''});
   };
-  const handleImageUpload = (e) => {
-    const files = Array.from(e.target.files);
-    if(form.images.length + files.length > 5) { alert('Limit 5 zdjęć!'); return; }
-    files.forEach(file => {
-      if(file.size > 5*1024*1024) { alert(file.name + ' za duży (max 5MB)'); return; }
-      const reader = new FileReader();
-      reader.onload = (ev) => { setForm(prev => { if(prev.images.length >= 5) return prev; return { ...prev, images: [...prev.images, ev.target.result] }; }); };
+  const handleImageUpload=(e)=>{
+    const files=Array.from(e.target.files||[]);
+    if(form.images.length+files.length>5){alert('Limit 5 zdjęć!');return;}
+    files.forEach(file=>{
+      if(file.size>5*1024*1024){alert(file.name+' za duży');return;}
+      const reader=new FileReader();
+      reader.onload=(ev)=>{setForm(prev=>{if(prev.images.length>=5) return prev; return {...prev, images:[...prev.images, ev.target.result]};});};
       reader.readAsDataURL(file);
     });
-    if(fileInputRef.current) fileInputRef.current.value = '';
+    if(fileInputRef.current) fileInputRef.current.value='';
   };
-  const handleAddClick = () => { if(!currentUser) { setShowAuth('login'); return; } setShowAdd(true); };
-  const handleSubmitForConfirm = (e) => {
-    e.preventDefault();
-    if(!form.brand || !form.model) { alert('Podaj markę i model'); return; }
-    if(form.images.length === 0) { if(!confirm('Dodać bez zdjęć?')) return; }
-    setShowConfirm({ ...form });
-  };
-  const confirmAdd = () => {
-    const f = showConfirm;
-    const newAd = {
-      id: Date.now(), title: f.title || (f.brand + ' ' + f.model + ' ' + f.year), brand: f.brand, model: f.model, year: parseInt(f.year) || 2020, price: parseInt(f.price) || 0,
-      mileage: parseInt(f.mileage) || 0, fuel: f.fuel, gearbox: f.gearbox, power: parseInt(f.power) || 0, location: f.location || 'Polska', description: f.description || 'Brak opisu.',
-      image: f.images[0] || 'https://picsum.photos/seed/' + Date.now() + '/800/600',
-      images: f.images.length > 0 ? f.images : ['https://picsum.photos/seed/' + Date.now() + '/800/600'],
-      owner: currentUser.name, ownerEmail: currentUser.email, ownerId: currentUser.id, phone: 'Kontakt', createdAt: 'Teraz'
-    };
-    setAds([newAd, ...ads]); setShowConfirm(null); setShowAdd(false);
-    setForm({ brand: '', model: '', year: 2020, price: '', mileage: '', fuel: 'Benzyna', gearbox: 'Manualna', power: '', location: '', title: '', description: '', images: [] });
-    setSelected(newAd);
-  };
-  const clearFilters = () => { setSearchBrand(''); setSearchModel(''); setSearchFuel(''); setSearchLocation(''); setSearchText(''); setShowFilters(false); };
 
-  return (
-    <div className="min-h-screen flex flex-col">
-      <header className="sticky top-0 z-30 bg-black text-white border-b border-neutral-800">
-        <div className="max-w-[1440px] mx-auto px-4 h-[56px] flex items-center justify-between">
-          <div className="flex items-center gap-2 cursor-pointer" onClick={()=>setSelected(null)} style={{minHeight: '44px'}}>
-            <div className="w-8 h-8 bg-[#ffea00] rounded-[8px] flex items-center justify-center font-black text-black">W</div>
-            <div className="font-black text-[18px]">WROOMER<span className="text-[#ffea00]">.PL</span></div>
+  return h`
+    <div class="min-h-screen flex flex-col">
+      <header class="sticky top-0 z-30 bg-black text-white border-b border-neutral-800">
+        <div class="max-w-[1440px] mx-auto px-4 h-[56px] flex items-center justify-between">
+          <div class="flex items-center gap-2 cursor-pointer" onClick=${()=>setSelected(null)} style="min-height:44px">
+            <div class="w-8 h-8 bg-[#ffea00] rounded-[8px] flex items-center justify-center font-black text-black">W</div>
+            <div class="font-black text-[18px]">WROOMER<span class="text-[#ffea00]">.PL</span></div>
           </div>
-          <div className="flex items-center gap-2">
-            <button onClick={()=>setShowFilters(true)} className="lg:hidden bg-[#222] border border-neutral-700 text-white px-3 py-2 rounded-[10px] font-bold text-[13px] flex items-center gap-1.5" style={{minHeight: '44px'}}>
-              <span>🔍</span> Filtry {(searchBrand || searchModel) && <span className="bg-[#ffea00] text-black text-[10px] w-5 h-5 rounded-full flex items-center justify-center ml-1">!</span>}
-            </button>
-            {currentUser ? (
-              <><span className="hidden md:block text-[12px] max-w-[80px] truncate">{currentUser.name}</span><button onClick={()=>setCurrentUser(null)} className="text-[12px] text-neutral-400 px-2 hidden md:block" style={{minHeight: '44px'}}>Wyloguj</button><button onClick={handleAddClick} className="bg-[#ffea00] text-black px-4 py-2 rounded-[10px] font-bold text-[13px]" style={{minHeight: '44px'}}>+ Dodaj</button></>
-            ) : (
-              <><button onClick={()=>setShowAuth('login')} className="text-[13px] hidden md:block px-3" style={{minHeight: '44px'}}>Zaloguj</button><button onClick={()=>setShowAuth('register')} className="bg-white text-black px-4 py-2 rounded-[10px] font-bold text-[13px] hidden md:block" style={{minHeight: '44px'}}>Rejestracja</button><button onClick={handleAddClick} className="bg-[#ffea00] text-black px-4 py-2 rounded-[10px] font-bold text-[13px]" style={{minHeight: '44px'}}>+ Dodaj</button></>
-            )}
+          <div class="flex items-center gap-2">
+            <button onClick=${()=>setShowFilters(true)} class="lg:hidden bg-[#222] border border-neutral-700 text-white px-3 py-2 rounded-[10px] font-bold text-[13px] flex items-center gap-1.5" style="min-height:44px">🔍 Filtry ${searchBrand||searchModel?h`<span class="bg-[#ffea00] text-black text-[10px] w-5 h-5 rounded-full flex items-center justify-center ml-1">!</span>`:''}</button>
+            ${currentUser?h`
+              <span class="hidden md:block text-[12px] max-w-[80px] truncate">${currentUser.name}</span>
+              <button onClick=${()=>setCurrentUser(null)} class="text-[12px] text-neutral-400 px-2 hidden md:block" style="min-height:44px">Wyloguj</button>
+              <button onClick=${()=>{if(!currentUser){setShowAuth('login');return;} setShowAdd(true);}} class="bg-[#ffea00] text-black px-4 py-2 rounded-[10px] font-bold text-[13px]" style="min-height:44px">+ Dodaj</button>
+            `:h`
+              <button onClick=${()=>setShowAuth('login')} class="text-[13px] hidden md:block px-3" style="min-height:44px">Zaloguj</button>
+              <button onClick=${()=>setShowAuth('register')} class="bg-white text-black px-4 py-2 rounded-[10px] font-bold text-[13px] hidden md:block" style="min-height:44px">Rejestracja</button>
+              <button onClick=${()=>{if(!currentUser){setShowAuth('login');return;} setShowAdd(true);}} class="bg-[#ffea00] text-black px-4 py-2 rounded-[10px] font-bold text-[13px]" style="min-height:44px">+ Dodaj</button>
+            `}
           </div>
         </div>
       </header>
 
-      <div className="bg-black text-white">
-        <div className="max-w-[1440px] mx-auto px-4 py-4">
-          <h1 className="text-[20px] md:text-[28px] font-black tracking-tight">Darmowe ogłoszenia <span className="text-[#ffea00]">motoryzacyjne</span></h1>
+      <div class="bg-black text-white">
+        <div class="max-w-[1440px] mx-auto px-4 py-4">
+          <h1 class="text-[20px] md:text-[28px] font-black tracking-tight">Darmowe ogłoszenia <span class="text-[#ffea00]">motoryzacyjne</span></h1>
         </div>
       </div>
 
-      <div className="sticky top-[56px] z-20 bg-white/95 backdrop-blur-md border-b border-neutral-200">
-        <div className="max-w-[1440px] mx-auto px-4 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="bg-black text-white text-[12px] font-bold px-3 py-1.5 rounded-full">{filtered.length} ogłoszeń</div>
-            {searchBrand && <div className="bg-[#ffea00] text-black text-[11px] font-bold px-3 py-1.5 rounded-full">{searchBrand} {searchModel && '• ' + searchModel}</div>}
-            {(searchBrand || searchModel || searchFuel || searchLocation) && <button onClick={clearFilters} className="text-[11px] text-neutral-500 hover:text-black underline" style={{minHeight: '44px'}}>Wyczyść filtry ✕</button>}
+      <div class="sticky top-[56px] z-20 bg-white/95 border-b border-neutral-200" style="backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px)">
+        <div class="max-w-[1440px] mx-auto px-4 py-3 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="bg-black text-white text-[12px] font-bold px-3 py-1.5 rounded-full">${filtered.length} ogłoszeń</div>
+            ${searchBrand?h`<div class="bg-[#ffea00] text-black text-[11px] font-bold px-3 py-1.5 rounded-full">${searchBrand} ${searchModel?'• '+searchModel:''}</div>`:''}
+            ${(searchBrand||searchModel||searchFuel||searchLocation)?h`<button onClick=${clearFilters} class="text-[11px] text-neutral-500 hover:text-black underline" style="min-height:44px">Wyczyść filtry ✕</button>`:''}
           </div>
-          <div className="text-[11px] text-neutral-400 hidden md:block">Kliknij kafelek → powiększenie • ESC / klik w tło / X = zamknij</div>
+          <div class="text-[11px] text-neutral-400 hidden md:block">Kliknij kafelek → powiększenie • ESC / tło / X / wstecz = zamknij</div>
         </div>
       </div>
 
-      <div className="max-w-[1440px] mx-auto w-full px-4 py-4 flex flex-col lg:flex-row gap-6">
-        <div className="hidden lg:block w-[340px] flex-shrink-0">
-          <div className="bg-[#111] border border-neutral-800 rounded-[16px] p-5 sticky top-[112px]">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="font-bold text-[15px] text-white">🔍 Szukaj auta</h2>
-              <button onClick={clearFilters} className="text-[11px] text-neutral-400 hover:text-white px-2" style={{minHeight: '44px'}}>Wyczyść</button>
+      <div class="max-w-[1440px] mx-auto w-full px-4 py-4 flex flex-col lg:flex-row gap-6">
+        <div class="hidden lg:block w-[340px] flex-shrink-0">
+          <div class="bg-[#111] border border-neutral-800 rounded-[16px] p-5 sticky top-[112px]">
+            <div class="flex items-center justify-between mb-4">
+              <h2 class="font-bold text-[15px] text-white">🔍 Szukaj auta</h2>
+              <button onClick=${clearFilters} class="text-[11px] text-neutral-400 hover:text-white px-2" style="min-height:44px">Wyczyść</button>
             </div>
-            <div className="space-y-3">
+            <div class="space-y-3">
               <div>
-                <label className="text-[11px] font-bold uppercase text-neutral-500 mb-1.5 block">Marka</label>
-                <div className="relative">
-                  <select value={searchBrand} onChange={e=>{setSearchBrand(e.target.value); setSearchModel('');}} className="w-full bg-[#1a1a1a] border border-neutral-800 rounded-[12px] px-3 py-3 pr-8 text-[15px] text-white" style={{minHeight: '44px'}}>
+                <label class="text-[11px] font-bold uppercase text-neutral-500 mb-1.5 block">Marka</label>
+                <div class="relative">
+                  <select value=${searchBrand} onChange=${e=>{setSearchBrand(e.target.value); setSearchModel('');}} class="w-full bg-[#1a1a1a] border border-neutral-800 rounded-[12px] px-3 py-3 pr-8 text-[15px] text-white" style="min-height:44px">
                     <option value="">Wybierz markę</option>
-                    {Object.keys(BRAND_MODELS).sort().map(brand => <option key={brand} value={brand}>{brand}</option>)}
+                    ${Object.keys(BRAND_MODELS).sort().map(brand=>h`<option key=${brand} value=${brand}>${brand}</option>`)}
                   </select>
-                  <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-neutral-500">▼</div>
+                  <div class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-neutral-500">▼</div>
                 </div>
               </div>
               <div>
-                <label className="text-[11px] font-bold uppercase text-neutral-500 mb-1.5 block">Model</label>
-                <div className="relative">
-                  <select value={searchModel} onChange={e=>setSearchModel(e.target.value)} disabled={!searchBrand} className="w-full bg-[#1a1a1a] border border-neutral-800 rounded-[12px] px-3 py-3 pr-8 text-[15px] text-white disabled:opacity-40" style={{minHeight: '44px'}}>
-                    <option value="">{searchBrand ? 'Wybierz model' : 'Najpierw marka'}</option>
-                    {availableModels.map(model => <option key={model} value={model}>{model}</option>)}
+                <label class="text-[11px] font-bold uppercase text-neutral-500 mb-1.5 block">Model</label>
+                <div class="relative">
+                  <select value=${searchModel} onChange=${e=>setSearchModel(e.target.value)} disabled=${!searchBrand} class="w-full bg-[#1a1a1a] border border-neutral-800 rounded-[12px] px-3 py-3 pr-8 text-[15px] text-white disabled:opacity-40" style="min-height:44px">
+                    <option value="">${searchBrand?'Wybierz model':'Najpierw marka'}</option>
+                    ${availableModels.map(model=>h`<option key=${model} value=${model}>${model}</option>`)}
                   </select>
-                  <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-neutral-500">▼</div>
+                  <div class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-neutral-500">▼</div>
                 </div>
               </div>
-              <div className="grid grid-cols-2 gap-3">
+              <div class="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="text-[11px] font-bold uppercase text-neutral-500 mb-1.5 block">Paliwo</label>
-                  <select value={searchFuel} onChange={e=>setSearchFuel(e.target.value)} className="w-full bg-[#1a1a1a] border border-neutral-800 rounded-[12px] px-3 py-3 text-[14px] text-white" style={{minHeight: '44px'}}>
+                  <label class="text-[11px] font-bold uppercase text-neutral-500 mb-1.5 block">Paliwo</label>
+                  <select value=${searchFuel} onChange=${e=>setSearchFuel(e.target.value)} class="w-full bg-[#1a1a1a] border border-neutral-800 rounded-[12px] px-3 py-3 text-[14px] text-white" style="min-height:44px">
                     <option value="">Wszystkie</option><option>Benzyna</option><option>Diesel</option><option>LPG</option><option>Hybryda</option><option>Elektryczny</option>
                   </select>
                 </div>
                 <div>
-                  <label className="text-[11px] font-bold uppercase text-neutral-500 mb-1.5 block">Miasto</label>
-                  <input value={searchLocation} onChange={e=>setSearchLocation(e.target.value)} placeholder="Warszawa" className="w-full bg-[#1a1a1a] border border-neutral-800 rounded-[12px] px-3 py-3 text-[14px] text-white" style={{minHeight: '44px'}} />
+                  <label class="text-[11px] font-bold uppercase text-neutral-500 mb-1.5 block">Miasto</label>
+                  <input value=${searchLocation} onInput=${e=>setSearchLocation(e.target.value)} placeholder="Warszawa" class="w-full bg-[#1a1a1a] border border-neutral-800 rounded-[12px] px-3 py-3 text-[14px] text-white" style="min-height:44px" />
                 </div>
-              </div>
-              <div className="pt-2 flex gap-2">
-                <div className="flex-1 bg-[#1a1a1a] rounded-[12px] px-3 py-3 border border-neutral-800"><div className="text-[10px] text-neutral-500 uppercase font-bold">Znaleziono</div><div className="text-[20px] font-black text-[#ffea00]">{filtered.length}</div></div>
-                <button onClick={clearFilters} className="bg-white text-black font-bold text-[14px] px-6 rounded-[12px]" style={{minHeight: '44px'}}>Reset</button>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="flex-1 min-w-0">
-          {isLoading ? (
-            <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3">
-              {[1,2,3,4,5,6,7,8].map(i => (
-                <div key={i} className="bg-white border rounded-[14px] overflow-hidden"><div className="aspect-[4/3] skeleton"></div><div className="p-3 space-y-2"><div className="h-4 skeleton rounded"></div><div className="h-3 skeleton rounded w-2/3"></div></div></div>
-              ))}
+        <div class="flex-1 min-w-0">
+          ${isLoading?h`
+            <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3">
+              ${[1,2,3,4,5,6,7,8].map(i=>h`<div key=${i} class="bg-white border rounded-[14px] overflow-hidden"><div class="aspect-[4/3] skeleton"></div><div class="p-3 space-y-2"><div class="h-4 skeleton rounded"></div><div class="h-3 skeleton rounded w-2/3"></div></div></div>`)}
             </div>
-          ) : (
-            <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3">
-              {filtered.map(ad => (
-                <div key={ad.id} onClick={()=>setSelected(ad)} className="group bg-white border border-neutral-200 rounded-[14px] overflow-hidden hover:border-black hover:shadow-[0_8px_24px_rgba(0,0,0,0.12)] active:scale-[0.98] transition-all cursor-pointer">
-                  <div className="aspect-[4/3] bg-neutral-100 relative overflow-hidden">
-                    <img src={ad.image} alt={ad.title} className="w-full h-full object-cover group-hover:scale-[1.05] transition-transform duration-300" loading="lazy" />
-                    <div className="absolute top-2 left-2 bg-black/80 text-white text-[10px] font-bold px-2 py-1 rounded-[6px]">{ad.year}</div>
-                    <div className="absolute top-2 right-2 bg-black/80 text-white text-[10px] font-bold px-2 py-1 rounded-full">📷 {ad.images.length}</div>
-                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100"><div className="bg-white/90 backdrop-blur text-black text-[12px] font-bold px-3 py-1.5 rounded-full shadow-lg">🔍 Powiększ</div></div>
+          `:h`
+            <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3">
+              ${filtered.map(ad=>h`
+                <div key=${ad.id} onClick=${()=>openAd(ad)} class="group bg-white border border-neutral-200 rounded-[14px] overflow-hidden hover:border-black hover:shadow-[0_8px_24px_rgba(0,0,0,0.12)] active:scale-[0.98] transition-all cursor-pointer">
+                  <div class="aspect-[4/3] bg-neutral-100 relative overflow-hidden">
+                    <img src=${ad.image} alt=${ad.title} class="w-full h-full object-cover group-hover:scale-[1.05] transition-transform duration-300" loading="lazy" />
+                    <div class="absolute top-2 left-2 bg-black/80 text-white text-[10px] font-bold px-2 py-1 rounded-[6px]">${ad.year}</div>
+                    <div class="absolute top-2 right-2 bg-black/80 text-white text-[10px] font-bold px-2 py-1 rounded-full">📷 ${ad.images.length}</div>
+                    <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100"><div class="bg-white/90 text-black text-[12px] font-bold px-3 py-1.5 rounded-full shadow-lg">🔍 Powiększ</div></div>
                   </div>
-                  <div className="p-3">
-                    <div className="font-bold text-[13px] leading-[1.25] line-clamp-2 min-h-[34px]">{ad.title}</div>
-                    <div className="text-[11px] text-neutral-500 mt-1 truncate">{ad.fuel} • {ad.power} KM</div>
-                    <div className="flex items-center justify-between mt-2"><div className="font-black text-[15px]">{ad.price.toLocaleString('pl-PL')} zł</div><div className="text-[10px] text-neutral-400">{ad.location}</div></div>
+                  <div class="p-3">
+                    <div class="font-bold text-[13px] leading-[1.25] line-clamp-2 min-h-[34px]">${ad.title}</div>
+                    <div class="text-[11px] text-neutral-500 mt-1 truncate">${ad.fuel} • ${ad.power} KM</div>
+                    <div class="flex items-center justify-between mt-2"><div class="font-black text-[15px]">${ad.price.toLocaleString('pl-PL')} zł</div><div class="text-[10px] text-neutral-400">${ad.location}</div></div>
                   </div>
                 </div>
-              ))}
+              `)}
             </div>
-          )}
+          `}
         </div>
       </div>
 
-      {showFilters && (
-        <div className="fixed inset-0 z-[80] lg:hidden">
-          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={()=>setShowFilters(false)}></div>
-          <div className={`absolute bottom-0 left-0 right-0 bg-[#111] rounded-t-[24px] max-h-[85vh] flex flex-col bottom-sheet ${showFilters ? 'open' : ''}`}>
-            <div className="p-4 flex items-center justify-between border-b border-neutral-800">
-              <div className="w-12 h-1.5 bg-neutral-600 rounded-full mx-auto absolute top-3 left-1/2 -translate-x-1/2"></div>
-              <h2 className="font-bold text-[16px] text-white mt-3">🔍 Filtry</h2>
-              <button onClick={()=>setShowFilters(false)} className="w-10 h-10 rounded-full bg-[#222] text-white flex items-center justify-center" style={{minHeight: '44px'}}>✕</button>
-            </div>
-            <div className="flex-1 overflow-auto p-4 space-y-4">
-              <div><label className="text-[12px] font-bold uppercase text-neutral-400 mb-2 block">Marka</label><select value={searchBrand} onChange={e=>{setSearchBrand(e.target.value); setSearchModel('');}} className="w-full bg-[#1a1a1a] border border-neutral-700 rounded-[12px] px-4 py-4 text-[16px] text-white" style={{minHeight: '44px'}}><option value="">Wybierz markę</option>{Object.keys(BRAND_MODELS).sort().map(brand => <option key={brand} value={brand}>{brand}</option>)}</select></div>
-              <div><label className="text-[12px] font-bold uppercase text-neutral-400 mb-2 block">Model</label><select value={searchModel} onChange={e=>setSearchModel(e.target.value)} disabled={!searchBrand} className="w-full bg-[#1a1a1a] border border-neutral-700 rounded-[12px] px-4 py-4 text-[16px] text-white disabled:opacity-40" style={{minHeight: '44px'}}><option value="">{searchBrand ? 'Wybierz model' : 'Najpierw marka'}</option>{availableModels.map(model => <option key={model} value={model}>{model}</option>)}</select></div>
-              <div className="grid grid-cols-2 gap-3">
-                <div><label className="text-[12px] font-bold uppercase text-neutral-400 mb-2 block">Paliwo</label><select value={searchFuel} onChange={e=>setSearchFuel(e.target.value)} className="w-full bg-[#1a1a1a] border border-neutral-700 rounded-[12px] px-4 py-4 text-[16px] text-white" style={{minHeight: '44px'}}><option value="">Wszystkie</option><option>Benzyna</option><option>Diesel</option><option>LPG</option><option>Hybryda</option><option>Elektryczny</option></select></div>
-                <div><label className="text-[12px] font-bold uppercase text-neutral-400 mb-2 block">Miasto</label><input value={searchLocation} onChange={e=>setSearchLocation(e.target.value)} placeholder="Warszawa" className="w-full bg-[#1a1a1a] border border-neutral-700 rounded-[12px] px-4 py-4 text-[16px] text-white" style={{minHeight: '44px'}} /></div>
-              </div>
-            </div>
-            <div className="p-4 border-t border-neutral-800 bg-[#111] rounded-b-[24px] flex gap-3">
-              <button onClick={clearFilters} className="flex-1 bg-[#222] text-white font-bold py-4 rounded-[12px]" style={{minHeight: '44px'}}>Wyczyść</button>
-              <button onClick={()=>setShowFilters(false)} className="flex-[2] bg-[#ffea00] text-black font-bold py-4 rounded-[12px]" style={{minHeight: '44px'}}>Pokaż {filtered.length} wyników</button>
-            </div>
+      <footer class="border-t bg-white mt-8">
+        <div class="max-w-[1440px] mx-auto px-4 py-6">
+          <div class="flex flex-col md:flex-row justify-between gap-3 text-[13px]">
+            <div><div class="font-black text-[16px]">WROOMER<span class="text-[#ffea00]">.PL</span></div><div class="text-neutral-500 text-[12px] mt-1">© 2026 Norbert Nakoneczny</div></div>
+            <div class="flex gap-5 text-[12px] text-neutral-500"><span>Regulamin</span><span>Kontakt</span></div>
           </div>
-        </div>
-      )}
-
-      <footer className="border-t bg-white mt-8">
-        <div className="max-w-[1440px] mx-auto px-4 py-6">
-          <div className="flex flex-col md:flex-row justify-between gap-3 text-[13px]">
-            <div><div className="font-black text-[16px]">WROOMER<span className="text-[#ffea00]">.PL</span></div><div className="text-neutral-500 text-[12px] mt-1">© 2026 Norbert Nakoneczny • Wszystkie prawa zastrzeżone</div></div>
-            <div className="flex gap-5 text-[12px] text-neutral-500"><span>Regulamin</span><span>Kontakt</span></div>
-          </div>
-          <div className="mt-5 pt-4 border-t text-[10px] leading-[1.6] text-neutral-400"><strong className="text-neutral-700">Info:</strong> Właścicielem serwisu jest Norbert Nakoneczny. Nie ponosi odpowiedzialności za treść ogłoszeń i zdjęcia. Za treść odpowiada zamieszczający. Limit 5 zdjęć, max 5MB.</div>
+          <div class="mt-5 pt-4 border-t text-[10px] leading-[1.6] text-neutral-400"><strong class="text-neutral-700">Info:</strong> Właścicielem jest Norbert Nakoneczny. Nie ponosi odpowiedzialności za treść ogłoszeń.</div>
         </div>
       </footer>
 
-      {selected && (
-        <div className="fixed inset-0 z-50 bg-[#0a0a0a]/90 backdrop-blur-md overflow-auto" onClick={(e)=>{ if(e.target===e.currentTarget) setSelected(null); }}>
-          <div className="min-h-screen md:flex md:items-center md:justify-center md:p-6" onClick={(e)=>{ if(e.target===e.currentTarget) setSelected(null); }}>
-            <div className="bg-white w-full md:max-w-[1080px] md:rounded-[24px] overflow-hidden md:max-h-[90vh] flex flex-col relative animate-[scaleIn_0.25s_ease-out] shadow-2xl">
-              <div className="absolute top-0 left-0 right-0 z-20 flex items-center justify-between p-3 md:p-4 bg-gradient-to-b from-black/80 via-black/40 to-transparent">
-                <button onClick={()=>setSelected(null)} className="flex items-center gap-2 bg-white hover:bg-neutral-100 text-black text-[13px] font-bold px-5 py-3 rounded-full shadow-xl border border-white/20" style={{minHeight: '44px'}}>
-                  <span>←</span> Wróć
-                </button>
-                <button onClick={()=>setSelected(null)} className="w-12 h-12 bg-white text-black hover:bg-neutral-100 rounded-full flex items-center justify-center shadow-xl border-2 border-black/10 group" style={{minHeight: '48px', minWidth: '48px'}} title="Zamknij (ESC)">
-                  <span className="text-[22px] font-bold group-hover:rotate-90 transition-transform duration-200">✕</span>
-                </button>
+      ${selected?h`
+        <div class="fixed inset-0 z-50 bg-[#0a0a0a]/90 overflow-auto" style="backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px)" onClick=${(e)=>{if(e.target===e.currentTarget) closeAd();}}>
+          <div class="min-h-screen md:flex md:items-center md:justify-center md:p-6" onClick=${(e)=>{if(e.target===e.currentTarget) closeAd();}}>
+            <div class="bg-white w-full md:max-w-[1080px] md:rounded-[24px] overflow-hidden md:max-h-[90vh] flex flex-col relative shadow-2xl" style="animation:scaleIn .25s ease-out">
+              <div class="absolute top-0 left-0 right-0 z-20 flex items-center justify-between p-3 md:p-4" style="background:linear-gradient(to bottom, rgba(0,0,0,.8), rgba(0,0,0,.4), transparent)">
+                <button onClick=${closeAd} class="flex items-center gap-2 bg-white hover:bg-neutral-100 text-black text-[13px] font-bold px-5 py-3 rounded-full shadow-xl border" style="min-height:44px"><span>←</span> Wróć do listy</button>
+                <button onClick=${closeAd} class="w-12 h-12 bg-white text-black hover:bg-neutral-100 rounded-full flex items-center justify-center shadow-xl border-2 border-black/10" style="min-height:48px; min-width:48px" title="Zamknij - przycisk wstecz też cofa"><span class="text-[22px] font-bold">✕</span></button>
               </div>
-              <div className="flex-1 overflow-auto md:flex">
-                <div className="md:w-[62%] bg-black relative flex flex-col">
-                  <div className="aspect-[4/3] md:aspect-[16/12] relative overflow-hidden bg-neutral-900" onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd}>
-                    <img src={selected.images?.[imgIdx] || selected.image} alt={selected.title} className="w-full h-full object-contain md:object-cover" />
-                    <button onClick={()=>setImgIdx((imgIdx-1+selected.images.length)%selected.images.length)} className="absolute left-3 top-1/2 -translate-y-1/2 w-11 h-11 bg-white/90 hover:bg-white rounded-full flex items-center justify-center shadow-xl text-[20px] font-bold" style={{minHeight: '44px', minWidth: '44px'}}>‹</button>
-                    <button onClick={()=>setImgIdx((imgIdx+1)%selected.images.length)} className="absolute right-3 top-1/2 -translate-y-1/2 w-11 h-11 bg-white/90 hover:bg-white rounded-full flex items-center justify-center shadow-xl text-[20px] font-bold" style={{minHeight: '44px', minWidth: '44px'}}>›</button>
-                    <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent">
-                      <div className="flex items-center justify-between">
-                        <div className="flex gap-1.5">
-                          {(selected.images || [selected.image]).map((_, i) => (
-                            <button key={i} onClick={()=>setImgIdx(i)} className={`h-1.5 rounded-full transition-all ${i===imgIdx ? 'bg-[#ffea00] w-8' : 'bg-white/50 w-1.5'}`} style={{minHeight: '6px', minWidth: i===imgIdx ? '32px' : '6px'}}></button>
-                          ))}
+              <div class="flex-1 overflow-auto md:flex">
+                <div class="md:w-[62%] bg-black relative flex flex-col">
+                  <div class="aspect-[4/3] md:aspect-[16/12] relative overflow-hidden bg-neutral-900"
+                    onTouchStart=${(e)=>{touchStartX.current=e.touches[0].clientX;}}
+                    onTouchEnd=${(e)=>{
+                      const endX=e.changedTouches[0].clientX;
+                      const diff=touchStartX.current-endX;
+                      if(Math.abs(diff)>50){
+                        if(diff>0) setImgIdx((imgIdx+1)%selected.images.length);
+                        else setImgIdx((imgIdx-1+selected.images.length)%selected.images.length);
+                      }
+                    }}
+                  >
+                    <img src=${(selected.images&&selected.images[imgIdx])||selected.image} alt=${selected.title} class="w-full h-full object-contain md:object-cover" />
+                    <button onClick=${()=>setImgIdx((imgIdx-1+selected.images.length)%selected.images.length)} class="absolute left-3 top-1/2 -translate-y-1/2 w-11 h-11 bg-white/90 hover:bg-white rounded-full flex items-center justify-center shadow-xl text-[20px] font-bold" style="min-height:44px; min-width:44px">‹</button>
+                    <button onClick=${()=>setImgIdx((imgIdx+1)%selected.images.length)} class="absolute right-3 top-1/2 -translate-y-1/2 w-11 h-11 bg-white/90 hover:bg-white rounded-full flex items-center justify-center shadow-xl text-[20px] font-bold" style="min-height:44px; min-width:44px">›</button>
+                    <div class="absolute bottom-0 left-0 right-0 p-4" style="background:linear-gradient(to top, rgba(0,0,0,.8), transparent)">
+                      <div class="flex items-center justify-between">
+                        <div class="flex gap-1.5">
+                          ${(selected.images||[selected.image]).map((_,i)=>h`<button key=${i} onClick=${()=>setImgIdx(i)} class=${'h-1.5 rounded-full transition-all '+(i===imgIdx?'bg-[#ffea00] w-8':'bg-white/50 w-1.5')} style=${'min-height:6px; min-width:'+(i===imgIdx?'32px':'6px')}></button>`)}
                         </div>
-                        <div className="bg-white/90 text-black text-[12px] font-bold px-3 py-1 rounded-full">{imgIdx+1} / {(selected.images || [selected.image]).length}</div>
+                        <div class="bg-white/90 text-black text-[12px] font-bold px-3 py-1 rounded-full">${imgIdx+1} / ${(selected.images||[selected.image]).length}</div>
                       </div>
-                      <div className="text-[11px] text-white/70 mt-2 md:hidden">Swipe ← → • Kliknij tło / X / ESC aby zamknąć</div>
+                      <div class="text-[11px] text-white/70 mt-2 md:hidden">Swipe ← → zdjęcia • Przycisk wstecz w telefonie = powrót do listy</div>
                     </div>
                   </div>
-                  <div className="p-3 bg-[#111] border-t border-neutral-800">
-                    <div className="flex gap-2 overflow-x-auto pb-1">
-                      {(selected.images || [selected.image]).map((img, i) => (
-                        <button key={i} onClick={()=>setImgIdx(i)} className={`flex-shrink-0 w-[72px] h-[54px] rounded-[10px] overflow-hidden border-2 ${i===imgIdx ? 'border-[#ffea00] scale-105' : 'border-transparent opacity-60'}`} style={{minHeight: '54px', minWidth: '72px'}}>
-                          <img src={img} className="w-full h-full object-cover" loading="lazy" />
-                        </button>
-                      ))}
+                  <div class="p-3 bg-[#111] border-t border-neutral-800">
+                    <div class="flex gap-2 overflow-x-auto pb-1">
+                      ${(selected.images||[selected.image]).map((img,i)=>h`<button key=${i} onClick=${()=>setImgIdx(i)} class=${'flex-shrink-0 w-[72px] h-[54px] rounded-[10px] overflow-hidden border-2 '+(i===imgIdx?'border-[#ffea00] scale-105':'border-transparent opacity-60')} style="min-height:54px; min-width:72px"><img src=${img} class="w-full h-full object-cover" loading="lazy" /></button>`)}
                     </div>
                   </div>
                 </div>
-                <div className="md:w-[38%] p-5">
-                  <h1 className="text-[20px] font-black leading-tight">{selected.title}</h1>
-                  <div className="text-[26px] font-black mt-3">{selected.price.toLocaleString('pl-PL')} zł</div>
-                  <div className="grid grid-cols-3 gap-2 my-5">
-                    {[
-                      { k: 'Rok', v: selected.year },
-                      { k: 'Przebieg', v: `${selected.mileage.toLocaleString('pl-PL')} km` },
-                      { k: 'Moc', v: `${selected.power} KM` },
-                      { k: 'Paliwo', v: selected.fuel },
-                      { k: 'Skrzynia', v: selected.gearbox },
-                      { k: 'Miasto', v: selected.location },
-                    ].map(item => (
-                      <div key={item.k} className="bg-[#f5f5f7] rounded-[12px] p-3"><div className="text-[10px] font-bold text-neutral-500 uppercase">{item.k}</div><div className="text-[13px] font-bold mt-1">{item.v}</div></div>
-                    ))}
+                <div class="md:w-[38%] p-5">
+                  <h1 class="text-[20px] font-black leading-tight">${selected.title}</h1>
+                  <div class="text-[26px] font-black mt-3">${selected.price.toLocaleString('pl-PL')} zł</div>
+                  <div class="grid grid-cols-3 gap-2 my-5">
+                    ${[{k:'Rok',v:selected.year},{k:'Przebieg',v:selected.mileage.toLocaleString('pl-PL')+' km'},{k:'Moc',v:selected.power+' KM'},{k:'Paliwo',v:selected.fuel},{k:'Skrzynia',v:selected.gearbox},{k:'Miasto',v:selected.location}].map(item=>h`<div key=${item.k} class="bg-[#f5f5f7] rounded-[12px] p-3"><div class="text-[10px] font-bold text-neutral-500 uppercase">${item.k}</div><div class="text-[13px] font-bold mt-1">${item.v}</div></div>`)}
                   </div>
-                  <div className="mb-6"><div className="font-bold text-[13px] mb-2">Opis</div><div className="text-[13px] leading-[1.6] text-neutral-700 whitespace-pre-wrap">{selected.description}</div></div>
-                  <div className="bg-black text-white rounded-[16px] p-4">
-                    <div className="flex items-center gap-3">
-                      <div className="w-11 h-11 bg-[#ffea00] rounded-full flex items-center justify-center font-black text-black">{selected.owner[0]}</div>
-                      <div className="flex-1"><div className="font-bold text-[14px]">{selected.owner}</div><div className="text-[11px] text-neutral-400">{selected.ownerEmail}</div></div>
-                    </div>
-                    <div className="grid grid-cols-2 gap-2 mt-4">
-                      <a href={`tel:${selected.phone.replace(/ /g,'')}`} className="bg-[#ffea00] text-black font-bold text-[14px] py-3.5 rounded-[12px] text-center" style={{minHeight: '44px'}}>📞 Zadzwoń</a>
-                      <button className="bg-[#222] text-white font-bold text-[14px] py-3.5 rounded-[12px]" style={{minHeight: '44px'}}>💬 Napisz</button>
-                    </div>
+                  <div class="mb-6"><div class="font-bold text-[13px] mb-2">Opis</div><div class="text-[13px] leading-[1.6] text-neutral-700" style="white-space:pre-wrap">${selected.description}</div></div>
+                  <div class="bg-black text-white rounded-[16px] p-4">
+                    <div class="flex items-center gap-3"><div class="w-11 h-11 bg-[#ffea00] rounded-full flex items-center justify-center font-black text-black">${selected.owner[0]}</div><div class="flex-1"><div class="font-bold text-[14px]">${selected.owner}</div><div class="text-[11px] text-neutral-400">${selected.ownerEmail}</div></div></div>
+                    <div class="grid grid-cols-2 gap-2 mt-4"><a href=${'tel:'+selected.phone.replace(/ /g,'')} class="bg-[#ffea00] text-black font-bold text-[14px] py-3.5 rounded-[12px] text-center" style="min-height:44px">📞 Zadzwoń</a><button class="bg-[#222] text-white font-bold text-[14px] py-3.5 rounded-[12px]" style="min-height:44px">💬 Napisz</button></div>
                   </div>
-                  <div className="mt-6 space-y-3">
-                    <button onClick={()=>setSelected(null)} className="w-full bg-black text-white font-bold py-4 rounded-[14px] text-[15px] flex items-center justify-center gap-2 shadow-lg hover:bg-neutral-900 active:scale-[0.98] transition-all" style={{minHeight: '52px'}}>
-                      <span className="text-[18px]">✕</span> Zamknij ogłoszenie
-                    </button>
-                    <div className="text-center text-[11px] text-neutral-500">Kliknij poza ogłoszeniem • Naciśnij ESC • Swipe w dół na mobile</div>
+                  <div class="mt-6 space-y-3">
+                    <button onClick=${closeAd} class="w-full bg-black text-white font-bold py-4 rounded-[14px] text-[15px] flex items-center justify-center gap-2 shadow-lg" style="min-height:52px"><span class="text-[18px]">✕</span> Zamknij - wróć do listy</button>
+                    <div class="text-center text-[11px] text-neutral-500">ESC • Klik w tło • X • Przycisk wstecz w telefonie = powrót</div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      )}
+      `:''}
 
-      {showAuth && (
-        <div className="fixed inset-0 z-[60] bg-black/60 flex items-center justify-center p-4" onClick={(e)=>{ if(e.target===e.currentTarget) setShowAuth(null); }}>
-          <div className="bg-white rounded-[20px] w-full max-w-[380px] p-6 animate-[scaleIn_0.2s_ease-out]">
-            <div className="flex justify-between mb-6"><div className="font-black">WROOMER.PL</div><button onClick={()=>{setShowAuth(null); setError('');}} className="w-11 h-11 rounded-full bg-neutral-100 flex items-center justify-center" style={{minHeight: '44px'}}>✕</button></div>
-            <h2 className="text-[22px] font-black mb-1">{showAuth === 'login' ? 'Zaloguj się' : 'Załóż konto'}</h2>
-            <form onSubmit={showAuth === 'login' ? handleLogin : handleRegister} className="space-y-3 mt-4">
-              {showAuth === 'register' && <input value={authForm.name} onChange={e=>setAuthForm({...authForm, name: e.target.value})} placeholder="Imię" className="w-full border rounded-[12px] px-4 py-4 text-[16px]" style={{minHeight: '44px'}} />}
-              <input type="email" value={authForm.email} onChange={e=>setAuthForm({...authForm, email: e.target.value})} placeholder="E-mail" className="w-full border rounded-[12px] px-4 py-4 text-[16px]" style={{minHeight: '44px'}} />
-              <input type="password" value={authForm.password} onChange={e=>setAuthForm({...authForm, password: e.target.value})} placeholder="Hasło" className="w-full border rounded-[12px] px-4 py-4 text-[16px]" style={{minHeight: '44px'}} />
-              {error && <div className="bg-red-50 border border-red-200 text-red-700 text-[12px] rounded-[8px] px-3 py-2">{error}</div>}
-              <button type="submit" className="w-full bg-black text-white font-bold py-4 rounded-[12px]" style={{minHeight: '44px'}}>{showAuth === 'login' ? 'Zaloguj' : 'Załóż konto'}</button>
-            </form>
-          </div>
-        </div>
-      )}
-
-      {showAdd && (
-        <div className="fixed inset-0 z-50 bg-black/60 flex items-end md:items-center justify-center p-0 md:p-4" onClick={(e)=>{ if(e.target===e.currentTarget) setShowAdd(false); }}>
-          <div className="bg-white w-full md:max-w-[600px] rounded-t-[24px] md:rounded-[20px] max-h-[92vh] overflow-auto animate-[scaleIn_0.2s_ease-out]">
-            <div className="sticky top-0 bg-white border-b px-5 py-4 flex justify-between items-center"><div><div className="font-bold">Dodaj ogłoszenie</div><div className="text-[11px] text-neutral-500">{currentUser?.name} • Max 5 zdjęć</div></div><button onClick={()=>setShowAdd(false)} className="w-11 h-11 rounded-full bg-neutral-100 flex items-center justify-center" style={{minHeight: '44px'}}>✕</button></div>
-            <form onSubmit={handleSubmitForConfirm} className="p-5 space-y-4">
-              <div className="bg-[#ffea00]/20 border border-[#ffea00]/50 rounded-[12px] p-3">
-                <div className="font-bold text-[12px] mb-2">📷 Zdjęcia (max 5)</div>
-                <div className="grid grid-cols-5 gap-2 mb-3">
-                  {form.images.map((img, idx) => (<div key={idx} className="relative aspect-square rounded-[8px] overflow-hidden border"><img src={img} className="w-full h-full object-cover" /><button type="button" onClick={()=>setForm({...form, images: form.images.filter((_, i) => i !== idx)})} className="absolute top-1 right-1 w-6 h-6 bg-black/70 text-white rounded-full text-[10px] flex items-center justify-center" style={{minHeight: '24px', minWidth: '24px'}}>✕</button></div>))}
-                  {form.images.length < 5 && <button type="button" onClick={()=>fileInputRef.current?.click()} className="aspect-square rounded-[8px] border-2 border-dashed flex flex-col items-center justify-center" style={{minHeight: '44px'}}><span className="text-[20px]">+</span><span className="text-[10px] font-semibold">Dodaj</span></button>}
-                </div>
-                <input ref={fileInputRef} type="file" accept="image/*" multiple onChange={handleImageUpload} />
-              </div>
-              <div className="grid grid-cols-2 gap-3">
-                <div><label className="text-[11px] font-bold uppercase text-neutral-500">Marka *</label><select required value={form.brand} onChange={e=>{setForm({...form, brand: e.target.value, model: ''});}} className="w-full mt-1.5 bg-white border rounded-[12px] px-3 py-4 text-[16px]" style={{minHeight: '44px'}}><option value="">Wybierz markę</option>{Object.keys(BRAND_MODELS).sort().map(b => <option key={b} value={b}>{b}</option>)}</select></div>
-                <div><label className="text-[11px] font-bold uppercase text-neutral-500">Model *</label><select required value={form.model} onChange={e=>setForm({...form, model: e.target.value})} disabled={!form.brand} className="w-full mt-1.5 bg-white border rounded-[12px] px-3 py-4 text-[16px] disabled:opacity-40" style={{minHeight: '44px'}}><option value="">{form.brand ? 'Wybierz model' : 'Najpierw marka'}</option>{availableModelsForForm.map(m => <option key={m} value={m}>{m}</option>)}</select></div>
-              </div>
-              <div className="grid grid-cols-3 gap-2"><div><label className="text-[11px] font-bold uppercase text-neutral-500">Rok</label><input type="number" value={form.year} onChange={e=>setForm({...form, year: e.target.value})} className="w-full mt-1.5 border rounded-[12px] px-3 py-4 text-[16px]" style={{minHeight: '44px'}} /></div><div><label className="text-[11px] font-bold uppercase text-neutral-500">Cena</label><input type="number" value={form.price} onChange={e=>setForm({...form, price: e.target.value})} className="w-full mt-1.5 border rounded-[12px] px-3 py-4 text-[16px]" style={{minHeight: '44px'}} /></div><div><label className="text-[11px] font-bold uppercase text-neutral-500">Przebieg</label><input type="number" value={form.mileage} onChange={e=>setForm({...form, mileage: e.target.value})} className="w-full mt-1.5 border rounded-[12px] px-3 py-4 text-[16px]" style={{minHeight: '44px'}} /></div></div>
-              <div><label className="text-[11px] font-bold uppercase text-neutral-500">Tytuł</label><input value={form.title} onChange={e=>setForm({...form, title: e.target.value})} className="w-full mt-1.5 border rounded-[12px] px-3 py-4 text-[16px]" style={{minHeight: '44px'}} /></div>
-              <div><label className="text-[11px] font-bold uppercase text-neutral-500">Opis</label><textarea value={form.description} onChange={e=>setForm({...form, description: e.target.value})} rows="3" className="w-full mt-1.5 border rounded-[12px] px-3 py-3 text-[16px]"></textarea></div>
-              <div className="flex gap-2"><button type="button" onClick={()=>setShowAdd(false)} className="flex-1 bg-[#f5f5f7] font-bold py-4 rounded-[12px]" style={{minHeight: '44px'}}>Anuluj</button><button type="submit" className="flex-[2] bg-black text-white font-bold py-4 rounded-[12px]" style={{minHeight: '44px'}}>Dalej → Potwierdź</button></div>
-            </form>
-          </div>
-        </div>
-      )}
-
-      {showConfirm && (
-        <div className="fixed inset-0 z-[70] bg-black/70 flex items-center justify-center p-4" onClick={(e)=>{ if(e.target===e.currentTarget) setShowConfirm(null); }}>
-          <div className="bg-white rounded-[20px] w-full max-w-[480px] p-6 animate-[scaleIn_0.2s_ease-out]">
-            <div className="w-12 h-12 bg-[#ffea00] rounded-full flex items-center justify-center mx-auto mb-4">⚠️</div>
-            <h2 className="text-[18px] font-black text-center mb-2">Potwierdź dodanie</h2>
-            <div className="bg-[#f5f5f7] rounded-[12px] p-4 mb-4 flex gap-3">
-              {showConfirm.images[0] && <img src={showConfirm.images[0]} className="w-20 h-20 rounded-[8px] object-cover" />}
-              <div><div className="font-bold text-[14px]">{showConfirm.title || (showConfirm.brand + ' ' + showConfirm.model)}</div><div className="text-[12px] text-neutral-500">{showConfirm.year} • {showConfirm.mileage} km</div><div className="font-black mt-1">{showConfirm.price} zł</div><div className="text-[11px] text-neutral-500">📷 {showConfirm.images.length} zdjęć</div></div>
+      ${showFilters?h`
+        <div class="fixed inset-0 z-[80] lg:hidden">
+          <div class="absolute inset-0 bg-black/60" style="backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px)" onClick=${()=>setShowFilters(false)}></div>
+          <div class=${'absolute bottom-0 left-0 right-0 bg-[#111] rounded-t-[24px] max-h-[85vh] flex flex-col bottom-sheet '+(showFilters?'open':'')}>
+            <div class="p-4 flex items-center justify-between border-b border-neutral-800"><div class="w-12 h-1.5 bg-neutral-600 rounded-full mx-auto absolute top-3 left-1/2 -translate-x-1/2"></div><h2 class="font-bold text-[16px] text-white mt-3">🔍 Filtry</h2><button onClick=${()=>setShowFilters(false)} class="w-10 h-10 rounded-full bg-[#222] text-white flex items-center justify-center" style="min-height:44px">✕</button></div>
+            <div class="flex-1 overflow-auto p-4 space-y-4">
+              <div><label class="text-[12px] font-bold uppercase text-neutral-400 mb-2 block">Marka</label><select value=${searchBrand} onChange=${e=>{setSearchBrand(e.target.value); setSearchModel('');}} class="w-full bg-[#1a1a1a] border border-neutral-700 rounded-[12px] px-4 py-4 text-[16px] text-white" style="min-height:44px"><option value="">Wybierz markę</option>${Object.keys(BRAND_MODELS).sort().map(b=>h`<option value=${b}>${b}</option>`)}</select></div>
+              <div><label class="text-[12px] font-bold uppercase text-neutral-400 mb-2 block">Model</label><select value=${searchModel} onChange=${e=>setSearchModel(e.target.value)} disabled=${!searchBrand} class="w-full bg-[#1a1a1a] border border-neutral-700 rounded-[12px] px-4 py-4 text-[16px] text-white disabled:opacity-40" style="min-height:44px"><option value="">${searchBrand?'Wybierz model':'Najpierw marka'}</option>${availableModels.map(m=>h`<option value=${m}>${m}</option>`)}</select></div>
+              <div class="grid grid-cols-2 gap-3"><div><label class="text-[12px] font-bold uppercase text-neutral-400 mb-2 block">Paliwo</label><select value=${searchFuel} onChange=${e=>setSearchFuel(e.target.value)} class="w-full bg-[#1a1a1a] border border-neutral-700 rounded-[12px] px-4 py-4 text-[16px] text-white" style="min-height:44px"><option value="">Wszystkie</option><option>Benzyna</option><option>Diesel</option></select></div><div><label class="text-[12px] font-bold uppercase text-neutral-400 mb-2 block">Miasto</label><input value=${searchLocation} onInput=${e=>setSearchLocation(e.target.value)} placeholder="Warszawa" class="w-full bg-[#1a1a1a] border border-neutral-700 rounded-[12px] px-4 py-4 text-[16px] text-white" style="min-height:44px" /></div></div>
             </div>
-            <div className="flex gap-2"><button onClick={()=>setShowConfirm(null)} className="flex-1 bg-[#f5f5f7] font-bold py-4 rounded-[12px]" style={{minHeight: '44px'}}>← Wróć</button><button onClick={confirmAdd} className="flex-[1.5] bg-[#ffea00] text-black font-bold py-4 rounded-[12px]" style={{minHeight: '44px'}}>✅ Dodaj</button></div>
-            <button onClick={()=>{setShowConfirm(null); setShowAdd(false);}} className="w-full mt-2 text-[12px] text-neutral-500 py-3" style={{minHeight: '44px'}}>Anuluj</button>
+            <div class="p-4 border-t border-neutral-800 bg-[#111] rounded-b-[24px] flex gap-3"><button onClick=${clearFilters} class="flex-1 bg-[#222] text-white font-bold py-4 rounded-[12px]" style="min-height:44px">Wyczyść</button><button onClick=${()=>setShowFilters(false)} class="flex-[2] bg-[#ffea00] text-black font-bold py-4 rounded-[12px]" style="min-height:44px">Pokaż ${filtered.length} wyników</button></div>
           </div>
         </div>
-      )}
+      `:''}
+
+      ${showAuth?h`
+        <div class="fixed inset-0 z-[60] bg-black/60 flex items-center justify-center p-4" onClick=${(e)=>{if(e.target===e.currentTarget) setShowAuth(null);}}>
+          <div class="bg-white rounded-[20px] w-full max-w-[380px] p-6" style="animation:scaleIn .2s ease-out">
+            <div class="flex justify-between mb-6"><div class="font-black">WROOMER.PL</div><button onClick=${()=>{setShowAuth(null); setError('');}} class="w-11 h-11 rounded-full bg-neutral-100 flex items-center justify-center" style="min-height:44px">✕</button></div>
+            <h2 class="text-[22px] font-black mb-1">${showAuth==='login'?'Zaloguj się':'Załóż konto'}</h2>
+            <form onSubmit=${showAuth==='login'?handleLogin:handleRegister} class="space-y-3 mt-4">
+              ${showAuth==='register'?h`<input value=${authForm.name} onInput=${e=>setAuthForm({...authForm, name:e.target.value})} placeholder="Imię" class="w-full border rounded-[12px] px-4 py-4 text-[16px]" style="min-height:44px" />`:''}
+              <input type="email" value=${authForm.email} onInput=${e=>setAuthForm({...authForm, email:e.target.value})} placeholder="E-mail" class="w-full border rounded-[12px] px-4 py-4 text-[16px]" style="min-height:44px" />
+              <input type="password" value=${authForm.password} onInput=${e=>setAuthForm({...authForm, password:e.target.value})} placeholder="Hasło" class="w-full border rounded-[12px] px-4 py-4 text-[16px]" style="min-height:44px" />
+              ${error?h`<div class="bg-red-50 border border-red-200 text-red-700 text-[12px] rounded-[8px] px-3 py-2">${error}</div>`:''}
+              <button type="submit" class="w-full bg-black text-white font-bold py-4 rounded-[12px]" style="min-height:44px">${showAuth==='login'?'Zaloguj':'Załóż konto'}</button>
+            </form>
+          </div>
+        </div>
+      `:''}
     </div>
-  );
+  `;
 }
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(<App />);
+root.render(h`<${App} />`);
 </script>
 </body>
 </html>
