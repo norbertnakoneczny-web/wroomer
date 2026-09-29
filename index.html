@@ -266,8 +266,9 @@ function App(){
               </>
             ) : (
               <>
-                <button onClick={()=>setShowAuth('login')} className="text-[13px] px-3 bg-[#222] md:bg-transparent border border-neutral-700 md:border-0 rounded-[10px]" style={{minHeight:'44px'}}>Zaloguj</button>
-                <button onClick={handleAddClick} className="bg-[#ffea00] text-black px-4 py-2 rounded-[10px] font-bold text-[13px]" style={{minHeight:'44px'}}>+ Dodaj</button>
+                <button onClick={()=>setShowAuth('login')} className="text-[13px] px-3 bg-[#222] border border-neutral-700 rounded-[10px] font-bold" style={{minHeight:'44px'}}>Zaloguj</button>
+                <button onClick={()=>setShowAuth('register')} className="bg-white text-black px-3 md:px-4 py-2 rounded-[10px] font-bold text-[13px] border border-white" style={{minHeight:'44px'}}>Zarejestruj</button>
+                <button onClick={handleAddClick} className="bg-[#ffea00] text-black px-3 md:px-4 py-2 rounded-[10px] font-bold text-[13px]" style={{minHeight:'44px'}}>+ Dodaj</button>
               </>
             )}
           </div>
