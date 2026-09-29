@@ -45,8 +45,7 @@ const CITY_COORDS = {
   "Warszawa": [52.2297, 21.0122], "Kraków": [50.0647, 19.9450], "Wrocław": [51.1079, 17.0385],
   "Gdańsk": [54.3520, 18.6466], "Poznań": [52.4064, 16.9252], "Katowice": [50.2649, 19.0238],
   "Łódź": [51.7592, 19.4550], "Szczecin": [53.4285, 14.5528], "Gorzyce": [49.96, 18.40],
-  "Wodzisław Śląski": [50.05, 18.45], "Rybnik": [50.09, 18.54], "Tychy": [50.12, 18.99],
-  "Bielsko-Biała": [49.82, 19.04], "Częstochowa": [50.81, 19.12], "Gliwice": [50.29, 18.67]
+  "Wodzisław Śląski": [50.05, 18.45], "Rybnik": [50.09, 18.54], "Tychy": [50.12, 18.99]
 };
 function haversine(lat1, lon1, lat2, lon2) {
   const R = 6371; const dLat = (lat2 - lat1) * Math.PI / 180; const dLon = (lon2 - lon1) * Math.PI / 180;
@@ -58,21 +57,15 @@ function getDistanceToAd(userLat, userLng, adLocation) {
 }
 
 const MOCK_ADS = [
-  { id: 1, title: "BMW 320d F30 2018 - ASO, bezwypadkowy", brand: "BMW", model: "3 Series", year: 2018, price: 65900, mileage: 89000, fuel: "Diesel", gearbox: "Automatyczna", power: 190, location: "Warszawa", voivodeship: "Mazowieckie", description: "Zadbany, ASO.", image: "https://images.unsplash.com/photo-1555215695-3004980ad54e?w=600", images: ["https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800"], owner: "Marek K.", ownerEmail: "marek@example.com", phone: "600 123 456", createdAt: "2h temu", createdAtTs: Date.now()-2*3600000 },
-  { id: 2, title: "Audi A4 B9 S-line 2019", brand: "Audi", model: "A4", year: 2019, price: 78900, mileage: 67000, fuel: "Benzyna", gearbox: "Automatyczna", power: 190, location: "Kraków", voivodeship: "Małopolskie", description: "S-line.", image: "https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=600", images: ["https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=800"], owner: "Auto-Kompleks", ownerEmail: "auto@example.com", phone: "500 987 654", createdAt: "5h temu", createdAtTs: Date.now()-5*3600000 },
-  { id: 6, title: "Toyota Corolla Hybrid 2022", brand: "Toyota", model: "Corolla", year: 2022, price: 79900, mileage: 22000, fuel: "Hybryda", gearbox: "Automatyczna", power: 122, location: "Katowice", voivodeship: "Śląskie", description: "Gwarancja.", image: "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=600", images: ["https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=800"], owner: "Salon Toyota", ownerEmail: "toyota@example.com", phone: "600 777 888", createdAt: "3 dni temu", createdAtTs: Date.now()-72*3600000 },
-  { id: 11, title: "Mercedes GLC 220d 4MATIC 2018", brand: "Mercedes", model: "GLC", year: 2018, price: 89900, mileage: 88000, fuel: "Diesel", gearbox: "Automatyczna", power: 170, location: "Wodzisław Śląski", voivodeship: "Śląskie", description: "AMG Line.", image: "https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=600", images: ["https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=800"], owner: "Anna M.", ownerEmail: "anna@example.com", phone: "600 333 444", createdAt: "12h temu", createdAtTs: Date.now()-12*3600000 },
-  { id: 12, title: "Skoda Kodiaq 7-osobowy 4x4 2019", brand: "Skoda", model: "Kodiaq", year: 2019, price: 75900, mileage: 72000, fuel: "Diesel", gearbox: "Automatyczna", power: 150, location: "Rybnik", voivodeship: "Śląskie", description: "7-osob.", image: "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=600", images: ["https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=800"], owner: "Tomasz L.", ownerEmail: "tomasz@example.com", phone: "600 555 666", createdAt: "1 dzień temu", createdAtTs: Date.now()-30*3600000 },
-  { id: 13, title: "Toyota RAV4 Hybrid AWD 2021", brand: "Toyota", model: "RAV4", year: 2021, price: 109900, mileage: 35000, fuel: "Hybryda", gearbox: "Automatyczna", power: 222, location: "Katowice", voivodeship: "Śląskie", description: "Gwarancja.", image: "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=600", images: ["https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=800"], owner: "Salon Toyota", ownerEmail: "toyota@example.com", phone: "600 777 888", createdAt: "2 dni temu", createdAtTs: Date.now()-50*3600000 },
-  { id: 14, title: "VW Tiguan R-Line 4Motion 2020", brand: "Volkswagen", model: "Tiguan", year: 2020, price: 84900, mileage: 48000, fuel: "Diesel", gearbox: "Automatyczna", power: 150, location: "Tychy", voivodeship: "Śląskie", image: "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=600", images: ["https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800"], owner: "Piotr W.", ownerEmail: "piotr@example.com", phone: "600 111 222", createdAt: "2 dni temu", createdAtTs: Date.now()-55*3600000 },
-  { id: 17, title: "BMW M3 Competition 510KM 2021", brand: "BMW", model: "M3", year: 2021, price: 329900, mileage: 18000, fuel: "Benzyna", gearbox: "Automatyczna", power: 510, location: "Warszawa", voivodeship: "Mazowieckie", description: "Ceramika, nagłośnienie Harman.", image: "https://images.unsplash.com/photo-1555215695-3004980ad54e?w=600", images: ["https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800"], owner: "M Cars", ownerEmail: "mcars@example.com", phone: "600 888 999", createdAt: "1h temu", createdAtTs: Date.now()-1*3600000 },
-  { id: 18, title: "Ford Mustang GT V8 421KM 2018", brand: "Ford", model: "Mustang", year: 2018, price: 119900, mileage: 45000, fuel: "Benzyna", gearbox: "Automatyczna", power: 421, location: "Częstochowa", voivodeship: "Śląskie", description: "V8.", image: "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=600", images: ["https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800"], owner: "Mustang Garage", ownerEmail: "mustang@example.com", phone: "600 123 789", createdAt: "3h temu", createdAtTs: Date.now()-3*3600000 },
+  { id: 1, title: "BMW 320d F30 2018 - ASO", brand: "BMW", model: "3 Series", year: 2018, price: 65900, mileage: 89000, fuel: "Diesel", gearbox: "Automatyczna", power: 190, location: "Warszawa", voivodeship: "Mazowieckie", description: "Zadbany, ASO.", image: "https://images.unsplash.com/photo-1555215695-3004980ad54e?w=600", images: ["https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800"], owner: "Marek K.", ownerEmail: "marek@example.com", ownerId: 9991, phone: "600 123 456", whatsapp: "600 123 456", allowCall: true, allowSms: true, allowWhatsapp: true, contactEmail: "marek@example.com", preferredContact: "telefon", createdAt: "2h temu", createdAtTs: Date.now()-2*3600000 },
+  { id: 6, title: "Toyota Corolla Hybrid 2022", brand: "Toyota", model: "Corolla", year: 2022, price: 79900, mileage: 22000, fuel: "Hybryda", gearbox: "Automatyczna", power: 122, location: "Katowice", voivodeship: "Śląskie", description: "Gwarancja.", image: "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=600", images: ["https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=800"], owner: "Salon Toyota", ownerEmail: "toyota@example.com", ownerId: 9992, phone: "32 123 45 67", whatsapp: "600 777 888", allowCall: true, allowSms: false, allowWhatsapp: true, contactEmail: "kontakt@toyota-katowice.pl", preferredContact: "whatsapp", createdAt: "3 dni temu", createdAtTs: Date.now()-72*3600000 },
+  { id: 11, title: "Mercedes GLC 220d 4MATIC 2018", brand: "Mercedes", model: "GLC", year: 2018, price: 89900, mileage: 88000, fuel: "Diesel", gearbox: "Automatyczna", power: 170, location: "Wodzisław Śląski", voivodeship: "Śląskie", description: "AMG Line, stan bdb.", image: "https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=600", images: ["https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=800"], owner: "Anna M.", ownerEmail: "anna@example.com", ownerId: 9993, phone: "600 333 444", whatsapp: "600 333 444", allowCall: true, allowSms: true, allowWhatsapp: true, contactEmail: "anna@example.com", preferredContact: "telefon", createdAt: "12h temu", createdAtTs: Date.now()-12*3600000 },
 ];
 
 function App() {
-  const [ads, setAds] = useState(() => { try { const s = localStorage.getItem('wroomer_ads_2237'); return s ? JSON.parse(s) : MOCK_ADS; } catch(e){ return MOCK_ADS; } });
-  const [users, setUsers] = useState(() => { try { const s = localStorage.getItem('wroomer_users_2237'); return s ? JSON.parse(s) : []; } catch(e){ return []; } });
-  const [currentUser, setCurrentUser] = useState(() => { try { const s = localStorage.getItem('wroomer_current_user_2237'); return s ? JSON.parse(s) : null; } catch(e){ return null; } });
+  const [ads, setAds] = useState(() => { try { const s = localStorage.getItem('wroomer_ads_pro'); return s ? JSON.parse(s) : MOCK_ADS; } catch(e){ return MOCK_ADS; } });
+  const [users, setUsers] = useState(() => { try { const s = localStorage.getItem('wroomer_users_pro'); return s ? JSON.parse(s) : []; } catch(e){ return []; } });
+  const [currentUser, setCurrentUser] = useState(() => { try { const s = localStorage.getItem('wroomer_current_user_pro'); return s ? JSON.parse(s) : null; } catch(e){ return null; } });
   const [searchBrand, setSearchBrand] = useState('');
   const [searchModel, setSearchModel] = useState('');
   const [searchLocation, setSearchLocation] = useState('');
@@ -86,17 +79,20 @@ function App() {
   const [showAdd, setShowAdd] = useState(false);
   const [showAuth, setShowAuth] = useState(null);
   const [showConfirm, setShowConfirm] = useState(null);
+  const [editingId, setEditingId] = useState(null);
   const [authForm, setAuthForm] = useState({ email: '', password: '', name: '' });
-  const [form, setForm] = useState({ brand: '', model: '', year: 2020, price: '', mileage: '', fuel: 'Benzyna', gearbox: 'Manualna', power: '', location: '', voivodeship: 'Śląskie', title: '', description: '', images: [] });
+  const [form, setForm] = useState({ brand: '', model: '', year: 2020, price: '', mileage: '', fuel: 'Benzyna', gearbox: 'Manualna', power: '', location: '', voivodeship: 'Śląskie', title: '', description: '', images: [], phone: '', whatsapp: '', allowCall: true, allowSms: true, allowWhatsapp: true, contactEmail: '', preferredContact: 'telefon', messenger: '' });
   const [imgIdx, setImgIdx] = useState(0);
   const [error, setError] = useState('');
+  const [contactMessage, setContactMessage] = useState('');
+  const [showContactForm, setShowContactForm] = useState(null);
   const fileInputRef = useRef(null);
 
-  useEffect(() => { try { localStorage.setItem('wroomer_ads_2237', JSON.stringify(ads)); } catch(e){} }, [ads]);
-  useEffect(() => { try { localStorage.setItem('wroomer_users_2237', JSON.stringify(users)); } catch(e){} }, [users]);
-  useEffect(() => { try { if(currentUser) localStorage.setItem('wroomer_current_user_2237', JSON.stringify(currentUser)); else localStorage.removeItem('wroomer_current_user_2237'); } catch(e){} }, [currentUser]);
+  useEffect(() => { try { localStorage.setItem('wroomer_ads_pro', JSON.stringify(ads)); } catch(e){} }, [ads]);
+  useEffect(() => { try { localStorage.setItem('wroomer_users_pro', JSON.stringify(users)); } catch(e){} }, [users]);
+  useEffect(() => { try { if(currentUser) localStorage.setItem('wroomer_current_user_pro', JSON.stringify(currentUser)); else localStorage.removeItem('wroomer_current_user_pro'); } catch(e){} }, [currentUser]);
   useEffect(() => { if(selected) setImgIdx(0); }, [selected]);
-  useEffect(() => { document.body.style.overflow = selected || showAdd || showAuth || showConfirm || showFilters ? 'hidden' : ''; return () => document.body.style.overflow = ''; }, [selected, showAdd, showAuth, showConfirm, showFilters]);
+  useEffect(() => { document.body.style.overflow = selected || showAdd || showAuth || showConfirm || showFilters || showContactForm ? 'hidden' : ''; return () => document.body.style.overflow = ''; }, [selected, showAdd, showAuth, showConfirm, showFilters, showContactForm]);
 
   const filteredAndSorted = useMemo(() => {
     let result = ads.filter(ad => {
@@ -122,7 +118,6 @@ function App() {
         case 'year_asc': return a.year - b.year;
         case 'year_desc': return b.year - a.year;
         case 'mileage_asc': return a.mileage - b.mileage;
-        case 'mileage_desc': return b.mileage - a.mileage;
         default: return 0;
       }
     });
@@ -178,25 +173,43 @@ function App() {
     });
     if(fileInputRef.current) fileInputRef.current.value = '';
   };
-  const handleAddClick = () => { if(!currentUser) { setShowAuth('login'); return; } setShowAdd(true); };
+  const handleAddClick = () => { if(!currentUser) { setShowAuth('login'); return; } setEditingId(null); setForm({ brand: '', model: '', year: 2020, price: '', mileage: '', fuel: 'Benzyna', gearbox: 'Manualna', power: '', location: '', voivodeship: 'Śląskie', title: '', description: '', images: [], phone: '', whatsapp: '', allowCall: true, allowSms: true, allowWhatsapp: true, contactEmail: currentUser.email, preferredContact: 'telefon', messenger: '' }); setShowAdd(true); };
+  const handleEditClick = (ad) => {
+    setEditingId(ad.id);
+    setForm({ brand: ad.brand, model: ad.model, year: ad.year, price: ad.price, mileage: ad.mileage, fuel: ad.fuel, gearbox: ad.gearbox, power: ad.power, location: ad.location, voivodeship: ad.voivodeship, title: ad.title, description: ad.description, images: ad.images || [ad.image], phone: ad.phone || '', whatsapp: ad.whatsapp || '', allowCall: ad.allowCall ?? true, allowSms: ad.allowSms ?? true, allowWhatsapp: ad.allowWhatsapp ?? true, contactEmail: ad.contactEmail || ad.ownerEmail, preferredContact: ad.preferredContact || 'telefon', messenger: ad.messenger || '' });
+    setSelected(null);
+    setShowAdd(true);
+  };
+  const handleDelete = (adId) => {
+    if(!confirm('Usunąć ogłoszenie?')) return;
+    setAds(ads.filter(a => a.id !== adId));
+    setSelected(null);
+  };
   const handleSubmitForConfirm = (e) => {
     e.preventDefault();
     if(!form.brand || !form.model) { alert('Podaj markę i model'); return; }
     if(!form.price || !form.year) { alert('Podaj cenę i rocznik'); return; }
+    if(!form.phone) { alert('Podaj numer telefonu - wymagany kontakt'); return; }
     setShowConfirm({ ...form });
   };
   const confirmAdd = () => {
     const f = showConfirm;
-    const newAd = {
-      id: Date.now(), title: f.title || (f.brand + ' ' + f.model + ' ' + f.year), brand: f.brand, model: f.model, year: parseInt(f.year)||2020, price: parseInt(f.price)||0,
-      mileage: parseInt(f.mileage)||0, fuel: f.fuel, gearbox: f.gearbox, power: parseInt(f.power)||0, location: f.location || 'Polska', voivodeship: f.voivodeship || 'Śląskie', description: f.description || 'Brak opisu.',
-      image: f.images[0] || ('https://picsum.photos/seed/' + Date.now() + '/600/400'),
-      images: f.images.length>0 ? f.images : [('https://picsum.photos/seed/' + Date.now() + '/600/400')],
-      owner: currentUser.name, ownerEmail: currentUser.email, ownerId: currentUser.id, phone: 'Kontakt przez wroomer.pl', createdAt: 'Teraz', createdAtTs: Date.now()
-    };
-    setAds([newAd, ...ads]); setShowConfirm(null); setShowAdd(false);
-    setForm({ brand: '', model: '', year: 2020, price: '', mileage: '', fuel: 'Benzyna', gearbox: 'Manualna', power: '', location: '', voivodeship: 'Śląskie', title: '', description: '', images: [] });
-    setSelected(newAd);
+    if(editingId) {
+      setAds(ads.map(ad => ad.id === editingId ? { ...ad, title: f.title || (f.brand + ' ' + f.model + ' ' + f.year), brand: f.brand, model: f.model, year: parseInt(f.year)||2020, price: parseInt(f.price)||0, mileage: parseInt(f.mileage)||0, fuel: f.fuel, gearbox: f.gearbox, power: parseInt(f.power)||0, location: f.location || 'Polska', voivodeship: f.voivodeship || 'Śląskie', description: f.description || 'Brak opisu.', image: f.images[0] || ad.image, images: f.images.length>0 ? f.images : ad.images, phone: f.phone, whatsapp: f.whatsapp || f.phone, allowCall: f.allowCall, allowSms: f.allowSms, allowWhatsapp: f.allowWhatsapp, contactEmail: f.contactEmail, preferredContact: f.preferredContact, messenger: f.messenger } : ad));
+      setShowConfirm(null); setShowAdd(false); setEditingId(null);
+      setForm({ brand: '', model: '', year: 2020, price: '', mileage: '', fuel: 'Benzyna', gearbox: 'Manualna', power: '', location: '', voivodeship: 'Śląskie', title: '', description: '', images: [], phone: '', whatsapp: '', allowCall: true, allowSms: true, allowWhatsapp: true, contactEmail: '', preferredContact: 'telefon', messenger: '' });
+    } else {
+      const newAd = {
+        id: Date.now(), title: f.title || (f.brand + ' ' + f.model + ' ' + f.year), brand: f.brand, model: f.model, year: parseInt(f.year)||2020, price: parseInt(f.price)||0,
+        mileage: parseInt(f.mileage)||0, fuel: f.fuel, gearbox: f.gearbox, power: parseInt(f.power)||0, location: f.location || 'Polska', voivodeship: f.voivodeship || 'Śląskie', description: f.description || 'Brak opisu.',
+        image: f.images[0] || ('https://picsum.photos/seed/' + Date.now() + '/600/400'),
+        images: f.images.length>0 ? f.images : [('https://picsum.photos/seed/' + Date.now() + '/600/400')],
+        owner: currentUser.name, ownerEmail: currentUser.email, ownerId: currentUser.id, phone: f.phone, whatsapp: f.whatsapp || f.phone, allowCall: f.allowCall, allowSms: f.allowSms, allowWhatsapp: f.allowWhatsapp, contactEmail: f.contactEmail, preferredContact: f.preferredContact, messenger: f.messenger, createdAt: 'Teraz', createdAtTs: Date.now()
+      };
+      setAds([newAd, ...ads]); setShowConfirm(null); setShowAdd(false);
+      setForm({ brand: '', model: '', year: 2020, price: '', mileage: '', fuel: 'Benzyna', gearbox: 'Manualna', power: '', location: '', voivodeship: 'Śląskie', title: '', description: '', images: [], phone: '', whatsapp: '', allowCall: true, allowSms: true, allowWhatsapp: true, contactEmail: '', preferredContact: 'telefon', messenger: '' });
+      setSelected(newAd);
+    }
   };
   const clearFilters = () => { setSearchBrand(''); setSearchModel(''); setSearchLocation(''); setSearchVoivodeship(''); setSearchRadius(''); setSortBy('newest'); setUserCoords(null); setShowFilters(false); };
 
@@ -227,76 +240,55 @@ function App() {
         </div>
       </header>
 
-      <div className="bg-black text-white w-full"><div className="max-w-[1440px] mx-auto px-3 md:px-4 py-3 md:py-4"><h1 className="text-[18px] md:text-[26px] font-black leading-tight">Darmowe ogłoszenia <span className="text-[#ffea00]">motoryzacyjne</span></h1><p className="text-[11px] md:text-[12px] text-neutral-400 mt-1">Wersja 22:37 • Czysty layout z sidebar 360px • GPS Haversine • Sortowanie ↑↓ poprawione • Mobile 44px przyciski</p></div></div>
+      <div className="bg-black text-white w-full"><div className="max-w-[1440px] mx-auto px-3 md:px-4 py-3"><h1 className="text-[18px] md:text-[24px] font-black leading-tight">Darmowe ogłoszenia <span className="text-[#ffea00]">motoryzacyjne</span></h1><p className="text-[11px] text-neutral-400 mt-1">PRO: Bez zbędnych filtrów • Rozwijane sortowanie ↑↓ • Kontakt telefon/WhatsApp/SMS/e-mail • Edycja ogłoszeń</p></div></div>
 
       <div className="sticky top-[56px] z-20 bg-white/95 backdrop-blur-md border-b border-neutral-200 w-full">
-        <div className="max-w-[1440px] mx-auto px-3 md:px-4 py-2.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-          <div className="flex items-center gap-1.5 md:gap-2 flex-wrap">
-            <div className="bg-black text-white text-[11px] md:text-[12px] font-bold px-3 py-1.5 rounded-full">{filteredAndSorted.length} ogłoszeń</div>
-            {searchBrand && <div className="bg-[#ffea00] text-black text-[11px] font-bold px-3 py-1 rounded-full">{searchBrand} {searchModel && '• '+searchModel}</div>}
-            {searchVoivodeship && <div className="bg-black text-white text-[11px] font-bold px-3 py-1 rounded-full">📍 {searchVoivodeship} {searchRadius && '• '+searchRadius+'km'}</div>}
-            {userCoords && <div className="bg-[#ffea00] text-black text-[11px] font-bold px-3 py-1 rounded-full">✓ GPS {searchRadius}km</div>}
-            {(searchBrand || searchLocation || searchVoivodeship) && <button onClick={clearFilters} className="text-[11px] text-neutral-500 underline" style={{minHeight:'44px'}}>Wyczyść ✕</button>}
+        <div className="max-w-[1440px] mx-auto px-3 md:px-4 py-2.5 flex items-center justify-between gap-2">
+          <div className="flex items-center gap-2">
+            <div className="bg-black text-white text-[12px] font-bold px-3 py-1.5 rounded-full">{filteredAndSorted.length} ogłoszeń</div>
+            {searchBrand && <div className="bg-[#ffea00] text-black text-[11px] font-bold px-3 py-1 rounded-full hidden md:flex">{searchBrand} {searchModel && '• '+searchModel}</div>}
+            {userCoords && <div className="bg-[#ffea00] text-black text-[11px] font-bold px-3 py-1 rounded-full hidden md:flex">✓ GPS {searchRadius}km</div>}
           </div>
           <div className="flex items-center gap-2">
             <span className="text-[11px] font-bold uppercase text-neutral-500 hidden md:block">Sortuj:</span>
-            <select value={sortBy} onChange={e=>setSortBy(e.target.value)} className="bg-white border border-neutral-300 rounded-[10px] px-3 py-2 text-[12px] md:text-[13px] font-bold min-w-[200px]" style={{minHeight:'40px'}}>
+            <select value={sortBy} onChange={e=>setSortBy(e.target.value)} className="bg-white border border-neutral-300 rounded-[10px] px-3 py-2 text-[12px] md:text-[13px] font-bold" style={{minHeight:'40px'}}>
               <option value="newest">Najnowsze</option>
               {userCoords && <option value="distance">📍 Najbliżej mnie</option>}
-              <option value="price_asc">Cena ↑ rosnąco (od najtańszych)</option>
-              <option value="price_desc">Cena ↓ malejąco (od najdroższych)</option>
-              <option value="year_asc">Rocznik ↑ rosnąco (od najstarszych)</option>
-              <option value="year_desc">Rocznik ↓ malejąco (od najnowszych)</option>
-              <option value="mileage_asc">Przebieg ↑ rosnąco (od najmniejszego)</option>
-              <option value="mileage_desc">Przebieg ↓ malejąco (od największego)</option>
+              <option value="price_asc">Cena ↑ od najtańszych</option>
+              <option value="price_desc">Cena ↓ od najdroższych</option>
+              <option value="year_desc">Rocznik ↓ od najnowszych</option>
+              <option value="year_asc">Rocznik ↑ od najstarszych</option>
             </select>
           </div>
-        </div>
-        <div className="max-w-[1440px] mx-auto px-3 md:px-4 pb-2.5 flex gap-1.5 overflow-x-auto">
-          <button onClick={()=>setSortBy('price_asc')} className={'shrink-0 px-3 py-1.5 rounded-full text-[11px] font-bold border ' + (sortBy==='price_asc' ? 'bg-black text-white border-black' : 'bg-white border-neutral-200')}>Cena ↑ od najtańszych</button>
-          <button onClick={()=>setSortBy('price_desc')} className={'shrink-0 px-3 py-1.5 rounded-full text-[11px] font-bold border ' + (sortBy==='price_desc' ? 'bg-black text-white border-black' : 'bg-white border-neutral-200')}>Cena ↓ od najdroższych</button>
-          <button onClick={()=>setSortBy('year_desc')} className={'shrink-0 px-3 py-1.5 rounded-full text-[11px] font-bold border ' + (sortBy==='year_desc' ? 'bg-black text-white border-black' : 'bg-white border-neutral-200')}>Rocznik ↓ najnowsze</button>
-          <button onClick={()=>setSortBy('year_asc')} className={'shrink-0 px-3 py-1.5 rounded-full text-[11px] font-bold border ' + (sortBy==='year_asc' ? 'bg-black text-white border-black' : 'bg-white border-neutral-200')}>Rocznik ↑ najstarsze</button>
-          {userCoords && <button onClick={()=>setSortBy('distance')} className={'shrink-0 px-3 py-1.5 rounded-full text-[11px] font-bold border ' + (sortBy==='distance' ? 'bg-[#ffea00] border-[#ffea00]' : 'bg-white border-neutral-200')}>📍 Najbliżej</button>}
         </div>
       </div>
 
       <div className="max-w-[1440px] mx-auto w-full px-3 md:px-4 py-3 md:py-4 flex flex-col lg:flex-row gap-4 md:gap-6">
-        <div className="hidden lg:block w-[360px] flex-shrink-0">
-          <div className="bg-[#111] border border-neutral-800 rounded-[16px] p-5 sticky top-[132px]">
-            <h2 className="font-bold text-[15px] text-white mb-4">🔍 Szukaj auta • 22:37 + ulepszenia</h2>
+        <div className="hidden lg:block w-[340px] flex-shrink-0">
+          <div className="bg-[#111] border border-neutral-800 rounded-[16px] p-5 sticky top-[112px]">
+            <h2 className="font-bold text-[15px] text-white mb-4">🔍 Szukaj • Rozwijane</h2>
             <div className="space-y-4">
-              <div className="grid grid-cols-2 gap-3">
-                <select value={searchBrand} onChange={e=>{setSearchBrand(e.target.value); setSearchModel('');}} className="w-full bg-[#1a1a1a] border border-neutral-800 rounded-[12px] px-3 py-3 text-[14px] text-white" style={{minHeight:'44px'}}><option value="">Marka</option>{Object.keys(BRAND_MODELS).sort().map(b => <option key={b} value={b}>{b}</option>)}</select>
-                <select value={searchModel} onChange={e=>setSearchModel(e.target.value)} disabled={!searchBrand} className="w-full bg-[#1a1a1a] border border-neutral-800 rounded-[12px] px-3 py-3 text-[14px] text-white disabled:opacity-40" style={{minHeight:'44px'}}><option value="">{searchBrand ? 'Model' : 'Najpierw marka'}</option>{(BRAND_MODELS[searchBrand]||[]).map(m => <option key={m} value={m}>{m}</option>)}</select>
-              </div>
-              <div className="border-t border-neutral-800 pt-4">
-                <h3 className="text-[12px] font-bold text-white mb-3">📍 Lokalizacja • GPS Haversine (FIXED 200km)</h3>
-                <button onClick={handleUseMyLocation} disabled={isLocating} className="w-full mb-3 bg-[#ffea00] disabled:opacity-50 text-black font-bold text-[13px] py-3 rounded-[12px]" style={{minHeight:'44px'}}>{isLocating ? '⌛ Szukam GPS...' : '📍 Użyj mojej lokalizacji'}</button>
-                <div className="space-y-3">
+              <details className="group">
+                <summary className="flex items-center justify-between cursor-pointer text-white font-bold text-[13px] py-2 list-none">🚗 Marka i model <span className="group-open:rotate-180 transition">▼</span></summary>
+                <div className="mt-3 grid grid-cols-2 gap-3">
+                  <select value={searchBrand} onChange={e=>{setSearchBrand(e.target.value); setSearchModel('');}} className="w-full bg-[#1a1a1a] border border-neutral-800 rounded-[12px] px-3 py-3 text-[14px] text-white" style={{minHeight:'44px'}}><option value="">Marka</option>{Object.keys(BRAND_MODELS).sort().map(b => <option key={b} value={b}>{b}</option>)}</select>
+                  <select value={searchModel} onChange={e=>setSearchModel(e.target.value)} disabled={!searchBrand} className="w-full bg-[#1a1a1a] border border-neutral-800 rounded-[12px] px-3 py-3 text-[14px] text-white disabled:opacity-40" style={{minHeight:'44px'}}><option value="">{searchBrand ? 'Model' : 'Marka→'}</option>{(BRAND_MODELS[searchBrand]||[]).map(m => <option key={m} value={m}>{m}</option>)}</select>
+                </div>
+              </details>
+              <details className="group" open>
+                <summary className="flex items-center justify-between cursor-pointer text-white font-bold text-[13px] py-2 list-none border-t border-neutral-800 pt-4">📍 Lokalizacja <span className="group-open:rotate-180 transition">▼</span></summary>
+                <div className="mt-3 space-y-3">
+                  <button onClick={handleUseMyLocation} disabled={isLocating} className="w-full bg-[#ffea00] disabled:opacity-50 text-black font-bold text-[13px] py-3 rounded-[12px]" style={{minHeight:'44px'}}>{isLocating ? '⌛ Szukam...' : '📍 Użyj mojej lokalizacji'}</button>
                   <select value={searchVoivodeship} onChange={e=>setSearchVoivodeship(e.target.value)} className="w-full bg-[#1a1a1a] border border-neutral-800 rounded-[12px] px-3 py-3 text-[14px] text-white" style={{minHeight:'44px'}}><option value="">Cała Polska</option>{VOIVODESHIPS.map(v => <option key={v} value={v}>{v}</option>)}</select>
                   <div className="grid grid-cols-2 gap-3">
                     <input value={searchLocation} onChange={e=>setSearchLocation(e.target.value)} placeholder="Miasto" className="w-full bg-[#1a1a1a] border border-neutral-800 rounded-[12px] px-3 py-3 text-[14px] text-white" style={{minHeight:'44px'}} />
-                    <select value={searchRadius} onChange={e=>setSearchRadius(e.target.value)} className="w-full bg-[#1a1a1a] border border-neutral-800 rounded-[12px] px-3 py-3 text-[14px] text-white" style={{minHeight:'44px'}}><option value="">Dowolny</option><option value="10">+10 km</option><option value="20">+20 km</option><option value="50">+50 km</option><option value="100">+100 km</option><option value="200">+200 km</option><option value="500">+500 km</option></select>
+                    <select value={searchRadius} onChange={e=>setSearchRadius(e.target.value)} className="w-full bg-[#1a1a1a] border border-neutral-800 rounded-[12px] px-3 py-3 text-[14px] text-white" style={{minHeight:'44px'}}><option value="">Dowolny</option><option value="20">20km</option><option value="50">50km</option><option value="100">100km</option><option value="200">200km</option><option value="500">500km</option></select>
                   </div>
-                  {userCoords && <div className="bg-[#ffea00]/20 border border-[#ffea00]/50 rounded-[10px] p-3 text-[11px] text-[#ffea00]"><div className="font-bold">✓ GPS: {searchLocation} ({userCoords.lat.toFixed(2)}, {userCoords.lng.toFixed(2)})</div><div className="mt-1">Haversine FIXED: Gorzyce 49.96,18.40 → Katowice 30km, Kraków 80km, Wrocław 180km, Warszawa 320km<br/>Przy 200km zobaczysz Śląskie + Małopolskie + Dolnośląskie!</div></div>}
+                  {userCoords && <div className="bg-[#ffea00]/20 border border-[#ffea00]/50 rounded-[10px] p-2.5 text-[11px] text-[#ffea00]">✓ GPS: {searchLocation} • Haversine: Katowice 30km, Kraków 80km</div>}
                 </div>
-              </div>
-              <div className="border-t border-neutral-800 pt-4">
-                <h3 className="text-[12px] font-bold text-white mb-3">⬆️⬇️ Sortowanie poprawione</h3>
-                <select value={sortBy} onChange={e=>setSortBy(e.target.value)} className="w-full bg-[#1a1a1a] border border-neutral-800 rounded-[12px] px-3 py-3 text-[14px] text-white" style={{minHeight:'44px'}}>
-                  <option value="newest">🕒 Najnowsze</option>
-                  {userCoords && <option value="distance">📍 Najbliżej mnie (Haversine)</option>}
-                  <option value="price_asc">💰 Cena ↑ rosnąco (od najtańszych)</option>
-                  <option value="price_desc">💰 Cena ↓ malejąco (od najdroższych)</option>
-                  <option value="year_asc">📅 Rocznik ↑ rosnąco (od najstarszych)</option>
-                  <option value="year_desc">📅 Rocznik ↓ malejąco (od najnowszych)</option>
-                  <option value="mileage_asc">🛣️ Przebieg ↑ rosnąco (od najmniejszego)</option>
-                  <option value="mileage_desc">🛣️ Przebieg ↓ malejąco (od największego)</option>
-                </select>
-                <div className="text-[10px] text-neutral-500 mt-2">↑ Rosnąco = od najmniejszych wartości • ↓ Malejąco = od największych - poprawione!</div>
-              </div>
-              <button onClick={clearFilters} className="w-full bg-white text-black font-bold py-3 rounded-[12px]" style={{minHeight:'44px'}}>Reset filtrów</button>
+              </details>
+              <button onClick={clearFilters} className="w-full bg-white text-black font-bold py-3 rounded-[12px]" style={{minHeight:'44px'}}>Reset</button>
+              {currentUser && <div className="border-t border-neutral-800 pt-4"><div className="text-[11px] text-neutral-400">Zalogowany jako <span className="text-white font-bold">{currentUser.name}</span><br/>Możesz edytować swoje ogłoszenia</div></div>}
             </div>
           </div>
         </div>
@@ -304,25 +296,25 @@ function App() {
         <div className="flex-1 min-w-0 w-full">
           {userCoords && searchRadius && (
             <div className="bg-[#ffea00]/20 border border-[#ffea00] rounded-[12px] p-3 mb-3 text-[12px]">
-              <div className="font-bold">📍 Szukasz w promieniu {searchRadius}km od: {searchLocation} (GPS Haversine FIXED)</div>
-              <div className="text-[11px] mt-1">Rzeczywiste odległości od Gorzyc: Wodzisław 7km, Rybnik 15km, Katowice 30km, Tychy 45km, Kraków 80km, Wrocław 180km, Warszawa 320km. Przy 200km zobaczysz Katowice, Kraków, Wrocław!</div>
+              <div className="font-bold">📍 {searchLocation} • {searchRadius}km • {filteredAndSorted.length} aut w promieniu</div>
             </div>
           )}
           <div className="mobile-grid grid gap-2.5 md:gap-3 w-full">
             {filteredAndSorted.map(ad => {
               const dist = userCoords ? Math.round(getDistanceToAd(userCoords.lat, userCoords.lng, ad.location)) : null;
+              const isOwn = currentUser && ad.ownerId === currentUser.id;
               return (
                 <div key={ad.id} onClick={()=>setSelected(ad)} className="mobile-list-card group bg-white border border-neutral-200 rounded-[14px] overflow-hidden hover:border-black active:scale-[0.98] transition-all cursor-pointer w-full" style={{touchAction:'manipulation'}}>
                   <div className="img-wrap md:aspect-[4/3] md:w-full bg-neutral-100 relative overflow-hidden shrink-0">
                     <img src={ad.image} alt={ad.title} className="w-full h-full object-cover group-hover:scale-[1.05] transition-transform duration-300" loading="lazy" />
                     <div className="absolute top-2 left-2 bg-black/80 text-white text-[10px] font-bold px-2 py-1 rounded-[6px]">{ad.year}</div>
                     {dist !== null && <div className="absolute top-2 right-2 bg-[#ffea00] text-black text-[10px] font-bold px-2 py-1 rounded-full">{dist}km</div>}
-                    <div className="absolute bottom-2 left-2 bg-black/80 text-white text-[9px] font-bold px-2 py-1 rounded-[6px] hidden lg:flex">📍 {ad.location} {dist !== null ? '• '+dist+'km' : ''}</div>
+                    {isOwn && <div className="absolute bottom-2 left-2 bg-[#ffea00] text-black text-[9px] font-bold px-2 py-1 rounded-full">MOJE</div>}
                   </div>
                   <div className="content-wrap p-2.5 md:p-3 flex flex-col justify-between min-w-0 flex-1">
                     <div className="min-w-0">
                       <div className="font-bold text-[13px] leading-[1.25] line-clamp-2 truncate md:whitespace-normal">{ad.title}</div>
-                      <div className="text-[11px] text-neutral-500 mt-1 truncate">{ad.location} • {ad.year} • {ad.fuel} {dist !== null ? '• 📍 '+dist+'km od Ciebie' : ''}</div>
+                      <div className="text-[11px] text-neutral-500 mt-1 truncate">{ad.location} {dist !== null ? '• 📍 '+dist+'km' : ''} {isOwn ? '• ✏️ Twoje' : ''}</div>
                     </div>
                     <div className="flex items-center justify-between mt-2">
                       <div className="font-black text-[15px]">{ad.price.toLocaleString('pl-PL')} zł</div>
@@ -333,17 +325,6 @@ function App() {
               );
             })}
           </div>
-          {filteredAndSorted.length===0 && (
-            <div className="bg-white border rounded-[16px] p-8 text-center mt-3">
-              <div className="text-[40px] mb-3">🔍</div>
-              <div className="font-bold">Brak w promieniu {searchRadius}km</div>
-              <div className="text-[13px] text-neutral-500 mt-1">Zwiększ promień do 200km lub 500km</div>
-              <div className="flex gap-2 justify-center mt-4">
-                <button onClick={()=>setSearchRadius('200')} className="bg-black text-white px-6 py-3 rounded-[12px] font-bold" style={{minHeight:'44px'}}>200km</button>
-                <button onClick={()=>setSearchRadius('500')} className="bg-[#ffea00] text-black px-6 py-3 rounded-[12px] font-bold" style={{minHeight:'44px'}}>500km</button>
-              </div>
-            </div>
-          )}
         </div>
       </div>
 
@@ -352,7 +333,7 @@ function App() {
           <div className="absolute inset-0 bg-black/60" onClick={()=>setShowFilters(false)}></div>
           <div className="absolute bottom-0 left-0 right-0 bg-[#111] rounded-t-[24px] max-h-[92vh] flex flex-col">
             <div className="p-4 border-b border-neutral-800 flex justify-between items-center">
-              <div><h2 className="font-bold text-white">🔍 Filtry • GPS • Sortowanie ↑↓</h2><p className="text-[11px] text-neutral-400">22:37 + ulepszenia • Haversine FIXED</p></div>
+              <h2 className="font-bold text-white">🔍 Filtry • Rozwijane</h2>
               <button onClick={()=>setShowFilters(false)} className="w-10 h-10 bg-[#222] text-white rounded-full" style={{minHeight:'44px'}}>✕</button>
             </div>
             <div className="flex-1 overflow-auto p-4 space-y-4">
@@ -360,26 +341,12 @@ function App() {
                 <select value={searchBrand} onChange={e=>{setSearchBrand(e.target.value); setSearchModel('');}} className="w-full bg-[#222] border border-neutral-700 rounded-[12px] px-3 py-3.5 text-white" style={{minHeight:'44px'}}><option value="">Marka</option>{Object.keys(BRAND_MODELS).sort().map(b => <option key={b} value={b}>{b}</option>)}</select>
                 <select value={searchModel} onChange={e=>setSearchModel(e.target.value)} disabled={!searchBrand} className="w-full bg-[#222] border border-neutral-700 rounded-[12px] px-3 py-3.5 text-white disabled:opacity-40" style={{minHeight:'44px'}}><option value="">{searchBrand ? 'Model' : 'Marka→'}</option>{(BRAND_MODELS[searchBrand]||[]).map(m => <option key={m} value={m}>{m}</option>)}</select>
               </div>
-              <button onClick={handleUseMyLocation} disabled={isLocating} className="w-full bg-[#ffea00] disabled:opacity-50 text-black font-bold py-4 rounded-[14px]" style={{minHeight:'44px'}}>{isLocating ? '⌛ Szukam GPS...' : '📍 Użyj mojej lokalizacji • Haversine FIXED'}</button>
+              <button onClick={handleUseMyLocation} disabled={isLocating} className="w-full bg-[#ffea00] disabled:opacity-50 text-black font-bold py-4 rounded-[14px]" style={{minHeight:'44px'}}>{isLocating ? '⌛ Szukam...' : '📍 Moja lokalizacja'}</button>
               <select value={searchVoivodeship} onChange={e=>setSearchVoivodeship(e.target.value)} className="w-full bg-[#222] border border-neutral-700 rounded-[12px] px-3 py-3.5 text-white" style={{minHeight:'44px'}}><option value="">Cała Polska</option>{VOIVODESHIPS.map(v => <option key={v} value={v}>{v}</option>)}</select>
               <div className="grid grid-cols-2 gap-3">
                 <input value={searchLocation} onChange={e=>setSearchLocation(e.target.value)} placeholder="Miasto" className="w-full bg-[#222] border border-neutral-700 rounded-[12px] px-3 py-3.5 text-white" style={{minHeight:'44px'}} />
                 <select value={searchRadius} onChange={e=>setSearchRadius(e.target.value)} className="w-full bg-[#222] border border-neutral-700 rounded-[12px] px-3 py-3.5 text-white" style={{minHeight:'44px'}}><option value="">Dowolny</option><option value="20">20km</option><option value="50">50km</option><option value="100">100km</option><option value="200">200km</option><option value="500">500km</option></select>
               </div>
-              <div>
-                <label className="text-[11px] font-bold uppercase text-neutral-400 mb-2 block">Sortowanie poprawione ↑↓</label>
-                <select value={sortBy} onChange={e=>setSortBy(e.target.value)} className="w-full bg-[#222] border border-neutral-700 rounded-[12px] px-3 py-3.5 text-white" style={{minHeight:'44px'}}>
-                  <option value="newest">🕒 Najnowsze</option>
-                  {userCoords && <option value="distance">📍 Najbliżej mnie (Haversine)</option>}
-                  <option value="price_asc">💰 Cena ↑ rosnąco (od najtańszych)</option>
-                  <option value="price_desc">💰 Cena ↓ malejąco (od najdroższych)</option>
-                  <option value="year_asc">📅 Rocznik ↑ rosnąco (od najstarszych)</option>
-                  <option value="year_desc">📅 Rocznik ↓ malejąco (od najnowszych)</option>
-                  <option value="mileage_asc">🛣️ Przebieg ↑ rosnąco (od najmniejszego)</option>
-                  <option value="mileage_desc">🛣️ Przebieg ↓ malejąco (od największego)</option>
-                </select>
-              </div>
-              {userCoords && <div className="bg-[#ffea00]/20 border border-[#ffea00]/50 rounded-[12px] p-3 text-[12px] text-[#ffea00]"><div className="font-bold">✓ GPS: {searchLocation}</div><div className="text-[11px] mt-1">Haversine FIXED: Katowice 30km, Kraków 80km od Gorzyc. Przy 200km zobaczysz wszystko!</div></div>}
             </div>
             <div className="p-4 border-t border-neutral-800 flex gap-3">
               <button onClick={clearFilters} className="flex-1 bg-[#222] text-white py-4 rounded-[14px]" style={{minHeight:'44px'}}>Wyczyść</button>
@@ -392,20 +359,83 @@ function App() {
       {selected && (
         <div className="fixed inset-0 z-50 bg-black/80 overflow-auto">
           <div className="min-h-screen w-full flex items-start md:items-center justify-center p-0 md:p-6">
-            <div className="bg-white w-full md:max-w-[900px] md:rounded-[24px] overflow-hidden flex flex-col min-h-screen md:min-h-0">
-              <div className="aspect-[4/3] bg-black relative w-full">
+            <div className="bg-white w-full md:max-w-[900px] md:rounded-[24px] overflow-hidden flex flex-col min-h-screen md:min-h-0 max-h-[100vh] md:max-h-[90vh] overflow-auto">
+              <div className="aspect-[4/3] md:aspect-[16/10] bg-black relative w-full shrink-0">
                 <img src={selected.images[imgIdx] || selected.image} alt={selected.title} className="w-full h-full object-contain" />
                 <button onClick={()=>setSelected(null)} className="absolute top-3 left-3 bg-white text-black text-[13px] font-bold px-4 py-2.5 rounded-full" style={{minHeight:'44px'}}>← Wróć</button>
                 <button onClick={()=>setSelected(null)} className="absolute top-3 right-3 w-11 h-11 bg-white text-black rounded-full font-bold" style={{minHeight:'44px'}}>✕</button>
+                {selected.images && selected.images.length >1 && (
+                  <>
+                    <button onClick={()=>setImgIdx((imgIdx-1+selected.images.length)%selected.images.length)} className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/90 rounded-full font-bold" style={{minHeight:'44px'}}>‹</button>
+                    <button onClick={()=>setImgIdx((imgIdx+1)%selected.images.length)} className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/90 rounded-full font-bold" style={{minHeight:'44px'}}>›</button>
+                    <div className="absolute bottom-3 left-1/2 -translate-x-1/2 bg-black/70 text-white text-[12px] px-3 py-1 rounded-full">{imgIdx+1} / {selected.images.length}</div>
+                  </>
+                )}
               </div>
-              <div className="p-4 md:p-5">
-                <h1 className="text-[18px] font-black">{selected.title}</h1>
-                <div className="text-[22px] font-black mt-2">{selected.price.toLocaleString('pl-PL')} zł</div>
-                <div className="text-[12px] text-neutral-500 mt-1">📍 {selected.location} • {selected.year} {userCoords && '• 📍 '+Math.round(getDistanceToAd(userCoords.lat, userCoords.lng, selected.location))+'km od Ciebie'}</div>
-                <div className="text-[13px] mt-3">{selected.description}</div>
-                <div className="mt-4 bg-[#f5f5f7] rounded-[12px] p-3 text-[12px]"><div className="font-bold">Sprzedawca: {selected.owner}</div><div>{selected.ownerEmail} • {selected.phone}</div></div>
+              <div className="p-4 md:p-5 overflow-auto">
+                <div className="flex items-start justify-between gap-3">
+                  <h1 className="text-[18px] md:text-[20px] font-black leading-tight flex-1">{selected.title}</h1>
+                  {currentUser && selected.ownerId === currentUser.id && (
+                    <div className="flex gap-1.5 shrink-0">
+                      <button onClick={()=>handleEditClick(selected)} className="bg-[#ffea00] text-black text-[12px] font-bold px-3 py-2 rounded-full" style={{minHeight:'36px'}}>✏️ Edytuj</button>
+                      <button onClick={()=>handleDelete(selected.id)} className="bg-red-50 text-red-600 border border-red-200 text-[12px] font-bold px-3 py-2 rounded-full" style={{minHeight:'36px'}}>🗑️ Usuń</button>
+                    </div>
+                  )}
+                </div>
+                <div className="text-[22px] md:text-[24px] font-black mt-2">{selected.price.toLocaleString('pl-PL')} zł</div>
+                <div className="text-[12px] text-neutral-500 mt-1">📍 {selected.location} • {selected.year} • {selected.fuel} • {selected.mileage.toLocaleString('pl-PL')} km {userCoords && '• 📍 '+Math.round(getDistanceToAd(userCoords.lat, userCoords.lng, selected.location))+'km'}</div>
+                
+                <div className="grid grid-cols-3 gap-2 my-4">
+                  {[{k:'Rocznik',v:selected.year},{k:'Moc',v:(selected.power||0)+' KM'},{k:'Paliwo',v:selected.fuel},{k:'Skrzynia',v:selected.gearbox},{k:'Przebieg',v:(selected.mileage||0).toLocaleString('pl-PL')+' km'},{k:'Lokalizacja',v:selected.location}].map(i=>(
+                    <div key={i.k} className="bg-[#f5f5f7] rounded-[12px] p-3"><div className="text-[10px] text-neutral-500 font-bold uppercase">{i.k}</div><div className="text-[13px] font-bold mt-1 truncate">{i.v}</div></div>
+                  ))}
+                </div>
+
+                {selected.description && <div className="bg-[#f5f5f7] rounded-[12px] p-4 mb-4"><div className="text-[11px] font-bold uppercase text-neutral-500 mb-2">Opis</div><div className="text-[13px] leading-[1.5]">{selected.description}</div></div>}
+
+                <div className="bg-black text-white rounded-[16px] p-4">
+                  <div className="text-[13px] font-bold mb-3">📞 Kontakt • Sprzedawca: {selected.owner}</div>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                    {selected.allowCall && selected.phone && <a href={'tel:'+selected.phone} className="bg-[#ffea00] text-black font-bold py-3 rounded-[12px] text-[13px] text-center flex flex-col items-center justify-center" style={{minHeight:'60px'}}><span>📞</span><span>Zadzwoń</span><span className="text-[10px] font-normal">{selected.phone}</span></a>}
+                    {selected.allowWhatsapp && selected.whatsapp && <a href={'https://wa.me/'+selected.whatsapp.replace(/\s/g,'').replace(/^0/,'48')} target="_blank" className="bg-[#25D366] text-white font-bold py-3 rounded-[12px] text-[13px] text-center flex flex-col items-center justify-center" style={{minHeight:'60px'}}><span>💬</span><span>WhatsApp</span><span className="text-[10px] font-normal">Napisz</span></a>}
+                    {selected.allowSms && selected.phone && <a href={'sms:'+selected.phone} className="bg-[#222] text-white font-bold py-3 rounded-[12px] text-[13px] text-center flex flex-col items-center justify-center" style={{minHeight:'60px'}}><span>✉️</span><span>SMS</span><span className="text-[10px] font-normal">Wyślij SMS</span></a>}
+                    {selected.contactEmail && <button onClick={()=>setShowContactForm(selected)} className="bg-white text-black font-bold py-3 rounded-[12px] text-[13px] text-center flex flex-col items-center justify-center" style={{minHeight:'60px'}}><span>📧</span><span>E-mail</span><span className="text-[10px] font-normal truncate max-w-[80px]">{selected.contactEmail}</span></button>}
+                  </div>
+                  <div className="mt-3 text-[11px] text-neutral-400">
+                    <div>📱 Tel: {selected.phone} {selected.allowCall ? '• 📞 Połączenia' : ''} {selected.allowSms ? '• ✉️ SMS' : ''} {selected.allowWhatsapp ? '• 💬 WhatsApp: '+selected.whatsapp : ''}</div>
+                    <div className="mt-1">📧 E-mail: {selected.contactEmail || selected.ownerEmail} {selected.messenger ? '• Messenger: '+selected.messenger : ''}</div>
+                    <div className="mt-1">⭐ Preferowany kontakt: {selected.preferredContact || 'telefon'} • {selected.createdAt}</div>
+                  </div>
+                </div>
+
                 <button onClick={()=>setSelected(null)} className="w-full bg-black text-white font-bold py-4 rounded-[14px] mt-4" style={{minHeight:'44px'}}>✕ Zamknij</button>
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showContactForm && (
+        <div className="fixed inset-0 z-[90] bg-black/70 flex items-end md:items-center justify-center p-0 md:p-4">
+          <div className="bg-white w-full md:max-w-[500px] rounded-t-[24px] md:rounded-[20px] p-6 max-h-[90vh] overflow-auto">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="font-black text-[18px]">📧 Wiadomość do {showContactForm.owner}</h2>
+              <button onClick={()=>setShowContactForm(null)} className="w-9 h-9 bg-[#f5f5f7] rounded-full flex items-center justify-center" style={{minHeight:'44px'}}>✕</button>
+            </div>
+            <div className="bg-[#f5f5f7] rounded-[12px] p-3 text-[12px] mb-4">
+              <div>Ogłoszenie: <span className="font-bold">{showContactForm.title}</span></div>
+              <div>E-mail: {showContactForm.contactEmail || showContactForm.ownerEmail}</div>
+              <div>Tel: {showContactForm.phone}</div>
+            </div>
+            <textarea value={contactMessage} onChange={e=>setContactMessage(e.target.value)} placeholder="Dzień dobry, jestem zainteresowany ogłoszeniem... Podaj swoje dane kontaktowe..." className="w-full bg-[#f5f5f7] border rounded-[12px] p-4 h-[120px] text-[14px]"></textarea>
+            <div className="flex gap-3 mt-4">
+              <button onClick={()=>setShowContactForm(null)} className="flex-1 bg-[#f5f5f7] font-bold py-3.5 rounded-[12px]" style={{minHeight:'44px'}}>Anuluj</button>
+              <button onClick={()=>{ if(!contactMessage.trim()){alert('Wpisz wiadomość'); return;} alert('Wiadomość wysłana do '+ (showContactForm.contactEmail || showContactForm.ownerEmail) + '!\n\nTreść:\n' + contactMessage + '\n\n(W demo - w prawdziwej wersji e-mail zostałby wysłany)'); setShowContactForm(null); setContactMessage(''); }} className="flex-[2] bg-black text-white font-bold py-3.5 rounded-[12px]" style={{minHeight:'44px'}}>📧 Wyślij wiadomość</button>
+            </div>
+            <div className="mt-4 grid grid-cols-3 gap-2">
+              <a href={'tel:'+showContactForm.phone} className="bg-[#ffea00] text-black font-bold py-3 rounded-[12px] text-[12px] text-center">📞 Zadzwoń</a>
+              <a href={'https://wa.me/'+showContactForm.whatsapp.replace(/\s/g,'').replace(/^0/,'48')} target="_blank" className="bg-[#25D366] text-white font-bold py-3 rounded-[12px] text-[12px] text-center">💬 WhatsApp</a>
+              <a href={'sms:'+showContactForm.phone} className="bg-[#222] text-white font-bold py-3 rounded-[12px] text-[12px] text-center">✉️ SMS</a>
             </div>
           </div>
         </div>
@@ -433,48 +463,105 @@ function App() {
       {showAdd && (
         <div className="fixed inset-0 z-[85] bg-black/70 backdrop-blur-sm overflow-auto">
           <div className="min-h-screen flex items-start md:items-center justify-center p-0 md:p-4">
-            <div className="bg-white w-full md:max-w-[600px] md:rounded-[20px] rounded-t-[24px] mt-auto md:mt-0 max-h-[95vh] overflow-auto">
+            <div className="bg-white w-full md:max-w-[650px] md:rounded-[20px] rounded-t-[24px] mt-auto md:mt-0 max-h-[95vh] overflow-auto">
               <div className="sticky top-0 bg-white border-b p-4 flex justify-between items-center">
-                <h2 className="font-black text-[18px]">+ Dodaj ogłoszenie • 22:37 + ulepszenia</h2>
-                <button onClick={()=>setShowAdd(false)} className="w-9 h-9 bg-[#f5f5f7] rounded-full flex items-center justify-center" style={{minHeight:'44px'}}>✕</button>
+                <h2 className="font-black text-[18px]">{editingId ? '✏️ Edytuj ogłoszenie' : '+ Dodaj ogłoszenie'} • PRO</h2>
+                <button onClick={()=>{setShowAdd(false); setEditingId(null);}} className="w-9 h-9 bg-[#f5f5f7] rounded-full flex items-center justify-center" style={{minHeight:'44px'}}>✕</button>
               </div>
-              <form onSubmit={handleSubmitForConfirm} className="p-4 space-y-4">
-                <div className="grid grid-cols-2 gap-3">
-                  <div><label className="text-[11px] font-bold uppercase text-neutral-500">Marka *</label><select value={form.brand} onChange={e=>setForm({...form, brand: e.target.value, model: ''})} className="w-full bg-[#f5f5f7] border rounded-[12px] px-3 py-3 text-[14px] mt-1" style={{minHeight:'44px'}}><option value="">Wybierz</option>{Object.keys(BRAND_MODELS).sort().map(b => <option key={b} value={b}>{b}</option>)}</select></div>
-                  <div><label className="text-[11px] font-bold uppercase text-neutral-500">Model *</label><select value={form.model} onChange={e=>setForm({...form, model: e.target.value})} disabled={!form.brand} className="w-full bg-[#f5f5f7] border rounded-[12px] px-3 py-3 text-[14px] mt-1 disabled:opacity-40" style={{minHeight:'44px'}}><option value="">{form.brand ? 'Wybierz' : 'Najpierw marka'}</option>{(BRAND_MODELS[form.brand]||[]).map(m => <option key={m} value={m}>{m}</option>)}</select></div>
-                </div>
-                <div className="grid grid-cols-2 gap-3">
-                  <div><label className="text-[11px] font-bold uppercase text-neutral-500">Rocznik *</label><input type="number" value={form.year} onChange={e=>setForm({...form, year: e.target.value})} className="w-full bg-[#f5f5f7] border rounded-[12px] px-3 py-3 text-[14px] mt-1" style={{minHeight:'44px'}} /></div>
-                  <div><label className="text-[11px] font-bold uppercase text-neutral-500">Cena (zł) *</label><input type="number" value={form.price} onChange={e=>setForm({...form, price: e.target.value})} className="w-full bg-[#f5f5f7] border rounded-[12px] px-3 py-3 text-[14px] mt-1" style={{minHeight:'44px'}} /></div>
-                </div>
-                <div className="grid grid-cols-2 gap-3">
-                  <div><label className="text-[11px] font-bold uppercase text-neutral-500">Przebieg (km)</label><input type="number" value={form.mileage} onChange={e=>setForm({...form, mileage: e.target.value})} className="w-full bg-[#f5f5f7] border rounded-[12px] px-3 py-3 text-[14px] mt-1" style={{minHeight:'44px'}} /></div>
-                  <div><label className="text-[11px] font-bold uppercase text-neutral-500">Moc (KM)</label><input type="number" value={form.power} onChange={e=>setForm({...form, power: e.target.value})} className="w-full bg-[#f5f5f7] border rounded-[12px] px-3 py-3 text-[14px] mt-1" style={{minHeight:'44px'}} /></div>
-                </div>
-                <div className="grid grid-cols-2 gap-3">
-                  <div><label className="text-[11px] font-bold uppercase text-neutral-500">Miejscowość</label><input value={form.location} onChange={e=>setForm({...form, location: e.target.value})} placeholder="Katowice" className="w-full bg-[#f5f5f7] border rounded-[12px] px-3 py-3 text-[14px] mt-1" style={{minHeight:'44px'}} /></div>
-                  <div><label className="text-[11px] font-bold uppercase text-neutral-500">Województwo</label><select value={form.voivodeship} onChange={e=>setForm({...form, voivodeship: e.target.value})} className="w-full bg-[#f5f5f7] border rounded-[12px] px-3 py-3 text-[14px] mt-1" style={{minHeight:'44px'}}>{VOIVODESHIPS.map(v => <option key={v} value={v}>{v}</option>)}</select></div>
-                </div>
-                <div><label className="text-[11px] font-bold uppercase text-neutral-500">Tytuł</label><input value={form.title} onChange={e=>setForm({...form, title: e.target.value})} placeholder="np. BMW 320d 2018 ASO" className="w-full bg-[#f5f5f7] border rounded-[12px] px-3 py-3 text-[14px] mt-1" style={{minHeight:'44px'}} /></div>
-                <div><label className="text-[11px] font-bold uppercase text-neutral-500">Opis</label><textarea value={form.description} onChange={e=>setForm({...form, description: e.target.value})} placeholder="Opisz auto..." className="w-full bg-[#f5f5f7] border rounded-[12px] px-3 py-3 text-[14px] mt-1 h-[80px]"></textarea></div>
+              <form onSubmit={handleSubmitForConfirm} className="p-4 space-y-5">
                 <div>
-                  <label className="text-[11px] font-bold uppercase text-neutral-500">Zdjęcia (max 5)</label>
-                  <div className="mt-1 flex gap-2 flex-wrap">
-                    {form.images.map((img,i) => (
-                      <div key={i} className="relative w-[80px] h-[80px] rounded-[10px] overflow-hidden border">
-                        <img src={img} className="w-full h-full object-cover" />
-                        <button type="button" onClick={()=>setForm({...form, images: form.images.filter((_,idx)=>idx!==i)})} className="absolute top-1 right-1 w-6 h-6 bg-black/70 text-white rounded-full text-[12px] flex items-center justify-center">✕</button>
-                      </div>
-                    ))}
-                    {form.images.length <5 && (
-                      <label className="w-[80px] h-[80px] border-2 border-dashed border-neutral-300 rounded-[10px] flex flex-col items-center justify-center cursor-pointer hover:border-black" style={{minHeight:'80px'}}>
-                        <span className="text-[24px]">+</span><span className="text-[10px]">Dodaj</span>
-                        <input ref={fileInputRef} type="file" accept="image/*" multiple onChange={handleImageUpload} />
-                      </label>
-                    )}
+                  <h3 className="font-bold text-[13px] mb-2">🚗 Pojazd</h3>
+                  <div className="grid grid-cols-2 gap-3">
+                    <select value={form.brand} onChange={e=>setForm({...form, brand: e.target.value, model: ''})} className="w-full bg-[#f5f5f7] border rounded-[12px] px-3 py-3 text-[14px]" style={{minHeight:'44px'}}><option value="">Marka *</option>{Object.keys(BRAND_MODELS).sort().map(b => <option key={b} value={b}>{b}</option>)}</select>
+                    <select value={form.model} onChange={e=>setForm({...form, model: e.target.value})} disabled={!form.brand} className="w-full bg-[#f5f5f7] border rounded-[12px] px-3 py-3 text-[14px] disabled:opacity-40" style={{minHeight:'44px'}}><option value="">{form.brand ? 'Model *' : 'Najpierw marka'}</option>{(BRAND_MODELS[form.brand]||[]).map(m => <option key={m} value={m}>{m}</option>)}</select>
+                  </div>
+                  <div className="grid grid-cols-2 gap-3 mt-3">
+                    <input type="number" value={form.year} onChange={e=>setForm({...form, year: e.target.value})} placeholder="Rocznik *" className="w-full bg-[#f5f5f7] border rounded-[12px] px-3 py-3 text-[14px]" style={{minHeight:'44px'}} />
+                    <input type="number" value={form.price} onChange={e=>setForm({...form, price: e.target.value})} placeholder="Cena zł *" className="w-full bg-[#f5f5f7] border rounded-[12px] px-3 py-3 text-[14px]" style={{minHeight:'44px'}} />
+                  </div>
+                  <div className="grid grid-cols-2 gap-3 mt-3">
+                    <input type="number" value={form.mileage} onChange={e=>setForm({...form, mileage: e.target.value})} placeholder="Przebieg km" className="w-full bg-[#f5f5f7] border rounded-[12px] px-3 py-3 text-[14px]" style={{minHeight:'44px'}} />
+                    <input type="number" value={form.power} onChange={e=>setForm({...form, power: e.target.value})} placeholder="Moc KM" className="w-full bg-[#f5f5f7] border rounded-[12px] px-3 py-3 text-[14px]" style={{minHeight:'44px'}} />
+                  </div>
+                  <div className="grid grid-cols-2 gap-3 mt-3">
+                    <select value={form.fuel} onChange={e=>setForm({...form, fuel: e.target.value})} className="w-full bg-[#f5f5f7] border rounded-[12px] px-3 py-3 text-[14px]" style={{minHeight:'44px'}}><option>Benzyna</option><option>Diesel</option><option>Hybryda</option><option>Elektryczny</option><option>LPG</option></select>
+                    <select value={form.gearbox} onChange={e=>setForm({...form, gearbox: e.target.value})} className="w-full bg-[#f5f5f7] border rounded-[12px] px-3 py-3 text-[14px]" style={{minHeight:'44px'}}><option>Manualna</option><option>Automatyczna</option></select>
                   </div>
                 </div>
-                <button type="submit" className="w-full bg-[#ffea00] text-black font-bold py-4 rounded-[14px]" style={{minHeight:'44px'}}>Dalej → Podgląd</button>
+
+                <div className="border-t pt-4">
+                  <h3 className="font-bold text-[13px] mb-2">📍 Lokalizacja</h3>
+                  <div className="grid grid-cols-2 gap-3">
+                    <input value={form.location} onChange={e=>setForm({...form, location: e.target.value})} placeholder="Miejscowość" className="w-full bg-[#f5f5f7] border rounded-[12px] px-3 py-3 text-[14px]" style={{minHeight:'44px'}} />
+                    <select value={form.voivodeship} onChange={e=>setForm({...form, voivodeship: e.target.value})} className="w-full bg-[#f5f5f7] border rounded-[12px] px-3 py-3 text-[14px]" style={{minHeight:'44px'}}>{VOIVODESHIPS.map(v => <option key={v} value={v}>{v}</option>)}</select>
+                  </div>
+                </div>
+
+                <div className="border-t pt-4">
+                  <h3 className="font-bold text-[13px] mb-2">📞 Dane kontaktowe • PROFESJONALNE</h3>
+                  <div className="space-y-3">
+                    <div>
+                      <label className="text-[11px] font-bold uppercase text-neutral-500">Telefon kontaktowy * (widoczny w ogłoszeniu)</label>
+                      <input value={form.phone} onChange={e=>setForm({...form, phone: e.target.value})} placeholder="np. 600 123 456" className="w-full bg-[#f5f5f7] border rounded-[12px] px-3 py-3 text-[14px] mt-1" style={{minHeight:'44px'}} />
+                      <div className="flex gap-2 mt-2">
+                        <label className="flex items-center gap-1.5 text-[12px] bg-[#f5f5f7] border rounded-full px-3 py-1.5"><input type="checkbox" checked={form.allowCall} onChange={e=>setForm({...form, allowCall: e.target.checked})} /> 📞 Połączenia</label>
+                        <label className="flex items-center gap-1.5 text-[12px] bg-[#f5f5f7] border rounded-full px-3 py-1.5"><input type="checkbox" checked={form.allowSms} onChange={e=>setForm({...form, allowSms: e.target.checked})} /> ✉️ SMS</label>
+                        <label className="flex items-center gap-1.5 text-[12px] bg-[#f5f5f7] border rounded-full px-3 py-1.5"><input type="checkbox" checked={form.allowWhatsapp} onChange={e=>setForm({...form, allowWhatsapp: e.target.checked})} /> 💬 WhatsApp</label>
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <label className="text-[11px] font-bold uppercase text-neutral-500">WhatsApp (jeśli inny niż tel)</label>
+                        <input value={form.whatsapp} onChange={e=>setForm({...form, whatsapp: e.target.value})} placeholder="np. 600 123 456" className="w-full bg-[#f5f5f7] border rounded-[12px] px-3 py-3 text-[14px] mt-1" style={{minHeight:'44px'}} />
+                      </div>
+                      <div>
+                        <label className="text-[11px] font-bold uppercase text-neutral-500">E-mail kontaktowy</label>
+                        <input type="email" value={form.contactEmail} onChange={e=>setForm({...form, contactEmail: e.target.value})} placeholder="kontakt@example.com" className="w-full bg-[#f5f5f7] border rounded-[12px] px-3 py-3 text-[14px] mt-1" style={{minHeight:'44px'}} />
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <label className="text-[11px] font-bold uppercase text-neutral-500">Messenger / FB</label>
+                        <input value={form.messenger} onChange={e=>setForm({...form, messenger: e.target.value})} placeholder="np. fb.com/twoj.profil" className="w-full bg-[#f5f5f7] border rounded-[12px] px-3 py-3 text-[14px] mt-1" style={{minHeight:'44px'}} />
+                      </div>
+                      <div>
+                        <label className="text-[11px] font-bold uppercase text-neutral-500">Preferowany kontakt</label>
+                        <select value={form.preferredContact} onChange={e=>setForm({...form, preferredContact: e.target.value})} className="w-full bg-[#f5f5f7] border rounded-[12px] px-3 py-3 text-[14px] mt-1" style={{minHeight:'44px'}}>
+                          <option value="telefon">📞 Telefon</option>
+                          <option value="whatsapp">💬 WhatsApp</option>
+                          <option value="sms">✉️ SMS</option>
+                          <option value="email">📧 E-mail</option>
+                          <option value="wiadomosc">💬 Wiadomość na Wroomer</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="border-t pt-4">
+                  <h3 className="font-bold text-[13px] mb-2">📝 Opis i zdjęcia</h3>
+                  <input value={form.title} onChange={e=>setForm({...form, title: e.target.value})} placeholder="Tytuł ogłoszenia np. BMW 320d 2018 ASO" className="w-full bg-[#f5f5f7] border rounded-[12px] px-3 py-3 text-[14px] mb-3" style={{minHeight:'44px'}} />
+                  <textarea value={form.description} onChange={e=>setForm({...form, description: e.target.value})} placeholder="Opisz auto, stan, wyposażenie, historia serwisowa..." className="w-full bg-[#f5f5f7] border rounded-[12px] px-3 py-3 text-[14px] h-[100px]"></textarea>
+                  <div className="mt-3">
+                    <label className="text-[11px] font-bold uppercase text-neutral-500">Zdjęcia (max 5)</label>
+                    <div className="mt-1 flex gap-2 flex-wrap">
+                      {form.images.map((img,i) => (
+                        <div key={i} className="relative w-[80px] h-[80px] rounded-[10px] overflow-hidden border">
+                          <img src={img} className="w-full h-full object-cover" />
+                          <button type="button" onClick={()=>setForm({...form, images: form.images.filter((_,idx)=>idx!==i)})} className="absolute top-1 right-1 w-6 h-6 bg-black/70 text-white rounded-full text-[12px] flex items-center justify-center">✕</button>
+                        </div>
+                      ))}
+                      {form.images.length <5 && (
+                        <label className="w-[80px] h-[80px] border-2 border-dashed border-neutral-300 rounded-[10px] flex flex-col items-center justify-center cursor-pointer hover:border-black" style={{minHeight:'80px'}}>
+                          <span className="text-[24px]">+</span><span className="text-[10px]">Dodaj</span>
+                          <input ref={fileInputRef} type="file" accept="image/*" multiple onChange={handleImageUpload} />
+                        </label>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                <button type="submit" className="w-full bg-[#ffea00] text-black font-bold py-4 rounded-[14px]" style={{minHeight:'44px'}}>{editingId ? '💾 Zapisz zmiany → Podgląd' : 'Dalej → Podgląd'}</button>
               </form>
             </div>
           </div>
@@ -484,24 +571,25 @@ function App() {
       {showConfirm && (
         <div className="fixed inset-0 z-[95] bg-black/70 backdrop-blur-sm flex items-end md:items-center justify-center p-0 md:p-4">
           <div className="bg-white w-full md:max-w-[500px] rounded-t-[24px] md:rounded-[20px] p-6 max-h-[90vh] overflow-auto">
-            <h2 className="font-black text-[18px] mb-1">Potwierdź ogłoszenie</h2>
-            <p className="text-[13px] text-neutral-500 mb-4">Sprawdź czy wszystko się zgadza</p>
+            <h2 className="font-black text-[18px] mb-1">{editingId ? '✏️ Potwierdź zmiany' : 'Potwierdź ogłoszenie'}</h2>
+            <p className="text-[13px] text-neutral-500 mb-4">Sprawdź dane kontaktowe</p>
             <div className="bg-[#f5f5f7] rounded-[12px] p-4 space-y-2 text-[13px]">
-              <div className="flex justify-between"><span className="text-neutral-500">Marka/Model:</span><span className="font-bold">{showConfirm.brand} {showConfirm.model}</span></div>
-              <div className="flex justify-between"><span className="text-neutral-500">Rocznik:</span><span className="font-bold">{showConfirm.year}</span></div>
+              <div className="flex justify-between"><span className="text-neutral-500">Pojazd:</span><span className="font-bold">{showConfirm.brand} {showConfirm.model} {showConfirm.year}</span></div>
               <div className="flex justify-between"><span className="text-neutral-500">Cena:</span><span className="font-bold">{showConfirm.price} zł</span></div>
-              <div className="flex justify-between"><span className="text-neutral-500">Lokalizacja:</span><span className="font-bold">{showConfirm.location} • {showConfirm.voivodeship}</span></div>
-              <div className="flex justify-between"><span className="text-neutral-500">Zdjęcia:</span><span className="font-bold">{showConfirm.images.length}</span></div>
+              <div className="flex justify-between"><span className="text-neutral-500">Tel:</span><span className="font-bold">{showConfirm.phone} {showConfirm.allowCall ? '📞' : ''} {showConfirm.allowSms ? '✉️' : ''} {showConfirm.allowWhatsapp ? '💬' : ''}</span></div>
+              <div className="flex justify-between"><span className="text-neutral-500">WhatsApp:</span><span className="font-bold">{showConfirm.whatsapp || showConfirm.phone}</span></div>
+              <div className="flex justify-between"><span className="text-neutral-500">E-mail:</span><span className="font-bold truncate max-w-[180px]">{showConfirm.contactEmail}</span></div>
+              <div className="flex justify-between"><span className="text-neutral-500">Pref. kontakt:</span><span className="font-bold">{showConfirm.preferredContact}</span></div>
             </div>
             <div className="flex gap-3 mt-6">
               <button onClick={()=>setShowConfirm(null)} className="flex-1 bg-[#f5f5f7] text-black font-bold py-3.5 rounded-[12px]" style={{minHeight:'44px'}}>Wróć</button>
-              <button onClick={confirmAdd} className="flex-[2] bg-black text-white font-bold py-3.5 rounded-[12px]" style={{minHeight:'44px'}}>✓ Opublikuj</button>
+              <button onClick={confirmAdd} className="flex-[2] bg-black text-white font-bold py-3.5 rounded-[12px]" style={{minHeight:'44px'}}>{editingId ? '💾 Zapisz zmiany' : '✓ Opublikuj'}</button>
             </div>
           </div>
         </div>
       )}
 
-      <footer className="border-t bg-white mt-6"><div className="max-w-[1440px] mx-auto px-3 md:px-4 py-5"><div className="font-black">WROOMER<span className="text-[#ffea00]">.PL</span></div><div className="text-[11px] text-neutral-500 mt-1">© 2026 • Wersja 22:37 + ostatnie ulepszenia • Sidebar 360px (bez dużego top search) • Sortowanie ↑↓ poprawione: ↑ od najmniejszych • GPS Haversine FIXED 200km → Katowice 30km, Kraków 80km • Mobile przyciski 44px naprawione • Dodawanie ogłoszeń działa</div></div></footer>
+      <footer className="border-t bg-white mt-6"><div className="max-w-[1440px] mx-auto px-3 md:px-4 py-5"><div className="font-black">WROOMER<span className="text-[#ffea00]">.PL</span></div><div className="text-[11px] text-neutral-500 mt-1">© 2026 • PRO: Usunięte zbędne filtry • Rozwijane sortowanie ↑↓ • Kontakt: tel/WhatsApp/SMS/e-mail/wiadomość • Edycja ogłoszeń przez właściciela • GPS Haversine 200km</div></div></footer>
     </div>
   );
 }
