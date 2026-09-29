@@ -2,98 +2,193 @@
 <html lang="pl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, viewport-fit=cover">
   <title>Wroomer.pl - Darmowe ogłoszenia motoryzacyjne | Auta, części, motocykle</title>
-  <meta name="description" content="Wroomer.pl - darmowe ogłoszenia motoryzacyjne. Dodaj ogłoszenie auta za darmo. Bez prowizji.">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <meta name="description" content="Wroomer.pl - darmowe ogłoszenia motoryzacyjne. Dodaj ogłoszenie auta za darmo.">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { theme: { extend: { fontFamily: { sans: ['Inter','system-ui','sans-serif'] } } } }
+  </script>
   <style>
-    * { margin:0; padding:0; box-sizing:border-box; font-family:'Inter',system-ui,sans-serif; }
-    body { background:#f8f9fa; color:#111; }
-    header { position:sticky; top:0; z-index:40; background:#000; color:#fff; border-bottom:1px solid #222; }
-    .container { max-width:1280px; margin:0 auto; padding:0 16px; }
-    .header-inner { height:64px; display:flex; align-items:center; justify-content:space-between; }
-    .logo { display:flex; align-items:center; gap:12px; }
-    .logo-icon { width:32px; height:32px; background:#ffea00; border-radius:6px; display:flex; align-items:center; justify-content:center; font-weight:800; color:#000; font-size:18px; }
-    .logo-text { font-weight:800; letter-spacing:-0.02em; font-size:20px; }
-    .logo-text span { color:#ffea00; }
-    .hero { background:#000; color:#fff; padding:80px 0; text-align:center; }
-    .hero h1 { font-size:48px; font-weight:800; letter-spacing:-0.03em; margin-bottom:16px; line-height:1.1; }
-    .hero h1 span { color:#ffea00; }
-    .hero p { color:#aaa; font-size:18px; max-width:600px; margin:0 auto 32px; }
-    .btn { display:inline-flex; align-items:center; gap:8px; background:#ffea00; color:#000; padding:14px 28px; border-radius:8px; font-weight:700; text-decoration:none; font-size:16px; }
-    .btn:hover { background:#ffe000; }
-    .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:24px; padding:40px 0; }
-    .card { background:#fff; border:1px solid #e5e7eb; border-radius:12px; padding:24px; }
-    .card h3 { font-size:18px; font-weight:700; margin-bottom:8px; }
-    .card p { color:#666; font-size:14px; }
-    .badge { display:inline-block; background:#ffea00; color:#000; font-size:11px; font-weight:700; padding:4px 8px; border-radius:4px; margin-bottom:12px; }
-    @media(max-width:768px){ .hero h1{ font-size:32px; } .container{ padding:0 12px; } }
+    *{font-family:'Inter',system-ui,sans-serif}
+    .scrollbar-hide{-ms-overflow-style:none;scrollbar-width:none}.scrollbar-hide::-webkit-scrollbar{display:none}
   </style>
 </head>
-<body>
-  <header>
-    <div class="container">
-      <div class="header-inner">
-        <div class="logo">
-          <div class="logo-icon">W</div>
-          <div class="logo-text">WROOMER<span>.PL</span></div>
+<body class="bg-[#f8f9fa]">
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect, useMemo } = React;
+
+    const MOCK_ADS = [
+      { id: 1, title: "BMW 320d F30 2018 - Idealny stan", brand: "BMW", model: "3", year: 2018, price: 65900, mileage: 89000, fuel: "Diesel", gearbox: "Automatyczna", power: 190, location: "Warszawa", description: "Zadbany, serwisowany w ASO, bezwypadkowy.", image: "https://images.unsplash.com/photo-1555215695-3004980ad54e?w=600", createdAt: new Date().toISOString() },
+      { id: 2, title: "Audi A4 B9 2.0 TFSI 2019", brand: "Audi", model: "A4", year: 2019, price: 78900, mileage: 67000, fuel: "Benzyna", gearbox: "Automatyczna", power: 190, location: "Kraków", description: "Pierwszy właściciel, pełna historia serwisowa.", image: "https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=600", createdAt: new Date().toISOString() },
+      { id: 3, title: "VW Golf VII 1.5 TSI 2020", brand: "Volkswagen", model: "Golf", year: 2020, price: 54900, mileage: 45000, fuel: "Benzyna", gearbox: "Manualna", power: 150, location: "Wrocław", description: "Bardzo zadbany, garażowany.", image: "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=600", createdAt: new Date().toISOString() },
+    ];
+
+    function App() {
+      const [ads, setAds] = useState(() => {
+        try {
+          const saved = localStorage.getItem('wroomer_ads_final');
+          return saved ? JSON.parse(saved) : MOCK_ADS;
+        } catch(e){ return MOCK_ADS; }
+      });
+      const [search, setSearch] = useState('');
+      const [showAdd, setShowAdd] = useState(false);
+      const [form, setForm] = useState({ title: '', brand: '', model: '', year: 2020, price: '', mileage: '', fuel: 'Benzyna', gearbox: 'Manualna', power: '', location: '', description: '' });
+
+      useEffect(() => {
+        try { localStorage.setItem('wroomer_ads_final', JSON.stringify(ads)); } catch(e){}
+      }, [ads]);
+
+      const filtered = useMemo(() => {
+        const s = search.toLowerCase();
+        if(!s) return ads;
+        return ads.filter(a => 
+          a.title.toLowerCase().includes(s) || 
+          a.brand.toLowerCase().includes(s) || 
+          a.model.toLowerCase().includes(s) ||
+          a.location.toLowerCase().includes(s)
+        );
+      }, [ads, search]);
+
+      const handleAdd = (e) => {
+        e.preventDefault();
+        const newAd = {
+          id: Date.now(),
+          title: form.title || `${form.brand} ${form.model} ${form.year}`,
+          brand: form.brand,
+          model: form.model,
+          year: parseInt(form.year) || 2020,
+          price: parseInt(form.price) || 0,
+          mileage: parseInt(form.mileage) || 0,
+          fuel: form.fuel,
+          gearbox: form.gearbox,
+          power: parseInt(form.power) || 0,
+          location: form.location,
+          description: form.description,
+          image: `https://picsum.photos/seed/${Date.now()}/600/400`,
+          createdAt: new Date().toISOString()
+        };
+        setAds([newAd, ...ads]);
+        setShowAdd(false);
+        setForm({ title: '', brand: '', model: '', year: 2020, price: '', mileage: '', fuel: 'Benzyna', gearbox: 'Manualna', power: '', location: '', description: '' });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      };
+
+      return (
+        <div className="min-h-screen">
+          <header className="sticky top-0 z-40 bg-black text-white border-b border-neutral-800">
+            <div className="max-w-[1280px] mx-auto px-4 h-[64px] flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 bg-[#ffea00] rounded-md flex items-center justify-center font-black text-black">W</div>
+                <div className="font-black text-[20px] tracking-tight">WROOMER<span className="text-[#ffea00]">.PL</span></div>
+                <div className="hidden md:flex ml-8 gap-6 text-[13px] font-medium text-neutral-400">
+                  <span className="text-white">Ogłoszenia</span>
+                  <span>Dealerzy</span>
+                  <span>Wycena</span>
+                </div>
+              </div>
+              <div className="flex items-center gap-3">
+                <button onClick={() => setShowAdd(true)} className="bg-[#ffea00] text-black px-4 py-2 rounded-md font-bold text-[14px] hover:bg-[#ffe000]">+ Dodaj ogłoszenie</button>
+              </div>
+            </div>
+          </header>
+
+          <div className="bg-black text-white">
+            <div className="max-w-[1280px] mx-auto px-4 py-12 md:py-16">
+              <div className="max-w-[720px]">
+                <h1 className="text-[36px] md:text-[52px] font-black leading-[0.95] tracking-tight mb-4">Darmowe ogłoszenia<br/><span className="text-[#ffea00]">motoryzacyjne</span></h1>
+                <p className="text-neutral-400 text-[16px] md:text-[18px] mb-8">Dodaj ogłoszenie auta, części lub motocykla za darmo. Bez prowizji, bez limitów. {ads.length} ogłoszeń.</p>
+                <div className="flex gap-3 max-w-[520px]">
+                  <input value={search} onChange={e=>setSearch(e.target.value)} placeholder="Szukaj: BMW, Audi, Warszawa..." className="flex-1 bg-[#111] border border-neutral-800 rounded-lg px-4 py-3 text-[15px] text-white placeholder-neutral-500 focus:outline-none focus:border-[#ffea00]" />
+                  <button className="bg-white text-black px-6 py-3 rounded-lg font-bold text-[14px]">Szukaj</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="max-w-[1280px] mx-auto px-4 py-8">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-[20px] font-bold">Najnowsze ogłoszenia <span className="text-neutral-400 font-normal text-[14px] ml-2">({filtered.length})</span></h2>
+              <div className="text-[13px] text-neutral-500">Sortowanie: Najnowsze</div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+              {filtered.map(ad => (
+                <div key={ad.id} className="bg-white border border-neutral-200 rounded-xl overflow-hidden hover:shadow-lg transition-shadow">
+                  <div className="aspect-[16/10] bg-neutral-100 relative overflow-hidden">
+                    <img src={ad.image} alt={ad.title} className="w-full h-full object-cover" loading="lazy" />
+                    <div className="absolute top-3 left-3 bg-black text-white text-[11px] font-bold px-2 py-1 rounded">{ad.fuel} • {ad.year}</div>
+                    <div className="absolute top-3 right-3 bg-[#ffea00] text-black text-[11px] font-bold px-2 py-1 rounded">{ad.location}</div>
+                  </div>
+                  <div className="p-4">
+                    <div className="font-bold text-[16px] leading-tight mb-1 line-clamp-2">{ad.title}</div>
+                    <div className="text-[13px] text-neutral-500 mb-3">{ad.brand} • {ad.mileage.toLocaleString('pl-PL')} km • {ad.gearbox}</div>
+                    <div className="flex items-center justify-between">
+                      <div className="text-[20px] font-black">{ad.price.toLocaleString('pl-PL')} zł</div>
+                      <button className="text-[13px] font-semibold border border-neutral-200 rounded-md px-3 py-1.5 hover:bg-black hover:text-white hover:border-black transition-colors">Szczegóły</button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {filtered.length === 0 && (
+              <div className="text-center py-20 text-neutral-400">
+                <div className="text-[48px] mb-4">🔍</div>
+                <div className="text-[16px] font-medium">Brak ogłoszeń dla "{search}"</div>
+              </div>
+            )}
+          </div>
+
+          {showAdd && (
+            <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+              <div className="bg-white rounded-2xl w-full max-w-[560px] max-h-[90vh] overflow-auto">
+                <div className="sticky top-0 bg-white border-b p-5 flex items-center justify-between rounded-t-2xl">
+                  <div className="font-bold text-[18px]">Dodaj ogłoszenie</div>
+                  <button onClick={()=>setShowAdd(false)} className="w-8 h-8 rounded-full bg-neutral-100 flex items-center justify-center">✕</button>
+                </div>
+                <form onSubmit={handleAdd} className="p-5 space-y-4">
+                  <div className="grid grid-cols-2 gap-3">
+                    <div><label className="text-[12px] font-semibold text-neutral-600">Marka *</label><input required value={form.brand} onChange={e=>setForm({...form, brand: e.target.value})} placeholder="np. BMW" className="w-full mt-1 border border-neutral-200 rounded-lg px-3 py-2.5 text-[14px]" /></div>
+                    <div><label className="text-[12px] font-semibold text-neutral-600">Model *</label><input required value={form.model} onChange={e=>setForm({...form, model: e.target.value})} placeholder="np. 320d" className="w-full mt-1 border border-neutral-200 rounded-lg px-3 py-2.5 text-[14px]" /></div>
+                  </div>
+                  <div><label className="text-[12px] font-semibold text-neutral-600">Tytuł ogłoszenia</label><input value={form.title} onChange={e=>setForm({...form, title: e.target.value})} placeholder="np. BMW 320d F30 2018 - Idealny stan" className="w-full mt-1 border border-neutral-200 rounded-lg px-3 py-2.5 text-[14px]" /></div>
+                  <div className="grid grid-cols-3 gap-3">
+                    <div><label className="text-[12px] font-semibold text-neutral-600">Rok</label><input type="number" value={form.year} onChange={e=>setForm({...form, year: e.target.value})} className="w-full mt-1 border border-neutral-200 rounded-lg px-3 py-2.5 text-[14px]" /></div>
+                    <div><label className="text-[12px] font-semibold text-neutral-600">Cena (zł)</label><input type="number" value={form.price} onChange={e=>setForm({...form, price: e.target.value})} placeholder="65900" className="w-full mt-1 border border-neutral-200 rounded-lg px-3 py-2.5 text-[14px]" /></div>
+                    <div><label className="text-[12px] font-semibold text-neutral-600">Przebieg</label><input type="number" value={form.mileage} onChange={e=>setForm({...form, mileage: e.target.value})} placeholder="89000" className="w-full mt-1 border border-neutral-200 rounded-lg px-3 py-2.5 text-[14px]" /></div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div><label className="text-[12px] font-semibold text-neutral-600">Paliwo</label><select value={form.fuel} onChange={e=>setForm({...form, fuel: e.target.value})} className="w-full mt-1 border border-neutral-200 rounded-lg px-3 py-2.5 text-[14px]"><option>Benzyna</option><option>Diesel</option><option>LPG</option><option>Hybryda</option><option>Elektryczny</option></select></div>
+                    <div><label className="text-[12px] font-semibold text-neutral-600">Skrzynia</label><select value={form.gearbox} onChange={e=>setForm({...form, gearbox: e.target.value})} className="w-full mt-1 border border-neutral-200 rounded-lg px-3 py-2.5 text-[14px]"><option>Manualna</option><option>Automatyczna</option></select></div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div><label className="text-[12px] font-semibold text-neutral-600">Moc (KM)</label><input type="number" value={form.power} onChange={e=>setForm({...form, power: e.target.value})} placeholder="190" className="w-full mt-1 border border-neutral-200 rounded-lg px-3 py-2.5 text-[14px]" /></div>
+                    <div><label className="text-[12px] font-semibold text-neutral-600">Lokalizacja</label><input value={form.location} onChange={e=>setForm({...form, location: e.target.value})} placeholder="Warszawa" className="w-full mt-1 border border-neutral-200 rounded-lg px-3 py-2.5 text-[14px]" /></div>
+                  </div>
+                  <div><label className="text-[12px] font-semibold text-neutral-600">Opis</label><textarea value={form.description} onChange={e=>setForm({...form, description: e.target.value})} rows="3" placeholder="Opisz stan auta..." className="w-full mt-1 border border-neutral-200 rounded-lg px-3 py-2.5 text-[14px]"></textarea></div>
+                  <button type="submit" className="w-full bg-[#ffea00] text-black font-bold py-3 rounded-lg hover:bg-[#ffe000]">Dodaj ogłoszenie za darmo</button>
+                  <div className="text-[11px] text-neutral-500 text-center">Ogłoszenie zapisze się lokalnie w przeglądarce. Bez prowizji.</div>
+                </form>
+              </div>
+            </div>
+          )}
+
+          <footer className="border-t mt-12 py-8 text-center text-[13px] text-neutral-500">
+            © 2026 Wroomer.pl - Darmowe ogłoszenia motoryzacyjne. Bez prowizji. • Wersja naprawiona dla Firefox
+          </footer>
         </div>
-        <div style="display:flex; gap:12px;">
-          <a href="#" style="color:#fff; text-decoration:none; font-size:14px; font-weight:500;">Zaloguj</a>
-          <a href="#" style="background:#ffea00; color:#000; padding:8px 16px; border-radius:6px; font-weight:700; text-decoration:none; font-size:14px;">+ Dodaj ogłoszenie</a>
-        </div>
-      </div>
-    </div>
-  </header>
+      );
+    }
 
-  <div class="hero">
-    <div class="container">
-      <h1>Darmowe ogłoszenia<br><span>motoryzacyjne</span></h1>
-      <p>Wroomer.pl - dodaj ogłoszenie auta, części lub motocykla za darmo. Bez prowizji, bez limitów.</p>
-      <a href="#" class="btn">🔍 Przeglądaj ogłoszenia</a>
-    </div>
-  </div>
-
-  <div class="container">
-    <div class="grid">
-      <div class="card">
-        <div class="badge">NOWOŚĆ</div>
-        <h3>🚗 Auta na sprzedaż</h3>
-        <p>Tysiące ogłoszeń aut osobowych, dostawczych i ciężarowych. Filtruj po marce, roczniku, cenie.</p>
-      </div>
-      <div class="card">
-        <div class="badge">POPULARNE</div>
-        <h3>🔧 Części samochodowe</h3>
-        <p>Nowe i używane części do wszystkich marek. Silniki, skrzynie, zawieszenia, elektronika.</p>
-      </div>
-      <div class="card">
-        <div class="badge">DARMOWE</div>
-        <h3>🏍️ Motocykle</h3>
-        <p>Motocykle, skutery, quady. Dodaj ogłoszenie za darmo w 30 sekund.</p>
-      </div>
-    </div>
-
-    <div style="background:#000; color:#fff; border-radius:12px; padding:32px; text-align:center; margin-bottom:40px;">
-      <h2 style="font-size:24px; font-weight:800; margin-bottom:12px;">Strona w budowie - wracamy wkrótce!</h2>
-      <p style="color:#aaa; margin-bottom:20px;">Pełna wersja Wroomer.pl z wyszukiwarką i dodawaniem ogłoszeń już za chwilę.</p>
-      <div style="display:inline-flex; background:#111; border:1px solid #222; border-radius:8px; padding:12px 20px; font-family:monospace; font-size:13px; color:#ffea00;">
-        www.wroomer.pl - Darmowe ogłoszenia motoryzacyjne
-      </div>
-    </div>
-  </div>
-
-  <footer style="border-top:1px solid #e5e7eb; padding:24px 0; text-align:center; color:#888; font-size:13px;">
-    <div class="container">
-      © 2026 Wroomer.pl - Darmowe ogłoszenia motoryzacyjne. Bez prowizji.
-    </div>
-  </footer>
-
-  <script>
-    console.log('Wroomer.pl - wersja naprawiona, błąd SyntaxError usunięty');
-    // Prosty JS bez błędów składni
-    document.addEventListener('DOMContentLoaded', function() {
-      console.log('Wroomer załadowany poprawnie');
-    });
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
   </script>
 </body>
 </html>
