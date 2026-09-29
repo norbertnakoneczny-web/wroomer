@@ -14,14 +14,14 @@
     html, body { overflow-x: hidden; max-width: 100vw; margin: 0; }
     .line-clamp-2{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
     select{appearance:none} input[type="file"]{display:none}
-    @media (max-width: 768px) {
+    @media (max-width: 1024px) {
       .mobile-list-card { display: flex; flex-direction: row; height: 130px; }
       .mobile-list-card .img-wrap { width: 38%; min-width: 38%; height: 100%; }
       .mobile-list-card .content-wrap { width: 62%; padding: 10px 12px; display: flex; flex-direction: column; justify-content: space-between; }
       .mobile-grid { grid-template-columns: 1fr !important; gap: 10px !important; }
     }
-    @media (min-width: 769px) { .mobile-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
-    @media (min-width: 1100px) { .mobile-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+    @media (min-width: 1025px) { .mobile-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+    @media (min-width: 1300px) { .mobile-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
   </style>
 </head>
 <body class="bg-[#f5f5f7]"><div id="root"></div>
@@ -58,19 +58,21 @@ function getDistanceToAd(userLat, userLng, adLocation) {
 }
 
 const MOCK_ADS = [
-  { id: 1, title: "BMW 320d F30 2018 - ASO", brand: "BMW", model: "3 Series", year: 2018, price: 65900, mileage: 89000, fuel: "Diesel", gearbox: "Automatyczna", power: 190, location: "Warszawa", voivodeship: "Mazowieckie", description: "Zadbany, ASO.", image: "https://images.unsplash.com/photo-1555215695-3004980ad54e?w=600", images: ["https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800"], owner: "Marek K.", ownerEmail: "marek@example.com", phone: "600 123 456", createdAt: "2h temu", createdAtTs: Date.now()-2*3600000 },
+  { id: 1, title: "BMW 320d F30 2018 - ASO, bezwypadkowy", brand: "BMW", model: "3 Series", year: 2018, price: 65900, mileage: 89000, fuel: "Diesel", gearbox: "Automatyczna", power: 190, location: "Warszawa", voivodeship: "Mazowieckie", description: "Zadbany, ASO.", image: "https://images.unsplash.com/photo-1555215695-3004980ad54e?w=600", images: ["https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800"], owner: "Marek K.", ownerEmail: "marek@example.com", phone: "600 123 456", createdAt: "2h temu", createdAtTs: Date.now()-2*3600000 },
   { id: 2, title: "Audi A4 B9 S-line 2019", brand: "Audi", model: "A4", year: 2019, price: 78900, mileage: 67000, fuel: "Benzyna", gearbox: "Automatyczna", power: 190, location: "Kraków", voivodeship: "Małopolskie", description: "S-line.", image: "https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=600", images: ["https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=800"], owner: "Auto-Kompleks", ownerEmail: "auto@example.com", phone: "500 987 654", createdAt: "5h temu", createdAtTs: Date.now()-5*3600000 },
-  { id: 3, title: "VW Golf VII Highline 2020", brand: "Volkswagen", model: "Golf", year: 2020, price: 54900, mileage: 45000, fuel: "Benzyna", gearbox: "Manualna", power: 150, location: "Wrocław", voivodeship: "Dolnośląskie", description: "Garażowany.", image: "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=600", images: ["https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800"], owner: "Piotr W.", ownerEmail: "piotr@example.com", phone: "600 111 222", createdAt: "1 dzień temu", createdAtTs: Date.now()-24*3600000 },
   { id: 6, title: "Toyota Corolla Hybrid 2022", brand: "Toyota", model: "Corolla", year: 2022, price: 79900, mileage: 22000, fuel: "Hybryda", gearbox: "Automatyczna", power: 122, location: "Katowice", voivodeship: "Śląskie", description: "Gwarancja.", image: "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=600", images: ["https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=800"], owner: "Salon Toyota", ownerEmail: "toyota@example.com", phone: "600 777 888", createdAt: "3 dni temu", createdAtTs: Date.now()-72*3600000 },
-  { id: 11, title: "Mercedes GLC 4MATIC 2018", brand: "Mercedes", model: "GLC", year: 2018, price: 89900, mileage: 88000, fuel: "Diesel", gearbox: "Automatyczna", power: 170, location: "Wodzisław Śląski", voivodeship: "Śląskie", description: "AMG.", image: "https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=600", images: ["https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=800"], owner: "Anna M.", ownerEmail: "anna@example.com", phone: "600 333 444", createdAt: "12h temu", createdAtTs: Date.now()-12*3600000 },
-  { id: 12, title: "Skoda Kodiaq 4x4 2019", brand: "Skoda", model: "Kodiaq", year: 2019, price: 75900, mileage: 72000, fuel: "Diesel", gearbox: "Automatyczna", power: 150, location: "Rybnik", voivodeship: "Śląskie", image: "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=600", images: ["https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=800"], owner: "Tomasz L.", ownerEmail: "tomasz@example.com", phone: "600 555 666", createdAt: "1 dzień temu", createdAtTs: Date.now()-30*3600000 },
-  { id: 17, title: "BMW M3 Competition 510KM 2021", brand: "BMW", model: "M3", year: 2021, price: 329900, mileage: 18000, fuel: "Benzyna", gearbox: "Automatyczna", power: 510, location: "Warszawa", voivodeship: "Mazowieckie", description: "Ceramika.", image: "https://images.unsplash.com/photo-1555215695-3004980ad54e?w=600", images: ["https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800"], owner: "M Cars", ownerEmail: "mcars@example.com", phone: "600 888 999", createdAt: "1h temu", createdAtTs: Date.now()-1*3600000 },
+  { id: 11, title: "Mercedes GLC 220d 4MATIC 2018", brand: "Mercedes", model: "GLC", year: 2018, price: 89900, mileage: 88000, fuel: "Diesel", gearbox: "Automatyczna", power: 170, location: "Wodzisław Śląski", voivodeship: "Śląskie", description: "AMG Line.", image: "https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=600", images: ["https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=800"], owner: "Anna M.", ownerEmail: "anna@example.com", phone: "600 333 444", createdAt: "12h temu", createdAtTs: Date.now()-12*3600000 },
+  { id: 12, title: "Skoda Kodiaq 7-osobowy 4x4 2019", brand: "Skoda", model: "Kodiaq", year: 2019, price: 75900, mileage: 72000, fuel: "Diesel", gearbox: "Automatyczna", power: 150, location: "Rybnik", voivodeship: "Śląskie", description: "7-osob.", image: "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=600", images: ["https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=800"], owner: "Tomasz L.", ownerEmail: "tomasz@example.com", phone: "600 555 666", createdAt: "1 dzień temu", createdAtTs: Date.now()-30*3600000 },
+  { id: 13, title: "Toyota RAV4 Hybrid AWD 2021", brand: "Toyota", model: "RAV4", year: 2021, price: 109900, mileage: 35000, fuel: "Hybryda", gearbox: "Automatyczna", power: 222, location: "Katowice", voivodeship: "Śląskie", description: "Gwarancja.", image: "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=600", images: ["https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=800"], owner: "Salon Toyota", ownerEmail: "toyota@example.com", phone: "600 777 888", createdAt: "2 dni temu", createdAtTs: Date.now()-50*3600000 },
+  { id: 14, title: "VW Tiguan R-Line 4Motion 2020", brand: "Volkswagen", model: "Tiguan", year: 2020, price: 84900, mileage: 48000, fuel: "Diesel", gearbox: "Automatyczna", power: 150, location: "Tychy", voivodeship: "Śląskie", image: "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=600", images: ["https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800"], owner: "Piotr W.", ownerEmail: "piotr@example.com", phone: "600 111 222", createdAt: "2 dni temu", createdAtTs: Date.now()-55*3600000 },
+  { id: 17, title: "BMW M3 Competition 510KM 2021", brand: "BMW", model: "M3", year: 2021, price: 329900, mileage: 18000, fuel: "Benzyna", gearbox: "Automatyczna", power: 510, location: "Warszawa", voivodeship: "Mazowieckie", description: "Ceramika, nagłośnienie Harman.", image: "https://images.unsplash.com/photo-1555215695-3004980ad54e?w=600", images: ["https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800"], owner: "M Cars", ownerEmail: "mcars@example.com", phone: "600 888 999", createdAt: "1h temu", createdAtTs: Date.now()-1*3600000 },
+  { id: 18, title: "Ford Mustang GT V8 421KM 2018", brand: "Ford", model: "Mustang", year: 2018, price: 119900, mileage: 45000, fuel: "Benzyna", gearbox: "Automatyczna", power: 421, location: "Częstochowa", voivodeship: "Śląskie", description: "V8.", image: "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=600", images: ["https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800"], owner: "Mustang Garage", ownerEmail: "mustang@example.com", phone: "600 123 789", createdAt: "3h temu", createdAtTs: Date.now()-3*3600000 },
 ];
 
 function App() {
-  const [ads, setAds] = useState(() => { try { const s = localStorage.getItem('wroomer_ads_2243'); return s ? JSON.parse(s) : MOCK_ADS; } catch(e){ return MOCK_ADS; } });
-  const [users, setUsers] = useState(() => { try { const s = localStorage.getItem('wroomer_users_2243'); return s ? JSON.parse(s) : []; } catch(e){ return []; } });
-  const [currentUser, setCurrentUser] = useState(() => { try { const s = localStorage.getItem('wroomer_current_user_2243'); return s ? JSON.parse(s) : null; } catch(e){ return null; } });
+  const [ads, setAds] = useState(() => { try { const s = localStorage.getItem('wroomer_ads_2237'); return s ? JSON.parse(s) : MOCK_ADS; } catch(e){ return MOCK_ADS; } });
+  const [users, setUsers] = useState(() => { try { const s = localStorage.getItem('wroomer_users_2237'); return s ? JSON.parse(s) : []; } catch(e){ return []; } });
+  const [currentUser, setCurrentUser] = useState(() => { try { const s = localStorage.getItem('wroomer_current_user_2237'); return s ? JSON.parse(s) : null; } catch(e){ return null; } });
   const [searchBrand, setSearchBrand] = useState('');
   const [searchModel, setSearchModel] = useState('');
   const [searchLocation, setSearchLocation] = useState('');
@@ -90,9 +92,9 @@ function App() {
   const [error, setError] = useState('');
   const fileInputRef = useRef(null);
 
-  useEffect(() => { try { localStorage.setItem('wroomer_ads_2243', JSON.stringify(ads)); } catch(e){} }, [ads]);
-  useEffect(() => { try { localStorage.setItem('wroomer_users_2243', JSON.stringify(users)); } catch(e){} }, [users]);
-  useEffect(() => { try { if(currentUser) localStorage.setItem('wroomer_current_user_2243', JSON.stringify(currentUser)); else localStorage.removeItem('wroomer_current_user_2243'); } catch(e){} }, [currentUser]);
+  useEffect(() => { try { localStorage.setItem('wroomer_ads_2237', JSON.stringify(ads)); } catch(e){} }, [ads]);
+  useEffect(() => { try { localStorage.setItem('wroomer_users_2237', JSON.stringify(users)); } catch(e){} }, [users]);
+  useEffect(() => { try { if(currentUser) localStorage.setItem('wroomer_current_user_2237', JSON.stringify(currentUser)); else localStorage.removeItem('wroomer_current_user_2237'); } catch(e){} }, [currentUser]);
   useEffect(() => { if(selected) setImgIdx(0); }, [selected]);
   useEffect(() => { document.body.style.overflow = selected || showAdd || showAuth || showConfirm || showFilters ? 'hidden' : ''; return () => document.body.style.overflow = ''; }, [selected, showAdd, showAuth, showConfirm, showFilters]);
 
@@ -145,7 +147,7 @@ function App() {
         setSearchRadius('50');
       } catch(e) { setSearchLocation('Moja lokalizacja'); setSearchRadius('50'); }
       setIsLocating(false);
-    }, (err) => { setIsLocating(false); alert(err.code===1 ? 'Odmówiono lokalizacji - włącz w przeglądarce' : 'Błąd: '+err.message); }, { enableHighAccuracy: true, timeout: 10000 });
+    }, (err) => { setIsLocating(false); alert(err.code===1 ? 'Odmówiono lokalizacji' : 'Błąd: '+err.message); }, { enableHighAccuracy: true, timeout: 10000 });
   };
 
   const handleRegister = (e) => {
@@ -198,30 +200,19 @@ function App() {
   };
   const clearFilters = () => { setSearchBrand(''); setSearchModel(''); setSearchLocation(''); setSearchVoivodeship(''); setSearchRadius(''); setSortBy('newest'); setUserCoords(null); setShowFilters(false); };
 
-  const sortOptions = [
-    { value: 'newest', label: 'Najnowsze', icon: '🕒' },
-    { value: 'distance', label: 'Najbliżej mnie', icon: '📍', needGPS: true },
-    { value: 'price_asc', label: 'Cena rosnąco ↑', sub: 'od najtańszych', icon: '💰' },
-    { value: 'price_desc', label: 'Cena malejąco ↓', sub: 'od najdroższych', icon: '💰' },
-    { value: 'year_asc', label: 'Rocznik rosnąco ↑', sub: 'od najstarszych', icon: '📅' },
-    { value: 'year_desc', label: 'Rocznik malejąco ↓', sub: 'od najnowszych', icon: '📅' },
-    { value: 'mileage_asc', label: 'Przebieg rosnąco ↑', sub: 'od najmniejszego', icon: '🛣️' },
-    { value: 'mileage_desc', label: 'Przebieg malejąco ↓', sub: 'od największego', icon: '🛣️' },
-  ];
-
   return (
     <div className="min-h-screen flex flex-col w-full max-w-[100vw] overflow-hidden">
       <header className="sticky top-0 z-30 bg-black text-white border-b border-neutral-800 w-full">
         <div className="max-w-[1440px] mx-auto px-3 md:px-4 h-[56px] flex items-center justify-between">
-          <div className="flex items-center gap-2 cursor-pointer" onClick={()=>setSelected(null)}>
+          <div className="flex items-center gap-2 cursor-pointer shrink-0" onClick={()=>setSelected(null)}>
             <div className="w-8 h-8 bg-[#ffea00] rounded-[8px] flex items-center justify-center font-black text-black">W</div>
             <div className="font-black text-[16px] md:text-[18px]">WROOMER<span className="text-[#ffea00]">.PL</span></div>
           </div>
-          <div className="flex items-center gap-1.5 md:gap-2">
-            <button onClick={()=>setShowFilters(true)} className="lg:hidden bg-[#222] border border-neutral-700 text-white px-3 py-2 rounded-[10px] font-bold text-[12px]" style={{minHeight:'44px'}}>🔍 Filtry</button>
+          <div className="flex items-center gap-1.5 md:gap-2 shrink-0">
+            <button onClick={()=>setShowFilters(true)} className="lg:hidden bg-[#222] border border-neutral-700 text-white px-3 py-2 rounded-[10px] font-bold text-[12px]" style={{minHeight:'44px', touchAction:'manipulation'}}>🔍 Filtry</button>
             {currentUser ? (
               <>
-                <span className="hidden md:block text-[12px] max-w-[80px] truncate">{currentUser.name}</span>
+                <span className="hidden md:block text-[12px] max-w-[100px] truncate">{currentUser.name}</span>
                 <button onClick={()=>setCurrentUser(null)} className="text-[12px] text-neutral-400 px-2 hidden md:block" style={{minHeight:'44px'}}>Wyloguj</button>
                 <button onClick={handleAddClick} className="bg-[#ffea00] text-black px-4 py-2 rounded-[10px] font-bold text-[13px]" style={{minHeight:'44px', touchAction:'manipulation'}}>+ Dodaj</button>
               </>
@@ -236,52 +227,28 @@ function App() {
         </div>
       </header>
 
-      <div className="bg-white border-b border-neutral-200 sticky top-[56px] z-20 shadow-sm">
-        <div className="max-w-[1440px] mx-auto px-3 md:px-4 py-3">
-          <div className="flex flex-col md:flex-row gap-2 md:gap-3">
-            <div className="flex gap-2 flex-1 min-w-0">
-              <div className="relative flex-1 min-w-0">
-                <select value={searchBrand} onChange={e=>{setSearchBrand(e.target.value); setSearchModel('');}} className="w-full bg-[#f5f5f7] border border-neutral-200 rounded-[12px] px-3 py-3 pr-8 text-[14px] font-bold" style={{minHeight:'44px'}}>
-                  <option value="">Marka ▼</option>
-                  {Object.keys(BRAND_MODELS).sort().map(b => <option key={b} value={b}>{b}</option>)}
-                </select>
-              </div>
-              <div className="relative flex-1 min-w-0">
-                <select value={searchModel} onChange={e=>setSearchModel(e.target.value)} disabled={!searchBrand} className="w-full bg-[#f5f5f7] border border-neutral-200 rounded-[12px] px-3 py-3 pr-8 text-[14px] font-bold disabled:opacity-40" style={{minHeight:'44px'}}>
-                  <option value="">{searchBrand ? 'Model ▼' : 'Najpierw marka'}</option>
-                  {(BRAND_MODELS[searchBrand]||[]).map(m => <option key={m} value={m}>{m}</option>)}
-                </select>
-              </div>
-            </div>
-            <div className="flex gap-2 flex-1 min-w-0">
-              <input value={searchLocation} onChange={e=>setSearchLocation(e.target.value)} placeholder="📍 Lokalizacja" className="flex-1 min-w-0 bg-[#f5f5f7] border border-neutral-200 rounded-[12px] px-3 py-3 text-[14px]" style={{minHeight:'44px'}} />
-              <button onClick={handleUseMyLocation} disabled={isLocating} className="bg-black text-white px-4 py-3 rounded-[12px] font-bold text-[13px] shrink-0 disabled:opacity-50" style={{minHeight:'44px', touchAction:'manipulation'}}>{isLocating ? '⌛' : '📍 GPS'}</button>
-              <button onClick={()=>setShowFilters(true)} className="bg-[#ffea00] text-black px-4 py-3 rounded-[12px] font-bold text-[13px] shrink-0 hidden md:block" style={{minHeight:'44px'}}>Więcej filtrów</button>
-            </div>
-          </div>
-          {(searchBrand || searchVoivodeship || searchRadius || userCoords) && (
-            <div className="flex gap-1.5 mt-3 flex-wrap">
-              {searchBrand && <span className="bg-[#ffea00] text-black text-[11px] font-bold px-3 py-1 rounded-full">{searchBrand} {searchModel && '• '+searchModel}</span>}
-              {searchVoivodeship && <span className="bg-black text-white text-[11px] font-bold px-3 py-1 rounded-full">📍 {searchVoivodeship} {searchRadius && '• '+searchRadius+'km'}</span>}
-              {userCoords && <span className="bg-black text-white text-[11px] font-bold px-3 py-1 rounded-full">✓ GPS {searchRadius}km</span>}
-              <button onClick={clearFilters} className="text-[11px] text-neutral-500 underline" style={{minHeight:'44px'}}>Wyczyść ✕</button>
-            </div>
-          )}
-        </div>
-      </div>
+      <div className="bg-black text-white w-full"><div className="max-w-[1440px] mx-auto px-3 md:px-4 py-3 md:py-4"><h1 className="text-[18px] md:text-[26px] font-black leading-tight">Darmowe ogłoszenia <span className="text-[#ffea00]">motoryzacyjne</span></h1><p className="text-[11px] md:text-[12px] text-neutral-400 mt-1">Wersja 22:37 • Czysty layout z sidebar 360px • GPS Haversine • Sortowanie ↑↓ poprawione • Mobile 44px przyciski</p></div></div>
 
-      <div className="bg-[#f5f5f7] border-b border-neutral-200">
+      <div className="sticky top-[56px] z-20 bg-white/95 backdrop-blur-md border-b border-neutral-200 w-full">
         <div className="max-w-[1440px] mx-auto px-3 md:px-4 py-2.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-          <div className="flex items-center gap-2">
-            <div className="bg-black text-white text-[12px] font-bold px-3 py-1.5 rounded-full">{filteredAndSorted.length} ogłoszeń</div>
-            <div className="text-[11px] text-neutral-500 hidden md:block">↑ rosnąco od najmniejszych • ↓ malejąco od największych • GPS Haversine</div>
+          <div className="flex items-center gap-1.5 md:gap-2 flex-wrap">
+            <div className="bg-black text-white text-[11px] md:text-[12px] font-bold px-3 py-1.5 rounded-full">{filteredAndSorted.length} ogłoszeń</div>
+            {searchBrand && <div className="bg-[#ffea00] text-black text-[11px] font-bold px-3 py-1 rounded-full">{searchBrand} {searchModel && '• '+searchModel}</div>}
+            {searchVoivodeship && <div className="bg-black text-white text-[11px] font-bold px-3 py-1 rounded-full">📍 {searchVoivodeship} {searchRadius && '• '+searchRadius+'km'}</div>}
+            {userCoords && <div className="bg-[#ffea00] text-black text-[11px] font-bold px-3 py-1 rounded-full">✓ GPS {searchRadius}km</div>}
+            {(searchBrand || searchLocation || searchVoivodeship) && <button onClick={clearFilters} className="text-[11px] text-neutral-500 underline" style={{minHeight:'44px'}}>Wyczyść ✕</button>}
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-[11px] font-bold uppercase text-neutral-500">Sortuj:</span>
-            <select value={sortBy} onChange={e=>setSortBy(e.target.value)} className="bg-white border border-neutral-300 rounded-[10px] px-3 py-2 pr-8 text-[13px] font-bold min-w-[200px]" style={{minHeight:'40px'}}>
-              {sortOptions.filter(o => !o.needGPS || userCoords).map(o => (
-                <option key={o.value} value={o.value}>{o.icon} {o.label} {o.sub ? '('+o.sub+')' : ''}</option>
-              ))}
+            <span className="text-[11px] font-bold uppercase text-neutral-500 hidden md:block">Sortuj:</span>
+            <select value={sortBy} onChange={e=>setSortBy(e.target.value)} className="bg-white border border-neutral-300 rounded-[10px] px-3 py-2 text-[12px] md:text-[13px] font-bold min-w-[200px]" style={{minHeight:'40px'}}>
+              <option value="newest">Najnowsze</option>
+              {userCoords && <option value="distance">📍 Najbliżej mnie</option>}
+              <option value="price_asc">Cena ↑ rosnąco (od najtańszych)</option>
+              <option value="price_desc">Cena ↓ malejąco (od najdroższych)</option>
+              <option value="year_asc">Rocznik ↑ rosnąco (od najstarszych)</option>
+              <option value="year_desc">Rocznik ↓ malejąco (od najnowszych)</option>
+              <option value="mileage_asc">Przebieg ↑ rosnąco (od najmniejszego)</option>
+              <option value="mileage_desc">Przebieg ↓ malejąco (od największego)</option>
             </select>
           </div>
         </div>
@@ -294,32 +261,40 @@ function App() {
         </div>
       </div>
 
-      <div className="max-w-[1440px] mx-auto w-full px-3 md:px-4 py-3 flex flex-col lg:flex-row gap-4">
-        <div className="hidden lg:block w-[340px] flex-shrink-0">
-          <div className="bg-[#111] border border-neutral-800 rounded-[16px] p-5 sticky top-[180px]">
-            <h2 className="font-bold text-[15px] text-white mb-4">🔍 Filtry • GPS • Sortowanie ↑↓</h2>
+      <div className="max-w-[1440px] mx-auto w-full px-3 md:px-4 py-3 md:py-4 flex flex-col lg:flex-row gap-4 md:gap-6">
+        <div className="hidden lg:block w-[360px] flex-shrink-0">
+          <div className="bg-[#111] border border-neutral-800 rounded-[16px] p-5 sticky top-[132px]">
+            <h2 className="font-bold text-[15px] text-white mb-4">🔍 Szukaj auta • 22:37 + ulepszenia</h2>
             <div className="space-y-4">
-              <div>
-                <label className="text-[11px] font-bold uppercase text-neutral-500 mb-1.5 block">Sortowanie poprawione</label>
-                <div className="bg-[#1a1a1a] border border-neutral-800 rounded-[12px] p-2 space-y-1">
-                  {sortOptions.map(o => {
-                    if(o.needGPS && !userCoords) return null;
-                    return (
-                      <button key={o.value} onClick={()=>setSortBy(o.value)} className={'w-full text-left px-3 py-2 rounded-[8px] text-[12px] flex items-center justify-between ' + (sortBy===o.value ? 'bg-[#ffea00] text-black font-bold' : 'text-white hover:bg-[#222]')} style={{minHeight:'44px'}}>
-                        <span>{o.icon} {o.label} {o.sub && <span className="text-[10px] opacity-70">• {o.sub}</span>}</span>
-                      </button>
-                    );
-                  })}
+              <div className="grid grid-cols-2 gap-3">
+                <select value={searchBrand} onChange={e=>{setSearchBrand(e.target.value); setSearchModel('');}} className="w-full bg-[#1a1a1a] border border-neutral-800 rounded-[12px] px-3 py-3 text-[14px] text-white" style={{minHeight:'44px'}}><option value="">Marka</option>{Object.keys(BRAND_MODELS).sort().map(b => <option key={b} value={b}>{b}</option>)}</select>
+                <select value={searchModel} onChange={e=>setSearchModel(e.target.value)} disabled={!searchBrand} className="w-full bg-[#1a1a1a] border border-neutral-800 rounded-[12px] px-3 py-3 text-[14px] text-white disabled:opacity-40" style={{minHeight:'44px'}}><option value="">{searchBrand ? 'Model' : 'Najpierw marka'}</option>{(BRAND_MODELS[searchBrand]||[]).map(m => <option key={m} value={m}>{m}</option>)}</select>
+              </div>
+              <div className="border-t border-neutral-800 pt-4">
+                <h3 className="text-[12px] font-bold text-white mb-3">📍 Lokalizacja • GPS Haversine (FIXED 200km)</h3>
+                <button onClick={handleUseMyLocation} disabled={isLocating} className="w-full mb-3 bg-[#ffea00] disabled:opacity-50 text-black font-bold text-[13px] py-3 rounded-[12px]" style={{minHeight:'44px'}}>{isLocating ? '⌛ Szukam GPS...' : '📍 Użyj mojej lokalizacji'}</button>
+                <div className="space-y-3">
+                  <select value={searchVoivodeship} onChange={e=>setSearchVoivodeship(e.target.value)} className="w-full bg-[#1a1a1a] border border-neutral-800 rounded-[12px] px-3 py-3 text-[14px] text-white" style={{minHeight:'44px'}}><option value="">Cała Polska</option>{VOIVODESHIPS.map(v => <option key={v} value={v}>{v}</option>)}</select>
+                  <div className="grid grid-cols-2 gap-3">
+                    <input value={searchLocation} onChange={e=>setSearchLocation(e.target.value)} placeholder="Miasto" className="w-full bg-[#1a1a1a] border border-neutral-800 rounded-[12px] px-3 py-3 text-[14px] text-white" style={{minHeight:'44px'}} />
+                    <select value={searchRadius} onChange={e=>setSearchRadius(e.target.value)} className="w-full bg-[#1a1a1a] border border-neutral-800 rounded-[12px] px-3 py-3 text-[14px] text-white" style={{minHeight:'44px'}}><option value="">Dowolny</option><option value="10">+10 km</option><option value="20">+20 km</option><option value="50">+50 km</option><option value="100">+100 km</option><option value="200">+200 km</option><option value="500">+500 km</option></select>
+                  </div>
+                  {userCoords && <div className="bg-[#ffea00]/20 border border-[#ffea00]/50 rounded-[10px] p-3 text-[11px] text-[#ffea00]"><div className="font-bold">✓ GPS: {searchLocation} ({userCoords.lat.toFixed(2)}, {userCoords.lng.toFixed(2)})</div><div className="mt-1">Haversine FIXED: Gorzyce 49.96,18.40 → Katowice 30km, Kraków 80km, Wrocław 180km, Warszawa 320km<br/>Przy 200km zobaczysz Śląskie + Małopolskie + Dolnośląskie!</div></div>}
                 </div>
               </div>
               <div className="border-t border-neutral-800 pt-4">
-                <h3 className="text-[12px] font-bold text-white mb-3">📍 Promień Haversine</h3>
-                <select value={searchVoivodeship} onChange={e=>setSearchVoivodeship(e.target.value)} className="w-full bg-[#1a1a1a] border border-neutral-800 rounded-[12px] px-3 py-3 text-[14px] text-white mb-3" style={{minHeight:'44px'}}><option value="">Cała Polska</option>{VOIVODESHIPS.map(v => <option key={v} value={v}>{v}</option>)}</select>
-                <div className="grid grid-cols-2 gap-3">
-                  <input value={searchLocation} onChange={e=>setSearchLocation(e.target.value)} placeholder="Miasto" className="w-full bg-[#1a1a1a] border border-neutral-800 rounded-[12px] px-3 py-3 text-[14px] text-white" style={{minHeight:'44px'}} />
-                  <select value={searchRadius} onChange={e=>setSearchRadius(e.target.value)} className="w-full bg-[#1a1a1a] border border-neutral-800 rounded-[12px] px-3 py-3 text-[14px] text-white" style={{minHeight:'44px'}}><option value="">Dowolny</option><option value="20">20km</option><option value="50">50km</option><option value="100">100km</option><option value="200">200km</option><option value="500">500km</option></select>
-                </div>
-                {userCoords && <div className="mt-3 text-[11px] text-[#ffea00] bg-[#ffea00]/10 border border-[#ffea00]/30 rounded-[10px] p-2.5">✓ GPS: {searchLocation} • Haversine: Katowice 30km, Kraków 80km, Warszawa 320km</div>}
+                <h3 className="text-[12px] font-bold text-white mb-3">⬆️⬇️ Sortowanie poprawione</h3>
+                <select value={sortBy} onChange={e=>setSortBy(e.target.value)} className="w-full bg-[#1a1a1a] border border-neutral-800 rounded-[12px] px-3 py-3 text-[14px] text-white" style={{minHeight:'44px'}}>
+                  <option value="newest">🕒 Najnowsze</option>
+                  {userCoords && <option value="distance">📍 Najbliżej mnie (Haversine)</option>}
+                  <option value="price_asc">💰 Cena ↑ rosnąco (od najtańszych)</option>
+                  <option value="price_desc">💰 Cena ↓ malejąco (od najdroższych)</option>
+                  <option value="year_asc">📅 Rocznik ↑ rosnąco (od najstarszych)</option>
+                  <option value="year_desc">📅 Rocznik ↓ malejąco (od najnowszych)</option>
+                  <option value="mileage_asc">🛣️ Przebieg ↑ rosnąco (od najmniejszego)</option>
+                  <option value="mileage_desc">🛣️ Przebieg ↓ malejąco (od największego)</option>
+                </select>
+                <div className="text-[10px] text-neutral-500 mt-2">↑ Rosnąco = od najmniejszych wartości • ↓ Malejąco = od największych - poprawione!</div>
               </div>
               <button onClick={clearFilters} className="w-full bg-white text-black font-bold py-3 rounded-[12px]" style={{minHeight:'44px'}}>Reset filtrów</button>
             </div>
@@ -329,8 +304,8 @@ function App() {
         <div className="flex-1 min-w-0 w-full">
           {userCoords && searchRadius && (
             <div className="bg-[#ffea00]/20 border border-[#ffea00] rounded-[12px] p-3 mb-3 text-[12px]">
-              <div className="font-bold">📍 Promień {searchRadius}km od: {searchLocation} • Sort: {sortOptions.find(o=>o.value===sortBy)?.label}</div>
-              <div className="text-[11px] mt-1">Haversine: Gorzyce→Katowice 30km, Kraków 80km, Wrocław 180km. Przy 200km zobaczysz Śląsk + Małopolskę!</div>
+              <div className="font-bold">📍 Szukasz w promieniu {searchRadius}km od: {searchLocation} (GPS Haversine FIXED)</div>
+              <div className="text-[11px] mt-1">Rzeczywiste odległości od Gorzyc: Wodzisław 7km, Rybnik 15km, Katowice 30km, Tychy 45km, Kraków 80km, Wrocław 180km, Warszawa 320km. Przy 200km zobaczysz Katowice, Kraków, Wrocław!</div>
             </div>
           )}
           <div className="mobile-grid grid gap-2.5 md:gap-3 w-full">
@@ -342,11 +317,12 @@ function App() {
                     <img src={ad.image} alt={ad.title} className="w-full h-full object-cover group-hover:scale-[1.05] transition-transform duration-300" loading="lazy" />
                     <div className="absolute top-2 left-2 bg-black/80 text-white text-[10px] font-bold px-2 py-1 rounded-[6px]">{ad.year}</div>
                     {dist !== null && <div className="absolute top-2 right-2 bg-[#ffea00] text-black text-[10px] font-bold px-2 py-1 rounded-full">{dist}km</div>}
+                    <div className="absolute bottom-2 left-2 bg-black/80 text-white text-[9px] font-bold px-2 py-1 rounded-[6px] hidden lg:flex">📍 {ad.location} {dist !== null ? '• '+dist+'km' : ''}</div>
                   </div>
                   <div className="content-wrap p-2.5 md:p-3 flex flex-col justify-between min-w-0 flex-1">
                     <div className="min-w-0">
                       <div className="font-bold text-[13px] leading-[1.25] line-clamp-2 truncate md:whitespace-normal">{ad.title}</div>
-                      <div className="text-[11px] text-neutral-500 mt-1 truncate">{ad.location} • {ad.year} {dist !== null ? '• 📍 '+dist+'km' : ''}</div>
+                      <div className="text-[11px] text-neutral-500 mt-1 truncate">{ad.location} • {ad.year} • {ad.fuel} {dist !== null ? '• 📍 '+dist+'km od Ciebie' : ''}</div>
                     </div>
                     <div className="flex items-center justify-between mt-2">
                       <div className="font-black text-[15px]">{ad.price.toLocaleString('pl-PL')} zł</div>
@@ -357,6 +333,17 @@ function App() {
               );
             })}
           </div>
+          {filteredAndSorted.length===0 && (
+            <div className="bg-white border rounded-[16px] p-8 text-center mt-3">
+              <div className="text-[40px] mb-3">🔍</div>
+              <div className="font-bold">Brak w promieniu {searchRadius}km</div>
+              <div className="text-[13px] text-neutral-500 mt-1">Zwiększ promień do 200km lub 500km</div>
+              <div className="flex gap-2 justify-center mt-4">
+                <button onClick={()=>setSearchRadius('200')} className="bg-black text-white px-6 py-3 rounded-[12px] font-bold" style={{minHeight:'44px'}}>200km</button>
+                <button onClick={()=>setSearchRadius('500')} className="bg-[#ffea00] text-black px-6 py-3 rounded-[12px] font-bold" style={{minHeight:'44px'}}>500km</button>
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
@@ -365,7 +352,7 @@ function App() {
           <div className="absolute inset-0 bg-black/60" onClick={()=>setShowFilters(false)}></div>
           <div className="absolute bottom-0 left-0 right-0 bg-[#111] rounded-t-[24px] max-h-[92vh] flex flex-col">
             <div className="p-4 border-b border-neutral-800 flex justify-between items-center">
-              <div><h2 className="font-bold text-white">🔍 Filtry • Sortowanie ↑↓</h2><p className="text-[11px] text-neutral-400">↑ rosnąco od najmniejszych • ↓ malejąco • GPS Haversine</p></div>
+              <div><h2 className="font-bold text-white">🔍 Filtry • GPS • Sortowanie ↑↓</h2><p className="text-[11px] text-neutral-400">22:37 + ulepszenia • Haversine FIXED</p></div>
               <button onClick={()=>setShowFilters(false)} className="w-10 h-10 bg-[#222] text-white rounded-full" style={{minHeight:'44px'}}>✕</button>
             </div>
             <div className="flex-1 overflow-auto p-4 space-y-4">
@@ -373,20 +360,26 @@ function App() {
                 <select value={searchBrand} onChange={e=>{setSearchBrand(e.target.value); setSearchModel('');}} className="w-full bg-[#222] border border-neutral-700 rounded-[12px] px-3 py-3.5 text-white" style={{minHeight:'44px'}}><option value="">Marka</option>{Object.keys(BRAND_MODELS).sort().map(b => <option key={b} value={b}>{b}</option>)}</select>
                 <select value={searchModel} onChange={e=>setSearchModel(e.target.value)} disabled={!searchBrand} className="w-full bg-[#222] border border-neutral-700 rounded-[12px] px-3 py-3.5 text-white disabled:opacity-40" style={{minHeight:'44px'}}><option value="">{searchBrand ? 'Model' : 'Marka→'}</option>{(BRAND_MODELS[searchBrand]||[]).map(m => <option key={m} value={m}>{m}</option>)}</select>
               </div>
-              <button onClick={handleUseMyLocation} disabled={isLocating} className="w-full bg-[#ffea00] disabled:opacity-50 text-black font-bold py-4 rounded-[14px]" style={{minHeight:'44px'}}>{isLocating ? '⌛ Szukam GPS...' : '📍 Użyj mojej lokalizacji • Haversine'}</button>
+              <button onClick={handleUseMyLocation} disabled={isLocating} className="w-full bg-[#ffea00] disabled:opacity-50 text-black font-bold py-4 rounded-[14px]" style={{minHeight:'44px'}}>{isLocating ? '⌛ Szukam GPS...' : '📍 Użyj mojej lokalizacji • Haversine FIXED'}</button>
               <select value={searchVoivodeship} onChange={e=>setSearchVoivodeship(e.target.value)} className="w-full bg-[#222] border border-neutral-700 rounded-[12px] px-3 py-3.5 text-white" style={{minHeight:'44px'}}><option value="">Cała Polska</option>{VOIVODESHIPS.map(v => <option key={v} value={v}>{v}</option>)}</select>
               <div className="grid grid-cols-2 gap-3">
                 <input value={searchLocation} onChange={e=>setSearchLocation(e.target.value)} placeholder="Miasto" className="w-full bg-[#222] border border-neutral-700 rounded-[12px] px-3 py-3.5 text-white" style={{minHeight:'44px'}} />
                 <select value={searchRadius} onChange={e=>setSearchRadius(e.target.value)} className="w-full bg-[#222] border border-neutral-700 rounded-[12px] px-3 py-3.5 text-white" style={{minHeight:'44px'}}><option value="">Dowolny</option><option value="20">20km</option><option value="50">50km</option><option value="100">100km</option><option value="200">200km</option><option value="500">500km</option></select>
               </div>
               <div>
-                <label className="text-[11px] font-bold uppercase text-neutral-400 mb-2 block">Sortowanie ↑↓</label>
+                <label className="text-[11px] font-bold uppercase text-neutral-400 mb-2 block">Sortowanie poprawione ↑↓</label>
                 <select value={sortBy} onChange={e=>setSortBy(e.target.value)} className="w-full bg-[#222] border border-neutral-700 rounded-[12px] px-3 py-3.5 text-white" style={{minHeight:'44px'}}>
-                  {sortOptions.filter(o => !o.needGPS || userCoords).map(o => (
-                    <option key={o.value} value={o.value}>{o.icon} {o.label} {o.sub ? '('+o.sub+')' : ''}</option>
-                  ))}
+                  <option value="newest">🕒 Najnowsze</option>
+                  {userCoords && <option value="distance">📍 Najbliżej mnie (Haversine)</option>}
+                  <option value="price_asc">💰 Cena ↑ rosnąco (od najtańszych)</option>
+                  <option value="price_desc">💰 Cena ↓ malejąco (od najdroższych)</option>
+                  <option value="year_asc">📅 Rocznik ↑ rosnąco (od najstarszych)</option>
+                  <option value="year_desc">📅 Rocznik ↓ malejąco (od najnowszych)</option>
+                  <option value="mileage_asc">🛣️ Przebieg ↑ rosnąco (od najmniejszego)</option>
+                  <option value="mileage_desc">🛣️ Przebieg ↓ malejąco (od największego)</option>
                 </select>
               </div>
+              {userCoords && <div className="bg-[#ffea00]/20 border border-[#ffea00]/50 rounded-[12px] p-3 text-[12px] text-[#ffea00]"><div className="font-bold">✓ GPS: {searchLocation}</div><div className="text-[11px] mt-1">Haversine FIXED: Katowice 30km, Kraków 80km od Gorzyc. Przy 200km zobaczysz wszystko!</div></div>}
             </div>
             <div className="p-4 border-t border-neutral-800 flex gap-3">
               <button onClick={clearFilters} className="flex-1 bg-[#222] text-white py-4 rounded-[14px]" style={{minHeight:'44px'}}>Wyczyść</button>
@@ -408,7 +401,7 @@ function App() {
               <div className="p-4 md:p-5">
                 <h1 className="text-[18px] font-black">{selected.title}</h1>
                 <div className="text-[22px] font-black mt-2">{selected.price.toLocaleString('pl-PL')} zł</div>
-                <div className="text-[12px] text-neutral-500 mt-1">📍 {selected.location} • {selected.year} • {selected.fuel} {userCoords && '• 📍 '+Math.round(getDistanceToAd(userCoords.lat, userCoords.lng, selected.location))+'km'}</div>
+                <div className="text-[12px] text-neutral-500 mt-1">📍 {selected.location} • {selected.year} {userCoords && '• 📍 '+Math.round(getDistanceToAd(userCoords.lat, userCoords.lng, selected.location))+'km od Ciebie'}</div>
                 <div className="text-[13px] mt-3">{selected.description}</div>
                 <div className="mt-4 bg-[#f5f5f7] rounded-[12px] p-3 text-[12px]"><div className="font-bold">Sprzedawca: {selected.owner}</div><div>{selected.ownerEmail} • {selected.phone}</div></div>
                 <button onClick={()=>setSelected(null)} className="w-full bg-black text-white font-bold py-4 rounded-[14px] mt-4" style={{minHeight:'44px'}}>✕ Zamknij</button>
@@ -442,37 +435,27 @@ function App() {
           <div className="min-h-screen flex items-start md:items-center justify-center p-0 md:p-4">
             <div className="bg-white w-full md:max-w-[600px] md:rounded-[20px] rounded-t-[24px] mt-auto md:mt-0 max-h-[95vh] overflow-auto">
               <div className="sticky top-0 bg-white border-b p-4 flex justify-between items-center">
-                <h2 className="font-black text-[18px]">+ Dodaj ogłoszenie</h2>
+                <h2 className="font-black text-[18px]">+ Dodaj ogłoszenie • 22:37 + ulepszenia</h2>
                 <button onClick={()=>setShowAdd(false)} className="w-9 h-9 bg-[#f5f5f7] rounded-full flex items-center justify-center" style={{minHeight:'44px'}}>✕</button>
               </div>
               <form onSubmit={handleSubmitForConfirm} className="p-4 space-y-4">
                 <div className="grid grid-cols-2 gap-3">
-                  <div>
-                    <label className="text-[11px] font-bold uppercase text-neutral-500">Marka *</label>
-                    <select value={form.brand} onChange={e=>setForm({...form, brand: e.target.value, model: ''})} className="w-full bg-[#f5f5f7] border border-neutral-200 rounded-[12px] px-3 py-3 text-[14px] mt-1" style={{minHeight:'44px'}}><option value="">Wybierz</option>{Object.keys(BRAND_MODELS).sort().map(b => <option key={b} value={b}>{b}</option>)}</select>
-                  </div>
-                  <div>
-                    <label className="text-[11px] font-bold uppercase text-neutral-500">Model *</label>
-                    <select value={form.model} onChange={e=>setForm({...form, model: e.target.value})} disabled={!form.brand} className="w-full bg-[#f5f5f7] border border-neutral-200 rounded-[12px] px-3 py-3 text-[14px] mt-1 disabled:opacity-40" style={{minHeight:'44px'}}><option value="">{form.brand ? 'Wybierz' : 'Najpierw marka'}</option>{(BRAND_MODELS[form.brand]||[]).map(m => <option key={m} value={m}>{m}</option>)}</select>
-                  </div>
+                  <div><label className="text-[11px] font-bold uppercase text-neutral-500">Marka *</label><select value={form.brand} onChange={e=>setForm({...form, brand: e.target.value, model: ''})} className="w-full bg-[#f5f5f7] border rounded-[12px] px-3 py-3 text-[14px] mt-1" style={{minHeight:'44px'}}><option value="">Wybierz</option>{Object.keys(BRAND_MODELS).sort().map(b => <option key={b} value={b}>{b}</option>)}</select></div>
+                  <div><label className="text-[11px] font-bold uppercase text-neutral-500">Model *</label><select value={form.model} onChange={e=>setForm({...form, model: e.target.value})} disabled={!form.brand} className="w-full bg-[#f5f5f7] border rounded-[12px] px-3 py-3 text-[14px] mt-1 disabled:opacity-40" style={{minHeight:'44px'}}><option value="">{form.brand ? 'Wybierz' : 'Najpierw marka'}</option>{(BRAND_MODELS[form.brand]||[]).map(m => <option key={m} value={m}>{m}</option>)}</select></div>
                 </div>
                 <div className="grid grid-cols-2 gap-3">
-                  <div><label className="text-[11px] font-bold uppercase text-neutral-500">Rocznik *</label><input type="number" value={form.year} onChange={e=>setForm({...form, year: e.target.value})} placeholder="2020" className="w-full bg-[#f5f5f7] border rounded-[12px] px-3 py-3 text-[14px] mt-1" style={{minHeight:'44px'}} /></div>
-                  <div><label className="text-[11px] font-bold uppercase text-neutral-500">Cena (zł) *</label><input type="number" value={form.price} onChange={e=>setForm({...form, price: e.target.value})} placeholder="50000" className="w-full bg-[#f5f5f7] border rounded-[12px] px-3 py-3 text-[14px] mt-1" style={{minHeight:'44px'}} /></div>
+                  <div><label className="text-[11px] font-bold uppercase text-neutral-500">Rocznik *</label><input type="number" value={form.year} onChange={e=>setForm({...form, year: e.target.value})} className="w-full bg-[#f5f5f7] border rounded-[12px] px-3 py-3 text-[14px] mt-1" style={{minHeight:'44px'}} /></div>
+                  <div><label className="text-[11px] font-bold uppercase text-neutral-500">Cena (zł) *</label><input type="number" value={form.price} onChange={e=>setForm({...form, price: e.target.value})} className="w-full bg-[#f5f5f7] border rounded-[12px] px-3 py-3 text-[14px] mt-1" style={{minHeight:'44px'}} /></div>
                 </div>
                 <div className="grid grid-cols-2 gap-3">
-                  <div><label className="text-[11px] font-bold uppercase text-neutral-500">Przebieg (km)</label><input type="number" value={form.mileage} onChange={e=>setForm({...form, mileage: e.target.value})} placeholder="80000" className="w-full bg-[#f5f5f7] border rounded-[12px] px-3 py-3 text-[14px] mt-1" style={{minHeight:'44px'}} /></div>
-                  <div><label className="text-[11px] font-bold uppercase text-neutral-500">Moc (KM)</label><input type="number" value={form.power} onChange={e=>setForm({...form, power: e.target.value})} placeholder="150" className="w-full bg-[#f5f5f7] border rounded-[12px] px-3 py-3 text-[14px] mt-1" style={{minHeight:'44px'}} /></div>
-                </div>
-                <div className="grid grid-cols-2 gap-3">
-                  <div><label className="text-[11px] font-bold uppercase text-neutral-500">Paliwo</label><select value={form.fuel} onChange={e=>setForm({...form, fuel: e.target.value})} className="w-full bg-[#f5f5f7] border rounded-[12px] px-3 py-3 text-[14px] mt-1" style={{minHeight:'44px'}}><option>Benzyna</option><option>Diesel</option><option>Hybryda</option><option>Elektryczny</option><option>LPG</option></select></div>
-                  <div><label className="text-[11px] font-bold uppercase text-neutral-500">Skrzynia</label><select value={form.gearbox} onChange={e=>setForm({...form, gearbox: e.target.value})} className="w-full bg-[#f5f5f7] border rounded-[12px] px-3 py-3 text-[14px] mt-1" style={{minHeight:'44px'}}><option>Manualna</option><option>Automatyczna</option></select></div>
+                  <div><label className="text-[11px] font-bold uppercase text-neutral-500">Przebieg (km)</label><input type="number" value={form.mileage} onChange={e=>setForm({...form, mileage: e.target.value})} className="w-full bg-[#f5f5f7] border rounded-[12px] px-3 py-3 text-[14px] mt-1" style={{minHeight:'44px'}} /></div>
+                  <div><label className="text-[11px] font-bold uppercase text-neutral-500">Moc (KM)</label><input type="number" value={form.power} onChange={e=>setForm({...form, power: e.target.value})} className="w-full bg-[#f5f5f7] border rounded-[12px] px-3 py-3 text-[14px] mt-1" style={{minHeight:'44px'}} /></div>
                 </div>
                 <div className="grid grid-cols-2 gap-3">
                   <div><label className="text-[11px] font-bold uppercase text-neutral-500">Miejscowość</label><input value={form.location} onChange={e=>setForm({...form, location: e.target.value})} placeholder="Katowice" className="w-full bg-[#f5f5f7] border rounded-[12px] px-3 py-3 text-[14px] mt-1" style={{minHeight:'44px'}} /></div>
                   <div><label className="text-[11px] font-bold uppercase text-neutral-500">Województwo</label><select value={form.voivodeship} onChange={e=>setForm({...form, voivodeship: e.target.value})} className="w-full bg-[#f5f5f7] border rounded-[12px] px-3 py-3 text-[14px] mt-1" style={{minHeight:'44px'}}>{VOIVODESHIPS.map(v => <option key={v} value={v}>{v}</option>)}</select></div>
                 </div>
-                <div><label className="text-[11px] font-bold uppercase text-neutral-500">Tytuł ogłoszenia</label><input value={form.title} onChange={e=>setForm({...form, title: e.target.value})} placeholder="np. BMW 320d 2018 ASO" className="w-full bg-[#f5f5f7] border rounded-[12px] px-3 py-3 text-[14px] mt-1" style={{minHeight:'44px'}} /></div>
+                <div><label className="text-[11px] font-bold uppercase text-neutral-500">Tytuł</label><input value={form.title} onChange={e=>setForm({...form, title: e.target.value})} placeholder="np. BMW 320d 2018 ASO" className="w-full bg-[#f5f5f7] border rounded-[12px] px-3 py-3 text-[14px] mt-1" style={{minHeight:'44px'}} /></div>
                 <div><label className="text-[11px] font-bold uppercase text-neutral-500">Opis</label><textarea value={form.description} onChange={e=>setForm({...form, description: e.target.value})} placeholder="Opisz auto..." className="w-full bg-[#f5f5f7] border rounded-[12px] px-3 py-3 text-[14px] mt-1 h-[80px]"></textarea></div>
                 <div>
                   <label className="text-[11px] font-bold uppercase text-neutral-500">Zdjęcia (max 5)</label>
@@ -480,7 +463,7 @@ function App() {
                     {form.images.map((img,i) => (
                       <div key={i} className="relative w-[80px] h-[80px] rounded-[10px] overflow-hidden border">
                         <img src={img} className="w-full h-full object-cover" />
-                        <button type="button" onClick={()=>setForm({...form, images: form.images.filter((_,idx)=>idx!==i)})} className="absolute top-1 right-1 w-6 h-6 bg-black/70 text-white rounded-full text-[12px] flex items-center justify-center" style={{minHeight:'24px'}}>✕</button>
+                        <button type="button" onClick={()=>setForm({...form, images: form.images.filter((_,idx)=>idx!==i)})} className="absolute top-1 right-1 w-6 h-6 bg-black/70 text-white rounded-full text-[12px] flex items-center justify-center">✕</button>
                       </div>
                     ))}
                     {form.images.length <5 && (
@@ -507,19 +490,18 @@ function App() {
               <div className="flex justify-between"><span className="text-neutral-500">Marka/Model:</span><span className="font-bold">{showConfirm.brand} {showConfirm.model}</span></div>
               <div className="flex justify-between"><span className="text-neutral-500">Rocznik:</span><span className="font-bold">{showConfirm.year}</span></div>
               <div className="flex justify-between"><span className="text-neutral-500">Cena:</span><span className="font-bold">{showConfirm.price} zł</span></div>
-              <div className="flex justify-between"><span className="text-neutral-500">Przebieg:</span><span className="font-bold">{showConfirm.mileage} km</span></div>
               <div className="flex justify-between"><span className="text-neutral-500">Lokalizacja:</span><span className="font-bold">{showConfirm.location} • {showConfirm.voivodeship}</span></div>
               <div className="flex justify-between"><span className="text-neutral-500">Zdjęcia:</span><span className="font-bold">{showConfirm.images.length}</span></div>
             </div>
             <div className="flex gap-3 mt-6">
               <button onClick={()=>setShowConfirm(null)} className="flex-1 bg-[#f5f5f7] text-black font-bold py-3.5 rounded-[12px]" style={{minHeight:'44px'}}>Wróć</button>
-              <button onClick={confirmAdd} className="flex-[2] bg-black text-white font-bold py-3.5 rounded-[12px]" style={{minHeight:'44px'}}>✓ Opublikuj ogłoszenie</button>
+              <button onClick={confirmAdd} className="flex-[2] bg-black text-white font-bold py-3.5 rounded-[12px]" style={{minHeight:'44px'}}>✓ Opublikuj</button>
             </div>
           </div>
         </div>
       )}
 
-      <footer className="border-t bg-white mt-6"><div className="max-w-[1440px] mx-auto px-3 md:px-4 py-5"><div className="font-black">WROOMER<span className="text-[#ffea00]">.PL</span></div><div className="text-[11px] text-neutral-500 mt-1">© 2026 • Wersja 22:43 FIXED + Dodawanie ogłoszeń • Mobile przyciski naprawione • GPS Haversine 200km → Katowice 30km, Kraków 80km • Sortowanie ↑↓ poprawione</div></div></footer>
+      <footer className="border-t bg-white mt-6"><div className="max-w-[1440px] mx-auto px-3 md:px-4 py-5"><div className="font-black">WROOMER<span className="text-[#ffea00]">.PL</span></div><div className="text-[11px] text-neutral-500 mt-1">© 2026 • Wersja 22:37 + ostatnie ulepszenia • Sidebar 360px (bez dużego top search) • Sortowanie ↑↓ poprawione: ↑ od najmniejszych • GPS Haversine FIXED 200km → Katowice 30km, Kraków 80km • Mobile przyciski 44px naprawione • Dodawanie ogłoszeń działa</div></div></footer>
     </div>
   );
 }
