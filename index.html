@@ -14,37 +14,47 @@
     *{font-family:'Inter',system-ui,sans-serif}
     .line-clamp-2{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
     .scrollbar-hide{-ms-overflow-style:none;scrollbar-width:none}.scrollbar-hide::-webkit-scrollbar{display:none}
+    input[type="file"]{display:none}
   </style>
 </head>
 <body class="bg-[#f5f5f7] antialiased">
   <div id="root"></div>
 
   <script type="text/babel">
-    const { useState, useEffect, useMemo } = React;
+    const { useState, useEffect, useMemo, useRef } = React;
 
     const MOCK_ADS = [
-      { id: 1, title: "BMW 320d F30 2018", brand: "BMW", model: "3 Series", year: 2018, price: 65900, mileage: 89000, fuel: "Diesel", gearbox: "Automatyczna", power: 190, location: "Warszawa", description: "Zadbany egzemplarz, serwisowany w ASO BMW. Bezwypadkowy, pierwszy właściciel w Polsce. Pełna historia serwisowa, książka serwisowa. Stan techniczny i wizualny bardzo dobry. Opony letnie + zimowe na alufelgach. Możliwość sprawdzenia na stacji diagnostycznej.", image: "https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800", images: ["https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800","https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=800","https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800"], owner: "Marek K.", phone: "600 123 456", createdAt: "2 godziny temu" },
-      { id: 2, title: "Audi A4 B9 2.0 TFSI 2019", brand: "Audi", model: "A4", year: 2019, price: 78900, mileage: 67000, fuel: "Benzyna", gearbox: "Automatyczna", power: 190, location: "Kraków", description: "Audi A4 w wersji Avant. S-line, wirtualny kokpit, LED matrix, masaże, nagłośnienie Bang & Olufsen. Auto z polskiego salonu, gwarancja do 2026.", image: "https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=800", images: ["https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=800","https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800"], owner: "Auto-Kompleks", phone: "500 987 654", createdAt: "5 godzin temu" },
-      { id: 3, title: "VW Golf VII 1.5 TSI 2020", brand: "Volkswagen", model: "Golf", year: 2020, price: 54900, mileage: 45000, fuel: "Benzyna", gearbox: "Manualna", power: 150, location: "Wrocław", description: "Golf w idealnym stanie, garażowany, niepalący. Nowe opony, rozrząd zrobiony przy 40k.", image: "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800", images: ["https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800"], owner: "Piotr W.", phone: "600 111 222", createdAt: "1 dzień temu" },
-      { id: 4, title: "Mercedes C200 W205 2017", brand: "Mercedes", model: "C-Klasa", year: 2017, price: 72900, mileage: 95000, fuel: "Benzyna", gearbox: "Automatyczna", power: 184, location: "Gdańsk", description: "AMG Line, panorama, Burmester. Zadbany.", image: "https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=800", images: ["https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=800"], owner: "Anna M.", phone: "600 333 444", createdAt: "1 dzień temu" },
-      { id: 5, title: "Skoda Octavia 2.0 TDI 2021", brand: "Skoda", model: "Octavia", year: 2021, price: 62900, mileage: 38000, fuel: "Diesel", gearbox: "Manualna", power: 150, location: "Poznań", description: "Kombi, bardzo oszczędna, 5.2l/100km. Klimatyzacja, CarPlay.", image: "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=800", images: ["https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=800"], owner: "Tomasz L.", phone: "600 555 666", createdAt: "2 dni temu" },
-      { id: 6, title: "Toyota Corolla 1.8 Hybrid 2022", brand: "Toyota", model: "Corolla", year: 2022, price: 79900, mileage: 22000, fuel: "Hybryda", gearbox: "Automatyczna", power: 122, location: "Katowice", description: "Hybryda, 3.8l/100km w mieście. Gwarancja Toyota do 2027.", image: "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=800", images: ["https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=800"], owner: "Salon Toyota", phone: "600 777 888", createdAt: "3 dni temu" },
+      { id: 1, title: "BMW 320d F30 2018", brand: "BMW", model: "3 Series", year: 2018, price: 65900, mileage: 89000, fuel: "Diesel", gearbox: "Automatyczna", power: 190, location: "Warszawa", description: "Zadbany, serwisowany w ASO, bezwypadkowy.", image: "https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800", images: ["https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800","https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=800"], owner: "Marek K.", ownerEmail: "marek@example.com", phone: "600 123 456", createdAt: "2 godziny temu" },
+      { id: 2, title: "Audi A4 B9 2.0 TFSI 2019", brand: "Audi", model: "A4", year: 2019, price: 78900, mileage: 67000, fuel: "Benzyna", gearbox: "Automatyczna", power: 190, location: "Kraków", description: "S-line, wirtualny kokpit, LED matrix.", image: "https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=800", images: ["https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=800"], owner: "Auto-Kompleks", ownerEmail: "kontakt@autokompleks.pl", phone: "500 987 654", createdAt: "5 godzin temu" },
+      { id: 3, title: "VW Golf VII 1.5 TSI 2020", brand: "Volkswagen", model: "Golf", year: 2020, price: 54900, mileage: 45000, fuel: "Benzyna", gearbox: "Manualna", power: 150, location: "Wrocław", description: "Bardzo zadbany, garażowany.", image: "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800", images: ["https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800"], owner: "Piotr W.", ownerEmail: "piotr@example.com", phone: "600 111 222", createdAt: "1 dzień temu" },
     ];
 
     function App() {
       const [ads, setAds] = useState(() => {
-        try { const s = localStorage.getItem('wroomer_ads_v3'); return s ? JSON.parse(s) : MOCK_ADS; } catch(e){ return MOCK_ADS; }
+        try { const s = localStorage.getItem('wroomer_ads_v4'); return s ? JSON.parse(s) : MOCK_ADS; } catch(e){ return MOCK_ADS; }
+      });
+      const [users, setUsers] = useState(() => {
+        try { const s = localStorage.getItem('wroomer_users'); return s ? JSON.parse(s) : []; } catch(e){ return []; }
+      });
+      const [currentUser, setCurrentUser] = useState(() => {
+        try { const s = localStorage.getItem('wroomer_current_user'); return s ? JSON.parse(s) : null; } catch(e){ return null; }
       });
       const [search, setSearch] = useState('');
       const [selected, setSelected] = useState(null);
       const [showAdd, setShowAdd] = useState(false);
-      const [form, setForm] = useState({ brand: '', model: '', year: 2020, price: '', mileage: '', fuel: 'Benzyna', gearbox: 'Manualna', power: '', location: '', title: '', description: '' });
-      const [mobileMenu, setMobileMenu] = useState(false);
+      const [showAuth, setShowAuth] = useState(null);
+      const [showConfirm, setShowConfirm] = useState(null);
+      const [authForm, setAuthForm] = useState({ email: '', password: '', name: '' });
+      const [form, setForm] = useState({ brand: '', model: '', year: 2020, price: '', mileage: '', fuel: 'Benzyna', gearbox: 'Manualna', power: '', location: '', title: '', description: '', images: [] });
       const [imgIdx, setImgIdx] = useState(0);
+      const [error, setError] = useState('');
+      const fileInputRef = useRef(null);
 
-      useEffect(() => { try { localStorage.setItem('wroomer_ads_v3', JSON.stringify(ads)); } catch(e){} }, [ads]);
+      useEffect(() => { try { localStorage.setItem('wroomer_ads_v4', JSON.stringify(ads)); } catch(e){} }, [ads]);
+      useEffect(() => { try { localStorage.setItem('wroomer_users', JSON.stringify(users)); } catch(e){} }, [users]);
+      useEffect(() => { try { if(currentUser) localStorage.setItem('wroomer_current_user', JSON.stringify(currentUser)); else localStorage.removeItem('wroomer_current_user'); } catch(e){} }, [currentUser]);
       useEffect(() => { if(selected) setImgIdx(0); }, [selected]);
-      useEffect(() => { document.body.style.overflow = selected || showAdd ? 'hidden' : ''; return () => document.body.style.overflow = ''; }, [selected, showAdd]);
+      useEffect(() => { document.body.style.overflow = selected || showAdd || showAuth || showConfirm ? 'hidden' : ''; return () => document.body.style.overflow = ''; }, [selected, showAdd, showAuth, showConfirm]);
 
       const filtered = useMemo(() => {
         const s = search.toLowerCase().trim();
@@ -52,85 +62,149 @@
         return ads.filter(a => `${a.title} ${a.brand} ${a.model} ${a.location}`.toLowerCase().includes(s));
       }, [ads, search]);
 
-      const handleAdd = (e) => {
+      const handleRegister = (e) => {
         e.preventDefault();
+        setError('');
+        if(!authForm.email || !authForm.password || !authForm.name) { setError('Wypełnij wszystkie pola'); return; }
+        if(users.find(u => u.email.toLowerCase() === authForm.email.toLowerCase())) { setError('Użytkownik z tym e-mailem już istnieje'); return; }
+        if(authForm.password.length < 6) { setError('Hasło min. 6 znaków'); return; }
+        const newUser = { id: Date.now(), email: authForm.email.toLowerCase(), name: authForm.name, password: authForm.password, createdAt: new Date().toISOString() };
+        setUsers([...users, newUser]);
+        setCurrentUser({ id: newUser.id, email: newUser.email, name: newUser.name });
+        setShowAuth(null);
+        setAuthForm({ email: '', password: '', name: '' });
+      };
+
+      const handleLogin = (e) => {
+        e.preventDefault();
+        setError('');
+        const user = users.find(u => u.email.toLowerCase() === authForm.email.toLowerCase() && u.password === authForm.password);
+        if(!user) { setError('Nieprawidłowy e-mail lub hasło'); return; }
+        setCurrentUser({ id: user.id, email: user.email, name: user.name });
+        setShowAuth(null);
+        setAuthForm({ email: '', password: '', name: '' });
+      };
+
+      const handleLogout = () => { setCurrentUser(null); };
+
+      const handleImageUpload = (e) => {
+        const files = Array.from(e.target.files);
+        if(form.images.length + files.length > 5) { alert('Limit 5 zdjęć!'); return; }
+        files.forEach(file => {
+          if(file.size > 5*1024*1024) { alert(`Plik ${file.name} za duży (max 5MB)`); return; }
+          const reader = new FileReader();
+          reader.onload = (ev) => {
+            setForm(prev => {
+              if(prev.images.length >= 5) return prev;
+              return { ...prev, images: [...prev.images, ev.target.result] };
+            });
+          };
+          reader.readAsDataURL(file);
+        });
+        if(fileInputRef.current) fileInputRef.current.value = '';
+      };
+
+      const removeImage = (idx) => {
+        setForm({ ...form, images: form.images.filter((_, i) => i !== idx) });
+      };
+
+      const handleAddClick = () => {
+        if(!currentUser) { setShowAuth('login'); return; }
+        setShowAdd(true);
+      };
+
+      const handleSubmitForConfirm = (e) => {
+        e.preventDefault();
+        if(!form.brand || !form.model) { alert('Podaj markę i model'); return; }
+        if(form.images.length === 0) { if(!confirm('Dodać ogłoszenie bez zdjęć?')) return; }
+        setShowConfirm({ ...form });
+      };
+
+      const confirmAdd = () => {
+        const f = showConfirm;
         const newAd = {
           id: Date.now(),
-          title: form.title || `${form.brand} ${form.model} ${form.year}`.trim() || 'Nowe ogłoszenie',
-          brand: form.brand || 'Inne',
-          model: form.model || '',
-          year: parseInt(form.year) || 2020,
-          price: parseInt(form.price) || 0,
-          mileage: parseInt(form.mileage) || 0,
-          fuel: form.fuel,
-          gearbox: form.gearbox,
-          power: parseInt(form.power) || 0,
-          location: form.location || 'Polska',
-          description: form.description || 'Brak opisu.',
-          image: `https://picsum.photos/seed/${Date.now()}/800/600`,
-          images: [`https://picsum.photos/seed/${Date.now()}/800/600`],
-          owner: 'Ty',
-          phone: 'Twój numer',
+          title: f.title || `${f.brand} ${f.model} ${f.year}`.trim(),
+          brand: f.brand,
+          model: f.model,
+          year: parseInt(f.year) || 2020,
+          price: parseInt(f.price) || 0,
+          mileage: parseInt(f.mileage) || 0,
+          fuel: f.fuel,
+          gearbox: f.gearbox,
+          power: parseInt(f.power) || 0,
+          location: f.location || 'Polska',
+          description: f.description || 'Brak opisu.',
+          image: f.images[0] || `https://picsum.photos/seed/${Date.now()}/800/600`,
+          images: f.images.length > 0 ? f.images : [`https://picsum.photos/seed/${Date.now()}/800/600`],
+          owner: currentUser.name,
+          ownerEmail: currentUser.email,
+          ownerId: currentUser.id,
+          phone: 'Podany przy kontakcie',
           createdAt: 'Teraz'
         };
         setAds([newAd, ...ads]);
+        setShowConfirm(null);
         setShowAdd(false);
-        setForm({ brand: '', model: '', year: 2020, price: '', mileage: '', fuel: 'Benzyna', gearbox: 'Manualna', power: '', location: '', title: '', description: '' });
+        setForm({ brand: '', model: '', year: 2020, price: '', mileage: '', fuel: 'Benzyna', gearbox: 'Manualna', power: '', location: '', title: '', description: '', images: [] });
         setSelected(newAd);
       };
 
       return (
-        <div className="min-h-screen">
+        <div className="min-h-screen flex flex-col">
           <header className="sticky top-0 z-30 bg-black text-white border-b border-neutral-800">
             <div className="max-w-[1280px] mx-auto px-3 md:px-4 h-[56px] md:h-[60px] flex items-center justify-between">
-              <div className="flex items-center gap-2 md:gap-3">
-                <button onClick={()=>setMobileMenu(!mobileMenu)} className="md:hidden w-8 h-8 flex items-center justify-center">☰</button>
-                <div className="flex items-center gap-2 cursor-pointer" onClick={()=>setSelected(null)}>
-                  <div className="w-7 h-7 md:w-8 md:h-8 bg-[#ffea00] rounded-[6px] flex items-center justify-center font-black text-black text-[14px]">W</div>
-                  <div className="font-black text-[16px] md:text-[18px] tracking-tight">WROOMER<span className="text-[#ffea00]">.PL</span></div>
-                </div>
-                <div className="hidden lg:flex ml-6 gap-5 text-[13px] font-medium text-neutral-400">
-                  <button onClick={()=>{setSelected(null); window.scrollTo(0,0)}} className="text-white">Ogłoszenia</button>
-                  <span className="hover:text-white cursor-pointer">Dealerzy</span>
-                  <span className="hover:text-white cursor-pointer">Wycena</span>
-                </div>
+              <div className="flex items-center gap-2 cursor-pointer" onClick={()=>setSelected(null)}>
+                <div className="w-7 h-7 md:w-8 md:h-8 bg-[#ffea00] rounded-[6px] flex items-center justify-center font-black text-black text-[14px]">W</div>
+                <div className="font-black text-[16px] md:text-[18px] tracking-tight">WROOMER<span className="text-[#ffea00]">.PL</span></div>
               </div>
               <div className="flex items-center gap-2">
-                <button onClick={()=>setShowAdd(true)} className="bg-[#ffea00] text-black px-3 md:px-4 py-1.5 md:py-2 rounded-[8px] font-bold text-[12px] md:text-[13px] hover:bg-[#ffe000] transition-colors">+ Dodaj</button>
+                {currentUser ? (
+                  <>
+                    <div className="hidden md:flex items-center gap-2 text-[12px]">
+                      <div className="w-7 h-7 bg-[#ffea00] rounded-full flex items-center justify-center font-bold text-black text-[11px]">{currentUser.name[0].toUpperCase()}</div>
+                      <span className="max-w-[120px] truncate">{currentUser.name}</span>
+                    </div>
+                    <button onClick={handleLogout} className="text-[12px] text-neutral-400 hover:text-white px-2">Wyloguj</button>
+                    <button onClick={handleAddClick} className="bg-[#ffea00] text-black px-3 md:px-4 py-1.5 md:py-2 rounded-[8px] font-bold text-[12px] md:text-[13px]">+ Dodaj</button>
+                  </>
+                ) : (
+                  <>
+                    <button onClick={()=>setShowAuth('login')} className="text-[13px] font-medium hover:text-white">Zaloguj</button>
+                    <button onClick={()=>setShowAuth('register')} className="bg-white text-black px-3 md:px-4 py-1.5 md:py-2 rounded-[8px] font-bold text-[12px] md:text-[13px]">Rejestracja</button>
+                    <button onClick={handleAddClick} className="bg-[#ffea00] text-black px-3 md:px-4 py-1.5 md:py-2 rounded-[8px] font-bold text-[12px] md:text-[13px]">+ Dodaj</button>
+                  </>
+                )}
               </div>
             </div>
-            {mobileMenu && (
-              <div className="md:hidden bg-[#111] border-t border-neutral-800 px-4 py-3 flex gap-4 text-[13px] text-neutral-300">
-                <button onClick={()=>{setSelected(null); setMobileMenu(false)}} className="text-white font-semibold">Ogłoszenia</button>
-                <span>Dealerzy</span><span>Wycena</span>
-              </div>
-            )}
           </header>
 
           <div className="bg-black text-white">
             <div className="max-w-[1280px] mx-auto px-3 md:px-4 py-8 md:py-12">
               <div className="max-w-[640px]">
                 <h1 className="text-[28px] md:text-[44px] font-black leading-[0.95] tracking-tight mb-3">Darmowe ogłoszenia<br/><span className="text-[#ffea00]">motoryzacyjne</span></h1>
-                <p className="text-neutral-400 text-[14px] md:text-[16px] mb-6">Dodaj auto za darmo. Bez prowizji. <span className="text-white font-semibold">{ads.length} ogłoszeń</span> • Firefox ready</p>
+                <p className="text-neutral-400 text-[14px] md:text-[16px] mb-6">{ads.length} ogłoszeń • {currentUser ? `Zalogowany: ${currentUser.name}` : 'Zaloguj się aby dodać ogłoszenie'} • Bez prowizji</p>
                 <div className="flex gap-2">
                   <div className="flex-1 relative">
-                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-500 text-[14px]">🔍</span>
-                    <input value={search} onChange={e=>setSearch(e.target.value)} placeholder="Szukaj: BMW, Warszawa, Diesel..." className="w-full bg-[#1a1a1a] border border-neutral-800 rounded-[10px] pl-9 pr-3 py-2.5 md:py-3 text-[14px] text-white placeholder-neutral-500 focus:outline-none focus:border-[#ffea00]/50 focus:bg-[#222]" />
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-500">🔍</span>
+                    <input value={search} onChange={e=>setSearch(e.target.value)} placeholder="Szukaj: BMW, Warszawa..." className="w-full bg-[#1a1a1a] border border-neutral-800 rounded-[10px] pl-9 pr-3 py-2.5 md:py-3 text-[14px] text-white placeholder-neutral-500 focus:outline-none focus:border-[#ffea00]/50" />
                   </div>
-                  <button className="bg-white text-black px-4 md:px-6 py-2.5 md:py-3 rounded-[10px] font-bold text-[13px] md:text-[14px] hover:bg-neutral-100">Szukaj</button>
+                  <button className="bg-white text-black px-4 md:px-6 py-2.5 rounded-[10px] font-bold text-[13px]">Szukaj</button>
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="max-w-[1280px] mx-auto px-3 md:px-4 py-4 md:py-6">
+          <div className="flex-1 max-w-[1280px] mx-auto w-full px-3 md:px-4 py-4 md:py-6">
+            {!currentUser && (
+              <div className="bg-[#ffea00]/10 border border-[#ffea00]/30 rounded-[12px] p-3 md:p-4 mb-4 flex items-center justify-between gap-3">
+                <div className="text-[13px]"><span className="font-bold">Chcesz dodać ogłoszenie?</span> <span className="text-neutral-600">Zarejestruj się za darmo - tylko zalogowani mogą dodawać ogłoszenia.</span></div>
+                <button onClick={()=>setShowAuth('register')} className="bg-black text-white text-[12px] font-bold px-3 py-1.5 rounded-full whitespace-nowrap">Zarejestruj się</button>
+              </div>
+            )}
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-[15px] md:text-[17px] font-bold">Najnowsze <span className="text-neutral-400 font-normal ml-1">({filtered.length})</span></h2>
-              <div className="hidden md:flex gap-2 text-[12px]">
-                <span className="bg-black text-white px-3 py-1 rounded-full">Wszystkie</span>
-                <span className="bg-white border px-3 py-1 rounded-full">Do 50k zł</span>
-                <span className="bg-white border px-3 py-1 rounded-full">Diesel</span>
-              </div>
+              <div className="text-[11px] text-neutral-500">Kliknij kafelek aby zobaczyć szczegóły</div>
             </div>
 
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2.5 md:gap-4">
@@ -139,11 +213,12 @@
                   <div className="aspect-[4/3] bg-neutral-100 relative overflow-hidden">
                     <img src={ad.image} alt={ad.title} className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-300" loading="lazy" />
                     <div className="absolute top-2 left-2 bg-black/80 backdrop-blur text-white text-[10px] font-bold px-2 py-1 rounded-[6px]">{ad.year}</div>
+                    {ad.images?.length > 1 && <div className="absolute top-2 right-2 bg-black/70 text-white text-[10px] px-1.5 py-0.5 rounded">📷 {ad.images.length}</div>}
                     <div className="absolute bottom-2 left-2 bg-[#ffea00] text-black text-[10px] font-bold px-2 py-1 rounded-[6px]">{ad.mileage.toLocaleString('pl-PL')} km</div>
                   </div>
                   <div className="p-2.5 md:p-3">
                     <div className="font-bold text-[12px] md:text-[13px] leading-[1.25] line-clamp-2 min-h-[32px]">{ad.title}</div>
-                    <div className="text-[11px] text-neutral-500 mt-1 truncate">{ad.fuel} • {ad.gearbox} • {ad.power} KM</div>
+                    <div className="text-[11px] text-neutral-500 mt-1 truncate">{ad.fuel} • {ad.gearbox} • {ad.owner}</div>
                     <div className="flex items-center justify-between mt-2.5">
                       <div className="font-black text-[14px] md:text-[15px]">{ad.price.toLocaleString('pl-PL')} zł</div>
                       <div className="text-[10px] text-neutral-400 truncate max-w-[70px]">{ad.location}</div>
@@ -154,23 +229,34 @@
             </div>
           </div>
 
+          <footer className="border-t bg-white mt-8">
+            <div className="max-w-[1280px] mx-auto px-3 md:px-4 py-6 md:py-8">
+              <div className="flex flex-col md:flex-row justify-between gap-4 text-[12px] text-neutral-500">
+                <div>
+                  <div className="font-bold text-black text-[14px] mb-1">WROOMER.PL</div>
+                  <div>© 2026 Wroomer.pl - Darmowe ogłoszenia motoryzacyjne</div>
+                </div>
+                <div className="flex gap-6 text-[11px]">
+                  <span>Regulamin</span><span>Polityka prywatności</span><span>Kontakt</span>
+                </div>
+              </div>
+              <div className="mt-6 pt-4 border-t border-neutral-100 text-[10px] leading-[1.5] text-neutral-400">
+                <strong className="text-neutral-600">Informacja prawna:</strong> Właściciel strony/domeny wroomer.pl nie ponosi odpowiedzialności za treść zamieszczanych ogłoszeń oraz zamieszczane zdjęcia. Za treść ogłoszenia oraz zdjęcia odpowiada wyłącznie osoba zamieszczająca ogłoszenie (ogłoszeniodawca). Wroomer.pl jest jedynie platformą umożliwiającą publikację ogłoszeń. W przypadku naruszenia praw, prosimy o kontakt. Wszystkie znaki towarowe należą do ich właścicieli.
+              </div>
+            </div>
+          </footer>
+
           {selected && (
             <div className="fixed inset-0 z-50 bg-white md:bg-black/70 md:backdrop-blur-sm overflow-auto">
               <div className="min-h-screen md:min-h-0 md:flex md:items-center md:justify-center md:p-4">
                 <div className="bg-white w-full md:max-w-[980px] md:rounded-[20px] md:overflow-hidden md:max-h-[90vh] md:flex md:flex-col">
-                  <div className="sticky top-0 z-10 bg-white border-b md:border-0 flex items-center justify-between p-3 md:p-4">
-                    <button onClick={()=>setSelected(null)} className="flex items-center gap-2 text-[13px] font-semibold">
-                      <span className="w-7 h-7 rounded-full bg-black text-white flex items-center justify-center">←</span>
-                      <span className="hidden md:inline">Wróć</span>
-                      <span className="md:hidden">Wróć do ogłoszeń</span>
-                    </button>
+                  <div className="sticky top-0 z-10 bg-white border-b flex items-center justify-between p-3 md:p-4">
+                    <button onClick={()=>setSelected(null)} className="flex items-center gap-2 text-[13px] font-semibold"><span className="w-7 h-7 rounded-full bg-black text-white flex items-center justify-center">←</span> Wróć</button>
                     <div className="flex items-center gap-2">
-                      <button className="w-8 h-8 rounded-full bg-neutral-100 flex items-center justify-center text-[14px]">♡</button>
-                      <button className="w-8 h-8 rounded-full bg-neutral-100 flex items-center justify-center text-[14px]">↗</button>
-                      <button onClick={()=>setSelected(null)} className="md:hidden w-8 h-8 rounded-full bg-neutral-900 text-white flex items-center justify-center">✕</button>
+                      <button className="w-8 h-8 rounded-full bg-neutral-100 flex items-center justify-center">♡</button>
+                      <button onClick={()=>setSelected(null)} className="w-8 h-8 rounded-full bg-neutral-900 text-white flex items-center justify-center md:hidden">✕</button>
                     </div>
                   </div>
-
                   <div className="md:overflow-auto md:flex">
                     <div className="md:w-[58%]">
                       <div className="aspect-[4/3] md:aspect-[16/11] bg-neutral-100 relative">
@@ -185,8 +271,8 @@
                         </div>
                         {selected.images?.length > 1 && (
                           <>
-                            <button onClick={()=>setImgIdx((imgIdx-1+(selected.images.length))%selected.images.length)} className="absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 bg-black/50 backdrop-blur text-white rounded-full flex items-center justify-center">‹</button>
-                            <button onClick={()=>setImgIdx((imgIdx+1)%selected.images.length)} className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 bg-black/50 backdrop-blur text-white rounded-full flex items-center justify-center">›</button>
+                            <button onClick={()=>setImgIdx((imgIdx-1+(selected.images.length))%selected.images.length)} className="absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 bg-black/50 backdrop-blur text-white rounded-full">‹</button>
+                            <button onClick={()=>setImgIdx((imgIdx+1)%selected.images.length)} className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 bg-black/50 backdrop-blur text-white rounded-full">›</button>
                           </>
                         )}
                       </div>
@@ -200,16 +286,11 @@
                         </div>
                       )}
                     </div>
-
-                    <div className="md:w-[42%] p-4 md:p-6 md:overflow-auto">
-                      <div className="flex items-start justify-between gap-3 mb-3">
-                        <h1 className="text-[20px] md:text-[22px] font-black leading-tight">{selected.title}</h1>
-                        <div className="text-[11px] text-neutral-500 whitespace-nowrap mt-1">{selected.createdAt}</div>
-                      </div>
-
-                      <div className="text-[26px] font-black mb-4">{selected.price.toLocaleString('pl-PL')} zł <span className="text-[13px] font-normal text-neutral-500">• do negocjacji</span></div>
-
-                      <div className="grid grid-cols-3 gap-2 mb-5">
+                    <div className="md:w-[42%] p-4 md:p-6">
+                      <h1 className="text-[20px] md:text-[22px] font-black leading-tight">{selected.title}</h1>
+                      <div className="text-[11px] text-neutral-500 mt-1">{selected.createdAt} • ID: {selected.id}</div>
+                      <div className="text-[26px] font-black mt-3">{selected.price.toLocaleString('pl-PL')} zł</div>
+                      <div className="grid grid-cols-3 gap-2 my-5">
                         {[
                           { k: 'Rok', v: selected.year },
                           { k: 'Przebieg', v: `${selected.mileage.toLocaleString('pl-PL')} km` },
@@ -218,35 +299,15 @@
                           { k: 'Skrzynia', v: selected.gearbox },
                           { k: 'Lokalizacja', v: selected.location },
                         ].map(item => (
-                          <div key={item.k} className="bg-[#f5f5f7] rounded-[10px] p-2.5">
-                            <div className="text-[10px] font-semibold text-neutral-500 uppercase tracking-wide">{item.k}</div>
-                            <div className="text-[13px] font-bold mt-0.5 truncate">{item.v}</div>
-                          </div>
+                          <div key={item.k} className="bg-[#f5f5f7] rounded-[10px] p-2.5"><div className="text-[10px] font-semibold text-neutral-500 uppercase">{item.k}</div><div className="text-[13px] font-bold mt-0.5 truncate">{item.v}</div></div>
                         ))}
                       </div>
-
-                      <div className="mb-5">
-                        <div className="font-bold text-[13px] mb-2">Opis</div>
-                        <div className="text-[13px] leading-[1.6] text-neutral-700 whitespace-pre-wrap">{selected.description}</div>
-                      </div>
-
+                      <div className="mb-5"><div className="font-bold text-[13px] mb-2">Opis</div><div className="text-[13px] leading-[1.6] text-neutral-700 whitespace-pre-wrap">{selected.description}</div></div>
                       <div className="bg-black text-white rounded-[14px] p-4 flex items-center justify-between">
-                        <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 bg-[#ffea00] rounded-full flex items-center justify-center font-black text-black">{selected.owner[0]}</div>
-                          <div>
-                            <div className="font-bold text-[13px]">{selected.owner}</div>
-                            <div className="text-[11px] text-neutral-400">{selected.location} • Prywatny</div>
-                          </div>
-                        </div>
+                        <div className="flex items-center gap-3"><div className="w-10 h-10 bg-[#ffea00] rounded-full flex items-center justify-center font-black text-black">{selected.owner[0]}</div><div><div className="font-bold text-[13px]">{selected.owner}</div><div className="text-[11px] text-neutral-400">{selected.ownerEmail}</div></div></div>
                         <a href={`tel:${selected.phone.replace(/ /g,'')}`} className="bg-white text-black font-bold text-[13px] px-4 py-2 rounded-full">Zadzwoń</a>
                       </div>
-
-                      <div className="mt-4 grid grid-cols-2 gap-2">
-                        <a href={`tel:${selected.phone.replace(/ /g,'')}`} className="bg-[#ffea00] text-black font-bold text-[14px] py-3 rounded-[12px] text-center">📞 {selected.phone}</a>
-                        <button className="bg-[#f5f5f7] font-semibold text-[14px] py-3 rounded-[12px]">💬 Napisz</button>
-                      </div>
-
-                      <div className="mt-6 text-[11px] text-neutral-400 text-center">ID: {selected.id} • Bezpieczne zakupy • Zgłoś ogłoszenie</div>
+                      <div className="mt-3 text-[10px] text-neutral-400 leading-[1.4]">Za treść ogłoszenia i zdjęcia odpowiada zamieszczający: {selected.owner} ({selected.ownerEmail}). Właściciel serwisu nie ponosi odpowiedzialności.</div>
                     </div>
                   </div>
                 </div>
@@ -254,14 +315,64 @@
             </div>
           )}
 
+          {showAuth && (
+            <div className="fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+              <div className="bg-white rounded-[20px] w-full max-w-[380px] overflow-hidden">
+                <div className="p-6 pb-4">
+                  <div className="flex items-center justify-between mb-6">
+                    <div className="flex items-center gap-2"><div className="w-8 h-8 bg-[#ffea00] rounded-[8px] flex items-center justify-center font-black text-black">W</div><div className="font-black">WROOMER.PL</div></div>
+                    <button onClick={()=>{setShowAuth(null); setError('');}} className="w-8 h-8 rounded-full bg-neutral-100 flex items-center justify-center">✕</button>
+                  </div>
+                  <h2 className="text-[22px] font-black mb-1">{showAuth === 'login' ? 'Zaloguj się' : 'Załóż konto'}</h2>
+                  <p className="text-[13px] text-neutral-500 mb-6">{showAuth === 'login' ? 'Tylko zalogowani mogą dodawać ogłoszenia' : 'Rejestracja jest darmowa i zajmuje 30 sekund'}</p>
+                  <form onSubmit={showAuth === 'login' ? handleLogin : handleRegister} className="space-y-3">
+                    {showAuth === 'register' && <input value={authForm.name} onChange={e=>setAuthForm({...authForm, name: e.target.value})} placeholder="Imię i nazwisko" className="w-full border rounded-[10px] px-4 py-3 text-[14px] focus:outline-none focus:border-black" />}
+                    <input type="email" value={authForm.email} onChange={e=>setAuthForm({...authForm, email: e.target.value})} placeholder="E-mail" className="w-full border rounded-[10px] px-4 py-3 text-[14px] focus:outline-none focus:border-black" />
+                    <input type="password" value={authForm.password} onChange={e=>setAuthForm({...authForm, password: e.target.value})} placeholder="Hasło (min. 6 znaków)" className="w-full border rounded-[10px] px-4 py-3 text-[14px] focus:outline-none focus:border-black" />
+                    {error && <div className="bg-red-50 border border-red-200 text-red-700 text-[12px] rounded-[8px] px-3 py-2">{error}</div>}
+                    <button type="submit" className="w-full bg-black text-white font-bold py-3 rounded-[12px] text-[14px]">{showAuth === 'login' ? 'Zaloguj się' : 'Załóż konto'}</button>
+                  </form>
+                  <div className="mt-4 text-center text-[12px] text-neutral-500">
+                    {showAuth === 'login' ? (
+                      <span>Nie masz konta? <button onClick={()=>{setShowAuth('register'); setError('');}} className="font-bold text-black underline">Zarejestruj się</button></span>
+                    ) : (
+                      <span>Masz już konto? <button onClick={()=>{setShowAuth('login'); setError('');}} className="font-bold text-black underline">Zaloguj się</button></span>
+                    )}
+                  </div>
+                </div>
+                <div className="bg-[#f5f5f7] px-6 py-3 text-[10px] text-neutral-400 leading-[1.4]">Rejestrując się akceptujesz regulamin. Za treść ogłoszeń odpowiada zamieszczający.</div>
+              </div>
+            </div>
+          )}
+
           {showAdd && (
             <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-end md:items-center justify-center p-0 md:p-4">
-              <div className="bg-white w-full md:max-w-[560px] rounded-t-[20px] md:rounded-[20px] max-h-[92vh] md:max-h-[90vh] overflow-auto">
+              <div className="bg-white w-full md:max-w-[600px] rounded-t-[20px] md:rounded-[20px] max-h-[92vh] md:max-h-[90vh] overflow-auto">
                 <div className="sticky top-0 bg-white border-b px-5 py-4 flex items-center justify-between">
-                  <div className="font-bold text-[16px]">Dodaj ogłoszenie</div>
+                  <div><div className="font-bold text-[16px]">Dodaj ogłoszenie</div><div className="text-[11px] text-neutral-500">Zalogowany jako {currentUser?.name} • Limit 5 zdjęć</div></div>
                   <button onClick={()=>setShowAdd(false)} className="w-8 h-8 rounded-full bg-neutral-100 flex items-center justify-center">✕</button>
                 </div>
-                <form onSubmit={handleAdd} className="p-5 space-y-4 pb-[max(20px,env(safe-area-inset-bottom))]">
+                <form onSubmit={handleSubmitForConfirm} className="p-5 space-y-4 pb-[max(20px,env(safe-area-inset-bottom))]">
+                  <div className="bg-[#ffea00]/20 border border-[#ffea00]/50 rounded-[10px] p-3">
+                    <div className="font-bold text-[12px] mb-2">📷 Zdjęcia (max 5, max 5MB każde)</div>
+                    <div className="grid grid-cols-5 gap-2 mb-3">
+                      {form.images.map((img, idx) => (
+                        <div key={idx} className="relative aspect-square rounded-[8px] overflow-hidden border bg-neutral-100">
+                          <img src={img} className="w-full h-full object-cover" />
+                          <button type="button" onClick={()=>removeImage(idx)} className="absolute top-1 right-1 w-5 h-5 bg-black/70 text-white rounded-full flex items-center justify-center text-[10px]">✕</button>
+                          <div className="absolute bottom-0 left-0 right-0 bg-black/60 text-white text-[9px] text-center py-0.5">{idx+1}/5</div>
+                        </div>
+                      ))}
+                      {form.images.length < 5 && (
+                        <button type="button" onClick={()=>fileInputRef.current?.click()} className="aspect-square rounded-[8px] border-2 border-dashed border-neutral-300 flex flex-col items-center justify-center gap-1 hover:border-black hover:bg-neutral-50 transition-colors">
+                          <span className="text-[20px]">+</span><span className="text-[10px] font-semibold">Dodaj</span>
+                        </button>
+                      )}
+                    </div>
+                    <input ref={fileInputRef} type="file" accept="image/*" multiple onChange={handleImageUpload} />
+                    <div className="text-[11px] text-neutral-600">Pierwsze zdjęcie będzie głównym. Możesz przeciągnąć aby zmienić kolejność. Limit 5 zdjęć.</div>
+                  </div>
+
                   <div className="grid grid-cols-2 gap-3">
                     <div><label className="text-[11px] font-bold uppercase tracking-wide text-neutral-500">Marka *</label><input required value={form.brand} onChange={e=>setForm({...form, brand: e.target.value})} placeholder="BMW" className="w-full mt-1.5 border rounded-[10px] px-3 py-2.5 text-[14px] focus:outline-none focus:border-black" /></div>
                     <div><label className="text-[11px] font-bold uppercase tracking-wide text-neutral-500">Model *</label><input required value={form.model} onChange={e=>setForm({...form, model: e.target.value})} placeholder="320d" className="w-full mt-1.5 border rounded-[10px] px-3 py-2.5 text-[14px] focus:outline-none focus:border-black" /></div>
@@ -269,20 +380,58 @@
                   <div><label className="text-[11px] font-bold uppercase tracking-wide text-neutral-500">Tytuł</label><input value={form.title} onChange={e=>setForm({...form, title: e.target.value})} placeholder="BMW 320d F30 2018 - Idealny stan" className="w-full mt-1.5 border rounded-[10px] px-3 py-2.5 text-[14px]" /></div>
                   <div className="grid grid-cols-3 gap-2">
                     <div><label className="text-[11px] font-bold uppercase tracking-wide text-neutral-500">Rok</label><input type="number" value={form.year} onChange={e=>setForm({...form, year: e.target.value})} className="w-full mt-1.5 border rounded-[10px] px-3 py-2.5 text-[14px]" /></div>
-                    <div><label className="text-[11px] font-bold uppercase tracking-wide text-neutral-500">Cena</label><input type="number" value={form.price} onChange={e=>setForm({...form, price: e.target.value})} placeholder="65900" className="w-full mt-1.5 border rounded-[10px] px-3 py-2.5 text-[14px]" /></div>
+                    <div><label className="text-[11px] font-bold uppercase tracking-wide text-neutral-500">Cena (zł)</label><input type="number" value={form.price} onChange={e=>setForm({...form, price: e.target.value})} placeholder="65900" className="w-full mt-1.5 border rounded-[10px] px-3 py-2.5 text-[14px]" /></div>
                     <div><label className="text-[11px] font-bold uppercase tracking-wide text-neutral-500">Przebieg</label><input type="number" value={form.mileage} onChange={e=>setForm({...form, mileage: e.target.value})} placeholder="89000" className="w-full mt-1.5 border rounded-[10px] px-3 py-2.5 text-[14px]" /></div>
                   </div>
-                  <div className="grid grid-cols-2 gap-3">
+                  <div className="grid grid-cols-3 gap-2">
                     <div><label className="text-[11px] font-bold uppercase tracking-wide text-neutral-500">Paliwo</label><select value={form.fuel} onChange={e=>setForm({...form, fuel: e.target.value})} className="w-full mt-1.5 border rounded-[10px] px-3 py-2.5 text-[14px]"><option>Benzyna</option><option>Diesel</option><option>LPG</option><option>Hybryda</option><option>Elektryczny</option></select></div>
                     <div><label className="text-[11px] font-bold uppercase tracking-wide text-neutral-500">Skrzynia</label><select value={form.gearbox} onChange={e=>setForm({...form, gearbox: e.target.value})} className="w-full mt-1.5 border rounded-[10px] px-3 py-2.5 text-[14px]"><option>Manualna</option><option>Automatyczna</option></select></div>
+                    <div><label className="text-[11px] font-bold uppercase tracking-wide text-neutral-500">Moc (KM)</label><input type="number" value={form.power} onChange={e=>setForm({...form, power: e.target.value})} placeholder="190" className="w-full mt-1.5 border rounded-[10px] px-3 py-2.5 text-[14px]" /></div>
                   </div>
-                  <div className="grid grid-cols-2 gap-3">
-                    <div><label className="text-[11px] font-bold uppercase tracking-wide text-neutral-500">Moc (KM)</label><input type="number" value={form.power} onChange={e=>setForm({...form, power: e.target.value})} className="w-full mt-1.5 border rounded-[10px] px-3 py-2.5 text-[14px]" /></div>
-                    <div><label className="text-[11px] font-bold uppercase tracking-wide text-neutral-500">Miasto</label><input value={form.location} onChange={e=>setForm({...form, location: e.target.value})} placeholder="Warszawa" className="w-full mt-1.5 border rounded-[10px] px-3 py-2.5 text-[14px]" /></div>
+                  <div><label className="text-[11px] font-bold uppercase tracking-wide text-neutral-500">Lokalizacja</label><input value={form.location} onChange={e=>setForm({...form, location: e.target.value})} placeholder="Warszawa" className="w-full mt-1.5 border rounded-[10px] px-3 py-2.5 text-[14px]" /></div>
+                  <div><label className="text-[11px] font-bold uppercase tracking-wide text-neutral-500">Opis</label><textarea value={form.description} onChange={e=>setForm({...form, description: e.target.value})} rows="4" placeholder="Opisz stan techniczny, wyposażenie, historię..." className="w-full mt-1.5 border rounded-[10px] px-3 py-2.5 text-[14px]"></textarea></div>
+                  <div className="bg-neutral-50 border rounded-[10px] p-3 text-[11px] leading-[1.4] text-neutral-600">
+                    <label className="flex gap-2"><input type="checkbox" required /><span>Potwierdzam że jestem właścicielem/właścicielką zdjęć i mam prawo do ich publikacji. Za treść ogłoszenia oraz zdjęcia odpowiada zamieszczający, a nie właściciel strony wroomer.pl</span></label>
                   </div>
-                  <div><label className="text-[11px] font-bold uppercase tracking-wide text-neutral-500">Opis</label><textarea value={form.description} onChange={e=>setForm({...form, description: e.target.value})} rows="3" placeholder="Opisz auto..." className="w-full mt-1.5 border rounded-[10px] px-3 py-2.5 text-[14px]"></textarea></div>
-                  <button type="submit" className="w-full bg-[#ffea00] text-black font-bold py-3.5 rounded-[12px]">Dodaj ogłoszenie za darmo</button>
+                  <div className="flex gap-2">
+                    <button type="button" onClick={()=>setShowAdd(false)} className="flex-1 bg-[#f5f5f7] font-bold py-3.5 rounded-[12px] text-[14px]">Anuluj</button>
+                    <button type="submit" className="flex-[2] bg-black text-white font-bold py-3.5 rounded-[12px] text-[14px]">Dalej → Potwierdź</button>
+                  </div>
                 </form>
+              </div>
+            </div>
+          )}
+
+          {showConfirm && (
+            <div className="fixed inset-0 z-[70] bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
+              <div className="bg-white rounded-[20px] w-full max-w-[480px] overflow-hidden">
+                <div className="p-6">
+                  <div className="w-12 h-12 bg-[#ffea00] rounded-full flex items-center justify-center mx-auto mb-4 text-[20px]">⚠️</div>
+                  <h2 className="text-[18px] font-black text-center mb-2">Potwierdź dodanie ogłoszenia</h2>
+                  <p className="text-[13px] text-neutral-600 text-center mb-5">Sprawdź czy wszystko się zgadza. Ogłoszenie będzie widoczne od razu.</p>
+                  
+                  <div className="bg-[#f5f5f7] rounded-[12px] p-4 mb-4">
+                    <div className="flex gap-3">
+                      {showConfirm.images[0] && <img src={showConfirm.images[0]} className="w-20 h-20 rounded-[8px] object-cover" />}
+                      <div className="flex-1">
+                        <div className="font-bold text-[14px]">{showConfirm.title || `${showConfirm.brand} ${showConfirm.model}`}</div>
+                        <div className="text-[12px] text-neutral-500">{showConfirm.year} • {showConfirm.mileage} km • {showConfirm.location}</div>
+                        <div className="font-black mt-1">{showConfirm.price} zł</div>
+                        <div className="text-[11px] text-neutral-500 mt-1">📷 {showConfirm.images.length} zdjęć/zdjęcia</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="text-[11px] leading-[1.4] text-neutral-500 bg-amber-50 border border-amber-200 rounded-[8px] p-3 mb-5">
+                    <strong>Uwaga:</strong> Za treść ogłoszenia oraz zdjęcia odpowiada zamieszczający ogłoszenie ({currentUser?.name} - {currentUser?.email}), a nie właściciel strony/domeny wroomer.pl. Publikując potwierdzasz że masz prawa do zdjęć.
+                  </div>
+
+                  <div className="flex gap-2">
+                    <button onClick={()=>setShowConfirm(null)} className="flex-1 bg-[#f5f5f7] font-bold py-3 rounded-[12px] text-[14px]">← Wróć i popraw</button>
+                    <button onClick={confirmAdd} className="flex-[1.5] bg-[#ffea00] text-black font-bold py-3 rounded-[12px] text-[14px]">✅ Tak, dodaj ogłoszenie</button>
+                  </div>
+                  <button onClick={()=>{setShowConfirm(null); setShowAdd(false);}} className="w-full mt-2 text-[12px] text-neutral-500 py-2">Anuluj dodawanie</button>
+                </div>
               </div>
             </div>
           )}
