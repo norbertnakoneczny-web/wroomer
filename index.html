@@ -28,18 +28,62 @@ const BRAND_MODELS = {
 };
 
 const MOCK_ADS = [
-  { id: 1, title: "BMW 320d F30 2018", brand: "BMW", model: "3 Series", year: 2018, price: 65900, mileage: 89000, fuel: "Diesel", gearbox: "Automatyczna", power: 190, location: "Warszawa", description: "Zadbany, serwisowany w ASO.", image: "https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800", images: ["https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800","https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=800"], owner: "Marek K.", ownerEmail: "marek@example.com", phone: "600 123 456", createdAt: "2h temu" },
-  { id: 2, title: "Audi A4 B9 2.0 TFSI 2019", brand: "Audi", model: "A4", year: 2019, price: 78900, mileage: 67000, fuel: "Benzyna", gearbox: "Automatyczna", power: 190, location: "Kraków", description: "S-line, wirtualny kokpit.", image: "https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=800", images: ["https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=800"], owner: "Auto-Kompleks", ownerEmail: "kontakt@autokompleks.pl", phone: "500 987 654", createdAt: "5h temu" },
-  { id: 3, title: "VW Golf VII 1.5 TSI 2020", brand: "Volkswagen", model: "Golf", year: 2020, price: 54900, mileage: 45000, fuel: "Benzyna", gearbox: "Manualna", power: 150, location: "Wrocław", description: "Bardzo zadbany.", image: "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800", images: ["https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800"], owner: "Piotr W.", ownerEmail: "piotr@example.com", phone: "600 111 222", createdAt: "1 dzień temu" },
-  { id: 4, title: "Mercedes C200 W205 2017", brand: "Mercedes", model: "C-Klasa", year: 2017, price: 72900, mileage: 95000, fuel: "Benzyna", gearbox: "Automatyczna", power: 184, location: "Gdańsk", description: "AMG Line.", image: "https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=800", images: ["https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=800"], owner: "Anna M.", ownerEmail: "anna@example.com", phone: "600 333 444", createdAt: "1 dzień temu" },
-  { id: 5, title: "Skoda Octavia 2.0 TDI 2021", brand: "Skoda", model: "Octavia", year: 2021, price: 62900, mileage: 38000, fuel: "Diesel", gearbox: "Manualna", power: 150, location: "Poznań", description: "Kombi.", image: "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=800", images: ["https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=800"], owner: "Tomasz L.", ownerEmail: "tomasz@example.com", phone: "600 555 666", createdAt: "2 dni temu" },
-  { id: 6, title: "Toyota Corolla 1.8 Hybrid 2022", brand: "Toyota", model: "Corolla", year: 2022, price: 79900, mileage: 22000, fuel: "Hybryda", gearbox: "Automatyczna", power: 122, location: "Katowice", description: "3.8l/100km.", image: "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=800", images: ["https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=800"], owner: "Salon Toyota", ownerEmail: "toyota@example.com", phone: "600 777 888", createdAt: "3 dni temu" },
-  { id: 7, title: "Ford Focus 1.5 EcoBoost 2019", brand: "Ford", model: "Focus", year: 2019, price: 42900, mileage: 78000, fuel: "Benzyna", gearbox: "Manualna", power: 150, location: "Łódź", description: "ST-Line.", image: "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800", images: ["https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800"], owner: "Krzysztof B.", ownerEmail: "krzys@example.com", phone: "600 999 000", createdAt: "4 dni temu" },
-  { id: 8, title: "Opel Astra K 1.6 CDTI 2018", brand: "Opel", model: "Astra", year: 2018, price: 38900, mileage: 92000, fuel: "Diesel", gearbox: "Manualna", power: 136, location: "Szczecin", description: "Bardzo oszczędna.", image: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800", images: ["https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800"], owner: "Michał S.", ownerEmail: "michal@example.com", phone: "600 111 333", createdAt: "5 dni temu" },
+  { 
+    id: 1, title: "BMW 320d F30 2018 - Bezwypadkowy, ASO", brand: "BMW", model: "3 Series", year: 2018, price: 65900, mileage: 89000, fuel: "Diesel", gearbox: "Automatyczna", power: 190, location: "Warszawa", 
+    description: "Zadbany egzemplarz, serwisowany w ASO BMW. Bezwypadkowy, pierwszy właściciel. Pełna historia serwisowa. Stan techniczny i wizualny bardzo dobry.", 
+    image: "https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800", 
+    images: [
+      "https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800",
+      "https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=800",
+      "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800",
+      "https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=800",
+      "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=800"
+    ], 
+    owner: "Marek K.", ownerEmail: "marek@example.com", phone: "600 123 456", createdAt: "2h temu" 
+  },
+  { 
+    id: 2, title: "Audi A4 B9 2.0 TFSI S-line 2019", brand: "Audi", model: "A4", year: 2019, price: 78900, mileage: 67000, fuel: "Benzyna", gearbox: "Automatyczna", power: 190, location: "Kraków", 
+    description: "Wersja S-line, wirtualny kokpit, LED matrix, masaże, Bang & Olufsen. Polski salon, gwarancja.", 
+    image: "https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=800", 
+    images: [
+      "https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=800",
+      "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=800",
+      "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800",
+      "https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800",
+      "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800"
+    ], 
+    owner: "Auto-Kompleks", ownerEmail: "kontakt@autokompleks.pl", phone: "500 987 654", createdAt: "5h temu" 
+  },
+  { 
+    id: 3, title: "VW Golf VII 1.5 TSI Highline 2020", brand: "Volkswagen", model: "Golf", year: 2020, price: 54900, mileage: 45000, fuel: "Benzyna", gearbox: "Manualna", power: 150, location: "Wrocław", 
+    description: "Bardzo zadbany, garażowany, niepalący. Nowe opony.", 
+    image: "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800", 
+    images: [
+      "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800",
+      "https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800",
+      "https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=800",
+      "https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=800",
+      "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=800"
+    ], 
+    owner: "Piotr W.", ownerEmail: "piotr@example.com", phone: "600 111 222", createdAt: "1 dzień temu" 
+  },
+  { 
+    id: 4, title: "Mercedes C200 AMG Line W205 2017", brand: "Mercedes", model: "C-Klasa", year: 2017, price: 72900, mileage: 95000, fuel: "Benzyna", gearbox: "Automatyczna", power: 184, location: "Gdańsk", 
+    description: "AMG Line, panorama, Burmester, nagłośnienie.", 
+    image: "https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=800", 
+    images: [
+      "https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=800",
+      "https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800",
+      "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800",
+      "https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=800",
+      "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800"
+    ], 
+    owner: "Anna M.", ownerEmail: "anna@example.com", phone: "600 333 444", createdAt: "1 dzień temu" 
+  },
 ];
 
 function App() {
-  const [ads, setAds] = useState(() => { try { const s = localStorage.getItem('wroomer_ads_v6'); return s ? JSON.parse(s) : MOCK_ADS; } catch(e){ return MOCK_ADS; } });
+  const [ads, setAds] = useState(() => { try { const s = localStorage.getItem('wroomer_ads_v7'); return s ? JSON.parse(s) : MOCK_ADS; } catch(e){ return MOCK_ADS; } });
   const [users, setUsers] = useState(() => { try { const s = localStorage.getItem('wroomer_users'); return s ? JSON.parse(s) : []; } catch(e){ return []; } });
   const [currentUser, setCurrentUser] = useState(() => { try { const s = localStorage.getItem('wroomer_current_user'); return s ? JSON.parse(s) : null; } catch(e){ return null; } });
   const [searchBrand, setSearchBrand] = useState('');
@@ -57,7 +101,7 @@ function App() {
   const [error, setError] = useState('');
   const fileInputRef = useRef(null);
 
-  useEffect(() => { try { localStorage.setItem('wroomer_ads_v6', JSON.stringify(ads)); } catch(e){} }, [ads]);
+  useEffect(() => { try { localStorage.setItem('wroomer_ads_v7', JSON.stringify(ads)); } catch(e){} }, [ads]);
   useEffect(() => { try { localStorage.setItem('wroomer_users', JSON.stringify(users)); } catch(e){} }, [users]);
   useEffect(() => { try { if(currentUser) localStorage.setItem('wroomer_current_user', JSON.stringify(currentUser)); else localStorage.removeItem('wroomer_current_user'); } catch(e){} }, [currentUser]);
   useEffect(() => { if(selected) setImgIdx(0); }, [selected]);
@@ -146,8 +190,9 @@ function App() {
       </header>
 
       <div className="bg-black text-white">
-        <div className="max-w-[1440px] mx-auto px-4 md:px-6 py-8 md:py-14 text-center md:text-left">
-          <h1 className="text-[36px] md:text-[64px] font-black leading-[0.9] tracking-tight">Darmowe ogłoszenia <span className="text-[#ffea00]">motoryzacyjne</span></h1>
+        <div className="max-w-[1440px] mx-auto px-4 md:px-6 py-5 md:py-7">
+          <h1 className="text-[22px] md:text-[32px] font-black tracking-tight leading-[1.1]">Darmowe ogłoszenia <span className="text-[#ffea00]">motoryzacyjne</span></h1>
+          <p className="text-neutral-400 text-[12px] md:text-[13px] mt-2">Znajdź auto • Dodaj za darmo • Bez prowizji</p>
         </div>
       </div>
 
@@ -205,7 +250,7 @@ function App() {
 
         <div className="flex-1 min-w-0">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-[16px] font-bold">Ogłoszenia <span className="text-neutral-400 font-normal ml-2">{filtered.length}</span> {searchBrand && <span className="ml-2 bg-black text-white text-[11px] px-2 py-1 rounded-full">{searchBrand} {searchModel && '• ' + searchModel}</span>}</h2>
+            <h2 className="text-[15px] font-bold">Ogłoszenia <span className="text-neutral-400 font-normal ml-2">{filtered.length}</span> {searchBrand && <span className="ml-2 bg-black text-white text-[11px] px-2 py-1 rounded-full">{searchBrand} {searchModel && '• ' + searchModel}</span>}</h2>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-4">
             {filtered.map(ad => (
@@ -213,7 +258,7 @@ function App() {
                 <div className="aspect-[4/3] bg-neutral-100 relative overflow-hidden">
                   <img src={ad.image} alt={ad.title} className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-300" loading="lazy" />
                   <div className="absolute top-2 left-2 bg-black/80 text-white text-[10px] font-bold px-2 py-1 rounded-[6px]">{ad.year}</div>
-                  {ad.images?.length > 1 && <div className="absolute top-2 right-2 bg-black/70 text-white text-[10px] px-1.5 py-0.5 rounded">📷 {ad.images.length}</div>}
+                  <div className="absolute top-2 right-2 bg-black/80 backdrop-blur text-white text-[10px] font-bold px-2 py-1 rounded-full">📷 {ad.images.length}</div>
                   <div className="absolute bottom-2 left-2 bg-[#ffea00] text-black text-[10px] font-bold px-2 py-1 rounded-[6px]">{ad.mileage.toLocaleString('pl-PL')} km</div>
                 </div>
                 <div className="p-3">
@@ -221,33 +266,124 @@ function App() {
                   <div className="text-[11px] text-neutral-500 mt-1 truncate">{ad.fuel} • {ad.gearbox} • {ad.power} KM</div>
                   <div className="flex items-center justify-between mt-2.5">
                     <div className="font-black text-[15px]">{ad.price.toLocaleString('pl-PL')} zł</div>
-                    <div className="text-[10px] text-neutral-400 truncate max-w-[70px]">{ad.location}</div>
+                    <div className="text-[10px] text-neutral-400">{ad.location}</div>
                   </div>
                 </div>
               </div>
             ))}
           </div>
-          {filtered.length === 0 && (
-            <div className="text-center py-16 bg-white rounded-[16px] border mt-4">
-              <div className="text-[40px] mb-3">🔍</div><div className="font-bold">Brak wyników</div><button onClick={clearFilters} className="mt-4 bg-black text-white text-[13px] font-bold px-5 py-2 rounded-full">Wyczyść filtry</button>
-            </div>
-          )}
         </div>
       </div>
 
       <footer className="border-t bg-white mt-8">
         <div className="max-w-[1440px] mx-auto px-4 md:px-6 py-6">
-          <div className="flex justify-between gap-4 text-[12px] text-neutral-500"><div><div className="font-bold text-black text-[14px] mb-1">WROOMER.PL</div><div>© 2026 Darmowe ogłoszenia</div></div><div className="flex gap-6 text-[11px]"><span>Regulamin</span><span>Kontakt</span></div></div>
-          <div className="mt-6 pt-4 border-t text-[10px] leading-[1.5] text-neutral-400"><strong>Informacja prawna:</strong> Właściciel wroomer.pl nie ponosi odpowiedzialności za treść ogłoszeń i zdjęcia. Za treść i zdjęcia odpowiada zamieszczający. Limit 5 zdjęć, max 5MB.</div>
+          <div className="flex flex-col md:flex-row justify-between gap-3 text-[13px]">
+            <div>
+              <div className="font-black text-[16px] tracking-tight">WROOMER<span className="text-[#ffea00]">.PL</span></div>
+              <div className="text-neutral-500 text-[12px] mt-1">© 2026 Norbert Nakoneczny • Wszystkie prawa zastrzeżone</div>
+            </div>
+            <div className="flex gap-5 text-[12px] text-neutral-500"><span>Regulamin</span><span>Polityka prywatności</span><span>Kontakt</span></div>
+          </div>
+          <div className="mt-5 pt-4 border-t text-[10px] leading-[1.6] text-neutral-400">
+            <strong className="text-neutral-700">Informacja prawna:</strong> Właścicielem serwisu wroomer.pl jest Norbert Nakoneczny. Właściciel nie ponosi odpowiedzialności za treść zamieszczanych ogłoszeń oraz zdjęcia. Za treść ogłoszenia oraz zdjęcia odpowiada wyłącznie osoba zamieszczająca ogłoszenie (ogłoszeniodawca). Wroomer.pl jest platformą umożliwiającą publikację ogłoszeń. Limit 5 zdjęć na ogłoszenie, max 5MB każde. Kontakt w sprawie naruszeń: poprzez formularz kontaktowy.
+          </div>
         </div>
       </footer>
 
       {selected && (
-        <div className="fixed inset-0 z-50 bg-white md:bg-black/70 overflow-auto">
-          <div className="min-h-screen md:flex md:items-center md:justify-center md:p-4">
-            <div className="bg-white w-full md:max-w-[980px] md:rounded-[20px] md:max-h-[90vh] md:flex md:flex-col">
-              <div className="sticky top-0 z-10 bg-white border-b flex items-center justify-between p-3"><button onClick={()=>setSelected(null)} className="flex items-center gap-2 text-[13px] font-semibold"><span className="w-7 h-7 rounded-full bg-black text-white flex items-center justify-center">←</span> Wróć</button><button onClick={()=>setSelected(null)} className="w-8 h-8 rounded-full bg-neutral-900 text-white md:hidden">✕</button></div>
-              <div className="md:flex"><div className="md:w-[58%]"><div className="aspect-[4/3] bg-neutral-100 relative"><img src={selected.images?.[imgIdx] || selected.image} className="w-full h-full object-cover" /><div className="absolute bottom-3 left-3 right-3 flex justify-between"><div className="flex gap-1.5">{(selected.images || [selected.image]).map((_, i) => (<button key={i} onClick={()=>setImgIdx(i)} className={`w-1.5 h-1.5 rounded-full ${i===imgIdx ? 'bg-white w-6' : 'bg-white/50'}`}></button>))}</div><div className="bg-black/70 text-white text-[11px] px-2 py-1 rounded-full">{imgIdx+1}/{(selected.images || [selected.image]).length}</div></div></div></div><div className="md:w-[42%] p-4"><h1 className="text-[20px] font-black">{selected.title}</h1><div className="text-[26px] font-black mt-3">{selected.price.toLocaleString('pl-PL')} zł</div><div className="grid grid-cols-3 gap-2 my-5">{[{ k: 'Rok', v: selected.year }, { k: 'Przebieg', v: selected.mileage + ' km' }, { k: 'Moc', v: selected.power + ' KM' }, { k: 'Paliwo', v: selected.fuel }, { k: 'Skrzynia', v: selected.gearbox }, { k: 'Miasto', v: selected.location }].map(item => (<div key={item.k} className="bg-[#f5f5f7] rounded-[10px] p-2.5"><div className="text-[10px] font-semibold text-neutral-500 uppercase">{item.k}</div><div className="text-[13px] font-bold mt-0.5">{item.v}</div></div>))}</div><div className="text-[13px] leading-[1.6]">{selected.description}</div><div className="mt-5 bg-black text-white rounded-[14px] p-4 flex justify-between items-center"><div className="flex gap-3 items-center"><div className="w-10 h-10 bg-[#ffea00] rounded-full flex items-center justify-center font-black text-black">{selected.owner[0]}</div><div><div className="font-bold text-[13px]">{selected.owner}</div><div className="text-[11px] text-neutral-400">{selected.ownerEmail}</div></div></div><a href={`tel:${selected.phone}`} className="bg-white text-black font-bold text-[13px] px-4 py-2 rounded-full">Zadzwoń</a></div></div></div>
+        <div className="fixed inset-0 z-50 bg-[#0a0a0a]/90 backdrop-blur-md overflow-auto">
+          <div className="min-h-screen md:flex md:items-center md:justify-center md:p-6">
+            <div className="bg-white w-full md:max-w-[1080px] md:rounded-[24px] overflow-hidden md:max-h-[90vh] flex flex-col relative">
+              
+              <div className="absolute top-0 left-0 right-0 z-20 flex items-center justify-between p-4 md:p-5 bg-gradient-to-b from-black/60 to-transparent">
+                <button onClick={()=>setSelected(null)} className="flex items-center gap-2 bg-white/90 backdrop-blur hover:bg-white text-black text-[13px] font-bold px-4 py-2 rounded-full shadow-lg transition-all">
+                  <span className="text-[16px]">←</span> Wróć do listy
+                </button>
+                <div className="flex items-center gap-2">
+                  <button className="w-10 h-10 bg-white/90 backdrop-blur hover:bg-white rounded-full flex items-center justify-center shadow-lg transition-all text-[16px]">♡</button>
+                  <button className="w-10 h-10 bg-white/90 backdrop-blur hover:bg-white rounded-full flex items-center justify-center shadow-lg transition-all text-[16px]">↗</button>
+                  <button onClick={()=>setSelected(null)} className="w-10 h-10 bg-black text-white hover:bg-neutral-800 rounded-full flex items-center justify-center shadow-lg transition-all group">
+                    <span className="text-[18px] group-hover:rotate-90 transition-transform">✕</span>
+                  </button>
+                </div>
+              </div>
+
+              <div className="flex-1 overflow-auto md:flex">
+                <div className="md:w-[62%] bg-black relative flex flex-col">
+                  <div className="aspect-[4/3] md:aspect-[16/12] relative overflow-hidden bg-neutral-900">
+                    <img src={selected.images?.[imgIdx] || selected.image} alt={selected.title} className="w-full h-full object-contain md:object-cover" />
+                    
+                    <button onClick={()=>setImgIdx((imgIdx-1+selected.images.length)%selected.images.length)} className="absolute left-3 md:left-4 top-1/2 -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 bg-white/90 backdrop-blur hover:bg-white rounded-full flex items-center justify-center shadow-xl transition-all text-[20px] font-bold">‹</button>
+                    <button onClick={()=>setImgIdx((imgIdx+1)%selected.images.length)} className="absolute right-3 md:right-4 top-1/2 -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 bg-white/90 backdrop-blur hover:bg-white rounded-full flex items-center justify-center shadow-xl transition-all text-[20px] font-bold">›</button>
+                    
+                    <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent">
+                      <div className="flex items-center justify-between">
+                        <div className="flex gap-1.5">
+                          {(selected.images || [selected.image]).map((_, i) => (
+                            <button key={i} onClick={()=>setImgIdx(i)} className={`h-1.5 rounded-full transition-all ${i===imgIdx ? 'bg-[#ffea00] w-8' : 'bg-white/50 w-1.5 hover:bg-white/80'}`}></button>
+                          ))}
+                        </div>
+                        <div className="bg-white/90 backdrop-blur text-black text-[12px] font-bold px-3 py-1 rounded-full">{imgIdx+1} / {(selected.images || [selected.image]).length}</div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="p-3 bg-[#111] border-t border-neutral-800">
+                    <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-1">
+                      {(selected.images || [selected.image]).map((img, i) => (
+                        <button key={i} onClick={()=>setImgIdx(i)} className={`flex-shrink-0 w-[72px] h-[54px] rounded-[10px] overflow-hidden border-2 transition-all ${i===imgIdx ? 'border-[#ffea00] scale-105' : 'border-transparent opacity-60 hover:opacity-100'}`}>
+                          <img src={img} className="w-full h-full object-cover" />
+                        </button>
+                      ))}
+                    </div>
+                    <div className="text-[11px] text-neutral-500 mt-2 text-center">Kliknij miniaturę lub użyj strzałek ← → • {selected.images.length} zdjęć</div>
+                  </div>
+                </div>
+
+                <div className="md:w-[38%] p-5 md:p-6 overflow-auto">
+                  <div className="flex items-start justify-between gap-3 mb-2">
+                    <h1 className="text-[20px] md:text-[22px] font-black leading-tight">{selected.title}</h1>
+                  </div>
+                  <div className="text-[11px] text-neutral-500 mb-3">{selected.createdAt} • {selected.brand} {selected.model} • ID: {selected.id}</div>
+                  <div className="text-[28px] font-black mb-1">{selected.price.toLocaleString('pl-PL')} zł</div>
+                  <div className="text-[12px] text-neutral-500 mb-5">Do negocjacji • Faktura VAT • Możliwa zamiana</div>
+
+                  <div className="grid grid-cols-3 gap-2 mb-6">
+                    {[
+                      { k: 'Rocznik', v: selected.year },
+                      { k: 'Przebieg', v: `${selected.mileage.toLocaleString('pl-PL')} km` },
+                      { k: 'Moc', v: `${selected.power} KM` },
+                      { k: 'Paliwo', v: selected.fuel },
+                      { k: 'Skrzynia', v: selected.gearbox },
+                      { k: 'Lokalizacja', v: selected.location },
+                    ].map(item => (
+                      <div key={item.k} className="bg-[#f5f5f7] rounded-[12px] p-3"><div className="text-[10px] font-bold text-neutral-500 uppercase tracking-wide">{item.k}</div><div className="text-[13px] font-bold mt-1">{item.v}</div></div>
+                    ))}
+                  </div>
+
+                  <div className="mb-6"><div className="font-bold text-[13px] mb-2 uppercase tracking-wide">Opis</div><div className="text-[13px] leading-[1.7] text-neutral-700 whitespace-pre-wrap">{selected.description}</div></div>
+
+                  <div className="bg-black text-white rounded-[16px] p-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-11 h-11 bg-[#ffea00] rounded-full flex items-center justify-center font-black text-black text-[16px]">{selected.owner[0]}</div>
+                      <div className="flex-1"><div className="font-bold text-[14px]">{selected.owner}</div><div className="text-[11px] text-neutral-400">{selected.ownerEmail} • {selected.location}</div></div>
+                      <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-2 mt-4">
+                      <a href={`tel:${selected.phone.replace(/ /g,'')}`} className="bg-[#ffea00] text-black font-bold text-[14px] py-3 rounded-[12px] text-center hover:bg-[#ffe000]">📞 Zadzwoń</a>
+                      <button className="bg-[#222] hover:bg-[#333] text-white font-bold text-[14px] py-3 rounded-[12px]">💬 Napisz</button>
+                    </div>
+                  </div>
+
+                  <div className="mt-4 p-3 bg-amber-50 border border-amber-200 rounded-[10px] text-[10px] leading-[1.5] text-neutral-600">
+                    Za treść ogłoszenia i {selected.images.length} zdjęć odpowiada: <strong>{selected.owner}</strong> ({selected.ownerEmail}). Właściciel wroomer.pl (Norbert Nakoneczny) nie ponosi odpowiedzialności.
+                  </div>
+
+                  <button onClick={()=>setSelected(null)} className="w-full mt-6 bg-[#f5f5f7] hover:bg-neutral-200 text-black font-bold py-3 rounded-[12px] text-[14px] flex items-center justify-center gap-2 transition-colors">
+                    <span>✕</span> Zamknij ogłoszenie
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -256,7 +392,7 @@ function App() {
       {showAuth && (
         <div className="fixed inset-0 z-[60] bg-black/60 flex items-center justify-center p-4">
           <div className="bg-white rounded-[20px] w-full max-w-[380px] p-6">
-            <div className="flex justify-between mb-6"><div className="font-black">WROOMER.PL</div><button onClick={()=>{setShowAuth(null); setError('');}} className="w-8 h-8 rounded-full bg-neutral-100">✕</button></div>
+            <div className="flex justify-between mb-6"><div className="font-black">WROOMER.PL</div><button onClick={()=>{setShowAuth(null); setError('');}} className="w-8 h-8 rounded-full bg-neutral-100 flex items-center justify-center">✕</button></div>
             <h2 className="text-[22px] font-black mb-1">{showAuth === 'login' ? 'Zaloguj się' : 'Załóż konto'}</h2>
             <form onSubmit={showAuth === 'login' ? handleLogin : handleRegister} className="space-y-3 mt-4">
               {showAuth === 'register' && <input value={authForm.name} onChange={e=>setAuthForm({...authForm, name: e.target.value})} placeholder="Imię" className="w-full border rounded-[10px] px-4 py-3 text-[14px]" />}
@@ -275,12 +411,13 @@ function App() {
             <div className="sticky top-0 bg-white border-b px-5 py-4 flex justify-between"><div><div className="font-bold">Dodaj ogłoszenie</div><div className="text-[11px] text-neutral-500">{currentUser?.name} • Max 5 zdjęć</div></div><button onClick={()=>setShowAdd(false)} className="w-8 h-8 rounded-full bg-neutral-100">✕</button></div>
             <form onSubmit={handleSubmitForConfirm} className="p-5 space-y-4">
               <div className="bg-[#ffea00]/20 border border-[#ffea00]/50 rounded-[10px] p-3">
-                <div className="font-bold text-[12px] mb-2">📷 Zdjęcia (max 5)</div>
+                <div className="font-bold text-[12px] mb-2">📷 Zdjęcia (max 5) - zobacz nawigację w podglądzie</div>
                 <div className="grid grid-cols-5 gap-2 mb-3">
-                  {form.images.map((img, idx) => (<div key={idx} className="relative aspect-square rounded-[8px] overflow-hidden border"><img src={img} className="w-full h-full object-cover" /><button type="button" onClick={()=>setForm({...form, images: form.images.filter((_, i) => i !== idx)})} className="absolute top-1 right-1 w-5 h-5 bg-black/70 text-white rounded-full text-[10px]">✕</button></div>))}
+                  {form.images.map((img, idx) => (<div key={idx} className="relative aspect-square rounded-[8px] overflow-hidden border"><img src={img} className="w-full h-full object-cover" /><button type="button" onClick={()=>setForm({...form, images: form.images.filter((_, i) => i !== idx)})} className="absolute top-1 right-1 w-5 h-5 bg-black/70 text-white rounded-full text-[10px]">✕</button><div className="absolute bottom-0 left-0 right-0 bg-black/60 text-white text-[9px] text-center">{idx+1}/5</div></div>))}
                   {form.images.length < 5 && <button type="button" onClick={()=>fileInputRef.current?.click()} className="aspect-square rounded-[8px] border-2 border-dashed flex flex-col items-center justify-center"><span className="text-[20px]">+</span><span className="text-[10px] font-semibold">Dodaj</span></button>}
                 </div>
                 <input ref={fileInputRef} type="file" accept="image/*" multiple onChange={handleImageUpload} />
+                <div className="text-[11px] text-neutral-600">Dodaj 5 zdjęć aby przetestować nawigację: strzałki, kropki, miniatury</div>
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div><label className="text-[11px] font-bold uppercase text-neutral-500">Marka *</label><select required value={form.brand} onChange={e=>{setForm({...form, brand: e.target.value, model: ''});}} className="w-full mt-1.5 bg-white border rounded-[10px] px-3 py-2.5 text-[14px]"><option value="">Wybierz markę</option>{Object.keys(BRAND_MODELS).sort().map(b => <option key={b} value={b}>{b}</option>)}</select></div>
@@ -289,7 +426,7 @@ function App() {
               <div className="grid grid-cols-3 gap-2"><div><label className="text-[11px] font-bold uppercase text-neutral-500">Rok</label><input type="number" value={form.year} onChange={e=>setForm({...form, year: e.target.value})} className="w-full mt-1.5 border rounded-[10px] px-3 py-2.5 text-[14px]" /></div><div><label className="text-[11px] font-bold uppercase text-neutral-500">Cena</label><input type="number" value={form.price} onChange={e=>setForm({...form, price: e.target.value})} className="w-full mt-1.5 border rounded-[10px] px-3 py-2.5 text-[14px]" /></div><div><label className="text-[11px] font-bold uppercase text-neutral-500">Przebieg</label><input type="number" value={form.mileage} onChange={e=>setForm({...form, mileage: e.target.value})} className="w-full mt-1.5 border rounded-[10px] px-3 py-2.5 text-[14px]" /></div></div>
               <div><label className="text-[11px] font-bold uppercase text-neutral-500">Tytuł</label><input value={form.title} onChange={e=>setForm({...form, title: e.target.value})} className="w-full mt-1.5 border rounded-[10px] px-3 py-2.5 text-[14px]" /></div>
               <div><label className="text-[11px] font-bold uppercase text-neutral-500">Opis</label><textarea value={form.description} onChange={e=>setForm({...form, description: e.target.value})} rows="3" className="w-full mt-1.5 border rounded-[10px] px-3 py-2.5 text-[14px]"></textarea></div>
-              <div className="bg-neutral-50 border rounded-[10px] p-3 text-[11px]"><label className="flex gap-2"><input type="checkbox" required /><span>Za treść i zdjęcia odpowiada zamieszczający, nie właściciel wroomer.pl</span></label></div>
+              <div className="bg-neutral-50 border rounded-[10px] p-3 text-[11px]"><label className="flex gap-2"><input type="checkbox" required /><span>Za treść i zdjęcia odpowiada zamieszczający, nie właściciel wroomer.pl (Norbert Nakoneczny)</span></label></div>
               <div className="flex gap-2"><button type="button" onClick={()=>setShowAdd(false)} className="flex-1 bg-[#f5f5f7] font-bold py-3.5 rounded-[12px]">Anuluj</button><button type="submit" className="flex-[2] bg-black text-white font-bold py-3.5 rounded-[12px]">Dalej → Potwierdź</button></div>
             </form>
           </div>
