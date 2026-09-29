@@ -70,6 +70,8 @@ function App() {
   const [searchVoivodeship, setSearchVoivodeship] = useState('');
   const [searchRadius, setSearchRadius] = useState('');
   const [sortBy, setSortBy] = useState('newest');
+  const [isLocating, setIsLocating] = useState(false);
+  const [userCoords, setUserCoords] = useState(null);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [selected, setSelected] = useState(null);
   const [showAdd, setShowAdd] = useState(false);
@@ -105,6 +107,48 @@ function App() {
     return () => window.removeEventListener('keydown', handleEsc);
   }, [selected, showFilters, showConfirm, showAdd, showAuth, showMobileMenu]);
 
+  const handleUseMyLocation = async () => {
+    if(!navigator.geolocation) { alert('Geolokalizacja nie jest wspierana'); return; }
+    setIsLocating(true);
+    navigator.geolocation.getCurrentPosition(async (pos) => {
+      const { latitude, longitude } = pos.coords;
+      setUserCoords({ lat: latitude, lng: longitude });
+      try {
+        const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=10&accept-language=pl`);
+        const data = await res.json();
+        const city = data.address?.city || data.address?.town || data.address?.village || data.address?.county || '';
+        const state = data.address?.state || '';
+        if(city) setSearchLocation(city);
+        if(state) {
+          const lower = state.toLowerCase();
+          if(lower.includes('śląskie')) setSearchVoivodeship('Śląskie');
+          else if(lower.includes('mazowieckie')) setSearchVoivodeship('Mazowieckie');
+          else if(lower.includes('małopolskie')) setSearchVoivodeship('Małopolskie');
+          else if(lower.includes('wielkopolskie')) setSearchVoivodeship('Wielkopolskie');
+          else if(lower.includes('dolnośląskie')) setSearchVoivodeship('Dolnośląskie');
+          else if(lower.includes('pomorskie') && !lower.includes('zachodnio')) setSearchVoivodeship('Pomorskie');
+          else if(lower.includes('zachodniopomorskie')) setSearchVoivodeship('Zachodniopomorskie');
+          else if(lower.includes('łódzkie')) setSearchVoivodeship('Łódzkie');
+          else if(lower.includes('lubelskie')) setSearchVoivodeship('Lubelskie');
+          else if(lower.includes('podkarpackie')) setSearchVoivodeship('Podkarpackie');
+          else {
+            const match = VOIVODESHIPS.find(v => state.toLowerCase().includes(v.toLowerCase().split(' ')[0]) );
+            if(match) setSearchVoivodeship(match);
+          }
+        }
+        if(!searchRadius) setSearchRadius('20');
+      } catch(e) {
+        setSearchLocation(`📍 ${latitude.toFixed(3)}, ${longitude.toFixed(3)}`);
+        if(!searchRadius) setSearchRadius('20');
+      }
+      setIsLocating(false);
+    }, (err) => {
+      setIsLocating(false);
+      if(err.code === 1) alert('Odmówiono dostępu do lokalizacji. Włącz lokalizację w przeglądarce.');
+      else alert('Nie udało się pobrać lokalizacji: ' + err.message);
+    }, { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 });
+  };
+
   const availableModels = useMemo(() => { if(!searchBrand) return []; return BRAND_MODELS[searchBrand] || []; }, [searchBrand]);
   const availableModelsForForm = useMemo(() => { if(!form.brand) return []; return BRAND_MODELS[form.brand] || []; }, [form.brand]);
   
@@ -114,19 +158,17 @@ function App() {
       if(searchModel && ad.model !== searchModel) return false;
       if(searchFuel && ad.fuel !== searchFuel) return false;
       if(searchVoivodeship && ad.voivodeship !== searchVoivodeship) return false;
-      if(searchLocation && !ad.location.toLowerCase().includes(searchLocation.toLowerCase())) return false;
+      if(searchLocation && !searchLocation.startsWith('📍') && !ad.location.toLowerCase().includes(searchLocation.toLowerCase())) return false;
       if(searchRadius && searchLocation) {
         const radius = parseInt(searchRadius);
         if(radius <= 10) {
-          if(!ad.location.toLowerCase().includes(searchLocation.toLowerCase())) return false;
+          if(!searchLocation.startsWith('📍') && !ad.location.toLowerCase().includes(searchLocation.toLowerCase())) return false;
         } else if(radius <= 50) {
           if(searchVoivodeship && ad.voivodeship !== searchVoivodeship) return false;
         }
       }
       return true;
     });
-
-    // Sorting like OLX/Otomoto
     result.sort((a,b) => {
       switch(sortBy) {
         case 'newest': return (b.createdAtTs || b.id) - (a.createdAtTs || a.id);
@@ -204,7 +246,7 @@ function App() {
     setForm({ brand: '', model: '', year: 2020, price: '', mileage: '', fuel: 'Benzyna', gearbox: 'Manualna', power: '', location: '', voivodeship: 'Śląskie', title: '', description: '', images: [] });
     setSelected(newAd);
   };
-  const clearFilters = () => { setSearchBrand(''); setSearchModel(''); setSearchFuel(''); setSearchLocation(''); setSearchVoivodeship(''); setSearchRadius(''); setSortBy('newest'); setShowFilters(false); };
+  const clearFilters = () => { setSearchBrand(''); setSearchModel(''); setSearchFuel(''); setSearchLocation(''); setSearchVoivodeship(''); setSearchRadius(''); setSortBy('newest'); setUserCoords(null); setShowFilters(false); };
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -250,6 +292,7 @@ function App() {
             {searchBrand && <div className="bg-[#ffea00] text-black text-[11px] font-bold px-3 py-1.5 rounded-full">{searchBrand} {searchModel && '• ' + searchModel}</div>}
             {searchVoivodeship && <div className="bg-black text-white text-[11px] font-bold px-3 py-1.5 rounded-full">📍 {searchVoivodeship} {searchRadius && '• ' + searchRadius + 'km'}</div>}
             {searchLocation && !searchVoivodeship && <div className="bg-black text-white text-[11px] font-bold px-3 py-1.5 rounded-full">📍 {searchLocation}</div>}
+            {userCoords && <div className="bg-[#ffea00] text-black text-[11px] font-bold px-3 py-1.5 rounded-full">✓ Twoja lokalizacja</div>}
             {(searchBrand || searchModel || searchFuel || searchLocation || searchVoivodeship) && <button onClick={clearFilters} className="text-[11px] text-neutral-500 hover:text-black underline" style={{minHeight: '44px'}}>Wyczyść ✕</button>}
           </div>
           <div className="flex items-center gap-2">
@@ -305,7 +348,10 @@ function App() {
               </div>
 
               <div className="border-t border-neutral-800 pt-4">
-                <h3 className="text-[12px] font-bold text-white mb-3 flex items-center gap-2">📍 Lokalizacja</h3>
+                <h3 className="text-[12px] font-bold text-white mb-3 flex items-center gap-2">📍 Lokalizacja • Auto</h3>
+                <button onClick={handleUseMyLocation} disabled={isLocating} className="w-full mb-3 bg-[#ffea00] hover:bg-[#ffe000] disabled:opacity-50 text-black font-bold text-[13px] py-3 rounded-[12px] flex items-center justify-center gap-2" style={{minHeight: '44px'}}>
+                  {isLocating ? '⌛ Szukam...' : '📍 Użyj mojej lokalizacji'}
+                </button>
                 <div className="space-y-3">
                   <div>
                     <label className="text-[11px] font-bold uppercase text-neutral-500 mb-1.5 block">Województwo</label>
@@ -319,7 +365,7 @@ function App() {
                   </div>
                   <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <label className="text-[11px] font-bold uppercase text-neutral-500 mb-1.5 block">Miasto</label>
+                      <label className="text-[11px] font-bold uppercase text-neutral-500 mb-1.5 block">Miasto {userCoords && '✓'}</label>
                       <input value={searchLocation} onChange={e=>setSearchLocation(e.target.value)} placeholder="np. Katowice" className="w-full bg-[#1a1a1a] border border-neutral-800 rounded-[12px] px-3 py-3 text-[14px] text-white placeholder-neutral-600" style={{minHeight: '44px'}} />
                     </div>
                     <div>
@@ -337,6 +383,7 @@ function App() {
                       </div>
                     </div>
                   </div>
+                  {userCoords && <div className="text-[10px] text-[#ffea00]">✓ Wykryto: {searchLocation} • promień {searchRadius}km</div>}
                 </div>
               </div>
 
@@ -434,13 +481,7 @@ function App() {
               )}
               <div className="border-t border-neutral-800 pt-4 space-y-3">
                 <button onClick={()=>{setShowMobileMenu(false); handleAddClick();}} className="w-full bg-[#ffea00] text-black py-4 rounded-[12px] font-bold text-[15px] flex items-center justify-center gap-2" style={{minHeight: '52px'}}>➕ Dodaj ogłoszenie</button>
-              </div>
-              <div className="border-t border-neutral-800 pt-4">
-                <div className="text-[12px] font-bold text-white mb-2">Szybkie filtry</div>
-                <div className="grid grid-cols-2 gap-2">
-                  <button onClick={()=>{setSearchVoivodeship('Śląskie'); setShowMobileMenu(false);}} className="bg-[#1a1a1a] border border-neutral-800 text-white py-3 rounded-[10px] text-[12px] font-bold" style={{minHeight: '44px'}}>Śląskie</button>
-                  <button onClick={()=>{setSearchVoivodeship('Mazowieckie'); setShowMobileMenu(false);}} className="bg-[#1a1a1a] border border-neutral-800 text-white py-3 rounded-[10px] text-[12px] font-bold" style={{minHeight: '44px'}}>Mazowieckie</button>
-                </div>
+                <button onClick={()=>{setShowMobileMenu(false); handleUseMyLocation(); setShowFilters(true);}} className="w-full bg-white text-black py-3 rounded-[12px] font-bold text-[13px] flex items-center justify-center gap-2" style={{minHeight: '44px'}}>📍 Auta blisko mnie</button>
               </div>
             </div>
             <div className="p-4 border-t border-neutral-800 text-[10px] text-neutral-500">© 2026 Norbert Nakoneczny</div>
@@ -454,10 +495,18 @@ function App() {
           <div className={`absolute bottom-0 left-0 right-0 bg-[#111] rounded-t-[24px] max-h-[90vh] flex flex-col bottom-sheet ${showFilters ? 'open' : ''}`}>
             <div className="p-4 flex items-center justify-between border-b border-neutral-800">
               <div className="w-12 h-1.5 bg-neutral-600 rounded-full mx-auto absolute top-3 left-1/2 -translate-x-1/2"></div>
-              <h2 className="font-bold text-[16px] text-white mt-3">🔍 Filtry • Sortowanie</h2>
+              <h2 className="font-bold text-[16px] text-white mt-3">🔍 Filtry • Sortowanie • 📍 Lokalizacja</h2>
               <button onClick={()=>setShowFilters(false)} className="w-10 h-10 rounded-full bg-[#222] text-white flex items-center justify-center" style={{minHeight: '44px'}}>✕</button>
             </div>
             <div className="flex-1 overflow-auto p-4 space-y-5">
+              <div className="bg-[#1a1a1a] border border-[#ffea00]/30 rounded-[14px] p-4">
+                <h3 className="text-[13px] font-bold text-[#ffea00] mb-3">📍 Automatyczne wykrywanie lokalizacji</h3>
+                <button onClick={handleUseMyLocation} disabled={isLocating} className="w-full bg-[#ffea00] hover:bg-[#ffe000] disabled:opacity-50 text-black font-bold text-[14px] py-4 rounded-[12px] flex items-center justify-center gap-2" style={{minHeight: '52px'}}>
+                  {isLocating ? '⌛ Wykrywam lokalizację...' : '📍 Znajdź auta blisko mnie'}
+                </button>
+                {userCoords && <div className="mt-3 text-[12px] text-[#ffea00] bg-black/50 rounded-[8px] p-3">✓ Wykryto: <strong>{searchLocation}</strong> {searchVoivodeship && `• ${searchVoivodeship}`} • promień {searchRadius}km</div>}
+                <div className="mt-2 text-[10px] text-neutral-500">Strona poprosi o dostęp do lokalizacji. Działa na telefonie i komputerze.</div>
+              </div>
               <div>
                 <label className="text-[11px] font-bold uppercase text-neutral-400 mb-1.5 block">Sortuj wg</label>
                 <select value={sortBy} onChange={e=>setSortBy(e.target.value)} className="w-full bg-[#1a1a1a] border border-neutral-700 rounded-[12px] px-3 py-3 text-[14px] text-white" style={{minHeight: '44px'}}>
@@ -489,7 +538,7 @@ function App() {
                   </div>
                   <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <label className="text-[11px] font-bold uppercase text-neutral-400 mb-1.5 block">Miejscowość</label>
+                      <label className="text-[11px] font-bold uppercase text-neutral-400 mb-1.5 block">Miejscowość {userCoords && '✓'}</label>
                       <input value={searchLocation} onChange={e=>setSearchLocation(e.target.value)} placeholder="np. Katowice" className="w-full bg-[#222] border border-neutral-700 rounded-[12px] px-3 py-3 text-[14px] text-white placeholder-neutral-500" style={{minHeight: '44px'}} />
                     </div>
                     <div>
@@ -518,7 +567,7 @@ function App() {
       <footer className="border-t bg-white mt-8">
         <div className="max-w-[1440px] mx-auto px-4 py-6">
           <div className="flex flex-col md:flex-row justify-between gap-3 text-[13px]">
-            <div><div className="font-black text-[16px]">WROOMER<span className="text-[#ffea00]">.PL</span></div><div className="text-neutral-500 text-[12px] mt-1">© 2026 Norbert Nakoneczny</div></div>
+            <div><div className="font-black text-[16px]">WROOMER<span className="text-[#ffea00]">.PL</span></div><div className="text-neutral-500 text-[12px] mt-1">© 2026 Norbert Nakoneczny • Auto-lokalizacja ✓</div></div>
             <div className="flex gap-5 text-[12px] text-neutral-500"><span>Regulamin</span><span>Kontakt</span></div>
           </div>
         </div>
