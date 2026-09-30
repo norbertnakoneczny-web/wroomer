@@ -2,245 +2,444 @@
 <html lang="pl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
-<title>Wroomer.pl - Supabase STAŁY ZAPIS</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, viewport-fit=cover">
+<title>Wroomer.pl - Supabase STAŁY ZAPIS - FINAL</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
 <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
 <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<style>*{font-family:'Inter',sans-serif;box-sizing:border-box} html,body{overflow-x:hidden;margin:0}</style>
+<style>
+*{font-family:'Inter',system-ui,sans-serif;-webkit-tap-highlight-color:transparent;box-sizing:border-box}
+html,body{overflow-x:hidden;max-width:100vw;margin:0}
+select{appearance:none} input[type="file"]{display:none}
+@media (max-width:1024px){
+.mobile-list-card{display:flex;flex-direction:row;height:130px}
+.mobile-list-card .img-wrap{width:38%;min-width:38%;height:100%}
+.mobile-list-card .content-wrap{width:62%;padding:10px 12px;display:flex;flex-direction:column;justify-content:space-between}
+.mobile-grid{grid-template-columns:1fr!important;gap:10px!important}
+}
+@media (min-width:1025px){.mobile-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (min-width:1300px){.mobile-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+</style>
 </head>
 <body class="bg-[#f5f5f7]"><div id="root"></div>
 <script type="text/babel">
 const { useState, useMemo, useEffect, useRef } = React;
-const BRAND_MODELS = {"BMW": ["1 Series", "2 Series", "3 Series", "4 Series", "5 Series", "7 Series", "X1", "X3", "X5", "X6", "M3", "M4"], "Audi": ["A1", "A3", "A4", "A5", "A6", "A8", "Q3", "Q5", "Q7", "Q8"], "Volkswagen": ["Golf", "Passat", "Tiguan", "T-Roc", "Arteon", "Polo"], "Mercedes": ["A-Klasa", "C-Klasa", "E-Klasa", "GLA", "GLC", "GLE", "GLS"], "Skoda": ["Octavia", "Superb", "Kodiaq", "Karoq", "Fabia", "Scala"], "Toyota": ["Corolla", "Camry", "RAV4", "Yaris", "C-HR", "Hilux"]};
+const BRAND_MODELS = {"BMW": ["1 Series", "2 Series", "3 Series", "4 Series", "5 Series", "7 Series", "X1", "X3", "X5", "X6", "M3", "M4"], "Audi": ["A1", "A3", "A4", "A5", "A6", "A8", "Q3", "Q5", "Q7", "Q8", "e-tron"], "Volkswagen": ["Golf", "Passat", "Tiguan", "T-Roc", "Arteon", "Polo", "ID.4"], "Mercedes": ["A-Klasa", "C-Klasa", "E-Klasa", "S-Klasa", "GLA", "GLC", "GLE", "GLS"], "Skoda": ["Octavia", "Superb", "Kodiaq", "Karoq", "Fabia", "Scala", "Enyaq"], "Toyota": ["Corolla", "Camry", "RAV4", "Yaris", "C-HR", "Hilux", "Highlander"], "Ford": ["Focus", "Fiesta", "Kuga", "Puma", "Mustang", "Ranger", "Explorer"], "Opel": ["Astra", "Corsa", "Insignia", "Mokka", "Grandland", "Crossland"], "Renault": ["Clio", "Megane", "Captur", "Kadjar", "Talisman", "Arkana"], "Peugeot": ["208", "308", "3008", "5008", "2008", "508", "e-2008"]};
 const VOIVODESHIPS = ["Dolnośląskie", "Kujawsko-Pomorskie", "Lubelskie", "Lubuskie", "Łódzkie", "Małopolskie", "Mazowieckie", "Opolskie", "Podkarpackie", "Podlaskie", "Pomorskie", "Śląskie", "Świętokrzyskie", "Warmińsko-Mazurskie", "Wielkopolskie", "Zachodniopomorskie"];
 
-// ==================== SUPABASE - PODMIEŃ NA SWOJE! ====================
-const SUPABASE_URL = 'https://YOUR_PROJECT.supabase.co'; // <- PODMIEŃ! Settings → API → Project URL
-const SUPABASE_ANON_KEY = 'YOUR_ANON_KEY_EYJ...'; // <- PODMIEŃ! Settings → API → anon public
-// ========================================================================
-
+const SUPABASE_URL = 'https://rljqnhfogaqdjeirqqdj.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJsanFuaGZvZ2FxZGplaXJxcWRqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA3Mzk2MzIsImV4cCI6MjEwNjMxNTYzMn0.wjImTHn516H1isOFe6KPxVZsa-Rh1fPofeq_bkMk2XI';
 const supabase = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
 
-const App = () => {
+const CITY_COORDS = {"Warszawa":[52.2297,21.0122],"Kraków":[50.0647,19.9450],"Wrocław":[51.1079,17.0385],"Gdańsk":[54.3520,18.6466],"Poznań":[52.4064,16.9252],"Katowice":[50.2649,19.0238],"Łódź":[51.7592,19.4550],"Szczecin":[53.4285,14.5528],"Gorzyce":[49.96,18.40],"Wodzisław Śląski":[50.05,18.45],"Rybnik":[50.09,18.54]};
+function haversine(lat1,lon1,lat2,lon2){const R=6371;const dLat=(lat2-lat1)*Math.PI/180;const dLon=(lon2-lon1)*Math.PI/180;const a=Math.sin(dLat/2)*Math.sin(dLat/2)+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)*Math.sin(dLon/2);return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));}
+function getDistance(userLat,userLng,loc){const c=CITY_COORDS[loc];if(!c) return 9999; return haversine(userLat,userLng,c[0],c[1]);}
+
+function App(){
   const [ads, setAds] = useState([]);
   const [status, setStatus] = useState('Łączę z Supabase...');
-  const [currentUser] = useState({ id: 999, name: "User", email: "user@example.com" });
-  const [showAdd, setShowAdd] = useState(false);
-  const [editingId, setEditingId] = useState(null);
-  const [selected, setSelected] = useState(null);
-  const [form, setForm] = useState({ brand: 'BMW', model: '3 Series', year: 2020, price: '', phone: '', location: 'Warszawa', voivodeship: 'Śląskie', title: '', description: '', images: [] });
+  const [users, setUsers] = useState(() => { try{ const s=localStorage.getItem('wroomer_users_final'); return s?JSON.parse(s):[]; }catch(e){return [];} });
+  const [currentUser, setCurrentUser] = useState(() => { try{ const s=localStorage.getItem('wroomer_current_user_final'); return s?JSON.parse(s):null; }catch(e){return null;} });
   const [searchBrand, setSearchBrand] = useState('');
   const [searchModel, setSearchModel] = useState('');
-  const fileRef = useRef(null);
+  const [searchLocation, setSearchLocation] = useState('');
+  const [searchVoivodeship, setSearchVoivodeship] = useState('');
+  const [searchRadius, setSearchRadius] = useState('');
+  const [sortBy, setSortBy] = useState('newest');
+  const [isLocating, setIsLocating] = useState(false);
+  const [userCoords, setUserCoords] = useState(null);
+  const [showFilters, setShowFilters] = useState(false);
+  const [selected, setSelected] = useState(null);
+  const [showAdd, setShowAdd] = useState(false);
+  const [showAuth, setShowAuth] = useState(null);
+  const [editingId, setEditingId] = useState(null);
+  const [authForm, setAuthForm] = useState({ email:'', password:'', name:'' });
+  const [form, setForm] = useState({ brand:'', model:'', year:2020, price:'', mileage:'', fuel:'Benzyna', gearbox:'Manualna', power:'', location:'', voivodeship:'Śląskie', title:'', description:'', images:[], phone:'', whatsapp:'', contactEmail:'' });
+  const [imgIdx, setImgIdx] = useState(0);
+  const [error, setError] = useState('');
+  const fileInputRef = useRef(null);
+
+  useEffect(() => { try{ localStorage.setItem('wroomer_users_final', JSON.stringify(users)); }catch(e){} }, [users]);
+  useEffect(() => { try{ if(currentUser) localStorage.setItem('wroomer_current_user_final', JSON.stringify(currentUser)); else localStorage.removeItem('wroomer_current_user_final'); }catch(e){} }, [currentUser]);
+  useEffect(() => { if(selected) setImgIdx(0); }, [selected]);
+  useEffect(() => { document.body.style.overflow = selected||showAdd||showAuth||showFilters ? 'hidden' : ''; return () => document.body.style.overflow=''; }, [selected,showAdd,showAuth,showFilters]);
 
   // WCZYTAJ Z SUPABASE - STAŁE!
   useEffect(() => {
     const load = async () => {
-      if(!supabase || SUPABASE_URL.includes('YOUR_PROJECT')){
-        setStatus('⚠️ Podmień SUPABASE_URL i ANON_KEY w index.html na górze! Tabela ads już stworzona, teraz tylko wklej klucze.');
-        return;
-      }
       try{
-        setStatus('Pobieram z Supabase (STAŁE)...');
+        setStatus('Pobieram z Supabase (STAŁE na zawsze)...');
         const { data, error } = await supabase.from('ads').select('*').order('created_at_ts', { ascending: false });
         if(error) throw error;
-        if(data && data.length>0){
-          // Zamień images jsonb na array jeśli trzeba
-          const normalized = data.map(d => ({...d, images: typeof d.images === 'string' ? JSON.parse(d.images) : d.images || [d.image]}));
-          setAds(normalized);
-          setStatus(`✓ Z Supabase - STAŁE! ${data.length} ogłoszeń • Nie znika po F5, widoczne na każdym urządzeniu!`);
-        } else {
-          setStatus('✓ Supabase połączony - brak ogłoszeń, dodaj pierwsze! Będzie STAŁE!');
-        }
+        const normalized = (data||[]).map(d => {
+          let imgs = d.images;
+          if(typeof imgs === 'string'){ try{ imgs = JSON.parse(imgs); }catch(e){ imgs = [d.image]; } }
+          if(!Array.isArray(imgs)) imgs = [d.image].filter(Boolean);
+          return {...d, images: imgs, phone: d.phone||'', whatsapp: d.whatsapp||d.phone||''};
+        });
+        setAds(normalized);
+        if(normalized.length>0) setStatus(`✓ Supabase STAŁE! ${normalized.length} ogłoszeń • Nie znika po F5, widoczne na każdym urządzeniu! • Tabela ads w ${SUPABASE_URL}`);
+        else setStatus('✓ Supabase połączony! Brak ogłoszeń - dodaj pierwsze, będzie STAŁE na zawsze!');
       }catch(e){
-        setStatus('❌ Błąd Supabase: ' + e.message + ' - sprawdź URL i ANON_KEY oraz czy tabela ads ma wyłączone RLS (alter table ads disable row level security;)');
+        setStatus('❌ Błąd Supabase: ' + e.message);
       }
     };
     load();
   }, []);
 
-  const handleImage = (e) => {
-    const files = Array.from(e.target.files||[]);
-    files.forEach(f => {
-      const r = new FileReader();
-      r.onload = ev => setForm(p => ({...p, images: [...p.images, ev.target.result]}));
-      r.readAsDataURL(f);
+  const filteredAndSorted = useMemo(() => {
+    let result = ads.filter(ad => {
+      if(searchBrand && ad.brand!==searchBrand) return false;
+      if(searchModel && ad.model!==searchModel) return false;
+      if(searchRadius && userCoords){
+        const r=parseInt(searchRadius);
+        if(getDistance(userCoords.lat,userCoords.lng,ad.location)>r) return false;
+      } else {
+        if(searchVoivodeship && ad.voivodeship!==searchVoivodeship) return false;
+        if(searchLocation && !ad.location.toLowerCase().includes(searchLocation.toLowerCase())) return false;
+      }
+      return true;
     });
-    if(fileRef.current) fileRef.current.value='';
+    result.sort((a,b)=>{
+      switch(sortBy){
+        case 'distance': if(!userCoords) return 0; return getDistance(userCoords.lat,userCoords.lng,a.location)-getDistance(userCoords.lat,userCoords.lng,b.location);
+        case 'newest': return (b.created_at_ts||b.id)-(a.created_at_ts||a.id);
+        case 'price_asc': return a.price-b.price;
+        case 'price_desc': return b.price-a.price;
+        case 'year_desc': return b.year-a.year;
+        default: return 0;
+      }
+    });
+    return result;
+  }, [ads,searchBrand,searchModel,searchLocation,searchVoivodeship,searchRadius,sortBy,userCoords]);
+
+  const handleUseMyLocation = async () => {
+    if(!navigator.geolocation){ alert('Brak geolokalizacji'); return; }
+    setIsLocating(true);
+    navigator.geolocation.getCurrentPosition(async pos=>{
+      const {latitude,longitude}=pos.coords;
+      setUserCoords({lat:latitude,lng:longitude});
+      setSearchLocation('Moja lokalizacja'); setSearchRadius('50'); setIsLocating(false);
+    }, ()=>{ setIsLocating(false); alert('Odmowa lokalizacji'); }, {enableHighAccuracy:true, timeout:10000});
   };
 
-  // ZAPISZ DO SUPABASE - STAŁE NA ZAWSZE!
-  const handleSave = async (e) => {
-    e.preventDefault();
-    if(!form.brand || !form.model || !form.price || !form.phone) return alert('Marka, model, cena, telefon!');
-    if(SUPABASE_URL.includes('YOUR_PROJECT')){
-      return alert('Najpierw podmień SUPABASE_URL i ANON_KEY w index.html na górze pliku! Settings → API w Supabase');
-    }
+  const handleRegister = (e)=>{ e.preventDefault(); setError(''); if(!authForm.email||!authForm.password||!authForm.name){ setError('Wypełnij wszystkie'); return; } if(users.find(u=>u.email.toLowerCase()===authForm.email.toLowerCase())){ setError('Istnieje'); return; } if(authForm.password.length<6){ setError('Hasło min 6'); return; } const newUser={id:Date.now(), email:authForm.email.toLowerCase(), name:authForm.name, password:authForm.password}; setUsers([...users,newUser]); setCurrentUser({id:newUser.id,email:newUser.email,name:newUser.name}); setShowAuth(null); setAuthForm({email:'',password:'',name:''}); };
+  const handleLogin = (e)=>{ e.preventDefault(); setError(''); const user=users.find(u=>u.email.toLowerCase()===authForm.email.toLowerCase()&&u.password===authForm.password); if(!user){ setError('Błędny login'); return; } setCurrentUser({id:user.id,email:user.email,name:user.name}); setShowAuth(null); };
 
-    const f = form;
-    const baseAd = {
-      title: f.title || `${f.brand} ${f.model} ${f.year}`,
-      brand: f.brand,
-      model: f.model,
-      year: parseInt(f.year)||2020,
-      price: parseInt(f.price)||0,
-      mileage: 0,
-      fuel: 'Benzyna',
-      gearbox: 'Manualna',
-      power: 0,
-      location: f.location||'Polska',
-      voivodeship: f.voivodeship||'Śląskie',
-      description: f.description||'',
-      image: f.images[0]||`https://picsum.photos/seed/${Date.now()}/600/400`,
-      images: f.images.length>0 ? f.images : [`https://picsum.photos/seed/${Date.now()}/600/400`],
-      owner: currentUser.name,
-      owner_email: currentUser.email,
-      owner_id: currentUser.id,
-      phone: f.phone,
-      whatsapp: f.phone,
-      contact_email: currentUser.email,
-      created_at_ts: Date.now()
-    };
+  const handleImageUpload = (e)=>{
+    const files=Array.from(e.target.files||[]);
+    if(form.images.length+files.length>5){ alert('Max 5 zdjęć'); return; }
+    files.forEach(file=>{
+      if(file.size>5*1024*1024){ alert(file.name+' za duży'); return; }
+      const reader=new FileReader();
+      reader.onload=ev=>{ setForm(prev=>({...prev, images:[...prev.images, ev.target.result]})); };
+      reader.readAsDataURL(file);
+    });
+    if(fileInputRef.current) fileInputRef.current.value='';
+  };
 
+  const handleAddClick = ()=>{ if(!currentUser){ setShowAuth('login'); return; } setEditingId(null); setForm({ brand:'', model:'', year:2020, price:'', mileage:'', fuel:'Benzyna', gearbox:'Manualna', power:'', location:'', voivodeship:'Śląskie', title:'', description:'', images:[], phone:'', whatsapp:'', contactEmail:currentUser.email }); setShowAdd(true); };
+  const handleEditClick = (ad)=>{ setEditingId(ad.id); setForm({ brand:ad.brand, model:ad.model, year:ad.year, price:ad.price, mileage:ad.mileage, fuel:ad.fuel, gearbox:ad.gearbox, power:ad.power, location:ad.location, voivodeship:ad.voivodeship, title:ad.title, description:ad.description, images:ad.images||[ad.image], phone:ad.phone||'', whatsapp:ad.whatsapp||'', contactEmail:ad.contact_email||ad.owner_email }); setSelected(null); setShowAdd(true); };
+
+  const handleDelete = async (adId)=>{
+    if(!confirm('Usunąć na stałe z Supabase?')) return;
     try{
-      setStatus('Zapisuję do Supabase (STAŁE)...');
+      const { error } = await supabase.from('ads').delete().eq('id', adId);
+      if(error) throw error;
+      setAds(ads.filter(a=>a.id!==adId));
+      setSelected(null);
+      setStatus(`✓ Usunięto z Supabase ID:${adId} - STAŁE!`);
+    }catch(e){ alert('Błąd usuwania: '+e.message); }
+  };
+
+  const handleCancelAdd = ()=>{ setShowAdd(false); setEditingId(null); };
+
+  const handleDirectSave = async (e)=>{
+    e.preventDefault();
+    if(!form.brand){ alert('Marka!'); return; }
+    if(!form.model){ alert('Model!'); return; }
+    if(!form.price){ alert('Cena!'); return; }
+    if(!form.phone){ alert('Telefon!'); return; }
+    const f=form;
+    const baseAd = {
+      title: f.title||`${f.brand} ${f.model} ${f.year}`,
+      brand: f.brand, model: f.model, year: parseInt(f.year)||2020, price: parseInt(f.price)||0, mileage: parseInt(f.mileage)||0, fuel: f.fuel, gearbox: f.gearbox, power: parseInt(f.power)||0,
+      location: f.location||'Polska', voivodeship: f.voivodeship||'Śląskie', description: f.description||'Brak opisu',
+      image: f.images[0]||`https://picsum.photos/seed/${Date.now()}/600/400`, images: f.images.length>0?f.images:[`https://picsum.photos/seed/${Date.now()}/600/400`],
+      owner: currentUser.name, owner_email: currentUser.email, owner_id: currentUser.id, phone: f.phone, whatsapp: f.whatsapp||f.phone, contact_email: f.contactEmail||currentUser.email, created_at_ts: Date.now()
+    };
+    try{
+      setStatus('Zapisuję do Supabase (STAŁE na zawsze)...');
       if(editingId){
-        const { error } = await supabase.from('ads').update({...baseAd, id: editingId}).eq('id', editingId);
+        const { error } = await supabase.from('ads').update(baseAd).eq('id', editingId);
         if(error) throw error;
-        setAds(ads.map(a => a.id===editingId ? {...a, ...baseAd, id: editingId} : a));
-        setStatus(`✓ ZAKTUALIZOWANO W SUPABASE! ID:${editingId} - STAŁE, nie znika!`);
+        setAds(ads.map(a=>a.id===editingId?{...a,...baseAd,id:editingId}:a));
+        setStatus(`✓ ZAKTUALIZOWANO W SUPABASE! ID:${editingId} - STAŁE!`);
       } else {
         const newId = Date.now();
         const { error } = await supabase.from('ads').insert([{...baseAd, id: newId}]);
         if(error) throw error;
         setAds([{...baseAd, id: newId}, ...ads]);
-        setStatus(`✓ ZAPISANO W SUPABASE NA STAŁE! ID:${newId} - widoczne na każdym urządzeniu, nie znika po F5!`);
+        setStatus(`✓ ZAPISANO W SUPABASE NA STAŁE! ID:${newId} - widoczne wszędzie!`);
       }
-      setShowAdd(false);
-      setEditingId(null);
-      setForm({ brand: 'BMW', model: '3 Series', year: 2020, price: '', phone: '', location: 'Warszawa', voivodeship: 'Śląskie', title: '', description: '', images: [] });
-      alert('✓ ZAPISANO NA STAŁE W SUPABASE! Teraz odśwież F5 - ogłoszenie ZOSTANIE! Otwórz na telefonie - też będzie!');
+      setShowAdd(false); setEditingId(null);
+      setForm({ brand:'', model:'', year:2020, price:'', mileage:'', fuel:'Benzyna', gearbox:'Manualna', power:'', location:'', voivodeship:'Śląskie', title:'', description:'', images:[], phone:'', whatsapp:'', contactEmail:'' });
+      alert('✓ ZAPISANO NA STAŁE W SUPABASE! Nie zniknie po F5! Widoczne na telefonie, u każdego!');
     }catch(err){
-      setStatus('❌ Błąd zapisu Supabase: ' + err.message);
-      alert('Błąd Supabase: ' + err.message + '\nSprawdź czy tabela ads ma: alter table ads disable row level security;');
+      setStatus('❌ Błąd zapisu Supabase: '+err.message);
+      alert('Błąd Supabase: '+err.message);
     }
   };
 
-  const handleDelete = async (id) => {
-    if(!confirm('Usunąć?')) return;
-    try{
-      const { error } = await supabase.from('ads').delete().eq('id', id);
-      if(error) throw error;
-      setAds(ads.filter(a => a.id!==id));
-      setSelected(null);
-      setStatus(`✓ Usunięto z Supabase ID:${id} - STAŁE!`);
-    }catch(e){ setStatus('Błąd usuwania: '+e.message); }
-  };
-
-  const filtered = useMemo(() => {
-    return ads.filter(a => {
-      if(searchBrand && a.brand!==searchBrand) return false;
-      if(searchModel && a.model!==searchModel) return false;
-      return true;
-    });
-  }, [ads, searchBrand, searchModel]);
+  const clearFilters = ()=>{ setSearchBrand(''); setSearchModel(''); setSearchLocation(''); setSearchVoivodeship(''); setSearchRadius(''); setSortBy('newest'); setUserCoords(null); setShowFilters(false); };
 
   return (
-    <div className="min-h-screen">
-      <header className="bg-black text-white p-3 flex justify-between items-center">
-        <div className="font-black">WROOMER.PL • SUPABASE STAŁY</div>
-        <button onClick={()=>{setEditingId(null); setForm({ brand: 'BMW', model: '3 Series', year: 2020, price: '', phone: '', location: 'Warszawa', voivodeship: 'Śląskie', title: '', description: '', images: [] }); setShowAdd(true);}} className="bg-[#ffea00] text-black px-4 py-2 rounded-[10px] font-bold">+ Dodaj</button>
+    <div className="min-h-screen flex flex-col w-full max-w-[100vw] overflow-hidden">
+      <header className="sticky top-0 z-30 bg-black text-white border-b border-neutral-800 w-full">
+        <div className="max-w-[1440px] mx-auto px-3 md:px-4 h-[56px] flex items-center justify-between">
+          <div className="flex items-center gap-2 cursor-pointer shrink-0" onClick={()=>setSelected(null)}>
+            <div className="w-8 h-8 bg-[#ffea00] rounded-[8px] flex items-center justify-center font-black text-black">W</div>
+            <div className="font-black text-[16px] md:text-[18px]">WROOMER<span className="text-[#ffea00]">.PL</span></div>
+          </div>
+          <div className="flex items-center gap-1.5 md:gap-2 shrink-0">
+            <button onClick={()=>setShowFilters(true)} className="lg:hidden bg-[#222] border border-neutral-700 text-white px-3 py-2 rounded-[10px] font-bold text-[12px]" style={{minHeight:'44px'}}>🔍 Filtry</button>
+            {currentUser ? (
+              <>
+                <span className="hidden md:block text-[12px] max-w-[100px] truncate">{currentUser.name}</span>
+                <button onClick={()=>setCurrentUser(null)} className="text-[12px] text-neutral-400 px-2 hidden md:block" style={{minHeight:'44px'}}>Wyloguj</button>
+                <button onClick={handleAddClick} className="bg-[#ffea00] text-black px-4 py-2 rounded-[10px] font-bold text-[13px]" style={{minHeight:'44px'}}>+ Dodaj</button>
+              </>
+            ) : (
+              <>
+                <button onClick={()=>setShowAuth('login')} className="text-[13px] px-3 bg-[#222] border border-neutral-700 rounded-[10px] font-bold" style={{minHeight:'44px'}}>Zaloguj</button>
+                <button onClick={()=>setShowAuth('register')} className="bg-white text-black px-3 md:px-4 py-2 rounded-[10px] font-bold text-[13px] border" style={{minHeight:'44px'}}>Zarejestruj</button>
+                <button onClick={handleAddClick} className="bg-[#ffea00] text-black px-3 md:px-4 py-2 rounded-[10px] font-bold text-[13px]" style={{minHeight:'44px'}}>+ Dodaj</button>
+              </>
+            )}
+          </div>
+        </div>
       </header>
 
-      <div className="bg-[#111] text-white p-3">
-        <div className="text-[12px] font-bold">{status}</div>
-        <div className="text-[10px] text-neutral-400 mt-1 break-all">
-          ADRES ZAPISU: Supabase Postgres → tabela ads (id, brand, model, price, phone...) • STAŁE na zawsze, dla wszystkich, na każdym urządzeniu!<br/>
-          Jeśli widzisz ⚠️ Podmień URL i KEY - otwórz index.html i na górze podmień SUPABASE_URL i SUPABASE_ANON_KEY (Settings → API w Supabase)
+      <div className="bg-black text-white w-full">
+        <div className="max-w-[1440px] mx-auto px-3 md:px-4 py-3">
+          <h1 className="text-[18px] md:text-[24px] font-black leading-tight">Darmowe ogłoszenia <span className="text-[#ffea00]">motoryzacyjne</span> • Supabase STAŁE</h1>
+          <p className="text-[11px] text-neutral-300 mt-1">{status}</p>
+          <p className="text-[10px] text-[#ffea00] mt-1">Supabase: {SUPABASE_URL} • Tabela ads • STAŁE na zawsze, dla wszystkich urządzeń!</p>
         </div>
       </div>
 
-      <div className="p-3 flex gap-3">
-        <select value={searchBrand} onChange={e=>{setSearchBrand(e.target.value); setSearchModel('');}} className="bg-white border rounded-[10px] px-3 py-2"><option value="">Marka</option>{Object.keys(BRAND_MODELS).map(b=><option key={b} value={b}>{b}</option>)}</select>
-        <select value={searchModel} onChange={e=>setSearchModel(e.target.value)} className="bg-white border rounded-[10px] px-3 py-2"><option value="">Model</option>{(BRAND_MODELS[searchBrand]||[]).map(m=><option key={m} value={m}>{m}</option>)}</select>
-        <div className="ml-auto bg-black text-white text-[12px] px-3 py-2 rounded-full">{filtered.length} ogłoszeń z Supabase</div>
+      <div className="sticky top-[56px] z-20 bg-white/95 backdrop-blur-md border-b border-neutral-200 w-full">
+        <div className="max-w-[1440px] mx-auto px-3 md:px-4 py-2.5 flex items-center justify-between gap-2">
+          <div className="flex items-center gap-2">
+            <div className="bg-black text-white text-[12px] font-bold px-3 py-1.5 rounded-full">{filteredAndSorted.length} ogłoszeń z Supabase</div>
+            {searchBrand && <div className="bg-[#ffea00] text-black text-[11px] font-bold px-3 py-1 rounded-full hidden md:flex">{searchBrand}</div>}
+          </div>
+          <div className="flex items-center gap-2">
+            <select value={sortBy} onChange={e=>setSortBy(e.target.value)} className="bg-white border border-neutral-300 rounded-[10px] px-3 py-2 text-[12px] md:text-[13px] font-bold" style={{minHeight:'40px'}}>
+              <option value="newest">Najnowsze</option>
+              {userCoords && <option value="distance">📍 Najbliżej</option>}
+              <option value="price_asc">Cena ↑</option>
+              <option value="price_desc">Cena ↓</option>
+              <option value="year_desc">Rocznik ↓</option>
+            </select>
+          </div>
+        </div>
       </div>
 
-      <div className="p-3 grid grid-cols-1 md:grid-cols-3 gap-3">
-        {filtered.map(ad => (
-          <div key={ad.id} onClick={()=>setSelected(ad)} className="bg-white border rounded-[12px] overflow-hidden cursor-pointer">
-            <img src={ad.image} className="w-full h-[150px] object-cover" />
-            <div className="p-3">
-              <div className="font-bold text-[13px]">{ad.title}</div>
-              <div className="text-[12px]">{ad.price} zł • {ad.location}</div>
-              <div className="text-[10px] text-neutral-500">Tel: {ad.phone}</div>
+      <div className="max-w-[1440px] mx-auto w-full px-3 md:px-4 py-3 md:py-4 flex flex-col lg:flex-row gap-4 md:gap-6">
+        <div className="hidden lg:block w-[340px] flex-shrink-0">
+          <div className="bg-[#111] border border-neutral-800 rounded-[16px] p-5 sticky top-[112px]">
+            <h2 className="font-bold text-[15px] text-white mb-4">🔍 Szukaj • Supabase STAŁE</h2>
+            <div className="space-y-4">
+              <details className="group" open>
+                <summary className="flex items-center justify-between cursor-pointer text-white font-bold text-[13px] py-2 list-none">🚗 Marka i model <span className="group-open:rotate-180 transition">▼</span></summary>
+                <div className="mt-3 grid grid-cols-2 gap-3">
+                  <select value={searchBrand} onChange={e=>{setSearchBrand(e.target.value); setSearchModel('');}} className="w-full bg-[#1a1a1a] border border-neutral-800 rounded-[12px] px-3 py-3 text-[14px] text-white" style={{minHeight:'44px'}}><option value="">Marka</option>{Object.keys(BRAND_MODELS).sort().map(b => <option key={b} value={b}>{b}</option>)}</select>
+                  <select value={searchModel} onChange={e=>setSearchModel(e.target.value)} disabled={!searchBrand} className="w-full bg-[#1a1a1a] border border-neutral-800 rounded-[12px] px-3 py-3 text-[14px] text-white disabled:opacity-40" style={{minHeight:'44px'}}><option value="">{searchBrand ? 'Model' : 'Marka→'}</option>{(BRAND_MODELS[searchBrand]||[]).map(m => <option key={m} value={m}>{m}</option>)}</select>
+                </div>
+              </details>
+              <details className="group" open>
+                <summary className="flex items-center justify-between cursor-pointer text-white font-bold text-[13px] py-2 list-none border-t border-neutral-800 pt-4">📍 Lokalizacja <span className="group-open:rotate-180 transition">▼</span></summary>
+                <div className="mt-3 space-y-3">
+                  <button onClick={handleUseMyLocation} disabled={isLocating} className="w-full bg-[#ffea00] disabled:opacity-50 text-black font-bold text-[13px] py-3 rounded-[12px]" style={{minHeight:'44px'}}>{isLocating ? '⌛...' : '📍 Moja lokalizacja'}</button>
+                  <select value={searchVoivodeship} onChange={e=>setSearchVoivodeship(e.target.value)} className="w-full bg-[#1a1a1a] border border-neutral-800 rounded-[12px] px-3 py-3 text-[14px] text-white" style={{minHeight:'44px'}}><option value="">Cała Polska</option>{VOIVODESHIPS.map(v => <option key={v} value={v}>{v}</option>)}</select>
+                  <div className="grid grid-cols-2 gap-3">
+                    <input value={searchLocation} onChange={e=>setSearchLocation(e.target.value)} placeholder="Miasto" className="w-full bg-[#1a1a1a] border border-neutral-800 rounded-[12px] px-3 py-3 text-[14px] text-white" style={{minHeight:'44px'}} />
+                    <select value={searchRadius} onChange={e=>setSearchRadius(e.target.value)} className="w-full bg-[#1a1a1a] border border-neutral-800 rounded-[12px] px-3 py-3 text-[14px] text-white" style={{minHeight:'44px'}}><option value="">Dowolny</option><option value="20">20km</option><option value="50">50km</option><option value="100">100km</option></select>
+                  </div>
+                </div>
+              </details>
+              <button onClick={clearFilters} className="w-full bg-white text-black font-bold py-3 rounded-[12px]" style={{minHeight:'44px'}}>Reset filtrów</button>
+              <div className="border-t border-neutral-800 pt-3 text-[10px] text-neutral-500">
+                <div className="font-bold text-white mb-1">💾 Supabase STAŁY ZAPIS</div>
+                <div className="text-[#ffea00] break-all">{SUPABASE_URL}</div>
+                <div className="mt-1">Tabela: ads • RLS wyłączone</div>
+                <div className="mt-2 text-[#ffea00]">{status}</div>
+              </div>
             </div>
           </div>
-        ))}
-        {filtered.length===0 && <div className="col-span-3 bg-white border rounded-[12px] p-8 text-center">Brak ogłoszeń w Supabase - dodaj pierwsze! Będzie STAŁE!</div>}
+        </div>
+
+        <div className="flex-1 min-w-0 w-full">
+          <div className="mobile-grid grid gap-2.5 md:gap-3 w-full">
+            {filteredAndSorted.map(ad => {
+              const isOwn = currentUser && ad.owner_id === currentUser.id;
+              return (
+                <div key={ad.id} onClick={()=>setSelected(ad)} className="mobile-list-card group bg-white border border-neutral-200 rounded-[14px] overflow-hidden hover:border-black active:scale-[0.98] transition-all cursor-pointer w-full" style={{touchAction:'manipulation'}}>
+                  <div className="img-wrap md:aspect-[4/3] md:w-full bg-neutral-100 relative overflow-hidden shrink-0">
+                    <img src={ad.image} alt={ad.title} className="w-full h-full object-cover group-hover:scale-[1.05] transition-transform duration-300" loading="lazy" />
+                    <div className="absolute top-2 left-2 bg-black/80 text-white text-[10px] font-bold px-2 py-1 rounded-[6px]">{ad.year}</div>
+                    {isOwn && <div className="absolute bottom-2 left-2 bg-[#ffea00] text-black text-[9px] font-bold px-2 py-1 rounded-full">MOJE</div>}
+                  </div>
+                  <div className="content-wrap p-2.5 md:p-3 flex flex-col justify-between min-w-0 flex-1">
+                    <div className="min-w-0">
+                      <div className="font-bold text-[13px] leading-[1.25] truncate">{ad.title}</div>
+                      <div className="text-[11px] text-neutral-500 mt-1 truncate">{ad.location} {isOwn ? '• ✏️ Twoje' : ''}</div>
+                    </div>
+                    <div className="flex items-center justify-between mt-2">
+                      <div className="font-black text-[15px]">{ad.price.toLocaleString('pl-PL')} zł</div>
+                      <div className="text-[10px] text-neutral-400">{ad.mileage ? ad.mileage.toLocaleString('pl-PL')+' km' : ''}</div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
       </div>
 
-      {showAdd && (
-        <div className="fixed inset-0 z-50 bg-black/70 p-4 overflow-auto">
-          <div className="bg-white max-w-[500px] mx-auto rounded-[16px]">
-            <div className="p-4 border-b flex justify-between">
-              <h2 className="font-black">{editingId ? 'Edytuj' : 'Dodaj'} → Supabase STAŁY</h2>
-              <button onClick={()=>{setShowAdd(false); setEditingId(null);}} className="w-8 h-8 bg-[#f5f5f7] rounded-full">✕</button>
+      {selected && (
+        <div className="fixed inset-0 z-50 bg-black/80 overflow-auto">
+          <div className="min-h-screen w-full flex items-start md:items-center justify-center p-0 md:p-6">
+            <div className="bg-white w-full md:max-w-[900px] md:rounded-[24px] overflow-hidden flex flex-col min-h-screen md:min-h-0 max-h-[100vh] md:max-h-[90vh] overflow-auto">
+              <div className="aspect-[4/3] md:aspect-[16/10] bg-black relative w-full shrink-0">
+                <img src={selected.images[imgIdx] || selected.image} alt={selected.title} className="w-full h-full object-contain" />
+                <button onClick={()=>setSelected(null)} className="absolute top-3 left-3 bg-white text-black text-[13px] font-bold px-4 py-2.5 rounded-full" style={{minHeight:'44px'}}>← Wróć</button>
+                <button onClick={()=>setSelected(null)} className="absolute top-3 right-3 w-11 h-11 bg-white text-black rounded-full font-bold" style={{minHeight:'44px'}}>✕</button>
+              </div>
+              <div className="p-4 md:p-5 overflow-auto">
+                <div className="flex items-start justify-between gap-3">
+                  <h1 className="text-[18px] md:text-[20px] font-black leading-tight flex-1">{selected.title}</h1>
+                  {currentUser && selected.owner_id === currentUser.id && (
+                    <div className="flex gap-1.5 shrink-0">
+                      <button onClick={()=>handleEditClick(selected)} className="bg-[#ffea00] text-black text-[12px] font-bold px-3 py-2 rounded-full" style={{minHeight:'36px'}}>✏️ Edytuj</button>
+                      <button onClick={()=>handleDelete(selected.id)} className="bg-red-50 text-red-600 border border-red-200 text-[12px] font-bold px-3 py-2 rounded-full" style={{minHeight:'36px'}}>🗑️ Usuń</button>
+                    </div>
+                  )}
+                </div>
+                <div className="text-[22px] md:text-[24px] font-black mt-2">{selected.price.toLocaleString('pl-PL')} zł</div>
+                <div className="grid grid-cols-3 gap-2 my-4">
+                  {[{k:'Rocznik',v:selected.year},{k:'Moc',v:(selected.power||0)+' KM'},{k:'Paliwo',v:selected.fuel},{k:'Skrzynia',v:selected.gearbox},{k:'Przebieg',v:(selected.mileage||0).toLocaleString('pl-PL')+' km'},{k:'Lokalizacja',v:selected.location}].map(i=>(
+                    <div key={i.k} className="bg-[#f5f5f7] rounded-[12px] p-3"><div className="text-[10px] text-neutral-500 font-bold uppercase">{i.k}</div><div className="text-[13px] font-bold mt-1 truncate">{i.v}</div></div>
+                  ))}
+                </div>
+                {selected.description && <div className="bg-[#f5f5f7] rounded-[12px] p-4 mb-4"><div className="text-[11px] font-bold uppercase text-neutral-500 mb-2">Opis</div><div className="text-[13px] leading-[1.5]">{selected.description}</div></div>}
+                <div className="bg-black text-white rounded-[16px] p-4">
+                  <div className="text-[13px] font-bold mb-3">📞 Kontakt • {selected.owner}</div>
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                    {selected.phone && <a href={'tel:'+selected.phone} className="bg-[#ffea00] text-black font-bold py-3 rounded-[12px] text-[13px] text-center" style={{minHeight:'60px'}}>📞 Zadzwoń<br/><span className="text-[10px]">{selected.phone}</span></a>}
+                    {selected.whatsapp && <a href={'https://wa.me/'+selected.whatsapp.replace(/\s/g,'').replace(/^0/,'48')} target="_blank" className="bg-[#25D366] text-white font-bold py-3 rounded-[12px] text-[13px] text-center" style={{minHeight:'60px'}}>💬 WhatsApp</a>}
+                    {selected.contact_email && <button onClick={()=>alert('E-mail: '+selected.contact_email)} className="bg-white text-black font-bold py-3 rounded-[12px] text-[13px] text-center" style={{minHeight:'60px'}}>📧 E-mail</button>}
+                  </div>
+                </div>
+                <button onClick={()=>setSelected(null)} className="w-full bg-black text-white font-bold py-4 rounded-[14px] mt-4" style={{minHeight:'44px'}}>✕ Zamknij</button>
+              </div>
             </div>
-            <form onSubmit={handleSave} className="p-4 space-y-3">
-              <div className="grid grid-cols-2 gap-3">
-                <select value={form.brand} onChange={e=>setForm({...form, brand:e.target.value, model:''})} className="w-full bg-[#f5f5f7] border rounded-[10px] px-3 py-3" required><option value="">Marka *</option>{Object.keys(BRAND_MODELS).map(b=><option key={b} value={b}>{b}</option>)}</select>
-                <select value={form.model} onChange={e=>setForm({...form, model:e.target.value})} className="w-full bg-[#f5f5f7] border rounded-[10px] px-3 py-3" required><option value="">{form.brand?'Model *':'Najpierw marka'}</option>{(BRAND_MODELS[form.brand]||[]).map(m=><option key={m} value={m}>{m}</option>)}</select>
-              </div>
-              <div className="grid grid-cols-2 gap-3">
-                <input type="number" value={form.year} onChange={e=>setForm({...form, year:e.target.value})} placeholder="Rocznik" className="w-full bg-[#f5f5f7] border rounded-[10px] px-3 py-3" />
-                <input type="number" value={form.price} onChange={e=>setForm({...form, price:e.target.value})} placeholder="Cena zł *" className="w-full bg-[#f5f5f7] border rounded-[10px] px-3 py-3" required />
-              </div>
-              <input value={form.phone} onChange={e=>setForm({...form, phone:e.target.value})} placeholder="Telefon * 600 123 456" className="w-full bg-[#f5f5f7] border-2 border-black rounded-[10px] px-3 py-3" required />
-              <input value={form.location} onChange={e=>setForm({...form, location:e.target.value})} placeholder="Miejscowość" className="w-full bg-[#f5f5f7] border rounded-[10px] px-3 py-3" />
-              <select value={form.voivodeship} onChange={e=>setForm({...form, voivodeship:e.target.value})} className="w-full bg-[#f5f5f7] border rounded-[10px] px-3 py-3">{VOIVODESHIPS.map(v=><option key={v} value={v}>{v}</option>)}</select>
-              <div className="flex gap-2 flex-wrap">
-                {form.images.map((img,i)=><div key={i} className="relative w-[70px] h-[70px] rounded-[8px] overflow-hidden border"><img src={img} className="w-full h-full object-cover" /><button type="button" onClick={()=>setForm({...form, images: form.images.filter((_,idx)=>idx!==i)})} className="absolute top-0 right-0 w-5 h-5 bg-black/70 text-white rounded-full text-[10px]">✕</button></div>)}
-                <label className="w-[70px] h-[70px] border-2 border-dashed rounded-[8px] flex items-center justify-center cursor-pointer">+<input ref={fileRef} type="file" accept="image/*" multiple onChange={handleImage} style={{display:'none'}} /></label>
-              </div>
-              <div className="bg-[#ffea00]/20 border border-[#ffea00] rounded-[10px] p-3 text-[11px]">
-                <div className="font-bold">ZAPISUJE DO: Supabase → tabela ads</div>
-                <div>Adres: {SUPABASE_URL.includes('YOUR_PROJECT') ? 'PODMIEŃ URL i KEY na górze pliku!' : SUPABASE_URL}</div>
-                <div>Po kliknięciu Zapisz → INSERT INTO ads → STAŁE, widoczne na każdym urządzeniu!</div>
-              </div>
-              <div className="flex gap-3">
-                <button type="button" onClick={()=>{setShowAdd(false); setEditingId(null);}} className="flex-1 bg-[#f5f5f7] border font-bold py-4 rounded-[12px]">Anuluj</button>
-                <button type="submit" className="flex-[2] bg-black text-white font-bold py-4 rounded-[12px] text-[18px]">💾 Zapisz do Supabase</button>
+          </div>
+        </div>
+      )}
+
+      {showAuth && (
+        <div className="fixed inset-0 z-[90] bg-black/70 backdrop-blur-sm flex items-end md:items-center justify-center p-0 md:p-4">
+          <div className="bg-white w-full md:max-w-[400px] rounded-t-[24px] md:rounded-[20px] p-6">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="font-black text-[18px]">{showAuth==='login' ? 'Zaloguj się' : 'Rejestracja'}</h2>
+              <button onClick={()=>setShowAuth(null)} className="w-9 h-9 bg-[#f5f5f7] rounded-full flex items-center justify-center" style={{minHeight:'44px'}}>✕</button>
+            </div>
+            {error && <div className="bg-red-50 border border-red-200 text-red-700 text-[13px] p-3 rounded-[10px] mb-3">{error}</div>}
+            <form onSubmit={showAuth==='login' ? handleLogin : handleRegister} className="space-y-3">
+              {showAuth==='register' && <input value={authForm.name} onChange={e=>setAuthForm({...authForm, name: e.target.value})} placeholder="Imię i nazwisko" className="w-full bg-[#f5f5f7] border rounded-[12px] px-4 py-3 text-[14px]" style={{minHeight:'44px'}} />}
+              <input type="email" value={authForm.email} onChange={e=>setAuthForm({...authForm, email: e.target.value})} placeholder="E-mail" className="w-full bg-[#f5f5f7] border rounded-[12px] px-4 py-3 text-[14px]" style={{minHeight:'44px'}} />
+              <input type="password" value={authForm.password} onChange={e=>setAuthForm({...authForm, password: e.target.value})} placeholder="Hasło (min. 6)" className="w-full bg-[#f5f5f7] border rounded-[12px] px-4 py-3 text-[14px]" style={{minHeight:'44px'}} />
+              <button type="submit" className="w-full bg-black text-white font-bold py-3.5 rounded-[12px]" style={{minHeight:'44px'}}>{showAuth==='login' ? 'Zaloguj się' : 'Zarejestruj się'}</button>
+              <div className="text-center pt-2">
+                <button type="button" onClick={()=>setShowAuth(showAuth==='login' ? 'register' : 'login')} className="text-[13px] text-neutral-500">{showAuth==='login' ? 'Nie masz konta? Zarejestruj się' : 'Masz konto? Zaloguj się'}</button>
               </div>
             </form>
           </div>
         </div>
       )}
 
-      {selected && (
-        <div className="fixed inset-0 z-40 bg-black/80 p-4 flex items-center justify-center">
-          <div className="bg-white rounded-[16px] max-w-[400px] w-full">
-            <img src={selected.image} className="w-full h-[180px] object-cover rounded-t-[16px]" />
-            <div className="p-4">
-              <div className="font-black">{selected.title}</div>
-              <div className="font-bold">{selected.price} zł • {selected.location}</div>
-              <div className="text-[12px]">Tel: {selected.phone}</div>
-              <div className="flex gap-2 mt-4">
-                <button onClick={()=>{setForm({ brand:selected.brand, model:selected.model, year:selected.year, price:selected.price, phone:selected.phone, location:selected.location, voivodeship:selected.voivodeship, title:selected.title, description:selected.description, images:selected.images||[selected.image] }); setEditingId(selected.id); setSelected(null); setShowAdd(true);}} className="flex-1 bg-[#ffea00] text-black font-bold py-3 rounded-[10px]">Edytuj</button>
-                <button onClick={()=>handleDelete(selected.id)} className="flex-1 bg-red-50 text-red-600 border font-bold py-3 rounded-[10px]">Usuń z Supabase</button>
-                <button onClick={()=>setSelected(null)} className="flex-1 bg-black text-white font-bold py-3 rounded-[10px]">Zamknij</button>
+      {showAdd && (
+        <div className="fixed inset-0 z-[85] bg-black/70 backdrop-blur-sm overflow-auto">
+          <div className="min-h-screen flex items-start md:items-center justify-center p-0 md:p-4">
+            <div className="bg-white w-full md:max-w-[650px] md:rounded-[20px] rounded-t-[24px] mt-auto md:mt-0 max-h-[95vh] overflow-auto">
+              <div className="sticky top-0 bg-white border-b p-4 flex justify-between items-center">
+                <h2 className="font-black text-[18px]">{editingId ? '✏️ Edytuj' : '+ Dodaj'} • Supabase STAŁE</h2>
+                <button onClick={handleCancelAdd} className="w-9 h-9 bg-[#f5f5f7] rounded-full flex items-center justify-center" style={{minHeight:'44px'}}>✕</button>
               </div>
+              <form onSubmit={handleDirectSave} className="p-4 space-y-5">
+                <div>
+                  <h3 className="font-bold text-[13px] mb-2">🚗 Pojazd *</h3>
+                  <div className="grid grid-cols-2 gap-3">
+                    <select value={form.brand} onChange={e=>setForm({...form, brand: e.target.value, model: ''})} className="w-full bg-[#f5f5f7] border rounded-[12px] px-3 py-3 text-[14px]" style={{minHeight:'44px'}}><option value="">Marka *</option>{Object.keys(BRAND_MODELS).sort().map(b => <option key={b} value={b}>{b}</option>)}</select>
+                    <select value={form.model} onChange={e=>setForm({...form, model: e.target.value})} disabled={!form.brand} className="w-full bg-[#f5f5f7] border rounded-[12px] px-3 py-3 text-[14px] disabled:opacity-40" style={{minHeight:'44px'}}><option value="">{form.brand ? 'Model *' : 'Najpierw marka'}</option>{(BRAND_MODELS[form.brand]||[]).map(m => <option key={m} value={m}>{m}</option>)}</select>
+                  </div>
+                  <div className="grid grid-cols-2 gap-3 mt-3">
+                    <input type="number" value={form.year} onChange={e=>setForm({...form, year: e.target.value})} placeholder="Rocznik *" className="w-full bg-[#f5f5f7] border rounded-[12px] px-3 py-3 text-[14px]" style={{minHeight:'44px'}} />
+                    <input type="number" value={form.price} onChange={e=>setForm({...form, price: e.target.value})} placeholder="Cena zł *" className="w-full bg-[#f5f5f7] border rounded-[12px] px-3 py-3 text-[14px]" style={{minHeight:'44px'}} />
+                  </div>
+                </div>
+                <div className="border-t pt-4">
+                  <h3 className="font-bold text-[13px] mb-2">📞 Kontakt *</h3>
+                  <input value={form.phone} onChange={e=>setForm({...form, phone: e.target.value})} placeholder="Telefon * np. 600 123 456" className="w-full bg-[#f5f5f7] border-2 border-black/10 rounded-[12px] px-3 py-3 text-[14px]" style={{minHeight:'44px'}} />
+                  <div className="grid grid-cols-2 gap-3 mt-3">
+                    <input value={form.whatsapp} onChange={e=>setForm({...form, whatsapp: e.target.value})} placeholder="WhatsApp" className="w-full bg-[#f5f5f7] border rounded-[12px] px-3 py-3 text-[14px]" style={{minHeight:'44px'}} />
+                    <input type="email" value={form.contactEmail} onChange={e=>setForm({...form, contactEmail: e.target.value})} placeholder="E-mail" className="w-full bg-[#f5f5f7] border rounded-[12px] px-3 py-3 text-[14px]" style={{minHeight:'44px'}} />
+                  </div>
+                </div>
+                <div className="border-t pt-4">
+                  <h3 className="font-bold text-[13px] mb-2">📝 Opis i zdjęcia</h3>
+                  <input value={form.title} onChange={e=>setForm({...form, title: e.target.value})} placeholder="Tytuł (opcjonalnie)" className="w-full bg-[#f5f5f7] border rounded-[12px] px-3 py-3 text-[14px] mb-3" style={{minHeight:'44px'}} />
+                  <div className="flex gap-2 flex-wrap">
+                    {form.images.map((img,i) => (
+                      <div key={i} className="relative w-[80px] h-[80px] rounded-[10px] overflow-hidden border">
+                        <img src={img} className="w-full h-full object-cover" />
+                        <button type="button" onClick={()=>setForm({...form, images: form.images.filter((_,idx)=>idx!==i)})} className="absolute top-1 right-1 w-6 h-6 bg-black/70 text-white rounded-full text-[12px]">✕</button>
+                      </div>
+                    ))}
+                    {form.images.length <5 && (
+                      <label className="w-[80px] h-[80px] border-2 border-dashed border-neutral-300 rounded-[10px] flex flex-col items-center justify-center cursor-pointer" style={{minHeight:'80px'}}>
+                        <span className="text-[24px]">+</span><span className="text-[10px]">Zdjęcie</span>
+                        <input ref={fileInputRef} type="file" accept="image/*" multiple onChange={handleImageUpload} />
+                      </label>
+                    )}
+                  </div>
+                </div>
+
+                <div className="bg-[#ffea00]/20 border border-[#ffea00] rounded-[12px] p-3 text-[11px]">
+                  <div className="font-bold">💾 ZAPISUJE DO: Supabase → {SUPABASE_URL}</div>
+                  <div>• Tabela ads • STAŁE na zawsze, dla wszystkich!</div>
+                  <div className="mt-1 text-[10px]">{status}</div>
+                </div>
+
+                <div className="flex gap-3 pt-2 sticky bottom-0 bg-white pb-2">
+                  <button type="button" onClick={handleCancelAdd} className="flex-1 bg-[#f5f5f7] border border-neutral-200 text-black font-bold py-4 rounded-[14px] text-[15px]" style={{minHeight:'48px', touchAction:'manipulation'}}>✕ Anuluj</button>
+                  <button type="submit" className="flex-[2] bg-black text-white font-bold py-4 rounded-[14px] text-[16px] shadow-lg" style={{minHeight:'48px', touchAction:'manipulation'}}>💾 Zapisz do Supabase</button>
+                </div>
+              </form>
             </div>
           </div>
         </div>
       )}
+
+      <footer className="border-t bg-white mt-6"><div className="max-w-[1440px] mx-auto px-3 md:px-4 py-5"><div className="font-black">WROOMER<span className="text-[#ffea00]">.PL</span></div><div className="text-[11px] text-neutral-500 mt-1">© 2026 • Supabase STAŁY • {SUPABASE_URL} • {status}</div></div></footer>
     </div>
   );
-};
+}
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(<App />);
 </script>
