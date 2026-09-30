@@ -3,326 +3,86 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<title>Wroomer.pl - NAPRAWA KOLUMN</title>
+<title>Wroomer - FINAL po dodaniu kolumn</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
 <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
 <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<style>
-*{font-family:Inter,sans-serif;box-sizing:border-box;max-width:100%}
-html,body{overflow-x:hidden !important;margin:0;width:100%;max-width:100vw;background:#f5f5f7}
-#root{overflow-x:hidden !important;width:100%;max-width:100vw}
-.kafelek-mini{display:flex !important;flex-direction:row !important;height:88px !important;min-height:88px !important;border-radius:10px !important;overflow:hidden !important;background:white !important;border:1px solid #e5e5e5 !important;width:100% !important}
-.kafelek-mini-img{width:110px !important;min-width:110px !important;max-width:110px !important;height:88px !important;object-fit:cover !important;flex-shrink:0 !important}
-.kafelek-mini-content{flex:1 !important;padding:6px 8px !important;display:flex !important;flex-direction:column !important;justify-content:space-between !important;min-width:0 !important;overflow:hidden !important;max-width:calc(100% - 110px) !important}
-.kafelek-mini-title{font-size:11px !important;line-height:1.2 !important;font-weight:700 !important;display:-webkit-box !important;-webkit-line-clamp:2 !important;-webkit-box-orient:vertical !important;overflow:hidden !important}
-.kafelek-mini-price{font-size:13px !important;font-weight:900 !important}
-.kafelek-mini-meta{font-size:9px !important;color:#888 !important;display:flex !important;justify-content:space-between !important}
-.prof-input{width:100%;background:#f5f5f7;border:1px solid #e5e5e5;border-radius:10px;padding:10px 12px;font-size:13px;outline:none;box-sizing:border-box}
-@media(min-width:1025px){.kafelek-mini{flex-direction:column !important;height:auto !important}.kafelek-mini-img{width:100% !important;min-width:100% !important;max-width:100% !important;height:140px !important}.kafelek-mini-content{max-width:100% !important}}
+<style>*{font-family:Inter,sans-serif;box-sizing:border-box;max-width:100%}html,body{overflow-x:hidden!important;margin:0;width:100%;max-width:100vw;background:#f5f5f7}
+.kafelek-mini{display:flex!important;flex-direction:row!important;height:88px!important;min-height:88px!important;border-radius:10px!important;overflow:hidden!important;background:white!important;border:1px solid #e5e5e5!important;width:100%!important}
+.kafelek-mini-img{width:110px!important;min-width:110px!important;max-width:110px!important;height:88px!important;object-fit:cover!important;flex-shrink:0!important}
+.kafelek-mini-content{flex:1!important;padding:6px 8px!important;display:flex!important;flex-direction:column!important;justify-content:space-between!important;min-width:0!important;overflow:hidden!important;max-width:calc(100% - 110px)!important}
+.kafelek-mini-title{font-size:11px!important;line-height:1.2!important;font-weight:700!important;display:-webkit-box!important;-webkit-line-clamp:2!important;-webkit-box-orient:vertical!important;overflow:hidden!important}
+.kafelek-mini-price{font-size:13px!important;font-weight:900!important}
+.kafelek-mini-meta{font-size:9px!important;color:#888!important;display:flex!important;justify-content:space-between!important}
+.prof-input{width:100%;background:#f5f5f7;border:1px solid #e5e5e5;border-radius:10px;padding:10px 12px;font-size:13px;outline:none}
+@media(min-width:1025px){.kafelek-mini{flex-direction:column!important;height:auto!important}.kafelek-mini-img{width:100%!important;min-width:100%!important;max-width:100%!important;height:140px!important}.kafelek-mini-content{max-width:100%!important}}
 </style>
 </head>
 <body><div id="root"></div>
 <script type="text/babel">
 const { useState, useMemo, useEffect, useRef } = React;
-const BRAND_MODELS = {"BMW": ["1 Series", "3 Series", "5 Series", "X1", "X3", "X5"], "Audi": ["A3", "A4", "A6", "Q5"], "Volkswagen": ["Golf", "Passat", "Tiguan"], "Mercedes": ["C-Klasa", "E-Klasa", "GLC"], "Skoda": ["Octavia", "Superb"], "Toyota": ["Corolla", "RAV4"], "Ford": ["Focus", "Mustang"]};
-const SAMPLE_ADS = [{"id": 1001, "title": "BMW 3 Series 2020 320d", "brand": "BMW", "model": "3 Series", "year": 2020, "price": 89500, "mileage": 89000, "location": "Warszawa", "phone": "600 123 456", "owner": "Norbert", "images": ["https://images.unsplash.com/photo-1555215695-3004980ad54e?w=600"], "image": "https://images.unsplash.com/photo-1555215695-3004980ad54e?w=600", "created_at_ts": 1001, "owner_id": 0}];
-const SUPABASE_URL = 'https://rljqnhfogaqdjeirqqdj.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.[STRIPPED 127 bytes].wjImTHn516H1isOFe6KPxVZsa-Rh1fPofeq_bkMk2XI';
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-const CITY_COORDS = {"Warszawa":[52.2297,21.0122],"Krakow":[50.0647,19.9450],"Kraków":[50.0647,19.9450],"Wroclaw":[51.1079,17.0385],"Wrocław":[51.1079,17.0385],"Gdansk":[54.3520,18.6466],"Gdańsk":[54.3520,18.6466],"Poznan":[52.4064,16.9252],"Poznań":[52.4064,16.9252],"Katowice":[50.2649,19.0238],"Gorzyce":[49.96,18.40]};
-function haversine(a,b,c,d){const R=6371;const dLat=(c-a)*Math.PI/180;const dLon=(d-b)*Math.PI/180;const s=Math.sin(dLat/2)*Math.sin(dLat/2)+Math.cos(a*Math.PI/180)*Math.cos(c*Math.PI/180)*Math.sin(dLon/2)*Math.sin(dLon/2);return R*2*Math.atan2(Math.sqrt(s),Math.sqrt(1-s))}
+const BRAND_MODELS = {"BMW": ["1 Series", "3 Series", "5 Series", "X1", "X3", "X5", "X6"], "Audi": ["A3", "A4", "A6", "Q5", "Q7"], "Volkswagen": ["Golf", "Passat", "Tiguan", "Polo"], "Mercedes": ["A-Klasa", "C-Klasa", "E-Klasa", "GLC", "GLE"], "Skoda": ["Fabia", "Octavia", "Superb", "Kodiaq"], "Toyota": ["Corolla", "Yaris", "RAV4", "Camry"], "Ford": ["Focus", "Fiesta", "Mustang", "Kuga"]};
+const SAMPLE_ADS = [{"id": 1001, "title": "BMW 3 Series 2020 320d 190KM", "brand": "BMW", "model": "3 Series", "year": 2020, "price": 89500, "mileage": 89000, "location": "Warszawa", "phone": "600123456", "owner": "Norbert", "owner_id": 0, "description": "Bezwypadkowy, serwisowany w ASO", "images": ["https://images.unsplash.com/photo-1555215695-3004980ad54e?w=600"], "image": "https://images.unsplash.com/photo-1555215695-3004980ad54e?w=600", "created_at_ts": 1001}];
+const SUPABASE_URL='https://rljqnhfogaqdjeirqqdj.supabase.co'; const SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJsanFuaGZvZ2FxZGplaXJxcWRqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjEwODAzMjUsImV4cCI6MjA3NjY1NjMyNX0.wjImTHn516H1isOFe6KPxVZsa-Rh1fPofeq_bkMk2XI';
+const supabase=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
+const CITY_COORDS={"Warszawa":[52.2297,21.0122],"Krakow":[50.0647,19.9450],"Wroclaw":[51.1079,17.0385],"Gdansk":[54.3520,18.6466],"Poznan":[52.4064,16.9252],"Katowice":[50.2649,19.0238],"Gorzyce":[49.96,18.40]};
+function haversine(a,b,c,d){const R=6371;const dLat=(c-a)*Math.PI/180;const dLon=(d-b)*Math.PI/180;const s=Math.sin(dLat/2)**2+Math.cos(a*Math.PI/180)*Math.cos(c*Math.PI/180)*Math.sin(dLon/2)**2;return R*2*Math.atan2(Math.sqrt(s),Math.sqrt(1-s))}
 function getDistance(lat,lng,loc){const co=CITY_COORDS[loc]||null; if(!co) return 9999; return haversine(lat,lng,co[0],co[1]);}
-
-function openDB(){
-  return new Promise(function(resolve, reject){
-    const req=indexedDB.open('wroomer_prof_v4', 2);
-    req.onupgradeneeded=function(e){const db=e.target.result; if(!db.objectStoreNames.contains('ads')){db.createObjectStore('ads',{keyPath:'id'});}};
-    req.onsuccess=function(e){resolve(e.target.result);};
-    req.onerror=function(e){reject(e.target.error);};
-  });
-}
-function saveToIndexedDB(ad){return openDB().then(function(db){return new Promise(function(resolve, reject){const tx=db.transaction('ads','readwrite'); const store=tx.objectStore('ads'); const req=store.put(ad); req.onsuccess=function(){resolve(true);}; req.onerror=function(){reject(req.error);};});});}
-function getAllFromIndexedDB(){return openDB().then(function(db){return new Promise(function(resolve, reject){const tx=db.transaction('ads','readonly'); const store=tx.objectStore('ads'); const req=store.getAll(); req.onsuccess=function(){resolve(req.result||[]);}; req.onerror=function(){reject(req.error);};});});}
-function deleteFromIndexedDB(id){return openDB().then(function(db){return new Promise(function(resolve, reject){const tx=db.transaction('ads','readwrite'); const store=tx.objectStore('ads'); const req=store.delete(id); req.onsuccess=function(){resolve(true);}; req.onerror=function(){reject(req.error);};});});}
-
+function openDB(){return new Promise((res,rej)=>{const r=indexedDB.open('wroomer_final_pro2',2); r.onupgradeneeded=e=>{const db=e.target.result; if(!db.objectStoreNames.contains('ads')) db.createObjectStore('ads',{keyPath:'id'})}; r.onsuccess=e=>res(e.target.result); r.onerror=e=>rej(e.target.error)})}
+function saveToIDB(ad){return openDB().then(db=>new Promise((res,rej)=>{const tx=db.transaction('ads','readwrite'); const req=tx.objectStore('ads').put(ad); req.onsuccess=()=>res(true); req.onerror=e=>rej(req.error)}))}
+function getAllIDB(){return openDB().then(db=>new Promise((res,rej)=>{const tx=db.transaction('ads','readonly'); const rq=tx.objectStore('ads').getAll(); rq.onsuccess=()=>res(rq.result||[]); rq.onerror=()=>rej(rq.error)}))}
+function delIDB(id){return openDB().then(db=>new Promise((res,rej)=>{const tx=db.transaction('ads','readwrite'); tx.objectStore('ads').delete(id).onsuccess=()=>res(true)}))}
 function App(){
   const [ads,setAds]=useState(SAMPLE_ADS);
-  const [users,setUsers]=useState(function(){try{return JSON.parse(localStorage.getItem('wroomer_users_prof_v4')||'[]')}catch(e){return []}});
-  const [currentUser,setCurrentUser]=useState(function(){try{return JSON.parse(localStorage.getItem('wroomer_current_user_prof_v4')||'null')}catch(e){return null}});
-  const [searchBrand,setSearchBrand]=useState('');
-  const [searchLocation,setSearchLocation]=useState('');
-  const [searchRadius,setSearchRadius]=useState('50');
-  const [userCoords,setUserCoords]=useState(null);
-  const [isLocating,setIsLocating]=useState(false);
-  const [sortBy,setSortBy]=useState('distance');
-  const [selected,setSelected]=useState(null);
-  const [showAdd,setShowAdd]=useState(false);
-  const [editingId,setEditingId]=useState(null);
-  const [showAuth,setShowAuth]=useState(null);
-  const [authForm,setAuthForm]=useState({email:'',password:'',name:''});
-  const [form,setForm]=useState({brand:'',model:'',year:2020,price:'',mileage:'',location:'Warszawa',title:'',description:'',images:[],phone:''});
-  const [error,setError]=useState('');
-  const [formError,setFormError]=useState('');
-  const fileRef=useRef(null);
-
-  useEffect(function(){try{localStorage.setItem('wroomer_users_prof_v4',JSON.stringify(users))}catch(e){}},[users]);
-  useEffect(function(){try{if(currentUser) localStorage.setItem('wroomer_current_user_prof_v4',JSON.stringify(currentUser)); else localStorage.removeItem('wroomer_current_user_prof_v4')}catch(e){}},[currentUser]);
-
-  useEffect(function(){
-    async function load(){
-      let supabaseAds=[];
-      try{
-        const res = await supabase.from('ads').select('*').order('created_at_ts',{ascending:false}).limit(100);
-        if(res.data){
-          // Twoja tabela ma tylko 6 kolumn - uzupełnij resztę z IndexedDB
-          supabaseAds=res.data.map(function(d){
-            return {id:d.id,title:d.title||'',brand:d.brand||'',model:d.model||'',year:d.year||2020,price:d.price||0,image:'https://images.unsplash.com/photo-1555215695-3004980ad54e?w=600',images:['https://images.unsplash.com/photo-1555215695-3004980ad54e?w=600'],location:d.location||'Warszawa',mileage:d.mileage||0,phone:d.phone||'',owner:d.owner||'',owner_id:d.owner_id||0,description:d.description||'',created_at_ts:d.created_at_ts||d.id};
-          });
-        }
-      }catch(e){console.log('Supabase load',e);}
-
-      let indexedAds=[];
-      try{indexedAds=await getAllFromIndexedDB();}catch(e){}
-
-      const map={};
-      // Najpierw IndexedDB (pełne dane), potem Supabase, potem przykładowe - IndexedDB ma priorytet
-      indexedAds.concat(supabaseAds).concat(SAMPLE_ADS).forEach(function(a){if(a && a.id && !map[a.id]) map[a.id]=a;});
-      setAds(Object.values(map).sort(function(a,b){return (b.created_at_ts||b.id)-(a.created_at_ts||a.id)}));
-    }
-    load();
-  },[]);
-
-  const filtered=useMemo(function(){
-    let r=ads.filter(function(a){
-      if(searchBrand && a.brand!==searchBrand) return false;
-      if(userCoords && searchRadius){const rad=parseInt(searchRadius); if(getDistance(userCoords.lat,userCoords.lng,a.location)>rad) return false;}
-      else if(searchLocation && a.location.toLowerCase().indexOf(searchLocation.toLowerCase())===-1) return false;
-      return true;
-    });
-    if(userCoords && sortBy==='distance'){r.sort(function(a,b){return getDistance(userCoords.lat,userCoords.lng,a.location)-getDistance(userCoords.lat,userCoords.lng,b.location)});}
-    else if(sortBy==='newest') r.sort(function(a,b){return (b.created_at_ts||b.id)-(a.created_at_ts||a.id)});
-    else if(sortBy==='price_asc') r.sort(function(a,b){return a.price-b.price});
-    else if(sortBy==='price_desc') r.sort(function(a,b){return b.price-a.price});
-    return r;
-  },[ads,searchBrand,searchLocation,searchRadius,sortBy,userCoords]);
-
-  const handleUseMyLocation=function(){
-    if(!navigator.geolocation){alert('Brak geolokalizacji'); return;}
-    setIsLocating(true);
-    navigator.geolocation.getCurrentPosition(function(pos){
-      setUserCoords({lat:pos.coords.latitude,lng:pos.coords.longitude});
-      setSearchLocation('Moja lokalizacja');
-      setSortBy('distance');
-      setIsLocating(false);
-    },function(){setIsLocating(false); alert('Odmowa');},{enableHighAccuracy:true,timeout:10000});
-  };
-
-  const handleRegister=function(e){
-    e.preventDefault(); setError('');
-    if(!authForm.email||!authForm.password||!authForm.name){setError('Wypełnij wszystkie'); return;}
-    if(users.find(function(u){return u.email.toLowerCase()===authForm.email.toLowerCase()})){setError('Istnieje'); return;}
-    const nu={id:Date.now(),email:authForm.email.toLowerCase(),name:authForm.name,password:authForm.password};
-    setUsers(users.concat([nu])); setCurrentUser({id:nu.id,email:nu.email,name:nu.name}); setShowAuth(null);
-  };
-  const handleLogin=function(e){
-    e.preventDefault(); setError('');
-    const u=users.find(function(x){return x.email.toLowerCase()===authForm.email.toLowerCase() && x.password===authForm.password});
-    if(!u){setError('Błędny login'); return;}
-    setCurrentUser({id:u.id,email:u.email,name:u.name}); setShowAuth(null);
-  };
-  
-  const resetForm=function(){setForm({brand:'',model:'',year:2020,price:'',mileage:'',location:'Warszawa',title:'',description:'',images:[],phone:''}); setEditingId(null); setFormError('');};
-  const handleAddClick=function(){if(!currentUser){setShowAuth('login'); return;} resetForm(); setShowAdd(true);};
-  const handleEditClick=function(ad){setEditingId(ad.id); setForm({brand:ad.brand||'',model:ad.model||'',year:ad.year||2020,price:ad.price||'',mileage:ad.mileage||'',location:ad.location||'Warszawa',title:ad.title||'',description:ad.description||'',images:ad.images||[ad.image],phone:ad.phone||''}); setSelected(null); setShowAdd(true);};
-  const handleCancelAdd=function(){if(form.images.length>0 || form.brand){if(!confirm('Anulować?')) return;} setShowAdd(false); resetForm();};
-  
-  const compressImage=function(file, callback){
-    const reader=new FileReader();
-    reader.onload=function(e){
-      const img=new Image();
-      img.onload=function(){
-        const canvas=document.createElement('canvas');
-        const maxW=600; const scale=Math.min(1, maxW/img.width);
-        canvas.width=img.width*scale; canvas.height=img.height*scale;
-        const ctx=canvas.getContext('2d'); ctx.drawImage(img,0,0,canvas.width,canvas.height);
-        callback(canvas.toDataURL('image/jpeg',0.65));
-      };
-      img.src=e.target.result;
-    };
-    reader.readAsDataURL(file);
-  };
-  
-  const handleImg=function(e){
-    const files=Array.from(e.target.files||[]);
-    if(form.images.length+files.length>5){alert('Max 5'); return;}
-    files.forEach(function(f){compressImage(f, function(c){setForm(function(p){return Object.assign({},p,{images:p.images.concat([c])});});});});
-    if(fileRef.current) fileRef.current.value='';
-  };
-  
-  const handleSave=async function(e){
+  const [users,setUsers]=useState(()=>{try{return JSON.parse(localStorage.getItem('wroomer_users_final')||'[]')}catch{return []}});
+  const [currentUser,setCurrentUser]=useState(()=>{try{return JSON.parse(localStorage.getItem('wroomer_current_final')||'null')}catch{return null}});
+  const [searchBrand,setSearchBrand]=useState(''); const [searchLocation,setSearchLocation]=useState(''); const [searchRadius,setSearchRadius]=useState('50'); const [userCoords,setUserCoords]=useState(null); const [isLocating,setIsLocating]=useState(false); const [sortBy,setSortBy]=useState('newest'); const [selected,setSelected]=useState(null); const [showAdd,setShowAdd]=useState(false); const [editingId,setEditingId]=useState(null); const [showAuth,setShowAuth]=useState(null); const [authForm,setAuthForm]=useState({email:'',password:'',name:''}); const [form,setForm]=useState({brand:'',model:'',year:2020,price:'',mileage:'',location:'Warszawa',title:'',description:'',images:[],phone:''}); const [error,setError]=useState(''); const [formError,setFormError]=useState(''); const fileRef=useRef(null);
+  useEffect(()=>{try{localStorage.setItem('wroomer_users_final',JSON.stringify(users))}catch{}},[users]);
+  useEffect(()=>{try{if(currentUser) localStorage.setItem('wroomer_current_final',JSON.stringify(currentUser)); else localStorage.removeItem('wroomer_current_final')}catch{}},[currentUser]);
+  useEffect(()=>{async function load(){let supabaseAds=[]; try{const {data,error}=await supabase.from('ads').select('*').order('created_at_ts',{ascending:false}).limit(200); if(!error&&data){supabaseAds=data.map(d=>({id:d.id,title:d.title||'',brand:d.brand||'',model:d.model||'',year:d.year||2020,price:d.price||0,mileage:d.mileage||0,location:d.location||'Warszawa',phone:d.phone||'',owner:d.owner||'',owner_id:d.owner_id||0,description:d.description||'',image:d.image||'https://images.unsplash.com/photo-1555215695-3004980ad54e?w=600',images:d.image?[d.image]:['https://images.unsplash.com/photo-1555215695-3004980ad54e?w=600'],created_at_ts:d.created_at_ts||d.id}))}}catch(e){console.log(e)} let idbAds=[]; try{idbAds=await getAllIDB()}catch(e){} const map={}; [...idbAds,...supabaseAds,...SAMPLE_ADS].forEach(a=>{if(a&&a.id&&!map[a.id]) map[a.id]=a}); setAds(Object.values(map).sort((a,b)=>(b.created_at_ts||b.id)-(a.created_at_ts||a.id)));} load();},[]);
+  const filtered=useMemo(()=>{let r=ads.filter(a=>{if(searchBrand&&a.brand!==searchBrand) return false; if(userCoords&&searchRadius){if(getDistance(userCoords.lat,userCoords.lng,a.location)>parseInt(searchRadius)) return false;} else if(searchLocation&&!a.location.toLowerCase().includes(searchLocation.toLowerCase())) return false; return true;}); if(userCoords&&sortBy==='distance') r.sort((a,b)=>getDistance(userCoords.lat,userCoords.lng,a.location)-getDistance(userCoords.lat,userCoords.lng,b.location)); else if(sortBy==='newest') r.sort((a,b)=>(b.created_at_ts||b.id)-(a.created_at_ts||a.id)); else if(sortBy==='price_asc') r.sort((a,b)=>a.price-b.price); else if(sortBy==='price_desc') r.sort((a,b)=>b.price-a.price); return r;},[ads,searchBrand,searchLocation,searchRadius,sortBy,userCoords]);
+  const handleUseMyLocation=()=>{if(!navigator.geolocation){alert('Brak geolokalizacji'); return;} setIsLocating(true); navigator.geolocation.getCurrentPosition(pos=>{setUserCoords({lat:pos.coords.latitude,lng:pos.coords.longitude}); setSearchLocation('Moja lokalizacja'); setSortBy('distance'); setIsLocating(false);},()=>{setIsLocating(false); alert('Odmowa')},{enableHighAccuracy:true,timeout:10000});};
+  const handleRegister=(e)=>{e.preventDefault(); setError(''); if(!authForm.email||!authForm.password||!authForm.name){setError('Wypełnij wszystkie'); return;} if(users.find(u=>u.email.toLowerCase()===authForm.email.toLowerCase())){setError('Istnieje'); return;} const nu={id:Date.now(),email:authForm.email.toLowerCase(),name:authForm.name,password:authForm.password}; setUsers([...users,nu]); setCurrentUser({id:nu.id,email:nu.email,name:nu.name}); setShowAuth(null)};
+  const handleLogin=(e)=>{e.preventDefault(); setError(''); const u=users.find(x=>x.email.toLowerCase()===authForm.email.toLowerCase() && x.password===authForm.password); if(!u){setError('Błędny login'); return;} setCurrentUser({id:u.id,email:u.email,name:u.name}); setShowAuth(null)};
+  const resetForm=()=>{setForm({brand:'',model:'',year:2020,price:'',mileage:'',location:'Warszawa',title:'',description:'',images:[],phone:''}); setEditingId(null); setFormError('')};
+  const handleAddClick=()=>{if(!currentUser){setShowAuth('login'); return;} resetForm(); setShowAdd(true)};
+  const handleEditClick=(ad)=>{setEditingId(ad.id); setForm({brand:ad.brand||'',model:ad.model||'',year:ad.year||2020,price:ad.price||'',mileage:ad.mileage||'',location:ad.location||'Warszawa',title:ad.title||'',description:ad.description||'',images:ad.images||[ad.image],phone:ad.phone||''}); setSelected(null); setShowAdd(true)};
+  const handleCancelAdd=()=>{if(form.images.length>0||form.brand){if(!confirm('Anulować?')) return;} setShowAdd(false); resetForm()};
+  const compressImage=(file,cb)=>{const reader=new FileReader(); reader.onload=e=>{const img=new Image(); img.onload=()=>{const canvas=document.createElement('canvas'); const maxW=600; const scale=Math.min(1,maxW/img.width); canvas.width=img.width*scale; canvas.height=img.height*scale; canvas.getContext('2d').drawImage(img,0,0,canvas.width,canvas.height); cb(canvas.toDataURL('image/jpeg',0.65))}; img.src=e.target.result}; reader.readAsDataURL(file)};
+  const handleImg=(e)=>{const files=Array.from(e.target.files||[]); if(form.images.length+files.length>5){alert('Max 5'); return;} files.forEach(f=>compressImage(f,c=>setForm(p=>({...p,images:[...p.images,c]})))); if(fileRef.current) fileRef.current.value=''};
+  const handleSave=async(e)=>{
     e.preventDefault(); setFormError('');
     if(!form.brand){setFormError('Wybierz markę'); return;}
     if(!form.model){setFormError('Wybierz model'); return;}
     if(!form.price){setFormError('Podaj cenę'); return;}
     if(!form.phone){setFormError('Podaj telefon'); return;}
     if(form.images.length===0){setFormError('Dodaj min 1 zdjęcie'); return;}
-
-    const nid = editingId || Date.now();
-    const title = form.title ? form.title : (form.brand+' '+form.model+' '+form.year);
-    const fullAd = {
-      id: nid, title: title, brand: form.brand, model: form.model, year: parseInt(form.year)||2020, price: parseInt(form.price)||0,
-      mileage: parseInt(form.mileage)||0, location: form.location||'Warszawa', description: form.description||'',
-      image: form.images[0], images: form.images, owner: currentUser?currentUser.name:'Użytkownik', owner_id: currentUser?currentUser.id:999,
-      phone: form.phone, created_at_ts: Date.now()
-    };
-
-    // 1. IndexedDB - ZAWSZE ZAPISUJE - 50MB
-    try{await saveToIndexedDB(fullAd); console.log('✓ IndexedDB zapisano');}catch(err){setFormError('IndexedDB błąd: '+err.message); return;}
-
-    // 2. Supabase - TYLKO 6 kolumn które ISTNIEJĄ w Twojej tabeli!
+    const nid=editingId||Date.now();
+    const title=form.title?form.title:`${form.brand} ${form.model} ${form.year}`;
+    const fullAd={id:nid,title,brand:form.brand,model:form.model,year:parseInt(form.year)||2020,price:parseInt(form.price)||0,mileage:parseInt(form.mileage)||0,location:form.location||'Warszawa',description:form.description||'',image:form.images[0],images:form.images,owner:currentUser?.name||'Użytkownik',owner_id:currentUser?.id||999,phone:form.phone,created_at_ts:Date.now()};
+    try{await saveToIDB(fullAd); console.log('✓ IndexedDB')}catch(err){setFormError('IndexedDB błąd: '+err.message); return;}
     try{
-      const minimalForYourTable={
-        id: nid,
-        title: title.substring(0,100),
-        brand: form.brand,
-        model: form.model,
-        year: parseInt(form.year)||2020,
-        price: parseInt(form.price)||0
-      };
-      let res;
-      if(editingId){
-        res = await supabase.from('ads').update({title:minimalForYourTable.title,brand:minimalForYourTable.brand,model:minimalForYourTable.model,year:minimalForYourTable.year,price:minimalForYourTable.price}).eq('id', editingId);
-      }else{
-        res = await supabase.from('ads').insert([minimalForYourTable]);
-      }
-      if(res.error){console.log('Supabase error:',res.error.message,'- ale IndexedDB zapisane, nie zniknie po F5');}
-      else{console.log('✓ Supabase zapisano');}
-    }catch(err){console.log('Supabase exception:',err.message);}
-
-    if(editingId){setAds(ads.map(function(a){return a.id===editingId ? Object.assign({}, a, fullAd) : a}));}
-    else{setAds([fullAd].concat(ads));}
-    setShowAdd(false); resetForm();
-    alert('✓ ZAPISANO NA STAŁE!\n\nIndexedDB: TAK ✓ (50MB - nie zniknie po F5)\nSupabase: próba zapisu 6 kolumn które masz w tabeli\n\nID: '+nid);
+      const payload={id:nid,title:title.substring(0,200),brand:form.brand,model:form.model,year:parseInt(form.year)||2020,price:parseInt(form.price)||0,mileage:parseInt(form.mileage)||0,location:form.location||'Warszawa',description:(form.description||'').substring(0,1000),image:form.images[0],owner:currentUser?.name||'Anonim',owner_id:currentUser?.id||999,phone:form.phone,created_at_ts:Date.now()};
+      let res; if(editingId){res=await supabase.from('ads').update(payload).eq('id',editingId);} else {res=await supabase.from('ads').insert([payload]);}
+      if(res.error){console.log('Supabase error:',res.error.message);} else console.log('✓ Supabase zapisano');
+    }catch(err){console.log('Supabase exception',err);}
+    if(editingId) setAds(ads.map(a=>a.id===editingId?{...a,...fullAd}:a)); else setAds([fullAd,...ads]);
+    setShowAdd(false); resetForm(); alert('✓ ZAPISANO NA STAŁE! ID: '+nid);
   };
-  
-  const handleDelete=async function(id){
-    if(!confirm('Usunąć na stałe?')) return;
-    try{await deleteFromIndexedDB(id);}catch(e){}
-    try{await supabase.from('ads').delete().eq('id',id);}catch(e){}
-    setAds(ads.filter(function(a){return a.id!==id}));
-    setSelected(null);
-  };
-  
-  const clearAll=function(){setSearchBrand(''); setSearchLocation(''); setSearchRadius('50'); setUserCoords(null); setSortBy('distance');};
-  const sortLabel=function(){if(sortBy==='distance') return 'Odległość'; if(sortBy==='price_asc') return 'Cena ↑'; if(sortBy==='price_desc') return 'Cena ↓'; return 'Najnowsze';};
-
+  const handleDelete=async(id)=>{if(!confirm('Usunąć?')) return; try{await delIDB(id)}catch(e){} try{await supabase.from('ads').delete().eq('id',id)}catch(e){} setAds(ads.filter(a=>a.id!==id)); setSelected(null)};
+  const clearAll=()=>{setSearchBrand(''); setSearchLocation(''); setSearchRadius('50'); setUserCoords(null); setSortBy('newest')};
   return (
     <div className="min-h-screen w-full max-w-[100vw] overflow-x-hidden">
-      <div className="bg-black text-white w-full">
-        <div className="max-w-[1440px] mx-auto px-2 lg:px-3 h-[36px] lg:h-[52px] flex items-center justify-start">
-          <div className="flex items-center gap-1.5 lg:gap-2 font-black text-[13px] lg:text-[20px] cursor-pointer" onClick={function(){setSelected(null)}}><div className="w-5 h-5 lg:w-8 lg:h-8 bg-[#ffea00] rounded-[5px] lg:rounded-[8px] flex items-center justify-center text-black text-[10px] lg:text-[13px]">W</div>WROOMER<span className="text-[#ffea00]">.PL</span></div>
-        </div>
-      </div>
-
-      <div className="bg-[#111] border-b border-neutral-800 w-full">
-        <div className="max-w-[1440px] mx-auto px-2 lg:px-3 py-2">
-          <div className="lg:hidden w-full">
-            <button onClick={handleUseMyLocation} disabled={isLocating} className="w-full bg-[#ffea00] disabled:opacity-50 text-black font-black text-[14px] py-3 rounded-[12px]">📍 {isLocating ? 'Pobieram...' : (userCoords ? '✓ '+searchRadius+'km' : 'Szukaj aut obok mnie')}</button>
-            {userCoords && <div className="grid grid-cols-3 gap-2 mt-2"><select value={searchRadius} onChange={function(e){setSearchRadius(e.target.value)}} className="w-full bg-[#222] border border-neutral-700 rounded-[10px] px-2 py-2.5 text-[12px] text-white"><option value="20">20 km</option><option value="50">50 km</option><option value="100">100 km</option></select><select value={sortBy} onChange={function(e){setSortBy(e.target.value)}} className="w-full bg-[#222] border border-neutral-700 rounded-[10px] px-2 py-2.5 text-[12px] text-white"><option value="distance">Odległość</option><option value="newest">Najnowsze</option><option value="price_asc">Cena ↑</option></select><button onClick={clearAll} className="w-full bg-[#333] text-white rounded-[10px] text-[11px] font-bold">Reset</button></div>}
-          </div>
-          <div className="hidden lg:flex items-center gap-2">
-            <button onClick={handleUseMyLocation} disabled={isLocating} className="bg-[#ffea00] text-black font-black text-[13px] px-5 py-2.5 rounded-[10px]">{isLocating ? 'Pobieram...' : (userCoords ? '✓ '+searchRadius+'km' : '📍 Szukaj obok mnie')}</button>
-            <select value={searchBrand} onChange={function(e){setSearchBrand(e.target.value)}} className="bg-[#222] border border-neutral-700 rounded-[10px] px-3 py-2.5 text-[12px] text-white"><option value="">Marka</option>{Object.keys(BRAND_MODELS).sort().map(function(b){return <option key={b} value={b}>{b}</option>})}</select>
-            <button onClick={clearAll} className="bg-[#333] text-white px-3 py-2.5 rounded-[10px] text-[11px] font-bold">Reset</button>
-            <div className="flex-1"></div>
-            {currentUser ? <><span className="text-[11px] text-neutral-400">{currentUser.name}</span><button onClick={handleAddClick} className="bg-[#ffea00] text-black px-4 py-2 rounded-[10px] font-bold text-[12px]">+ Dodaj</button></> : <><button onClick={function(){setShowAuth('login')}} className="bg-[#222] border text-white px-3 py-2 rounded-[10px] text-[11px] font-bold">Zaloguj</button><button onClick={handleAddClick} className="bg-[#ffea00] text-black px-3 py-2 rounded-[10px] font-bold text-[11px]">+ Dodaj</button></>}
-          </div>
-        </div>
-      </div>
-
-      <div className="bg-red-50 border-b border-red-200">
-        <div className="max-w-[1440px] mx-auto px-2 py-2">
-          <div className="text-[10px] text-red-800"><div className="font-bold">⚠️ WYKRYTO PROBLEM - Twoja tabela ma tylko 6 kolumn (id, title, brand, model, year, price) - brakuje 10 kolumn!</div><div className="mt-1">Na screenie: RLS disabled (dobrze) ale brakuje kolumn: mileage, location, image, phone, owner, description, created_at_ts itd. Dlatego INSERT się wywalał!</div><div className="mt-1 font-bold">NAPRAWA: Wykonaj SQL z instrukcji poniżej żeby dodać brakujące kolumny!</div></div>
-        </div>
-      </div>
-
-      <div className="max-w-[1440px] mx-auto w-full px-2 lg:px-3 py-2">
-        <div className="flex items-center justify-between mb-2">
-          <div className="bg-black text-white text-[10px] font-bold px-2.5 py-1 rounded-full">{filtered.length} ogłoszeń {userCoords ? '• GPS '+searchRadius+'km' : ''}</div>
-          <div className="lg:hidden"><button onClick={handleAddClick} className="bg-[#ffea00] text-black px-3 py-1.5 rounded-[8px] font-bold text-[11px]">+ Dodaj</button></div>
-        </div>
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-2">
-          {filtered.map(function(ad){
-            const dist=userCoords ? getDistance(userCoords.lat,userCoords.lng,ad.location) : null;
-            const isOwn=currentUser && ad.owner_id===currentUser.id;
-            return (
-              <div key={ad.id} onClick={function(){setSelected(ad)}} className={'kafelek-mini cursor-pointer '+(isOwn?'ring-2 ring-[#ffea00]':'')}>
-                <img src={ad.image} className="kafelek-mini-img" alt={ad.title} />
-                <div className="kafelek-mini-content">
-                  <div className="kafelek-mini-title">{ad.title} {isOwn?'⭐':''}</div>
-                  <div><div className="kafelek-mini-price">{ad.price.toLocaleString('pl-PL')} zl</div><div className="kafelek-mini-meta"><span>{ad.location}{dist!==null && dist<999 ? ' • '+Math.round(dist)+'km' : ''}</span><span>{ad.year}</span></div></div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-        {filtered.length===0 && <div className="bg-white border rounded-[12px] p-6 text-center mt-3"><div className="font-bold text-[13px]">Brak ogłoszeń</div><button onClick={clearAll} className="mt-2 bg-black text-white px-4 py-2 rounded-full text-[11px] font-bold">Reset</button></div>}
-      </div>
-
-      {selected && (
-        <div className="fixed inset-0 z-50 bg-black/80 overflow-auto">
-          <div className="min-h-screen flex items-start md:items-center justify-center p-0 md:p-4">
-            <div className="bg-white w-full md:max-w-[720px] md:rounded-[20px] overflow-hidden flex flex-col max-h-[100dvh] md:max-h-[90vh]">
-              <div className="flex items-center justify-between p-3 border-b"><button onClick={function(){setSelected(null)}} className="bg-[#f5f5f7] px-4 py-2 rounded-full text-[13px] font-bold">Wroc</button><div className="flex gap-2">{currentUser && selected.owner_id===currentUser.id && <><button onClick={function(){handleEditClick(selected)}} className="bg-[#ffea00] text-black px-3 py-2 rounded-full text-[12px] font-bold">Edytuj</button><button onClick={function(){handleDelete(selected.id)}} className="bg-red-50 text-red-600 border px-3 py-2 rounded-full text-[12px] font-bold">Usun</button></>}<button onClick={function(){setSelected(null)}} className="w-9 h-9 bg-black text-white rounded-full">X</button></div></div>
-              <div className="overflow-auto flex-1"><div className="bg-[#f5f5f7] w-full flex items-center justify-center" style={{height:'400px'}}><img src={selected.image} style={{height:'400px',width:'auto',maxWidth:'100%',objectFit:'contain'}} /></div><div className="p-4"><h1 className="font-black text-[18px]">{selected.title}</h1><div className="font-black text-[22px] mt-1">{selected.price.toLocaleString('pl-PL')} zl</div><div className="mt-3 bg-black text-white rounded-[12px] p-3"><div className="font-bold text-[12px]">Tel: {selected.phone}</div><div className="grid grid-cols-2 gap-2 mt-2"><a href={'tel:'+selected.phone} className="bg-[#ffea00] text-black font-bold py-2.5 rounded-[8px] text-center text-[12px]">Zadzwon</a><a href={'https://wa.me/'+selected.phone} target="_blank" className="bg-[#25D366] text-white font-bold py-2.5 rounded-[8px] text-center text-[12px]">WhatsApp</a></div></div></div></div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {showAuth && (
-        <div className="fixed inset-0 z-[90] bg-black/70 flex items-end md:items-center justify-center p-0 md:p-4">
-          <div className="bg-white w-full md:max-w-[360px] rounded-t-[20px] md:rounded-[16px] p-5">
-            <div className="flex justify-between items-center mb-3"><h2 className="font-black text-[16px]">{showAuth==='login'?'Zaloguj sie':'Rejestracja'}</h2><button onClick={function(){setShowAuth(null)}} className="w-8 h-8 bg-[#f5f5f7] rounded-full">X</button></div>
-            {error && <div className="bg-red-50 border text-red-700 text-[12px] p-2 rounded-[8px] mb-2">{error}</div>}
-            <form onSubmit={showAuth==='login'?handleLogin:handleRegister} className="space-y-2">
-              {showAuth==='register' && <input value={authForm.name} onChange={function(e){setAuthForm(Object.assign({},authForm,{name:e.target.value}))}} placeholder="Imie" className="w-full bg-[#f5f5f7] border rounded-[8px] px-3 py-2.5 text-[13px]" />}
-              <input type="email" value={authForm.email} onChange={function(e){setAuthForm(Object.assign({},authForm,{email:e.target.value}))}} placeholder="E-mail" className="w-full bg-[#f5f5f7] border rounded-[8px] px-3 py-2.5 text-[13px]" />
-              <input type="password" value={authForm.password} onChange={function(e){setAuthForm(Object.assign({},authForm,{password:e.target.value}))}} placeholder="Haslo" className="w-full bg-[#f5f5f7] border rounded-[8px] px-3 py-2.5 text-[13px]" />
-              <button type="submit" className="w-full bg-black text-white font-bold py-3 rounded-[10px] text-[13px]">{showAuth==='login'?'Zaloguj':'Zarejestruj'}</button>
-            </form>
-          </div>
-        </div>
-      )}
-
-      {showAdd && (
-        <div className="fixed inset-0 z-50 bg-black/70 overflow-auto">
-          <div className="min-h-screen flex items-start justify-center p-0 md:p-4">
-            <div className="bg-white w-full md:max-w-[600px] md:rounded-[20px] rounded-t-[20px] mt-auto md:mt-0 max-h-[95vh] flex flex-col">
-              <div className="sticky top-0 bg-white border-b p-4 flex justify-between items-center"><h2 className="font-black text-[14px]">{editingId ? 'Edytuj STAŁE' : 'Dodaj STAŁE - naprawa kolumn'}</h2><button onClick={handleCancelAdd} className="w-9 h-9 bg-[#f5f5f7] rounded-full">X</button></div>
-              <form onSubmit={handleSave} className="overflow-auto flex-1 p-4 space-y-3">
-                {formError && <div className="bg-red-50 border text-red-700 text-[13px] p-3 rounded-[10px] font-bold">{formError}</div>}
-                <div className="bg-green-50 border border-green-200 rounded-[10px] p-3 text-[11px] text-green-800"><div className="font-bold">✓ NAPRAWA - teraz zapisuje 6 kolumn które masz + reszta w IndexedDB</div><div>Twoja tabela ma tylko: id, title, brand, model, year, price. Brakuje: mileage, location, image, phone, owner itd. - dodaj je SQL z instrukcji! Na razie zapisuję 6 kolumn do Supabase + pełne dane do IndexedDB (nie zniknie po F5)</div></div>
-                <div className="grid grid-cols-2 gap-2">
-                  <select value={form.brand} onChange={function(e){setForm(Object.assign({},form,{brand:e.target.value}))}} className="prof-input"><option value="">Marka *</option>{Object.keys(BRAND_MODELS).map(function(b){return <option key={b} value={b}>{b}</option>})}</select>
-                  <select value={form.model} onChange={function(e){setForm(Object.assign({},form,{model:e.target.value}))}} className="prof-input"><option value="">Model *</option>{(BRAND_MODELS[form.brand]||[]).map(function(m){return <option key={m} value={m}>{m}</option>})}</select>
-                  <input type="number" value={form.year} onChange={function(e){setForm(Object.assign({},form,{year:e.target.value}))}} placeholder="Rocznik *" className="prof-input" />
-                  <input type="number" value={form.price} onChange={function(e){setForm(Object.assign({},form,{price:e.target.value}))}} placeholder="Cena *" className="prof-input" />
-                  <input type="number" value={form.mileage} onChange={function(e){setForm(Object.assign({},form,{mileage:e.target.value}))}} placeholder="Przebieg km *" className="prof-input" />
-                  <input value={form.location} onChange={function(e){setForm(Object.assign({},form,{location:e.target.value}))}} placeholder="Miasto *" className="prof-input" />
-                </div>
-                <input value={form.phone} onChange={function(e){setForm(Object.assign({},form,{phone:e.target.value}))}} placeholder="Telefon *" className="prof-input" />
-                <textarea value={form.description} onChange={function(e){setForm(Object.assign({},form,{description:e.target.value}))}} placeholder="Opis" className="prof-input min-h-[80px]" rows="3"></textarea>
-                <div><div className="text-[11px] font-bold mb-1">Zdjęcia * (max 5)</div><div className="flex gap-2 flex-wrap">{form.images.map(function(im,i){return <div key={i} className="relative w-[70px] h-[70px] rounded-[8px] overflow-hidden border"><img src={im} className="w-full h-full object-cover" /><button type="button" onClick={function(){setForm(Object.assign({},form,{images:form.images.filter(function(_,idx){return idx!==i})}))}} className="absolute top-0 right-0 w-5 h-5 bg-black/70 text-white rounded-full text-[10px]">X</button></div>})}{form.images.length<5 && <label className="w-[70px] h-[70px] border-2 border-dashed rounded-[8px] flex items-center justify-center cursor-pointer">+<input ref={fileRef} type="file" accept="image/*" multiple onChange={handleImg} style={{display:'none'}} /></label>}</div></div>
-                <div className="flex gap-2 sticky bottom-0 bg-white pt-2 border-t -mx-4 px-4"><button type="button" onClick={handleCancelAdd} className="flex-1 bg-[#f5f5f7] border font-bold py-3 rounded-[10px] text-[12px]">Anuluj</button><button type="submit" className="flex-[2] bg-black text-white font-bold py-3 rounded-[10px] text-[12px]">Zapisz STAŁE</button></div>
-              </form>
-            </div>
-          </div>
-        </div>
-      )}
+      <div className="bg-black text-white w-full"><div className="max-w-[1440px] mx-auto px-2 lg:px-3 h-[36px] lg:h-[52px] flex items-center justify-between"><div className="flex items-center gap-1.5 font-black text-[13px] lg:text-[20px] cursor-pointer" onClick={()=>setSelected(null)}><div className="w-5 h-5 lg:w-8 lg:h-8 bg-[#ffea00] rounded flex items-center justify-center text-black">W</div>WROOMER<span className="text-[#ffea00]">.PL</span></div></div></div>
+      <div className="bg-[#111] border-b border-neutral-800 w-full"><div className="max-w-[1440px] mx-auto px-2 lg:px-3 py-2"><div className="lg:hidden w-full"><button onClick={handleUseMyLocation} disabled={isLocating} className="w-full bg-[#ffea00] text-black font-black text-[14px] py-3 rounded-[12px]">📍 {isLocating ? 'Pobieram...' : (userCoords ? '✓ '+searchRadius+'km GPS' : 'Szukaj aut obok mnie')}</button></div><div className="hidden lg:flex items-center gap-2"><button onClick={handleUseMyLocation} disabled={isLocating} className="bg-[#ffea00] text-black font-black text-[13px] px-5 py-2.5 rounded-[10px]">{isLocating ? 'Pobieram...' : (userCoords ? '✓ '+searchRadius+'km GPS' : '📍 Szukaj obok mnie')}</button><select value={searchBrand} onChange={e=>setSearchBrand(e.target.value)} className="bg-[#222] border border-neutral-700 rounded-[10px] px-3 py-2.5 text-[12px] text-white"><option value="">Marka</option>{Object.keys(BRAND_MODELS).sort().map(b=><option key={b} value={b}>{b}</option>)}</select><button onClick={clearAll} className="bg-[#333] text-white px-3 py-2.5 rounded-[10px] text-[11px] font-bold">Reset</button><div className="flex-1"></div><button onClick={handleAddClick} className="bg-[#ffea00] text-black px-4 py-2 rounded-[10px] font-bold text-[12px]">+ Dodaj</button></div></div></div>
+      <div className="bg-green-50 border-b border-green-200"><div className="max-w-[1440px] mx-auto px-2 py-2 text-[10px] text-green-800 font-bold">✓ RLS disabled + kolumny dodane - TERAZ ZAPISUJE NA STAŁE!</div></div>
+      <div className="max-w-[1440px] mx-auto w-full px-2 lg:px-3 py-2"><div className="bg-black text-white text-[10px] font-bold px-2.5 py-1 rounded-full inline-block mb-2">{filtered.length} ogłoszeń</div><div className="grid grid-cols-1 lg:grid-cols-3 gap-2">{filtered.map(ad=>{const dist=userCoords ? getDistance(userCoords.lat,userCoords.lng,ad.location) : null; const isOwn=currentUser && ad.owner_id===currentUser.id; return (<div key={ad.id} onClick={()=>setSelected(ad)} className={'kafelek-mini cursor-pointer '+(isOwn?'ring-2 ring-[#ffea00]':'')}><img src={ad.image} className="kafelek-mini-img" alt={ad.title} /><div className="kafelek-mini-content"><div className="kafelek-mini-title">{ad.title} {isOwn?'⭐':''}</div><div><div className="kafelek-mini-price">{ad.price.toLocaleString('pl-PL')} zł</div><div className="kafelek-mini-meta"><span>{ad.location}{dist!==null && dist<999 ? ' • '+Math.round(dist)+'km' : ''}</span><span>{ad.year}</span></div></div></div></div>)})}</div></div>
+      {selected && (<div className="fixed inset-0 z-50 bg-black/80 overflow-auto"><div className="min-h-screen flex items-center justify-center p-0 md:p-4"><div className="bg-white w-full md:max-w-[720px] md:rounded-[20px] overflow-hidden flex flex-col max-h-[100dvh]"><div className="flex justify-between p-3 border-b"><button onClick={()=>setSelected(null)} className="bg-[#f5f5f7] px-4 py-2 rounded-full text-[13px] font-bold">Wróć</button><button onClick={()=>setSelected(null)} className="w-9 h-9 bg-black text-white rounded-full">X</button></div><div className="overflow-auto p-4"><h1 className="font-black text-[18px]">{selected.title}</h1><div className="font-black text-[22px]">{selected.price.toLocaleString('pl-PL')} zł</div><div className="text-[11px] text-neutral-500">{selected.location} • {selected.year}</div><div className="mt-3 bg-black text-white rounded-[12px] p-3"><div className="font-bold text-[12px]">Tel: {selected.phone}</div><div className="grid grid-cols-2 gap-2 mt-2"><a href={'tel:'+selected.phone} className="bg-[#ffea00] text-black font-bold py-2.5 rounded-[8px] text-center text-[12px]">Zadzwoń</a><a href={'https://wa.me/'+selected.phone} target="_blank" className="bg-[#25D366] text-white font-bold py-2.5 rounded-[8px] text-center text-[12px]">WhatsApp</a></div></div></div></div></div></div>)}
+      {showAuth && (<div className="fixed inset-0 z-[90] bg-black/70 flex items-end md:items-center justify-center p-0 md:p-4"><div className="bg-white w-full md:max-w-[360px] rounded-t-[20px] md:rounded-[16px] p-5"><h2 className="font-black text-[16px] mb-3">{showAuth==='login'?'Zaloguj':'Rejestracja'}</h2>{error && <div className="bg-red-50 text-red-700 text-[12px] p-2 rounded mb-2">{error}</div>}<form onSubmit={showAuth==='login'?handleLogin:handleRegister} className="space-y-2">{showAuth==='register' && <input value={authForm.name} onChange={e=>setAuthForm({...authForm,name:e.target.value})} placeholder="Imię" className="prof-input" />}<input type="email" value={authForm.email} onChange={e=>setAuthForm({...authForm,email:e.target.value})} placeholder="E-mail" className="prof-input" /><input type="password" value={authForm.password} onChange={e=>setAuthForm({...authForm,password:e.target.value})} placeholder="Hasło" className="prof-input" /><button type="submit" className="w-full bg-black text-white font-bold py-3 rounded-[10px] text-[13px]">{showAuth==='login'?'Zaloguj':'Zarejestruj'}</button></form></div></div>)}
+      {showAdd && (<div className="fixed inset-0 z-50 bg-black/70 overflow-auto"><div className="min-h-screen flex items-start justify-center p-0 md:p-4"><div className="bg-white w-full md:max-w-[600px] md:rounded-[20px] mt-auto md:mt-0 max-h-[95vh] flex flex-col"><div className="p-4 border-b flex justify-between"><h2 className="font-black text-[14px]">{editingId ? 'Edytuj' : 'Dodaj - STAŁY zapis ✓'}</h2><button onClick={handleCancelAdd} className="w-9 h-9 bg-[#f5f5f7] rounded-full">X</button></div><form onSubmit={handleSave} className="overflow-auto flex-1 p-4 space-y-3">{formError && <div className="bg-red-50 border text-red-700 text-[13px] p-3 rounded-[10px] font-bold">{formError}</div>}<div className="grid grid-cols-2 gap-2"><select value={form.brand} onChange={e=>setForm({...form,brand:e.target.value})} className="prof-input"><option value="">Marka *</option>{Object.keys(BRAND_MODELS).map(b=><option key={b} value={b}>{b}</option>)}</select><select value={form.model} onChange={e=>setForm({...form,model:e.target.value})} className="prof-input"><option value="">Model *</option>{(BRAND_MODELS[form.brand]||[]).map(m=><option key={m} value={m}>{m}</option>)}</select><input type="number" value={form.year} onChange={e=>setForm({...form,year:e.target.value})} placeholder="Rocznik *" className="prof-input" /><input type="number" value={form.price} onChange={e=>setForm({...form,price:e.target.value})} placeholder="Cena *" className="prof-input" /><input type="number" value={form.mileage} onChange={e=>setForm({...form,mileage:e.target.value})} placeholder="Przebieg" className="prof-input" /><input value={form.location} onChange={e=>setForm({...form,location:e.target.value})} placeholder="Miasto *" className="prof-input" /></div><input value={form.phone} onChange={e=>setForm({...form,phone:e.target.value})} placeholder="Telefon *" className="prof-input" /><textarea value={form.description} onChange={e=>setForm({...form,description:e.target.value})} placeholder="Opis" className="prof-input" rows="3"></textarea><div className="flex gap-2 flex-wrap">{form.images.map((im,i)=><div key={i} className="relative w-[70px] h-[70px] rounded border overflow-hidden"><img src={im} className="w-full h-full object-cover" /><button type="button" onClick={()=>setForm({...form,images:form.images.filter((_,idx)=>idx!==i)})} className="absolute top-0 right-0 w-5 h-5 bg-black/70 text-white rounded-full text-[10px]">X</button></div>)}{form.images.length<5 && <label className="w-[70px] h-[70px] border-2 border-dashed rounded flex items-center justify-center cursor-pointer">+<input ref={fileRef} type="file" accept="image/*" multiple onChange={handleImg} style={{display:'none'}} /></label>}</div><div className="flex gap-2"><button type="button" onClick={handleCancelAdd} className="flex-1 bg-[#f5f5f7] border font-bold py-3 rounded-[10px] text-[12px]">Anuluj</button><button type="submit" className="flex-[2] bg-black text-white font-bold py-3 rounded-[10px] text-[12px]">Zapisz STAŁE ✓</button></div></form></div></div></div>)}
     </div>
   );
 }
