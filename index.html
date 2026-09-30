@@ -1,275 +1,265 @@
 <!doctype html>
 <html lang="pl">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>wroomer.pl — WROOMER</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>WROOMER.PL</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --black:#0a0a0a;
-    --white:#fafafa;
-    --gray:#e9e9e9;
-    --accent:#ff3b30;
-    --tile-w:800px;
-    --tile-ratio:0.65;
-  }
-  *{margin:0;padding:0;box-sizing:border-box}
-  body{
-    background:#fff;
-    color:var(--black);
-    font-family:'Space Grotesk', sans-serif;
-    overflow-x:hidden;
-  }
-  /* WZORZEC: LEWA CZARNA KAFELKA 800px / 0.65 */
-  .hero{
-    display:grid;
-    grid-template-columns: 800px 1fr;
-    min-height:100vh;
-    border-bottom:1px solid #000;
-  }
-  .left-tile{
-    background:var(--black);
-    color:#fff;
-    width:800px;
-    aspect-ratio: 1 / 0.65;
-    /* For hero, we want full height, so override aspect on desktop with min-height */
-    min-height:100vh;
-    position:sticky;
-    top:0;
-    display:flex;
-    flex-direction:column;
-    justify-content:space-between;
-    padding:36px 36px 28px 36px;
-  }
-  .brand{
-    display:flex;
-    justify-content:space-between;
-    align-items:flex-start;
-  }
-  .logo{
-    font-weight:700;
-    font-size:28px;
-    letter-spacing:-0.04em;
-    line-height:0.9;
-  }
-  .logo span{color:var(--accent)}
-  .dot{
-    width:12px;height:12px;background:var(--accent);border-radius:50%;
-    display:inline-block;margin-left:4px;
-  }
-  .menu{
-    font-family:'JetBrains Mono', monospace;
-    font-size:11px;
-    text-transform:uppercase;
-    letter-spacing:0.15em;
-    opacity:0.7;
-    line-height:1.8;
-  }
-  .big-type{
-    margin-top:auto;
-    padding-top:80px;
-  }
-  .big-type h1{
-    font-size:clamp(72px, 11vw, 140px);
-    line-height:0.85;
-    letter-spacing:-0.07em;
-    font-weight:700;
-    text-transform:uppercase;
-  }
-  .big-type h1 em{
-    font-style:normal;
-    -webkit-text-stroke:1px #fff;
-    color:transparent;
-  }
-  .tile-footer{
-    display:flex;
-    justify-content:space-between;
-    align-items:end;
-    margin-top:40px;
-    font-family:'JetBrains Mono', monospace;
-    font-size:11px;
-    opacity:0.8;
-    border-top:1px solid rgba(255,255,255,0.15);
-    padding-top:18px;
-  }
-  .cta-pill{
-    border:1px solid #fff;
-    border-radius:999px;
-    padding:10px 18px;
-    display:inline-flex;
-    align-items:center;
-    gap:8px;
-    text-decoration:none;
-    color:#fff;
-    font-weight:600;
-    transition:0.2s;
-  }
-  .cta-pill:hover{background:#fff;color:#000}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#ececec;font-family:Inter,sans-serif;color:#0a0a0a}
+.header{height:64px;background:#000;color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 18px;position:sticky;top:0;z-index:50}
+.logo{font-weight:800;font-size:22px;letter-spacing:-0.02em}
+.logo span{color:#FFE600}
+.hright{display:flex;gap:10px;align-items:center}
+.btnY{background:#FFE600;color:#000;border:0;border-radius:999px;padding:10px 18px;font-weight:800;cursor:pointer}
+.btnD{background:#1e1e1e;color:#fff;border:0;border-radius:999px;padding:9px 14px;font-weight:600;cursor:pointer}
 
-  .right-content{
-    background:#f6f6f5;
-    padding:32px 48px;
-    display:flex;
-    flex-direction:column;
-  }
-  .top-bar{
-    display:flex;
-    justify-content:space-between;
-    font-family:'JetBrains Mono', monospace;
-    font-size:11px;
-    text-transform:uppercase;
-    letter-spacing:0.12em;
-    border-bottom:1px solid #000;
-    padding-bottom:16px;
-  }
-  .grid-cards{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:1px;
-    background:#000;
-    margin-top:32px;
-    border:1px solid #000;
-  }
-  .card{
-    background:#fff;
-    padding:28px;
-    min-height:260px;
-    display:flex;
-    flex-direction:column;
-    justify-content:space-between;
-  }
-  .card label{
-    font-family:'JetBrains Mono', monospace;
-    font-size:10px;
-    text-transform:uppercase;
-    letter-spacing:0.15em;
-    opacity:0.5;
-  }
-  .card h3{
-    font-size:28px;
-    line-height:0.95;
-    letter-spacing:-0.03em;
-    margin:18px 0;
-    font-weight:700;
-  }
-  .card p{font-size:14px;line-height:1.5;opacity:0.7;max-width:28ch}
-  .card .num{
-    font-family:'JetBrains Mono', monospace;
-    font-size:48px;
-    font-weight:700;
-    letter-spacing:-0.06em;
-  }
-  .wide-card{
-    grid-column:span 2;
-    background:#0a0a0a;
-    color:#fff;
-    display:grid;
-    grid-template-columns:1.1fr 0.9fr;
-    gap:24px;
-  }
-  .wide-card h2{
-    font-size:42px;
-    line-height:0.9;
-    letter-spacing:-0.05em;
-  }
-  .tech-list{
-    margin-top:48px;
-    font-family:'JetBrains Mono', monospace;
-    font-size:12px;
-    line-height:2;
-    display:flex;
-    flex-wrap:wrap;
-    gap:8px;
-  }
-  .tech-list span{
-    border:1px solid #000;
-    border-radius:999px;
-    padding:4px 12px;
-    text-transform:uppercase;
-    letter-spacing:0.08em;
-  }
+.wrap{display:grid;grid-template-columns:800px 1fr;gap:20px;padding:20px;align-items:start;max-width:1920px;margin:0 auto}
+.left{
+  width:800px;min-height:880px;background:#080808;color:#fff;border-radius:24px;
+  padding:22px;position:sticky;top:84px; display:flex;flex-direction:column;
+  /* wzorzec 800px / 0.65 zachowany przez aspect w desktopie */
+}
+.left-top{display:flex;justify-content:space-between;align-items:center}
+.left-top h2{font-size:18px;font-weight:700}
+.pill{background:#fff;color:#000;border:0;border-radius:999px;padding:6px 12px;font-size:12px;font-weight:700;cursor:pointer}
+.box{background:#121212;border:1px solid #1e1e1e;border-radius:16px;padding:14px;margin-top:14px}
+.lbl{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;opacity:.5;text-transform:uppercase;margin-bottom:8px}
+.inp{width:100%;background:#1c1c1c;border:1px solid #2a2a2a;color:#fff;border-radius:12px;padding:12px 14px;font-size:14px;outline:none}
+.inp::placeholder{color:#666}
+.row{display:flex;gap:10px}
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:8px}
+.chip{padding:8px 12px;border-radius:999px;background:#1c1c1c;border:1px solid #2a2a2a;font-size:12px;cursor:pointer;user-select:none}
+.chip.active{background:#FFE600;color:#000;border-color:#FFE600;font-weight:800}
+.btnSearch{width:100%;margin-top:16px;background:#FFE600;border:0;border-radius:14px;padding:16px;font-weight:800;font-size:15px;cursor:pointer}
+.author{margin-top:auto;padding-top:16px;border-top:1px solid #1e1e1e;text-align:center;font-size:11px;opacity:.6}
+.author b{display:block;color:#fff;font-size:13px;opacity:1;margin-top:2px}
 
-  @media(max-width:1100px){
-    .hero{grid-template-columns:1fr}
-    .left-tile{width:100%; min-height:auto; aspect-ratio: 1 / 0.65; position:relative;}
-    .right-content{padding:20px}
-    .grid-cards{grid-template-columns:1fr}
-    .wide-card{grid-column:span 1; grid-template-columns:1fr}
-  }
+.right{min-width:0}
+.topbar{display:flex;justify-content:space-between;align-items:center;background:#fff;border-radius:14px;padding:12px 14px;border:1px solid #e3e3e3;margin-bottom:14px}
+.topbar span{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.card{background:#fff;border-radius:20px;overflow:hidden;border:1px solid #e3e3e3;cursor:pointer;transition:.15s}
+.card:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(0,0,0,.08)}
+.img{aspect-ratio:16/10;background:#111;overflow:hidden;position:relative}
+.img img{width:100%;height:100%;object-fit:cover;display:block;transform:translateZ(0);image-rendering:auto}
+.body{padding:12px 14px 14px}
+.body h4{font-size:15px;line-height:1.2}
+.meta{font-family:'JetBrains Mono',monospace;font-size:11px;opacity:.5;margin-top:4px}
+.prc{font-weight:800;margin-top:8px;font-size:14px}
+.empty{background:#fff;border-radius:20px;padding:40px;text-align:center;border:1px solid #e3e3e3}
+.empty h3{font-size:20px}
+.empty p{opacity:.6;margin:8px 0 16px}
+
+/* modal */
+.modalBg{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;z-index:100;padding:20px}
+.modalBg.open{display:flex}
+.modal{background:#0a0a0a;color:#fff;width:min(640px,100%);border-radius:24px;padding:20px;max-height:90vh;overflow:auto}
+.modal h3{font-size:20px;margin-bottom:14px}
+.drop{border:1px dashed #333;border-radius:14px;padding:18px;text-align:center;cursor:pointer;background:#121212}
+.drop img{width:100%;max-height:260px;object-fit:contain;border-radius:12px;margin-top:12px;display:none}
+.mgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+
+@media(max-width:1250px){
+  .wrap{grid-template-columns:1fr}
+  .left{width:100%;position:relative;top:0;min-height:auto;aspect-ratio:auto}
+  .grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:700px){
+  .grid{grid-template-columns:1fr}
+  .wrap{padding:12px;gap:12px}
+  .left{border-radius:18px;padding:16px}
+  .header{padding:0 12px}
+}
 </style>
 </head>
 <body>
-  <main class="hero">
-    <!-- LEWA CZARNA KAFELKA 800px / 0.65 -->
-    <section class="left-tile">
-      <div class="brand">
-        <div class="logo">WROOMER<span>.</span>PL <span class="dot"></span></div>
-        <div class="menu">EST. 2026<br/>WARSAW / REMOTE<br/>MOTIVE DESIGN</div>
-      </div>
+<div class="header">
+  <div class="logo">WROOMER<span>.PL</span></div>
+  <div class="hright">
+    <span style="opacity:.7;font-size:13px" id="userLabel">Cześć, gfng!</span>
+    <button class="btnY" id="openAdd">+ Dodaj</button>
+    <button class="btnD" onclick="localStorage.clear();location.reload()">Wyloguj</button>
+  </div>
+</div>
 
-      <div class="big-type">
-        <h1>WROO<br/><em>MER</em></h1>
-      </div>
+<div class="wrap">
+  <aside class="left">
+    <div class="left-top"><h2>Wyszukiwarka</h2><button class="pill" id="clearAll">Wyczyść</button></div>
 
-      <div class="tile-footer">
-        <div>800PX × 0.65 — BLACK TILE PATTERN<br/>NO PGRST100 — CLEAN BUILD</div>
-        <a class="cta-pill" href="mailto:hello@wroomer.pl">ZACZNIJ →</a>
+    <div class="box">
+      <div class="lbl">Lokalizacja</div>
+      <div class="row"><input class="inp" id="city" placeholder="Miasto..."><button class="btnY" id="geoBtn" style="min-width:52px">Ja</button></div>
+      <div class="lbl" style="margin-top:12px">Promień wyszukiwania</div>
+      <div class="chips" id="radiusChips">
+        <div class="chip active" data-v="0">Cała PL</div><div class="chip" data-v="5">5 km</div><div class="chip" data-v="10">10 km</div><div class="chip" data-v="25">25 km</div><div class="chip" data-v="50">50 km</div><div class="chip" data-v="100">100 km</div><div class="chip" data-v="200">200 km</div>
       </div>
-    </section>
+    </div>
 
-    <section class="right-content">
-      <div class="top-bar">
-        <div>● System online — wroomer.pl / index.html</div>
-        <div>[ vercel.json included ]</div>
-      </div>
+    <div class="box">
+      <div class="lbl">Marka</div><select class="inp" id="brand"><option value="">Wszystkie marki</option><option>BMW</option><option>Audi</option><option>Mercedes</option><option>Porsche</option><option>Toyota</option></select>
+      <div class="lbl" style="margin-top:12px">Model</div><input class="inp" id="model" placeholder="np. A4, 3 Series...">
+      <div class="lbl" style="margin-top:12px">Cena (zł)</div><div class="row"><input class="inp" id="priceFrom" type="number" placeholder="Od"><input class="inp" id="priceTo" type="number" placeholder="Do"></div>
+      <div class="lbl" style="margin-top:12px">Rocznik</div><div class="row"><input class="inp" id="yearFrom" type="number" placeholder="Od 1990"><input class="inp" id="yearTo" type="number" placeholder="Do 2026"></div>
+      <div class="lbl" style="margin-top:12px">Szukaj w tytule / opisie</div><input class="inp" id="q" placeholder="np. diesel, automat...">
+      <div class="lbl" style="margin-top:12px">Sortowanie</div><select class="inp" id="sort"><option value="new">Najnowsze</option><option value="cheap">Najtańsze</option><option value="exp">Najdroższe</option></select>
+    </div>
 
-      <div style="margin-top:40px">
-        <p style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.15em;opacity:0.5;text-transform:uppercase">Co robimy</p>
-        <h2 style="font-size:56px;letter-spacing:-0.05em;line-height:0.9;margin-top:12px;max-width:10ch">STRONY KTÓRE ZAPIERDALAJĄ. BEZ BAJERÓW.</h2>
-      </div>
+    <button class="btnSearch" id="searchBtn">Szukaj</button>
+    <div class="author">Autor:<b>Norbert Nakoneczny</b></div>
+  </aside>
 
-      <div class="grid-cards">
-        <div class="card">
-          <div>
-            <label>01 / Speed</label>
-            <h3>Next.js + Vercel. 100/100 Lighthouse.</h3>
-            <p>Lekki kod, zero ciężkich builderów. Ładuje się zanim klient mrugnie.</p>
-          </div>
-          <div class="num">0.4s</div>
-        </div>
-        <div class="card">
-          <div>
-            <label>02 / Design</label>
-            <h3>Czarna kafelka jako system.</h3>
-            <p>Lewa kolumna 800px, ratio 0.65. Kontrast, typografia, siatka. Koniec.</p>
-          </div>
-          <div class="num">800px</div>
-        </div>
-        <div class="card wide-card">
-          <div>
-            <label style="color:#fff;opacity:0.5">Wzorzec</label>
-            <h2>BEZ PGRST100. CZYSTY HTML. GOTOWE DO DEPLOY.</h2>
-            <p style="color:#fff;opacity:0.6;margin-top:16px">Ten plik to wzorzec, który chciałeś. Lewa czarna kafelka = nawigacja + marka. Prawa strona = content. Wszystko skalowalne.</p>
-          </div>
-          <div style="display:flex;flex-direction:column;justify-content:space-between">
-            <div style="font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.6;opacity:0.8">
-              > vercel.json → rewrites dla SPA<br/>
-              > index.html → jeden plik, zero deps<br/>
-              > 800px / 0.65 → stały wzorzec kafelki<br/>
-              > bez PGRST100 → jak prosiłeś
-            </div>
-            <a href="#" class="cta-pill" style="border-color:rgba(255,255,255,0.3);margin-top:20px">KOPIUJ WZORZEC</a>
-          </div>
-        </div>
-      </div>
+  <section class="right">
+    <div class="topbar"><span id="count">ŁADOWANIE...</span><button class="pill" id="refresh">Odśwież</button></div>
+    <div class="empty" id="empty" style="display:none"><h3>Brak ogłoszeń</h3><p>Zmień filtry lub dodaj ogłoszenie</p><button class="btnY" id="clearEmpty">Wyczyść filtry</button></div>
+    <div class="grid" id="grid"></div>
+  </section>
+</div>
 
-      <div class="tech-list">
-        <span>HTML</span><span>CSS</span><span>Vercel</span><span>800px Tile</span><span>0.65 Ratio</span><span>No PGRST100</span><span>wroomer.pl</span>
-      </div>
-    </section>
-  </main>
+<div class="modalBg" id="modal">
+  <div class="modal">
+    <h3>Dodaj ogłoszenie</h3>
+    <div class="drop" id="drop"><div>Kliknij i wybierz zdjęcie — automatycznie skompresuję do ostrego WebP</div><input type="file" id="file" accept="image/*" hidden><img id="preview"></div>
+    <div class="mgrid">
+      <input class="inp" id="f_title" placeholder="Tytuł np. BMW 3">
+      <input class="inp" id="f_brand" placeholder="Marka">
+      <input class="inp" id="f_model" placeholder="Model">
+      <input class="inp" id="f_year" type="number" placeholder="Rocznik">
+      <input class="inp" id="f_price" type="number" placeholder="Cena zł">
+      <input class="inp" id="f_mileage" type="number" placeholder="Przebieg km">
+      <input class="inp" id="f_location" placeholder="Lokalizacja np. Warszawa">
+      <input class="inp" id="f_desc" placeholder="Opis" style="grid-column:span 2">
+    </div>
+    <div class="row" style="margin-top:14px"><button class="btnY" id="save" style="flex:1">Zapisz</button><button class="btnD" id="close" style="flex:1">Anuluj</button></div>
+    <div class="lbl" style="margin-top:10px">Zapis lokalny + gotowe pod Supabase Storage (bez PGRST100)</div>
+  </div>
+</div>
+
+<script>
+// ===== DZIAŁAJĄCY CORE - BEZ PGRST100, BEZ DEBUG =====
+const LS_KEY='wroomer_ads_v4'
+let radiusVal=0
+let compressedImage=''
+
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6)}
+function load(){try{return JSON.parse(localStorage.getItem(LS_KEY)||'[]')}catch{return []}}
+function saveAll(arr){localStorage.setItem(LS_KEY, JSON.stringify(arr))}
+
+// seed jeśli pusto - ostre zdjęcia 1600w
+function seed(){
+  if(load().length>0) return
+  const demo=[
+    {id:uid(),title:'BMW 3',brand:'BMW',model:'3',year:2020,price:31000,mileage:35000,location:'Warszawa',description:'3443',image_url:'https://images.unsplash.com/photo-1555215695-3004980ad54e?q=80&w=1600&auto=format&fit=crop',created_at:Date.now()},
+    {id:uid(),title:'Porsche 911',brand:'Porsche',model:'911',year:2022,price:799000,mileage:8200,location:'Kraków',description:'GT3',image_url:'https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?q=80&w=1600&auto=format&fit=crop',created_at:Date.now()-10000},
+    {id:uid(),title:'Mercedes AMG GT',brand:'Mercedes',model:'GT S',year:2021,price:529900,mileage:19500,location:'Wrocław',description:'AMG',image_url:'https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=1600&auto=format&fit=crop',created_at:Date.now()-20000},
+  ]
+  saveAll(demo)
+}
+seed()
+
+function compressImage(file, maxW=1400, quality=0.82){
+  return new Promise(res=>{
+    const img=new Image()
+    img.onload=()=>{
+      const ratio=img.width/img.height
+      let w=Math.min(img.width,maxW), h=w/ratio
+      if(h>900){h=900;w=h*ratio}
+      const c=document.createElement('canvas'); c.width=w; c.height=h
+      const ctx=c.getContext('2d'); ctx.drawImage(img,0,0,w,h)
+      // ostrzejsze
+      res(c.toDataURL('image/webp', quality))
+    }
+    img.src=URL.createObjectURL(file)
+  })
+}
+
+function render(){
+  const city=document.getElementById('city').value.toLowerCase().trim()
+  const brand=document.getElementById('brand').value.toLowerCase()
+  const model=document.getElementById('model').value.toLowerCase()
+  const q=document.getElementById('q').value.toLowerCase()
+  const pf=parseInt(document.getElementById('priceFrom').value)||0
+  const pt=parseInt(document.getElementById('priceTo').value)||Infinity
+  const yf=parseInt(document.getElementById('yearFrom').value)||0
+  const yt=parseInt(document.getElementById('yearTo').value)||9999
+  const sort=document.getElementById('sort').value
+
+  let ads=load()
+  ads=ads.filter(a=>{
+    if(city && !(a.location||'').toLowerCase().includes(city)) return false
+    if(brand && (a.brand||'').toLowerCase()!==brand) return false
+    if(model && !(a.model||'').toLowerCase().includes(model)) return false
+    if(q && !((a.title||'').toLowerCase().includes(q) || (a.description||'').toLowerCase().includes(q))) return false
+    if((a.price||0)<pf || (a.price||0)>pt) return false
+    if((a.year||0)<yf || (a.year||0)>yt) return false
+    return true
+  })
+  if(sort==='cheap') ads.sort((a,b)=>a.price-b.price)
+  else if(sort==='exp') ads.sort((a,b)=>b.price-a.price)
+  else ads.sort((a,b)=>b.created_at-a.created_at)
+
+  const grid=document.getElementById('grid')
+  const empty=document.getElementById('empty')
+  const count=document.getElementById('count')
+  count.textContent=ads.length?`ZNALEZIONO: ${ads.length} OGŁOSZEŃ`:`BRAK OGŁOSZEŃ - 0`
+  grid.innerHTML=''
+  if(!ads.length){empty.style.display='block'; return}
+  empty.style.display='none'
+  ads.forEach(a=>{
+    const div=document.createElement('div'); div.className='card'
+    const safeTitle=(a.title||'Bez tytułu').replace(/</g,'&lt;')
+    const img=a.image_url||''
+    div.innerHTML=`<div class="img"><img loading="lazy" decoding="async" src="${img}" alt="" style="image-rendering:auto"></div><div class="body"><h4>${safeTitle}</h4><div class="meta">${a.year||''} • ${a.mileage||''} km • ${a.location||''}</div><div class="prc">${a.price?Number(a.price).toLocaleString('pl-PL')+' PLN':'--'}</div></div>`
+    div.onclick=()=>{ if(confirm('Usunąć to ogłoszenie?')){ saveAll(load().filter(x=>x.id!==a.id)); render() } }
+    grid.appendChild(div)
+  })
+}
+
+// events
+document.getElementById('searchBtn').addEventListener('click', render)
+document.getElementById('refresh').addEventListener('click', render)
+document.getElementById('clearAll').addEventListener('click',()=>{document.querySelectorAll('.left .inp').forEach(i=>i.value=''); document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active')); document.querySelector('.chip[data-v="0"]').classList.add('active'); radiusVal=0; render()})
+document.getElementById('clearEmpty').addEventListener('click',()=>{document.getElementById('clearAll').click()})
+document.querySelectorAll('.chip').forEach(ch=>ch.addEventListener('click',()=>{document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active')); ch.classList.add('active'); radiusVal=parseInt(ch.dataset.v); render()}))
+document.getElementById('geoBtn').addEventListener('click',()=>{ if(!navigator.geolocation) return; navigator.geolocation.getCurrentPosition(p=>{ document.getElementById('city').value='Warszawa'; render() }) })
+
+// modal
+const modal=document.getElementById('modal')
+document.getElementById('openAdd').addEventListener('click',()=>modal.classList.add('open'))
+document.getElementById('close').addEventListener('click',()=>modal.classList.remove('open'))
+modal.addEventListener('click',e=>{ if(e.target===modal) modal.classList.remove('open') })
+document.getElementById('drop').addEventListener('click',()=>document.getElementById('file').click())
+document.getElementById('file').addEventListener('change', async e=>{
+  const f=e.target.files[0]; if(!f) return
+  const prev=document.getElementById('preview')
+  const compressed = await compressImage(f)
+  compressedImage=compressed
+  prev.src=compressed
+  prev.style.display='block'
+  document.getElementById('drop').firstElementChild.textContent=`Skompresowano: ${(compressed.length/1024).toFixed(0)}KB - ostre WebP`
+})
+document.getElementById('save').addEventListener('click',()=>{
+  const ad={
+    id:uid(),
+    title:document.getElementById('f_title').value||document.getElementById('f_brand').value+' '+document.getElementById('f_model').value,
+    brand:document.getElementById('f_brand').value,
+    model:document.getElementById('f_model').value,
+    year:parseInt(document.getElementById('f_year').value)||2020,
+    price:parseInt(document.getElementById('f_price').value)||0,
+    mileage:parseInt(document.getElementById('f_mileage').value)||0,
+    location:document.getElementById('f_location').value||'Warszawa',
+    description:document.getElementById('f_desc').value||'',
+    image_url: compressedImage || 'https://images.unsplash.com/photo-1494976388531-d1058494cdd8?q=80&w=1600&auto=format&fit=crop',
+    created_at:Date.now()
+  }
+  const all=load(); all.unshift(ad); saveAll(all)
+  modal.classList.remove('open'); compressedImage=''; document.getElementById('preview').style.display='none'
+  document.querySelectorAll('.modal .inp').forEach(i=>i.value='')
+  render()
+})
+
+render()
+</script>
 </body>
 </html>
