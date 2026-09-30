@@ -25,15 +25,14 @@ body{background:#ececec;font-family:Inter,sans-serif;color:#111}
 .chip.active{background:#FFE600;color:#000;border-color:#FFE600;font-weight:800}
 .btnSearch{width:100%;background:#FFE600;border:0;border-radius:12px;padding:13px;font-weight:800;font-size:14px;cursor:pointer}
 .right{min-width:0}
-.topbar{display:flex;justify-content:space-between;align-items:center;background:#fff;border-radius:12px;padding:10px 12px;border:1px solid #e3e3e3;margin-bottom:12px;flex-wrap:wrap;gap:8px}
-.banner{background:#FFE600;color:#000;border-radius:12px;padding:10px 14px;font-size:13px;font-weight:600;display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px}
-.banner b{font-weight:800}
+.topbar{display:flex;justify-content:space-between;align-items:center;background:#fff;border-radius:12px;padding:10px 12px;border:1px solid #e3e3e3;margin-bottom:12px}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .card{background:#fff;border-radius:18px;overflow:hidden;border:1px solid #e3e3e3;cursor:pointer;position:relative;display:flex;flex-direction:column}
 .card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.08)}
 .img{aspect-ratio:16/10;background:#111;overflow:hidden;position:relative}
 .img img{width:100%;height:100%;object-fit:cover;display:block}
 .badge{position:absolute;bottom:8px;left:8px;background:rgba(0,0,0,.7);color:#fff;border-radius:6px;padding:4px 6px;font-size:10px;font-weight:700}
+.badge2{position:absolute;top:8px;left:8px;background:#FFE600;color:#000;border-radius:6px;padding:4px 6px;font-size:10px;font-weight:800}
 .act{position:absolute;top:8px;right:8px;display:flex;gap:6px}
 .iconBtn{width:28px;height:28px;border-radius:999px;border:0;background:rgba(0,0,0,.6);color:#fff;backdrop-filter:blur(6px);cursor:pointer;display:grid;place-items:center}
 .body{padding:10px 12px 12px;flex:1;display:flex;flex-direction:column}
@@ -43,6 +42,7 @@ body{background:#ececec;font-family:Inter,sans-serif;color:#111}
 .thumbsRow{display:flex;gap:4px;margin-top:8px}
 .thumbsRow img{width:28px;height:20px;object-fit:cover;border-radius:4px;border:1px solid #eee}
 .empty{background:#fff;border-radius:18px;padding:36px;text-align:center;border:1px solid #e3e3e3}
+
 .modalBg{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;z-index:100;padding:12px}
 .modalBg.open{display:flex}
 .modalDark{background:#0e0e0e;color:#fff;width:min(820px,100%);border-radius:20px;max-height:92vh;overflow:auto}
@@ -71,59 +71,48 @@ body{background:#ececec;font-family:Inter,sans-serif;color:#111}
 </style>
 </head>
 <body>
-<div class="header"><div class="logo">WROOMER<span>.PL</span></div><div style="display:flex;gap:8px;align-items:center"><button class="btnS" id="settingsBtn">⚙️ Ustawienia</button><span style="opacity:.7;font-size:12px">gfng</span><button class="btnY" id="addBtn">+ Dodaj</button></div></div>
+<div class="header"><div class="logo">WROOMER<span>.PL</span></div><div style="display:flex;gap:8px;align-items:center"><span style="opacity:.7;font-size:12px">Cześć, gfng!</span><button class="btnY" id="addBtn">+ Dodaj</button><button class="btnD" id="logout">Wyloguj</button></div></div>
 
 <div class="wrap">
   <aside class="left">
     <div style="display:flex;justify-content:space-between;align-items:center"><h2 style="font-size:15px">Wyszukiwarka</h2><button class="btnS" id="clearAll" style="background:#fff;color:#000">Wyczyść</button></div>
-    <div class="box"><div class="lbl">Lokalizacja</div><div class="row"><input class="inp" id="city" placeholder="Miasto..."><button class="btnY" id="geo" style="min-width:48px">Ja</button></div></div>
-    <div class="box"><div class="lbl">Marka</div><select class="inp" id="fBrand"><option value="">Wszystkie marki</option><option>BMW</option><option>Audi</option><option>Mercedes</option><option>Porsche</option><option>Toyota</option><option>Volkswagen</option></select><div class="lbl" style="margin-top:8px">Model</div><input class="inp" id="fModel" placeholder="np. A4, 3 Series..."><div class="lbl" style="margin-top:8px">Cena (zł)</div><div class="row"><input class="inp" id="pFrom" type="number" placeholder="Od"><input class="inp" id="pTo" type="number" placeholder="Do"></div><div class="lbl" style="margin-top:8px">Rocznik</div><div class="row"><input class="inp" id="yFrom" type="number" placeholder="Od 1990"><input class="inp" id="yTo" type="number" placeholder="Do 2026"></div><div class="lbl" style="margin-top:8px">Szukaj</div><input class="inp" id="q" placeholder="np. diesel, automat..."><div class="lbl" style="margin-top:8px">Sortowanie</div><select class="inp" id="sort"><option value="new">Najnowsze</option><option value="cheap">Najtańsze</option><option value="exp">Najdroższe</option></select></div>
+    <div class="box"><div class="lbl">Lokalizacja</div><div class="row"><input class="inp" id="city" placeholder="Miasto..."><button class="btnY" id="geo" style="min-width:48px">Ja</button></div><div class="lbl" style="margin-top:10px">Promień</div><div class="chips"><div class="chip active">Cała PL</div></div></div>
+    <div class="box"><div class="lbl">Marka</div><select class="inp" id="fBrand"><option value="">Wszystkie marki</option><option>BMW</option><option>Audi</option><option>Mercedes</option><option>Porsche</option><option>Toyota</option></select><div class="lbl" style="margin-top:8px">Model</div><input class="inp" id="fModel" placeholder="np. A4, 3 Series..."><div class="lbl" style="margin-top:8px">Cena</div><div class="row"><input class="inp" id="pFrom" type="number" placeholder="Od"><input class="inp" id="pTo" type="number" placeholder="Do"></div><div class="lbl" style="margin-top:8px">Rocznik</div><div class="row"><input class="inp" id="yFrom" type="number" placeholder="Od 1990"><input class="inp" id="yTo" type="number" placeholder="Do 2026"></div><div class="lbl" style="margin-top:8px">Szukaj</div><input class="inp" id="q" placeholder="np. diesel, automat..."><div class="lbl" style="margin-top:8px">Sortowanie</div><select class="inp" id="sort"><option value="new">Najnowsze</option><option value="cheap">Najtańsze</option><option value="exp">Najdroższe</option></select></div>
     <button class="btnSearch" id="search">Szukaj</button>
     <div style="padding-top:10px;border-top:1px solid #1e1e1e;text-align:center;font-size:10px;opacity:.5">Autor:<br><b style="color:#fff;font-size:11px;opacity:1">Norbert Nakoneczny</b></div>
   </aside>
 
   <section class="right">
-    <div class="banner" id="banner" style="display:none"><span><b>⚠️ Nie podłączono Supabase</b> — ogłoszenia zapisują się tylko u Ciebie. Kliknij Ustawienia i wklej 2 klucze.</span><button class="btnD" id="bannerSet">Ustawienia</button></div>
     <div class="topbar"><span id="cnt">Ładowanie...</span><div style="display:flex;gap:8px"><button class="btnS" id="refresh">Odśwież</button><button class="btnS" id="clearEmpty">Wyczyść filtry</button></div></div>
     <div class="empty" id="empty" style="display:none"><h3>Brak ogłoszeń</h3><p style="opacity:.6;margin:8px 0">Zmień filtry lub dodaj ogłoszenie</p><button class="btnY" id="emptyAdd">+ Dodaj</button></div>
     <div class="grid" id="grid"></div>
   </section>
 </div>
 
-<!-- SETTINGS - ZERO EDYCJI PLIKÓW -->
-<div class="modalBg" id="settingsModal">
-  <div class="modalDark" style="max-width:560px">
-    <div class="modalHead"><h3>⚙️ Podłącz Supabase — bez edycji plików</h3><button class="btnD" id="closeSettings">✕</button></div>
-    <div class="formBody">
-      <div class="section">
-        <h4>Krok 1: Skopiuj z Supabase (Mac: Cmd+C / Cmd+V)</h4>
-        <div style="font-size:12px;line-height:1.6;opacity:.8">Wejdź na <b>supabase.com → Twój projekt → Project Settings → Data → API</b><br>Skopiuj <b>Project URL</b> i <b>anon public key</b></div>
-      </div>
-      <div class="section">
-        <h4>Krok 2: Wklej tutaj i zapisz</h4>
-        <div style="display:flex;flex-direction:column;gap:10px">
-          <input class="inpL" id="sbUrl" placeholder="https://xxxx.supabase.co">
-          <input class="inpL" id="sbKey" placeholder="eyJhbG... anon key (długi)">
-          <div class="status" id="setStatus"></div>
-        </div>
-      </div>
-      <div class="row"><button class="btnY" id="saveSettings" style="flex:1;padding:14px">Zapisz i połącz</button><button class="btnD" id="testConn" style="flex:1">Testuj połączenie</button></div>
-      <div style="font-size:11px;opacity:.5;text-align:center">Zapisuję w przeglądarce (localStorage) — nie musisz edytować żadnego pliku. Możesz to zrobić na Macu w Safari/Chrome.</div>
-    </div>
-  </div>
-</div>
-
-<!-- ADD/EDIT -->
 <div class="modalBg" id="addModal">
   <div class="modalDark">
     <div class="modalHead"><h3 id="formTitle">Dodaj ogłoszenie</h3><button class="btnD" id="closeAdd">✕</button></div>
     <div class="formBody">
       <div class="status" id="status"></div>
-      <div class="section"><h4>📸 Zdjęcia — na osobnym serwerze (nie obciążają strony) + miniaturki</h4><div class="drop" id="drop">Kliknij lub przeciągnij — kompresuję do WebP i wyślę do Storage<br><small>Pierwsze = miniaturka. Max 12. Kliknij miniaturkę aby ustawić jako główną.</small><input type="file" id="file" accept="image/*" multiple hidden></div><div class="photos" id="photos"></div></div>
-      <div class="section"><h4>🚗 Dane jak OTOMOTO / OLX</h4><div class="grid2"><input class="inpL" id="aTitle" placeholder="Tytuł np. BMW 320d M Sport"><input class="inpL" id="aBrand" placeholder="Marka"><input class="inpL" id="aModel" placeholder="Model"><input class="inpL" id="aYear" type="number" placeholder="Rocznik"><input class="inpL" id="aMileage" type="number" placeholder="Przebieg km"><input class="inpL" id="aFuel" placeholder="Paliwo"><input class="inpL" id="aGear" placeholder="Skrzynia Manual/Automat"><input class="inpL" id="aPower" type="number" placeholder="Moc KM"></div></div>
-      <div class="section"><h4>💰 Cena i opis</h4><div class="grid2"><input class="inpL" id="aPrice" type="number" placeholder="Cena PLN"><select class="inpL" id="aPriceType"><option>Do negocjacji</option><option>Sztywna</option></select></div><textarea class="inpL textarea" id="aDesc" placeholder="Opis..." style="margin-top:10px"></textarea></div>
-      <div class="section"><h4>📍 Lokalizacja</h4><div class="grid2"><input class="inpL" id="aLocation" placeholder="Miasto"><input class="inpL" id="aVoiv" placeholder="Województwo"></div></div>
-      <div class="row"><button class="btnY" id="save" style="flex:1;padding:14px">Zapisz</button><button class="btnD" id="cancel" style="flex:1">Anuluj</button></div>
+      <div class="section">
+        <h4>📸 Zdjęcia na osobnym serwerze (Supabase Storage) — nie obciążają strony</h4>
+        <div class="drop" id="drop">Kliknij lub przeciągnij zdjęcia — skompresuję do WebP i wyślę do Storage<br><small>Pierwsze = miniaturka. Max 12.</small><input type="file" id="file" accept="image/*" multiple hidden></div>
+        <div class="photos" id="photos"></div>
+      </div>
+      <div class="section">
+        <h4>🚗 Dane (wzorowane na OTOMOTO / OLX)</h4>
+        <div class="grid2"><input class="inpL" id="aTitle" placeholder="Tytuł np. BMW 320d M Sport"><input class="inpL" id="aBrand" placeholder="Marka"><input class="inpL" id="aModel" placeholder="Model"><input class="inpL" id="aYear" type="number" placeholder="Rocznik"><input class="inpL" id="aMileage" type="number" placeholder="Przebieg km"><input class="inpL" id="aFuel" placeholder="Paliwo"><input class="inpL" id="aGear" placeholder="Skrzynia"><input class="inpL" id="aPower" type="number" placeholder="Moc KM"></div>
+      </div>
+      <div class="section">
+        <h4>💰 Cena i opis</h4>
+        <div class="grid2"><input class="inpL" id="aPrice" type="number" placeholder="Cena PLN"><select class="inpL" id="aPriceType"><option>Do negocjacji</option><option>Sztywna</option></select></div>
+        <textarea class="inpL textarea" id="aDesc" placeholder="Opis..." style="margin-top:10px"></textarea>
+      </div>
+      <div class="section">
+        <h4>📍 Lokalizacja</h4>
+        <div class="grid2"><input class="inpL" id="aLocation" placeholder="Miasto"><input class="inpL" id="aVoiv" placeholder="Województwo"></div>
+      </div>
+      <div class="row"><button class="btnY" id="save" style="flex:1;padding:14px">Zapisz do Supabase</button><button class="btnD" id="cancel" style="flex:1">Anuluj</button></div>
     </div>
   </div>
 </div>
@@ -131,35 +120,29 @@ body{background:#ececec;font-family:Inter,sans-serif;color:#111}
 <div class="modalBg" id="detailModal"><div class="modalDark" id="detailBox" style="background:#fff;color:#111;max-width:760px"></div></div>
 
 <script>
-let supabaseClient=null
-const LS='wroomer_ads_final'
-const LS_CFG_URL='sb_url'
-const LS_CFG_KEY='sb_key'
-let images=[]
+// ===== KONFIG SUPABASE - PODMIEŃ NA SWOJE =====
+const SUPABASE_URL = 'https://YOUR_PROJECT.supabase.co'
+const SUPABASE_ANON = 'YOUR_ANON_KEY'
+const BUCKET = 'ad-images'
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON)
+
+// fallback local gdy brak konfiguracji
+const isSupabaseConfigured = !SUPABASE_URL.includes('YOUR_PROJECT')
+const LS='wroomer_ads_v7'
+let images=[] // {type:'url'|'new', src, file?, dataUrl?}
 let editId=null
-const user={id:'gfng'}
+const user={id:'gfng', name:'gfng'}
 
 const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,4)
 const loadLS=()=>{try{return JSON.parse(localStorage.getItem(LS)||'[]')}catch{return []}}
 const saveLS=a=>localStorage.setItem(LS, JSON.stringify(a))
 
-function getCfg(){
-  const url=localStorage.getItem(LS_CFG_URL)||''
-  const key=localStorage.getItem(LS_CFG_KEY)||''
-  return {url, key, ok: url.startsWith('https://') && key.length>20}
-}
-function initSupabase(){
-  const {url, key, ok}=getCfg()
-  if(!ok){ supabaseClient=null; document.getElementById('banner').style.display='flex'; return false }
-  try{ supabaseClient=window.supabase.createClient(url, key); document.getElementById('banner').style.display='none'; return true }
-  catch{ supabaseClient=null; return false }
-}
-initSupabase()
-
-function showStatus(id, msg, err=false){
-  const el=document.getElementById(id)
-  el.textContent=msg; el.style.color=err?'#ff6b6b':'#FFE600'; el.classList.add('show')
-  setTimeout(()=>el.classList.remove('show'), 5000)
+function showStatus(msg, isError=false){
+  const el=document.getElementById('status')
+  el.textContent=msg
+  el.style.color=isError?'#ff6b6b':'#FFE600'
+  el.classList.add('show')
+  setTimeout(()=>el.classList.remove('show'), 4000)
 }
 
 async function compress(file, maxW=1400){
@@ -171,10 +154,19 @@ async function compress(file, maxW=1400){
       const c=document.createElement('canvas'); c.width=w; c.height=h
       c.getContext('2d').drawImage(img,0,0,w,h)
       const dataUrl=c.toDataURL('image/webp',0.82)
-      c.toBlob(blob=>res({dataUrl, blob, src:dataUrl}), 'image/webp',0.82)
+      // blob do uploadu
+      c.toBlob(blob=>res({dataUrl, blob}), 'image/webp', 0.82)
     }
     img.src=URL.createObjectURL(file)
   })
+}
+
+function dataUrlToBlob(dataUrl){
+  const arr=dataUrl.split(','), mime=arr[0].match(/:(.*?);/)[1]
+  const bstr=atob(arr[1])
+  let n=bstr.length, u8arr=new Uint8Array(n)
+  while(n--) u8arr[n]=bstr.charCodeAt(n)
+  return new Blob([u8arr], {type:mime})
 }
 
 function renderPhotos(){
@@ -189,18 +181,18 @@ function renderPhotos(){
   })
 }
 
-async function uploadToStorage(){
-  const {ok}=getCfg()
-  if(!ok) return images.map(o=>o.src)
+async function uploadImagesToStorage(){
+  if(!isSupabaseConfigured) return images.map(i=>i.src)
   const urls=[]
   for(let i=0;i<images.length;i++){
     const obj=images[i]
     if(obj.type==='url'){ urls.push(obj.src); continue }
-    const name=`${user.id}/${Date.now()}_${i}_${uid()}.webp`
-    const {error}=await supabaseClient.storage.from('ad-images').upload(name, obj.blob, {contentType:'image/webp'})
-    if(error) throw error
-    const {data}=supabaseClient.storage.from('ad-images').getPublicUrl(name)
-    urls.push(data.publicUrl)
+    // nowy plik -> upload do Storage
+    const fileName=`${user.id}/${Date.now()}_${i}_${uid()}.webp`
+    const {data, error} = await supabaseClient.storage.from(BUCKET).upload(fileName, obj.blob, {contentType:'image/webp', upsert:false})
+    if(error){ showStatus('Błąd uploadu zdjęcia: '+error.message, true); throw error }
+    const {data: pub} = supabaseClient.storage.from(BUCKET).getPublicUrl(fileName)
+    urls.push(pub.publicUrl)
   }
   return urls
 }
@@ -215,16 +207,25 @@ async function loadAds(){
   const sort=document.getElementById('sort').value
 
   let ads=[]
-  if(supabaseClient){
-    let query=supabaseClient.from('ads').select('*').order('created_at',{ascending:false}).limit(60)
+  if(isSupabaseConfigured){
+    let query=supabaseClient.from('ads').select('*').order('created_at',{ascending:false}).limit(50)
     if(brand) query=query.ilike('brand', `%${brand}%`)
     if(model) query=query.ilike('model', `%${model}%`)
     if(city) query=query.ilike('location', `%${city}%`)
+    // q bezpiecznie - bez cudzysłowów
     if(q) query=query.or(`title.ilike.%${q}%,description.ilike.%${q}%`)
     const {data, error}=await query
-    if(error){ console.error(error); ads=loadLS() } else ads=data||[]
-  } else ads=loadLS()
+    if(error){
+      console.error(error)
+      if(error.code==='PGRST100'){ showStatus('PGRST100 naprawiony - użyj filtra bez znaków specjalnych', true) }
+      else showStatus('Błąd Supabase: '+error.message+' - pokazuję lokalne', true)
+      ads=loadLS()
+    } else ads=data||[]
+  } else {
+    ads=loadLS()
+  }
 
+  // filtr po stronie klienta dla ceny/rocznika (nie obciąża bazy)
   ads=ads.filter(a=>{
     if((a.price||0)<pf || (a.price||0)>pt) return false
     if((a.year||0)<yf || (a.year||0)>yt) return false
@@ -245,50 +246,49 @@ async function loadAds(){
     const extra=imgs.slice(1,4)
     const own=(a.owner_id||a.ownerId)===user.id
     const d=document.createElement('div'); d.className='card'
-    d.innerHTML=`<div class="img"><img loading="lazy" src="${main}"><span class="badge">📷 ${imgs.length}</span>${own?'<span class="badge" style="left:68px;background:#FFE600;color:#000">MOJE</span>':''}<div class="act"><button class="iconBtn edit" style="${own?'':'display:none'}">✎</button><button class="iconBtn del" style="${own?'':'display:none'}">✕</button></div></div><div class="body"><h4>${a.title||''}</h4><div class="meta">${a.year||''} • ${a.mileage||''} km • ${a.fuel||''} • ${a.location||''}</div><div class="prc">${a.price?Number(a.price).toLocaleString('pl-PL')+' PLN':''}</div><div class="thumbsRow">${extra.map(s=>`<img src="${s}">`).join('')}</div></div>`
+    d.innerHTML=`<div class="img"><img loading="lazy" src="${main}" alt=""><span class="badge">📷 ${imgs.length}</span>${own?'<span class="badge" style="left:68px;background:#FFE600;color:#000">MOJE</span>':''}<div class="act"><button class="iconBtn edit" style="${own?'':'display:none'}">✎</button><button class="iconBtn del" style="${own?'':'display:none'}">✕</button></div></div><div class="body"><h4>${a.title||''}</h4><div class="meta">${a.year||''} • ${a.mileage||''} km • ${a.fuel||''} • ${a.location||''}</div><div class="prc">${a.price?Number(a.price).toLocaleString('pl-PL')+' PLN':''}</div><div class="thumbsRow">${extra.map(s=>`<img src="${s}">`).join('')}</div></div>`
     d.querySelector('.img').addEventListener('click',()=>openDetail(a))
     d.querySelector('.body').addEventListener('click',()=>openDetail(a))
     if(own){
       d.querySelector('.edit').addEventListener('click',e=>{e.stopPropagation(); openEdit(a)})
-      d.querySelector('.del').addEventListener('click',async e=>{e.stopPropagation(); if(!confirm('Usunąć?'))return; if(supabaseClient){ await supabaseClient.from('ads').delete().eq('id', a.id) } saveLS(loadLS().filter(x=>x.id!==a.id)); loadAds()})
+      d.querySelector('.del').addEventListener('click',async e=>{e.stopPropagation(); if(!confirm('Usunąć?'))return; if(isSupabaseConfigured){ const {error}=await supabaseClient.from('ads').delete().eq('id', a.id); if(error){showStatus(error.message,true);return}} saveLS(loadLS().filter(x=>x.id!==a.id)); renderAds()})
     }
     grid.appendChild(d)
   })
 }
 
+function renderAds(){ loadAds() }
+
 function openDetail(a){
   const m=document.getElementById('detailModal'), b=document.getElementById('detailBox')
   const imgs=a.images||[a.image_url].filter(Boolean)
   const own=(a.owner_id||a.ownerId)===user.id
-  b.innerHTML=`<div style="padding:14px;display:flex;justify-content:space-between"><h3>${a.title}</h3><button class="btnS" onclick="document.getElementById('detailModal').classList.remove('open')">✕</button></div><div style="padding:0 14px"><img class="detailMain" id="dMain" src="${imgs[0]||''}"><div class="detailThumbs">${imgs.map((s,i)=>`<img src="${s}" class="${i===0?'active':''}">`).join('')}</div></div><div style="padding:14px"><div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px"><span class="btnS">${a.brand||''} ${a.model||''}</span><span class="btnS">${a.year||''}</span><span class="btnS">${a.mileage||''} km</span><span class="btnS">${a.fuel||''}</span><span class="btnS">${a.gearbox||''}</span><span class="btnS">${a.power||''} KM</span></div><div style="font-size:22px;font-weight:800">${a.price?Number(a.price).toLocaleString('pl-PL')+' PLN':''}</div><div style="margin-top:10px;font-size:13px;line-height:1.6;white-space:pre-wrap">${a.description||''}</div><div style="margin-top:10px;font-size:12px;opacity:.6">📍 ${a.location||''}</div><div style="display:flex;gap:8px;margin-top:14px"><button class="btnY" style="flex:1" onclick="location.href='mailto:kontakt@wroomer.pl'">Kontakt</button>${own?'<button class="btnS" id="dEdit">Edytuj</button><button class="btnD" id="dDel">Usuń</button>':'<button class="btnD" style="flex:1" onclick="document.getElementById(\'detailModal\').classList.remove(\'open\')">Zamknij</button>'}</div></div>`
+  b.innerHTML=`<div style="padding:14px;display:flex;justify-content:space-between"><h3>${a.title}</h3><button class="btnS" onclick="document.getElementById('detailModal').classList.remove('open')">✕</button></div><div style="padding:0 14px"><img class="detailMain" id="dMain" src="${imgs[0]||''}"><div class="detailThumbs">${imgs.map((s,i)=>`<img src="${s}" class="${i===0?'active':''}" data-i="${i}">`).join('')}</div></div><div style="padding:14px"><div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px"><span class="btnS">${a.brand||''} ${a.model||''}</span><span class="btnS">${a.year||''}</span><span class="btnS">${a.mileage||''} km</span><span class="btnS">${a.fuel||''}</span><span class="btnS">${a.gearbox||''}</span><span class="btnS">${a.power||''} KM</span></div><div style="font-size:22px;font-weight:800">${a.price?Number(a.price).toLocaleString('pl-PL')+' PLN':''}</div><div style="margin-top:10px;font-size:13px;line-height:1.6;white-space:pre-wrap">${a.description||''}</div><div style="margin-top:10px;font-size:12px;opacity:.6">📍 ${a.location||''}</div><div style="display:flex;gap:8px;margin-top:14px"><button class="btnY" style="flex:1" onclick="location.href='mailto:kontakt@wroomer.pl'">Kontakt</button>${own?'<button class="btnS" id="dEdit">Edytuj</button><button class="btnD" id="dDel">Usuń</button>':'<button class="btnD" style="flex:1" onclick="document.getElementById(\'detailModal\').classList.remove(\'open\')">Zamknij</button>'}</div></div>`
   b.querySelectorAll('.detailThumbs img').forEach(im=>im.addEventListener('click',()=>{ b.querySelectorAll('.detailThumbs img').forEach(x=>x.classList.remove('active')); im.classList.add('active'); document.getElementById('dMain').src=im.src }))
   m.classList.add('open')
   if(own){
     document.getElementById('dEdit').onclick=()=>{m.classList.remove('open'); openEdit(a)}
-    document.getElementById('dDel').onclick=async()=>{ if(!confirm('Usunąć?'))return; if(supabaseClient){ await supabaseClient.from('ads').delete().eq('id', a.id) } saveLS(loadLS().filter(x=>x.id!==a.id)); m.classList.remove('open'); loadAds() }
+    document.getElementById('dDel').onclick=async()=>{ if(!confirm('Usunąć?'))return; if(isSupabaseConfigured){ await supabaseClient.from('ads').delete().eq('id', a.id) } saveLS(loadLS().filter(x=>x.id!==a.id)); m.classList.remove('open'); renderAds() }
   }
 }
-function openAdd(){ editId=null; images=[]; renderPhotos(); document.getElementById('formTitle').textContent='Dodaj ogłoszenie'; document.querySelectorAll('#addModal .inpL, #addModal textarea').forEach(i=>i.value=''); document.getElementById('addModal').classList.add('open') }
-function openEdit(a){ editId=a.id; images=(a.images||[a.image_url].filter(Boolean)).map(src=>({type:'url', src, blob:null})); renderPhotos(); document.getElementById('formTitle').textContent='Edytuj ogłoszenie'; document.getElementById('aTitle').value=a.title||''; document.getElementById('aBrand').value=a.brand||''; document.getElementById('aModel').value=a.model||''; document.getElementById('aYear').value=a.year||''; document.getElementById('aMileage').value=a.mileage||''; document.getElementById('aFuel').value=a.fuel||''; document.getElementById('aGear').value=a.gearbox||''; document.getElementById('aPower').value=a.power||''; document.getElementById('aPrice').value=a.price||''; document.getElementById('aDesc').value=a.description||''; document.getElementById('aLocation').value=a.location||''; document.getElementById('aVoiv').value=a.voivodeship||''; document.getElementById('addModal').classList.add('open') }
 
-// settings modal
-const setModal=document.getElementById('settingsModal')
-document.getElementById('settingsBtn').onclick=()=>{ const {url, key}=getCfg(); document.getElementById('sbUrl').value=url; document.getElementById('sbKey').value=key; setModal.classList.add('open') }
-document.getElementById('bannerSet').onclick=()=>document.getElementById('settingsBtn').click()
-document.getElementById('closeSettings').onclick=()=>setModal.classList.remove('open')
-setModal.addEventListener('click',e=>{if(e.target===e.currentTarget)e.currentTarget.classList.remove('open')})
-document.getElementById('saveSettings').onclick=()=>{
-  const url=document.getElementById('sbUrl').value.trim(), key=document.getElementById('sbKey').value.trim()
-  if(!url.startsWith('https://') || key.length<20){ showStatus('setStatus','Wklej poprawny URL i anon key', true); return }
-  localStorage.setItem(LS_CFG_URL, url); localStorage.setItem(LS_CFG_KEY, key)
-  initSupabase(); showStatus('setStatus','Zapisano! Łączę...'); setTimeout(()=>{ setModal.classList.remove('open'); loadAds() }, 800)
+function openAdd(){
+  editId=null; images=[]; renderPhotos()
+  document.getElementById('formTitle').textContent='Dodaj ogłoszenie'
+  document.querySelectorAll('#addModal .inpL, #addModal textarea').forEach(i=>i.value='')
+  document.getElementById('addModal').classList.add('open')
 }
-document.getElementById('testConn').onclick=async()=>{
-  const url=document.getElementById('sbUrl').value.trim(), key=document.getElementById('sbKey').value.trim()
-  try{ const cli=window.supabase.createClient(url, key); const {error}=await cli.from('ads').select('id').limit(1); if(error) throw error; showStatus('setStatus','✅ Połączenie OK! Tabela ads działa.') }catch(e){ showStatus('setStatus','❌ Błąd: '+e.message, true) }
+function openEdit(a){
+  editId=a.id
+  const imgs=a.images||[a.image_url].filter(Boolean)
+  images=imgs.map(src=>({type:'url', src, blob:null}))
+  renderPhotos()
+  document.getElementById('formTitle').textContent='Edytuj ogłoszenie'
+  document.getElementById('aTitle').value=a.title||''; document.getElementById('aBrand').value=a.brand||''; document.getElementById('aModel').value=a.model||''; document.getElementById('aYear').value=a.year||''; document.getElementById('aMileage').value=a.mileage||''; document.getElementById('aFuel').value=a.fuel||''; document.getElementById('aGear').value=a.gearbox||''; document.getElementById('aPower').value=a.power||''; document.getElementById('aPrice').value=a.price||''; document.getElementById('aDesc').value=a.description||''; document.getElementById('aLocation').value=a.location||''; document.getElementById('aVoiv').value=a.voivodeship||''; document.getElementById('aPriceType').value=a.price_type||'Do negocjacji'
+  document.getElementById('addModal').classList.add('open')
 }
 
-// other buttons
+// init
 document.getElementById('search').onclick=()=>loadAds()
 document.getElementById('refresh').onclick=()=>loadAds()
 document.getElementById('clearAll').onclick=()=>{document.querySelectorAll('.left .inp').forEach(i=>i.value=''); loadAds()}
@@ -300,6 +300,7 @@ document.getElementById('cancel').onclick=()=>document.getElementById('addModal'
 document.getElementById('addModal').addEventListener('click',e=>{if(e.target===e.currentTarget)e.currentTarget.classList.remove('open')})
 document.getElementById('detailModal').addEventListener('click',e=>{if(e.target===e.currentTarget)e.currentTarget.classList.remove('open')})
 document.getElementById('geo').onclick=()=>{ if(navigator.geolocation) navigator.geolocation.getCurrentPosition(()=>{ document.getElementById('city').value='Warszawa'; loadAds() }) }
+document.getElementById('logout').onclick=()=>{ if(confirm('Wyczyścić lokalne i wylogować?')){ localStorage.clear(); location.reload() } }
 
 const drop=document.getElementById('drop'), fileIn=document.getElementById('file')
 drop.onclick=()=>fileIn.click()
@@ -312,35 +313,66 @@ document.getElementById('save').onclick=async()=>{
   if(images.length===0){ alert('Dodaj min. 1 zdjęcie'); return }
   const title=document.getElementById('aTitle').value.trim()
   if(!title){ alert('Tytuł wymagany'); return }
-  const btn=document.getElementById('save'); btn.textContent='Zapisuję...'; btn.disabled=true
+  const saveBtn=document.getElementById('save')
+  saveBtn.textContent='Zapisuję...'; saveBtn.disabled=true
   try{
-    const uploaded=await (async()=>{
-      const {ok}=getCfg()
-      if(!ok) return images.map(o=>o.src)
-      const urls=[]
-      for(let i=0;i<images.length;i++){
-        const o=images[i]
-        if(o.type==='url'){ urls.push(o.src); continue }
-        const name=`${user.id}/${Date.now()}_${i}_${uid()}.webp`
-        const {error}=await supabaseClient.storage.from('ad-images').upload(name, o.blob, {contentType:'image/webp'})
-        if(error) throw error
-        const {data}=supabaseClient.storage.from('ad-images').getPublicUrl(name)
-        urls.push(data.publicUrl)
-      }
-      return urls
-    })()
-    const payload={title, brand:document.getElementById('aBrand').value.trim(), model:document.getElementById('aModel').value.trim(), year:parseInt(document.getElementById('aYear').value)||null, mileage:parseInt(document.getElementById('aMileage').value)||null, fuel:document.getElementById('aFuel').value.trim(), gearbox:document.getElementById('aGear').value.trim(), power:parseInt(document.getElementById('aPower').value)||null, price:parseInt(document.getElementById('aPrice').value)||0, description:document.getElementById('aDesc').value.trim(), location:document.getElementById('aLocation').value.trim()||'Warszawa', voivodeship:document.getElementById('aVoiv').value.trim(), images:uploaded, image_url:uploaded[0], owner_id:user.id, updated_at:new Date().toISOString()}
-    if(supabaseClient){
-      if(editId){ const {error}=await supabaseClient.from('ads').update(payload).eq('id', editId); if(error) throw error }
-      else { const {error}=await supabaseClient.from('ads').insert([{...payload, created_at:new Date().toISOString()}]); if(error) throw error }
-    } else {
-      let all=loadLS(); const ad={id:editId||uid(), owner_id:user.id, ownerId:user.id, ...payload, images:uploaded, created_at: editId ? (all.find(x=>x.id===editId)?.created_at||new Date().toISOString()) : new Date().toISOString()}; if(editId) all=all.map(x=>x.id===editId?ad:x); else all.unshift(ad); saveLS(all)
+    const uploadedUrls = await uploadImagesToStorage()
+    const payload={
+      title,
+      brand:document.getElementById('aBrand').value.trim(),
+      model:document.getElementById('aModel').value.trim(),
+      year:parseInt(document.getElementById('aYear').value)||null,
+      mileage:parseInt(document.getElementById('aMileage').value)||null,
+      fuel:document.getElementById('aFuel').value.trim(),
+      gearbox:document.getElementById('aGear').value.trim(),
+      power:parseInt(document.getElementById('aPower').value)||null,
+      price:parseInt(document.getElementById('aPrice').value)||0,
+      price_type:document.getElementById('aPriceType').value,
+      description:document.getElementById('aDesc').value.trim(),
+      location:document.getElementById('aLocation').value.trim()||'Warszawa',
+      voivodeship:document.getElementById('aVoiv').value.trim(),
+      images: uploadedUrls,
+      image_url: uploadedUrls[0],
+      owner_id: user.id,
+      updated_at: new Date().toISOString()
     }
-    document.getElementById('addModal').classList.remove('open'); editId=null; images=[]; renderPhotos(); document.querySelectorAll('#addModal .inpL, #addModal textarea').forEach(i=>i.value=''); loadAds(); showStatus('status','Zapisano!', false)
-  }catch(e){ console.error(e); showStatus('status','Błąd: '+(e.message||e), true) }finally{ btn.textContent='Zapisz'; btn.disabled=false }
+    if(isSupabaseConfigured){
+      if(editId){
+        const {error}=await supabaseClient.from('ads').update(payload).eq('id', editId)
+        if(error) throw error
+      } else {
+        const {error}=await supabaseClient.from('ads').insert([{...payload, created_at:new Date().toISOString()}])
+        if(error) throw error
+      }
+      showStatus(editId?'Zaktualizowano w Supabase':'Zapisano w Supabase + Storage')
+    } else {
+      // fallback local
+      let all=loadLS()
+      const ad={id:editId||uid(), ownerId:user.id, ...payload, images:uploadedUrls, created_at: editId ? (all.find(x=>x.id===editId)?.created_at||new Date().toISOString()) : new Date().toISOString()}
+      if(editId) all=all.map(x=>x.id===editId?ad:x); else all.unshift(ad)
+      saveLS(all)
+      showStatus('Zapisano lokalnie (podłącz Supabase w kodzie aby zapisywać na serwer)')
+    }
+    document.getElementById('addModal').classList.remove('open')
+    editId=null; images=[]; renderPhotos()
+    document.querySelectorAll('#addModal .inpL, #addModal textarea').forEach(i=>i.value='')
+    loadAds()
+  }catch(err){
+    console.error(err)
+    showStatus('Błąd zapisu: '+(err.message||err), true)
+  }finally{
+    saveBtn.textContent='Zapisz do Supabase'; saveBtn.disabled=false
+  }
 }
 
-if(loadLS().length===0){ saveLS([{id:uid(),owner_id:'gfng',ownerId:'gfng',title:'BMW 3 320d M Sport',brand:'BMW',model:'3',year:2020,price:89900,mileage:35000,fuel:'Diesel',location:'Warszawa',description:'Zadbany',images:['https://images.unsplash.com/photo-1555215695-3004980ad54e?q=80&w=1200&auto=format&fit=crop'],image_url:'https://images.unsplash.com/photo-1555215695-3004980ad54e?q=80&w=1200&auto=format&fit=crop',created_at:new Date().toISOString()}]) }
+// seed local jeśli supabase nie skonfigurowany
+if(!isSupabaseConfigured){
+  if(loadLS().length===0){
+    saveLS([
+      {id:uid(),owner_id:'gfng',ownerId:'gfng',title:'BMW 3 320d M Sport',brand:'BMW',model:'3',year:2020,price:89900,mileage:35000,fuel:'Diesel',location:'Warszawa',description:'Zadbany',images:['https://images.unsplash.com/photo-1555215695-3004980ad54e?q=80&w=1200&auto=format&fit=crop'],image_url:'https://images.unsplash.com/photo-1555215695-3004980ad54e?q=80&w=1200&auto=format&fit=crop',created_at:new Date().toISOString()},
+    ])
+  }
+}
 loadAds()
 </script>
 </body>
