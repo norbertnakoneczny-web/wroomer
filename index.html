@@ -1,15 +1,12 @@
 <!DOCTYPE html>
-<html lang="pl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-<title>WROOMER - FIX 3 zdjecia</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+<html lang="pl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>WROOMER - FIX Ladowanie</title>
 <style>
-*{font-family:Inter,sans-serif;box-sizing:border-box}body{background:#f5f5f7;margin:0;padding:0;overflow-x:hidden}
+*{font-family:Inter,sans-serif;box-sizing:border-box}body{background:#f5f5f7;margin:0}
 .header{background:#000;color:#fff;height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 12px;position:sticky;top:0;z-index:10}
-.logo{font-weight:900;font-size:16px;cursor:pointer} .logo span{color:#ffea00}
 .btn{border:none;border-radius:10px;padding:8px 14px;font-weight:900;font-size:12px;cursor:pointer}
 .btn-yellow{background:#ffea00;color:#000} .btn-black{background:#000;color:#fff} .btn-white{background:#fff;color:#000;border:1px solid #ddd} .btn-red{background:#fee;color:#a00;border:1px solid #fcc}
-.card{background:#fff;border-radius:16px;border:1px solid #e5e5e5;overflow:hidden;cursor:pointer} .card:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,0,0,0.1)}
-.card img{width:100%;height:170px;object-fit:cover;background:#f0f0f0}
+.card{background:#fff;border-radius:16px;border:1px solid #e5e5e5;overflow:hidden;cursor:pointer} .card img{width:100%;height:170px;object-fit:cover;background:#eee}
 .input{width:100%;background:#f5f5f7;border:1px solid #e5e5e5;border-radius:10px;padding:11px 12px;font-size:13px;outline:none;margin-top:4px}
 .label{font-size:10px;font-weight:700;margin-top:12px;display:block}
 .modal{position:fixed;inset:0;background:rgba(0,0,0,0.75);display:flex;align-items:center;justify-content:center;z-index:100;padding:12px}
@@ -17,7 +14,7 @@
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:12px}
 </style></head><body>
 <div class="header">
-  <div class="logo" onclick="location.reload()">WROOMER<span>.PL</span></div>
+  <div class="logo" style="font-weight:900" onclick="location.reload()">WROOMER<span style="color:#ffea00">.PL</span> <span style="font-size:8px;background:#ffea00;color:#000;padding:2px 6px;border-radius:10px;margin-left:6px">FIX Ladowanie</span></div>
   <div style="display:flex;gap:6px;align-items:center">
     <span id="userInfo" style="font-size:10px;color:#aaa;display:none"></span>
     <button class="btn btn-white" id="btnLogin">Zaloguj</button>
@@ -30,14 +27,13 @@
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px">
     <div style="background:#000;color:#fff;font-size:11px;font-weight:700;padding:7px 14px;border-radius:20px" id="status">Ladowanie...</div>
     <div style="display:flex;gap:6px">
-      <input id="searchInput" class="btn btn-white" placeholder="Szukaj..." style="padding:7px 12px;font-weight:400;width:150px">
-      <select id="brandFilter" class="btn btn-white" style="padding:7px 12px"><option value="">Wszystkie marki</option><option>BMW</option><option>Audi</option><option>Volkswagen</option><option>Mercedes</option><option>Skoda</option><option>Toyota</option></select>
-      <select id="sortBy" class="btn btn-white" style="padding:7px 12px"><option value="newest">Najnowsze</option><option value="price_asc">Cena up</option><option value="price_desc">Cena down</option></select>
+      <input id="searchInput" class="btn btn-white" placeholder="Szukaj..." style="padding:7px 12px;font-weight:400;width:140px">
+      <select id="brandFilter" class="btn btn-white" style="padding:7px 12px"><option value="">Wszystkie</option><option>BMW</option><option>Audi</option><option>VW</option><option>Mercedes</option><option>Skoda</option><option>Toyota</option></select>
       <button class="btn btn-white" onclick="loadAds()">Refresh</button>
     </div>
   </div>
   <div id="adsGrid" class="grid"></div>
-  <div id="empty" style="display:none;background:#fff;border-radius:20px;padding:32px;text-align:center;margin-top:16px"><div style="font-weight:900;font-size:18px">Brak ogloszen</div></div>
+  <div id="empty" style="display:none;background:#fff;border-radius:20px;padding:24px;text-align:center;margin-top:12px"><div style="font-weight:900">Brak ogloszen lub blad ladowania</div><div id="emptyMsg" style="font-size:11px;color:#888;margin-top:8px"></div><button class="btn btn-black" style="margin-top:12px" onclick="loadAds()">Sprobuj ponownie</button></div>
 </div>
 
 <div id="authModal" class="modal" style="display:none"><div class="modal-box"><div style="padding:16px;border-bottom:1px solid #eee;display:flex;justify-content:space-between"><div style="font-weight:900" id="authTitle">Zaloguj</div><button class="btn btn-white" onclick="closeAuth()">X</button></div><div style="padding:20px;overflow:auto"><div id="authError" style="display:none;background:#fee;border:1px solid #fcc;color:#a00;padding:10px;border-radius:10px;font-size:11px;font-weight:700;margin-bottom:12px"></div><div id="authNameWrap"><label class="label">Imie *</label><input id="authName" class="input" placeholder="Jan"></div><label class="label">E-mail *</label><input id="authEmail" class="input" type="email"><label class="label">Haslo *</label><input id="authPass" class="input" type="password"><button class="btn btn-black" style="width:100%;margin-top:20px;padding:14px" id="authSubmit">Zaloguj</button><div style="text-align:center;font-size:11px;color:#888;margin-top:14px"><span id="authSwitchText">Nie masz konta?</span> <button style="background:none;border:none;font-weight:900;text-decoration:underline;cursor:pointer;margin-left:6px;font-size:11px" id="authSwitch">Zarejestruj</button></div></div></div></div>
@@ -54,12 +50,12 @@
 </div>
 <label class="label">Tytul</label><input id="fTitle" class="input" placeholder="BMW 1 Series">
 <label class="label">Telefon *</label><input id="fPhone" class="input" placeholder="600123456">
-<label class="label">Opis</label><textarea id="fDesc" class="input" rows="3" placeholder="Opis..."></textarea>
-<label class="label">Zdjecia (max 3) * - wszystkie 3 beda wszedzie!</label>
+<label class="label">Opis</label><textarea id="fDesc" class="input" rows="3"></textarea>
+<label class="label">Zdjecia (max 3) *</label>
 <div id="imgPreview" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"></div>
-<label class="btn btn-white" style="margin-top:8px;cursor:pointer"><span>+ Dodaj zdjecia (max 3)</span><input id="fImages" type="file" accept="image/*" multiple style="display:none"></label>
-<div id="imgInfo" style="font-size:10px;color:#666;margin-top:6px">0/3 zdjec</div>
-<button class="btn btn-black" style="width:100%;margin-top:16px;padding:14px" id="btnSave">Zapisz - widoczne wszedzie</button>
+<label class="btn btn-white" style="margin-top:8px;cursor:pointer"><span>+ Dodaj zdjecia</span><input id="fImages" type="file" accept="image/*" multiple style="display:none"></label>
+<div id="imgInfo" style="font-size:10px;color:#666;margin-top:6px">0/3</div>
+<button class="btn btn-black" style="width:100%;margin-top:16px;padding:14px" id="btnSave">Zapisz</button>
 </div></div></div>
 
 <div id="detailModal" class="modal" style="display:none"><div class="modal-box" style="max-width:640px"><div style="padding:12px;border-bottom:1px solid #eee;display:flex;justify-content:space-between"><button class="btn btn-white" onclick="closeDetail()">Wroc</button><div style="display:flex;gap:6px"><button class="btn btn-black" id="detailEdit" style="display:none">Edytuj</button><button class="btn btn-red" id="detailDelete" style="display:none">Usun</button><button class="btn btn-white" onclick="closeDetail()">X</button></div></div><div id="detailContent" style="overflow:auto"></div></div></div>
@@ -95,30 +91,39 @@ function canEdit(ad){
   return false;
 }
 async function loadAds(){
-  document.getElementById('status').textContent='Ladowanie...';
+  const statusEl=document.getElementById('status');
+  statusEl.textContent='Ladowanie...';
+  document.getElementById('empty').style.display='none';
   try{
-    let res=await fetch(SUPABASE_URL+"/rest/v1/ads?select=*&order=created_at_ts.desc&limit=100",{headers:{apikey:PUB_KEY,Authorization:"Bearer "+PUB_KEY}});
+    // FIX: najpierw probuj order=id.desc bo created_at_ts moze nie istniec lub miec null
+    let res=await fetch(SUPABASE_URL+"/rest/v1/ads?select=*&order=id.desc&limit=50",{headers:{apikey:PUB_KEY,Authorization:"Bearer "+PUB_KEY}});
+    let txt=await res.text();
     if(!res.ok){
-      res=await fetch(SUPABASE_URL+"/rest/v1/ads?select=*&order=id.desc&limit=100",{headers:{apikey:PUB_KEY,Authorization:"Bearer "+PUB_KEY}});
+      statusEl.textContent='Blad SELECT '+res.status+': '+txt.substring(0,100);
+      document.getElementById('empty').style.display='block';
+      document.getElementById('emptyMsg').textContent=txt;
+      console.error('SELECT error',res.status,txt);
+      return;
     }
-    if(!res.ok){document.getElementById('status').textContent='Blad '+res.status; return;}
-    const txt=await res.text();
     ads=JSON.parse(txt);
+    console.log('Loaded',ads.length,'ads');
     renderAds();
-    document.getElementById('status').textContent="OK "+ads.length+" ogloszen - FIX 3 zdjecia + edycja po relogin";
-  }catch(e){document.getElementById('status').textContent='Blad: '+e.message;}
+    statusEl.textContent="OK "+ads.length+" ogloszen - dziala!";
+  }catch(e){
+    statusEl.textContent='Blad: '+e.message;
+    document.getElementById('empty').style.display='block';
+    document.getElementById('emptyMsg').textContent=e.message;
+    console.error(e);
+  }
 }
 function renderAds(){
   const grid=document.getElementById('adsGrid');
   const brand=document.getElementById('brandFilter').value;
   const query=document.getElementById('searchInput').value.toLowerCase();
-  const sort=document.getElementById('sortBy').value;
   let filtered=ads;
   if(brand) filtered=filtered.filter(a=>a.brand===brand);
   if(query) filtered=filtered.filter(a=>(a.title+" "+a.brand+" "+a.model).toLowerCase().includes(query));
-  if(sort==='price_asc') filtered=[...filtered].sort((a,b)=>a.price-b.price);
-  else if(sort==='price_desc') filtered=[...filtered].sort((a,b)=>b.price-a.price);
-  else filtered=[...filtered].sort((a,b)=>(b.created_at_ts||b.id)-(a.created_at_ts||a.id));
+  filtered=[...filtered].sort((a,b)=>(b.created_at_ts||b.id)-(a.created_at_ts||a.id));
   grid.innerHTML='';
   document.getElementById('empty').style.display=filtered.length===0?'block':'none';
   filtered.forEach(ad=>{
@@ -126,7 +131,7 @@ function renderAds(){
     const main=imgs[0]||'https://images.unsplash.com/photo-1555215695-3004980ad54e?w=600';
     const badge=imgs.length>1?'<div style="position:absolute;bottom:8px;right:8px;background:rgba(0,0,0,0.75);color:#fff;font-size:9px;padding:3px 7px;border-radius:10px">📸 '+imgs.length+'</div>':'';
     const div=document.createElement('div'); div.className='card';
-    div.innerHTML='<div style="position:relative"><img src="'+main+'"><div style="position:absolute;top:8px;left:8px;background:rgba(0,0,0,0.75);color:#fff;font-size:9px;font-weight:900;padding:4px 8px;border-radius:20px">'+(ad.brand||'')+' '+(ad.model||'')+'</div><div style="position:absolute;top:8px;right:8px;background:#ffea00;color:#000;font-size:8px;font-weight:900;padding:4px 7px;border-radius:20px">🌐</div>'+badge+'</div><div style="padding:12px"><div style="font-weight:700;font-size:13px;min-height:34px">'+(ad.title||ad.brand+' '+ad.model)+'</div><div style="font-weight:900;font-size:18px;margin-top:6px">'+Number(ad.price||0).toLocaleString('pl-PL')+' zł</div><div style="font-size:10px;color:#888;margin-top:6px;display:flex;justify-content:space-between"><span>'+(ad.location||'')+' • '+(ad.year||'')+'</span><span>📸 '+imgs.length+'</span></div></div>';
+    div.innerHTML='<div style="position:relative"><img src="'+main+'" onerror="this.src='https://images.unsplash.com/photo-1555215695-3004980ad54e?w=600'"><div style="position:absolute;top:8px;left:8px;background:rgba(0,0,0,0.75);color:#fff;font-size:9px;font-weight:900;padding:4px 8px;border-radius:20px">'+(ad.brand||'')+' '+(ad.model||'')+'</div><div style="position:absolute;top:8px;right:8px;background:#ffea00;color:#000;font-size:8px;font-weight:900;padding:4px 7px;border-radius:20px">🌐</div>'+badge+'</div><div style="padding:12px"><div style="font-weight:700;font-size:13px;min-height:34px">'+(ad.title||ad.brand+' '+ad.model)+'</div><div style="font-weight:900;font-size:18px;margin-top:6px">'+Number(ad.price||0).toLocaleString('pl-PL')+' zł</div><div style="font-size:10px;color:#888;margin-top:6px">'+(ad.location||'')+' • '+(ad.year||'')+'</div></div>';
     div.onclick=function(){openDetail(ad);};
     grid.appendChild(div);
   });
@@ -142,10 +147,10 @@ function openDetail(ad){
   let thumbs='';
   if(imgs.length>1){
     thumbs='<div id="detailThumbs" style="display:flex;gap:8px;padding:10px;overflow:auto;background:#f9f9f9">';
-    imgs.forEach(function(im,i){thumbs+='<img src="'+im+'" style="width:70px;height:70px;object-fit:cover;border-radius:10px;border:2px solid '+(i===0?'#ffea00':'#eee')+';cursor:pointer" onclick="document.getElementById('detailMainImg').src=this.src; document.querySelectorAll('#detailThumbs img').forEach(function(x){x.style.borderColor='#eee'}); this.style.borderColor='#ffea00'">';});
+    imgs.forEach(function(im,i){thumbs+='<img src="'+im+'" style="width:70px;height:70px;object-fit:cover;border-radius:10px;border:2px solid '+(i===0?'#ffea00':'#eee')+';cursor:pointer" onclick="document.getElementById('detailMainImg').src=this.src">';});
     thumbs+='</div>';
   }
-  document.getElementById('detailContent').innerHTML='<img id="detailMainImg" src="'+main+'" style="width:100%;height:340px;object-fit:cover"><div>'+thumbs+'</div><div style="padding:16px"><div style="font-weight:900;font-size:20px">'+(ad.title||'')+'</div><div style="font-weight:900;font-size:26px;margin-top:8px">'+Number(ad.price||0).toLocaleString('pl-PL')+' zł</div><div style="margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:8px"><div style="background:#f5f5f7;border-radius:12px;padding:12px"><div style="font-size:9px;color:#888">Marka</div><div style="font-weight:700">'+(ad.brand||'-')+'</div></div><div style="background:#f5f5f7;border-radius:12px;padding:12px"><div style="font-size:9px;color:#888">Model</div><div style="font-weight:700">'+(ad.model||'-')+'</div></div><div style="background:#f5f5f7;border-radius:12px;padding:12px"><div style="font-size:9px;color:#888">Rocznik</div><div style="font-weight:700">'+(ad.year||'-')+'</div></div><div style="background:#f5f5f7;border-radius:12px;padding:12px"><div style="font-size:9px;color:#888">Przebieg</div><div style="font-weight:700">'+(ad.mileage?Number(ad.mileage).toLocaleString('pl-PL')+' km':'-')+'</div></div><div style="background:#f5f5f7;border-radius:12px;padding:12px"><div style="font-size:9px;color:#888">Miasto</div><div style="font-weight:700">'+(ad.location||'-')+'</div></div><div style="background:#f5f5f7;border-radius:12px;padding:12px"><div style="font-size:9px;color:#888">Wlasciciel</div><div style="font-weight:700;font-size:12px">'+(ad.owner||'-')+'</div></div></div>'+(ad.description?'<div style="margin-top:12px;background:#f5f5f7;border-radius:12px;padding:12px"><div style="font-size:9px;color:#888">Opis</div><div style="margin-top:6px">'+ad.description+'</div></div>':'')+'<div style="margin-top:16px;background:#000;color:#fff;border-radius:12px;padding:14px;display:flex;justify-content:space-between;align-items:center"><div><div style="font-size:10px;color:#aaa">Telefon</div><div style="font-weight:900;font-size:16px">'+(ad.phone||'Brak')+'</div></div>'+(ad.phone?'<a href="tel:'+ad.phone+'" class="btn btn-yellow" style="padding:12px 18px;text-decoration:none">Zadzwon</a>':'')+'</div><div style="margin-top:12px;font-size:9px;color:#aaa;text-align:center">📸 '+imgs.length+' zdjecia wszedzie • ID: '+ad.id+' • '+(can?'Mozesz edytowac':'Zaloguj jako wlasciciel aby edytowac')+'</div></div>';
+  document.getElementById('detailContent').innerHTML='<img id="detailMainImg" src="'+main+'" style="width:100%;height:340px;object-fit:cover"><div>'+thumbs+'</div><div style="padding:16px"><div style="font-weight:900;font-size:20px">'+(ad.title||'')+'</div><div style="font-weight:900;font-size:26px;margin-top:8px">'+Number(ad.price||0).toLocaleString('pl-PL')+' zł</div><div style="margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:8px"><div style="background:#f5f5f7;border-radius:12px;padding:12px"><div style="font-size:9px;color:#888">Marka</div><div style="font-weight:700">'+(ad.brand||'-')+'</div></div><div style="background:#f5f5f7;border-radius:12px;padding:12px"><div style="font-size:9px;color:#888">Model</div><div style="font-weight:700">'+(ad.model||'-')+'</div></div><div style="background:#f5f5f7;border-radius:12px;padding:12px"><div style="font-size:9px;color:#888">Rocznik</div><div style="font-weight:700">'+(ad.year||'-')+'</div></div><div style="background:#f5f5f7;border-radius:12px;padding:12px"><div style="font-size:9px;color:#888">Przebieg</div><div style="font-weight:700">'+(ad.mileage?Number(ad.mileage).toLocaleString('pl-PL')+' km':'-')+'</div></div><div style="background:#f5f5f7;border-radius:12px;padding:12px"><div style="font-size:9px;color:#888">Miasto</div><div style="font-weight:700">'+(ad.location||'-')+'</div></div><div style="background:#f5f5f7;border-radius:12px;padding:12px"><div style="font-size:9px;color:#888">Wlasciciel</div><div style="font-weight:700;font-size:12px">'+(ad.owner||'-')+'</div></div></div>'+(ad.description?'<div style="margin-top:12px;background:#f5f5f7;border-radius:12px;padding:12px"><div style="font-size:9px;color:#888">Opis</div><div style="margin-top:6px">'+ad.description+'</div></div>':'')+'<div style="margin-top:16px;background:#000;color:#fff;border-radius:12px;padding:14px;display:flex;justify-content:space-between;align-items:center"><div><div style="font-size:10px;color:#aaa">Telefon</div><div style="font-weight:900;font-size:16px">'+(ad.phone||'Brak')+'</div></div>'+(ad.phone?'<a href="tel:'+ad.phone+'" class="btn btn-yellow" style="padding:12px 18px;text-decoration:none">Zadzwon</a>':'')+'</div><div style="margin-top:12px;font-size:9px;color:#aaa;text-align:center">📸 '+imgs.length+' zdjec • ID: '+ad.id+'</div></div>';
   document.getElementById('detailModal').style.display='flex';
 }
 function closeDetail(){document.getElementById('detailModal').style.display='none';}
@@ -163,7 +168,7 @@ function openAdd(){
   if(!currentUser){openAuth('login');return;}
   editingId=null; selectedImages=[]; document.getElementById('addTitle').textContent='Dodaj - 3 zdjecia';
   ['fBrand','fModel','fYear','fPrice','fMileage','fLocation','fTitle','fPhone','fDesc'].forEach(function(id){const el=document.getElementById(id); if(el) el.value=id==='fYear'?'2020':id==='fLocation'?'Warszawa':'';});
-  document.getElementById('imgPreview').innerHTML=''; document.getElementById('imgInfo').textContent='0/3 zdjec';
+  document.getElementById('imgPreview').innerHTML=''; document.getElementById('imgInfo').textContent='0/3';
   document.getElementById('addModal').style.display='flex';
 }
 function closeAdd(){document.getElementById('addModal').style.display='none'; editingId=null; selectedImages=[];}
@@ -179,11 +184,11 @@ function compress(file, cb){
     const img=new Image();
     img.onload=function(){
       const c=document.createElement('canvas');
-      const maxW=700;
+      const maxW=600;
       const sc=Math.min(1,maxW/img.width);
       c.width=img.width*sc; c.height=img.height*sc;
       c.getContext('2d').drawImage(img,0,0,c.width,c.height);
-      cb(c.toDataURL('image/jpeg',0.65));
+      cb(c.toDataURL('image/jpeg',0.6));
     };
     img.src=e.target.result;
   };
@@ -198,11 +203,11 @@ function renderImgPreview(){
     d.innerHTML='<img src="'+im+'" style="width:100%;height:100%;object-fit:cover"><button onclick="selectedImages=selectedImages.filter(function(_,idx){return idx!=='+i+'}); renderImgPreview()" style="position:absolute;top:4px;right:4px;width:20px;height:20px;background:rgba(0,0,0,0.7);color:#fff;border:none;border-radius:50%;font-size:10px;cursor:pointer">X</button><div style="position:absolute;bottom:0;left:0;background:rgba(0,0,0,0.6);color:#fff;font-size:8px;padding:2px 4px">'+Math.round(im.length/1024)+'KB</div>';
     wrap.appendChild(d);
   });
-  document.getElementById('imgInfo').textContent=selectedImages.length+'/3 zdjec'+(selectedImages.length>0?' - wszystkie beda wszedzie!':'');
+  document.getElementById('imgInfo').textContent=selectedImages.length+'/3 zdjec';
 }
 document.getElementById('fImages').addEventListener('change', function(e){
   const files=Array.from(e.target.files||[]);
-  if(selectedImages.length+files.length>3){alert('Max 3 zdjecia! Masz '+selectedImages.length+', mozesz dodac '+(3-selectedImages.length)); return;}
+  if(selectedImages.length+files.length>3){alert('Max 3 zdjecia! Masz '+selectedImages.length); return;}
   files.forEach(function(f){compress(f,function(c){selectedImages.push(c); renderImgPreview();});});
   e.target.value='';
 });
@@ -213,7 +218,6 @@ document.getElementById('btnLogout').onclick=function(){currentUser=null; localS
 document.getElementById('authSwitch').onclick=function(){openAuth(authMode==='login'?'register':'login');};
 document.getElementById('brandFilter').onchange=renderAds;
 document.getElementById('searchInput').oninput=renderAds;
-document.getElementById('sortBy').onchange=renderAds;
 
 document.getElementById('authSubmit').onclick=function(){
   const email=document.getElementById('authEmail').value.trim().toLowerCase();
@@ -268,7 +272,6 @@ document.getElementById('btnSave').onclick=async function(){
     const txt=await res.text();
     if(!res.ok){err.textContent='Blad: '+txt; err.style.display='block'; return;}
     closeAdd();
-    const newAd=JSON.parse(txt)[0]||payload;
     if(editingId){
       ads=ads.map(function(a){return a.id===editingId?Object.assign({},a,sendPayload,{image:imagesJson}):a;});
     } else {
