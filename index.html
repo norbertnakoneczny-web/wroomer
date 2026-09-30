@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Wroomer.pl</title>
+<title>Wroomer.pl - sortowania + logo wieksze na laptopie</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
 <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
@@ -38,9 +38,9 @@ html,body{overflow-x:hidden;margin:0}
 const { useState, useMemo, useEffect, useRef } = React;
 const BRAND_MODELS = {"BMW": ["3 Series", "5 Series", "X1", "X3", "X5"], "Audi": ["A3", "A4", "A6", "Q5"], "Volkswagen": ["Golf", "Passat", "Tiguan"], "Mercedes": ["C-Klasa", "E-Klasa", "GLC"], "Skoda": ["Octavia", "Superb", "Kodiaq"], "Toyota": ["Corolla", "RAV4", "Yaris"], "Ford": ["Focus", "Kuga", "Mustang"]};
 const VOIVODESHIPS = ["Dolnośląskie", "Mazowieckie", "Małopolskie", "Śląskie", "Wielkopolskie", "Pomorskie"];
-const SAMPLE_ADS = [{"id": 1001, "title": "BMW 3 Series 2020 320d xDrive M-Pakiet", "brand": "BMW", "model": "3 Series", "year": 2020, "price": 89500, "mileage": 89000, "location": "Warszawa", "phone": "600 123 456", "owner": "Norbert", "images": ["https://images.unsplash.com/photo-1555215695-3004980ad54e?w=400", "https://images.unsplash.com/photo-1603386329225-868f9b1ee6c9?w=400", "https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=400"], "image": "https://images.unsplash.com/photo-1555215695-3004980ad54e?w=400", "created_at_ts": 1001, "owner_id": 0, "whatsapp": "600 123 456", "voivodeship": "Mazowieckie"}, {"id": 1002, "title": "Audi A6 2019 3.0 TDI Quattro S-Line", "brand": "Audi", "model": "A6", "year": 2019, "price": 125000, "mileage": 112000, "location": "Kraków", "phone": "601 234 567", "owner": "Marek", "images": ["https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=400", "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=400", "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=400"], "image": "https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=400", "created_at_ts": 1002, "owner_id": 0, "whatsapp": "601 234 567", "voivodeship": "Mazowieckie"}, {"id": 1003, "title": "Volkswagen Golf 8 GTI 2021 245KM", "brand": "Volkswagen", "model": "Golf", "year": 2021, "price": 119900, "mileage": 45000, "location": "Wrocław", "phone": "602 345 678", "owner": "Ania", "images": ["https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=400", "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=400", "https://images.unsplash.com/photo-1511910849309-0dffb8785146?w=400"], "image": "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=400", "created_at_ts": 1003, "owner_id": 0, "whatsapp": "602 345 678", "voivodeship": "Mazowieckie"}, {"id": 1004, "title": "Toyota Corolla 2022 Hybrid 1.8", "brand": "Toyota", "model": "Corolla", "year": 2022, "price": 88900, "mileage": 32000, "location": "Gdańsk", "phone": "603 456 789", "owner": "Tomek", "images": ["https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=400", "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=400", "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=400"], "image": "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=400", "created_at_ts": 1004, "owner_id": 0, "whatsapp": "603 456 789", "voivodeship": "Mazowieckie"}, {"id": 1005, "title": "Mercedes GLC 2020 300 4MATIC AMG", "brand": "Mercedes", "model": "GLC", "year": 2020, "price": 159900, "mileage": 76000, "location": "Poznań", "phone": "604 567 890", "owner": "Kasia", "images": ["https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=400", "https://images.unsplash.com/photo-1555215695-3004980ad54e?w=400", "https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=400"], "image": "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=400", "created_at_ts": 1005, "owner_id": 0, "whatsapp": "604 567 890", "voivodeship": "Mazowieckie"}, {"id": 1006, "title": "Skoda Octavia RS 2021 2.0 TSI 245KM", "brand": "Skoda", "model": "Octavia", "year": 2021, "price": 129900, "mileage": 58000, "location": "Katowice", "phone": "605 678 901", "owner": "Piotr", "images": ["https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=400", "https://images.unsplash.com/photo-1511910849309-0dffb8785146?w=400", "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=400"], "image": "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=400", "created_at_ts": 1006, "owner_id": 0, "whatsapp": "605 678 901", "voivodeship": "Mazowieckie"}, {"id": 1007, "title": "Ford Focus ST 2022 2.3 EcoBoost 280KM", "brand": "Ford", "model": "Focus", "year": 2022, "price": 109900, "mileage": 38000, "location": "Łódź", "phone": "606 789 012", "owner": "Bartek", "images": ["https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=400", "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=400", "https://images.unsplash.com/photo-1511910849309-0dffb8785146?w=400"], "image": "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=400", "created_at_ts": 1007, "owner_id": 0, "whatsapp": "606 789 012", "voivodeship": "Mazowieckie"}, {"id": 1008, "title": "Opel Astra GSi 2021 1.6 Turbo 200KM", "brand": "Opel", "model": "Astra", "year": 2021, "price": 79900, "mileage": 52000, "location": "Szczecin", "phone": "607 890 123", "owner": "Magda", "images": ["https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=400", "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=400", "https://images.unsplash.com/photo-1555215695-3004980ad54e?w=400"], "image": "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=400", "created_at_ts": 1008, "owner_id": 0, "whatsapp": "607 890 123", "voivodeship": "Mazowieckie"}];
+const SAMPLE_ADS = [{"id": 1001, "title": "BMW 3 Series 2020 320d xDrive M-Pakiet", "brand": "BMW", "model": "3 Series", "year": 2020, "price": 89500, "mileage": 89000, "location": "Warszawa", "phone": "600 123 456", "owner": "Norbert", "images": ["https://images.unsplash.com/photo-1555215695-3004980ad54e?w=400", "https://images.unsplash.com/photo-1603386329225-868f9b1ee6c9?w=400"], "image": "https://images.unsplash.com/photo-1555215695-3004980ad54e?w=400", "created_at_ts": 1001, "owner_id": 0, "whatsapp": "600 123 456", "voivodeship": "Mazowieckie"}, {"id": 1002, "title": "Audi A6 2019 3.0 TDI Quattro S-Line", "brand": "Audi", "model": "A6", "year": 2019, "price": 125000, "mileage": 112000, "location": "Kraków", "phone": "601 234 567", "owner": "Marek", "images": ["https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=400", "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=400"], "image": "https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=400", "created_at_ts": 1002, "owner_id": 0, "whatsapp": "601 234 567", "voivodeship": "Mazowieckie"}, {"id": 1003, "title": "Volkswagen Golf 8 GTI 2021 245KM", "brand": "Volkswagen", "model": "Golf", "year": 2021, "price": 119900, "mileage": 45000, "location": "Wrocław", "phone": "602 345 678", "owner": "Ania", "images": ["https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=400", "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=400"], "image": "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=400", "created_at_ts": 1003, "owner_id": 0, "whatsapp": "602 345 678", "voivodeship": "Mazowieckie"}, {"id": 1004, "title": "Toyota Corolla 2022 Hybrid 1.8", "brand": "Toyota", "model": "Corolla", "year": 2022, "price": 88900, "mileage": 32000, "location": "Gdańsk", "phone": "603 456 789", "owner": "Tomek", "images": ["https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=400", "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=400"], "image": "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=400", "created_at_ts": 1004, "owner_id": 0, "whatsapp": "603 456 789", "voivodeship": "Mazowieckie"}, {"id": 1005, "title": "Mercedes GLC 2020 300 4MATIC AMG", "brand": "Mercedes", "model": "GLC", "year": 2020, "price": 159900, "mileage": 76000, "location": "Poznań", "phone": "604 567 890", "owner": "Kasia", "images": ["https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=400", "https://images.unsplash.com/photo-1555215695-3004980ad54e?w=400"], "image": "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=400", "created_at_ts": 1005, "owner_id": 0, "whatsapp": "604 567 890", "voivodeship": "Mazowieckie"}, {"id": 1006, "title": "Skoda Octavia RS 2021 2.0 TSI 245KM", "brand": "Skoda", "model": "Octavia", "year": 2021, "price": 129900, "mileage": 58000, "location": "Katowice", "phone": "605 678 901", "owner": "Piotr", "images": ["https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=400", "https://images.unsplash.com/photo-1511910849309-0dffb8785146?w=400"], "image": "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=400", "created_at_ts": 1006, "owner_id": 0, "whatsapp": "605 678 901", "voivodeship": "Mazowieckie"}, {"id": 1007, "title": "Ford Focus ST 2022 2.3 EcoBoost 280KM", "brand": "Ford", "model": "Focus", "year": 2022, "price": 109900, "mileage": 38000, "location": "Łódź", "phone": "606 789 012", "owner": "Bartek", "images": ["https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=400", "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=400"], "image": "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=400", "created_at_ts": 1007, "owner_id": 0, "whatsapp": "606 789 012", "voivodeship": "Mazowieckie"}, {"id": 1008, "title": "Opel Astra GSi 2021 1.6 Turbo 200KM", "brand": "Opel", "model": "Astra", "year": 2021, "price": 79900, "mileage": 52000, "location": "Szczecin", "phone": "607 890 123", "owner": "Magda", "images": ["https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=400", "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=400"], "image": "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=400", "created_at_ts": 1008, "owner_id": 0, "whatsapp": "607 890 123", "voivodeship": "Mazowieckie"}];
 const SUPABASE_URL = 'https://rljqnhfogaqdjeirqqdj.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJsanFuaGZvZ2FxZGplaXJxcWRqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI2MjI0NDEsImV4cCI6MjA4ODE5ODQ0MX0.wjImTHn516H1isOFe6KPxVZsa-Rh1fPofeq_bkMk2XI';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.[STRIPPED 127 bytes].wjImTHn516H1isOFe6KPxVZsa-Rh1fPofeq_bkMk2XI';
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 const CITY_COORDS = {"Warszawa":[52.2297,21.0122],"Krakow":[50.0647,19.9450],"Kraków":[50.0647,19.9450],"Wroclaw":[51.1079,17.0385],"Wrocław":[51.1079,17.0385],"Gdansk":[54.3520,18.6466],"Gdańsk":[54.3520,18.6466],"Poznan":[52.4064,16.9252],"Poznań":[52.4064,16.9252],"Katowice":[50.2649,19.0238],"Lodz":[51.7592,19.4550],"Łódź":[51.7592,19.4550],"Szczecin":[53.4285,14.5528],"Gorzyce":[49.96,18.40]};
 function haversine(a,b,c,d){const R=6371;const dLat=(c-a)*Math.PI/180;const dLon=(d-b)*Math.PI/180;const s=Math.sin(dLat/2)*Math.sin(dLat/2)+Math.cos(a*Math.PI/180)*Math.cos(c*Math.PI/180)*Math.sin(dLon/2)*Math.sin(dLon/2);return R*2*Math.atan2(Math.sqrt(s),Math.sqrt(1-s))}
@@ -59,6 +59,7 @@ function App(){
   const [isLocating,setIsLocating]=useState(false);
   const [sortBy,setSortBy]=useState('newest');
   const [showFilters,setShowFilters]=useState(false);
+  const [showSort,setShowSort]=useState(false);
   const [selected,setSelected]=useState(null);
   const [showAdd,setShowAdd]=useState(false);
   const [showAuth,setShowAuth]=useState(null);
@@ -107,6 +108,8 @@ function App(){
     else if(sortBy==='newest') r.sort(function(a,b){return (b.created_at_ts||b.id)-(a.created_at_ts||a.id)});
     else if(sortBy==='price_asc') r.sort(function(a,b){return a.price-b.price});
     else if(sortBy==='price_desc') r.sort(function(a,b){return b.price-a.price});
+    else if(sortBy==='year_desc') r.sort(function(a,b){return b.year-a.year});
+    else if(sortBy==='year_asc') r.sort(function(a,b){return a.year-b.year});
     return r;
   },[ads,searchBrand,searchModel,searchVoivodeship,searchLocation,searchRadius,sortBy,userCoords]);
 
@@ -155,22 +158,32 @@ function App(){
     setAds([toInsert].concat(ads));
     setShowAdd(false);
   };
-  const clearFilters=function(){setSearchBrand(''); setSearchModel(''); setSearchLocation(''); setSearchVoivodeship(''); setSearchRadius(''); setSortBy('newest'); setUserCoords(null); setShowFilters(false)};
+  const clearFilters=function(){setSearchBrand(''); setSearchModel(''); setSearchLocation(''); setSearchVoivodeship(''); setSearchRadius(''); setSortBy('newest'); setUserCoords(null); setShowFilters(false); setShowSort(false)};
+
+  const sortLabel=function(){
+    if(sortBy==='distance') return 'Odległość';
+    if(sortBy==='price_asc') return 'Cena ↑';
+    if(sortBy==='price_desc') return 'Cena ↓';
+    if(sortBy==='year_desc') return 'Rocznik ↓';
+    if(sortBy==='year_asc') return 'Rocznik ↑';
+    return 'Najnowsze';
+  };
 
   return (
     <div className="min-h-screen">
-      {/* LOGO NA SAMEJ GORZE - MNIEJSZE I PO LEWEJ */}
+      {/* LOGO NA SAMEJ GORZE - MALE NA SMARTFONIE, WIEKSZE NA LAPTOPIE */}
       <div className="bg-black text-white w-full">
-        <div className="max-w-[1440px] mx-auto px-2 md:px-3 h-[36px] flex items-center justify-start">
-          <div className="flex items-center gap-1.5 font-black text-[13px] cursor-pointer" onClick={function(){setSelected(null)}}><div className="w-5 h-5 bg-[#ffea00] rounded-[5px] flex items-center justify-center text-black text-[10px]">W</div>WROOMER<span className="text-[#ffea00]">.PL</span></div>
+        <div className="max-w-[1440px] mx-auto px-2 lg:px-3 h-[36px] lg:h-[52px] flex items-center justify-start">
+          <div className="flex items-center gap-1.5 lg:gap-2 font-black text-[13px] lg:text-[20px] cursor-pointer" onClick={function(){setSelected(null)}}><div className="w-5 h-5 lg:w-8 lg:h-8 bg-[#ffea00] rounded-[5px] lg:rounded-[8px] flex items-center justify-center text-black text-[10px] lg:text-[13px]">W</div>WROOMER<span className="text-[#ffea00]">.PL</span></div>
         </div>
       </div>
 
       <header className="sticky top-0 z-30 bg-[#111] text-white border-b border-neutral-800">
-        <div className="max-w-[1440px] mx-auto px-2 md:px-3 h-[44px] flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <button onClick={function(){setShowFilters(!showFilters)}} className="bg-[#222] border border-neutral-700 text-white px-3 py-1.5 rounded-[8px] text-[11px] font-bold">Filtry</button>
-            <div className="hidden md:flex items-center gap-2 text-[10px] text-neutral-400">
+        <div className="max-w-[1440px] mx-auto px-2 lg:px-3 h-[44px] lg:h-[48px] flex items-center justify-between">
+          <div className="flex items-center gap-1.5">
+            <button onClick={function(){setShowFilters(!showFilters); setShowSort(false)}} className="bg-[#222] border border-neutral-700 text-white px-2.5 lg:px-3 py-1.5 rounded-[8px] text-[11px] font-bold">Filtry</button>
+            <button onClick={function(){setShowSort(!showSort); setShowFilters(false)}} className="bg-[#ffea00] text-black px-2.5 lg:px-3 py-1.5 rounded-[8px] text-[11px] font-bold">↕ {sortLabel()}</button>
+            <div className="hidden md:flex items-center gap-2 text-[10px] text-neutral-400 ml-2">
               <span>{filtered.length} ogłoszeń</span>
               {userCoords && <span className="text-[#ffea00]">GPS {searchRadius}km</span>}
             </div>
@@ -186,11 +199,11 @@ function App(){
       </header>
 
       <div className="max-w-[1440px] mx-auto w-full px-2 md:px-3 py-2 flex flex-col lg:flex-row gap-3">
-        {(showFilters || true) && (
-          <div className={(showFilters ? 'block ' : 'hidden lg:block ') + 'w-full lg:w-[300px] flex-shrink-0 mb-2 lg:mb-0'}>
-            <div className="bg-[#111] border border-neutral-800 rounded-[12px] p-3 lg:sticky lg:top-[90px]">
-              <div className="flex justify-between items-center mb-3 lg:hidden"><h2 className="font-bold text-[12px] text-white">Wyszukiwarka</h2><button onClick={function(){setShowFilters(false)}} className="w-7 h-7 bg-[#222] text-white rounded-full text-[12px]">X</button></div>
-              <div className="hidden lg:block font-bold text-[12px] text-white mb-3">Wyszukiwarka</div>
+        {/* PANEL FILTRÓW */}
+        {showFilters && (
+          <div className="w-full lg:w-[320px] flex-shrink-0 mb-2 lg:mb-0">
+            <div className="bg-[#111] border border-neutral-800 rounded-[12px] p-3">
+              <div className="flex justify-between items-center mb-3"><h2 className="font-bold text-[12px] text-white">Filtry</h2><button onClick={function(){setShowFilters(false)}} className="w-7 h-7 bg-[#222] text-white rounded-full text-[12px]">X</button></div>
               <div className="space-y-2.5">
                 <div className="bg-[#1a1a1a] border border-neutral-800 rounded-[10px] p-2.5">
                   <div className="text-[11px] font-bold text-white mb-2">Lokalizacja</div>
@@ -205,21 +218,77 @@ function App(){
                   <select value={searchBrand} onChange={function(e){setSearchBrand(e.target.value); setSearchModel('')}} className="w-full bg-[#1a1a1a] border border-neutral-800 rounded-[8px] px-2 py-2.5 text-[11px] text-white"><option value="">Marka</option>{Object.keys(BRAND_MODELS).sort().map(function(b){return <option key={b} value={b}>{b}</option>})}</select>
                   <select value={searchModel} onChange={function(e){setSearchModel(e.target.value)}} className="w-full bg-[#1a1a1a] border border-neutral-800 rounded-[8px] px-2 py-2.5 text-[11px] text-white"><option value="">Model</option>{(BRAND_MODELS[searchBrand]||[]).map(function(m){return <option key={m} value={m}>{m}</option>})}</select>
                 </div>
-                <select value={sortBy} onChange={function(e){setSortBy(e.target.value)}} className="w-full bg-[#1a1a1a] border border-neutral-800 rounded-[8px] px-2 py-2.5 text-[11px] text-white"><option value="newest">Najnowsze</option>{userCoords && <option value="distance">Najblizej mnie</option>}<option value="price_asc">Cena rosnąco</option><option value="price_desc">Cena malejąco</option></select>
                 <button onClick={clearFilters} className="w-full bg-white text-black font-bold py-2.5 rounded-[8px] text-[11px]">Reset</button>
+                <button onClick={function(){setShowFilters(false)}} className="w-full bg-black border border-neutral-700 text-white font-bold py-2.5 rounded-[8px] text-[11px]">Pokaż {filtered.length} ogłoszeń</button>
               </div>
             </div>
           </div>
         )}
 
+        {/* PANEL SORTOWANIA - ZAMIAST JEDNEGO FILTRY */}
+        {showSort && (
+          <div className="w-full lg:w-[320px] flex-shrink-0 mb-2 lg:mb-0">
+            <div className="bg-[#111] border border-neutral-800 rounded-[12px] p-3">
+              <div className="flex justify-between items-center mb-3"><h2 className="font-bold text-[12px] text-white">Sortowania</h2><button onClick={function(){setShowSort(false)}} className="w-7 h-7 bg-[#222] text-white rounded-full text-[12px]">X</button></div>
+              <div className="space-y-1.5">
+                <button onClick={function(){setSortBy('newest'); setShowSort(false)}} className={'w-full text-left px-3 py-2.5 rounded-[8px] text-[12px] font-bold '+(sortBy==='newest'?'bg-[#ffea00] text-black':'bg-[#1a1a1a] text-white border border-neutral-800')}>🕒 Najnowsze</button>
+                <button onClick={function(){if(!userCoords){alert('Najpierw kliknij Moja lokalizacja zeby sortowac po odleglosci'); return;} setSortBy('distance'); setShowSort(false)}} className={'w-full text-left px-3 py-2.5 rounded-[8px] text-[12px] font-bold '+(sortBy==='distance'?'bg-[#ffea00] text-black':'bg-[#1a1a1a] text-white border border-neutral-800')}>📍 Odległość - od najbliższych {userCoords ? '('+searchRadius+'km)' : ''}</button>
+                <button onClick={function(){setSortBy('price_asc'); setShowSort(false)}} className={'w-full text-left px-3 py-2.5 rounded-[8px] text-[12px] font-bold '+(sortBy==='price_asc'?'bg-[#ffea00] text-black':'bg-[#1a1a1a] text-white border border-neutral-800')}>💰 Cena od najniższej</button>
+                <button onClick={function(){setSortBy('price_desc'); setShowSort(false)}} className={'w-full text-left px-3 py-2.5 rounded-[8px] text-[12px] font-bold '+(sortBy==='price_desc'?'bg-[#ffea00] text-black':'bg-[#1a1a1a] text-white border border-neutral-800')}>💰 Cena od najwyższej</button>
+                <button onClick={function(){setSortBy('year_desc'); setShowSort(false)}} className={'w-full text-left px-3 py-2.5 rounded-[8px] text-[12px] font-bold '+(sortBy==='year_desc'?'bg-[#ffea00] text-black':'bg-[#1a1a1a] text-white border border-neutral-800')}>📅 Rocznik od najnowszych</button>
+                <button onClick={function(){setSortBy('year_asc'); setShowSort(false)}} className={'w-full text-left px-3 py-2.5 rounded-[8px] text-[12px] font-bold '+(sortBy==='year_asc'?'bg-[#ffea00] text-black':'bg-[#1a1a1a] text-white border border-neutral-800')}>📅 Rocznik od najstarszych</button>
+                <div className="pt-2 border-t border-neutral-800 mt-2">
+                  <div className="text-[10px] text-neutral-500">Aktualne sortowanie: <span className="text-white font-bold">{sortLabel()}</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* SIDEBAR DESKTOP - zawsze widoczny na kompie */}
+        <div className="hidden lg:block w-[300px] flex-shrink-0">
+          <div className="bg-[#111] border border-neutral-800 rounded-[12px] p-4 sticky top-[108px]">
+            <h2 className="font-bold text-[12px] text-white mb-3">Wyszukiwarka i sortowanie</h2>
+            <div className="space-y-2.5">
+              <div className="bg-[#1a1a1a] border border-neutral-800 rounded-[10px] p-2.5">
+                <div className="text-[11px] font-bold text-white mb-2">Lokalizacja</div>
+                <button onClick={handleUseMyLocation} disabled={isLocating} className="w-full bg-[#ffea00] disabled:opacity-50 text-black font-bold text-[12px] py-2.5 rounded-[8px]">{isLocating ? 'Pobieram GPS...' : 'Moja lokalizacja'}</button>
+                <div className="grid grid-cols-2 gap-2 mt-2">
+                  <select value={searchVoivodeship} onChange={function(e){setSearchVoivodeship(e.target.value)}} className="w-full bg-[#222] border border-neutral-700 rounded-[8px] px-2 py-2 text-[11px] text-white"><option value="">Województwo</option>{VOIVODESHIPS.map(function(v){return <option key={v} value={v}>{v}</option>})}</select>
+                  <select value={searchRadius} onChange={function(e){setSearchRadius(e.target.value)}} className="w-full bg-[#222] border border-neutral-700 rounded-[8px] px-2 py-2 text-[11px] text-white"><option value="">Zasięg</option><option value="20">20 km</option><option value="50">50 km</option><option value="100">100 km</option></select>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-2">
+                <select value={searchBrand} onChange={function(e){setSearchBrand(e.target.value); setSearchModel('')}} className="w-full bg-[#1a1a1a] border border-neutral-800 rounded-[8px] px-2 py-2.5 text-[11px] text-white"><option value="">Marka</option>{Object.keys(BRAND_MODELS).sort().map(function(b){return <option key={b} value={b}>{b}</option>})}</select>
+                <select value={searchModel} onChange={function(e){setSearchModel(e.target.value)}} className="w-full bg-[#1a1a1a] border border-neutral-800 rounded-[8px] px-2 py-2.5 text-[11px] text-white"><option value="">Model</option>{(BRAND_MODELS[searchBrand]||[]).map(function(m){return <option key={m} value={m}>{m}</option>})}</select>
+              </div>
+              <div className="text-[11px] font-bold text-white mt-3 mb-1">Sortowania</div>
+              <select value={sortBy} onChange={function(e){setSortBy(e.target.value)}} className="w-full bg-[#1a1a1a] border border-neutral-800 rounded-[8px] px-2 py-2.5 text-[11px] text-white">
+                <option value="newest">Najnowsze</option>
+                {userCoords && <option value="distance">Odległość - najbliższe</option>}
+                <option value="price_asc">Cena od najniższej</option>
+                <option value="price_desc">Cena od najwyższej</option>
+                <option value="year_desc">Rocznik od najnowszych</option>
+                <option value="year_asc">Rocznik od najstarszych</option>
+              </select>
+              <button onClick={clearFilters} className="w-full bg-white text-black font-bold py-2.5 rounded-[8px] text-[11px]">Reset</button>
+            </div>
+          </div>
+        </div>
+
         <div className="flex-1">
+          <div className="flex items-center justify-between mb-2">
+            <div className="bg-black text-white text-[10px] font-bold px-2.5 py-1 rounded-full">{filtered.length} ogłoszeń • {sortLabel()} {userCoords ? '• GPS '+searchRadius+'km' : ''}</div>
+          </div>
+
+          {/* MOBILE - kompaktowy pasek */}
           <div className="lg:hidden bg-white border rounded-[10px] p-2 flex gap-2 items-center mb-2">
             <div className="flex-1 grid grid-cols-3 gap-1.5">
               <select value={searchBrand} onChange={function(e){setSearchBrand(e.target.value)}} className="w-full bg-[#f5f5f7] border rounded-[8px] px-2 py-2 text-[11px]"><option value="">Marka</option>{Object.keys(BRAND_MODELS).map(function(b){return <option key={b} value={b}>{b}</option>})}</select>
               <input value={searchLocation} onChange={function(e){setSearchLocation(e.target.value)}} placeholder={userCoords?'GPS '+searchRadius+'km':'Miasto'} className="w-full bg-[#f5f5f7] border rounded-[8px] px-2 py-2 text-[11px]" />
               <button onClick={handleUseMyLocation} disabled={isLocating} className="w-full bg-[#ffea00] text-black font-bold rounded-[8px] text-[10px]">{isLocating?'...':'Moja'}</button>
             </div>
-            <button onClick={function(){setShowFilters(!showFilters)}} className="bg-black text-white px-3 py-2 rounded-[8px] text-[11px] font-bold shrink-0">Filtry</button>
+            <button onClick={function(){setShowSort(!showSort); setShowFilters(false)}} className="bg-[#ffea00] text-black px-3 py-2 rounded-[8px] text-[11px] font-bold shrink-0">↕ {sortLabel()}</button>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
@@ -239,6 +308,7 @@ function App(){
               );
             })}
           </div>
+          {filtered.length===0 && <div className="bg-white border rounded-[12px] p-6 text-center mt-3"><div className="font-bold text-[13px]">Brak ogłoszeń</div><button onClick={clearFilters} className="mt-2 bg-black text-white px-4 py-2 rounded-full text-[11px] font-bold">Reset</button></div>}
         </div>
       </div>
 
