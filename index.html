@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Wroomer.pl - 4 cale FIX</title>
+<title>Wroomer.pl - FINAL z przykladowymi ogloszeniami</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
 <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
@@ -13,97 +13,158 @@
 <style>
 *{font-family:Inter,sans-serif;box-sizing:border-box}
 html,body{overflow-x:hidden;margin:0}
-/* FIX - WYMUSZENIE 4 CALE - BEZ max-width ktore zmniejsza */
-.img-fix-4inch{
+.img-4inch-fix{
   height:400px !important;
   min-height:400px !important;
   max-height:400px !important;
   width:auto !important;
-  max-width:none !important;
+  max-width:100% !important;
   object-fit:contain !important;
   display:block !important;
+  margin:0 auto !important;
 }
-.img-wrapper-4inch{
+.img-wrapper-fix{
   height:400px !important;
   min-height:400px !important;
   display:flex !important;
   align-items:center !important;
   justify-content:center !important;
-  overflow:hidden !important;
-}
-@media(max-width:768px){
-  .img-fix-4inch{
-    height:400px !important;
-    min-height:400px !important;
-    max-height:400px !important;
-  }
-  .img-wrapper-4inch{
-    height:400px !important;
-    min-height:400px !important;
-  }
+  background:#f5f5f7 !important;
 }
 </style>
 </head>
 <body class="bg-[#f5f5f7]"><div id="root"></div>
 <script type="text/babel">
 const { useState, useMemo, useEffect, useRef } = React;
-const BRAND_MODELS = {"BMW": ["3 Series", "5 Series", "X5"], "Audi": ["A4", "A6", "Q5"], "Volkswagen": ["Golf", "Passat"]};
+const BRAND_MODELS = {"BMW": ["1 Series", "3 Series", "5 Series", "X1", "X3", "X5", "M3"], "Audi": ["A3", "A4", "A6", "Q5", "Q7"], "Volkswagen": ["Golf", "Passat", "Tiguan"], "Mercedes": ["C-Klasa", "E-Klasa", "GLC", "GLE"], "Skoda": ["Octavia", "Superb", "Kodiaq"], "Toyota": ["Corolla", "RAV4", "Yaris"]};
+const VOIVODESHIPS = ["Dolnośląskie", "Mazowieckie", "Małopolskie", "Śląskie", "Wielkopolskie", "Pomorskie"];
+const SAMPLE_ADS = [{"id": 1001, "title": "BMW 3 Series 2020 320d xDrive M-Pakiet", "brand": "BMW", "model": "3 Series", "year": 2020, "price": 89500, "mileage": 89000, "fuel": "Diesel", "gearbox": "Automatyczna", "power": 190, "location": "Warszawa", "voivodeship": "Mazowieckie", "description": "BMW 320d xDrive, M-Pakiet, serwisowane w ASO, bezwypadkowe, 2 komplety kół. Stan idealny!", "phone": "600 123 456", "owner": "Norbert", "images": ["https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800", "https://images.unsplash.com/photo-1603386329225-868f9b1ee6c9?w=800", "https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=800", "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800"], "image": "https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800", "created_at_ts": 1001, "owner_id": 0, "whatsapp": "600 123 456", "contact_email": "kontakt@wroomer.pl"}, {"id": 1002, "title": "Audi A6 2019 3.0 TDI Quattro S-Line", "brand": "Audi", "model": "A6", "year": 2019, "price": 125000, "mileage": 112000, "fuel": "Diesel", "gearbox": "Automatyczna", "power": 286, "location": "Kraków", "voivodeship": "Małopolskie", "description": "Audi A6 C8 S-Line, Matrix LED, Virtual Cockpit, masaże, nagłośnienie Bang&Olufsen.", "phone": "601 234 567", "owner": "Marek", "images": ["https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=800", "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=800", "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=800"], "image": "https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=800", "created_at_ts": 1002, "owner_id": 0, "whatsapp": "601 234 567", "contact_email": "kontakt@wroomer.pl"}, {"id": 1003, "title": "Volkswagen Golf 8 GTI 2021 245KM", "brand": "Volkswagen", "model": "Golf", "year": 2021, "price": 119900, "mileage": 45000, "fuel": "Benzyna", "gearbox": "Automatyczna", "power": 245, "location": "Wrocław", "voivodeship": "Dolnośląskie", "description": "Golf 8 GTI, pakiet Performance, DCC, kamera, Keyless, stan salonowy.", "phone": "602 345 678", "owner": "Ania", "images": ["https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800", "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=800", "https://images.unsplash.com/photo-1511910849309-0dffb8785146?w=800", "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800"], "image": "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800", "created_at_ts": 1003, "owner_id": 0, "whatsapp": "602 345 678", "contact_email": "kontakt@wroomer.pl"}, {"id": 1004, "title": "Toyota Corolla 2022 Hybrid 1.8 140KM", "brand": "Toyota", "model": "Corolla", "year": 2022, "price": 88900, "mileage": 32000, "fuel": "Hybryda", "gearbox": "Automatyczna", "power": 140, "location": "Gdańsk", "voivodeship": "Pomorskie", "description": "Corolla Hybrid, gwarancja do 2027, pierwszy właściciel, serwis ASO.", "phone": "603 456 789", "owner": "Tomek", "images": ["https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=800", "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=800", "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800"], "image": "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=800", "created_at_ts": 1004, "owner_id": 0, "whatsapp": "603 456 789", "contact_email": "kontakt@wroomer.pl"}, {"id": 1005, "title": "Mercedes GLC 2020 300 4MATIC AMG", "brand": "Mercedes", "model": "GLC", "year": 2020, "price": 159900, "mileage": 76000, "fuel": "Benzyna", "gearbox": "Automatyczna", "power": 258, "location": "Poznań", "voivodeship": "Wielkopolskie", "description": "GLC 300 AMG Line, Burmester, 360 kamera, dach panoramiczny.", "phone": "604 567 890", "owner": "Kasia", "images": ["https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=800", "https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800", "https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=800", "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=800"], "image": "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=800", "created_at_ts": 1005, "owner_id": 0, "whatsapp": "604 567 890", "contact_email": "kontakt@wroomer.pl"}, {"id": 1006, "title": "Skoda Octavia RS 2021 2.0 TSI 245KM", "brand": "Skoda", "model": "Octavia", "year": 2021, "price": 129900, "mileage": 58000, "fuel": "Benzyna", "gearbox": "Automatyczna", "power": 245, "location": "Katowice", "voivodeship": "Śląskie", "description": "Octavia RS, Canton, Matrix, sportowe fotele, bezwypadkowa.", "phone": "605 678 901", "owner": "Piotr", "images": ["https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800", "https://images.unsplash.com/photo-1511910849309-0dffb8785146?w=800", "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800"], "image": "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800", "created_at_ts": 1006, "owner_id": 0, "whatsapp": "605 678 901", "contact_email": "kontakt@wroomer.pl"}];
 const SUPABASE_URL = 'https://rljqnhfogaqdjeirqqdj.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJsanFuaGZvZ2FxZGplaXJxcWRqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA3Mzk2MzIsImV4cCI6MjEwNjMxNTYzMn0.wjImTHn516H1isOFe6KPxVZsa-Rh1fPofeq_bkMk2XI';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.[STRIPPED 127 bytes].wjImTHn516H1isOFe6KPxVZsa-Rh1fPofeq_bkMk2XI';
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 function App(){
-  const [ads,setAds]=useState([]);
-  const [status,setStatus]=useState('Łączę...');
-  const [currentUser,setCurrentUser]=useState(()=>{try{return JSON.parse(localStorage.getItem('wroomer_users_final')||'null')}catch(e){return null}});
+  const [ads,setAds]=useState(SAMPLE_ADS);
+  const [status,setStatus]=useState('Laduje przykladowe ogloszenia...');
   const [searchBrand,setSearchBrand]=useState('');
+  const [searchModel,setSearchModel]=useState('');
   const [selected,setSelected]=useState(null);
   const [showAdd,setShowAdd]=useState(false);
-  const [showAuth,setShowAuth]=useState(null);
-  const [editingId,setEditingId]=useState(null);
-  const [authForm,setAuthForm]=useState({email:'',password:'',name:''});
   const [form,setForm]=useState({brand:'',model:'',year:2020,price:'',phone:'',location:'Warszawa',title:'',description:'',images:[]});
   const [imgIdx,setImgIdx]=useState(0);
   const fileRef=useRef(null);
 
-  useEffect(()=>{
-    (async()=>{
-      const {data}=await supabase.from('ads').select('*').order('created_at_ts',{ascending:false});
-      const norm=(data||[]).map(d=>{let im=d.images; if(typeof im==='string'){try{im=JSON.parse(im)}catch(e){im=[d.image]}} if(!Array.isArray(im)) im=[d.image].filter(Boolean); return {...d,images:im}});
-      setAds(norm); setStatus('✓ '+norm.length+' ogłoszeń');
-    })();
+  useEffect(function(){
+    async function load(){
+      try{
+        const res = await supabase.from('ads').select('*').order('created_at_ts',{ascending:false});
+        if(res.data && res.data.length>0){
+          const norm=res.data.map(function(d){
+            let im=d.images;
+            if(typeof im==='string'){try{im=JSON.parse(im)}catch(e){im=[d.image]}}
+            if(!Array.isArray(im)) im=[d.image].filter(Boolean);
+            return Object.assign({}, d, {images:im, image:(im&&im[0])||d.image});
+          });
+          const merged = norm.concat(SAMPLE_ADS);
+          setAds(merged);
+          setStatus('Supabase STALE! '+norm.length+' + '+SAMPLE_ADS.length+' przykladowych = '+merged.length+' ogloszen');
+        }else{
+          setAds(SAMPLE_ADS);
+          setStatus('Przykladowe ogloszenia: '+SAMPLE_ADS.length+' - dodaj swoje! Supabase gotowe.');
+        }
+      }catch(e){
+        setAds(SAMPLE_ADS);
+        setStatus('Przykladowe: '+SAMPLE_ADS.length+' ogloszen (Supabase: '+e.message+')');
+      }
+    }
+    load();
   },[]);
 
-  const filtered=useMemo(()=>ads.filter(a=>!searchBrand||a.brand===searchBrand),[ads,searchBrand]);
+  useEffect(function(){if(selected) setImgIdx(0)},[selected]);
 
-  const handleSave=async(e)=>{
+  const filtered=useMemo(function(){
+    return ads.filter(function(a){
+      if(searchBrand && a.brand!==searchBrand) return false;
+      if(searchModel && a.model!==searchModel) return false;
+      return true;
+    });
+  },[ads,searchBrand,searchModel]);
+
+  const handleImg=function(e){
+    Array.from(e.target.files||[]).forEach(function(f){
+      const rd=new FileReader();
+      rd.onload=function(ev){setForm(function(p){return Object.assign({},p,{images:p.images.concat([ev.target.result])});});};
+      rd.readAsDataURL(f);
+    });
+    if(fileRef.current) fileRef.current.value='';
+  };
+
+  const handleSave=async function(e){
     e.preventDefault();
-    const base={title:form.title||`${form.brand} ${form.model}`,brand:form.brand,model:form.model,year:2020,price:parseInt(form.price)||0,location:'Polska',description:form.description||'',image:form.images[0]||`https://picsum.photos/seed/${Date.now()}/600/400`,images:form.images.length?form.images:[`https://picsum.photos/seed/${Date.now()}/600/400`],owner:'Ja',owner_id:999,phone:form.phone,created_at_ts:Date.now()};
-    if(editingId){await supabase.from('ads').update(base).eq('id',editingId); setAds(ads.map(a=>a.id===editingId?{...a,...base,id:editingId}:a));}
-    else{const id=Date.now(); await supabase.from('ads').insert([{...base,id}]); setAds([{...base,id},...ads]);}
-    setShowAdd(false);
+    if(!form.brand || !form.model || !form.price || !form.phone){alert('Marka, model, cena, telefon!'); return;}
+    const title = form.title ? form.title : (form.brand + ' ' + form.model + ' ' + form.year);
+    const base={
+      title: title,
+      brand: form.brand,
+      model: form.model,
+      year: parseInt(form.year)||2020,
+      price: parseInt(form.price)||0,
+      location: form.location||'Warszawa',
+      voivodeship: 'Mazowieckie',
+      description: form.description||'',
+      image: form.images[0]||('https://picsum.photos/seed/'+Date.now()+'/600/400'),
+      images: form.images.length?form.images:['https://picsum.photos/seed/'+Date.now()+'/600/400'],
+      owner: 'Ja',
+      owner_id: 999,
+      phone: form.phone,
+      whatsapp: form.phone,
+      created_at_ts: Date.now()
+    };
+    try{
+      const nid=Date.now();
+      const toInsert = Object.assign({}, base, {id:nid});
+      await supabase.from('ads').insert([toInsert]);
+      setAds([toInsert].concat(ads));
+      setShowAdd(false);
+      setForm({brand:'',model:'',year:2020,price:'',phone:'',location:'Warszawa',title:'',description:'',images:[]});
+      alert('ZAPISANO NA STALE W SUPABASE!');
+    }catch(err){alert('Blad: '+err.message)}
   };
 
   return (
     <div className="min-h-screen">
-      <header className="bg-black text-white p-3 flex justify-between"><div className="font-black">WROOMER.PL</div><button onClick={()=>setShowAdd(true)} className="bg-[#ffea00] text-black px-4 py-2 rounded-[10px] font-bold">+ Dodaj</button></header>
-      <div className="bg-black text-white px-3 py-2 text-[11px]">{status}</div>
-      
-      <div className="max-w-[1440px] mx-auto px-3 py-3 flex gap-4">
-        <div className="hidden lg:block w-[340px]">
+      <header className="sticky top-0 z-30 bg-black text-white">
+        <div className="max-w-[1440px] mx-auto px-3 h-[56px] flex items-center justify-between">
+          <div className="flex items-center gap-2 font-black cursor-pointer" onClick={function(){setSelected(null)}}><div className="w-8 h-8 bg-[#ffea00] rounded-[8px] flex items-center justify-center text-black">W</div>WROOMER<span className="text-[#ffea00]">.PL</span></div>
+          <button onClick={function(){setForm({brand:'',model:'',year:2020,price:'',phone:'',location:'Warszawa',title:'',description:'',images:[]}); setShowAdd(true)}} className="bg-[#ffea00] text-black px-4 py-2 rounded-[10px] font-bold text-[13px]">+ Dodaj</button>
+        </div>
+      </header>
+      <div className="bg-black text-white"><div className="max-w-[1440px] mx-auto px-3 py-3"><h1 className="font-black text-[18px]">Darmowe ogloszenia <span className="text-[#ffea00]">motoryzacyjne</span></h1><p className="text-[11px] text-neutral-300">{status}</p><p className="text-[10px] text-[#ffea00] mt-1">Tylko 2 pliki na GitHub: index.html + vercel.json - usun ads.js i package.json!</p></div></div>
+
+      <div className="max-w-[1440px] mx-auto w-full px-3 py-3 flex flex-col lg:flex-row gap-4">
+        <div className="hidden lg:block w-[340px] flex-shrink-0">
           <div className="bg-[#111] border border-neutral-800 rounded-[16px] p-5 sticky top-[80px]">
-            <h2 className="font-bold text-white mb-4">🔍 Wyszukiwarka samochodów</h2>
-            <select value={searchBrand} onChange={e=>setSearchBrand(e.target.value)} className="w-full bg-[#1a1a1a] border border-neutral-800 rounded-[12px] px-3 py-3 text-white"><option value="">Wszystkie marki</option>{Object.keys(BRAND_MODELS).map(b=><option key={b} value={b}>{b}</option>)}</select>
-            <button onClick={()=>setSearchBrand('')} className="w-full mt-3 bg-white text-black font-bold py-3 rounded-[12px]">Reset</button>
+            <h2 className="font-bold text-[15px] text-white mb-4">Wyszukiwarka samochodow</h2>
+            <div className="space-y-3">
+              <select value={searchBrand} onChange={function(e){setSearchBrand(e.target.value); setSearchModel('')}} className="w-full bg-[#1a1a1a] border border-neutral-800 rounded-[12px] px-3 py-3 text-white"><option value="">Wszystkie marki</option>{Object.keys(BRAND_MODELS).map(function(b){return <option key={b} value={b}>{b}</option>})}</select>
+              <select value={searchModel} onChange={function(e){setSearchModel(e.target.value)}} className="w-full bg-[#1a1a1a] border border-neutral-800 rounded-[12px] px-3 py-3 text-white"><option value="">Wszystkie modele</option>{(BRAND_MODELS[searchBrand]||[]).map(function(m){return <option key={m} value={m}>{m}</option>})}</select>
+              <button onClick={function(){setSearchBrand(''); setSearchModel('')}} className="w-full bg-white text-black font-bold py-3 rounded-[12px]">Reset</button>
+              <div className="text-[10px] text-neutral-500 pt-3 border-t border-neutral-800">6 przykladowych ogloszen z 3-4 zdjeciami kazde. Zdjecia 4 cale = 400px w szczegolach.</div>
+            </div>
           </div>
         </div>
-        <div className="flex-1 grid grid-cols-1 md:grid-cols-3 gap-3">
-          {filtered.map(ad=>(
-            <div key={ad.id} onClick={()=>setSelected(ad)} className="bg-white border rounded-[14px] overflow-hidden cursor-pointer">
-              <div className="aspect-[4/3] bg-neutral-100"><img src={ad.image} className="w-full h-full object-cover" /></div>
-              <div className="p-3"><div className="font-bold truncate">{ad.title}</div><div className="font-black">{ad.price} zł</div></div>
-            </div>
-          ))}
+        <div className="flex-1">
+          <div className="mb-3 bg-black text-white text-[12px] font-bold px-3 py-1.5 rounded-full inline-block">{filtered.length} ogloszen</div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+            {filtered.map(function(ad){
+              return (
+                <div key={ad.id} onClick={function(){setSelected(ad)}} className="bg-white border rounded-[14px] overflow-hidden cursor-pointer hover:border-black">
+                  <div className="aspect-[4/3] bg-neutral-100 relative"><img src={ad.image} className="w-full h-full object-cover" alt={ad.title} /><div className="absolute bottom-2 right-2 bg-black/80 text-white text-[10px] px-2 py-1 rounded-full">{ad.images ? ad.images.length : 1} zdj</div><div className="absolute top-2 left-2 bg-black/80 text-white text-[10px] px-2 py-1 rounded-[6px]">{ad.year}</div></div>
+                  <div className="p-3"><div className="font-bold text-[13px] truncate">{ad.title}</div><div className="font-black text-[15px] mt-1">{ad.price.toLocaleString('pl-PL')} zl</div><div className="text-[11px] text-neutral-500">{ad.location} • {ad.mileage ? ad.mileage.toLocaleString('pl-PL')+' km' : ''}</div></div>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
 
@@ -111,28 +172,29 @@ function App(){
         <div className="fixed inset-0 z-50 bg-black/80 overflow-auto">
           <div className="min-h-screen flex items-start md:items-center justify-center p-0 md:p-6">
             <div className="bg-white w-full md:max-w-[720px] md:rounded-[20px] overflow-hidden flex flex-col max-h-[100dvh] md:max-h-[90vh]">
-              <div className="flex justify-between p-3 border-b sticky top-0 bg-white z-10">
-                <button onClick={()=>setSelected(null)} className="bg-[#f5f5f7] px-4 py-2 rounded-full font-bold">← Wróć</button>
-                <button onClick={()=>setSelected(null)} className="w-9 h-9 bg-black text-white rounded-full">✕</button>
+              <div className="flex items-center justify-between p-3 border-b sticky top-0 bg-white z-10">
+                <button onClick={function(){setSelected(null)}} className="bg-[#f5f5f7] px-4 py-2 rounded-full text-[13px] font-bold">Wroc</button>
+                <button onClick={function(){setSelected(null)}} className="w-9 h-9 bg-black text-white rounded-full">X</button>
               </div>
               <div className="overflow-auto flex-1">
-                {/* FIX 4 CALE - 400px, BEZ max-width:100% ktore zmniejszalo do 3 cali */}
-                <div className="bg-[#f5f5f7] p-4 flex items-center justify-center">
-                  <div className="img-wrapper-4inch bg-white rounded-[12px] p-2">
-                    <img 
-                      src={selected.images[imgIdx]||selected.image} 
-                      alt={selected.title} 
-                      className="img-fix-4inch"
-                      style={{height:'400px', minHeight:'400px', maxHeight:'400px', width:'auto', objectFit:'contain'}}
-                    />
-                  </div>
+                <div className="img-wrapper-fix">
+                  <img src={selected.images[imgIdx]||selected.image} alt={selected.title} className="img-4inch-fix" />
                 </div>
+                {selected.images && selected.images.length>1 && (
+                  <div className="flex gap-2 p-3 overflow-auto border-b bg-white">
+                    {selected.images.map(function(im,i){return <button key={i} onClick={function(){setImgIdx(i)}} className={'w-[72px] h-[54px] rounded-[8px] overflow-hidden border-2 flex-shrink-0 '+(i===imgIdx?'border-black':'border-transparent')}><img src={im} className="w-full h-full object-cover" /></button>})}
+                  </div>
+                )}
                 <div className="p-4">
                   <h1 className="font-black text-[18px]">{selected.title}</h1>
-                  <div className="font-black text-[22px] mt-2">{selected.price} zł</div>
-                  <div className="bg-black text-white rounded-[16px] p-4 mt-4">
-                    <div className="font-bold">📞 {selected.phone}</div>
+                  <div className="font-black text-[22px] mt-2">{selected.price.toLocaleString('pl-PL')} zl</div>
+                  <div className="grid grid-cols-3 gap-2 my-4">
+                    <div className="bg-[#f5f5f7] rounded-[12px] p-3"><div className="text-[10px] text-neutral-500 font-bold">Rocznik</div><div className="font-bold text-[13px]">{selected.year}</div></div>
+                    <div className="bg-[#f5f5f7] rounded-[12px] p-3"><div className="text-[10px] text-neutral-500 font-bold">Przebieg</div><div className="font-bold text-[13px]">{selected.mileage ? selected.mileage.toLocaleString('pl-PL')+' km' : '-'}</div></div>
+                    <div className="bg-[#f5f5f7] rounded-[12px] p-3"><div className="text-[10px] text-neutral-500 font-bold">Miasto</div><div className="font-bold text-[13px]">{selected.location}</div></div>
                   </div>
+                  {selected.description && <div className="bg-[#f5f5f7] rounded-[12px] p-4 mb-4"><div className="text-[11px] font-bold uppercase text-neutral-500 mb-2">Opis</div><div className="text-[13px] whitespace-pre-wrap">{selected.description}</div></div>}
+                  <div className="bg-black text-white rounded-[16px] p-4"><div className="font-bold text-[13px]">Kontakt: {selected.owner} • {selected.phone}</div><div className="grid grid-cols-2 gap-2 mt-3"><a href={'tel:'+selected.phone} className="bg-[#ffea00] text-black font-bold py-3 rounded-[12px] text-center">Zadzwon</a><a href={'https://wa.me/'+selected.phone} target="_blank" className="bg-[#25D366] text-white font-bold py-3 rounded-[12px] text-center">WhatsApp</a></div></div>
                 </div>
               </div>
             </div>
@@ -142,17 +204,25 @@ function App(){
 
       {showAdd && (
         <div className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-4">
-          <div className="bg-white rounded-[20px] p-4 w-full max-w-[500px]">
-            <h2 className="font-black mb-3">Dodaj</h2>
+          <div className="bg-white rounded-[20px] p-4 w-full max-w-[500px] max-h-[90vh] overflow-auto">
+            <div className="flex justify-between mb-3"><h2 className="font-black">Dodaj ogloszenie</h2><button onClick={function(){setShowAdd(false)}} className="w-8 h-8 bg-[#f5f5f7] rounded-full">X</button></div>
             <form onSubmit={handleSave} className="space-y-3">
               <div className="grid grid-cols-2 gap-2">
-                <select value={form.brand} onChange={e=>setForm({...form,brand:e.target.value})} className="bg-[#f5f5f7] border rounded-[12px] px-3 py-3"><option value="">Marka *</option>{Object.keys(BRAND_MODELS).map(b=><option key={b} value={b}>{b}</option>)}</select>
-                <input value={form.model} onChange={e=>setForm({...form,model:e.target.value})} placeholder="Model *" className="bg-[#f5f5f7] border rounded-[12px] px-3 py-3" />
+                <select value={form.brand} onChange={function(e){setForm(Object.assign({},form,{brand:e.target.value,model:''}))}} className="w-full bg-[#f5f5f7] border rounded-[12px] px-3 py-3"><option value="">Marka *</option>{Object.keys(BRAND_MODELS).map(function(b){return <option key={b} value={b}>{b}</option>})}</select>
+                <select value={form.model} onChange={function(e){setForm(Object.assign({},form,{model:e.target.value}))}} className="w-full bg-[#f5f5f7] border rounded-[12px] px-3 py-3"><option value="">Model *</option>{(BRAND_MODELS[form.brand]||[]).map(function(m){return <option key={m} value={m}>{m}</option>})}</select>
               </div>
-              <input type="number" value={form.price} onChange={e=>setForm({...form,price:e.target.value})} placeholder="Cena *" className="w-full bg-[#f5f5f7] border rounded-[12px] px-3 py-3" />
-              <input value={form.phone} onChange={e=>setForm({...form,phone:e.target.value})} placeholder="Telefon *" className="w-full bg-[#f5f5f7] border rounded-[12px] px-3 py-3" />
-              <input type="file" ref={fileRef} accept="image/*" multiple onChange={e=>{Array.from(e.target.files).forEach(f=>{const r=new FileReader(); r.onload=ev=>setForm(p=>({...p,images:[...p.images,ev.target.result]})); r.readAsDataURL(f)})}} />
-              <div className="flex gap-2"><button type="button" onClick={()=>setShowAdd(false)} className="flex-1 bg-[#f5f5f7] py-3 rounded-[12px] font-bold">Anuluj</button><button type="submit" className="flex-1 bg-black text-white py-3 rounded-[12px] font-bold">Zapisz</button></div>
+              <div className="grid grid-cols-2 gap-2">
+                <input type="number" value={form.year} onChange={function(e){setForm(Object.assign({},form,{year:e.target.value}))}} placeholder="Rocznik" className="w-full bg-[#f5f5f7] border rounded-[12px] px-3 py-3" />
+                <input type="number" value={form.price} onChange={function(e){setForm(Object.assign({},form,{price:e.target.value}))}} placeholder="Cena *" className="w-full bg-[#f5f5f7] border rounded-[12px] px-3 py-3" />
+              </div>
+              <input value={form.phone} onChange={function(e){setForm(Object.assign({},form,{phone:e.target.value}))}} placeholder="Telefon *" className="w-full bg-[#f5f5f7] border rounded-[12px] px-3 py-3" />
+              <input value={form.location} onChange={function(e){setForm(Object.assign({},form,{location:e.target.value}))}} placeholder="Miasto" className="w-full bg-[#f5f5f7] border rounded-[12px] px-3 py-3" />
+              <textarea value={form.description} onChange={function(e){setForm(Object.assign({},form,{description:e.target.value}))}} placeholder="Opis" className="w-full bg-[#f5f5f7] border rounded-[12px] px-3 py-3" rows="3"></textarea>
+              <div className="flex gap-2 flex-wrap">
+                {form.images.map(function(im,i){return <div key={i} className="relative w-[80px] h-[80px] rounded-[10px] overflow-hidden border"><img src={im} className="w-full h-full object-cover" /><button type="button" onClick={function(){setForm(Object.assign({},form,{images:form.images.filter(function(_,idx){return idx!==i})}))}} className="absolute top-1 right-1 w-6 h-6 bg-black/70 text-white rounded-full">X</button></div>})}
+                {form.images.length<5 && <label className="w-[80px] h-[80px] border-2 border-dashed rounded-[10px] flex items-center justify-center cursor-pointer">+<input ref={fileRef} type="file" accept="image/*" multiple onChange={handleImg} style={{display:'none'}} /></label>}
+              </div>
+              <div className="flex gap-3"><button type="button" onClick={function(){setShowAdd(false)}} className="flex-1 bg-[#f5f5f7] border font-bold py-4 rounded-[14px]">Anuluj</button><button type="submit" className="flex-[2] bg-black text-white font-bold py-4 rounded-[14px]">Zapisz do Supabase</button></div>
             </form>
           </div>
         </div>
