@@ -2,78 +2,77 @@
 <html lang="pl">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 <title>wroomer.pl</title>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
 <style>
   *{margin:0;padding:0;box-sizing:border-box}
-  body{background:#f5f5f3;color:#0a0a0a;font-family:'Space Grotesk',sans-serif}
+  html{overflow-x:hidden}
+  body{background:#f5f5f3;color:#0a0a0a;font-family:'Space Grotesk',sans-serif;overflow-x:hidden}
   
-  /* LEWA CZARNA KAFELKA - 800px / 0.65 - czysta, bez opisów technicznych */
-  .layout{display:grid;grid-template-columns:800px 1fr;min-height:100vh}
+  .layout{display:grid;grid-template-columns:800px 1fr;min-height:100vh;width:100%}
+
+  /* LEWA CZARNA KAFELKA 800px / 0.65 */
   .left{
     background:#080808;
     color:#fff;
     width:800px;
-    position:sticky;top:0;
-    height:100vh;
-    display:flex;flex-direction:column;
+    min-height:100vh;
+    position:sticky;
+    top:0;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
     padding:32px;
-    overflow:hidden;
   }
-  .left-top{display:flex;justify-content:space-between;align-items:center}
+  .left-top{display:flex;justify-content:space-between}
   .logo{font-weight:700;font-size:22px;letter-spacing:-0.04em}
   .nav{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.14em;text-transform:uppercase;opacity:0.6;line-height:1.9;text-align:right}
-  .left-main{margin-top:auto}
-  .left-main h1{font-size:122px;line-height:0.85;letter-spacing:-0.07em;font-weight:700}
+  .left-main h1{font-size:clamp(72px, 9vw, 122px);line-height:0.85;letter-spacing:-0.07em;font-weight:700;margin-top:auto}
   .left-main h1 i{font-style:normal;-webkit-text-stroke:1.2px #fff;color:transparent}
-  .left-bottom{margin-top:36px;display:flex;gap:12px}
-  .btn{border:1px solid #fff;border-radius:999px;padding:12px 22px;color:#fff;text-decoration:none;font-size:13px;font-weight:600;letter-spacing:0.02em}
-  .btn:hover{background:#fff;color:#000}
+  .left-bottom{margin-top:40px;display:flex;gap:12px;flex-wrap:wrap}
+  .btn{border:1px solid #fff;border-radius:999px;padding:12px 22px;color:#fff;text-decoration:none;font-size:13px;font-weight:600}
+  .btn.fill{background:#fff;color:#000}
 
-  .right{padding:0;background:#f5f5f3}
-  .topbar{display:flex;justify-content:space-between;padding:22px 32px;border-bottom:1px solid #000;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase}
-  
-  /* LISTING - OSTRE ZDJĘCIA */
-  .cars{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:#000;border-top:1px solid #000;border-bottom:1px solid #000}
-  .car{background:#fff;position:relative;overflow:hidden}
-  .car-img{
-    width:100%;
-    aspect-ratio: 16/10;
-    background:#111;
-    overflow:hidden;
-    position:relative;
-  }
+  .right{width:100%;min-width:0;background:#f5f5f3}
+  .topbar{display:flex;justify-content:space-between;padding:18px 24px;border-bottom:1px solid #000;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase}
+
+  .cars{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:#000;border-bottom:1px solid #000}
+  .car{background:#fff;min-width:0}
+  .car-img{width:100%;aspect-ratio:16/10;overflow:hidden;background:#111}
   .car-img img{
-    width:100%;height:100%;
-    object-fit:cover;
-    object-position:center;
-    display:block;
-    /* OSTROŚĆ - kluczowe */
-    image-rendering:-webkit-optimize-contrast;
+    width:100%;height:100%;object-fit:cover;display:block;
     transform:translateZ(0);
-    backface-visibility:hidden;
-    filter:contrast(1.02) saturate(1.05);
   }
-  .car-info{padding:20px 22px 22px;display:flex;justify-content:space-between;align-items:flex-end}
-  .car-info h3{font-size:19px;line-height:1.1;letter-spacing:-0.02em;font-weight:700}
-  .car-info h3 span{font-weight:400;opacity:0.5;font-size:13px;display:block;margin-top:4px;font-family:'JetBrains Mono',monospace;letter-spacing:0}
-  .price{font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:700}
-  
+  .car-info{padding:18px 20px 20px;display:flex;justify-content:space-between;align-items:flex-end;gap:12px}
+  .car-info h3{font-size:17px;line-height:1.1;font-weight:700;min-width:0}
+  .car-info h3 span{display:block;font-weight:400;opacity:0.5;font-size:12px;margin-top:4px;font-family:'JetBrains Mono',monospace}
+  .price{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;white-space:nowrap}
   .car-wide{grid-column:span 2}
   .car-wide .car-img{aspect-ratio:21/9}
 
-  /* eliminacja blurry na retina */
-  @media (-webkit-min-device-pixel-ratio: 2){
-    .car-img img{image-rendering:high-quality}
-  }
-
-  @media(max-width:1150px){
+  /* MOBILE - TO BYŁO DOBRZE, WRACAMY DO TEGO */
+  @media(max-width:900px){
     .layout{grid-template-columns:1fr}
-    .left{width:100%;height:auto;min-height:72vh;aspect-ratio:1/0.65;position:relative}
-    .left-main h1{font-size:84px}
+    .left{
+      width:100%;
+      min-height:auto;
+      height:auto;
+      position:relative;
+      aspect-ratio: 1 / 0.65;
+      padding:24px;
+      justify-content:space-between;
+    }
+    .left-main h1{font-size:64px}
+    .topbar{padding:14px 20px;font-size:10px}
     .cars{grid-template-columns:1fr}
     .car-wide{grid-column:span 1}
+    .car-wide .car-img{aspect-ratio:16/10}
+    .car-img{aspect-ratio:16/10}
+  }
+  @media(max-width:480px){
+    .left{padding:20px;aspect-ratio:1/0.75}
+    .left-main h1{font-size:52px}
   }
 </style>
 </head>
@@ -88,85 +87,37 @@
       <h1>WROO<br/><i>MER</i></h1>
       <div class="left-bottom">
         <a class="btn" href="#auta">ZOBACZ AUTA</a>
-        <a class="btn" style="background:#fff;color:#000" href="mailto:kontakt@wroomer.pl">KONTAKT</a>
+        <a class="btn fill" href="mailto:kontakt@wroomer.pl">KONTAKT</a>
       </div>
     </div>
   </aside>
 
   <section class="right" id="auta">
     <div class="topbar"><div>● DOSTĘPNE OD RĘKI</div><div>wroomer.pl</div></div>
-    
     <div class="cars">
-      <!-- ZDJĘCIA 2x rozdzielczość - ostre, bez upscalingu -->
       <div class="car">
-        <div class="car-img">
-          <img src="https://images.unsplash.com/photo-1555215695-3004980ad54e?q=80&w=1600&auto=format&fit=crop" 
-               srcset="https://images.unsplash.com/photo-1555215695-3004980ad54e?q=80&w=1600&auto=format&fit=crop 1x,
-                       https://images.unsplash.com/photo-1555215695-3004980ad54e?q=80&w=2400&auto=format&fit=crop 2x"
-               loading="eager" alt="car">
-        </div>
-        <div class="car-info">
-          <h3>BMW M4 Competition<span>2023 • 12 400 km • Benzyna</span></h3>
-          <div class="price">389 900 PLN</div>
-        </div>
+        <div class="car-img"><img src="https://images.unsplash.com/photo-1555215695-3004980ad54e?q=80&w=1200&auto=format&fit=crop" srcset="https://images.unsplash.com/photo-1555215695-3004980ad54e?q=80&w=1200&auto=format&fit=crop 600w, https://images.unsplash.com/photo-1555215695-3004980ad54e?q=80&w=1600&auto=format&fit=crop 1200w, https://images.unsplash.com/photo-1555215695-3004980ad54e?q=80&w=2400&auto=format&fit=crop 2400w" sizes="(max-width: 900px) 100vw, 50vw" loading="eager" alt=""></div>
+        <div class="car-info"><h3>BMW M4 Competition<span>2023 • 12 400 km</span></h3><div class="price">389 900 PLN</div></div>
       </div>
-
       <div class="car">
-        <div class="car-img">
-          <img src="https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?q=80&w=1600&auto=format&fit=crop"
-               srcset="https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?q=80&w=1600&auto=format&fit=crop 1x,
-                       https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?q=80&w=2400&auto=format&fit=crop 2x"
-               loading="eager" alt="car">
-        </div>
-        <div class="car-info">
-          <h3>Porsche 911 GT3<span>2022 • 8 200 km • Benzyna</span></h3>
-          <div class="price">799 000 PLN</div>
-        </div>
+        <div class="car-img"><img src="https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?q=80&w=1200&auto=format&fit=crop" srcset="https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?q=80&w=1200&auto=format&fit=crop 600w, https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?q=80&w=1600&auto=format&fit=crop 1200w, https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?q=80&w=2400&auto=format&fit=crop 2400w" sizes="(max-width: 900px) 100vw, 50vw" loading="eager" alt=""></div>
+        <div class="car-info"><h3>Porsche 911 GT3<span>2022 • 8 200 km</span></h3><div class="price">799 000 PLN</div></div>
       </div>
-
       <div class="car car-wide">
-        <div class="car-img">
-          <img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=2000&auto=format&fit=crop"
-               srcset="https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=2000&auto=format&fit=crop 1x,
-                       https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=3000&auto=format&fit=crop 2x"
-               loading="lazy" alt="car">
-        </div>
-        <div class="car-info">
-          <h3>Mercedes-AMG GT S<span>2021 • 19 500 km • Benzyna</span></h3>
-          <div class="price">529 900 PLN</div>
-        </div>
+        <div class="car-img"><img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=1600&auto=format&fit=crop" srcset="https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=1600&auto=format&fit=crop 800w, https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=2400&auto=format&fit=crop 1600w" sizes="100vw" loading="lazy" alt=""></div>
+        <div class="car-info"><h3>Mercedes-AMG GT S<span>2021 • 19 500 km</span></h3><div class="price">529 900 PLN</div></div>
       </div>
-
       <div class="car">
-        <div class="car-img">
-          <img src="https://images.unsplash.com/photo-1494976388531-d1058494cdd8?q=80&w=1600&auto=format&fit=crop"
-               srcset="https://images.unsplash.com/photo-1494976388531-d1058494cdd8?q=80&w=1600&auto=format&fit=crop 1x,
-                       https://images.unsplash.com/photo-1494976388531-d1058494cdd8?q=80&w=2400&auto=format&fit=crop 2x"
-               loading="lazy" alt="car">
-        </div>
-        <div class="car-info">
-          <h3>Audi RS6 Avant<span>2023 • 14 000 km • Benzyna</span></h3>
-          <div class="price">459 000 PLN</div>
-        </div>
+        <div class="car-img"><img src="https://images.unsplash.com/photo-1494976388531-d1058494cdd8?q=80&w=1200&auto=format&fit=crop" srcset="https://images.unsplash.com/photo-1494976388531-d1058494cdd8?q=80&w=1200&auto=format&fit=crop 600w, https://images.unsplash.com/photo-1494976388531-d1058494cdd8?q=80&w=2400&auto=format&fit=crop 1200w" sizes="(max-width: 900px) 100vw, 50vw" loading="lazy" alt=""></div>
+        <div class="car-info"><h3>Audi RS6 Avant<span>2023 • 14 000 km</span></h3><div class="price">459 000 PLN</div></div>
       </div>
-
       <div class="car">
-        <div class="car-img">
-          <img src="https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?q=80&w=1600&auto=format&fit=crop"
-               srcset="https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?q=80&w=1600&auto=format&fit=crop 1x,
-                       https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?q=80&w=2400&auto=format&fit=crop 2x"
-               loading="lazy" alt="car">
-        </div>
-        <div class="car-info">
-          <h3>BMW M2 Competition<span>2024 • 2 100 km • Benzyna</span></h3>
-          <div class="price">299 900 PLN</div>
-        </div>
+        <div class="car-img"><img src="https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?q=80&w=1200&auto=format&fit=crop" srcset="https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?q=80&w=1200&auto=format&fit=crop 600w, https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?q=80&w=2400&auto=format&fit=crop 1200w" sizes="(max-width: 900px) 100vw, 50vw" loading="lazy" alt=""></div>
+        <div class="car-info"><h3>BMW M2 Competition<span>2024 • 2 100 km</span></h3><div class="price">299 900 PLN</div></div>
       </div>
     </div>
-
-    <div style="padding:32px;font-family:'JetBrains Mono',monospace;font-size:11px;opacity:0.5;letter-spacing:0.1em;display:flex;justify-content:space-between">
-      <div>© 2026 wroomer.pl</div>
-      <div>WARSZAWA • KONTAKT@WROOMER.PL</div>
+    <div style="padding:24px;display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:10px;opacity:0.5;letter-spacing:0.08em">
+      <span>© 2026 wroomer.pl</span><span>kontakt@wroomer.pl</span>
     </div>
   </section>
 </div>
