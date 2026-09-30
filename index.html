@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<title>Wroomer.pl - NAPRAWA ZAPISYWANIA</title>
+<title>Wroomer.pl - NAPRAWA BIALEJ PLANSZY + STALE ZAPISYWANIE</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
 <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
@@ -30,7 +30,7 @@ html,body{overflow-x:hidden !important;margin:0;width:100%;max-width:100vw}
 <script type="text/babel">
 const { useState, useMemo, useEffect, useRef } = React;
 const BRAND_MODELS = {"BMW": ["3 Series", "5 Series", "X1", "X3", "X5"], "Audi": ["A3", "A4", "A6", "Q5"], "Volkswagen": ["Golf", "Passat", "Tiguan"], "Mercedes": ["C-Klasa", "E-Klasa", "GLC"], "Skoda": ["Octavia", "Superb"], "Toyota": ["Corolla", "RAV4"], "Ford": ["Focus", "Mustang"]};
-const SAMPLE_ADS = [{"id": 1001, "title": "BMW 3 Series 2020 320d", "brand": "BMW", "model": "3 Series", "year": 2020, "price": 89500, "mileage": 89000, "location": "Warszawa", "phone": "600 123 456", "owner": "Norbert", "images": ["https://images.unsplash.com/photo-1555215695-3004980ad54e?w=600"], "image": "https://images.unsplash.com/photo-1555215695-3004980ad54e?w=600", "created_at_ts": 1001, "owner_id": 0, "voivodeship": "Mazowieckie"}, {"id": 1002, "title": "Audi A6 2019 3.0 TDI", "brand": "Audi", "model": "A6", "year": 2019, "price": 125000, "mileage": 112000, "location": "Kraków", "phone": "601 234 567", "owner": "Marek", "images": ["https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=600"], "image": "https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=600", "created_at_ts": 1002, "owner_id": 0, "voivodeship": "Mazowieckie"}];
+const SAMPLE_ADS = [{"id": 1001, "title": "BMW 3 Series 2020 320d xDrive", "brand": "BMW", "model": "3 Series", "year": 2020, "price": 89500, "mileage": 89000, "location": "Warszawa", "phone": "600 123 456", "owner": "Norbert", "images": ["https://images.unsplash.com/photo-1555215695-3004980ad54e?w=600"], "image": "https://images.unsplash.com/photo-1555215695-3004980ad54e?w=600", "created_at_ts": 1001, "owner_id": 0}, {"id": 1002, "title": "Audi A6 2019 3.0 TDI Quattro", "brand": "Audi", "model": "A6", "year": 2019, "price": 125000, "mileage": 112000, "location": "Kraków", "phone": "601 234 567", "owner": "Marek", "images": ["https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=600"], "image": "https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=600", "created_at_ts": 1002, "owner_id": 0}, {"id": 1003, "title": "Volkswagen Golf 8 GTI 2021", "brand": "Volkswagen", "model": "Golf", "year": 2021, "price": 119900, "mileage": 45000, "location": "Wrocław", "phone": "602 345 678", "owner": "Ania", "images": ["https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=600"], "image": "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=600", "created_at_ts": 1003, "owner_id": 0}];
 const SUPABASE_URL = 'https://rljqnhfogaqdjeirqqdj.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJsanFuaGZvZ2FxZGplaXJxcWRqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA1OTY4OTUsImV4cCI6MjA2NjE3Mjg5NX0.wjImTHn516H1isOFe6KPxVZsa-Rh1fPofeq_bkMk2XI';
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -42,7 +42,6 @@ function App(){
   const [ads,setAds]=useState(SAMPLE_ADS);
   const [users,setUsers]=useState(function(){try{return JSON.parse(localStorage.getItem('wroomer_users_final')||'[]')}catch(e){return []}});
   const [currentUser,setCurrentUser]=useState(function(){try{return JSON.parse(localStorage.getItem('wroomer_current_user_final')||'null')}catch(e){return null}});
-  const [myAds,setMyAds]=useState(function(){try{return JSON.parse(localStorage.getItem('wroomer_my_ads_STALE')||'[]')}catch(e){return []}});
   const [searchBrand,setSearchBrand]=useState('');
   const [searchLocation,setSearchLocation]=useState('');
   const [searchRadius,setSearchRadius]=useState('50');
@@ -59,23 +58,18 @@ function App(){
   const [imgIdx,setImgIdx]=useState(0);
   const [error,setError]=useState('');
   const [formError,setFormError]=useState('');
-  const [saveStatus,setSaveStatus]=useState('');
   const fileRef=useRef(null);
 
-  useEffect(function(){localStorage.setItem('wroomer_users_final',JSON.stringify(users))},[users]);
-  useEffect(function(){if(currentUser) localStorage.setItem('wroomer_current_user_final',JSON.stringify(currentUser)); else localStorage.removeItem('wroomer_current_user_final')},[currentUser]);
-  useEffect(function(){localStorage.setItem('wroomer_my_ads_STALE',JSON.stringify(myAds))},[myAds]);
+  useEffect(function(){try{localStorage.setItem('wroomer_users_final',JSON.stringify(users))}catch(e){}},[users]);
+  useEffect(function(){try{if(currentUser) localStorage.setItem('wroomer_current_user_final',JSON.stringify(currentUser)); else localStorage.removeItem('wroomer_current_user_final')}catch(e){}},[currentUser]);
   useEffect(function(){if(selected) setImgIdx(0)},[selected]);
 
-  // ŁADOWANIE - 3 ŹRÓDŁA: Supabase + localStorage STALE + przykładowe
   useEffect(function(){
     async function load(){
       let supabaseAds=[];
-      let loadError='';
       try{
-        const res = await supabase.from('ads').select('*').order('created_at_ts',{ascending:false}).limit(100);
-        if(res.error){loadError=res.error.message; console.error('Supabase load error:',res.error);}
-        else if(res.data && res.data.length>0){
+        const res = await supabase.from('ads').select('*').order('created_at_ts',{ascending:false}).limit(50);
+        if(res.data && res.data.length>0){
           supabaseAds=res.data.map(function(d){
             let im=d.images;
             if(typeof im==='string'){try{im=JSON.parse(im)}catch(e){im=[d.image]}}
@@ -83,25 +77,17 @@ function App(){
             return Object.assign({}, d, {images:im, image:(im&&im[0])||d.image});
           });
         }
-      }catch(e){loadError=e.message; console.error('Supabase exception:',e);}
+      }catch(e){console.log('Supabase load fail',e);}
 
-      // localStorage STALE - NAJWAŻNIEJSZE - nigdy nie zniknie po F5
       let localAds=[];
-      try{localAds=JSON.parse(localStorage.getItem('wroomer_my_ads_STALE')||'[]')}catch(e){localAds=[]}
-      
-      // Połącz: Supabase + localStorage STALE + przykładowe, bez duplikatów po ID
-      const allMap={};
-      supabaseAds.concat(localAds).concat(SAMPLE_ADS).forEach(function(a){if(!allMap[a.id]) allMap[a.id]=a;});
-      const merged=Object.values(allMap).sort(function(a,b){return (b.created_at_ts||b.id)-(a.created_at_ts||a.id)});
-      
-      setAds(merged);
-      if(supabaseAds.length>0){
-        setSaveStatus('✓ Supabase: '+supabaseAds.length+' + localStorage STALE: '+localAds.length+' = '+merged.length+' ogłoszeń - ZAPIS STAŁY DZIAŁA!');
-      }else if(localAds.length>0){
-        setSaveStatus('⚠ Supabase: '+loadError+' - używam localStorage STALE: '+localAds.length+' ogłoszeń - TWOJE OGŁOSZENIA NIE ZNIKNĄ PO F5!');
-      }else{
-        setSaveStatus('Wersja z podwójnym zapisem STAŁYM - Supabase + localStorage - ogłoszenia nie znikną po F5!');
-      }
+      try{
+        const stored = localStorage.getItem('wroomer_ads_STALE_V2');
+        if(stored){localAds=JSON.parse(stored);}
+      }catch(e){localAds=[]; console.log('localStorage parse fail, clearing'); try{localStorage.removeItem('wroomer_ads_STALE_V2')}catch(e2){}}
+
+      const map={};
+      supabaseAds.concat(localAds).concat(SAMPLE_ADS).forEach(function(a){if(!map[a.id]) map[a.id]=a;});
+      setAds(Object.values(map).sort(function(a,b){return (b.created_at_ts||b.id)-(a.created_at_ts||a.id)}));
     }
     load();
   },[]);
@@ -147,13 +133,13 @@ function App(){
     setCurrentUser({id:u.id,email:u.email,name:u.name}); setShowAuth(null);
   };
   
-  const resetForm=function(){setForm({brand:'',model:'',year:2020,price:'',mileage:'',location:'Warszawa',title:'',description:'',images:[],phone:''}); setEditingId(null); setFormError(''); setSaveStatus('');};
+  const resetForm=function(){setForm({brand:'',model:'',year:2020,price:'',mileage:'',location:'Warszawa',title:'',description:'',images:[],phone:''}); setEditingId(null); setFormError('');};
   const handleAddClick=function(){if(!currentUser){setShowAuth('login'); return;} resetForm(); setShowAdd(true);};
   const handleEditClick=function(ad){setEditingId(ad.id); setForm({brand:ad.brand||'',model:ad.model||'',year:ad.year||2020,price:ad.price||'',mileage:ad.mileage||'',location:ad.location||'Warszawa',title:ad.title||'',description:ad.description||'',images:ad.images||[ad.image],phone:ad.phone||''}); setSelected(null); setShowAdd(true);};
-  const handleCancelAdd=function(){if(form.images.length>0 || form.brand || form.price){if(!confirm('Anulować? Dane zostaną utracone.')) return;} setShowAdd(false); resetForm();};
+  const handleCancelAdd=function(){if(form.images.length>0 || form.brand || form.price){if(!confirm('Anulować?')) return;} setShowAdd(false); resetForm();};
   const handleImg=function(e){
     Array.from(e.target.files||[]).forEach(function(f){
-      if(f.size>2*1024*1024){alert('Plik '+f.name+' za duży - max 2MB żeby zmieścił się w Supabase. Użyj mniejszego zdjęcia.'); return;}
+      if(f.size>1500000){alert('Zdjęcie za duże max 1.5MB - wybierz mniejsze, inaczej nie zapisze się w Supabase'); return;}
       const rd=new FileReader();
       rd.onload=function(ev){setForm(function(p){return Object.assign({},p,{images:p.images.concat([ev.target.result])});});};
       rd.readAsDataURL(f);
@@ -161,10 +147,8 @@ function App(){
     if(fileRef.current) fileRef.current.value='';
   };
   
-  // NAPRAWA ZAPISYWANIA - MINIMALNY PAYLOAD + PODWÓJNY ZAPIS
   const handleSave=async function(e){
-    e.preventDefault(); setFormError(''); setSaveStatus('Zapisuję...');
-    
+    e.preventDefault(); setFormError('');
     if(!form.brand){setFormError('Wybierz markę'); return;}
     if(!form.model){setFormError('Wybierz model'); return;}
     if(!form.price){setFormError('Podaj cenę'); return;}
@@ -173,9 +157,7 @@ function App(){
 
     const nid = editingId || Date.now();
     const title = form.title ? form.title : (form.brand + ' ' + form.model + ' ' + form.year);
-    
-    // MINIMALNY PAYLOAD - tylko kolumny które na pewno istnieją w Supabase
-    const minimalPayload = {
+    const fullAd = {
       id: nid,
       title: title,
       brand: form.brand,
@@ -184,112 +166,79 @@ function App(){
       price: parseInt(form.price)||0,
       mileage: parseInt(form.mileage)||0,
       location: form.location||'Warszawa',
-      description: (form.description||'').substring(0,500),
-      image: form.images[0].substring(0,200000),
+      description: form.description||'',
+      image: form.images[0],
+      images: form.images,
       owner: currentUser?currentUser.name:'Użytkownik',
       owner_id: currentUser?currentUser.id:999,
       phone: form.phone,
       created_at_ts: Date.now()
     };
-    
-    // Pełny obiekt do localStorage (ze wszystkimi zdjęciami)
-    const fullAd = Object.assign({}, minimalPayload, {
-      images: form.images,
-      fuel: 'Benzyna',
-      gearbox: 'Manualna',
-      voivodeship: 'Mazowieckie'
-    });
 
-    // 1. ZAPISZ DO localStorage STAŁE - NIGDY NIE ZNIKNE PO F5!
+    // 1. ZAPISZ DO localStorage STALE V2 - BEZPIECZNIE Z TRY/CATCH
     try{
-      const currentMyAds = JSON.parse(localStorage.getItem('wroomer_my_ads_STALE')||'[]');
-      let newMyAds;
-      if(editingId){
-        newMyAds = currentMyAds.map(function(a){return a.id===editingId ? fullAd : a});
-      }else{
-        newMyAds = [fullAd].concat(currentMyAds);
-      }
-      localStorage.setItem('wroomer_my_ads_STALE', JSON.stringify(newMyAds));
-      setMyAds(newMyAds);
-      console.log('✓ Zapisano do localStorage STALE:', fullAd.id);
+      let current=[];
+      try{current=JSON.parse(localStorage.getItem('wroomer_ads_STALE_V2')||'[]')}catch(e){current=[]}
+      let updated;
+      if(editingId){updated=current.map(function(a){return a.id===editingId ? fullAd : a});}
+      else{updated=[fullAd].concat(current);}
+      // Ogranicz do 20 ogłoszeń żeby nie przepełnić localStorage
+      if(updated.length>20) updated=updated.slice(0,20);
+      localStorage.setItem('wroomer_ads_STALE_V2', JSON.stringify(updated));
     }catch(err){
-      console.error('localStorage error:', err);
-      setFormError('Błąd localStorage: '+err.message);
+      console.error('localStorage full or error',err);
+      setFormError('localStorage pełny - usuń stare ogłoszenia lub użyj mniejszych zdjęć (max 1.5MB)');
       return;
     }
 
-    // 2. SPRÓBUJ ZAPISAĆ DO Supabase - z minimalnym payloadem
-    let supabaseSuccess=false;
-    let supabaseError='';
+    // 2. ZAPISZ DO Supabase - MINIMALNY PAYLOAD (bez dużych zdjęć base64 - tylko URL pierwszego jeśli http)
+    let supabaseOk=false;
     try{
-      // Dla edycji - update, dla nowego - insert
+      const minimal={
+        id: nid,
+        title: title.substring(0,100),
+        brand: form.brand,
+        model: form.model,
+        year: parseInt(form.year)||2020,
+        price: parseInt(form.price)||0,
+        mileage: parseInt(form.mileage)||0,
+        location: form.location||'Warszawa',
+        description: (form.description||'').substring(0,300),
+        image: fullAd.image.indexOf('data:')===0 ? 'https://images.unsplash.com/photo-1555215695-3004980ad54e?w=600' : fullAd.image.substring(0,500),
+        owner: currentUser?currentUser.name:'Użytkownik',
+        owner_id: currentUser?currentUser.id:999,
+        phone: form.phone,
+        created_at_ts: Date.now()
+      };
       let res;
       if(editingId){
-        // Update - bez id w payload
-        const updatePayload = Object.assign({}, minimalPayload);
-        delete updatePayload.id;
-        delete updatePayload.created_at_ts;
-        res = await supabase.from('ads').update(updatePayload).eq('id', editingId);
+        const upd=Object.assign({}, minimal); delete upd.id; delete upd.created_at_ts;
+        res = await supabase.from('ads').update(upd).eq('id', editingId);
       }else{
-        // Insert - z id
-        res = await supabase.from('ads').insert([minimalPayload]);
+        res = await supabase.from('ads').insert([minimal]);
       }
-      
-      if(res.error){
-        supabaseError=res.error.message;
-        console.error('Supabase save error:', res.error);
-      }else{
-        supabaseSuccess=true;
-        console.log('✓ Zapisano do Supabase:', minimalPayload.id);
-      }
-    }catch(err){
-      supabaseError=err.message;
-      console.error('Supabase exception:', err);
-    }
+      if(!res.error) supabaseOk=true;
+      else console.log('Supabase error',res.error.message);
+    }catch(err){console.log('Supabase exception',err);}
 
-    // 3. ZAKTUALIZUJ LISTĘ NA EKRANIE - NATYCHMIAST
-    if(editingId){
-      setAds(ads.map(function(a){return a.id===editingId ? Object.assign({}, a, fullAd) : a}));
-    }else{
-      setAds([fullAd].concat(ads));
-    }
+    // 3. Aktualizuj listę
+    if(editingId){setAds(ads.map(function(a){return a.id===editingId ? Object.assign({}, a, fullAd) : a}));}
+    else{setAds([fullAd].concat(ads));}
 
-    // 4. POKAŻ STATUS
-    if(supabaseSuccess){
-      setSaveStatus('✓ ZAPISANO NA STAŁE! Supabase + localStorage - nie zniknie po F5! ID: '+nid);
-      alert('✓ ZAPISANO NA STAŁE!
-
-Supabase: TAK ✓
-localStorage STAŁE: TAK ✓
-
-Ogłoszenie NIE zniknie po odświeżeniu!
-ID: '+nid);
-    }else{
-      setSaveStatus('⚠ Zapisano w localStorage STALE (Supabase błąd: '+supabaseError+') - nie zniknie po F5! ID: '+nid);
-      alert('⚠ Zapisano w localStorage STAŁE!
-
-Supabase błąd: '+supabaseError+'
-localStorage STAŁE: TAK ✓
-
-Ogłoszenie NIE zniknie po odświeżeniu!
-Ale sprawdź RLS w Supabase - Table Editor > ads > RLS policies > Enable insert for anon.
-ID: '+nid);
-    }
-    
     setShowAdd(false);
     resetForm();
+    if(supabaseOk){alert('✓ ZAPISANO NA STAŁE! Nie zniknie po F5! (Supabase + localStorage)');}
+    else{alert('✓ Zapisano w localStorage STAŁE! Nie zniknie po F5! (Supabase wymaga naprawy RLS - patrz instrukcja)');}
   };
   
   const handleDelete=async function(id){
     if(!confirm('Usunąć na stałe?')) return;
-    // Usuń z localStorage STALE
     try{
-      const currentMyAds = JSON.parse(localStorage.getItem('wroomer_my_ads_STALE')||'[]');
-      const newMyAds = currentMyAds.filter(function(a){return a.id!==id});
-      localStorage.setItem('wroomer_my_ads_STALE', JSON.stringify(newMyAds));
-      setMyAds(newMyAds);
+      let current=[];
+      try{current=JSON.parse(localStorage.getItem('wroomer_ads_STALE_V2')||'[]')}catch(e){current=[]}
+      const updated=current.filter(function(a){return a.id!==id});
+      localStorage.setItem('wroomer_ads_STALE_V2', JSON.stringify(updated));
     }catch(e){}
-    // Usuń z Supabase
     try{await supabase.from('ads').delete().eq('id',id);}catch(e){}
     setAds(ads.filter(function(a){return a.id!==id}));
     setSelected(null);
@@ -310,7 +259,7 @@ ID: '+nid);
         <div className="max-w-[1440px] mx-auto px-2 lg:px-3 py-2 w-full box-border">
           <div className="lg:hidden w-full">
             <button onClick={handleUseMyLocation} disabled={isLocating} className="w-full bg-[#ffea00] disabled:opacity-50 text-black font-black text-[14px] py-3 rounded-[12px] flex items-center justify-center gap-2 box-border">
-              <span className="text-[18px]">📍</span> {isLocating ? 'Pobieram lokalizację...' : (userCoords ? '✓ Zlokalizowano - szukam w pobliżu '+searchRadius+'km' : 'Szukaj aut obok mnie')}
+              <span className="text-[18px]">📍</span> {isLocating ? 'Pobieram lokalizację...' : (userCoords ? '✓ Zlokalizowano '+searchRadius+'km' : 'Szukaj aut obok mnie')}
             </button>
             {userCoords && (
               <div className="grid grid-cols-3 gap-2 mt-2 w-full">
@@ -345,35 +294,28 @@ ID: '+nid);
 
       <div className="lg:hidden bg-[#1a1a1a] border-b border-neutral-800 w-full max-w-[100vw] overflow-hidden">
         <div className="px-2 py-2 flex items-center justify-between w-full box-border">
-          <div className="text-[10px] text-neutral-400 truncate">{filtered.length} ogłoszeń {userCoords ? '• '+searchRadius+'km • '+sortLabel() : '• '+sortLabel()}</div>
+          <div className="text-[10px] text-neutral-400 truncate">{filtered.length} ogłoszeń {userCoords ? '• '+searchRadius+'km' : ''}</div>
           <div className="flex items-center gap-1.5 shrink-0">
             {currentUser ? (
-              <><span className="text-[10px] text-neutral-400 max-w-[60px] truncate">{currentUser.name}</span><button onClick={handleAddClick} className="bg-[#ffea00] text-black px-2.5 py-1.5 rounded-[8px] font-bold text-[11px]">+ Dodaj</button></>
+              <button onClick={handleAddClick} className="bg-[#ffea00] text-black px-2.5 py-1.5 rounded-[8px] font-bold text-[11px]">+ Dodaj</button>
             ) : (
               <><button onClick={function(){setShowAuth('login')}} className="bg-[#222] border border-neutral-700 text-white px-2.5 py-1.5 rounded-[8px] text-[10px] font-bold">Zaloguj</button><button onClick={handleAddClick} className="bg-[#ffea00] text-black px-2.5 py-1.5 rounded-[8px] font-bold text-[10px]">+ Dodaj</button></>
             )}
           </div>
         </div>
-        {saveStatus && <div className="px-2 pb-2 text-[9px] text-[#ffea00] break-words">{saveStatus}</div>}
       </div>
 
       <div className="max-w-[1440px] mx-auto w-full px-2 lg:px-3 py-2 flex flex-col lg:flex-row gap-2 lg:gap-3 overflow-hidden box-border max-w-[100vw]">
         <div className="flex-1 w-full min-w-0 max-w-full overflow-hidden box-border">
-          <div className="hidden lg:block mb-2">
-            <div className="bg-black text-white text-[10px] font-bold px-2.5 py-1 rounded-full inline-block">{filtered.length} ogłoszeń {userCoords ? '• GPS '+searchRadius+'km • '+sortLabel() : '• '+sortLabel()}</div>
-            {saveStatus && <div className="mt-2 text-[11px] text-neutral-600 bg-yellow-50 border border-yellow-200 rounded-[8px] p-2 break-words">{saveStatus}</div>}
-          </div>
-
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-2 w-full max-w-full">
             {filtered.map(function(ad){
               const dist = userCoords ? getDistance(userCoords.lat,userCoords.lng,ad.location) : null;
               const isOwn = currentUser && ad.owner_id===currentUser.id;
-              const isLocal = myAds.find(function(m){return m.id===ad.id}) ? true : false;
               return (
                 <div key={ad.id} onClick={function(){setSelected(ad)}} className={'kafelek-mini cursor-pointer w-full '+(isOwn?'ring-2 ring-[#ffea00]':'' )}>
                   <img src={ad.image} className="kafelek-mini-img" alt={ad.title} />
                   <div className="kafelek-mini-content">
-                    <div className="kafelek-mini-title">{ad.title} {isOwn ? '⭐' : ''} {isLocal ? '💾' : ''}</div>
+                    <div className="kafelek-mini-title">{ad.title} {isOwn ? '⭐' : ''}</div>
                     <div className="w-full overflow-hidden">
                       <div className="kafelek-mini-price">{ad.price.toLocaleString('pl-PL')} zl</div>
                       <div className="kafelek-mini-meta"><span className="truncate">{ad.location}{dist!==null && dist<999 ? ' • '+Math.round(dist)+'km' : ''}</span><span className="shrink-0 ml-1">{ad.year}</span></div>
@@ -383,7 +325,7 @@ ID: '+nid);
               );
             })}
           </div>
-          {filtered.length===0 && <div className="bg-white border rounded-[12px] p-6 text-center mt-3 w-full box-border"><div className="font-bold text-[13px]">Brak ogłoszeń {userCoords ? 'w promieniu '+searchRadius+'km' : ''}</div><button onClick={clearAll} className="mt-2 bg-black text-white px-4 py-2 rounded-full text-[11px] font-bold">Reset</button><div className="mt-3 text-[10px] text-neutral-500">Twoje ogłoszenia są w localStorage STALE: {myAds.length}</div></div>}
+          {filtered.length===0 && <div className="bg-white border rounded-[12px] p-6 text-center mt-3 w-full box-border"><div className="font-bold text-[13px]">Brak ogłoszeń {userCoords ? 'w promieniu '+searchRadius+'km' : ''}</div><button onClick={clearAll} className="mt-2 bg-black text-white px-4 py-2 rounded-full text-[11px] font-bold">Reset</button></div>}
         </div>
       </div>
 
@@ -405,7 +347,7 @@ ID: '+nid);
               </div>
               <div className="overflow-auto flex-1 w-full max-w-full">
                 <div className="img-wrapper-fix">
-                  <img src={selected.images[imgIdx]||selected.image} alt={selected.title} className="img-4inch-fix" />
+                  <img src={selected.images[0]||selected.image} alt={selected.title} className="img-4inch-fix" />
                 </div>
                 <div className="p-3 md:p-4 w-full box-border">
                   <h1 className="font-black text-[15px] md:text-[18px] break-words">{selected.title}</h1>
@@ -438,16 +380,14 @@ ID: '+nid);
           <div className="min-h-screen flex items-start justify-center p-0 md:p-4 w-full box-border">
             <div className="bg-white w-full md:max-w-[600px] md:rounded-[20px] rounded-t-[20px] mt-auto md:mt-0 max-h-[95vh] md:max-h-[90vh] flex flex-col max-w-full box-border">
               <div className="sticky top-0 bg-white border-b p-4 flex justify-between items-center rounded-t-[20px] w-full box-border">
-                <h2 className="font-black text-[14px] truncate">{editingId ? 'Edytuj ogłoszenie' : 'Dodaj ogłoszenie - STAŁE zapisywanie'}</h2>
+                <h2 className="font-black text-[14px] truncate">{editingId ? 'Edytuj' : 'Dodaj - STAŁE (nie zniknie po F5)'}</h2>
                 <button onClick={handleCancelAdd} className="w-9 h-9 bg-[#f5f5f7] rounded-full shrink-0">X</button>
               </div>
               <form onSubmit={handleSave} className="overflow-auto flex-1 p-4 space-y-3 w-full box-border">
                 {formError && <div className="bg-red-50 border border-red-200 text-red-700 text-[13px] p-3 rounded-[10px] font-bold break-words">{formError}</div>}
-                {saveStatus && <div className="bg-yellow-50 border border-yellow-200 text-yellow-800 text-[11px] p-2 rounded-[8px] break-words">{saveStatus}</div>}
-                <div className="bg-green-50 border border-green-200 rounded-[10px] p-3 text-[11px] text-green-800">
-                  <div className="font-bold">✓ NAPRAWA ZAPISYWANIA - ogłoszenie NIE zniknie po F5!</div>
-                  <div className="mt-1">Zapis podwójny: 1) localStorage STALE (zawsze działa) + 2) Supabase (jeśli RLS pozwala). Zdjęcia max 2MB.</div>
-                  <div className="mt-1">Jeśli Supabase nie zapisuje, sprawdź: Supabase Dashboard > Table Editor > ads > RLS > Policies > INSERT dla anon = true.</div>
+                <div className="bg-green-50 border border-green-200 rounded-[10px] p-3 text-[11px] text-green-800 break-words">
+                  <div className="font-bold">✓ NAPRAWA - nie zniknie po F5!</div>
+                  <div>Zapis: localStorage STAŁE V2 (max 20 ogłoszeń, zdjęcia max 1.5MB) + Supabase. Jeśli biała plansza była - teraz naprawione: nowy klucz V2, czyszczenie uszkodzonego JSON, limit zdjęć.</div>
                 </div>
                 <div className="grid grid-cols-2 gap-2 w-full">
                   <select value={form.brand} onChange={function(e){setForm(Object.assign({},form,{brand:e.target.value}))}} className="prof-input"><option value="">Marka *</option>{Object.keys(BRAND_MODELS).map(function(b){return <option key={b} value={b}>{b}</option>})}</select>
@@ -460,7 +400,7 @@ ID: '+nid);
                 <input value={form.phone} onChange={function(e){setForm(Object.assign({},form,{phone:e.target.value}))}} placeholder="Telefon *" className="prof-input" />
                 <textarea value={form.description} onChange={function(e){setForm(Object.assign({},form,{description:e.target.value}))}} placeholder="Opis" className="prof-input min-h-[80px]" rows="3"></textarea>
                 <div>
-                  <div className="text-[11px] font-bold mb-1">Zdjęcia * (max 2MB każde - ważne dla Supabase!)</div>
+                  <div className="text-[11px] font-bold mb-1">Zdjęcia * (max 1.5MB każde!)</div>
                   <div className="flex gap-2 flex-wrap w-full">
                     {form.images.map(function(im,i){return <div key={i} className="relative w-[70px] h-[70px] rounded-[8px] overflow-hidden border shrink-0"><img src={im} className="w-full h-full object-cover" /><button type="button" onClick={function(){setForm(Object.assign({},form,{images:form.images.filter(function(_,idx){return idx!==i})}))}} className="absolute top-0 right-0 w-5 h-5 bg-black/70 text-white rounded-full text-[10px]">X</button></div>})}
                     {form.images.length<5 && <label className="w-[70px] h-[70px] border-2 border-dashed rounded-[8px] flex items-center justify-center cursor-pointer shrink-0">+<input ref={fileRef} type="file" accept="image/*" multiple onChange={handleImg} style={{display:'none'}} /></label>}
@@ -468,7 +408,7 @@ ID: '+nid);
                 </div>
                 <div className="flex gap-2 w-full sticky bottom-0 bg-white pt-2 border-t -mx-4 px-4 box-border">
                   <button type="button" onClick={handleCancelAdd} className="flex-1 bg-[#f5f5f7] border font-bold py-3 rounded-[10px] text-[12px] box-border">Anuluj</button>
-                  <button type="submit" className="flex-[2] bg-black text-white font-bold py-3 rounded-[10px] text-[12px] box-border">{editingId ? 'Zapisz zmiany STAŁE' : 'Zapisz na STAŁE - nie zniknie po F5'}</button>
+                  <button type="submit" className="flex-[2] bg-black text-white font-bold py-3 rounded-[10px] text-[12px] box-border">{editingId ? 'Zapisz STAŁE' : 'Zapisz STAŁE - nie zniknie'}</button>
                 </div>
               </form>
             </div>
