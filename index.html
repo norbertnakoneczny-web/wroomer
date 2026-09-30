@@ -1,190 +1,40 @@
-<!DOCTYPE html>
-<html lang="pl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<title>Wroomer.pl - Kup sprzedaj auto</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
-<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script><script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script><script src="https://unpkg.com/@babel/standalone/babel.min.js"></script><script src="https://cdn.tailwindcss.com"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<style>*{font-family:Inter,sans-serif;box-sizing:border-box}html,body{overflow-x:hidden!important;background:#f5f5f7;margin:0;width:100%;max-width:100vw}
-.btn-yellow{background:#ffea00;color:#000;font-weight:900;border-radius:10px;padding:8px 14px;font-size:12px;border:none;cursor:pointer}
-.btn-black{background:#000;color:#fff;font-weight:700;border-radius:10px;padding:8px 14px;font-size:12px;border:none;cursor:pointer}
-.kafelek{border-radius:14px!important;overflow:hidden!important;background:white!important;border:1px solid #e5e5e5!important;cursor:pointer;transition:transform 0.1s}
-.kafelek:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,0,0,0.08)}
-.kafelek-img{width:100%;height:160px;object-fit:cover}
-.prof-input{width:100%;background:#f5f5f7;border:1px solid #e5e5e5;border-radius:10px;padding:10px 12px;font-size:13px;outline:none}
-.prof-input:focus{border-color:#000}
-@media(max-width:768px){.kafelek-img{height:180px}}
-</style></head><body><div id="root"></div>
-<script type="text/babel">
-const { useState, useMemo, useEffect, useRef } = React;
-const BRAND_MODELS = {"BMW": ["1 Series", "3 Series", "5 Series", "X1", "X3", "X5", "X6"], "Audi": ["A3", "A4", "A6", "A8", "Q3", "Q5", "Q7"], "Volkswagen": ["Golf", "Passat", "Tiguan", "Polo", "Arteon"], "Mercedes": ["A-Klasa", "C-Klasa", "E-Klasa", "S-Klasa", "GLC", "GLE"], "Skoda": ["Octavia", "Superb", "Kodiaq", "Karoq", "Fabia"], "Toyota": ["Corolla", "Camry", "RAV4", "Yaris", "C-HR"], "Ford": ["Focus", "Mondeo", "Kuga", "Fiesta"], "Opel": ["Astra", "Insignia", "Mokka", "Corsa"]};
-const SUPABASE_URL='https://rljqnhfogaqdjeirqqdj.supabase.co'; const SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJsanFuaGZvZ2FxZGplirqqdjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU2MjI0MTIsImV4cCI6MjA3MTE5ODQxMn0.wjImTHn516H1isOFe6KPxVZsa-Rh1fPofeq_bkMk2XI';
-const supabase=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
-function openDB(){return new Promise((res,rej)=>{const r=indexedDB.open('wroomer_full_final',6); r.onupgradeneeded=e=>{const db=e.target.result; if(!db.objectStoreNames.contains('ads')) db.createObjectStore('ads',{keyPath:'id'})}; r.onsuccess=e=>res(e.target.result);})}
-function saveToIDB(ad){return openDB().then(db=>new Promise((res)=>{const tx=db.transaction('ads','readwrite'); tx.objectStore('ads').put(ad).onsuccess=()=>res(true)}))}
-function getAllIDB(){return openDB().then(db=>new Promise((res)=>{const tx=db.transaction('ads','readonly'); const rq=tx.objectStore('ads').getAll(); rq.onsuccess=()=>res(rq.result||[])}))}
-function App(){
-  const [ads,setAds]=useState([]); const [status,setStatus]=useState('Ładowanie...');
-  const [currentUser,setCurrentUser]=useState(()=>{try{return JSON.parse(localStorage.getItem('wroomer_current_full')||'null')}catch{return null}});
-  const [users,setUsers]=useState(()=>{try{return JSON.parse(localStorage.getItem('wroomer_users_full')||'[]')}catch{return []}});
-  const [searchBrand,setSearchBrand]=useState(''); const [searchQuery,setSearchQuery]=useState(''); const [sortBy,setSortBy]=useState('newest');
-  const [selected,setSelected]=useState(null); const [showAdd,setShowAdd]=useState(false); const [editingId,setEditingId]=useState(null);
-  const [showAuth,setShowAuth]=useState(null); const [authForm,setAuthForm]=useState({email:'',password:'',name:''}); 
-  const [form,setForm]=useState({brand:'',model:'',year:2020,price:'',mileage:'',location:'Warszawa',title:'',description:'',images:[],phone:''}); 
-  const [error,setError]=useState(''); const [formError,setFormError]=useState(''); const fileRef=useRef(null);
-  useEffect(()=>{localStorage.setItem('wroomer_users_full',JSON.stringify(users))},[users]);
-  useEffect(()=>{if(currentUser) localStorage.setItem('wroomer_current_full',JSON.stringify(currentUser)); else localStorage.removeItem('wroomer_current_full')},[currentUser]);
-  useEffect(()=>{async function load(){
-    setStatus('Ładowanie ogłoszeń z serwera...');
-    let supabaseAds=[];
-    try{
-      const {data,error} = await supabase.from('ads').select('*').order('id',{ascending:false}).limit(200);
-      console.log('SELECT:',data,error);
-      if(error){ setStatus('Błąd: '+error.message); }
-      else if(data){
-        supabaseAds=data.map(d=>({
-          id:d.id, title:d.title||`${d.brand||''} ${d.model||''} ${d.year||''}`, brand:d.brand||'', model:d.model||'', year:d.year||2020, price:d.price||0,
-          mileage:0, location:'Warszawa', phone:'', owner:'', owner_id:0, description:'',
-          image:'https://images.unsplash.com/photo-1555215695-3004980ad54e?w=600', images:['https://images.unsplash.com/photo-1555215695-3004980ad54e?w=600'],
-          created_at_ts:d.id, isSupabase:true
-        }));
-        setStatus(`✓ ${supabaseAds.length} ogłoszeń z serwera - widoczne wszędzie 🌐`);
-      }
-    }catch(e){ setStatus('Błąd: '+e.message); }
-    let idbAds=[]; try{idbAds=await getAllIDB()}catch(e){}
-    const map={};
-    supabaseAds.forEach(a=>{map[a.id]=a});
-    idbAds.forEach(a=>{if(map[a.id]){map[a.id]={...map[a.id], ...a, image:a.images?.[0]||a.image, images:a.images||[a.image], isSupabase:true, isLocal:true, mileage:a.mileage||0, location:a.location||'Warszawa', phone:a.phone||'', description:a.description||''}} else {map[a.id]={...a, isLocal:true}}});
-    const all=Object.values(map).sort((a,b)=>b.id-a.id);
-    setAds(all);
-    if(all.length===0) setStatus('Brak ogłoszeń - dodaj pierwsze!');
-  } load();},[]);
-  const filtered=useMemo(()=>{
-    let r=ads.filter(a=>{
-      if(searchBrand && a.brand!==searchBrand) return false;
-      if(searchQuery && !(`${a.title} ${a.brand} ${a.model}`.toLowerCase().includes(searchQuery.toLowerCase()))) return false;
-      return true;
-    });
-    if(sortBy==='price_asc') r.sort((a,b)=>a.price-b.price);
-    else if(sortBy==='price_desc') r.sort((a,b)=>b.price-a.price);
-    else r.sort((a,b)=>b.id-a.id);
-    return r;
-  },[ads,searchBrand,searchQuery,sortBy]);
-  const handleRegister=(e)=>{e.preventDefault(); setError(''); if(!authForm.email||!authForm.password||!authForm.name){setError('Wypełnij wszystkie pola'); return;} if(users.find(u=>u.email.toLowerCase()===authForm.email.toLowerCase())){setError('Użytkownik już istnieje'); return;} const nu={id:Date.now(),email:authForm.email.toLowerCase(),name:authForm.name,password:authForm.password}; setUsers([...users,nu]); setCurrentUser({id:nu.id,email:nu.email,name:nu.name}); setShowAuth(null); setAuthForm({email:'',password:'',name:''});};
-  const handleLogin=(e)=>{e.preventDefault(); setError(''); const u=users.find(x=>x.email.toLowerCase()===authForm.email.toLowerCase() && x.password===authForm.password); if(!u){setError('Błędny e-mail lub hasło'); return;} setCurrentUser({id:u.id,email:u.email,name:u.name}); setShowAuth(null); setAuthForm({email:'',password:'',name:''});};
-  const handleLogout=()=>{setCurrentUser(null);};
-  const handleAddClick=()=>{if(!currentUser){setShowAuth('login'); return;} setEditingId(null); setForm({brand:'',model:'',year:2020,price:'',mileage:'',location:'Warszawa',title:'',description:'',images:[],phone:''}); setShowAdd(true);};
-  const compressImage=(file,cb)=>{const r=new FileReader(); r.onload=e=>{const img=new Image(); img.onload=()=>{const c=document.createElement('canvas'); const maxW=500; const sc=Math.min(1,maxW/img.width); c.width=img.width*sc; c.height=img.height*sc; c.getContext('2d').drawImage(img,0,0,c.width,c.height); cb(c.toDataURL('image/jpeg',0.6))}; img.src=e.target.result}; r.readAsDataURL(file)};
-  const handleImg=(e)=>{const files=Array.from(e.target.files||[]); if(form.images.length+files.length>3){alert('Max 3 zdjęcia'); return;} files.forEach(f=>compressImage(f,c=>setForm(p=>({...p,images:[...p.images,c]})))); if(fileRef.current) fileRef.current.value='';};
-  const handleSave=async(e)=>{
-    e.preventDefault(); setFormError('');
-    if(!form.brand){setFormError('Wybierz markę'); return;} if(!form.model){setFormError('Wybierz model'); return;} if(!form.price){setFormError('Podaj cenę'); return;} if(form.images.length===0){setFormError('Dodaj min 1 zdjęcie'); return;}
-    const nid=editingId||Date.now();
-    const title=form.title?form.title:`${form.brand} ${form.model} ${form.year}`;
-    const fullAd={id:nid, title, brand:form.brand, model:form.model, year:parseInt(form.year)||2020, price:parseInt(form.price)||0, mileage:parseInt(form.mileage)||0, location:form.location||'Warszawa', description:form.description||'', image:form.images[0], images:form.images, owner:currentUser?.name||'Użytkownik', owner_id:currentUser?.id||999, phone:form.phone||'', created_at_ts:nid, isLocal:true};
-    try{await saveToIDB(fullAd);}catch(err){setFormError('Błąd lokalnej bazy'); return;}
-    try{
-      const payload={id:nid, title:title.substring(0,200), brand:form.brand, model:form.model, year:parseInt(form.year)||2020, price:parseInt(form.price)||0};
-      let res;
-      if(editingId){ res=await supabase.from('ads').update(payload).eq('id',editingId); }
-      else { res=await supabase.from('ads').insert([payload]); }
-      if(res.error){ setFormError('Błąd serwera: '+res.error.message); return; }
-      if(editingId) setAds(ads.map(a=>a.id===editingId?{...fullAd, isSupabase:true}:a));
-      else setAds([{...fullAd, isSupabase:true},...ads]);
-      setShowAdd(false); setEditingId(null); setForm({brand:'',model:'',year:2020,price:'',mileage:'',location:'Warszawa',title:'',description:'',images:[],phone:''});
-    }catch(err){ setFormError('Błąd: '+err.message); }
-  };
-  const handleEdit=(ad)=>{if(!currentUser) {setShowAuth('login'); return;} setForm({brand:ad.brand,model:ad.model,year:ad.year,price:ad.price,mileage:ad.mileage||'',location:ad.location||'Warszawa',title:ad.title,description:ad.description||'',images:ad.images||[ad.image],phone:ad.phone||''}); setEditingId(ad.id); setShowAdd(true); setSelected(null);};
-  const handleDelete=async(id)=>{if(!confirm('Usunąć ogłoszenie na stałe?')) return; const res=await supabase.from('ads').delete().eq('id',id); if(res.error){alert('Błąd usuwania: '+res.error.message); return;} setAds(ads.filter(a=>a.id!==id)); setSelected(null);};
-  return (
-    <div className="min-h-screen w-full max-w-[100vw] overflow-x-hidden">
-      <div className="bg-black text-white w-full sticky top-0 z-20">
-        <div className="max-w-[1440px] mx-auto px-3 h-[52px] flex items-center justify-between">
-          <div className="flex items-center gap-6">
-            <div className="flex items-center gap-2 font-black text-[16px] cursor-pointer" onClick={()=>{setSelected(null); setSearchBrand(''); setSearchQuery('');}}><div className="w-7 h-7 bg-[#ffea00] rounded-[8px] flex items-center justify-center text-black text-[14px]">W</div>WROOMER<span className="text-[#ffea00]">.PL</span></div>
-            <div className="hidden md:flex items-center gap-2"><input value={searchQuery} onChange={e=>setSearchQuery(e.target.value)} placeholder="Szukaj BMW, Audi..." className="bg-[#222] text-white text-[12px] px-3 py-1.5 rounded-[8px] w-[200px] outline-none"/><select value={searchBrand} onChange={e=>setSearchBrand(e.target.value)} className="bg-[#222] text-white text-[11px] px-2 py-1.5 rounded-[8px] outline-none"><option value="">Wszystkie marki</option>{Object.keys(BRAND_MODELS).map(b=><option key={b} value={b}>{b}</option>)}</select></div>
-          </div>
-          <div className="flex items-center gap-2">
-            {currentUser ? (<><span className="hidden md:inline text-[11px] text-neutral-400">Cześć, {currentUser.name}!</span><button onClick={handleAddClick} className="btn-yellow">+ Dodaj ogłoszenie</button><button onClick={handleLogout} className="bg-[#222] text-white text-[11px] px-3 py-1.5 rounded-[8px]">Wyloguj</button></>) : (<><button onClick={()=>setShowAuth('login')} className="bg-[#222] text-white text-[11px] px-3 py-1.5 rounded-[8px]">Zaloguj</button><button onClick={()=>setShowAuth('register')} className="btn-yellow">Zarejestruj</button></>)}
-          </div>
-        </div>
-      </div>
-      <div className="bg-[#111] md:hidden"><div className="max-w-[1440px] mx-auto px-3 py-2 flex gap-2"><input value={searchQuery} onChange={e=>setSearchQuery(e.target.value)} placeholder="Szukaj..." className="flex-1 bg-[#222] text-white text-[12px] px-3 py-2 rounded-[8px] outline-none"/><select value={searchBrand} onChange={e=>setSearchBrand(e.target.value)} className="bg-[#222] text-white text-[11px] px-2 py-2 rounded-[8px]"><option value="">Marka</option>{Object.keys(BRAND_MODELS).map(b=><option key={b} value={b}>{b}</option>)}</select></div></div>
-      <div className="max-w-[1440px] mx-auto w-full px-3 py-3">
-        <div className="flex items-center justify-between mb-3">
-          <div className="bg-black text-white text-[11px] font-bold px-3 py-1.5 rounded-full">{filtered.length} ogłoszeń • {status}</div>
-          <select value={sortBy} onChange={e=>setSortBy(e.target.value)} className="bg-white border text-[11px] px-2 py-1.5 rounded-[8px]"><option value="newest">Najnowsze</option><option value="price_asc">Cena ↑</option><option value="price_desc">Cena ↓</option></select>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
-          {filtered.map(ad=>(
-            <div key={ad.id} onClick={()=>setSelected(ad)} className="kafelek">
-              <div className="relative"><img src={ad.image} className="kafelek-img" alt={ad.title}/><div className="absolute top-2 left-2 bg-black/70 text-white text-[9px] font-bold px-2 py-1 rounded-full">{ad.brand} {ad.model}</div>{ad.isSupabase && <div className="absolute top-2 right-2 bg-[#ffea00] text-black text-[8px] font-black px-1.5 py-0.5 rounded-full">🌐</div>}</div>
-              <div className="p-3"><div className="font-bold text-[13px] leading-tight line-clamp-2 min-h-[36px]">{ad.title}</div><div className="font-black text-[16px] mt-1">{ad.price.toLocaleString('pl-PL')} zł</div><div className="text-[10px] text-neutral-500 mt-1 flex justify-between"><span>{ad.location} • {ad.year}</span><span>{ad.mileage?ad.mileage.toLocaleString('pl-PL')+' km':''}</span></div></div>
-            </div>
-          ))}
-        </div>
-        {filtered.length===0 && <div className="bg-white border rounded-[16px] p-8 text-center mt-4"><div className="font-black text-[16px]">Brak ogłoszeń</div><div className="text-[12px] text-neutral-500 mt-2">{status}<br/><br/>Kliknij "Dodaj ogłoszenie" żeby dodać pierwsze!</div>{!currentUser && <button onClick={()=>setShowAuth('register')} className="btn-yellow mt-4">Zarejestruj się i dodaj</button>}</div>}
-      </div>
-      {selected && (
-        <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-3">
-          <div className="bg-white w-full max-w-[560px] rounded-[20px] overflow-hidden max-h-[90vh] flex flex-col">
-            <div className="p-3 border-b flex justify-between items-center"><button onClick={()=>setSelected(null)} className="bg-[#f5f5f7] px-4 py-1.5 rounded-full text-[12px] font-bold">← Wróć</button><div className="flex gap-2">{currentUser && (selected.owner_id===currentUser.id || selected.owner===currentUser.name) && <><button onClick={()=>handleEdit(selected)} className="bg-black text-white text-[11px] px-3 py-1 rounded-full">Edytuj</button><button onClick={()=>handleDelete(selected.id)} className="bg-red-50 text-red-600 border border-red-200 text-[11px] px-3 py-1 rounded-full">Usuń</button></>}<button onClick={()=>setSelected(null)} className="w-8 h-8 bg-black text-white rounded-full flex items-center justify-center">✕</button></div></div>
-            <div className="overflow-auto flex-1">
-              <img src={selected.image} className="w-full h-[320px] object-contain bg-[#f5f5f7]"/>
-              {selected.images && selected.images.length>1 && <div className="flex gap-2 p-2 overflow-auto">{selected.images.map((im,i)=><img key={i} src={im} className="w-[60px] h-[60px] rounded-[8px] object-cover border cursor-pointer" onClick={()=>setSelected({...selected, image:im})}/>)}</div>}
-              <div className="p-4">
-                <h1 className="font-black text-[18px] leading-tight">{selected.title}</h1>
-                <div className="font-black text-[24px] mt-1">{selected.price.toLocaleString('pl-PL')} zł</div>
-                <div className="grid grid-cols-2 gap-2 mt-3 text-[12px]"><div className="bg-[#f5f5f7] rounded-[10px] p-2"><div className="text-[10px] text-neutral-500">Marka</div><div className="font-bold">{selected.brand}</div></div><div className="bg-[#f5f5f7] rounded-[10px] p-2"><div className="text-[10px] text-neutral-500">Model</div><div className="font-bold">{selected.model}</div></div><div className="bg-[#f5f5f7] rounded-[10px] p-2"><div className="text-[10px] text-neutral-500">Rocznik</div><div className="font-bold">{selected.year}</div></div><div className="bg-[#f5f5f7] rounded-[10px] p-2"><div className="text-[10px] text-neutral-500">Przebieg</div><div className="font-bold">{selected.mileage?selected.mileage.toLocaleString('pl-PL')+' km':'-'} </div></div><div className="bg-[#f5f5f7] rounded-[10px] p-2"><div className="text-[10px] text-neutral-500">Lokalizacja</div><div className="font-bold">{selected.location}</div></div><div className="bg-[#f5f5f7] rounded-[10px] p-2"><div className="text-[10px] text-neutral-500">Telefon</div><div className="font-bold">{selected.phone||'-'}</div></div></div>
-                {selected.description && <div className="mt-3 bg-[#f5f5f7] rounded-[10px] p-3"><div className="text-[10px] text-neutral-500">Opis</div><div className="text-[12px] mt-1">{selected.description}</div></div>}
-                <div className="mt-4 flex gap-2">{selected.phone && <a href={`tel:${selected.phone}`} className="flex-1 bg-[#ffea00] text-black font-black text-[13px] py-3 rounded-[10px] text-center">📞 Zadzwoń: {selected.phone}</a>}<button onClick={()=>setSelected(null)} className="flex-1 bg-black text-white font-bold text-[12px] py-3 rounded-[10px]">Zamknij</button></div>
-                <div className="mt-2 text-[9px] text-neutral-400 text-center">{selected.isSupabase?'🌐 Ogłoszenie z serwera - widoczne w każdej przeglądarce':'💾 Tylko lokalnie'} • ID: {selected.id}</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-      {showAuth && (
-        <div className="fixed inset-0 z-[90] bg-black/70 flex items-center justify-center p-4">
-          <div className="bg-white w-full max-w-[380px] rounded-[20px] p-5">
-            <div className="flex justify-between items-center mb-4"><h2 className="font-black text-[18px]">{showAuth==='login'?'Zaloguj się':'Zarejestruj się'}</h2><button onClick={()=>setShowAuth(null)} className="w-8 h-8 bg-[#f5f5f7] rounded-full">✕</button></div>
-            {error && <div className="bg-red-50 border border-red-200 text-red-700 text-[11px] p-2.5 rounded-[10px] mb-3 font-bold">{error}</div>}
-            <form onSubmit={showAuth==='login'?handleLogin:handleRegister} className="space-y-3">
-              {showAuth==='register' && <div><label className="text-[11px] font-bold">Imię *</label><input value={authForm.name} onChange={e=>setAuthForm({...authForm,name:e.target.value})} placeholder="Jan" className="prof-input mt-1"/></div>}
-              <div><label className="text-[11px] font-bold">E-mail *</label><input type="email" value={authForm.email} onChange={e=>setAuthForm({...authForm,email:e.target.value})} placeholder="jan@example.com" className="prof-input mt-1"/></div>
-              <div><label className="text-[11px] font-bold">Hasło *</label><input type="password" value={authForm.password} onChange={e=>setAuthForm({...authForm,password:e.target.value})} placeholder="••••••••" className="prof-input mt-1"/></div>
-              <button type="submit" className="w-full bg-black text-white font-black py-3 rounded-[10px] text-[13px] mt-2">{showAuth==='login'?'Zaloguj się':'Zarejestruj się'}</button>
-              <div className="text-center text-[11px] text-neutral-500 mt-2">{showAuth==='login' ? <>Nie masz konta? <button type="button" onClick={()=>{setShowAuth('register'); setError('')}} className="font-bold text-black underline">Zarejestruj się</button></> : <>Masz konto? <button type="button" onClick={()=>{setShowAuth('login'); setError('')}} className="font-bold text-black underline">Zaloguj się</button></>}</div>
-            </form>
-          </div>
-        </div>
-      )}
-      {showAdd && (
-        <div className="fixed inset-0 z-50 bg-black/70 overflow-auto">
-          <div className="min-h-screen flex items-start justify-center p-0 md:p-4">
-            <div className="bg-white w-full md:max-w-[520px] rounded-t-[20px] md:rounded-[20px] mt-auto md:mt-0 max-h-[92vh] flex flex-col">
-              <div className="p-4 border-b flex justify-between items-center"><h2 className="font-black text-[14px]">{editingId?'Edytuj ogłoszenie':'Dodaj ogłoszenie - widoczne wszędzie 🌐'}</h2><button onClick={()=>{setShowAdd(false); setEditingId(null);}} className="w-8 h-8 bg-[#f5f5f7] rounded-full">✕</button></div>
-              <form onSubmit={handleSave} className="overflow-auto flex-1 p-4 space-y-3">
-                {formError && <div className="bg-red-50 border border-red-200 text-red-700 text-[11px] p-2.5 rounded-[10px] font-bold">{formError}</div>}
-                <div className="grid grid-cols-2 gap-3">
-                  <div><label className="text-[10px] font-bold">Marka *</label><select value={form.brand} onChange={e=>setForm({...form,brand:e.target.value, model:''})} className="prof-input mt-1"><option value="">Wybierz markę</option>{Object.keys(BRAND_MODELS).map(b=><option key={b} value={b}>{b}</option>)}</select></div>
-                  <div><label className="text-[10px] font-bold">Model *</label><select value={form.model} onChange={e=>setForm({...form,model:e.target.value})} className="prof-input mt-1"><option value="">Wybierz model</option>{(BRAND_MODELS[form.brand]||[]).map(m=><option key={m} value={m}>{m}</option>)}</select></div>
-                  <div><label className="text-[10px] font-bold">Rocznik *</label><input type="number" value={form.year} onChange={e=>setForm({...form,year:e.target.value})} placeholder="2020" className="prof-input mt-1"/></div>
-                  <div><label className="text-[10px] font-bold">Cena (zł) *</label><input type="number" value={form.price} onChange={e=>setForm({...form,price:e.target.value})} placeholder="50000" className="prof-input mt-1"/></div>
-                  <div><label className="text-[10px] font-bold">Przebieg (km)</label><input type="number" value={form.mileage} onChange={e=>setForm({...form,mileage:e.target.value})} placeholder="100000" className="prof-input mt-1"/></div>
-                  <div><label className="text-[10px] font-bold">Miasto</label><input value={form.location} onChange={e=>setForm({...form,location:e.target.value})} placeholder="Warszawa" className="prof-input mt-1"/></div>
-                </div>
-                <div><label className="text-[10px] font-bold">Tytuł ogłoszenia</label><input value={form.title} onChange={e=>setForm({...form,title:e.target.value})} placeholder="np. BMW 3 Series 2020 - zadbane" className="prof-input mt-1"/></div>
-                <div><label className="text-[10px] font-bold">Telefon</label><input value={form.phone} onChange={e=>setForm({...form,phone:e.target.value})} placeholder="600123456" className="prof-input mt-1"/></div>
-                <div><label className="text-[10px] font-bold">Opis</label><textarea value={form.description} onChange={e=>setForm({...form,description:e.target.value})} placeholder="Opisz stan auta, wyposażenie..." className="prof-input mt-1" rows="3"></textarea></div>
-                <div><label className="text-[10px] font-bold">Zdjęcia (max 3) *</label><div className="flex gap-2 flex-wrap mt-1">{form.images.map((im,i)=><div key={i} className="relative w-[80px] h-[80px] rounded-[10px] border overflow-hidden"><img src={im} className="w-full h-full object-cover"/><button type="button" onClick={()=>setForm({...form,images:form.images.filter((_,idx)=>idx!==i)})} className="absolute top-1 right-1 w-5 h-5 bg-black/70 text-white rounded-full text-[10px]">✕</button><div className="absolute bottom-0 left-0 bg-black/70 text-white text-[7px] px-1 rounded-tr">{Math.round(im.length/1024)}KB</div></div>)}{form.images.length<3 && <label className="w-[80px] h-[80px] border-2 border-dashed rounded-[10px] flex flex-col items-center justify-center cursor-pointer text-[10px] font-bold">+ Dodaj<input ref={fileRef} type="file" accept="image/*" multiple onChange={handleImg} style={{display:'none'}}/></label>}</div></div>
-                <div className="bg-blue-50 border border-blue-200 rounded-[10px] p-2.5 text-[10px] text-blue-800">ℹ️ Zapisuje 6 kolumn do serwera (widać wszędzie 🌐). Zdjęcia i szczegóły lokalnie w tej przeglądarce. Jak dodasz kolumny w Supabase (image, phone...), będzie FULL wszędzie!</div>
-                <div className="flex gap-2 pt-2"><button type="button" onClick={()=>{setShowAdd(false); setEditingId(null);}} className="flex-1 bg-[#f5f5f7] border font-bold py-3 rounded-[10px] text-[12px]">Anuluj</button><button type="submit" className="flex-[2] bg-black text-white font-black py-3 rounded-[10px] text-[12px]">{editingId?'Zapisz zmiany':'Dodaj ogłoszenie 🌐'}</button></div>
-              </form>
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
-  );
+<!DOCTYPE html><html lang="pl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>WROOMER DEBUG - test cross-browser</title><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>body{font-family:monospace;padding:12px;background:#111;color:#0f0}button{padding:10px 16px;margin:4px;font-weight:900;cursor:pointer}pre{background:#000;color:#0f0;padding:10px;overflow:auto;max-height:300px;border:1px solid #333} .ok{color:#0f0} .err{color:#f44} </style></head><body>
+<h2>WROOMER DEBUG - test czy Supabase działa cross-browser</h2>
+<p>Ten plik testuje TYLKO Supabase (bez IndexedDB). Otwórz go w 2 przeglądarkach.</p>
+<button onclick="testSelect()">1️⃣ TEST SELECT (pobierz ogłoszenia)</button>
+<button onclick="testInsert()">2️⃣ TEST INSERT (dodaj testowe BMW)</button>
+<button onclick="clearLog()">Clear</button>
+<pre id="log">Kliknij TEST SELECT żeby zobaczyć co jest w Supabase...
+</pre>
+<script>
+const SUPABASE_URL='https://rljqnhfogaqdjeirqqdj.supabase.co'; const KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJsanFuaGZvZ2FxZGpl [STRIPPED 76 bytes].wjImTHn516H1isOFe6KPxVZsa-Rh1fPofeq_bkMk2XI';
+const supabase=window.supabase.createClient(SUPABASE_URL,KEY);
+const logEl=document.getElementById('log');
+function log(msg, cls=''){
+  const d=new Date().toLocaleTimeString(); logEl.textContent+=`[${d}] ${msg}\n`; logEl.scrollTop=logEl.scrollHeight;
+  console.log(msg);
 }
-const root=ReactDOM.createRoot(document.getElementById('root')); root.render(<App />);
+function clearLog(){logEl.textContent='';}
+async function testSelect(){
+  log('--- SELECT * FROM ads ORDER BY id DESC ---');
+  try{
+    const {data, error} = await supabase.from('ads').select('*').order('id',{ascending:false}).limit(20);
+    if(error){ log('❌ BŁĄD SELECT: '+error.message+' | code: '+error.code+' | details: '+JSON.stringify(error), 'err'); }
+    else { log(`✅ SELECT OK - znaleziono ${data.length} ogłoszeń:`); data.forEach(d=>log(`  id=${d.id} title="${d.title}" brand=${d.brand} model=${d.model} year=${d.year} price=${d.price}`)); if(data.length===0) log('⚠️ Tabela pusta - 0 rekordów!'); }
+  }catch(e){ log('❌ EXCEPTION SELECT: '+e.message); }
+}
+async function testInsert(){
+  const nid=Date.now();
+  const payload={id:nid, title:'TEST DEBUG '+nid, brand:'BMW', model:'1 Series', year:2020, price:12345};
+  log('--- INSERT --- payload: '+JSON.stringify(payload));
+  try{
+    const {data, error} = await supabase.from('ads').insert([payload]).select();
+    if(error){ log('❌ BŁĄD INSERT: '+error.message+' | code: '+error.code+' | hint: '+error.hint+' | details: '+JSON.stringify(error), 'err'); }
+    else { log(`✅ INSERT OK - dodano id=${nid}`); log('Teraz kliknij TEST SELECT w INNEJ przeglądarce (incognito) żeby sprawdzić czy widać!'); }
+  }catch(e){ log('❌ EXCEPTION INSERT: '+e.message); }
+}
+// Auto SELECT on load
+testSelect();
 </script></body></html>
