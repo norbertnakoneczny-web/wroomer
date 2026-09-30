@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Wroomer.pl - 10cm FIX</title>
+<title>Wroomer.pl</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
 <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
@@ -13,24 +13,20 @@
 <style>
 *{font-family:Inter,sans-serif;box-sizing:border-box}
 html,body{overflow-x:hidden;margin:0}
-/* WYMUSZENIE 10cm = 378px */
-.img-10cm{
-  height:378px !important;
-  max-height:378px !important;
-  min-height:378px !important;
+.img-4inch{
+  height:384px !important;
+  max-height:384px !important;
+  min-height:384px !important;
   width:auto !important;
   max-width:100% !important;
   object-fit:contain !important;
   display:block !important;
 }
 @media(max-width:768px){
-  .img-10cm{
-    height:10cm !important;
-    max-height:10cm !important;
-    min-height:10cm !important;
-    height:300px !important;
-    max-height:300px !important;
-    min-height:300px !important;
+  .img-4inch{
+    height:384px !important;
+    max-height:384px !important;
+    min-height:384px !important;
   }
 }
 </style>
@@ -53,7 +49,6 @@ function App(){
   const [searchModel,setSearchModel]=useState('');
   const [searchLocation,setSearchLocation]=useState('');
   const [searchVoivodeship,setSearchVoivodeship]=useState('');
-  const [searchRadius,setSearchRadius]=useState('');
   const [sortBy,setSortBy]=useState('newest');
   const [selected,setSelected]=useState(null);
   const [showAdd,setShowAdd]=useState(false);
@@ -93,7 +88,6 @@ function App(){
 
   const handleRegister=(e)=>{e.preventDefault(); const nu={id:Date.now(),email:authForm.email,name:authForm.name,password:authForm.password}; setUsers([...users,nu]); setCurrentUser({id:nu.id,email:nu.email,name:nu.name}); setShowAuth(null)};
   const handleLogin=(e)=>{e.preventDefault(); const u=users.find(x=>x.email===authForm.email&&x.password===authForm.password); if(!u){setError('Błędny');return} setCurrentUser({id:u.id,email:u.email,name:u.name}); setShowAuth(null)};
-
   const handleImg=(e)=>{
     Array.from(e.target.files||[]).forEach(f=>{
       const rd=new FileReader(); rd.onload=ev=>setForm(p=>({...p,images:[...p.images,ev.target.result]})); rd.readAsDataURL(f);
@@ -105,7 +99,7 @@ function App(){
     const base={title:form.title||`${form.brand} ${form.model}`,brand:form.brand,model:form.model,year:parseInt(form.year)||2020,price:parseInt(form.price)||0,mileage:0,fuel:'Benzyna',gearbox:'Manualna',power:0,location:form.location||'Polska',voivodeship:'Śląskie',description:form.description||'',image:form.images[0]||`https://picsum.photos/seed/${Date.now()}/600/400`,images:form.images.length?form.images:[`https://picsum.photos/seed/${Date.now()}/600/400`],owner:currentUser.name,owner_email:currentUser.email,owner_id:currentUser.id,phone:form.phone,whatsapp:form.phone,contact_email:currentUser.email,created_at_ts:Date.now()};
     if(editingId){await supabase.from('ads').update(base).eq('id',editingId); setAds(ads.map(a=>a.id===editingId?{...a,...base,id:editingId}:a));}
     else{const id=Date.now(); await supabase.from('ads').insert([{...base,id}]); setAds([{...base,id},...ads]);}
-    setShowAdd(false); alert('✓ ZAPISANO!');
+    setShowAdd(false);
   };
   const handleDelete=async(id)=>{if(!confirm('Usunąć?'))return; await supabase.from('ads').delete().eq('id',id); setAds(ads.filter(a=>a.id!==id)); setSelected(null)};
 
@@ -162,12 +156,10 @@ function App(){
                 </div>
               </div>
               <div className="overflow-auto flex-1">
-                <div className="bg-[#f5f5f7] flex flex-col items-center justify-center p-4 gap-2">
-                  <div style={{height:'10cm', maxHeight:'10cm', display:'flex', alignItems:'center', justifyContent:'center'}} className="bg-white rounded-[12px] p-2 shadow">
-                    <img src={selected.images[imgIdx]||selected.image} alt={selected.title} className="img-10cm" style={{height:'378px', maxHeight:'378px', width:'auto'}} />
+                <div className="bg-[#f5f5f7] flex items-center justify-center p-4">
+                  <div className="bg-white rounded-[12px] p-2">
+                    <img src={selected.images[imgIdx]||selected.image} alt={selected.title} className="img-4inch" />
                   </div>
-                  <div className="text-[11px] font-bold text-black bg-[#ffea00] px-3 py-1 rounded-full">📏 10 cm wysokości • proporcje zachowane • ZAKOTWICZONE Z OPISEM</div>
-                  <div className="text-[10px] text-neutral-500">378px = 10cm • scrolluj - zdjęcie jedzie razem z opisem!</div>
                 </div>
                 {selected.images && selected.images.length>1 && (
                   <div className="flex gap-2 p-3 overflow-auto border-b">
@@ -190,7 +182,6 @@ function App(){
                       <a href={'https://wa.me/'+selected.phone} target="_blank" className="bg-[#25D366] text-white font-bold py-3 rounded-[12px] text-center">💬 WhatsApp</a>
                     </div>
                   </div>
-                  <div className="h-[40px]"></div>
                 </div>
               </div>
             </div>
@@ -202,7 +193,6 @@ function App(){
         <div className="fixed inset-0 z-[90] bg-black/70 flex items-end md:items-center justify-center">
           <div className="bg-white w-full md:max-w-[400px] rounded-t-[24px] md:rounded-[20px] p-6">
             <div className="flex justify-between mb-4"><h2 className="font-black">{showAuth==='login'?'Zaloguj':'Rejestracja'}</h2><button onClick={()=>setShowAuth(null)} className="w-9 h-9 bg-[#f5f5f7] rounded-full">✕</button></div>
-            {error && <div className="bg-red-50 text-red-700 text-[13px] p-3 rounded-[10px] mb-3">{error}</div>}
             <form onSubmit={showAuth==='login'?handleLogin:handleRegister} className="space-y-3">
               {showAuth==='register' && <input value={authForm.name} onChange={e=>setAuthForm({...authForm,name:e.target.value})} placeholder="Imię" className="w-full bg-[#f5f5f7] border rounded-[12px] px-4 py-3" />}
               <input type="email" value={authForm.email} onChange={e=>setAuthForm({...authForm,email:e.target.value})} placeholder="E-mail" className="w-full bg-[#f5f5f7] border rounded-[12px] px-4 py-3" />
