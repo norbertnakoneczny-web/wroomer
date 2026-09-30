@@ -6,183 +6,253 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <style>
-*{margin:0;padding:0;box-sizing:border-box}body{background:#efefef;font-family:Inter,sans-serif}
-.h{height:56px;background:#000;color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 16px;position:sticky;top:0;z-index:20}
-.logo{font-weight:800;font-size:20px}.logo b{color:#FFE600}
-.wrap{display:grid;grid-template-columns:320px 1fr;gap:16px;max-width:1500px;margin:0 auto;padding:16px}
-.left{background:#0a0a0a;color:#fff;border-radius:16px;padding:14px;height:fit-content;position:sticky;top:72px}
-.left input, .left select{width:100%;background:#1a1a1a;border:1px solid #2a2a2a;color:#fff;border-radius:10px;padding:10px 12px;margin-top:6px;font-size:13px}
-.btnY{background:#FFE600;color:#000;border:0;border-radius:10px;padding:12px 14px;font-weight:800;cursor:pointer;width:100%;margin-top:10px}
-.right{}
-.bar{background:#fff;border-radius:12px;padding:10px 12px;display:flex;justify-content:space-between;align-items:center;border:1px solid #e5e5e5;margin-bottom:12px}
-.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
-.card{background:#fff;border-radius:16px;overflow:hidden;border:1px solid #e5e5e5;cursor:pointer}
-.card .im{aspect-ratio:16/10;background:#111;overflow:hidden} .card .im img{width:100%;height:100%;object-fit:cover}
-.card .bo{padding:10px 12px} .card .bo h4{font-size:14px} .meta{font-size:11px;opacity:.5;margin-top:2px} .price{font-weight:800;margin-top:4px}
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;z-index:100;padding:12px} .modal.open{display:flex}
-.box{background:#111;color:#fff;width:min(720px,100%);border-radius:18px;max-height:90vh;overflow:auto;border:1px solid #222}
-.boxHead{padding:14px 16px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #222;position:sticky;top:0;background:#111}
-.boxBody{padding:14px 16px;display:flex;flex-direction:column;gap:12px}
-.in{background:#1e1e1e;border:1px solid #2e2e2e;color:#fff;border-radius:10px;padding:11px 12px;width:100%;font-size:13px} 
-.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.drop{border:1.5px dashed #333;border-radius:12px;padding:18px;text-align:center;color:#888;cursor:pointer;background:#161616}
-.photos{display:grid;grid-template-columns:repeat(4,1fr);gap:8px} .ph{aspect-ratio:4/3;background:#222;border-radius:10px;overflow:hidden;position:relative} .ph img{width:100%;height:100%;object-fit:cover} .ph button{position:absolute;top:4px;right:4px;width:20px;height:20px;border-radius:999px;border:0;background:rgba(0,0,0,.7);color:#fff;cursor:pointer}
-#status{background:#1a1a1a;border:1px solid #2a2a2a;border-radius:10px;padding:10px;font-size:12px;color:#FFE600;white-space:pre-wrap}
-@media(max-width:900px){.wrap{grid-template-columns:1fr}.grid{grid-template-columns:1fr}.left{position:relative;top:0}}
+*{margin:0;padding:0;box-sizing:border-box}body{background:#f2f2f2;font-family:Inter,sans-serif;color:#111}
+.h{height:56px;background:#000;color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 14px;position:sticky;top:0;z-index:30}
+.logo{font-weight:800;font-size:20px;letter-spacing:-.02em}.logo b{color:#FFE600}
+.hRight{display:flex;gap:8px;align-items:center}
+.btnY{background:#FFE600;color:#000;border:0;border-radius:999px;padding:8px 14px;font-weight:800;cursor:pointer;font-size:13px}
+.btnD{background:#222;color:#fff;border:1px solid #333;border-radius:999px;padding:8px 12px;cursor:pointer;font-size:12px}
+.btnS{background:#fff;color:#111;border:1px solid #ddd;border-radius:999px;padding:6px 10px;cursor:pointer;font-size:12px}
+.wrap{display:grid;grid-template-columns:300px 1fr;gap:14px;max-width:1480px;margin:0 auto;padding:14px}
+.left{background:#0a0a0a;color:#fff;border-radius:16px;padding:14px;height:fit-content;position:sticky;top:70px}
+.left input,.left select{width:100%;background:#1a1a1a;border:1px solid #2a2a2a;color:#fff;border-radius:10px;padding:9px 11px;margin-top:6px;font-size:12px}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.card{background:#fff;border-radius:14px;overflow:hidden;border:1px solid #e6e6e6;cursor:pointer;position:relative;transition:.15s}
+.card:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,.08)}
+.card .im{height:132px;background:#111;overflow:hidden;position:relative} /* o 50% mniejsze niż 16/10 ~ 260px -> 132px */
+.card .im img{width:100%;height:100%;object-fit:cover}
+.badge{position:absolute;bottom:6px;left:6px;background:rgba(0,0,0,.65);color:#fff;border-radius:6px;padding:2px 5px;font-size:9px;font-weight:700}
+.editTag{position:absolute;top:6px;right:6px;background:#FFE600;color:#000;border-radius:6px;padding:3px 6px;font-size:9px;font-weight:800;display:none}
+.card.own .editTag{display:block}
+.card .bo{padding:8px 9px} .card .bo h4{font-size:12px;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.meta{font-size:10px;opacity:.55;margin-top:2px} .price{font-weight:800;margin-top:3px;font-size:12px}
+.bar{background:#fff;border-radius:12px;padding:8px 10px;display:flex;justify-content:space-between;align-items:center;border:1px solid #e6e6e6;margin-bottom:10px;font-size:13px}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;z-index:100;padding:10px} .modal.open{display:flex}
+.box{background:#111;color:#fff;width:min(700px,100%);border-radius:18px;max-height:92vh;overflow:auto;border:1px solid #222}
+.boxHead{padding:12px 14px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #222;position:sticky;top:0;background:#111;z-index:2}
+.boxBody{padding:12px 14px;display:flex;flex-direction:column;gap:10px}
+.in{background:#1e1e1e;border:1px solid #2e2e2e;color:#fff;border-radius:10px;padding:10px 11px;width:100%;font-size:12px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.drop{border:1.5px dashed #333;border-radius:12px;padding:16px;text-align:center;color:#888;cursor:pointer;background:#161616;font-size:12px}
+.photos{display:grid;grid-template-columns:repeat(5,1fr);gap:6px} .ph{aspect-ratio:1;background:#222;border-radius:8px;overflow:hidden;position:relative} .ph img{width:100%;height:100%;object-fit:cover} .ph button{position:absolute;top:3px;right:3px;width:18px;height:18px;border-radius:999px;border:0;background:rgba(0,0,0,.7);color:#fff;cursor:pointer;font-size:11px}
+.authBox{background:#fff;color:#111;width:min(380px,100%);border-radius:16px;padding:16px;border:1px solid #e5e5e5}
+.authBox h3{font-size:16px;margin-bottom:10px} .authBox .in{background:#f6f6f6;color:#111;border:1px solid #ddd}
+.link{color:#111;text-decoration:underline;cursor:pointer;font-size:12px}
+#status{background:#1a1a1a;border:1px solid #2a2a2a;border-radius:10px;padding:8px;font-size:11px;color:#FFE600;white-space:pre-wrap;display:none} #status.show{display:block}
+@media(max-width:1100px){.grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:760px){.wrap{grid-template-columns:1fr}.grid{grid-template-columns:repeat(2,1fr)}.card .im{height:118px} .left{position:relative;top:0}}
 </style>
 </head>
 <body>
-<div class="h"><div class="logo">WROOMER<b>.PL</b></div><button class="btnY" id="openAdd" style="width:auto;padding:8px 14px;border-radius:999px">+ Dodaj</button></div>
+<div class="h">
+  <div class="logo">WROOMER<b>.PL</b></div>
+  <div class="hRight">
+    <span id="userEmail" style="font-size:11px;opacity:.7;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></span>
+    <button class="btnD" id="myAdsBtn" style="display:none">Moje</button>
+    <button class="btnY" id="openAdd">+ Dodaj</button>
+    <button class="btnD" id="authBtn">Zaloguj</button>
+  </div>
+</div>
+
 <div class="wrap">
   <aside class="left">
-    <h3 style="font-size:14px">Wyszukiwarka</h3>
-    <input id="q" placeholder="Szukaj BMW, diesel..."/>
-    <input id="city" placeholder="Miasto..." style="margin-top:10px"/>
-    <select id="brand" style="margin-top:10px"><option value="">Wszystkie marki</option><option>BMW</option><option>Audi</option><option>Mercedes</option></select>
+    <h3 style="font-size:13px">Wyszukiwarka</h3>
+    <input id="q" placeholder="Szukaj np. BMW"/>
+    <input id="city" placeholder="Miasto" style="margin-top:8px"/>
+    <select id="brand" style="margin-top:8px"><option value="">Wszystkie marki</option><option>BMW</option><option>Audi</option><option>Mercedes</option><option>Toyota</option></select>
     <button class="btnY" id="doSearch">Szukaj</button>
-    <div id="dbg" style="margin-top:12px;background:#000;border-radius:10px;padding:10px;font-size:11px;color:#0f0;white-space:pre-wrap;max-height:200px;overflow:auto"></div>
   </aside>
-  <section class="right">
-    <div class="bar"><span id="cnt">Ładowanie...</span><button id="ref" style="background:#fff;border:1px solid #ddd;border-radius:999px;padding:6px 12px;cursor:pointer;font-size:12px">Odśwież</button></div>
+  <section>
+    <div class="bar"><span id="cnt">Ładowanie...</span><button class="btnS" id="ref">Odśwież</button></div>
     <div class="grid" id="grid"></div>
   </section>
 </div>
 
+<!-- ADD / EDIT MODAL -->
 <div class="modal" id="addModal">
   <div class="box">
-    <div class="boxHead"><h3 id="fTitle">Dodaj ogłoszenie</h3><button id="closeAdd" style="background:#222;color:#fff;border:0;border-radius:999px;width:28px;height:28px;cursor:pointer">✕</button></div>
+    <div class="boxHead"><h3 id="fTitle">Dodaj ogłoszenie</h3><button id="closeAdd" class="btnD" style="width:28px;height:28px;padding:0">✕</button></div>
     <div class="boxBody">
-      <div id="status">Dodaj tytuł i min. 1 zdjęcie, potem Zapisz.</div>
-      <div class="drop" id="drop">Kliknij lub przeciągnij zdjęcia (max 8)<input type="file" id="file" accept="image/*" multiple hidden></div>
+      <div id="status"></div>
+      <div class="drop" id="drop">Kliknij lub przeciągnij zdjęcia (max 8) <input type="file" id="file" accept="image/*" multiple hidden></div>
       <div class="photos" id="photos"></div>
-      <div class="g2"><input class="in" id="aTitle" placeholder="Tytuł * np. BMW 44 2020"/><input class="in" id="aBrand" placeholder="Marka"/></div>
+      <div class="g2"><input class="in" id="aTitle" placeholder="Tytuł *"/><input class="in" id="aBrand" placeholder="Marka"/></div>
       <div class="g2"><input class="in" id="aModel" placeholder="Model"/><input class="in" id="aYear" type="number" placeholder="Rocznik"/></div>
-      <div class="g2"><input class="in" id="aPrice" type="number" placeholder="Cena PLN"/><input class="in" id="aLocation" placeholder="Miasto np. Warszawa"/></div>
-      <textarea class="in" id="aDesc" placeholder="Opis..." style="min-height:80px"></textarea>
-      <div style="display:flex;gap:10px"><button class="btnY" id="save" style="flex:1">Zapisz i pokaż w ogłoszeniach</button><button id="cancel" style="flex:1;background:#222;color:#fff;border:1px solid #333;border-radius:10px;padding:12px;cursor:pointer">Anuluj</button></div>
+      <div class="g2"><input class="in" id="aPrice" type="number" placeholder="Cena PLN"/><input class="in" id="aLocation" placeholder="Miasto"/></div>
+      <textarea class="in" id="aDesc" placeholder="Opis..." style="min-height:70px"></textarea>
+      <div style="display:flex;gap:8px"><button class="btnY" id="save" style="flex:1">Zapisz</button><button id="cancel" class="btnD" style="flex:1">Anuluj</button></div>
     </div>
   </div>
 </div>
 
-<div class="modal" id="detailModal"><div class="box" id="detailBox" style="background:#fff;color:#111;max-width:720px"></div></div>
+<!-- DETAIL -->
+<div class="modal" id="detailModal"><div class="box" id="detailBox" style="background:#fff;color:#111;max-width:700px"></div></div>
+
+<!-- AUTH MODAL -->
+<div class="modal" id="authModal">
+  <div class="authBox">
+    <div style="display:flex;justify-content:space-between;align-items:center"><h3 id="authTitle">Zaloguj się</h3><button id="closeAuth" class="btnS">✕</button></div>
+    <input class="in" id="authEmail" placeholder="Email" type="email" style="margin-top:8px"/>
+    <input class="in" id="authPass" placeholder="Hasło (min 6 znaków)" type="password" style="margin-top:8px"/>
+    <button class="btnY" id="authSubmit" style="margin-top:12px">Zaloguj</button>
+    <div style="margin-top:10px;display:flex;justify-content:space-between"><span class="link" id="switchAuth">Nie masz konta? Zarejestruj</span><span id="authMsg" style="font-size:11px;color:#c00"></span></div>
+    <div style="margin-top:8px;font-size:10px;opacity:.6">Logowanie jak OLX — po zalogowaniu możesz edytować swoje ogłoszenia.</div>
+  </div>
+</div>
 
 <script>
 const SB_URL="https://rljqnhfogaqdjeirqqdj.supabase.co";
 const SB_KEY="sb_publishable_j7CS5xIHzOMBMyvsqVgDmw_GeEek5hX";
-let sb=null; let images=[];
-const $ = id => document.getElementById(id);
-function log(t){ const d=$("dbg"); d.textContent += "\n"+t; d.scrollTop=d.scrollHeight; }
-function setStatus(t,err=false){ const s=$("status"); s.textContent=t; s.style.color=err?"#ff6b6b":"#FFE600"; }
+let sb=null, images=[], editId=null, currentUser=null, authMode='login', myOnly=false;
 
-try{ sb = window.supabase.createClient(SB_URL, SB_KEY); log("✅ Połączono: "+SB_URL); }catch(e){ log("❌ Supabase błąd: "+e.message); }
+const $=id=>document.getElementById(id);
+function setStatus(t,err=false){ const s=$("status"); if(!t){s.classList.remove('show');return;} s.textContent=t; s.style.color=err?"#ff6b6b":"#FFE600"; s.classList.add('show'); }
 
-async function compress(file, maxW=1400){
+try{ sb = window.supabase.createClient(SB_URL, SB_KEY); }catch(e){ console.error(e); }
+
+async function initAuth(){
+  const {data} = await sb.auth.getSession(); currentUser=data?.session?.user||null;
+  updateAuthUI();
+  sb.auth.onAuthStateChange((_,sess)=>{ currentUser=sess?.user||null; updateAuthUI(); loadAds(); });
+}
+function updateAuthUI(){
+  if(currentUser){
+    $("userEmail").textContent=currentUser.email;
+    $("authBtn").textContent="Wyloguj";
+    $("myAdsBtn").style.display="inline-block";
+  }else{
+    $("userEmail").textContent="";
+    $("authBtn").textContent="Zaloguj";
+    $("myAdsBtn").style.display="none";
+    myOnly=false; $("myAdsBtn").textContent="Moje";
+  }
+}
+
+function compress(file, maxW=1280){
   return new Promise(r=>{
     const img=new Image();
     img.onload=()=>{
       let w=Math.min(img.width,maxW); let h=w*(img.height/img.width); if(h>900){h=900; w=h*(img.width/img.height);}
       const c=document.createElement('canvas'); c.width=w; c.height=h; c.getContext('2d').drawImage(img,0,0,w,h);
-      c.toBlob(b=>{ r({blob:b, url:URL.createObjectURL(b)}); },'image/webp',0.82);
+      c.toBlob(b=>r({blob:b, url:URL.createObjectURL(b)}),'image/webp',0.78);
     };
     img.onerror=()=>r({blob:file, url:URL.createObjectURL(file)});
     img.src=URL.createObjectURL(file);
   });
 }
-function renderPhotos(){ const w=$("photos"); w.innerHTML=""; images.forEach((o,i)=>{ const d=document.createElement('div'); d.className='ph'; d.innerHTML=`<img src="${o.url}"><button>✕</button>`; d.querySelector('button').onclick=()=>{images.splice(i,1); renderPhotos();}; w.appendChild(d); }); }
+function renderPhotos(){ const w=$("photos"); w.innerHTML=""; images.forEach((o,i)=>{ const d=document.createElement('div'); d.className='ph'; d.innerHTML=`<img src="${o.url||o.src}"><button>✕</button>`; d.querySelector('button').onclick=()=>{images.splice(i,1); renderPhotos();}; w.appendChild(d); }); }
 
 async function loadAds(){
   const q=$("q").value.trim().toLowerCase(); const city=$("city").value.trim().toLowerCase(); const brand=$("brand").value.trim().toLowerCase();
-  $("cnt").textContent="Ładuję..."; $("grid").innerHTML="";
+  $("cnt").textContent="Ładowanie..."; $("grid").innerHTML="";
   try{
-    let query = sb.from('ads').select('*').order('created_at',{ascending:false}).limit(100);
+    let query=sb.from('ads').select('*').order('created_at',{ascending:false}).limit(120);
+    if(myOnly && currentUser) query=query.eq('owner_id', currentUser.id);
     if(brand) query=query.ilike('brand','%'+brand+'%');
     if(city) query=query.ilike('location','%'+city+'%');
     if(q) query=query.or(`title.ilike.%${q}%,description.ilike.%${q}%`);
-    const {data, error} = await query;
-    if(error) throw error;
-    log(`✅ Pobrano ${data.length} ogłoszeń`);
-    const g=$("grid"); g.innerHTML=""; $("cnt").textContent=`Znaleziono: ${data.length}`;
-    if(!data.length){ g.innerHTML='<div style="background:#fff;border-radius:16px;padding:30px;text-align:center">Brak ogłoszeń. Dodaj pierwsze.</div>'; return; }
+    const {data,error} = await query; if(error) throw error;
+    $("cnt").textContent=myOnly?`Moje ogłoszenia: ${data.length}`:`Znaleziono: ${data.length}`;
+    const g=$("grid"); g.innerHTML="";
+    if(!data.length){ g.innerHTML='<div style="background:#fff;border-radius:12px;padding:24px;text-align:center">Brak ogłoszeń</div>'; return; }
     data.forEach(a=>{
       const imgs = a.images && Array.isArray(a.images) && a.images.length ? a.images : (a.image_url ? [a.image_url] : []);
-      const main = imgs[0] || 'https://images.unsplash.com/photo-1494976388531-d1058494cdd8?q=80&w=600&auto=format&fit=crop';
-      const el=document.createElement('div'); el.className='card';
-      el.innerHTML=`<div class="im"><img src="${main}"></div><div class="bo"><h4>${a.title||'Bez tytułu'}</h4><div class="meta">${a.year||''} ${a.location||''}</div><div class="price">${a.price?Number(a.price).toLocaleString('pl-PL')+' PLN':''}</div></div>`;
+      const main = imgs[0] || 'https://images.unsplash.com/photo-1494976388531-d1058494cdd8?q=80&w=400&auto=format&fit=crop';
+      const own = currentUser && a.owner_id===currentUser.id;
+      const el=document.createElement('div'); el.className='card'+(own?' own':'');
+      el.innerHTML=`<div class="im"><img loading="lazy" src="${main}"><span class="badge">📷 ${imgs.length}</span><span class="editTag">MOJE • EDYTUJ</span></div><div class="bo"><h4>${a.title||''}</h4><div class="meta">${a.year||''} ${a.location||''}</div><div class="price">${a.price?Number(a.price).toLocaleString('pl-PL')+' PLN':''}</div></div>`;
       el.onclick=()=>openDetail(a);
       g.appendChild(el);
     });
-  }catch(e){ log("❌ Błąd ładowania: "+e.message); $("cnt").textContent="Błąd ładowania"; }
+  }catch(e){ $("cnt").textContent="Błąd: "+e.message; }
 }
 
 function openDetail(a){
   const imgs = a.images && Array.isArray(a.images) && a.images.length ? a.images : (a.image_url ? [a.image_url] : []);
+  const own = currentUser && a.owner_id===currentUser.id;
   const box=$("detailBox");
-  box.innerHTML=`<div style="padding:14px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #eee"><h3>${a.title||''}</h3><button onclick="document.getElementById('detailModal').classList.remove('open')" style="border:0;background:#111;color:#fff;border-radius:999px;width:28px;height:28px">✕</button></div><div style="padding:12px"><img src="${imgs[0]||''}" style="width:100%;aspect-ratio:16/10;object-fit:cover;border-radius:12px;background:#111"><div style="display:flex;gap:6px;overflow:auto;margin-top:8px">${imgs.map(s=>`<img src="${s}" style="width:64px;height:48px;object-fit:cover;border-radius:8px;cursor:pointer" onclick="this.parentElement.previousElementSibling.src=this.src">`).join('')}</div><div style="margin-top:12px;font-weight:800;font-size:20px">${a.price?Number(a.price).toLocaleString('pl-PL')+' PLN':''}</div><div style="margin-top:8px;font-size:13px;white-space:pre-wrap;line-height:1.5">${a.description||''}</div><div style="margin-top:8px;font-size:12px;opacity:.6">📍 ${a.location||''} • ${a.brand||''} ${a.model||''} ${a.year||''}</div></div>`;
+  box.innerHTML=`<div style="padding:12px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #eee"><h3 style="font-size:14px">${a.title||''}</h3><div style="display:flex;gap:6px"><button id="editBtn" style="display:${own?'inline-block':'none'};background:#FFE600;border:0;border-radius:999px;padding:6px 10px;font-weight:800;font-size:11px;cursor:pointer">Edytuj</button><button onclick="document.getElementById('detailModal').classList.remove('open')" class="btnS">✕</button></div></div><div style="padding:10px"><img id="dMain" src="${imgs[0]||''}" style="width:100%;height:220px;object-fit:cover;border-radius:10px;background:#111"><div style="display:flex;gap:5px;overflow:auto;margin-top:6px">${imgs.map(s=>`<img src="${s}" style="width:44px;height:32px;object-fit:cover;border-radius:6px;cursor:pointer;border:2px solid transparent" onclick="document.getElementById('dMain').src=this.src">`).join('')}</div><div style="margin-top:10px;font-weight:800">${a.price?Number(a.price).toLocaleString('pl-PL')+' PLN':''}</div><div style="margin-top:6px;font-size:12px;white-space:pre-wrap;line-height:1.4">${a.description||''}</div><div style="margin-top:6px;font-size:11px;opacity:.6">📍 ${a.location||''} ${a.brand||''} ${a.model||''} ${a.year||''}</div></div>`;
+  if(own) box.querySelector('#editBtn').onclick=()=>{ $("detailModal").classList.remove('open'); openEdit(a); };
   $("detailModal").classList.add('open');
 }
 
-$("openAdd").onclick=()=>{ images=[]; renderPhotos(); $("aTitle").value=""; $("aBrand").value=""; $("aModel").value=""; $("aYear").value=""; $("aPrice").value=""; $("aLocation").value=""; $("aDesc").value=""; setStatus("Gotowy. Dodaj tytuł i 1 zdjęcie."); $("addModal").classList.add('open'); };
+function openAdd(){
+  if(!currentUser){ $("authModal").classList.add('open'); setAuthMode('login'); return; }
+  editId=null; images=[]; renderPhotos();
+  $("fTitle").textContent="Dodaj ogłoszenie"; $("aTitle").value=""; $("aBrand").value=""; $("aModel").value=""; $("aYear").value=""; $("aPrice").value=""; $("aLocation").value=""; $("aDesc").value=""; setStatus("");
+  $("addModal").classList.add('open');
+}
+function openEdit(a){
+  editId=a.id; images=(a.images||[]).map(url=>({url, src:url, type:'url'})); renderPhotos();
+  $("fTitle").textContent="Edytuj ogłoszenie"; $("aTitle").value=a.title||""; $("aBrand").value=a.brand||""; $("aModel").value=a.model||""; $("aYear").value=a.year||""; $("aPrice").value=a.price||""; $("aLocation").value=a.location||""; $("aDesc").value=a.description||""; setStatus("Edytujesz swoje ogłoszenie. Zapisz aby zaktualizować.");
+  $("addModal").classList.add('open');
+}
+
+$("openAdd").onclick=openAdd;
 $("closeAdd").onclick=()=>$("addModal").classList.remove('open');
 $("cancel").onclick=()=>$("addModal").classList.remove('open');
-$("addModal").addEventListener('click',e=>{ if(e.target===e.currentTarget) e.currentTarget.classList.remove('open'); });
-$("detailModal").addEventListener('click',e=>{ if(e.target===e.currentTarget) e.currentTarget.classList.remove('open'); });
+$("addModal").addEventListener('click',e=>{if(e.target===e.currentTarget)e.currentTarget.classList.remove('open');});
+$("detailModal").addEventListener('click',e=>{if(e.target===e.currentTarget)e.currentTarget.classList.remove('open');});
 $("doSearch").onclick=loadAds; $("ref").onclick=loadAds;
+
+$("myAdsBtn").onclick=()=>{ if(!currentUser) return; myOnly=!myOnly; $("myAdsBtn").textContent=myOnly?"Wszystkie":"Moje"; loadAds(); };
+
+// auth
+function setAuthMode(m){ authMode=m; $("authTitle").textContent=m==='login'?"Zaloguj się":"Rejestracja"; $("authSubmit").textContent=m==='login'?"Zaloguj":"Zarejestruj"; $("switchAuth").textContent=m==='login'?"Nie masz konta? Zarejestruj":"Masz konto? Zaloguj"; $("authMsg").textContent=""; }
+$("authBtn").onclick=async()=>{ if(currentUser){ await sb.auth.signOut(); }else{ $("authModal").classList.add('open'); setAuthMode('login'); } };
+$("closeAuth").onclick=()=>$("authModal").classList.remove('open');
+$("switchAuth").onclick=()=>setAuthMode(authMode==='login'?'register':'login');
+$("authModal").addEventListener('click',e=>{if(e.target===e.currentTarget)e.currentTarget.classList.remove('open');});
+$("authSubmit").onclick=async()=>{
+  const email=$("authEmail").value.trim(); const pass=$("authPass").value.trim();
+  if(!email||pass.length<6){ $("authMsg").textContent="Email i hasło min 6 znaków"; return; }
+  $("authSubmit").disabled=true; $("authMsg").textContent="...";
+  try{
+    if(authMode==='login'){ const {error} = await sb.auth.signInWithPassword({email, password:pass}); if(error) throw error; }
+    else{ const {error} = await sb.auth.signUp({email, password:pass}); if(error) throw error; $("authMsg").textContent="Sprawdź email aby potwierdzić."; }
+    $("authModal").classList.remove('open');
+  }catch(e){ $("authMsg").textContent=e.message; }finally{ $("authSubmit").disabled=false; }
+};
 
 const drop=$("drop"), fileIn=$("file");
 drop.onclick=()=>fileIn.click();
 drop.ondragover=e=>{e.preventDefault(); drop.style.borderColor='#FFE600';};
 drop.ondragleave=()=>drop.style.borderColor='#333';
-drop.ondrop=async e=>{ e.preventDefault(); drop.style.borderColor='#333'; const files=[...e.dataTransfer.files].filter(f=>f.type.startsWith('image/')).slice(0,8-images.length); for(const f of files){ const c=await compress(f); images.push({blob:c.blob, url:c.url}); } renderPhotos(); };
-fileIn.onchange=async e=>{ const files=[...e.target.files].slice(0,8-images.length); for(const f of files){ const c=await compress(f); images.push({blob:c.blob, url:c.url}); } renderPhotos(); fileIn.value=''; };
+drop.ondrop=async e=>{ e.preventDefault(); drop.style.borderColor='#333'; const files=[...e.dataTransfer.files].filter(f=>f.type.startsWith('image/')).slice(0,8-images.length); for(const f of files){ const c=await compress(f); images.push({blob:c.blob, url:c.url, src:c.url}); } renderPhotos(); };
+fileIn.onchange=async e=>{ const files=[...e.target.files].slice(0,8-images.length); for(const f of files){ const c=await compress(f); images.push({blob:c.blob, url:c.url, src:c.url}); } renderPhotos(); fileIn.value=''; };
 
 $("save").onclick=async()=>{
-  const title=$("aTitle").value.trim();
-  if(!title){ setStatus("❌ Tytuł wymagany",true); return; }
-  if(images.length===0){ setStatus("❌ Dodaj min. 1 zdjęcie",true); return; }
-  const btn=$("save"); btn.disabled=true; btn.textContent="Zapisuję...";
-  setStatus("⏳ Wysyłam zdjęcia...");
+  const title=$("aTitle").value.trim(); if(!title){ setStatus("❌ Tytuł wymagany",true); return; } if(images.length===0){ setStatus("❌ Dodaj min. 1 zdjęcie",true); return; }
+  if(!currentUser){ $("authModal").classList.add('open'); return; }
+  const btn=$("save"); btn.disabled=true; btn.textContent="Zapisuję..."; setStatus("⏳ Wysyłam zdjęcia...");
   try{
     const urls=[];
     for(let i=0;i<images.length;i++){
-      const name=`public/${Date.now()}_${i}_${Math.random().toString(36).slice(2,6)}.webp`;
-      setStatus(`⏳ Upload ${i+1}/${images.length}...`);
-      const {error} = await sb.storage.from('ad-images').upload(name, images[i].blob, {contentType:'image/webp', upsert:true});
+      const it=images[i];
+      if(it.type==='url'){ urls.push(it.url); continue; }
+      const name=`${currentUser.id}/${Date.now()}_${i}_${Math.random().toString(36).slice(2,6)}.webp`;
+      const {error} = await sb.storage.from('ad-images').upload(name, it.blob, {contentType:'image/webp', upsert:true});
       if(error) throw new Error("Storage: "+error.message);
       const {data} = sb.storage.from('ad-images').getPublicUrl(name);
       urls.push(data.publicUrl);
-      log("Uploaded: "+data.publicUrl);
     }
     setStatus("⏳ Zapisuję ogłoszenie...");
     const payload={
-      title: title,
-      brand: $("aBrand").value.trim() || null,
-      model: $("aModel").value.trim() || null,
-      year: parseInt($("aYear").value) || null,
-      price: parseInt($("aPrice").value) || 0,
-      location: $("aLocation").value.trim() || "Warszawa",
-      description: $("aDesc").value.trim() || null,
-      images: urls,
-      image_url: urls[0]
+      title, brand:$("aBrand").value.trim()||null, model:$("aModel").value.trim()||null,
+      year:parseInt($("aYear").value)||null, price:parseInt($("aPrice").value)||0,
+      location:$("aLocation").value.trim()||null, description:$("aDesc").value.trim()||null,
+      images:urls, image_url:urls[0], owner_id: currentUser.id
     };
-    const {data, error} = await sb.from('ads').insert([payload]).select();
-    if(error) throw error;
-    log("✅ Zapisano ID="+data[0].id);
-    setStatus("✅ Zapisano! Zamykam...");
-    // ZAMKNIJ FORMULARZ i POKAŻ WŚRÓD INNYCH - tak jak chciałeś
-    setTimeout(()=>{
-      $("addModal").classList.remove('open');
-      images=[]; renderPhotos();
-      loadAds();
-    }, 400);
-  }catch(e){
-    log("❌ BŁĄD ZAPISU: "+ (e.message||JSON.stringify(e)));
-    setStatus("❌ "+(e.message||"Błąd zapisu - zobacz log po lewej"), true);
-  }finally{
-    btn.disabled=false; btn.textContent="Zapisz i pokaż w ogłoszeniach";
-  }
+    let res;
+    if(editId){ res=await sb.from('ads').update(payload).eq('id', editId).eq('owner_id', currentUser.id).select(); }
+    else{ res=await sb.from('ads').insert([payload]).select(); }
+    if(res.error) throw res.error;
+    setStatus("✅ Zapisano!");
+    setTimeout(()=>{ $("addModal").classList.remove('open'); setStatus(""); images=[]; loadAds(); }, 300);
+  }catch(e){ setStatus("❌ "+e.message, true); }finally{ btn.disabled=false; btn.textContent=editId?"Zapisz zmiany":"Zapisz"; }
 };
 
-loadAds();
+initAuth(); loadAds();
 </script>
 </body>
 </html>
