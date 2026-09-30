@@ -1,5 +1,5 @@
 <!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>WROOMER - małe miniaturki</title>
+<title>WROOMER HYBRID - male miniaturki bez blokowania</title>
 <style>
 *{font-family:Inter,sans-serif;box-sizing:border-box}body{background:#f5f5f7;margin:0}
 .header{background:#000;color:#fff;height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 12px;position:sticky;top:0;z-index:10}
@@ -17,10 +17,9 @@
 .modal-box{background:#fff;width:100%;max-width:560px;border-radius:18px;overflow:hidden;max-height:94vh;display:flex;flex-direction:column}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
 @media(max-width:600px){.grid{grid-template-columns:repeat(2,1fr);gap:8px} .card img{height:95px} .card-body{padding:8px} .card-title{font-size:11px} .price{font-size:13px}}
-@media(max-width:400px){.grid{grid-template-columns:repeat(2,1fr)} .card img{height:85px}}
 </style></head><body>
 <div class="header">
-  <div style="font-weight:900;cursor:pointer;font-size:14px" onclick="location.reload()">WROOMER<span style="color:#ffea00">.PL</span> <span style="font-size:7px;background:#ffea00;color:#000;padding:2px 5px;border-radius:8px;margin-left:5px">MALE MINIATURKI 110px</span></div>
+  <div style="font-weight:900;cursor:pointer;font-size:14px" onclick="location.reload()">WROOMER<span style="color:#ffea00">.PL</span> <span style="font-size:7px;background:#ffea00;color:#000;padding:2px 5px;border-radius:8px;margin-left:5px">HYBRID - MALE 110px - NIE BLOKUJE</span></div>
   <div style="display:flex;gap:5px;align-items:center">
     <span id="userInfo" style="font-size:9px;color:#aaa;display:none"></span>
     <button class="btn btn-white" id="btnLogin">Zaloguj</button>
@@ -32,15 +31,16 @@
 <div style="max-width:1280px;margin:0 auto;padding:10px">
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:6px">
     <div style="background:#000;color:#fff;font-size:10px;font-weight:700;padding:6px 12px;border-radius:20px" id="status">Ladowanie...</div>
-    <div style="display:flex;gap:5px;flex-wrap:wrap"><input id="searchInput" class="btn btn-white" placeholder="Szukaj..." style="padding:6px 10px;font-weight:400;width:120px"><select id="brandFilter" class="btn btn-white" style="padding:6px 10px"><option value="">Wszystkie</option><option>BMW</option><option>Audi</option><option>Volkswagen</option><option>Mercedes</option><option>Skoda</option><option>Toyota</option></select><button class="btn btn-white" onclick="loadAds()">↻</button></div>
+    <div style="display:flex;gap:5px;flex-wrap:wrap"><input id="searchInput" class="btn btn-white" placeholder="Szukaj..." style="padding:6px 10px;font-weight:400;width:120px"><select id="brandFilter" class="btn btn-white" style="padding:6px 10px"><option value="">Wszystkie</option><option>BMW</option><option>Audi</option><option>Volkswagen</option><option>Mercedes</option></select><button class="btn btn-white" onclick="loadAds()">↻</button></div>
   </div>
   <div id="adsGrid" class="grid"></div>
-  <div id="empty" style="display:none;background:#fff;border-radius:16px;padding:20px;text-align:center;margin-top:10px"><div style="font-weight:900;font-size:14px">Brak ogloszen</div><div id="emptyMsg" style="font-size:10px;color:#888;margin-top:6px"></div></div>
+  <div id="empty" style="display:none;background:#fff;border-radius:16px;padding:20px;text-align:center;margin-top:10px"><div style="font-weight:900;font-size:14px">Brak ogloszen</div></div>
+  <div style="margin-top:10px;background:#fff;border-radius:10px;padding:8px;font-size:9px;color:#666;text-align:center">💡 HYBRID: Najpierw laduje kafelki BEZ zdjec (2KB) - od razu widac! Potem miniaturki 110px laduja sie w tle po kolei, nie blokuja "Ladowanie..."</div>
 </div>
 
 <div id="authModal" class="modal" style="display:none"><div class="modal-box"><div style="padding:12px;border-bottom:1px solid #eee;display:flex;justify-content:space-between"><div style="font-weight:900;font-size:14px" id="authTitle">Zaloguj</div><button class="btn btn-white" onclick="closeAuth()">✕</button></div><div style="padding:16px;overflow:auto"><div id="authError" style="display:none;background:#fee;border:1px solid #fcc;color:#a00;padding:8px;border-radius:8px;font-size:10px;font-weight:700;margin-bottom:10px"></div><div id="authNameWrap"><label class="label">Imie *</label><input id="authName" class="input"></div><label class="label">E-mail *</label><input id="authEmail" class="input" type="email"><label class="label">Haslo *</label><input id="authPass" class="input" type="password"><button class="btn btn-black" style="width:100%;margin-top:16px;padding:12px" id="authSubmit">Zaloguj</button><div style="text-align:center;margin-top:10px"><button style="background:none;border:none;font-weight:900;text-decoration:underline;cursor:pointer;font-size:10px" id="authSwitch">Zarejestruj</button></div></div></div></div>
 
-<div id="addModal" class="modal" style="display:none"><div class="modal-box"><div style="padding:12px;border-bottom:1px solid #eee;display:flex;justify-content:space-between"><div style="font-weight:900;font-size:13px" id="addTitle">Dodaj - 3 zdjecia (30KB)</div><button class="btn btn-white" onclick="closeAdd()">✕</button></div><div style="padding:14px;overflow:auto"><div id="addError" style="display:none;background:#fee;border:1px solid #fcc;color:#a00;padding:8px;border-radius:8px;font-size:10px;font-weight:700;margin-bottom:10px"></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><div><label class="label">Marka *</label><select id="fBrand" class="input"><option value="">Wybierz</option><option>BMW</option><option>Audi</option><option>Volkswagen</option><option>Mercedes</option><option>Skoda</option><option>Toyota</option><option>Ford</option><option>Opel</option></select></div><div><label class="label">Model *</label><input id="fModel" class="input"></div><div><label class="label">Rocznik *</label><input id="fYear" class="input" type="number" value="2020"></div><div><label class="label">Cena *</label><input id="fPrice" class="input" type="number"></div><div><label class="label">Przebieg</label><input id="fMileage" class="input" type="number"></div><div><label class="label">Miasto *</label><input id="fLocation" class="input" value="Warszawa"></div></div><label class="label">Tytul</label><input id="fTitle" class="input"><label class="label">Telefon *</label><input id="fPhone" class="input"><label class="label">Opis</label><textarea id="fDesc" class="input" rows="2"></textarea><label class="label">Zdjecia (max 3) * - miniaturki 110px w kafelkach!</label><div id="imgPreview" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px"></div><label class="btn btn-white" style="margin-top:6px;cursor:pointer;display:inline-flex"><span>+ Dodaj zdjecia</span><input id="fImages" type="file" accept="image/*" multiple style="display:none"></label><div id="imgInfo" style="font-size:9px;color:#666;margin-top:4px">0/3</div><button class="btn btn-black" style="width:100%;margin-top:12px;padding:12px" id="btnSave">Zapisz</button></div></div></div>
+<div id="addModal" class="modal" style="display:none"><div class="modal-box"><div style="padding:12px;border-bottom:1px solid #eee;display:flex;justify-content:space-between"><div style="font-weight:900;font-size:13px" id="addTitle">Dodaj - 3 zdjecia 25KB</div><button class="btn btn-white" onclick="closeAdd()">✕</button></div><div style="padding:14px;overflow:auto"><div id="addError" style="display:none;background:#fee;border:1px solid #fcc;color:#a00;padding:8px;border-radius:8px;font-size:10px;font-weight:700;margin-bottom:10px"></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><div><label class="label">Marka *</label><select id="fBrand" class="input"><option value="">Wybierz</option><option>BMW</option><option>Audi</option><option>Volkswagen</option><option>Mercedes</option><option>Skoda</option><option>Toyota</option><option>Ford</option><option>Opel</option></select></div><div><label class="label">Model *</label><input id="fModel" class="input"></div><div><label class="label">Rocznik *</label><input id="fYear" class="input" type="number" value="2020"></div><div><label class="label">Cena *</label><input id="fPrice" class="input" type="number"></div><div><label class="label">Przebieg</label><input id="fMileage" class="input" type="number"></div><div><label class="label">Miasto *</label><input id="fLocation" class="input" value="Warszawa"></div></div><label class="label">Tytul</label><input id="fTitle" class="input"><label class="label">Telefon *</label><input id="fPhone" class="input"><label class="label">Opis</label><textarea id="fDesc" class="input" rows="2"></textarea><label class="label">Zdjecia (max 3) * - male 110px w kafelkach!</label><div id="imgPreview" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px"></div><label class="btn btn-white" style="margin-top:6px;cursor:pointer;display:inline-flex"><span>+ Dodaj zdjecia</span><input id="fImages" type="file" accept="image/*" multiple style="display:none"></label><div id="imgInfo" style="font-size:9px;color:#666;margin-top:4px">0/3</div><button class="btn btn-black" style="width:100%;margin-top:12px;padding:12px" id="btnSave">Zapisz</button></div></div></div>
 
 <div id="detailModal" class="modal" style="display:none"><div class="modal-box" style="max-width:600px"><div style="padding:10px;border-bottom:1px solid #eee;display:flex;justify-content:space-between"><button class="btn btn-white" onclick="closeDetail()">← Wroc</button><div style="display:flex;gap:5px"><button class="btn btn-black" id="detailEdit" style="display:none">Edytuj</button><button class="btn btn-red" id="detailDelete" style="display:none">Usun</button><button class="btn btn-white" onclick="closeDetail()">✕</button></div></div><div id="detailContent" style="overflow:auto"></div></div></div>
 
@@ -71,17 +71,21 @@ function canEdit(ad){
 }
 async function loadAds(){
   const statusEl=document.getElementById('status');
-  if(statusEl) statusEl.textContent='Ladowanie malych miniaturek...';
+  if(statusEl) statusEl.textContent='Ladowanie kafelkow (bez zdjec - 2KB)...';
   try{
-    const res=await fetch(SUPABASE_URL+"/rest/v1/ads?select=*&order=id.desc&limit=50",{headers:{apikey:PUB_KEY,Authorization:"Bearer "+PUB_KEY}});
+    // KROK 1: LIGHT - bez image - od razu widac kafelki!
+    const res=await fetch(SUPABASE_URL+"/rest/v1/ads?select=id,title,brand,model,year,price,mileage,location,phone,owner,owner_id&order=id.desc&limit=50",{headers:{apikey:PUB_KEY,Authorization:"Bearer "+PUB_KEY}});
     const txt=await res.text();
-    if(!res.ok){if(statusEl) statusEl.textContent='Blad '+res.status; document.getElementById('empty').style.display='block'; document.getElementById('emptyMsg').textContent=txt; return;}
+    console.log("LIGHT load:",res.status,txt.length+" bytes");
+    if(!res.ok){if(statusEl) statusEl.textContent='Blad '+res.status; return;}
     ads=JSON.parse(txt);
-    renderAds();
-    if(statusEl) statusEl.textContent="OK "+ads.length+" ogloszen - male miniaturki 110px!";
+    renderAdsLight();
+    if(statusEl) statusEl.textContent="OK "+ads.length+" kafelkow - ladowanie miniaturek 110px w tle... ("+Math.round(txt.length/1024)+"KB)";
+    // KROK 2: w tle ladujemy miniaturki po kolei - nie blokuje!
+    loadThumbnailsInBackground();
   }catch(e){if(statusEl) statusEl.textContent='Blad: '+e.message;}
 }
-function renderAds(){
+function renderAdsLight(){
   const grid=document.getElementById('adsGrid');
   const brand=document.getElementById('brandFilter').value;
   const query=document.getElementById('searchInput').value.toLowerCase();
@@ -92,16 +96,39 @@ function renderAds(){
   const emptyEl=document.getElementById('empty');
   if(emptyEl) emptyEl.style.display=filtered.length===0?'block':'none';
   filtered.forEach(ad=>{
-    const imgs=parseImages(ad);
-    const main=imgs[0]||'';
-    const hasImg=main && main.startsWith('data:');
-    const countBadge=imgs.length>1?'<div style="position:absolute;bottom:4px;right:4px;background:rgba(0,0,0,0.75);color:#fff;font-size:7px;font-weight:900;padding:2px 5px;border-radius:10px">📸 '+imgs.length+'</div>':'';
-    const imgTag=hasImg?'<img src="'+main+'" loading="lazy" onerror="this.style.display='none'">':'<div style="height:110px;background:linear-gradient(135deg,#000,#333);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:20px">'+(ad.brand?ad.brand.substring(0,2).toUpperCase():'🚗')+'</div>';
-    const div=document.createElement('div'); div.className='card';
-    div.innerHTML='<div style="position:relative">'+imgTag+'<div style="position:absolute;top:4px;left:4px;background:rgba(0,0,0,0.7);color:#fff;font-size:7px;font-weight:900;padding:2px 6px;border-radius:10px">'+(ad.brand||'')+' '+(ad.model||'')+'</div>'+countBadge+'<div style="position:absolute;bottom:4px;left:4px;background:rgba(0,0,0,0.6);color:#fff;font-size:7px;padding:2px 5px;border-radius:8px">📍 '+(ad.location||'')+' • '+ad.year+'</div></div><div class="card-body"><div class="card-title">'+(ad.title||ad.brand+' '+ad.model)+'</div><div class="price">'+Number(ad.price||0).toLocaleString('pl-PL')+' zł</div><div class="meta"><span>👤 '+(ad.owner?ad.owner.split('(')[0].trim():'')+'</span><span>📸 '+imgs.length+'</span></div></div>';
+    const div=document.createElement('div'); div.className='card'; div.id='card-'+ad.id;
+    // Placeholder - gradient, bez zdjecia na start!
+    div.innerHTML='<div style="position:relative;height:110px;background:linear-gradient(135deg,#111,#444);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:22px" id="imgbox-'+ad.id+'">'+(ad.brand?ad.brand.substring(0,2).toUpperCase():'🚗')+'<div style="position:absolute;top:4px;left:4px;background:rgba(0,0,0,0.7);color:#fff;font-size:7px;font-weight:900;padding:2px 6px;border-radius:10px">'+(ad.brand||'')+' '+(ad.model||'')+'</div><div style="position:absolute;bottom:4px;left:4px;background:rgba(0,0,0,0.6);color:#fff;font-size:7px;padding:2px 5px;border-radius:8px">📍 '+(ad.location||'')+' • '+ad.year+'</div><div style="position:absolute;bottom:4px;right:4px;background:rgba(0,0,0,0.6);color:#fff;font-size:7px;padding:2px 5px;border-radius:8px" id="badge-'+ad.id+'">⏳</div></div><div class="card-body"><div class="card-title">'+(ad.title||ad.brand+' '+ad.model)+'</div><div class="price">'+Number(ad.price||0).toLocaleString('pl-PL')+' zł</div><div class="meta"><span>👤 '+(ad.owner?ad.owner.split('(')[0].trim():'')+'</span><span id="count-'+ad.id+'">📸 ?</span></div></div>';
     div.onclick=()=>openDetail(ad);
     if(grid) grid.appendChild(div);
   });
+}
+async function loadThumbnailsInBackground(){
+  // Ladujemy miniaturki jedna po drugiej, nie wszystkie naraz!
+  for(let i=0;i<ads.length;i++){
+    const ad=ads[i];
+    try{
+      const res=await fetch(SUPABASE_URL+"/rest/v1/ads?select=image&id=eq."+ad.id,{headers:{apikey:PUB_KEY,Authorization:"Bearer "+PUB_KEY}});
+      if(!res.ok) continue;
+      const data=JSON.parse(await res.text());
+      if(data.length===0) continue;
+      const imgs=parseImages(data[0]);
+      const main=imgs[0];
+      if(main && main.startsWith('data:')){
+        const imgBox=document.getElementById('imgbox-'+ad.id);
+        const badge=document.getElementById('badge-'+ad.id);
+        const count=document.getElementById('count-'+ad.id);
+        if(imgBox){
+          imgBox.innerHTML='<img src="'+main+'" style="width:100%;height:110px;object-fit:cover;display:block" loading="lazy"><div style="position:absolute;top:4px;left:4px;background:rgba(0,0,0,0.7);color:#fff;font-size:7px;font-weight:900;padding:2px 6px;border-radius:10px">'+(ad.brand||'')+' '+(ad.model||'')+'</div><div style="position:absolute;bottom:4px;left:4px;background:rgba(0,0,0,0.6);color:#fff;font-size:7px;padding:2px 5px;border-radius:8px">📍 '+(ad.location||'')+' • '+ad.year+'</div><div style="position:absolute;bottom:4px;right:4px;background:rgba(0,0,0,0.75);color:#fff;font-size:7px;font-weight:900;padding:2px 5px;border-radius:10px">📸 '+imgs.length+'</div>';
+        }
+        if(count) count.textContent='📸 '+imgs.length;
+      }
+      // mala przerwa zeby nie zablokowac UI
+      await new Promise(r=>setTimeout(r,150));
+    }catch(e){console.log("thumb error for",ad.id,e.message);}
+  }
+  const statusEl=document.getElementById('status');
+  if(statusEl) statusEl.textContent="OK "+ads.length+" ogloszen - male miniaturki 110px zaladowane!";
 }
 async function openDetail(ad){
   const can=canEdit(ad);
@@ -110,7 +137,7 @@ async function openDetail(ad){
   const modal=document.getElementById('detailModal'); if(modal) modal.style.display='flex';
   const content=document.getElementById('detailContent');
   if(!content) return;
-  // ladujemy pelny rekord z bazy dla pewnosci
+  content.innerHTML='<div style="padding:20px;text-align:center">Ladowanie 3 zdjec...</div>';
   try{
     const res=await fetch(SUPABASE_URL+"/rest/v1/ads?select=*&id=eq."+ad.id,{headers:{apikey:PUB_KEY,Authorization:"Bearer "+PUB_KEY}});
     const fullAds=JSON.parse(await res.text());
@@ -120,29 +147,29 @@ async function openDetail(ad){
     let thumbs='';
     if(imgs.length>1){
       thumbs='<div id="detailThumbs" style="display:flex;gap:6px;padding:8px;overflow:auto;background:#f9f9f9">';
-      imgs.forEach((im,i)=>{thumbs+='<img src="'+im+'" style="width:60px;height:60px;object-fit:cover;border-radius:8px;border:2px solid '+(i===0?'#ffea00':'#eee')+';cursor:pointer" onclick="document.getElementById(\'detailMainImg\').src=this.src; document.querySelectorAll(\'#detailThumbs img\').forEach(x=>x.style.borderColor=\'#eee\'); this.style.borderColor=\'#ffea00\'">';});
+      imgs.forEach((im,i)=>{thumbs+='<img src="'+im+'" style="width:60px;height:60px;object-fit:cover;border-radius:8px;border:2px solid '+(i===0?'#ffea00':'#eee')+';cursor:pointer" onclick="document.getElementById(\'detailMainImg\').src=this.src">';});
       thumbs+='</div>';
     }
-    content.innerHTML='<img id="detailMainImg" src="'+main+'" style="width:100%;height:320px;object-fit:cover;background:#f0f0f0" onerror="this.src=\'https://images.unsplash.com/photo-1555215695-3004980ad54e?w=600\'"><div>'+thumbs+'</div><div style="padding:14px"><div style="font-weight:900;font-size:18px">'+(fullAd.title||'')+'</div><div style="font-weight:900;font-size:22px;margin-top:6px">'+Number(fullAd.price||0).toLocaleString('pl-PL')+' zł</div><div style="margin-top:10px;display:grid;grid-template-columns:1fr 1fr;gap:6px"><div style="background:#f5f5f7;border-radius:10px;padding:10px"><div style="font-size:8px;color:#888">Marka</div><div style="font-weight:700;font-size:12px">'+(fullAd.brand||'-')+'</div></div><div style="background:#f5f5f7;border-radius:10px;padding:10px"><div style="font-size:8px;color:#888">Model</div><div style="font-weight:700;font-size:12px">'+(fullAd.model||'-')+'</div></div><div style="background:#f5f5f7;border-radius:10px;padding:10px"><div style="font-size:8px;color:#888">Rocznik</div><div style="font-weight:700;font-size:12px">'+(fullAd.year||'-')+'</div></div><div style="background:#f5f5f7;border-radius:10px;padding:10px"><div style="font-size:8px;color:#888">Przebieg</div><div style="font-weight:700;font-size:12px">'+(fullAd.mileage?Number(fullAd.mileage).toLocaleString('pl-PL')+' km':'-')+'</div></div><div style="background:#f5f5f7;border-radius:10px;padding:10px"><div style="font-size:8px;color:#888">Miasto</div><div style="font-weight:700;font-size:12px">📍 '+(fullAd.location||'-')+'</div></div><div style="background:#f5f5f7;border-radius:10px;padding:10px"><div style="font-size:8px;color:#888">Wlasciciel</div><div style="font-weight:700;font-size:11px">'+(fullAd.owner||'-')+'</div></div></div>'+(fullAd.description?'<div style="margin-top:10px;background:#f5f5f7;border-radius:10px;padding:10px"><div style="font-size:8px;color:#888">Opis</div><div style="margin-top:4px;font-size:12px;line-height:1.4">'+fullAd.description+'</div></div>':'')+'<div style="margin-top:12px;background:#000;color:#fff;border-radius:10px;padding:12px;display:flex;justify-content:space-between;align-items:center"><div><div style="font-size:9px;color:#aaa">Telefon</div><div style="font-weight:900;font-size:14px">📞 '+(fullAd.phone||'Brak')+'</div></div>'+(fullAd.phone?'<a href="tel:'+fullAd.phone+'" class="btn btn-yellow" style="padding:10px 14px;text-decoration:none">Zadzwon</a>':'')+'</div><div style="margin-top:10px;font-size:8px;color:#aaa;text-align:center">📸 '+imgs.length+' zdjec • ID: '+fullAd.id+' • '+(can?'Mozesz edytowac':'')+'</div></div>';
+    content.innerHTML='<img id="detailMainImg" src="'+main+'" style="width:100%;height:320px;object-fit:cover;background:#f0f0f0"><div>'+thumbs+'</div><div style="padding:14px"><div style="font-weight:900;font-size:18px">'+(fullAd.title||'')+'</div><div style="font-weight:900;font-size:22px;margin-top:6px">'+Number(fullAd.price||0).toLocaleString('pl-PL')+' zł</div><div style="margin-top:10px;display:grid;grid-template-columns:1fr 1fr;gap:6px"><div style="background:#f5f5f7;border-radius:10px;padding:10px"><div style="font-size:8px;color:#888">Marka</div><div style="font-weight:700;font-size:12px">'+(fullAd.brand||'-')+'</div></div><div style="background:#f5f5f7;border-radius:10px;padding:10px"><div style="font-size:8px;color:#888">Model</div><div style="font-weight:700;font-size:12px">'+(fullAd.model||'-')+'</div></div><div style="background:#f5f5f7;border-radius:10px;padding:10px"><div style="font-size:8px;color:#888">Rocznik</div><div style="font-weight:700;font-size:12px">'+(fullAd.year||'-')+'</div></div><div style="background:#f5f5f7;border-radius:10px;padding:10px"><div style="font-size:8px;color:#888">Przebieg</div><div style="font-weight:700;font-size:12px">'+(fullAd.mileage?Number(fullAd.mileage).toLocaleString('pl-PL')+' km':'-')+'</div></div><div style="background:#f5f5f7;border-radius:10px;padding:10px"><div style="font-size:8px;color:#888">Miasto</div><div style="font-weight:700;font-size:12px">📍 '+(fullAd.location||'-')+'</div></div><div style="background:#f5f5f7;border-radius:10px;padding:10px"><div style="font-size:8px;color:#888">Wlasciciel</div><div style="font-weight:700;font-size:11px">'+(fullAd.owner||'-')+'</div></div></div>'+(fullAd.description?'<div style="margin-top:10px;background:#f5f5f7;border-radius:10px;padding:10px"><div style="font-size:8px;color:#888">Opis</div><div style="margin-top:4px;font-size:12px">'+fullAd.description+'</div></div>':'')+'<div style="margin-top:12px;background:#000;color:#fff;border-radius:10px;padding:12px;display:flex;justify-content:space-between;align-items:center"><div><div style="font-size:9px;color:#aaa">Telefon</div><div style="font-weight:900;font-size:14px">📞 '+(fullAd.phone||'Brak')+'</div></div>'+(fullAd.phone?'<a href="tel:'+fullAd.phone+'" class="btn btn-yellow" style="padding:10px 14px;text-decoration:none">Zadzwon</a>':'')+'</div><div style="margin-top:10px;font-size:8px;color:#aaa;text-align:center">📸 '+imgs.length+' zdjec • ID: '+fullAd.id+'</div></div>';
   }catch(e){content.innerHTML='<div style="padding:20px">Blad: '+e.message+'</div>';}
 }
 function closeDetail(){const m=document.getElementById('detailModal'); if(m) m.style.display='none';}
 async function deleteAd(id){if(!confirm('Usunac ID '+id+'?')) return; const res=await fetch(SUPABASE_URL+"/rest/v1/ads?id=eq."+id,{method:'DELETE',headers:{apikey:PUB_KEY,Authorization:"Bearer "+PUB_KEY}}); if(res.ok||res.status===204){closeDetail(); loadAds();}}
 function openAuth(m){authMode=m; const modal=document.getElementById('authModal'); if(modal) modal.style.display='flex'; const title=document.getElementById('authTitle'); if(title) title.textContent=m==='login'?'Zaloguj':'Zarejestruj'; const wrap=document.getElementById('authNameWrap'); if(wrap) wrap.style.display=m==='register'?'block':'none'; const err=document.getElementById('authError'); if(err) err.style.display='none';}
 function closeAuth(){const m=document.getElementById('authModal'); if(m) m.style.display='none';}
-function openAdd(){if(!currentUser){openAuth('login');return;} editingId=null; selectedImages=[]; const titleEl=document.getElementById('addTitle'); if(titleEl) titleEl.textContent='Dodaj - 3 zdjecia (male miniaturki)'; ['fBrand','fModel','fYear','fPrice','fMileage','fLocation','fTitle','fPhone','fDesc'].forEach(id=>{const el=document.getElementById(id); if(el) el.value=id==='fYear'?'2020':id==='fLocation'?'Warszawa':'';}); const preview=document.getElementById('imgPreview'); if(preview) preview.innerHTML=''; const info=document.getElementById('imgInfo'); if(info) info.textContent='0/3'; const modal=document.getElementById('addModal'); if(modal) modal.style.display='flex';}
+function openAdd(){if(!currentUser){openAuth('login');return;} editingId=null; selectedImages=[]; const titleEl=document.getElementById('addTitle'); if(titleEl) titleEl.textContent='Dodaj - 3 zdjecia male 110px'; ['fBrand','fModel','fYear','fPrice','fMileage','fLocation','fTitle','fPhone','fDesc'].forEach(id=>{const el=document.getElementById(id); if(el) el.value=id==='fYear'?'2020':id==='fLocation'?'Warszawa':'';}); const preview=document.getElementById('imgPreview'); if(preview) preview.innerHTML=''; const info=document.getElementById('imgInfo'); if(info) info.textContent='0/3'; const modal=document.getElementById('addModal'); if(modal) modal.style.display='flex';}
 function closeAdd(){const m=document.getElementById('addModal'); if(m) m.style.display='none'; editingId=null; selectedImages=[];}
 async function openEditFull(ad){if(!canEdit(ad)){alert('Nie mozesz edytowac. Wlasciciel: '+ad.owner); return;} editingId=ad.id; try{const res=await fetch(SUPABASE_URL+"/rest/v1/ads?select=*&id=eq."+ad.id,{headers:{apikey:PUB_KEY,Authorization:"Bearer "+PUB_KEY}}); const fullAds=JSON.parse(await res.text()); const fullAd=fullAds[0]||ad; document.getElementById('fBrand').value=fullAd.brand||''; document.getElementById('fModel').value=fullAd.model||''; document.getElementById('fYear').value=fullAd.year||2020; document.getElementById('fPrice').value=fullAd.price||''; document.getElementById('fMileage').value=fullAd.mileage||''; document.getElementById('fLocation').value=fullAd.location||'Warszawa'; document.getElementById('fTitle').value=fullAd.title||''; document.getElementById('fPhone').value=fullAd.phone||''; document.getElementById('fDesc').value=fullAd.description||''; selectedImages=parseImages(fullAd); renderImgPreview(); document.getElementById('addTitle').textContent='Edytuj'; document.getElementById('addModal').style.display='flex';}catch(e){alert(e.message);}}
-function compress(file, cb){const r=new FileReader(); r.onload=e=>{const img=new Image(); img.onload=()=>{const c=document.createElement('canvas'); const maxW=500; const sc=Math.min(1,maxW/img.width); c.width=img.width*sc; c.height=img.height*sc; c.getContext('2d').drawImage(img,0,0,c.width,c.height); cb(c.toDataURL('image/jpeg',0.55));}; img.src=e.target.result;}; r.readAsDataURL(file);}
+function compress(file, cb){const r=new FileReader(); r.onload=e=>{const img=new Image(); img.onload=()=>{const c=document.createElement('canvas'); const maxW=400; const sc=Math.min(1,maxW/img.width); c.width=img.width*sc; c.height=img.height*sc; c.getContext('2d').drawImage(img,0,0,c.width,c.height); cb(c.toDataURL('image/jpeg',0.45));}; img.src=e.target.result;}; r.readAsDataURL(file);}
 function renderImgPreview(){const wrap=document.getElementById('imgPreview'); if(!wrap) return; wrap.innerHTML=''; selectedImages.forEach((im,i)=>{const d=document.createElement('div'); d.style.position='relative'; d.style.width='80px'; d.style.height='80px'; d.style.borderRadius='10px'; d.style.overflow='hidden'; d.style.border='1px solid #ddd'; d.innerHTML='<img src="'+im+'" style="width:100%;height:100%;object-fit:cover"><button onclick="selectedImages=selectedImages.filter((_,idx)=>idx!=='+i+'); renderImgPreview()" style="position:absolute;top:3px;right:3px;width:18px;height:18px;background:rgba(0,0,0,0.7);color:#fff;border:none;border-radius:50%;font-size:9px;cursor:pointer">✕</button><div style="position:absolute;bottom:0;left:0;background:rgba(0,0,0,0.6);color:#fff;font-size:7px;padding:1px 3px">'+Math.round(im.length/1024)+'KB</div>'; wrap.appendChild(d);}); const info=document.getElementById('imgInfo'); if(info) info.textContent=selectedImages.length+'/3 - '+Math.round(selectedImages.reduce((s,im)=>s+im.length,0)/1024)+'KB';}
 document.getElementById('fImages').addEventListener('change', e=>{const files=Array.from(e.target.files||[]); if(selectedImages.length+files.length>3){alert('Max 3 zdjecia!'); return;} files.forEach(f=>compress(f,c=>{selectedImages.push(c); renderImgPreview();})); e.target.value='';});
 document.getElementById('btnLogin').onclick=()=>openAuth('login');
 document.getElementById('btnRegister').onclick=()=>openAuth('register');
 document.getElementById('btnAdd').onclick=()=>openAdd();
-document.getElementById('btnLogout').onclick=()=>{currentUser=null; localStorage.removeItem('wroomer_user_final14'); updateUI(); renderAds();};
+document.getElementById('btnLogout').onclick=()=>{currentUser=null; localStorage.removeItem('wroomer_user_final14'); updateUI(); loadAds();};
 document.getElementById('authSwitch').onclick=()=>openAuth(authMode==='login'?'register':'login');
-document.getElementById('brandFilter').onchange=renderAds;
-document.getElementById('searchInput').oninput=renderAds;
+document.getElementById('brandFilter').onchange=()=>{renderAdsLight();};
+document.getElementById('searchInput').oninput=()=>{renderAdsLight();};
 document.getElementById('authSubmit').onclick=()=>{
   const email=document.getElementById('authEmail').value.trim().toLowerCase();
   const pass=document.getElementById('authPass').value;
@@ -156,12 +183,12 @@ document.getElementById('authSubmit').onclick=()=>{
     const nu={id:Date.now(),email,name,password:pass};
     users.push(nu); localStorage.setItem('wroomer_users_final14',JSON.stringify(users));
     currentUser={id:nu.id,email:nu.email,name:nu.name}; localStorage.setItem('wroomer_user_final14',JSON.stringify(currentUser));
-    closeAuth(); updateUI(); renderAds();
+    closeAuth(); updateUI(); loadAds();
   } else {
     const u=users.find(x=>x.email===email&&x.password===pass);
     if(!u){if(err){err.textContent='Bledny email lub haslo'; err.style.display='block';} return;}
     currentUser={id:u.id,email:u.email,name:u.name}; localStorage.setItem('wroomer_user_final14',JSON.stringify(currentUser));
-    closeAuth(); updateUI(); renderAds();
+    closeAuth(); updateUI(); loadAds();
   }
 };
 document.getElementById('btnSave').onclick=async ()=>{
@@ -188,10 +215,11 @@ document.getElementById('btnSave').onclick=async ()=>{
     const txt=await res.text();
     if(!res.ok){if(err){err.textContent='Blad: '+txt; err.style.display='block';} return;}
     closeAdd();
+    // optymistycznie - dodajemy kafelek bez zdjecia, a miniaturka doladuje sie w tle
     if(editingId){ads=ads.map(a=>a.id===editingId?Object.assign({},a,sendPayload):a);}
-    else{ads=[{id:nid,title,brand,model,year,price,mileage,location,phone,owner:payload.owner,owner_id:payload.owner_id,image:imagesJson}].concat(ads);}
-    renderAds();
-    setTimeout(loadAds,800);
+    else{ads=[{id:nid,title,brand,model,year,price,mileage,location,phone,owner:payload.owner,owner_id:payload.owner_id}].concat(ads);}
+    renderAdsLight();
+    setTimeout(()=>{loadAds();},500);
   }catch(e){if(err){err.textContent='Blad: '+e.message; err.style.display='block';}}
 };
 
