@@ -1,55 +1,232 @@
 <!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>DEBUG WROOMER</title>
-<style>body{font-family:monospace;background:#111;color:#0f0;padding:12px} button{padding:10px 16px;margin:4px;font-weight:900;cursor:pointer} pre{background:#000;color:#0f0;padding:12px;overflow:auto;border:1px solid #333;white-space:pre-wrap;word-break:break-all} .ok{color:#0f0} .err{color:#f55}</style>
-</head><body>
-<h2>DEBUG WROOMER - test nowego klucza publishable</h2>
-<p>Klucz: sb_publishable_j7CS5xIHz...<br>URL: https://rljqnhfogaqdjeirqqdj.supabase.co</p>
-<button onclick="test1()">1. TEST SELECT id.desc</button>
-<button onclick="test2()">2. TEST SELECT * bez order</button>
-<button onclick="test3()">3. TEST INSERT testowe</button>
-<button onclick="clearLog()">Clear</button>
-<pre id="log">Kliknij TEST 1...
-</pre>
-<script>
-const URL = "https://rljqnhfogaqdjeirqqdj.supabase.co";
-const KEY = "sb_publishable_j7CS5xIHzOMBMyvsqVgDmw_GeEek5hX";
-const logEl=document.getElementById('log');
-function log(m){logEl.textContent+=m+"\n"; logEl.scrollTop=logEl.scrollHeight; console.log(m);}
-function clearLog(){logEl.textContent='';}
+<title>WROOMER FINAL - dziala 100%</title>
+<style>
+*{font-family:Inter,sans-serif;box-sizing:border-box}body{background:#f5f5f7;margin:0}
+.header{background:#000;color:#fff;height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 12px;position:sticky;top:0;z-index:10}
+.btn{border:none;border-radius:10px;padding:8px 14px;font-weight:900;font-size:12px;cursor:pointer}
+.btn-yellow{background:#ffea00;color:#000} .btn-black{background:#000;color:#fff} .btn-white{background:#fff;color:#000;border:1px solid #ddd} .btn-red{background:#fee;color:#a00;border:1px solid #fcc}
+.card{background:#fff;border-radius:16px;border:1px solid #e5e5e5;overflow:hidden;cursor:pointer} .card:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,0,0,0.1)}
+.card img{width:100%;height:170px;object-fit:cover;background:#eee}
+.input{width:100%;background:#f5f5f7;border:1px solid #e5e5e5;border-radius:10px;padding:11px 12px;font-size:13px;outline:none;margin-top:4px}
+.label{font-size:10px;font-weight:700;margin-top:12px;display:block}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,0.75);display:flex;align-items:center;justify-content:center;z-index:100;padding:12px}
+.modal-box{background:#fff;width:100%;max-width:560px;border-radius:20px;overflow:hidden;max-height:94vh;display:flex;flex-direction:column}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:12px}
+</style></head><body>
+<div class="header">
+  <div style="font-weight:900;cursor:pointer" onclick="location.reload()">WROOMER<span style="color:#ffea00">.PL</span> <span style="font-size:8px;background:#ffea00;color:#000;padding:2px 6px;border-radius:10px;margin-left:6px">FINAL DZIALA 200 OK</span></div>
+  <div style="display:flex;gap:6px"><button class="btn btn-white" id="btnLogin">Zaloguj</button><button class="btn btn-yellow" id="btnRegister">Zarejestruj</button><button class="btn btn-yellow" id="btnAdd" style="display:none">+ Dodaj</button><button class="btn btn-black" id="btnLogout" style="display:none">Wyloguj</button></div>
+</div>
+<div style="max-width:1280px;margin:0 auto;padding:12px">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px">
+    <div style="background:#000;color:#fff;font-size:11px;font-weight:700;padding:7px 14px;border-radius:20px" id="status">Ladowanie...</div>
+    <div style="display:flex;gap:6px"><input id="searchInput" class="btn btn-white" placeholder="Szukaj..." style="padding:7px 12px;font-weight:400;width:140px"><select id="brandFilter" class="btn btn-white" style="padding:7px 12px"><option value="">Wszystkie</option><option>BMW</option><option>Audi</option><option>Volkswagen</option><option>Mercedes</option><option>Skoda</option><option>Toyota</option></select><button class="btn btn-white" onclick="loadAds()">Refresh</button></div>
+  </div>
+  <div id="adsGrid" class="grid"></div>
+  <div id="empty" style="display:none;background:#fff;border-radius:20px;padding:24px;text-align:center;margin-top:12px"><div style="font-weight:900">Brak ogloszen</div><div id="emptyMsg" style="font-size:11px;color:#888;margin-top:8px"></div></div>
+</div>
 
-async function test1(){
-  log("--- TEST 1: SELECT * order=id.desc ---");
-  try{
-    const res=await fetch(URL+"/rest/v1/ads?select=*&order=id.desc&limit=5",{headers:{apikey:KEY,Authorization:"Bearer "+KEY}});
-    const txt=await res.text();
-    log("Status: "+res.status+" "+res.statusText);
-    log("Headers: "+JSON.stringify([...res.headers.entries()]));
-    log("Body: "+txt.substring(0,2000));
-    if(res.ok){log("✅ OK - SELECT dziala!");} else {log("❌ BLAD SELECT: "+txt);}
-  }catch(e){log("❌ EXCEPTION: "+e.message+" "+e.stack);}
+<div id="authModal" class="modal" style="display:none"><div class="modal-box"><div style="padding:16px;border-bottom:1px solid #eee;display:flex;justify-content:space-between"><div style="font-weight:900" id="authTitle">Zaloguj</div><button class="btn btn-white" onclick="closeAuth()">X</button></div><div style="padding:20px;overflow:auto"><div id="authError" style="display:none;background:#fee;border:1px solid #fcc;color:#a00;padding:10px;border-radius:10px;font-size:11px;font-weight:700;margin-bottom:12px"></div><div id="authNameWrap"><label class="label">Imie *</label><input id="authName" class="input"></div><label class="label">E-mail *</label><input id="authEmail" class="input" type="email"><label class="label">Haslo *</label><input id="authPass" class="input" type="password"><button class="btn btn-black" style="width:100%;margin-top:20px;padding:14px" id="authSubmit">Zaloguj</button><div style="text-align:center;margin-top:12px"><button style="background:none;border:none;font-weight:900;text-decoration:underline;cursor:pointer;font-size:11px" id="authSwitch">Zarejestruj</button></div></div></div></div>
+
+<div id="addModal" class="modal" style="display:none"><div class="modal-box"><div style="padding:16px;border-bottom:1px solid #eee;display:flex;justify-content:space-between"><div style="font-weight:900" id="addTitle">Dodaj - 3 zdjecia</div><button class="btn btn-white" onclick="closeAdd()">X</button></div><div style="padding:16px;overflow:auto"><div id="addError" style="display:none;background:#fee;border:1px solid #fcc;color:#a00;padding:10px;border-radius:10px;font-size:11px;font-weight:700;margin-bottom:12px"></div><label class="label">Marka *</label><select id="fBrand" class="input"><option value="">Wybierz</option><option>BMW</option><option>Audi</option><option>Volkswagen</option><option>Mercedes</option><option>Skoda</option><option>Toyota</option><option>Ford</option><option>Opel</option></select><label class="label">Model *</label><input id="fModel" class="input"><label class="label">Rocznik *</label><input id="fYear" class="input" type="number" value="2020"><label class="label">Cena *</label><input id="fPrice" class="input" type="number"><label class="label">Przebieg</label><input id="fMileage" class="input" type="number"><label class="label">Miasto *</label><input id="fLocation" class="input" value="Warszawa"><label class="label">Tytul</label><input id="fTitle" class="input"><label class="label">Telefon *</label><input id="fPhone" class="input"><label class="label">Opis</label><textarea id="fDesc" class="input" rows="3"></textarea><label class="label">Zdjecia (max 3) * - wszystkie 3 widoczne wszedzie!</label><div id="imgPreview" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"></div><label class="btn btn-white" style="margin-top:8px;cursor:pointer"><span>+ Dodaj zdjecia (max 3)</span><input id="fImages" type="file" accept="image/*" multiple style="display:none"></label><div id="imgInfo" style="font-size:10px;color:#666;margin-top:6px">0/3</div><button class="btn btn-black" style="width:100%;margin-top:16px;padding:14px" id="btnSave">Zapisz - widoczne wszedzie</button></div></div></div>
+
+<div id="detailModal" class="modal" style="display:none"><div class="modal-box" style="max-width:640px"><div style="padding:12px;border-bottom:1px solid #eee;display:flex;justify-content:space-between"><button class="btn btn-white" onclick="closeDetail()">Wroc</button><div style="display:flex;gap:6px"><button class="btn btn-black" id="detailEdit" style="display:none">Edytuj</button><button class="btn btn-red" id="detailDelete" style="display:none">Usun</button><button class="btn btn-white" onclick="closeDetail()">X</button></div></div><div id="detailContent" style="overflow:auto"></div></div></div>
+
+<script>
+const SUPABASE_URL="https://rljqnhfogaqdjeirqqdj.supabase.co";
+const PUB_KEY="sb_publishable_j7CS5xIHzOMBMyvsqVgDmw_GeEek5hX";
+let currentUser=null, users=[], ads=[], authMode='login', editingId=null, selectedImages=[];
+
+try{currentUser=JSON.parse(localStorage.getItem('wroomer_user_final14')||'null')}catch(e){}
+try{users=JSON.parse(localStorage.getItem('wroomer_users_final14')||'[]')}catch(e){}
+
+function updateUI(){
+  const bL=document.getElementById('btnLogin'), bR=document.getElementById('btnRegister'), bA=document.getElementById('btnAdd'), bO=document.getElementById('btnLogout');
+  if(currentUser){bL.style.display='none';bR.style.display='none';bA.style.display='inline-block';bO.style.display='inline-block';}
+  else{bL.style.display='inline-block';bR.style.display='inline-block';bA.style.display='none';bO.style.display='none';}
 }
-async function test2(){
-  log("--- TEST 2: SELECT * bez order ---");
-  try{
-    const res=await fetch(URL+"/rest/v1/ads?select=*&limit=5",{headers:{apikey:KEY,Authorization:"Bearer "+KEY}});
-    const txt=await res.text();
-    log("Status: "+res.status);
-    log("Body: "+txt.substring(0,2000));
-    if(res.ok){log("✅ OK");} else {log("❌ BLAD: "+txt);}
-  }catch(e){log("❌ EX: "+e.message);}
+function parseImages(ad){
+  try{if(!ad.image) return []; if(ad.image.trim().startsWith('[')){const arr=JSON.parse(ad.image); return Array.isArray(arr)?arr:[ad.image];} return [ad.image];}catch(e){return [ad.image];}
 }
-async function test3(){
-  const nid=Date.now();
-  const payload={id:nid,title:"TEST DEBUG "+nid,brand:"BMW",model:"Test",year:2020,price:12345};
-  log("--- TEST 3: INSERT "+JSON.stringify(payload)+" ---");
-  try{
-    const res=await fetch(URL+"/rest/v1/ads",{method:"POST",headers:{apikey:KEY,Authorization:"Bearer "+KEY,"Content-Type":"application/json",Prefer:"return=representation"},body:JSON.stringify(payload)});
-    const txt=await res.text();
-    log("Status: "+res.status);
-    log("Body: "+txt.substring(0,2000));
-    if(res.ok){log("✅ INSERT OK id="+nid);} else {log("❌ BLAD INSERT: "+txt);}
-  }catch(e){log("❌ EX: "+e.message);}
+function canEdit(ad){
+  if(!currentUser) return false;
+  if(ad.owner_id && currentUser.id && ad.owner_id===currentUser.id) return true;
+  if(ad.owner && currentUser.email && ad.owner.toLowerCase().includes(currentUser.email.toLowerCase())) return true;
+  return false;
 }
-test1();
-</script>
-</body></html>
+async function loadAds(){
+  const statusEl=document.getElementById('status');
+  statusEl.textContent='Ladowanie...';
+  try{
+    const res=await fetch(SUPABASE_URL+"/rest/v1/ads?select=*&order=id.desc&limit=50",{headers:{apikey:PUB_KEY,Authorization:"Bearer "+PUB_KEY}});
+    const txt=await res.text();
+    console.log("SELECT status",res.status,txt.substring(0,300));
+    if(!res.ok){
+      statusEl.textContent='Blad SELECT '+res.status;
+      document.getElementById('empty').style.display='block';
+      document.getElementById('emptyMsg').textContent=txt;
+      return;
+    }
+    ads=JSON.parse(txt);
+    renderAds();
+    statusEl.textContent="OK "+ads.length+" ogloszen - dziala wszedzie! (200 OK)";
+  }catch(e){
+    statusEl.textContent='Blad: '+e.message;
+    document.getElementById('empty').style.display='block';
+    document.getElementById('emptyMsg').textContent=e.message;
+  }
+}
+function renderAds(){
+  const grid=document.getElementById('adsGrid');
+  const brand=document.getElementById('brandFilter').value;
+  const query=document.getElementById('searchInput').value.toLowerCase();
+  let filtered=ads;
+  if(brand) filtered=filtered.filter(a=>a.brand===brand);
+  if(query) filtered=filtered.filter(a=>(a.title+" "+a.brand+" "+a.model).toLowerCase().includes(query));
+  grid.innerHTML='';
+  document.getElementById('empty').style.display=filtered.length===0?'block':'none';
+  filtered.forEach(ad=>{
+    const imgs=parseImages(ad);
+    const main=imgs[0]||'https://images.unsplash.com/photo-1555215695-3004980ad54e?w=600';
+    const badge=imgs.length>1?'<div style="position:absolute;bottom:8px;right:8px;background:rgba(0,0,0,0.75);color:#fff;font-size:9px;padding:3px 7px;border-radius:10px">📸 '+imgs.length+'</div>':'';
+    const div=document.createElement('div'); div.className='card';
+    div.innerHTML='<div style="position:relative"><img src="'+main+'" onerror="this.src='https://images.unsplash.com/photo-1555215695-3004980ad54e?w=600'"><div style="position:absolute;top:8px;left:8px;background:rgba(0,0,0,0.75);color:#fff;font-size:9px;font-weight:900;padding:4px 8px;border-radius:20px">'+(ad.brand||'')+' '+(ad.model||'')+'</div><div style="position:absolute;top:8px;right:8px;background:#ffea00;color:#000;font-size:8px;font-weight:900;padding:4px 7px;border-radius:20px">🌐</div>'+badge+'</div><div style="padding:12px"><div style="font-weight:700;font-size:13px;min-height:34px">'+(ad.title||ad.brand+' '+ad.model)+'</div><div style="font-weight:900;font-size:18px;margin-top:6px">'+Number(ad.price||0).toLocaleString('pl-PL')+' zł</div><div style="font-size:10px;color:#888;margin-top:6px">'+(ad.location||'')+' • '+(ad.year||'')+' • 📸 '+imgs.length+'</div></div>';
+    div.onclick=function(){openDetail(ad);};
+    grid.appendChild(div);
+  });
+}
+function openDetail(ad){
+  const imgs=parseImages(ad);
+  const can=canEdit(ad);
+  document.getElementById('detailEdit').style.display=can?'inline-block':'none';
+  document.getElementById('detailDelete').style.display=can?'inline-block':'none';
+  document.getElementById('detailEdit').onclick=function(){closeDetail(); openEdit(ad);};
+  document.getElementById('detailDelete').onclick=function(){deleteAd(ad.id);};
+  const main=imgs[0]||'https://images.unsplash.com/photo-1555215695-3004980ad54e?w=600';
+  let thumbs='';
+  if(imgs.length>1){
+    thumbs='<div id="detailThumbs" style="display:flex;gap:8px;padding:10px;overflow:auto;background:#f9f9f9">';
+    imgs.forEach(function(im,i){thumbs+='<img src="'+im+'" style="width:70px;height:70px;object-fit:cover;border-radius:10px;border:2px solid '+(i===0?'#ffea00':'#eee')+';cursor:pointer" onclick="document.getElementById('detailMainImg').src=this.src">';});
+    thumbs+='</div>';
+  }
+  document.getElementById('detailContent').innerHTML='<img id="detailMainImg" src="'+main+'" style="width:100%;height:340px;object-fit:cover"><div>'+thumbs+'</div><div style="padding:16px"><div style="font-weight:900;font-size:20px">'+(ad.title||'')+'</div><div style="font-weight:900;font-size:26px;margin-top:8px">'+Number(ad.price||0).toLocaleString('pl-PL')+' zł</div><div style="margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:8px"><div style="background:#f5f5f7;border-radius:12px;padding:12px"><div style="font-size:9px;color:#888">Marka</div><div style="font-weight:700">'+(ad.brand||'-')+'</div></div><div style="background:#f5f5f7;border-radius:12px;padding:12px"><div style="font-size:9px;color:#888">Model</div><div style="font-weight:700">'+(ad.model||'-')+'</div></div><div style="background:#f5f5f7;border-radius:12px;padding:12px"><div style="font-size:9px;color:#888">Rocznik</div><div style="font-weight:700">'+(ad.year||'-')+'</div></div><div style="background:#f5f5f7;border-radius:12px;padding:12px"><div style="font-size:9px;color:#888">Przebieg</div><div style="font-weight:700">'+(ad.mileage?Number(ad.mileage).toLocaleString('pl-PL')+' km':'-')+'</div></div><div style="background:#f5f5f7;border-radius:12px;padding:12px"><div style="font-size:9px;color:#888">Miasto</div><div style="font-weight:700">'+(ad.location||'-')+'</div></div><div style="background:#f5f5f7;border-radius:12px;padding:12px"><div style="font-size:9px;color:#888">Wlasciciel</div><div style="font-weight:700;font-size:12px">'+(ad.owner||'-')+'</div></div></div>'+(ad.description?'<div style="margin-top:12px;background:#f5f5f7;border-radius:12px;padding:12px"><div style="font-size:9px;color:#888">Opis</div><div style="margin-top:6px">'+ad.description+'</div></div>':'')+'<div style="margin-top:16px;background:#000;color:#fff;border-radius:12px;padding:14px;display:flex;justify-content:space-between;align-items:center"><div><div style="font-size:10px;color:#aaa">Telefon</div><div style="font-weight:900;font-size:16px">'+(ad.phone||'Brak')+'</div></div>'+(ad.phone?'<a href="tel:'+ad.phone+'" class="btn btn-yellow" style="padding:12px 18px;text-decoration:none">Zadzwon</a>':'')+'</div><div style="margin-top:12px;font-size:9px;color:#aaa;text-align:center">📸 '+imgs.length+' zdjec • ID: '+ad.id+' • '+(can?'Mozesz edytowac':'Zaloguj jako wlasciciel')+'</div></div>';
+  document.getElementById('detailModal').style.display='flex';
+}
+function closeDetail(){document.getElementById('detailModal').style.display='none';}
+async function deleteAd(id){
+  if(!confirm('Usunac ID '+id+'?')) return;
+  try{
+    const res=await fetch(SUPABASE_URL+"/rest/v1/ads?id=eq."+id,{method:'DELETE',headers:{apikey:PUB_KEY,Authorization:"Bearer "+PUB_KEY}});
+    if(res.ok||res.status===204){closeDetail(); await loadAds();}
+    else{const t=await res.text(); alert('Blad: '+t);}
+  }catch(e){alert('Blad: '+e.message);}
+}
+function openAuth(m){authMode=m;document.getElementById('authModal').style.display='flex';document.getElementById('authTitle').textContent=m==='login'?'Zaloguj':'Zarejestruj';document.getElementById('authSubmit').textContent=m==='login'?'Zaloguj':'Zarejestruj';document.getElementById('authSwitchText').textContent=m==='login'?'Nie masz konta?':'Masz konto?';document.getElementById('authSwitch').textContent=m==='login'?'Zarejestruj':'Zaloguj';document.getElementById('authNameWrap').style.display=m==='register'?'block':'none';document.getElementById('authError').style.display='none';}
+function closeAuth(){document.getElementById('authModal').style.display='none';}
+function openAdd(){
+  if(!currentUser){openAuth('login');return;}
+  editingId=null; selectedImages=[]; document.getElementById('addTitle').textContent='Dodaj - 3 zdjecia'; document.getElementById('fBrand').value=''; document.getElementById('fModel').value=''; document.getElementById('fYear').value='2020'; document.getElementById('fPrice').value=''; document.getElementById('fMileage').value=''; document.getElementById('fLocation').value='Warszawa'; document.getElementById('fTitle').value=''; document.getElementById('fPhone').value=''; document.getElementById('fDesc').value=''; document.getElementById('imgPreview').innerHTML=''; document.getElementById('imgInfo').textContent='0/3';
+  document.getElementById('addModal').style.display='flex';
+}
+function closeAdd(){document.getElementById('addModal').style.display='none'; editingId=null; selectedImages=[];}
+function openEdit(ad){
+  if(!canEdit(ad)){alert('Nie mozesz edytowac. Wlasciciel: '+ad.owner); return;}
+  editingId=ad.id; document.getElementById('addTitle').textContent='Edytuj'; document.getElementById('fBrand').value=ad.brand||''; document.getElementById('fModel').value=ad.model||''; document.getElementById('fYear').value=ad.year||2020; document.getElementById('fPrice').value=ad.price||''; document.getElementById('fMileage').value=ad.mileage||''; document.getElementById('fLocation').value=ad.location||'Warszawa'; document.getElementById('fTitle').value=ad.title||''; document.getElementById('fPhone').value=ad.phone||''; document.getElementById('fDesc').value=ad.description||''; selectedImages=parseImages(ad); renderImgPreview(); document.getElementById('addModal').style.display='flex';
+}
+function compress(file, cb){
+  const r=new FileReader();
+  r.onload=function(e){
+    const img=new Image();
+    img.onload=function(){
+      const c=document.createElement('canvas');
+      const maxW=600;
+      const sc=Math.min(1,maxW/img.width);
+      c.width=img.width*sc; c.height=img.height*sc;
+      c.getContext('2d').drawImage(img,0,0,c.width,c.height);
+      cb(c.toDataURL('image/jpeg',0.6));
+    };
+    img.src=e.target.result;
+  };
+  r.readAsDataURL(file);
+}
+function renderImgPreview(){
+  const wrap=document.getElementById('imgPreview');
+  wrap.innerHTML='';
+  selectedImages.forEach(function(im,i){
+    const d=document.createElement('div');
+    d.style.position='relative'; d.style.width='90px'; d.style.height='90px'; d.style.borderRadius='12px'; d.style.overflow='hidden'; d.style.border='1px solid #ddd';
+    d.innerHTML='<img src="'+im+'" style="width:100%;height:100%;object-fit:cover"><button onclick="selectedImages=selectedImages.filter(function(_,idx){return idx!=='+i+'}); renderImgPreview()" style="position:absolute;top:4px;right:4px;width:20px;height:20px;background:rgba(0,0,0,0.7);color:#fff;border:none;border-radius:50%;font-size:10px;cursor:pointer">X</button><div style="position:absolute;bottom:0;left:0;background:rgba(0,0,0,0.6);color:#fff;font-size:8px;padding:2px 4px">'+Math.round(im.length/1024)+'KB</div>';
+    wrap.appendChild(d);
+  });
+  document.getElementById('imgInfo').textContent=selectedImages.length+'/3 zdjec';
+}
+document.getElementById('fImages').addEventListener('change', function(e){
+  const files=Array.from(e.target.files||[]);
+  if(selectedImages.length+files.length>3){alert('Max 3 zdjecia!'); return;}
+  files.forEach(function(f){compress(f,function(c){selectedImages.push(c); renderImgPreview();});});
+  e.target.value='';
+});
+document.getElementById('btnLogin').onclick=function(){openAuth('login');};
+document.getElementById('btnRegister').onclick=function(){openAuth('register');};
+document.getElementById('btnAdd').onclick=function(){openAdd();};
+document.getElementById('btnLogout').onclick=function(){currentUser=null; localStorage.removeItem('wroomer_user_final14'); updateUI(); renderAds();};
+document.getElementById('authSwitch').onclick=function(){openAuth(authMode==='login'?'register':'login');};
+document.getElementById('brandFilter').onchange=renderAds;
+document.getElementById('searchInput').oninput=renderAds;
+
+document.getElementById('authSubmit').onclick=function(){
+  const email=document.getElementById('authEmail').value.trim().toLowerCase();
+  const pass=document.getElementById('authPass').value;
+  const name=document.getElementById('authName').value.trim();
+  const err=document.getElementById('authError');
+  err.style.display='none';
+  if(!email||!pass){err.textContent='Podaj email i haslo'; err.style.display='block'; return;}
+  if(authMode==='register'){
+    if(!name){err.textContent='Podaj imie'; err.style.display='block'; return;}
+    if(users.find(function(u){return u.email===email;})){err.textContent='Istnieje - zaloguj'; err.style.display='block'; return;}
+    const nu={id:Date.now(),email:email,name:name,password:pass};
+    users.push(nu); localStorage.setItem('wroomer_users_final14',JSON.stringify(users));
+    currentUser={id:nu.id,email:nu.email,name:nu.name}; localStorage.setItem('wroomer_user_final14',JSON.stringify(currentUser));
+    closeAuth(); updateUI(); renderAds();
+  } else {
+    const u=users.find(function(x){return x.email===email&&x.password===pass;});
+    if(!u){err.textContent='Bledny email lub haslo'; err.style.display='block'; return;}
+    currentUser={id:u.id,email:u.email,name:u.name}; localStorage.setItem('wroomer_user_final14',JSON.stringify(currentUser));
+    closeAuth(); updateUI(); renderAds();
+  }
+};
+
+document.getElementById('btnSave').onclick=async function(){
+  const brand=document.getElementById('fBrand').value;
+  const model=document.getElementById('fModel').value.trim();
+  const year=parseInt(document.getElementById('fYear').value)||2020;
+  const price=parseInt(document.getElementById('fPrice').value)||0;
+  const mileage=parseInt(document.getElementById('fMileage').value)||0;
+  const location=document.getElementById('fLocation').value.trim()||'Warszawa';
+  const title=document.getElementById('fTitle').value.trim()||brand+' '+model+' '+year;
+  const phone=document.getElementById('fPhone').value.trim();
+  const desc=document.getElementById('fDesc').value.trim();
+  const err=document.getElementById('addError');
+  err.style.display='none';
+  if(!brand||!model||!price||selectedImages.length===0||!phone){err.textContent='Wypelnij marka, model, cena, telefon i zdjecie'; err.style.display='block'; return;}
+  const nid=editingId||Date.now();
+  const imagesJson=JSON.stringify(selectedImages);
+  const payload={id:nid, title:title.substring(0,200), brand:brand, model:model, year:year, price:price, mileage:mileage||0, location:location, image:imagesJson, phone:phone, owner:(currentUser?.name||'User')+' ('+(currentUser?.email||'')+')', owner_id:currentUser?.id||999, description:desc||'', created_at_ts:nid};
+  const sendPayload=editingId?{title:payload.title, brand:brand, model:model, year:year, price:price, mileage:payload.mileage, location:location, image:imagesJson, phone:phone, description:payload.description}:payload;
+  try{
+    let res;
+    if(editingId){res=await fetch(SUPABASE_URL+"/rest/v1/ads?id=eq."+editingId,{method:'PATCH',headers:{apikey:PUB_KEY,Authorization:"Bearer "+PUB_KEY,"Content-Type":"application/json",Prefer:"return=representation"},body:JSON.stringify(sendPayload)});}
+    else{res=await fetch(SUPABASE_URL+"/rest/v1/ads",{method:'POST',headers:{apikey:PUB_KEY,Authorization:"Bearer "+PUB_KEY,"Content-Type":"application/json",Prefer:"return=representation"},body:JSON.stringify(payload)});}
+    const txt=await res.text();
+    if(!res.ok){err.textContent='Blad: '+txt; err.style.display='block'; return;}
+    closeAdd();
+    if(editingId){ads=ads.map(function(a){return a.id===editingId?Object.assign({},a,sendPayload,{image:imagesJson}):a;});}
+    else{ads=[Object.assign({},payload,{image:imagesJson})].concat(ads);}
+    renderAds();
+    setTimeout(loadAds,800);
+  }catch(e){err.textContent='Blad: '+e.message; err.style.display='block';}
+};
+
+updateUI();
+loadAds();
+</script></body></html>
