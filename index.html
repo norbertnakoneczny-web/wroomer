@@ -1,5 +1,5 @@
 <!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>WROOMER FINAL WORKING</title>
+<title>WROOMER FINAL v999 - cache buster</title>
 <style>
 *{font-family:Inter,sans-serif;box-sizing:border-box}body{background:#f5f5f7;margin:0}
 .header{background:#000;color:#fff;height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 12px;position:sticky;top:0;z-index:10}
@@ -11,10 +11,10 @@
 .modal{position:fixed;inset:0;background:rgba(0,0,0,0.75);display:flex;align-items:center;justify-content:center;z-index:100;padding:12px}
 .modal-box{background:#fff;width:100%;max-width:560px;border-radius:20px;overflow:hidden;max-height:94vh;display:flex;flex-direction:column}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px}
-#log{background:#000;color:#0f0;padding:8px;font-size:10px;white-space:pre-wrap;max-height:100px;overflow:auto;margin:8px;border-radius:8px}
+#log{background:#000;color:#0f0;padding:8px;font-size:10px;white-space:pre-wrap;max-height:80px;overflow:auto;margin:8px;border-radius:8px}
 </style></head><body>
 <div class="header">
-  <div style="font-weight:900" onclick="location.reload()">WROOMER<span style="color:#ffea00">.PL</span> <span style="font-size:8px;background:#ffea00;color:#000;padding:2px 6px;border-radius:10px;margin-left:6px">FINAL WORKING - bazuje na MINIMAL ktory dzialal</span></div>
+  <div style="font-weight:900" onclick="location.reload()">WROOMER<span style="color:#ffea00">.PL</span> <span style="font-size:8px;background:#ffea00;color:#000;padding:2px 6px;border-radius:10px;margin-left:6px">v999 CACHE BUSTER upabase.co</span></div>
   <div style="display:flex;gap:6px;align-items:center">
     <span id="userInfo" style="font-size:10px;color:#aaa;display:none"></span>
     <button class="btn btn-white" id="btnLogin">Zaloguj</button>
@@ -25,270 +25,160 @@
 </div>
 <div style="max-width:1200px;margin:0 auto;padding:12px">
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px">
-    <div style="background:#000;color:#fff;font-size:11px;font-weight:700;padding:7px 14px;border-radius:20px" id="status">Ladowanie...</div>
-    <div style="display:flex;gap:6px"><input id="searchInput" class="btn btn-white" placeholder="Szukaj..." style="padding:7px 12px;font-weight:400;width:140px"><select id="brandFilter" class="btn btn-white" style="padding:7px 12px"><option value="">Wszystkie</option><option>BMW</option><option>Audi</option><option>Volkswagen</option></select><button class="btn btn-white" onclick="loadAds()">Refresh</button></div>
+    <div style="background:#000;color:#fff;font-size:11px;font-weight:700;padding:7px 14px;border-radius:20px" id="status">Ladowanie v999...</div>
+    <div style="display:flex;gap:6px"><input id="searchInput" class="btn btn-white" placeholder="Szukaj..." style="padding:7px 12px;font-weight:400;width:140px"><button class="btn btn-white" onclick="loadAds()">Refresh (v999)</button></div>
   </div>
-  <div id="log"></div>
+  <div id="log">v999 START\n</div>
   <div id="adsGrid" class="grid"></div>
-  <div id="empty" style="display:none;background:#fff;border-radius:20px;padding:24px;text-align:center;margin-top:12px"><div style="font-weight:900">Brak ogloszen</div><div id="emptyMsg" style="font-size:11px;color:#888;margin-top:8px"></div></div>
+  <div id="empty" style="display:none;background:#fff;border-radius:20px;padding:24px;text-align:center;margin-top:12px"><div style="font-weight:900">Brak ogloszen</div></div>
 </div>
 
 <div id="authModal" class="modal" style="display:none"><div class="modal-box"><div style="padding:16px;border-bottom:1px solid #eee;display:flex;justify-content:space-between"><div style="font-weight:900" id="authTitle">Zaloguj</div><button class="btn btn-white" onclick="closeAuth()">X</button></div><div style="padding:20px;overflow:auto"><div id="authError" style="display:none;background:#fee;border:1px solid #fcc;color:#a00;padding:10px;border-radius:10px;font-size:11px;font-weight:700;margin-bottom:12px"></div><div id="authNameWrap"><label class="label">Imie *</label><input id="authName" class="input"></div><label class="label">E-mail *</label><input id="authEmail" class="input" type="email"><label class="label">Haslo *</label><input id="authPass" class="input" type="password"><button class="btn btn-black" style="width:100%;margin-top:20px;padding:14px" id="authSubmit">Zaloguj</button><div style="text-align:center;margin-top:12px"><button style="background:none;border:none;font-weight:900;text-decoration:underline;cursor:pointer;font-size:11px" id="authSwitch">Zarejestruj</button></div></div></div></div>
 
-<div id="addModal" class="modal" style="display:none"><div class="modal-box"><div style="padding:16px;border-bottom:1px solid #eee;display:flex;justify-content:space-between"><div style="font-weight:900" id="addTitle">Dodaj - 3 zdjecia ultra light 30KB</div><button class="btn btn-white" onclick="closeAdd()">X</button></div><div style="padding:16px;overflow:auto"><div id="addError" style="display:none;background:#fee;border:1px solid #fcc;color:#a00;padding:10px;border-radius:10px;font-size:11px;font-weight:700;margin-bottom:12px"></div><label class="label">Marka *</label><select id="fBrand" class="input"><option value="">Wybierz</option><option>BMW</option><option>Audi</option><option>Volkswagen</option><option>Mercedes</option><option>Skoda</option><option>Toyota</option><option>Ford</option><option>Opel</option></select><label class="label">Model *</label><input id="fModel" class="input"><label class="label">Rocznik *</label><input id="fYear" class="input" type="number" value="2020"><label class="label">Cena *</label><input id="fPrice" class="input" type="number"><label class="label">Miasto *</label><input id="fLocation" class="input" value="Warszawa"><label class="label">Telefon *</label><input id="fPhone" class="input"><label class="label">Zdjecia (max 3) * - 400px / 30KB kazde!</label><div id="imgPreview" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"></div><label class="btn btn-white" style="margin-top:8px;cursor:pointer"><span>+ Dodaj zdjecia (max 3)</span><input id="fImages" type="file" accept="image/*" multiple style="display:none"></label><div id="imgInfo" style="font-size:10px;color:#666;margin-top:6px">0/3</div><button class="btn btn-black" style="width:100%;margin-top:16px;padding:14px" id="btnSave">Zapisz</button></div></div></div>
+<div id="addModal" class="modal" style="display:none"><div class="modal-box"><div style="padding:16px;border-bottom:1px solid #eee;display:flex;justify-content:space-between"><div style="font-weight:900" id="addTitle">Dodaj - 3 zdjecia 30KB</div><button class="btn btn-white" onclick="closeAdd()">X</button></div><div style="padding:16px;overflow:auto"><div id="addError" style="display:none;background:#fee;border:1px solid #fcc;color:#a00;padding:10px;border-radius:10px;font-size:11px;font-weight:700;margin-bottom:12px"></div><label class="label">Marka *</label><select id="fBrand" class="input"><option value="">Wybierz</option><option>BMW</option><option>Audi</option><option>Volkswagen</option><option>Mercedes</option></select><label class="label">Model *</label><input id="fModel" class="input"><label class="label">Rocznik *</label><input id="fYear" class="input" type="number" value="2020"><label class="label">Cena *</label><input id="fPrice" class="input" type="number"><label class="label">Miasto *</label><input id="fLocation" class="input" value="Warszawa"><label class="label">Telefon *</label><input id="fPhone" class="input"><label class="label">Zdjecia (max 3) *</label><div id="imgPreview" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"></div><label class="btn btn-white" style="margin-top:8px;cursor:pointer"><span>+ Dodaj zdjecia</span><input id="fImages" type="file" accept="image/*" multiple style="display:none"></label><div id="imgInfo" style="font-size:10px;color:#666;margin-top:6px">0/3</div><button class="btn btn-black" style="width:100%;margin-top:16px;padding:14px" id="btnSave">Zapisz</button></div></div></div>
 
 <div id="detailModal" class="modal" style="display:none"><div class="modal-box" style="max-width:640px"><div style="padding:12px;border-bottom:1px solid #eee;display:flex;justify-content:space-between"><button class="btn btn-white" onclick="closeDetail()">Wroc</button><div style="display:flex;gap:6px"><button class="btn btn-black" id="detailEdit" style="display:none">Edytuj</button><button class="btn btn-red" id="detailDelete" style="display:none">Usun</button><button class="btn btn-white" onclick="closeDetail()">X</button></div></div><div id="detailContent" style="overflow:auto"></div></div></div>
 
 <script>
+console.log("v999 LOADED - https://rljqnhfogaqdjeirqqdj.supabase.co");
 const SUPABASE_URL="https://rljqnhfogaqdjeirqqdj.supabase.co";
 const PUB_KEY="sb_publishable_j7CS5xIHzOMBMyvsqVgDmw_GeEek5hX";
 let currentUser=null, users=[], ads=[], authMode='login', editingId=null, selectedImages=[];
 
-function log(m){const el=document.getElementById('log'); if(el){el.textContent+=m+"\n"; el.scrollTop=el.scrollHeight;} console.log(m);}
+function log(m){const el=document.getElementById('log'); if(el){el.textContent+=m+"\n";} console.log(m);}
 
 try{currentUser=JSON.parse(localStorage.getItem('wroomer_user_final14')||'null')}catch(e){}
 try{users=JSON.parse(localStorage.getItem('wroomer_users_final14')||'[]')}catch(e){}
 
 function updateUI(){
   try{
-    const bL=document.getElementById('btnLogin'), bR=document.getElementById('btnRegister'), bA=document.getElementById('btnAdd'), bO=document.getElementById('btnLogout'), info=document.getElementById('userInfo');
-    if(currentUser){if(bL) bL.style.display='none'; if(bR) bR.style.display='none'; if(bA) bA.style.display='inline-block'; if(bO) bO.style.display='inline-block'; if(info){info.style.display='inline'; info.textContent='Czesc, '+currentUser.name+'!';}}
-    else{if(bL) bL.style.display='inline-block'; if(bR) bR.style.display='inline-block'; if(bA) bA.style.display='none'; if(bO) bO.style.display='none'; if(info) info.style.display='none';}
-  }catch(e){log("updateUI error: "+e.message);}
+    const bL=document.getElementById('btnLogin'), bR=document.getElementById('btnRegister'), bA=document.getElementById('btnAdd'), bO=document.getElementById('btnLogout');
+    if(currentUser){if(bL) bL.style.display='none'; if(bR) bR.style.display='none'; if(bA) bA.style.display='inline-block'; if(bO) bO.style.display='inline-block';}
+    else{if(bL) bL.style.display='inline-block'; if(bR) bR.style.display='inline-block'; if(bA) bA.style.display='none'; if(bO) bO.style.display='none';}
+  }catch(e){log("updateUI err: "+e.message);}
 }
-function parseImages(ad){
-  try{if(!ad.image) return []; if(typeof ad.image==='string' && ad.image.trim().startsWith('[')){const arr=JSON.parse(ad.image); return Array.isArray(arr)?arr:[ad.image];} return [ad.image];}catch(e){return [ad.image];}
-}
-function canEdit(ad){
-  if(!currentUser) return false;
-  if(ad.owner_id && currentUser.id && ad.owner_id===currentUser.id) return true;
-  if(ad.owner && currentUser.email && ad.owner.toLowerCase().includes(currentUser.email.toLowerCase())) return true;
-  return false;
-}
+function parseImages(ad){try{if(!ad.image) return []; if(typeof ad.image==='string' && ad.image.trim().startsWith('[')){const arr=JSON.parse(ad.image); return Array.isArray(arr)?arr:[ad.image];} return [ad.image];}catch(e){return [ad.image];}}
+function canEdit(ad){if(!currentUser) return false; if(ad.owner_id && currentUser.id && ad.owner_id===currentUser.id) return true; if(ad.owner && currentUser.email && ad.owner.toLowerCase().includes(currentUser.email.toLowerCase())) return true; return false;}
+
 async function loadAds(){
+  log("=== loadAds v999 START ===");
   const statusEl=document.getElementById('status');
-  if(statusEl) statusEl.textContent='Ladowanie (light - bez duzych zdjec)...';
-  log("START loadAds() - LIGHT version bez image w gridzie");
+  if(statusEl) statusEl.textContent='Ladowanie v999...';
   try{
-    // LIGHT: bez kolumny image!
+    log("Fetch LIGHT: select=id,title,brand,model,year,price,location,phone,owner,owner_id");
     const res=await fetch(SUPABASE_URL+"/rest/v1/ads?select=id,title,brand,model,year,price,location,phone,owner,owner_id&order=id.desc&limit=50",{headers:{apikey:PUB_KEY,Authorization:"Bearer "+PUB_KEY}});
     const txt=await res.text();
-    log("SELECT status: "+res.status+" length: "+txt.length+" bytes");
-    if(!res.ok){
-      log("❌ SELECT error: "+txt);
-      if(statusEl) statusEl.textContent='Blad SELECT '+res.status;
-      document.getElementById('empty').style.display='block';
-      document.getElementById('emptyMsg').textContent=txt.substring(0,500);
-      return;
-    }
+    log("Status: "+res.status+" Length: "+txt.length);
+    if(!res.ok){log("❌ Error: "+txt); if(statusEl) statusEl.textContent='Blad '+res.status; return;}
     ads=JSON.parse(txt);
-    log("✅ Parsed "+ads.length+" ads - LIGHT OK!");
-    if(statusEl) statusEl.textContent="OK "+ads.length+" ogloszen - dziala! ("+Math.round(txt.length/1024)+"KB zamiast 791KB)";
+    log("✅ Parsed "+ads.length+" ads - OK!");
+    if(statusEl) statusEl.textContent="OK "+ads.length+" ogloszen - v999 DZIALA! ("+Math.round(txt.length/1024)+"KB)";
     renderAds();
-  }catch(e){
-    log("❌ EXCEPTION: "+e.message);
-    if(statusEl) statusEl.textContent='Blad: '+e.message;
-    document.getElementById('empty').style.display='block';
-    document.getElementById('emptyMsg').textContent=e.message;
-  }
+  }catch(e){log("❌ EX: "+e.message); if(statusEl) statusEl.textContent='Blad: '+e.message;}
 }
 function renderAds(){
   try{
     const grid=document.getElementById('adsGrid');
-    const brand=document.getElementById('brandFilter').value;
-    const query=document.getElementById('searchInput').value.toLowerCase();
-    let filtered=ads;
-    if(brand) filtered=filtered.filter(a=>a.brand===brand);
-    if(query) filtered=filtered.filter(a=>(a.title+" "+a.brand+" "+a.model).toLowerCase().includes(query));
-    if(grid) grid.innerHTML='';
+    if(!grid) return;
+    grid.innerHTML='';
     const emptyEl=document.getElementById('empty');
-    if(emptyEl) emptyEl.style.display=filtered.length===0?'block':'none';
-    filtered.forEach(ad=>{
+    if(emptyEl) emptyEl.style.display=ads.length===0?'block':'none';
+    ads.forEach(ad=>{
       const div=document.createElement('div'); div.className='card';
-      div.innerHTML='<div style="font-weight:900;font-size:15px">'+(ad.title||ad.brand+' '+ad.model)+'</div><div style="margin-top:6px">'+ad.brand+' '+ad.model+' - '+ad.year+' - '+Number(ad.price||0).toLocaleString('pl-PL')+' zł</div><div style="font-size:11px;color:#888;margin-top:6px">📍 '+(ad.location||'')+' | 👤 '+(ad.owner?ad.owner.split('(')[0].trim():'')+' | 📞 '+(ad.phone||'brak')+' | ID:'+ad.id+'</div><div style="margin-top:8px;font-size:10px;color:#fff;background:#000;display:inline-block;padding:3px 8px;border-radius:10px">Kliknij po zdjecia (3)</div>';
-      div.onclick=function(){openDetail(ad);};
-      if(grid) grid.appendChild(div);
+      div.innerHTML='<div style="font-weight:900">'+(ad.title||ad.brand+' '+ad.model)+'</div><div>'+ad.brand+' '+ad.model+' - '+ad.year+' - '+Number(ad.price||0).toLocaleString('pl-PL')+' zl</div><div style="font-size:11px;color:#888">📍 '+(ad.location||'')+' | 📞 '+(ad.phone||'brak')+' | ID:'+ad.id+'</div>';
+      div.onclick=()=>openDetail(ad);
+      grid.appendChild(div);
     });
-    log("Rendered "+filtered.length+" cards");
-  }catch(e){log("❌ renderAds error: "+e.message);}
+    log("Rendered "+ads.length+" cards");
+  }catch(e){log("render error: "+e.message);}
 }
 async function openDetail(ad){
   const can=canEdit(ad);
-  const editBtn=document.getElementById('detailEdit');
-  const delBtn=document.getElementById('detailDelete');
-  if(editBtn) editBtn.style.display=can?'inline-block':'none';
-  if(delBtn) delBtn.style.display=can?'inline-block':'none';
-  if(editBtn) editBtn.onclick=function(){closeDetail(); openEditFull(ad);};
-  if(delBtn) delBtn.onclick=function(){deleteAd(ad.id);};
-  const modal=document.getElementById('detailModal');
-  const content=document.getElementById('detailContent');
-  if(modal) modal.style.display='flex';
-  if(content) content.innerHTML='<div style="padding:20px;text-align:center">Ladowanie zdjec dla ID '+ad.id+'...</div>';
+  const editBtn=document.getElementById('detailEdit'); if(editBtn){editBtn.style.display=can?'inline-block':'none'; editBtn.onclick=()=>{closeDetail(); openEditFull(ad);};}
+  const delBtn=document.getElementById('detailDelete'); if(delBtn){delBtn.style.display=can?'inline-block':'none'; delBtn.onclick=()=>deleteAd(ad.id);}
+  const modal=document.getElementById('detailModal'); if(modal) modal.style.display='flex';
+  const content=document.getElementById('detailContent'); if(content) content.innerHTML='<div style="padding:20px">Ladowanie zdjec dla ID '+ad.id+'...</div>';
   try{
     const res=await fetch(SUPABASE_URL+"/rest/v1/ads?select=*&id=eq."+ad.id,{headers:{apikey:PUB_KEY,Authorization:"Bearer "+PUB_KEY}});
     const txt=await res.text();
-    if(!res.ok){if(content) content.innerHTML='<div style="padding:20px">Blad: '+txt+'</div>'; return;}
     const fullAds=JSON.parse(txt);
-    if(fullAds.length===0){if(content) content.innerHTML='<div style="padding:20px">Brak</div>'; return;}
     const fullAd=fullAds[0];
     const imgs=parseImages(fullAd);
     const main=imgs[0]||'https://images.unsplash.com/photo-1555215695-3004980ad54e?w=600';
     let thumbs='';
-    if(imgs.length>1){
-      thumbs='<div id="detailThumbs" style="display:flex;gap:8px;padding:10px;overflow:auto;background:#f9f9f9">';
-      imgs.forEach(function(im,i){thumbs+='<img src="'+im+'" style="width:70px;height:70px;object-fit:cover;border-radius:10px;border:2px solid '+(i===0?'#ffea00':'#eee')+';cursor:pointer" onclick="document.getElementById('detailMainImg').src=this.src">';});
-      thumbs+='</div>';
-    }
-    if(content) content.innerHTML='<img id="detailMainImg" src="'+main+'" style="width:100%;height:340px;object-fit:cover" onerror="this.src='https://images.unsplash.com/photo-1555215695-3004980ad54e?w=600'"><div>'+thumbs+'</div><div style="padding:16px"><div style="font-weight:900;font-size:20px">'+(fullAd.title||'')+'</div><div style="font-weight:900;font-size:26px;margin-top:8px">'+Number(fullAd.price||0).toLocaleString('pl-PL')+' zł</div><div style="margin-top:12px">Marka: '+(fullAd.brand||'-')+'<br>Model: '+(fullAd.model||'-')+'<br>Rocznik: '+(fullAd.year||'-')+'<br>Miasto: '+(fullAd.location||'-')+'<br>Telefon: '+(fullAd.phone||'-')+'<br>Wlasciciel: '+(fullAd.owner||'-')+'</div>'+(fullAd.description?'<div style="margin-top:12px;background:#f5f5f7;padding:12px;border-radius:12px">'+fullAd.description+'</div>':'')+'<div style="margin-top:12px;font-size:10px;color:#aaa">📸 '+imgs.length+' zdjec • ID: '+fullAd.id+' • '+(can?'Mozesz edytowac':'')+'</div></div>';
-  }catch(e){if(content) content.innerHTML='<div style="padding:20px">Blad: '+e.message+'</div>';}
+    if(imgs.length>1){thumbs='<div style="display:flex;gap:8px;padding:10px;background:#f9f9f9">'; imgs.forEach(im=>{thumbs+='<img src="'+im+'" style="width:70px;height:70px;object-fit:cover;border-radius:10px;cursor:pointer" onclick="document.getElementById(\'detailMainImg\').src=this.src">';}); thumbs+='</div>';}
+    if(content) content.innerHTML='<img id="detailMainImg" src="'+main+'" style="width:100%;height:340px;object-fit:cover"><div>'+thumbs+'</div><div style="padding:16px"><div style="font-weight:900;font-size:20px">'+(fullAd.title||'')+'</div><div style="font-weight:900;font-size:26px;margin-top:8px">'+Number(fullAd.price||0).toLocaleString('pl-PL')+' zl</div><div style="margin-top:12px">Marka: '+fullAd.brand+'<br>Model: '+fullAd.model+'<br>Telefon: '+fullAd.phone+'<br>Miasto: '+fullAd.location+'</div><div style="margin-top:12px;font-size:10px;color:#aaa">📸 '+imgs.length+' zdjec • ID: '+fullAd.id+'</div></div>';
+  }catch(e){if(content) content.innerHTML='Blad: '+e.message;}
 }
 function closeDetail(){const m=document.getElementById('detailModal'); if(m) m.style.display='none';}
-async function deleteAd(id){
-  if(!confirm('Usunac ID '+id+'?')) return;
-  try{
-    const res=await fetch(SUPABASE_URL+"/rest/v1/ads?id=eq."+id,{method:'DELETE',headers:{apikey:PUB_KEY,Authorization:"Bearer "+PUB_KEY}});
-    if(res.ok||res.status===204){closeDetail(); await loadAds();}
-    else{const t=await res.text(); alert('Blad: '+t);}
-  }catch(e){alert('Blad: '+e.message);}
-}
-function openAuth(m){authMode=m;const modal=document.getElementById('authModal'); if(modal) modal.style.display='flex';const title=document.getElementById('authTitle'); if(title) title.textContent=m==='login'?'Zaloguj':'Zarejestruj';const submit=document.getElementById('authSubmit'); if(submit) submit.textContent=m==='login'?'Zaloguj':'Zarejestruj';const wrap=document.getElementById('authNameWrap'); if(wrap) wrap.style.display=m==='register'?'block':'none';const err=document.getElementById('authError'); if(err) err.style.display='none';}
+async function deleteAd(id){if(!confirm('Usunac '+id+'?')) return; const res=await fetch(SUPABASE_URL+"/rest/v1/ads?id=eq."+id,{method:'DELETE',headers:{apikey:PUB_KEY,Authorization:"Bearer "+PUB_KEY}}); if(res.ok||res.status===204){closeDetail(); loadAds();}}
+function openAuth(m){authMode=m; const modal=document.getElementById('authModal'); if(modal) modal.style.display='flex'; const title=document.getElementById('authTitle'); if(title) title.textContent=m==='login'?'Zaloguj':'Zarejestruj'; const wrap=document.getElementById('authNameWrap'); if(wrap) wrap.style.display=m==='register'?'block':'none';}
 function closeAuth(){const m=document.getElementById('authModal'); if(m) m.style.display='none';}
-function openAdd(){
-  if(!currentUser){openAuth('login');return;}
-  editingId=null; selectedImages=[]; const titleEl=document.getElementById('addTitle'); if(titleEl) titleEl.textContent='Dodaj - 3 zdjecia ultra light 30KB'; ['fBrand','fModel','fYear','fPrice','fLocation','fPhone'].forEach(function(id){const el=document.getElementById(id); if(el) el.value=id==='fYear'?'2020':id==='fLocation'?'Warszawa':'';}); const preview=document.getElementById('imgPreview'); if(preview) preview.innerHTML=''; const info=document.getElementById('imgInfo'); if(info) info.textContent='0/3'; const modal=document.getElementById('addModal'); if(modal) modal.style.display='flex';
-}
+function openAdd(){if(!currentUser){openAuth('login');return;} editingId=null; selectedImages=[]; const modal=document.getElementById('addModal'); if(modal) modal.style.display='flex'; const preview=document.getElementById('imgPreview'); if(preview) preview.innerHTML='';}
 function closeAdd(){const m=document.getElementById('addModal'); if(m) m.style.display='none'; editingId=null; selectedImages=[];}
-async function openEditFull(ad){
-  if(!canEdit(ad)){alert('Nie mozesz edytowac. Wlasciciel: '+ad.owner); return;}
-  editingId=ad.id;
-  try{
-    const res=await fetch(SUPABASE_URL+"/rest/v1/ads?select=*&id=eq."+ad.id,{headers:{apikey:PUB_KEY,Authorization:"Bearer "+PUB_KEY}});
-    const txt=await res.text();
-    const fullAds=JSON.parse(txt);
-    const fullAd=fullAds[0]||ad;
-    const fBrand=document.getElementById('fBrand'); if(fBrand) fBrand.value=fullAd.brand||'';
-    const fModel=document.getElementById('fModel'); if(fModel) fModel.value=fullAd.model||'';
-    const fYear=document.getElementById('fYear'); if(fYear) fYear.value=fullAd.year||2020;
-    const fPrice=document.getElementById('fPrice'); if(fPrice) fPrice.value=fullAd.price||'';
-    const fLocation=document.getElementById('fLocation'); if(fLocation) fLocation.value=fullAd.location||'Warszawa';
-    const fPhone=document.getElementById('fPhone'); if(fPhone) fPhone.value=fullAd.phone||'';
-    selectedImages=parseImages(fullAd); renderImgPreview();
-    const titleEl=document.getElementById('addTitle'); if(titleEl) titleEl.textContent='Edytuj';
-    const modal=document.getElementById('addModal'); if(modal) modal.style.display='flex';
-  }catch(e){alert('Blad: '+e.message);}
-}
-function compress(file, cb){
-  const r=new FileReader();
-  r.onload=function(e){
-    const img=new Image();
-    img.onload=function(){
-      const c=document.createElement('canvas');
-      const maxW=400;
-      const sc=Math.min(1,maxW/img.width);
-      c.width=img.width*sc; c.height=img.height*sc;
-      c.getContext('2d').drawImage(img,0,0,c.width,c.height);
-      cb(c.toDataURL('image/jpeg',0.5));
-    };
-    img.src=e.target.result;
-  };
-  r.readAsDataURL(file);
-}
-function renderImgPreview(){
-  const wrap=document.getElementById('imgPreview');
-  if(!wrap) return;
-  wrap.innerHTML='';
-  selectedImages.forEach(function(im,i){
-    const d=document.createElement('div');
-    d.style.position='relative'; d.style.width='90px'; d.style.height='90px'; d.style.borderRadius='12px'; d.style.overflow='hidden'; d.style.border='1px solid #ddd';
-    d.innerHTML='<img src="'+im+'" style="width:100%;height:100%;object-fit:cover"><button onclick="selectedImages=selectedImages.filter(function(_,idx){return idx!=='+i+'}); renderImgPreview()" style="position:absolute;top:4px;right:4px;width:20px;height:20px;background:rgba(0,0,0,0.7);color:#fff;border:none;border-radius:50%;font-size:10px;cursor:pointer">X</button><div style="position:absolute;bottom:0;left:0;background:rgba(0,0,0,0.6);color:#fff;font-size:8px;padding:2px 4px">'+Math.round(im.length/1024)+'KB</div>';
-    wrap.appendChild(d);
-  });
-  const info=document.getElementById('imgInfo');
-  if(info) info.textContent=selectedImages.length+'/3 - '+Math.round(selectedImages.reduce(function(s,im){return s+im.length;},0)/1024)+'KB total';
-}
-const fImagesEl=document.getElementById('fImages');
-if(fImagesEl){
-  fImagesEl.addEventListener('change', function(e){
-    const files=Array.from(e.target.files||[]);
-    if(selectedImages.length+files.length>3){alert('Max 3 zdjecia!'); return;}
-    files.forEach(function(f){compress(f,function(c){selectedImages.push(c); renderImgPreview();});});
-    e.target.value='';
-  });
-}
-const btnLogin=document.getElementById('btnLogin'); if(btnLogin) btnLogin.onclick=function(){openAuth('login');};
-const btnRegister=document.getElementById('btnRegister'); if(btnRegister) btnRegister.onclick=function(){openAuth('register');};
-const btnAdd=document.getElementById('btnAdd'); if(btnAdd) btnAdd.onclick=function(){openAdd();};
-const btnLogout=document.getElementById('btnLogout'); if(btnLogout) btnLogout.onclick=function(){currentUser=null; localStorage.removeItem('wroomer_user_final14'); updateUI(); renderAds();};
-const authSwitch=document.getElementById('authSwitch'); if(authSwitch) authSwitch.onclick=function(){openAuth(authMode==='login'?'register':'login');};
-const brandFilter=document.getElementById('brandFilter'); if(brandFilter) brandFilter.onchange=renderAds;
+async function openEditFull(ad){if(!canEdit(ad)){alert('Nie mozesz edytowac'); return;} editingId=ad.id; try{const res=await fetch(SUPABASE_URL+"/rest/v1/ads?select=*&id=eq."+ad.id,{headers:{apikey:PUB_KEY,Authorization:"Bearer "+PUB_KEY}}); const fullAds=JSON.parse(await res.text()); const fullAd=fullAds[0]||ad; document.getElementById('fBrand').value=fullAd.brand||''; document.getElementById('fModel').value=fullAd.model||''; document.getElementById('fYear').value=fullAd.year||2020; document.getElementById('fPrice').value=fullAd.price||''; document.getElementById('fLocation').value=fullAd.location||''; document.getElementById('fPhone').value=fullAd.phone||''; selectedImages=parseImages(fullAd); renderImgPreview(); document.getElementById('addModal').style.display='flex';}catch(e){alert(e.message);}}
+function compress(file, cb){const r=new FileReader(); r.onload=e=>{const img=new Image(); img.onload=()=>{const c=document.createElement('canvas'); const maxW=400; const sc=Math.min(1,maxW/img.width); c.width=img.width*sc; c.height=img.height*sc; c.getContext('2d').drawImage(img,0,0,c.width,c.height); cb(c.toDataURL('image/jpeg',0.5));}; img.src=e.target.result;}; r.readAsDataURL(file);}
+function renderImgPreview(){const wrap=document.getElementById('imgPreview'); if(!wrap) return; wrap.innerHTML=''; selectedImages.forEach((im,i)=>{const d=document.createElement('div'); d.style.position='relative'; d.style.width='90px'; d.style.height='90px'; d.style.borderRadius='12px'; d.style.overflow='hidden'; d.style.border='1px solid #ddd'; d.innerHTML='<img src="'+im+'" style="width:100%;height:100%;object-fit:cover"><button onclick="selectedImages=selectedImages.filter((_,idx)=>idx!=='+i+'); renderImgPreview()" style="position:absolute;top:4px;right:4px;width:20px;height:20px;background:rgba(0,0,0,0.7);color:#fff;border:none;border-radius:50%;font-size:10px;cursor:pointer">X</button>'; wrap.appendChild(d);}); const info=document.getElementById('imgInfo'); if(info) info.textContent=selectedImages.length+'/3';}
+const fImagesEl=document.getElementById('fImages'); if(fImagesEl){fImagesEl.addEventListener('change', e=>{const files=Array.from(e.target.files||[]); if(selectedImages.length+files.length>3){alert('Max 3'); return;} files.forEach(f=>compress(f,c=>{selectedImages.push(c); renderImgPreview();})); e.target.value='';});}
+const btnLogin=document.getElementById('btnLogin'); if(btnLogin) btnLogin.onclick=()=>openAuth('login');
+const btnRegister=document.getElementById('btnRegister'); if(btnRegister) btnRegister.onclick=()=>openAuth('register');
+const btnAdd=document.getElementById('btnAdd'); if(btnAdd) btnAdd.onclick=()=>openAdd();
+const btnLogout=document.getElementById('btnLogout'); if(btnLogout) btnLogout.onclick=()=>{currentUser=null; localStorage.removeItem('wroomer_user_final14'); updateUI(); renderAds();};
+const authSwitch=document.getElementById('authSwitch'); if(authSwitch) authSwitch.onclick=()=>openAuth(authMode==='login'?'register':'login');
 const searchInput=document.getElementById('searchInput'); if(searchInput) searchInput.oninput=renderAds;
 
-const authSubmit=document.getElementById('authSubmit');
-if(authSubmit){
-  authSubmit.onclick=function(){
-    const emailEl=document.getElementById('authEmail');
-    const passEl=document.getElementById('authPass');
-    const nameEl=document.getElementById('authName');
-    const errEl=document.getElementById('authError');
-    const email=emailEl?emailEl.value.trim().toLowerCase():'';
-    const pass=passEl?passEl.value:'';
-    const name=nameEl?nameEl.value.trim():'';
-    if(errEl) errEl.style.display='none';
-    if(!email||!pass){if(errEl){errEl.textContent='Podaj email i haslo'; errEl.style.display='block';} return;}
-    if(authMode==='register'){
-      if(!name){if(errEl){errEl.textContent='Podaj imie'; errEl.style.display='block';} return;}
-      if(users.find(function(u){return u.email===email;})){if(errEl){errEl.textContent='Istnieje - zaloguj'; errEl.style.display='block';} return;}
-      const nu={id:Date.now(),email:email,name:name,password:pass};
-      users.push(nu); localStorage.setItem('wroomer_users_final14',JSON.stringify(users));
-      currentUser={id:nu.id,email:nu.email,name:nu.name}; localStorage.setItem('wroomer_user_final14',JSON.stringify(currentUser));
-      closeAuth(); updateUI(); renderAds();
-    } else {
-      const u=users.find(function(x){return x.email===email&&x.password===pass;});
-      if(!u){if(errEl){errEl.textContent='Bledny email lub haslo'; errEl.style.display='block';} return;}
-      currentUser={id:u.id,email:u.email,name:u.name}; localStorage.setItem('wroomer_user_final14',JSON.stringify(currentUser));
-      closeAuth(); updateUI(); renderAds();
-    }
-  };
-}
+document.getElementById('authSubmit').onclick=()=>{
+  const email=document.getElementById('authEmail').value.trim().toLowerCase();
+  const pass=document.getElementById('authPass').value;
+  const name=document.getElementById('authName').value.trim();
+  const err=document.getElementById('authError');
+  if(err) err.style.display='none';
+  if(!email||!pass){if(err){err.textContent='Podaj email i haslo'; err.style.display='block';} return;}
+  if(authMode==='register'){
+    if(!name){if(err){err.textContent='Podaj imie'; err.style.display='block';} return;}
+    if(users.find(u=>u.email===email)){if(err){err.textContent='Istnieje'; err.style.display='block';} return;}
+    const nu={id:Date.now(),email,name,password:pass};
+    users.push(nu); localStorage.setItem('wroomer_users_final14',JSON.stringify(users));
+    currentUser={id:nu.id,email:nu.email,name:nu.name}; localStorage.setItem('wroomer_user_final14',JSON.stringify(currentUser));
+    closeAuth(); updateUI(); renderAds();
+  } else {
+    const u=users.find(x=>x.email===email&&x.password===pass);
+    if(!u){if(err){err.textContent='Bledny email/haslo'; err.style.display='block';} return;}
+    currentUser={id:u.id,email:u.email,name:u.name}; localStorage.setItem('wroomer_user_final14',JSON.stringify(currentUser));
+    closeAuth(); updateUI(); renderAds();
+  }
+};
 
-const btnSave=document.getElementById('btnSave');
-if(btnSave){
-  btnSave.onclick=async function(){
-    const brandEl=document.getElementById('fBrand');
-    const modelEl=document.getElementById('fModel');
-    const yearEl=document.getElementById('fYear');
-    const priceEl=document.getElementById('fPrice');
-    const locationEl=document.getElementById('fLocation');
-    const phoneEl=document.getElementById('fPhone');
-    const brand=brandEl?brandEl.value:'';
-    const model=modelEl?modelEl.value.trim():'';
-    const year=yearEl?parseInt(yearEl.value)||2020:2020;
-    const price=priceEl?parseInt(priceEl.value)||0:0;
-    const location=locationEl?locationEl.value.trim()||'Warszawa':'Warszawa';
-    const title=(brand+' '+model+' '+year).substring(0,200);
-    const phone=phoneEl?phoneEl.value.trim():'';
-    const err=document.getElementById('addError');
-    if(err) err.style.display='none';
-    if(!brand||!model||!price||selectedImages.length===0||!phone){if(err){err.textContent='Wypelnij marka, model, cena, telefon i zdjecie'; err.style.display='block';} return;}
-    const nid=editingId||Date.now();
-    const imagesJson=JSON.stringify(selectedImages);
-    const payload={id:nid, title:title, brand:brand, model:model, year:year, price:price, location:location, image:imagesJson, phone:phone, owner:(currentUser?.name||'User')+' ('+(currentUser?.email||'')+')', owner_id:currentUser?.id||999, created_at_ts:nid};
-    const sendPayload=editingId?{title:payload.title, brand:brand, model:model, year:year, price:price, location:location, image:imagesJson, phone:phone}:payload;
-    try{
-      let res;
-      if(editingId){res=await fetch(SUPABASE_URL+"/rest/v1/ads?id=eq."+editingId,{method:'PATCH',headers:{apikey:PUB_KEY,Authorization:"Bearer "+PUB_KEY,"Content-Type":"application/json",Prefer:"return=representation"},body:JSON.stringify(sendPayload)});}
-      else{res=await fetch(SUPABASE_URL+"/rest/v1/ads",{method:'POST',headers:{apikey:PUB_KEY,Authorization:"Bearer "+PUB_KEY,"Content-Type":"application/json",Prefer:"return=representation"},body:JSON.stringify(payload)});}
-      const txt=await res.text();
-      if(!res.ok){if(err){err.textContent='Blad: '+txt; err.style.display='block';} return;}
-      closeAdd();
-      if(editingId){ads=ads.map(function(a){return a.id===editingId?Object.assign({},a,sendPayload):a;});}
-      else{ads=[{id:nid,title:title,brand:brand,model:model,year:year,price:price,location:location,phone:phone,owner:payload.owner,owner_id:payload.owner_id}].concat(ads);}
-      renderAds();
-      setTimeout(loadAds,800);
-    }catch(e){if(err){err.textContent='Blad: '+e.message; err.style.display='block';}}
-  };
-}
+document.getElementById('btnSave').onclick=async ()=>{
+  const brand=document.getElementById('fBrand').value;
+  const model=document.getElementById('fModel').value.trim();
+  const year=parseInt(document.getElementById('fYear').value)||2020;
+  const price=parseInt(document.getElementById('fPrice').value)||0;
+  const location=document.getElementById('fLocation').value.trim()||'Warszawa';
+  const title=(brand+' '+model+' '+year).substring(0,200);
+  const phone=document.getElementById('fPhone').value.trim();
+  const err=document.getElementById('addError');
+  if(err) err.style.display='none';
+  if(!brand||!model||!price||selectedImages.length===0||!phone){if(err){err.textContent='Wypelnij marka, model, cena, tel, zdjecie'; err.style.display='block';} return;}
+  const nid=editingId||Date.now();
+  const imagesJson=JSON.stringify(selectedImages);
+  const payload={id:nid, title, brand, model, year, price, location, image:imagesJson, phone, owner:(currentUser?.name||'User')+' ('+(currentUser?.email||'')+')', owner_id:currentUser?.id||999, created_at_ts:nid};
+  const sendPayload=editingId?{title:payload.title, brand, model, year, price, location, image:imagesJson, phone}:payload;
+  try{
+    let res;
+    if(editingId){res=await fetch(SUPABASE_URL+"/rest/v1/ads?id=eq."+editingId,{method:'PATCH',headers:{apikey:PUB_KEY,Authorization:"Bearer "+PUB_KEY,"Content-Type":"application/json",Prefer:"return=representation"},body:JSON.stringify(sendPayload)});}
+    else{res=await fetch(SUPABASE_URL+"/rest/v1/ads",{method:'POST',headers:{apikey:PUB_KEY,Authorization:"Bearer "+PUB_KEY,"Content-Type":"application/json",Prefer:"return=representation"},body:JSON.stringify(payload)});}
+    const txt=await res.text();
+    if(!res.ok){if(err){err.textContent='Blad: '+txt; err.style.display='block';} return;}
+    closeAdd();
+    if(editingId){ads=ads.map(a=>a.id===editingId?Object.assign({},a,sendPayload):a);}
+    else{ads=[{id:nid,title,brand,model,year,price,location,phone,owner:payload.owner,owner_id:payload.owner_id}].concat(ads);}
+    renderAds();
+    setTimeout(loadAds,800);
+  }catch(e){if(err){err.textContent='Blad: '+e.message; err.style.display='block';}}
+};
 
 updateUI();
+log("v999 init done - calling loadAds()");
 loadAds();
 </script></body></html>
