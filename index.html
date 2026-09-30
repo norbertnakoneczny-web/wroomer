@@ -1,5 +1,5 @@
 <!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>WROOMER - OTOMOTO layout - lewa czarna kafelka + promien km</title>
+<title>WROOMER - Wyszukiwarka - lewa czarna kafelka</title>
 <style>
 *{font-family:Inter,sans-serif;box-sizing:border-box}body{background:#f5f5f7;margin:0}
 .header{background:#000;color:#fff;height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 12px;position:sticky;top:0;z-index:20}
@@ -36,338 +36,39 @@
 .radius-btn{display:inline-block;padding:5px 8px;border-radius:20px;font-size:9px;font-weight:700;border:1px solid #444;background:#222;color:#aaa;cursor:pointer;margin:2px}
 .radius-btn.active{background:#ffea00;color:#000;border-color:#ffea00}
 </style></head><body>
-<div class="header">
-  <div style="font-weight:900;cursor:pointer;font-size:14px" onclick="location.reload()">WROOMER<span style="color:#ffea00">.PL</span> <span style="font-size:7px;background:#ffea00;color:#000;padding:2px 5px;border-radius:8px;margin-left:5px">OTOMOTO LAYOUT - LEWA CZARNA KAFELKA</span></div>
-  <div style="display:flex;gap:5px;align-items:center">
-    <span id="userInfo" style="font-size:9px;color:#aaa;display:none"></span>
-    <button class="btn btn-white" id="btnLogin">Zaloguj</button>
-    <button class="btn btn-yellow" id="btnRegister">Zarejestruj</button>
-    <button class="btn btn-yellow" id="btnAdd" style="display:none">+ Dodaj</button>
-    <button class="btn btn-black" id="btnLogout" style="display:none">Wyloguj</button>
-  </div>
-</div>
-
-<div class="layout">
-  <!-- LEWA CZARNA KAFELKA - JAK OTOMOTO -->
-  <aside class="sidebar">
-    <div class="sidebar-card">
-      <div style="font-weight:900;font-size:13px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center">
-        <span>🔍 Wyszukiwarka</span>
-        <button class="btn btn-white" style="font-size:8px;padding:4px 8px" onclick="clearFilters()">Wyczyść</button>
-      </div>
-
-      <!-- GEOLOKALIZACJA + PROMIEN -->
-      <div style="background:#111;border-radius:12px;padding:10px;border:1px solid #222;margin-bottom:10px">
-        <label class="label-dark">📍 Lokalizacja użytkownika</label>
-        <div style="display:flex;gap:5px;margin-top:4px">
-          <input id="locationFilter" class="input-dark" placeholder="Miasto, np. Warszawa..." style="margin-top:0">
-          <button class="btn btn-yellow" style="white-space:nowrap;padding:8px 10px" onclick="findNearMe()" id="btnNearMe">📍 Ja</button>
-        </div>
-        <div id="nearMeInfo" style="display:none;margin-top:6px;background:#ffea00;color:#000;font-size:9px;font-weight:700;padding:5px 8px;border-radius:8px"></div>
-        
-        <label class="label-dark">📏 Promień wyszukiwania (jak OTOMOTO / OLX)</label>
-        <div style="margin-top:6px;display:flex;flex-wrap:wrap;gap:2px" id="radiusButtons">
-          <button class="radius-btn active" data-radius="0" onclick="setRadius(0)">Cała PL</button>
-          <button class="radius-btn" data-radius="5" onclick="setRadius(5)">5 km</button>
-          <button class="radius-btn" data-radius="10" onclick="setRadius(10)">10 km</button>
-          <button class="radius-btn" data-radius="25" onclick="setRadius(25)">25 km</button>
-          <button class="radius-btn" data-radius="50" onclick="setRadius(50)">50 km</button>
-          <button class="radius-btn" data-radius="100" onclick="setRadius(100)">100 km</button>
-          <button class="radius-btn" data-radius="200" onclick="setRadius(200)">200 km</button>
-        </div>
-        <div style="font-size:8px;color:#666;margin-top:4px">Wzorem OTOMOTO: wybierz promień wokół Twojej lokalizacji. Na razie filtruje po mieście, wkrótce liczenie km.</div>
-      </div>
-
-      <!-- MARKA / MODEL -->
-      <label class="label-dark">🚗 Marka</label>
-      <select id="brandFilter" class="input-dark"><option value="">Wszystkie marki</option><option>BMW</option><option>Audi</option><option>Volkswagen</option><option>Mercedes</option><option>Skoda</option><option>Toyota</option><option>Ford</option><option>Opel</option><option>Renault</option><option>Peugeot</option><option>Hyundai</option><option>Kia</option><option>Fiat</option></select>
-      
-      <label class="label-dark">Model</label>
-      <input id="modelFilter" class="input-dark" placeholder="np. A4, 3 Series, Octavia...">
-
-      <!-- CENA -->
-      <label class="label-dark">💰 Cena (zł)</label>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
-        <input id="priceMin" class="input-dark" type="number" placeholder="Od">
-        <input id="priceMax" class="input-dark" type="number" placeholder="Do">
-      </div>
-
-      <!-- ROCZNIK -->
-      <label class="label-dark">📅 Rocznik</label>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
-        <input id="yearMin" class="input-dark" type="number" placeholder="Od 1990">
-        <input id="yearMax" class="input-dark" type="number" placeholder="Do 2026">
-      </div>
-
-      <!-- PRZEBIEG -->
-      <label class="label-dark">🛣️ Przebieg maksymalny</label>
-      <select id="mileageMax" class="input-dark"><option value="">Dowolny</option><option value="50000">do 50 000 km</option><option value="100000">do 100 000 km</option><option value="150000">do 150 000 km</option><option value="200000">do 200 000 km</option><option value="250000">do 250 000 km</option></select>
-
-      <!-- SORTOWANIE -->
-      <label class="label-dark">↕️ Sortowanie</label>
-      <select id="sortFilter" class="input-dark"><option value="newest">Najnowsze</option><option value="price_asc">Cena rosnąco</option><option value="price_desc">Cena malejąco</option><option value="year_desc">Rocznik najnowsze</option><option value="year_asc">Rocznik najstarsze</option><option value="mileage_asc">Przebieg najmniej</option><option value="distance">Najbliżej mnie (📍)</option></select>
-
-      <label class="label-dark">🔎 Szukaj w tytule / opisie</label>
-      <input id="searchInput" class="input-dark" placeholder="np. diesel, automat, klima...">
-
-      <button class="btn btn-yellow" style="width:100%;margin-top:14px;padding:12px;font-size:12px" onclick="applyFilters()">🔍 Szukaj - pokaż wyniki</button>
-
-      <div id="activeFilters" style="margin-top:10px;display:flex;gap:4px;flex-wrap:wrap"></div>
-      <div style="margin-top:10px;font-size:8px;color:#666;line-height:1.3">💡 Wzorem OTOMOTO: lewa czarna kafelka z geolokalizacją i promieniem km. Miniaturki 110px ładują się w tle (HYBRID - 2KB najpierw). Edycja tylko przez właściciela, strzałki ← → w galerii.</div>
-    </div>
-
-    <div style="margin-top:10px;background:#fff;border-radius:14px;padding:10px;border:1px solid #e5e5e5">
-      <div style="font-weight:900;font-size:11px">📊 Statystyki</div>
-      <div style="font-size:10px;color:#666;margin-top:4px" id="statsBox">Ładowanie...</div>
-    </div>
-  </aside>
-
-  <!-- PRAWA STRONA - KAFELKI -->
-  <main class="main">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-      <div style="background:#000;color:#fff;font-size:10px;font-weight:700;padding:6px 12px;border-radius:20px" id="status">Ladowanie...</div>
-      <div style="display:flex;gap:6px;align-items:center">
-        <div style="font-size:10px;color:#888" id="resultCount"></div>
-        <button class="btn btn-white" onclick="loadAds()">↻ Odśwież</button>
-      </div>
-    </div>
-    <div id="adsGrid" class="grid"></div>
-    <div id="empty" style="display:none;background:#fff;border-radius:16px;padding:20px;text-align:center;margin-top:10px"><div style="font-weight:900;font-size:14px">Brak ogłoszeń pasujących do filtrów</div><div style="font-size:11px;color:#888;margin-top:4px">Zmień filtry w lewej czarnej kafelce lub wyczyść</div><button class="btn btn-black" style="margin-top:10px" onclick="clearFilters()">Wyczyść filtry</button></div>
-  </main>
-</div>
-
-<!-- MODALS -->
-<div id="authModal" class="modal" style="display:none"><div class="modal-box"><div style="padding:12px;border-bottom:1px solid #eee;display:flex;justify-content:space-between"><div style="font-weight:900;font-size:14px" id="authTitle">Zaloguj</div><button class="btn btn-white" onclick="closeAuth()">✕</button></div><div style="padding:16px;overflow:auto"><div id="authError" style="display:none;background:#fee;border:1px solid #fcc;color:#a00;padding:8px;border-radius:8px;font-size:10px;font-weight:700;margin-bottom:10px"></div><div id="authNameWrap"><label class="label">Imie *</label><input id="authName" class="input"></div><label class="label">E-mail *</label><input id="authEmail" class="input" type="email"><label class="label">Haslo *</label><input id="authPass" class="input" type="password"><button class="btn btn-black" style="width:100%;margin-top:16px;padding:12px" id="authSubmit">Zaloguj</button><div style="text-align:center;margin-top:10px"><button style="background:none;border:none;font-weight:900;text-decoration:underline;cursor:pointer;font-size:10px" id="authSwitch">Zarejestruj</button></div></div></div></div>
-
-<div id="addModal" class="modal" style="display:none"><div class="modal-box"><div style="padding:12px;border-bottom:1px solid #eee;display:flex;justify-content:space-between"><div style="font-weight:900;font-size:13px" id="addTitle">Dodaj - 3 zdjęcia</div><button class="btn btn-white" onclick="closeAdd()">✕</button></div><div style="padding:14px;overflow:auto"><div id="addError" style="display:none;background:#fee;border:1px solid #fcc;color:#a00;padding:8px;border-radius:8px;font-size:10px;font-weight:700;margin-bottom:10px"></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><div><label class="label">Marka *</label><select id="fBrand" class="input"><option value="">Wybierz</option><option>BMW</option><option>Audi</option><option>Volkswagen</option><option>Mercedes</option><option>Skoda</option><option>Toyota</option><option>Ford</option><option>Opel</option></select></div><div><label class="label">Model *</label><input id="fModel" class="input"></div><div><label class="label">Rocznik *</label><input id="fYear" class="input" type="number" value="2020"></div><div><label class="label">Cena *</label><input id="fPrice" class="input" type="number"></div><div><label class="label">Przebieg</label><input id="fMileage" class="input" type="number"></div><div><label class="label">Miasto *</label><input id="fLocation" class="input" value="Warszawa"></div></div><label class="label">Tytuł</label><input id="fTitle" class="input"><label class="label">Telefon *</label><input id="fPhone" class="input"><label class="label">Opis</label><textarea id="fDesc" class="input" rows="2"></textarea><label class="label">Zdjęcia (max 3) *</label><div id="imgPreview" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px"></div><label class="btn btn-white" style="margin-top:6px;cursor:pointer;display:inline-flex"><span>+ Dodaj zdjęcia</span><input id="fImages" type="file" accept="image/*" multiple style="display:none"></label><div id="imgInfo" style="font-size:9px;color:#666;margin-top:4px">0/3</div><button class="btn btn-black" style="width:100%;margin-top:12px;padding:12px" id="btnSave">Zapisz</button></div></div></div>
-
-<div id="detailModal" class="modal" style="display:none"><div class="modal-box" style="max-width:640px"><div style="padding:10px;border-bottom:1px solid #eee;display:flex;justify-content:space-between;align-items:center"><button class="btn btn-white" onclick="closeDetail()">← Wróć</button><div style="display:flex;gap:5px"><button class="btn btn-black" id="detailEdit" style="display:none">✏️ Edytuj</button><button class="btn btn-red" id="detailDelete" style="display:none">🗑️ Usuń</button><button class="btn btn-white" onclick="closeDetail()">✕</button></div></div><div id="detailContent" style="overflow:auto"></div></div></div>
-
-<script>
+<div class="header"> <div style="font-weight:900;cursor:pointer;font-size:14px" onclick="location.reload()">WROOMER<span style="color:#ffea00">.PL</span> <span style="font-size:7px;background:#ffea00;color:#000;padding:2px 5px;border-radius:8px;margin-left:5px">WYSZUKIWARKA</span></div> <div style="display:flex;gap:5px;align-items:center"> <span id="userInfo" style="font-size:9px;color:#aaa;display:none"></span> <button class="btn btn-white" id="btnLogin">Zaloguj</button> <button class="btn btn-yellow" id="btnRegister">Zarejestruj</button> <button class="btn btn-yellow" id="btnAdd" style="display:none">+ Dodaj</button> <button class="btn btn-black" id="btnLogout" style="display:none">Wyloguj</button> </div>
+</div> <div class="layout"> <!-- LEWA CZARNA KAFELKA - JAK --> <aside class="sidebar"> <div class="sidebar-card"> <div style="font-weight:900;font-size:13px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center"> <span>🔍 Wyszukiwarka</span> <button class="btn btn-white" style="font-size:8px;padding:4px 8px" onclick="clearFilters()">Wyczyść</button> </div> <!-- GEOLOKALIZACJA + PROMIEN --> <div style="background:#111;border-radius:12px;padding:10px;border:1px solid #222;margin-bottom:10px"> <label class="label-dark">📍 Lokalizacja użytkownika</label> <div style="display:flex;gap:5px;margin-top:4px"> <input id="locationFilter" class="input-dark" placeholder="Miasto, np. Warszawa..." style="margin-top:0"> <button class="btn btn-yellow" style="white-space:nowrap;padding:8px 10px" onclick="findNearMe()" id="btnNearMe">📍 Ja</button> </div> <div id="nearMeInfo" style="display:none;margin-top:6px;background:#ffea00;color:#000;font-size:9px;font-weight:700;padding:5px 8px;border-radius:8px"></div> <label class="label-dark">📏 Promień wyszukiwania (jak / )</label> <div style="margin-top:6px;display:flex;flex-wrap:wrap;gap:2px" id="radiusButtons"> <button class="radius-btn active" data-radius="0" onclick="setRadius(0)">Cała PL</button> <button class="radius-btn" data-radius="5" onclick="setRadius(5)">5 km</button> <button class="radius-btn" data-radius="10" onclick="setRadius(10)">10 km</button> <button class="radius-btn" data-radius="25" onclick="setRadius(25)">25 km</button> <button class="radius-btn" data-radius="50" onclick="setRadius(50)">50 km</button> <button class="radius-btn" data-radius="100" onclick="setRadius(100)">100 km</button> <button class="radius-btn" data-radius="200" onclick="setRadius(200)">200 km</button> </div> <div style="font-size:8px;color:#666;margin-top:4px"> : wybierz promień wokół Twojej lokalizacji. Na razie filtruje po mieście, wkrótce liczenie km.</div> </div> <!-- MARKA / MODEL --> <label class="label-dark">🚗 Marka</label> <select id="brandFilter" class="input-dark"><option value="">Wszystkie marki</option><option>BMW</option><option>Audi</option><option>Volkswagen</option><option>Mercedes</option><option>Skoda</option><option>Toyota</option><option>Ford</option><option>Opel</option><option>Renault</option><option>Peugeot</option><option>Hyundai</option><option>Kia</option><option>Fiat</option></select> <label class="label-dark">Model</label> <input id="modelFilter" class="input-dark" placeholder="np. A4, 3 Series, Octavia..."> <!-- CENA --> <label class="label-dark">💰 Cena (zł)</label> <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px"> <input id="priceMin" class="input-dark" type="number" placeholder="Od"> <input id="priceMax" class="input-dark" type="number" placeholder="Do"> </div> <!-- ROCZNIK --> <label class="label-dark">📅 Rocznik</label> <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px"> <input id="yearMin" class="input-dark" type="number" placeholder="Od 1990"> <input id="yearMax" class="input-dark" type="number" placeholder="Do 2026"> </div> <!-- PRZEBIEG --> <label class="label-dark">🛣️ Przebieg maksymalny</label> <select id="mileageMax" class="input-dark"><option value="">Dowolny</option><option value="50000">do 50 000 km</option><option value="100000">do 100 000 km</option><option value="150000">do 150 000 km</option><option value="200000">do 200 000 km</option><option value="250000">do 250 000 km</option></select> <!-- SORTOWANIE --> <label class="label-dark">↕️ Sortowanie</label> <select id="sortFilter" class="input-dark"><option value="newest">Najnowsze</option><option value="price_asc">Cena rosnąco</option><option value="price_desc">Cena malejąco</option><option value="year_desc">Rocznik najnowsze</option><option value="year_asc">Rocznik najstarsze</option><option value="mileage_asc">Przebieg najmniej</option><option value="distance">Najbliżej mnie (📍)</option></select> <label class="label-dark">🔎 Szukaj w tytule / opisie</label> <input id="searchInput" class="input-dark" placeholder="np. diesel, automat, klima..."> <button class="btn btn-yellow" style="width:100%;margin-top:14px;padding:12px;font-size:12px" onclick="applyFilters()">🔍 Szukaj - pokaż wyniki</button> <div id="activeFilters" style="margin-top:10px;display:flex;gap:4px;flex-wrap:wrap"></div> <div style="margin-top:16px;padding-top:12px;border-top:1px solid #222;text-align:center"><div style="font-size:10px;color:#666">Autor:</div><div style="font-weight:900;font-size:13px;color:#fff;margin-top:2px">Norbert Nakoneczny</div></div> </div> <div style="margin-top:10px;background:#000;border-radius:14px;padding:12px;border:1px solid #222;text-align:center"> <div style="font-size:9px;color:#888;letter-spacing:1px">AUTOR PROJEKTU</div> <div style="font-weight:900;font-size:14px;color:#fff;margin-top:4px">Norbert Nakoneczny</div> <div style="font-size:8px;color:#666;margin-top:6px">WROOMER.PL © 2026</div> </div> </aside> <!-- PRAWA STRONA - KAFELKI --> <main class="main"> <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"> <div style="display:none" id="status"></div> <div style="display:flex;gap:6px;align-items:center"> <div style="font-size:10px;color:#888" id="resultCount"></div> <button class="btn btn-white" onclick="loadAds()">↻ Odśwież</button> </div> </div> <div id="adsGrid" class="grid"></div> <div id="empty" style="display:none;background:#fff;border-radius:16px;padding:20px;text-align:center;margin-top:10px"><div style="font-weight:900;font-size:14px">Brak ogłoszeń pasujących do filtrów</div><div style="font-size:11px;color:#888;margin-top:4px">Zmień filtry w lewej czarnej kafelce lub wyczyść</div><button class="btn btn-black" style="margin-top:10px" onclick="clearFilters()">Wyczyść filtry</button></div> </main>
+</div> <!-- MODALS -->
+<div id="authModal" class="modal" style="display:none"><div class="modal-box"><div style="padding:12px;border-bottom:1px solid #eee;display:flex;justify-content:space-between"><div style="font-weight:900;font-size:14px" id="authTitle">Zaloguj</div><button class="btn btn-white" onclick="closeAuth()">✕</button></div><div style="padding:16px;overflow:auto"><div id="authError" style="display:none;background:#fee;border:1px solid #fcc;color:#a00;padding:8px;border-radius:8px;font-size:10px;font-weight:700;margin-bottom:10px"></div><div id="authNameWrap"><label class="label">Imie *</label><input id="authName" class="input"></div><label class="label">E-mail *</label><input id="authEmail" class="input" type="email"><label class="label">Haslo *</label><input id="authPass" class="input" type="password"><button class="btn btn-black" style="width:100%;margin-top:16px;padding:12px" id="authSubmit">Zaloguj</button><div style="text-align:center;margin-top:10px"><button style="background:none;border:none;font-weight:900;text-decoration:underline;cursor:pointer;font-size:10px" id="authSwitch">Zarejestruj</button></div></div></div></div> <div id="addModal" class="modal" style="display:none"><div class="modal-box"><div style="padding:12px;border-bottom:1px solid #eee;display:flex;justify-content:space-between"><div style="font-weight:900;font-size:13px" id="addTitle">Dodaj - 3 zdjęcia</div><button class="btn btn-white" onclick="closeAdd()">✕</button></div><div style="padding:14px;overflow:auto"><div id="addError" style="display:none;background:#fee;border:1px solid #fcc;color:#a00;padding:8px;border-radius:8px;font-size:10px;font-weight:700;margin-bottom:10px"></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><div><label class="label">Marka *</label><select id="fBrand" class="input"><option value="">Wybierz</option><option>BMW</option><option>Audi</option><option>Volkswagen</option><option>Mercedes</option><option>Skoda</option><option>Toyota</option><option>Ford</option><option>Opel</option></select></div><div><label class="label">Model *</label><input id="fModel" class="input"></div><div><label class="label">Rocznik *</label><input id="fYear" class="input" type="number" value="2020"></div><div><label class="label">Cena *</label><input id="fPrice" class="input" type="number"></div><div><label class="label">Przebieg</label><input id="fMileage" class="input" type="number"></div><div><label class="label">Miasto *</label><input id="fLocation" class="input" value="Warszawa"></div></div><label class="label">Tytuł</label><input id="fTitle" class="input"><label class="label">Telefon *</label><input id="fPhone" class="input"><label class="label">Opis</label><textarea id="fDesc" class="input" rows="2"></textarea><label class="label">Zdjęcia (max 3) *</label><div id="imgPreview" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px"></div><label class="btn btn-white" style="margin-top:6px;cursor:pointer;display:inline-flex"><span>+ Dodaj zdjęcia</span><input id="fImages" type="file" accept="image/*" multiple style="display:none"></label><div id="imgInfo" style="font-size:9px;color:#666;margin-top:4px">0/3</div><button class="btn btn-black" style="width:100%;margin-top:12px;padding:12px" id="btnSave">Zapisz</button></div></div></div> <div id="detailModal" class="modal" style="display:none"><div class="modal-box" style="max-width:640px"><div style="padding:10px;border-bottom:1px solid #eee;display:flex;justify-content:space-between;align-items:center"><button class="btn btn-white" onclick="closeDetail()">← Wróć</button><div style="display:flex;gap:5px"><button class="btn btn-black" id="detailEdit" style="display:none">✏️ Edytuj</button><button class="btn btn-red" id="detailDelete" style="display:none">🗑️ Usuń</button><button class="btn btn-white" onclick="closeDetail()">✕</button></div></div><div id="detailContent" style="overflow:auto"></div></div></div> <script>
 const SUPABASE_URL="https://rljqnhfogaqdjeirqqdj.supabase.co";
 const PUB_KEY="sb_publishable_j7CS5xIHzOMBMyvsqVgDmw_GeEek5hX";
-let currentUser=null, users=[], ads=[], filteredAds=[], authMode='login', editingId=null, selectedImages=[], currentGalleryImages=[], currentGalleryIndex=0, nearMeCity=null, nearMeCoords=null, searchRadius=0;
-
-try{currentUser=JSON.parse(localStorage.getItem('wroomer_user_final14')||'null')}catch(e){}
-try{users=JSON.parse(localStorage.getItem('wroomer_users_final14')||'[]')}catch(e){}
-
-function updateUI(){
-  try{
-    const bL=document.getElementById('btnLogin'), bR=document.getElementById('btnRegister'), bA=document.getElementById('btnAdd'), bO=document.getElementById('btnLogout'), info=document.getElementById('userInfo');
-    if(currentUser){if(bL) bL.style.display='none'; if(bR) bR.style.display='none'; if(bA) bA.style.display='inline-block'; if(bO) bO.style.display='inline-block'; if(info){info.style.display='inline'; info.textContent='Cześć, '+currentUser.name+'!';}}
-    else{if(bL) bL.style.display='inline-block'; if(bR) bR.style.display='inline-block'; if(bA) bA.style.display='none'; if(bO) bO.style.display='none'; if(info) info.style.display='none';}
-  }catch(e){}
+let currentUser=null, users=[], ads=[], filteredAds=[], authMode='login', editingId=null, selectedImages=[], currentGalleryImages=[], currentGalleryIndex=0, nearMeCity=null, nearMeCoords=null, searchRadius=0; try{currentUser=JSON.parse(localStorage.getItem('wroomer_user_final14')||'null')}catch(e){}
+try{users=JSON.parse(localStorage.getItem('wroomer_users_final14')||'[]')}catch(e){} function updateUI(){ try{ const bL=document.getElementById('btnLogin'), bR=document.getElementById('btnRegister'), bA=document.getElementById('btnAdd'), bO=document.getElementById('btnLogout'), info=document.getElementById('userInfo'); if(currentUser){if(bL) bL.style.display='none'; if(bR) bR.style.display='none'; if(bA) bA.style.display='inline-block'; if(bO) bO.style.display='inline-block'; if(info){info.style.display='inline'; info.textContent='Cześć, '+currentUser.name+'!';}} else{if(bL) bL.style.display='inline-block'; if(bR) bR.style.display='inline-block'; if(bA) bA.style.display='none'; if(bO) bO.style.display='none'; if(info) info.style.display='none';} }catch(e){}
 }
 function parseImages(ad){try{if(!ad.image) return []; if(typeof ad.image==='string' && ad.image.trim().startsWith('[')){const arr=JSON.parse(ad.image); return Array.isArray(arr)?arr:[ad.image];} return [ad.image];}catch(e){return [ad.image];}}
-function canEdit(ad){if(!currentUser) return false; if(ad.owner_id && currentUser.id && ad.owner_id===currentUser.id) return true; if(ad.owner && currentUser.email && ad.owner.toLowerCase().includes(currentUser.email.toLowerCase())) return true; if(ad.owner && currentUser.name && ad.owner.toLowerCase().includes(currentUser.name.toLowerCase())) return true; return false;}
-
-function setRadius(r){
-  searchRadius=r;
-  document.querySelectorAll('.radius-btn').forEach(btn=>{
-    btn.classList.toggle('active', parseInt(btn.dataset.radius)===r);
-  });
-  applyFilters();
+function canEdit(ad){if(!currentUser) return false; if(ad.owner_id && currentUser.id && ad.owner_id===currentUser.id) return true; if(ad.owner && currentUser.email && ad.owner.toLowerCase().includes(currentUser.email.toLowerCase())) return true; if(ad.owner && currentUser.name && ad.owner.toLowerCase().includes(currentUser.name.toLowerCase())) return true; return false;} function setRadius(r){ searchRadius=r; document.querySelectorAll('.radius-btn').forEach(btn=>{ btn.classList.toggle('active', parseInt(btn.dataset.radius)===r); }); applyFilters();
 }
-function clearFilters(){
-  document.getElementById('searchInput').value='';
-  document.getElementById('brandFilter').value='';
-  document.getElementById('locationFilter').value='';
-  document.getElementById('modelFilter').value='';
-  document.getElementById('priceMin').value='';
-  document.getElementById('priceMax').value='';
-  document.getElementById('yearMin').value='';
-  document.getElementById('yearMax').value='';
-  document.getElementById('mileageMax').value='';
-  document.getElementById('sortFilter').value='newest';
-  nearMeCity=null; nearMeCoords=null; searchRadius=0;
-  document.querySelectorAll('.radius-btn').forEach((btn,i)=>{btn.classList.toggle('active', i===0);});
-  const nearInfo=document.getElementById('nearMeInfo'); if(nearInfo) nearInfo.style.display='none';
-  applyFilters();
+function clearFilters(){ document.getElementById('searchInput').value=''; document.getElementById('brandFilter').value=''; document.getElementById('locationFilter').value=''; document.getElementById('modelFilter').value=''; document.getElementById('priceMin').value=''; document.getElementById('priceMax').value=''; document.getElementById('yearMin').value=''; document.getElementById('yearMax').value=''; document.getElementById('mileageMax').value=''; document.getElementById('sortFilter').value='newest'; nearMeCity=null; nearMeCoords=null; searchRadius=0; document.querySelectorAll('.radius-btn').forEach((btn,i)=>{btn.classList.toggle('active', i===0);}); const nearInfo=document.getElementById('nearMeInfo'); if(nearInfo) nearInfo.style.display='none'; applyFilters();
 }
-function applyFilters(){
-  let result=[...ads];
-  const search=document.getElementById('searchInput').value.toLowerCase().trim();
-  const brand=document.getElementById('brandFilter').value;
-  const location=document.getElementById('locationFilter').value.toLowerCase().trim();
-  const model=document.getElementById('modelFilter').value.toLowerCase().trim();
-  const priceMin=parseInt(document.getElementById('priceMin').value)||0;
-  const priceMax=parseInt(document.getElementById('priceMax').value)||Infinity;
-  const yearMin=parseInt(document.getElementById('yearMin').value)||0;
-  const yearMax=parseInt(document.getElementById('yearMax').value)||Infinity;
-  const mileageMax=parseInt(document.getElementById('mileageMax').value)||Infinity;
-  const sort=document.getElementById('sortFilter').value;
-
-  if(search){result=result.filter(a=>(a.title+" "+a.brand+" "+a.model+" "+a.location+" "+(a.description||'')).toLowerCase().includes(search));}
-  if(brand){result=result.filter(a=>a.brand===brand);}
-  if(location||nearMeCity){
-    const loc=(location||nearMeCity||'').toLowerCase();
-    result=result.filter(a=>a.location && a.location.toLowerCase().includes(loc));
-  }
-  if(model){result=result.filter(a=>a.model && a.model.toLowerCase().includes(model));}
-  result=result.filter(a=>{const p=Number(a.price||0); return p>=priceMin && p<=priceMax;});
-  result=result.filter(a=>{const y=Number(a.year||0); return y>=yearMin && y<=yearMax;});
-  if(mileageMax!==Infinity){result=result.filter(a=>{const m=Number(a.mileage||0); return m===0 || m<=mileageMax;});}
-
-  if(sort==='price_asc') result.sort((a,b)=>Number(a.price||0)-Number(b.price||0));
-  else if(sort==='price_desc') result.sort((a,b)=>Number(b.price||0)-Number(a.price||0));
-  else if(sort==='year_desc') result.sort((a,b)=>Number(b.year||0)-Number(a.year||0));
-  else if(sort==='year_asc') result.sort((a,b)=>Number(a.year||0)-Number(b.year||0));
-  else if(sort==='mileage_asc') result.sort((a,b)=>Number(a.mileage||0)-Number(b.mileage||0));
-  else result.sort((a,b)=>Number(b.id||0)-Number(a.id||0));
-
-  filteredAds=result;
-  renderFilteredAds();
-  updateActiveFilters();
-  updateStats();
+function applyFilters(){ let result=[...ads]; const search=document.getElementById('searchInput').value.toLowerCase().trim(); const brand=document.getElementById('brandFilter').value; const location=document.getElementById('locationFilter').value.toLowerCase().trim(); const model=document.getElementById('modelFilter').value.toLowerCase().trim(); const priceMin=parseInt(document.getElementById('priceMin').value)||0; const priceMax=parseInt(document.getElementById('priceMax').value)||Infinity; const yearMin=parseInt(document.getElementById('yearMin').value)||0; const yearMax=parseInt(document.getElementById('yearMax').value)||Infinity; const mileageMax=parseInt(document.getElementById('mileageMax').value)||Infinity; const sort=document.getElementById('sortFilter').value; if(search){result=result.filter(a=>(a.title+" "+a.brand+" "+a.model+" "+a.location+" "+(a.description||'')).toLowerCase().includes(search));} if(brand){result=result.filter(a=>a.brand===brand);} if(location||nearMeCity){ const loc=(location||nearMeCity||'').toLowerCase(); result=result.filter(a=>a.location && a.location.toLowerCase().includes(loc)); } if(model){result=result.filter(a=>a.model && a.model.toLowerCase().includes(model));} result=result.filter(a=>{const p=Number(a.price||0); return p>=priceMin && p<=priceMax;}); result=result.filter(a=>{const y=Number(a.year||0); return y>=yearMin && y<=yearMax;}); if(mileageMax!==Infinity){result=result.filter(a=>{const m=Number(a.mileage||0); return m===0 || m<=mileageMax;});} if(sort==='price_asc') result.sort((a,b)=>Number(a.price||0)-Number(b.price||0)); else if(sort==='price_desc') result.sort((a,b)=>Number(b.price||0)-Number(a.price||0)); else if(sort==='year_desc') result.sort((a,b)=>Number(b.year||0)-Number(a.year||0)); else if(sort==='year_asc') result.sort((a,b)=>Number(a.year||0)-Number(b.year||0)); else if(sort==='mileage_asc') result.sort((a,b)=>Number(a.mileage||0)-Number(b.mileage||0)); else result.sort((a,b)=>Number(b.id||0)-Number(a.id||0)); filteredAds=result; renderFilteredAds(); updateActiveFilters(); updateStats();
 }
-function updateActiveFilters(){
-  const container=document.getElementById('activeFilters');
-  if(!container) return;
-  container.innerHTML='';
-  const filters=[];
-  const search=document.getElementById('searchInput').value.trim();
-  const brand=document.getElementById('brandFilter').value;
-  const location=document.getElementById('locationFilter').value.trim();
-  const model=document.getElementById('modelFilter').value.trim();
-  const priceMin=document.getElementById('priceMin').value;
-  const priceMax=document.getElementById('priceMax').value;
-  if(search) filters.push('Szukaj: '+search);
-  if(brand) filters.push('Marka: '+brand);
-  if(location) filters.push('Miasto: '+location);
-  if(nearMeCity) filters.push('📍 '+nearMeCity+(searchRadius>0?' ('+searchRadius+' km)':''));
-  if(model) filters.push('Model: '+model);
-  if(priceMin||priceMax) filters.push('Cena: '+(priceMin||'0')+' - '+(priceMax||'∞'));
-  if(searchRadius>0) filters.push('Promień: '+searchRadius+' km');
-  filters.forEach(f=>{
-    const span=document.createElement('span');
-    span.style.cssText='background:#222;color:#fff;font-size:8px;font-weight:700;padding:3px 7px;border-radius:10px;border:1px solid #333';
-    span.textContent=f;
-    container.appendChild(span);
-  });
+function updateActiveFilters(){ const container=document.getElementById('activeFilters'); if(!container) return; container.innerHTML=''; const filters=[]; const search=document.getElementById('searchInput').value.trim(); const brand=document.getElementById('brandFilter').value; const location=document.getElementById('locationFilter').value.trim(); const model=document.getElementById('modelFilter').value.trim(); const priceMin=document.getElementById('priceMin').value; const priceMax=document.getElementById('priceMax').value; if(search) filters.push('Szukaj: '+search); if(brand) filters.push('Marka: '+brand); if(location) filters.push('Miasto: '+location); if(nearMeCity) filters.push('📍 '+nearMeCity+(searchRadius>0?' ('+searchRadius+' km)':'')); if(model) filters.push('Model: '+model); if(priceMin||priceMax) filters.push('Cena: '+(priceMin||'0')+' - '+(priceMax||'∞')); if(searchRadius>0) filters.push('Promień: '+searchRadius+' km'); filters.forEach(f=>{ const span=document.createElement('span'); span.style.cssText='background:#222;color:#fff;font-size:8px;font-weight:700;padding:3px 7px;border-radius:10px;border:1px solid #333'; span.textContent=f; container.appendChild(span); });
 }
-function updateStats(){
-  const box=document.getElementById('statsBox');
-  if(!box) return;
-  const total=ads.length;
-  const filtered=filteredAds.length;
-  const avgPrice=filtered>0?Math.round(filteredAds.reduce((s,a)=>s+Number(a.price||0),0)/filtered):0;
-  box.innerHTML='Wszystkich: '+total+'<br>Po filtrach: '+filtered+'<br>Śr. cena: '+avgPrice.toLocaleString('pl-PL')+' zł<br>Promień: '+(searchRadius===0?'Cała PL':searchRadius+' km');
+function updateStats(){ const box=document.getElementById('statsBox'); if(!box) return; const total=ads.length; const filtered=filteredAds.length; const avgPrice=filtered>0?Math.round(filteredAds.reduce((s,a)=>s+Number(a.price||0),0)/filtered):0; box.innerHTML='Wszystkich: '+total+'<br>Po filtrach: '+filtered+'<br>Śr. cena: '+avgPrice.toLocaleString('pl-PL')+' zł<br>Promień: '+(searchRadius===0?'Cała PL':searchRadius+' km');
 }
-async function findNearMe(){
-  const btn=document.getElementById('btnNearMe');
-  const info=document.getElementById('nearMeInfo');
-  if(!navigator.geolocation){alert('Geolokalizacja nie wspierana'); return;}
-  if(btn) btn.textContent='⏳...';
-  navigator.geolocation.getCurrentPosition(async pos=>{
-    const lat=pos.coords.latitude;
-    const lon=pos.coords.longitude;
-    nearMeCoords={lat,lon};
-    try{
-      const res=await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json&zoom=10&addressdetails=1`);
-      const data=await res.json();
-      const city=data.address.city||data.address.town||data.address.village||data.address.county||'';
-      nearMeCity=city;
-      if(info){info.style.display='block'; info.textContent='📍 Jesteś w: '+(city||lat.toFixed(2)+', '+lon.toFixed(2))+' - promień '+searchRadius+' km - jak OTOMOTO!';}
-      const locInput=document.getElementById('locationFilter');
-      if(locInput && city) locInput.value=city;
-      applyFilters();
-      if(btn) btn.textContent='📍 '+city;
-    }catch(e){
-      if(info){info.style.display='block'; info.textContent='📍 Pobrano: '+lat.toFixed(3)+', '+lon.toFixed(3)+' - wpisz miasto';}
-      if(btn) btn.textContent='📍 Ja';
-    }
-  }, err=>{
-    alert('Błąd lokalizacji: '+err.message);
-    if(btn) btn.textContent='📍 Ja';
-  });
+async function findNearMe(){ const btn=document.getElementById('btnNearMe'); const info=document.getElementById('nearMeInfo'); if(!navigator.geolocation){alert('Geolokalizacja nie wspierana'); return;} if(btn) btn.textContent='⏳...'; navigator.geolocation.getCurrentPosition(async pos=>{ const lat=pos.coords.latitude; const lon=pos.coords.longitude; nearMeCoords={lat,lon}; try{ const res=await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json&zoom=10&addressdetails=1`); const data=await res.json(); const city=data.address.city||data.address.town||data.address.village||data.address.county||''; nearMeCity=city; if(info){info.style.display='block'; info.textContent='📍 Jesteś w: '+(city||lat.toFixed(2)+', '+lon.toFixed(2))+' - promień '+searchRadius+' km - !';} const locInput=document.getElementById('locationFilter'); if(locInput && city) locInput.value=city; applyFilters(); if(btn) btn.textContent='📍 '+city; }catch(e){ if(info){info.style.display='block'; info.textContent='📍 Pobrano: '+lat.toFixed(3)+', '+lon.toFixed(3)+' - wpisz miasto';} if(btn) btn.textContent='📍 Ja'; } }, err=>{ alert('Błąd lokalizacji: '+err.message); if(btn) btn.textContent='📍 Ja'; });
 }
-async function loadAds(){
-  const statusEl=document.getElementById('status');
-  if(statusEl) statusEl.textContent='Ładowanie...';
-  try{
-    const res=await fetch(SUPABASE_URL+"/rest/v1/ads?select=id,title,brand,model,year,price,mileage,location,phone,owner,owner_id,description&order=id.desc&limit=80",{headers:{apikey:PUB_KEY,Authorization:"Bearer "+PUB_KEY}});
-    const txt=await res.text();
-    if(!res.ok){if(statusEl) statusEl.textContent='Błąd '+res.status; return;}
-    ads=JSON.parse(txt);
-    filteredAds=[...ads];
-    applyFilters();
-    if(statusEl) statusEl.textContent="OK "+ads.length+" ogłoszeń - lewa czarna kafelka OTOMOTO!";
-    loadThumbnailsInBackground();
-  }catch(e){if(statusEl) statusEl.textContent='Błąd: '+e.message;}
+async function loadAds(){ const statusEl=document.getElementById('status'); if(statusEl) statusEl.textContent=''; try{ const res=await fetch(SUPABASE_URL+"/rest/v1/ads?select=id,title,brand,model,year,price,mileage,location,phone,owner,owner_id,description&order=id.desc&limit=80&t="+Date.now(),{headers:{apikey:PUB_KEY,Authorization:"Bearer "+PUB_KEY},cache:"no-store"}); const txt=await res.text(); if(!res.ok){if(statusEl) statusEl.textContent=''; return;} ads=JSON.parse(txt); filteredAds=[...ads]; applyFilters(); if(statusEl) statusEl.textContent=""; loadThumbnailsInBackground(); }catch(e){if(statusEl) statusEl.textContent='Błąd: '+e.message;}
 }
-function renderFilteredAds(){
-  const grid=document.getElementById('adsGrid');
-  const resultCount=document.getElementById('resultCount');
-  if(resultCount) resultCount.textContent=filteredAds.length+' wyników'+(searchRadius>0?' w '+searchRadius+' km':'');
-  if(grid) grid.innerHTML='';
-  const emptyEl=document.getElementById('empty');
-  if(emptyEl) emptyEl.style.display=filteredAds.length===0?'block':'none';
-  filteredAds.forEach(ad=>{
-    const div=document.createElement('div'); div.className='card'; div.id='card-'+ad.id;
-    const isOwner=canEdit(ad);
-    div.innerHTML='<div style="position:relative;height:110px;background:linear-gradient(135deg,#111,#444);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:22px" id="imgbox-'+ad.id+'">'+(ad.brand?ad.brand.substring(0,2).toUpperCase():'🚗')+'<div style="position:absolute;top:4px;left:4px;background:rgba(0,0,0,0.7);color:#fff;font-size:7px;font-weight:900;padding:2px 6px;border-radius:10px">'+(ad.brand||'')+' '+(ad.model||'')+'</div><div style="position:absolute;bottom:4px;left:4px;background:rgba(0,0,0,0.6);color:#fff;font-size:7px;padding:2px 5px;border-radius:8px">📍 '+(ad.location||'')+' • '+ad.year+'</div><div style="position:absolute;bottom:4px;right:4px;background:rgba(0,0,0,0.6);color:#fff;font-size:7px;padding:2px 5px;border-radius:8px" id="badge-'+ad.id+'">⏳</div>'+(isOwner?'<div class="owner-badge">TWOJE</div>':'')+'</div><div class="card-body"><div class="card-title">'+(ad.title||ad.brand+' '+ad.model)+'</div><div class="price">'+Number(ad.price||0).toLocaleString('pl-PL')+' zł</div><div class="meta"><span>👤 '+(ad.owner?ad.owner.split('(')[0].trim():'')+'</span><span id="count-'+ad.id+'">📸 ? • '+(ad.mileage?Number(ad.mileage).toLocaleString('pl-PL')+' km':'')+'</span></div></div>';
-    div.onclick=()=>openDetail(ad);
-    if(grid) grid.appendChild(div);
-  });
+function renderFilteredAds(){ const grid=document.getElementById('adsGrid'); const resultCount=document.getElementById('resultCount'); if(resultCount) resultCount.textContent=filteredAds.length+' wyników'+(searchRadius>0?' w '+searchRadius+' km':''); if(grid) grid.innerHTML=''; const emptyEl=document.getElementById('empty'); if(emptyEl) emptyEl.style.display=filteredAds.length===0?'block':'none'; filteredAds.forEach(ad=>{ const div=document.createElement('div'); div.className='card'; div.id='card-'+ad.id; const isOwner=canEdit(ad); div.innerHTML='<div style="position:relative;height:110px;background:linear-gradient(135deg,#111,#444);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:22px" id="imgbox-'+ad.id+'">'+(ad.brand?ad.brand.substring(0,2).toUpperCase():'🚗')+'<div style="position:absolute;top:4px;left:4px;background:rgba(0,0,0,0.7);color:#fff;font-size:7px;font-weight:900;padding:2px 6px;border-radius:10px">'+(ad.brand||'')+' '+(ad.model||'')+'</div><div style="position:absolute;bottom:4px;left:4px;background:rgba(0,0,0,0.6);color:#fff;font-size:7px;padding:2px 5px;border-radius:8px">📍 '+(ad.location||'')+' • '+ad.year+'</div><div style="position:absolute;bottom:4px;right:4px;background:rgba(0,0,0,0.6);color:#fff;font-size:7px;padding:2px 5px;border-radius:8px" id="badge-'+ad.id+'">⏳</div>'+(isOwner?'<div class="owner-badge">TWOJE</div>':'')+'</div><div class="card-body"><div class="card-title">'+(ad.title||ad.brand+' '+ad.model)+'</div><div class="price">'+Number(ad.price||0).toLocaleString('pl-PL')+' zł</div><div class="meta"><span>👤 '+(ad.owner?ad.owner.split('(')[0].trim():'')+'</span><span id="count-'+ad.id+'">📸 ? • '+(ad.mileage?Number(ad.mileage).toLocaleString('pl-PL')+' km':'')+'</span></div></div>'; div.onclick=()=>openDetail(ad); if(grid) grid.appendChild(div); });
 }
-async function loadThumbnailsInBackground(){
-  for(let i=0;i<filteredAds.length;i++){
-    const ad=filteredAds[i];
-    try{
-      const res=await fetch(SUPABASE_URL+"/rest/v1/ads?select=image&id=eq."+ad.id,{headers:{apikey:PUB_KEY,Authorization:"Bearer "+PUB_KEY}});
-      if(!res.ok) continue;
-      const data=JSON.parse(await res.text());
-      if(data.length===0) continue;
-      const imgs=parseImages(data[0]);
-      const main=imgs[0];
-      if(main && main.startsWith('data:')){
-        const imgBox=document.getElementById('imgbox-'+ad.id);
-        const count=document.getElementById('count-'+ad.id);
-        if(imgBox){
-          imgBox.innerHTML='<img src="'+main+'" style="width:100%;height:110px;object-fit:cover;display:block" loading="lazy"><div style="position:absolute;top:4px;left:4px;background:rgba(0,0,0,0.7);color:#fff;font-size:7px;font-weight:900;padding:2px 6px;border-radius:10px">'+(ad.brand||'')+' '+(ad.model||'')+'</div><div style="position:absolute;bottom:4px;left:4px;background:rgba(0,0,0,0.6);color:#fff;font-size:7px;padding:2px 5px;border-radius:8px">📍 '+(ad.location||'')+' • '+ad.year+'</div><div style="position:absolute;bottom:4px;right:4px;background:rgba(0,0,0,0.75);color:#fff;font-size:7px;font-weight:900;padding:2px 5px;border-radius:10px">📸 '+imgs.length+'</div>'+(canEdit(ad)?'<div class="owner-badge">TWOJE</div>':'');
-        }
-        if(count) count.textContent='📸 '+imgs.length+' • '+(ad.mileage?Number(ad.mileage).toLocaleString('pl-PL')+' km':'');
-      }
-      await new Promise(r=>setTimeout(r,100));
-    }catch(e){}
-  }
+async function loadThumbnailsInBackground(){ for(let i=0;i<filteredAds.length;i++){ const ad=filteredAds[i]; try{ const res=await fetch(SUPABASE_URL+"/rest/v1/ads?select=image&id=eq."+ad.id+"&t="+Date.now(),{headers:{apikey:PUB_KEY,Authorization:"Bearer "+PUB_KEY},cache:"no-store"}); if(!res.ok) continue; const data=JSON.parse(await res.text()); if(data.length===0) continue; const imgs=parseImages(data[0]); const main=imgs[0]; if(main && main.startsWith('data:')){ const imgBox=document.getElementById('imgbox-'+ad.id); const count=document.getElementById('count-'+ad.id); if(imgBox){ imgBox.innerHTML='<img src="'+main+'" style="width:100%;height:110px;object-fit:cover;display:block" loading="lazy"><div style="position:absolute;top:4px;left:4px;background:rgba(0,0,0,0.7);color:#fff;font-size:7px;font-weight:900;padding:2px 6px;border-radius:10px">'+(ad.brand||'')+' '+(ad.model||'')+'</div><div style="position:absolute;bottom:4px;left:4px;background:rgba(0,0,0,0.6);color:#fff;font-size:7px;padding:2px 5px;border-radius:8px">📍 '+(ad.location||'')+' • '+ad.year+'</div><div style="position:absolute;bottom:4px;right:4px;background:rgba(0,0,0,0.75);color:#fff;font-size:7px;font-weight:900;padding:2px 5px;border-radius:10px">📸 '+imgs.length+'</div>'+(canEdit(ad)?'<div class="owner-badge">TWOJE</div>':''); } if(count) count.textContent='📸 '+imgs.length+' • '+(ad.mileage?Number(ad.mileage).toLocaleString('pl-PL')+' km':''); } await new Promise(r=>setTimeout(r,100)); }catch(e){} }
 }
-function updateGallery(){
-  const mainImg=document.getElementById('detailMainImg');
-  const counter=document.getElementById('galleryCounter');
-  const thumbs=document.querySelectorAll('#detailThumbs img');
-  if(mainImg && currentGalleryImages[currentGalleryIndex]) mainImg.src=currentGalleryImages[currentGalleryIndex];
-  if(counter) counter.textContent=(currentGalleryIndex+1)+' / '+currentGalleryImages.length;
-  thumbs.forEach((img,i)=>{img.style.borderColor=i===currentGalleryIndex?'#ffea00':'#eee';});
+function updateGallery(){ const mainImg=document.getElementById('detailMainImg'); const counter=document.getElementById('galleryCounter'); const thumbs=document.querySelectorAll('#detailThumbs img'); if(mainImg && currentGalleryImages[currentGalleryIndex]){ mainImg.src=currentGalleryImages[currentGalleryIndex]; } if(counter) counter.textContent=(currentGalleryIndex+1)+' / '+currentGalleryImages.length; thumbs.forEach((img,i)=>{img.style.borderColor=i===currentGalleryIndex?'#ffea00':'#eee';});
 }
 function nextImage(){if(currentGalleryImages.length===0) return; currentGalleryIndex=(currentGalleryIndex+1)%currentGalleryImages.length; updateGallery();}
 function prevImage(){if(currentGalleryImages.length===0) return; currentGalleryIndex=(currentGalleryIndex-1+currentGalleryImages.length)%currentGalleryImages.length; updateGallery();}
-async function openDetail(ad){
-  const can=canEdit(ad);
-  const editBtn=document.getElementById('detailEdit'); if(editBtn){editBtn.style.display=can?'inline-block':'none'; editBtn.onclick=()=>{closeDetail(); openEditFull(ad);}}
-  const delBtn=document.getElementById('detailDelete'); if(delBtn){delBtn.style.display=can?'inline-block':'none'; delBtn.onclick=()=>deleteAd(ad.id);}
-  const modal=document.getElementById('detailModal'); if(modal) modal.style.display='flex';
-  const content=document.getElementById('detailContent'); if(!content) return;
-  content.innerHTML='<div style="padding:20px;text-align:center">Ładowanie...</div>';
-  try{
-    const res=await fetch(SUPABASE_URL+"/rest/v1/ads?select=*&id=eq."+ad.id,{headers:{apikey:PUB_KEY,Authorization:"Bearer "+PUB_KEY}});
-    const fullAds=JSON.parse(await res.text());
-    const fullAd=fullAds[0]||ad;
-    currentGalleryImages=parseImages(fullAd);
-    currentGalleryIndex=0;
-    if(currentGalleryImages.length===0) currentGalleryImages=['https://images.unsplash.com/photo-1555215695-3004980ad54e?w=600'];
-    const main=currentGalleryImages[0];
-    let thumbs='';
-    if(currentGalleryImages.length>1){
-      thumbs='<div id="detailThumbs" style="display:flex;gap:6px;padding:8px;overflow:auto;background:#f9f9f9">';
-      currentGalleryImages.forEach((im,i)=>{thumbs+='<img src="'+im+'" style="width:60px;height:60px;object-fit:cover;border-radius:8px;border:2px solid '+(i===0?'#ffea00':'#eee')+';cursor:pointer" onclick="currentGalleryIndex='+i+'; updateGallery()">';});
-      thumbs+='</div>';
-    }
-    const arrows=currentGalleryImages.length>1?'<button class="arrow arrow-left" onclick="prevImage()">‹</button><button class="arrow arrow-right" onclick="nextImage()">›</button><div class="counter" id="galleryCounter">1 / '+currentGalleryImages.length+'</div>':'';
-    content.innerHTML='<div class="gallery-wrap"><img id="detailMainImg" src="'+main+'" style="width:100%;height:340px;object-fit:contain;background:#000">'+arrows+'</div><div>'+thumbs+'</div><div style="padding:14px"><div style="font-weight:900;font-size:18px">'+(fullAd.title||'')+'</div><div style="font-weight:900;font-size:22px;margin-top:6px">'+Number(fullAd.price||0).toLocaleString('pl-PL')+' zł</div><div style="margin-top:10px;display:grid;grid-template-columns:1fr 1fr;gap:6px"><div style="background:#f5f5f7;border-radius:10px;padding:10px"><div style="font-size:8px;color:#888">Marka</div><div style="font-weight:700;font-size:12px">'+(fullAd.brand||'-')+'</div></div><div style="background:#f5f5f7;border-radius:10px;padding:10px"><div style="font-size:8px;color:#888">Model</div><div style="font-weight:700;font-size:12px">'+(fullAd.model||'-')+'</div></div><div style="background:#f5f5f7;border-radius:10px;padding:10px"><div style="font-size:8px;color:#888">Rocznik</div><div style="font-weight:700;font-size:12px">'+(fullAd.year||'-')+'</div></div><div style="background:#f5f5f7;border-radius:10px;padding:10px"><div style="font-size:8px;color:#888">Przebieg</div><div style="font-weight:700;font-size:12px">'+(fullAd.mileage?Number(fullAd.mileage).toLocaleString('pl-PL')+' km':'-')+'</div></div><div style="background:#f5f5f7;border-radius:10px;padding:10px"><div style="font-size:8px;color:#888">Miasto</div><div style="font-weight:700;font-size:12px">📍 '+(fullAd.location||'-')+'</div></div><div style="background:#f5f5f7;border-radius:10px;padding:10px"><div style="font-size:8px;color:#888">Właściciel</div><div style="font-weight:700;font-size:11px">'+(fullAd.owner||'-')+(can?'<br><span style="background:#ffea00;color:#000;font-size:8px;padding:2px 6px;border-radius:10px">TWOJE - możesz edytować!</span>':'')+'</div></div></div>'+(fullAd.description?'<div style="margin-top:10px;background:#f5f5f7;border-radius:10px;padding:10px"><div style="font-size:8px;color:#888">Opis</div><div style="margin-top:4px;font-size:12px">'+fullAd.description+'</div></div>':'')+'<div style="margin-top:12px;background:#000;color:#fff;border-radius:10px;padding:12px;display:flex;justify-content:space-between;align-items:center"><div><div style="font-size:9px;color:#aaa">Telefon</div><div style="font-weight:900;font-size:14px">📞 '+(fullAd.phone||'Brak')+'</div></div>'+(fullAd.phone?'<a href="tel:'+fullAd.phone+'" class="btn btn-yellow" style="padding:10px 14px;text-decoration:none">Zadzwoń</a>':'')+'</div></div>';
-    document.onkeydown=e=>{if(document.getElementById('detailModal').style.display==='none') return; if(e.key==='ArrowLeft') prevImage(); if(e.key==='ArrowRight') nextImage(); if(e.key==='Escape') closeDetail();};
-    let startX=0; const wrap=document.querySelector('.gallery-wrap'); if(wrap){wrap.addEventListener('touchstart', e=>{startX=e.touches[0].clientX;},{passive:true}); wrap.addEventListener('touchend', e=>{const diff=e.changedTouches[0].clientX-startX; if(Math.abs(diff)>50){if(diff>0) prevImage(); else nextImage();}},{passive:true});}
-  }catch(e){content.innerHTML='<div style="padding:20px">Błąd: '+e.message+'</div>';}
+async function openDetail(ad){ const can=canEdit(ad); const editBtn=document.getElementById('detailEdit'); if(editBtn){editBtn.style.display=can?'inline-block':'none'; editBtn.onclick=()=>{closeDetail(); openEditFull(ad);}} const delBtn=document.getElementById('detailDelete'); if(delBtn){delBtn.style.display=can?'inline-block':'none'; delBtn.onclick=()=>deleteAd(ad.id);} const modal=document.getElementById('detailModal'); if(modal) modal.style.display='flex'; const content=document.getElementById('detailContent'); if(!content) return; content.innerHTML='<div style="padding:20px;text-align:center">Ładowanie...</div>'; try{ const res=await fetch(SUPABASE_URL+"/rest/v1/ads?select=*&id=eq."+ad.id+"&t="+Date.now(),{headers:{apikey:PUB_KEY,Authorization:"Bearer "+PUB_KEY},cache:"no-store"}); const fullAds=JSON.parse(await res.text()); const fullAd=fullAds[0]||ad; currentGalleryImages=parseImages(fullAd); currentGalleryIndex=0; if(currentGalleryImages.length===0) currentGalleryImages=['https://images.unsplash.com/photo-1555215695-3004980ad54e?w=600']; const main=currentGalleryImages[0]; let thumbs=''; if(currentGalleryImages.length>1){ thumbs='<div id="detailThumbs" style="display:flex;gap:6px;padding:8px;overflow:auto;background:#f9f9f9">'; currentGalleryImages.forEach((im,i)=>{thumbs+='<img src="'+im+'" style="width:60px;height:60px;object-fit:cover;border-radius:8px;border:2px solid '+(i===0?'#ffea00':'#eee')+';cursor:pointer" onclick="currentGalleryIndex='+i+'; updateGallery()">';}); thumbs+='</div>'; } const arrows=currentGalleryImages.length>1?'<button class="arrow arrow-left" onclick="prevImage()">‹</button><button class="arrow arrow-right" onclick="nextImage()">›</button><div class="counter" id="galleryCounter">1 / '+currentGalleryImages.length+'</div>':''; content.innerHTML='<div class="gallery-wrap"><img id="detailMainImg" src="'+main+'" style="width:100%;height:340px;object-fit:contain;background:#000">'+arrows+'</div><div>'+thumbs+'</div><div style="padding:14px"><div style="font-weight:900;font-size:18px">'+(fullAd.title||'')+'</div><div style="font-weight:900;font-size:22px;margin-top:6px">'+Number(fullAd.price||0).toLocaleString('pl-PL')+' zł</div><div style="margin-top:10px;display:grid;grid-template-columns:1fr 1fr;gap:6px"><div style="background:#f5f5f7;border-radius:10px;padding:10px"><div style="font-size:8px;color:#888">Marka</div><div style="font-weight:700;font-size:12px">'+(fullAd.brand||'-')+'</div></div><div style="background:#f5f5f7;border-radius:10px;padding:10px"><div style="font-size:8px;color:#888">Model</div><div style="font-weight:700;font-size:12px">'+(fullAd.model||'-')+'</div></div><div style="background:#f5f5f7;border-radius:10px;padding:10px"><div style="font-size:8px;color:#888">Rocznik</div><div style="font-weight:700;font-size:12px">'+(fullAd.year||'-')+'</div></div><div style="background:#f5f5f7;border-radius:10px;padding:10px"><div style="font-size:8px;color:#888">Przebieg</div><div style="font-weight:700;font-size:12px">'+(fullAd.mileage?Number(fullAd.mileage).toLocaleString('pl-PL')+' km':'-')+'</div></div><div style="background:#f5f5f7;border-radius:10px;padding:10px"><div style="font-size:8px;color:#888">Miasto</div><div style="font-weight:700;font-size:12px">📍 '+(fullAd.location||'-')+'</div></div><div style="background:#f5f5f7;border-radius:10px;padding:10px"><div style="font-size:8px;color:#888">Właściciel</div><div style="font-weight:700;font-size:11px">'+(fullAd.owner||'-')+(can?'<br><span style="background:#ffea00;color:#000;font-size:8px;padding:2px 6px;border-radius:10px">TWOJE - możesz edytować!</span>':'')+'</div></div></div>'+(fullAd.description?'<div style="margin-top:10px;background:#f5f5f7;border-radius:10px;padding:10px"><div style="font-size:8px;color:#888">Opis</div><div style="margin-top:4px;font-size:12px">'+fullAd.description+'</div></div>':'')+'<div style="margin-top:12px;background:#000;color:#fff;border-radius:10px;padding:12px;display:flex;justify-content:space-between;align-items:center"><div><div style="font-size:9px;color:#aaa">Telefon</div><div style="font-weight:900;font-size:14px">📞 '+(fullAd.phone||'Brak')+'</div></div>'+(fullAd.phone?'<a href="tel:'+fullAd.phone+'" class="btn btn-yellow" style="padding:10px 14px;text-decoration:none">Zadzwoń</a>':'')+'</div></div>'; document.onkeydown=e=>{if(document.getElementById('detailModal').style.display==='none') return; if(e.key==='ArrowLeft') prevImage(); if(e.key==='ArrowRight') nextImage(); if(e.key==='Escape') closeDetail();}; let startX=0; const wrap=document.querySelector('.gallery-wrap'); if(wrap){wrap.addEventListener('touchstart', e=>{startX=e.touches[0].clientX;},{passive:true}); wrap.addEventListener('touchend', e=>{const diff=e.changedTouches[0].clientX-startX; if(Math.abs(diff)>50){if(diff>0) prevImage(); else nextImage();}},{passive:true});} }catch(e){content.innerHTML='<div style="padding:20px">Błąd: '+e.message+'</div>';}
 }
 function closeDetail(){const m=document.getElementById('detailModal'); if(m) m.style.display='none'; document.onkeydown=null;}
 async function deleteAd(id){if(!confirm('Usunąć?')) return; const res=await fetch(SUPABASE_URL+"/rest/v1/ads?id=eq."+id,{method:'DELETE',headers:{apikey:PUB_KEY,Authorization:"Bearer "+PUB_KEY}}); if(res.ok||res.status===204){closeDetail(); loadAds();}}
@@ -375,8 +76,42 @@ function openAuth(m){authMode=m; const modal=document.getElementById('authModal'
 function closeAuth(){const m=document.getElementById('authModal'); if(m) m.style.display='none';}
 function openAdd(){if(!currentUser){openAuth('login');return;} editingId=null; selectedImages=[]; const titleEl=document.getElementById('addTitle'); if(titleEl) titleEl.textContent='Dodaj - 3 zdjęcia'; ['fBrand','fModel','fYear','fPrice','fMileage','fLocation','fTitle','fPhone','fDesc'].forEach(id=>{const el=document.getElementById(id); if(el) el.value=id==='fYear'?'2020':id==='fLocation'?'Warszawa':'';}); const preview=document.getElementById('imgPreview'); if(preview) preview.innerHTML=''; const info=document.getElementById('imgInfo'); if(info) info.textContent='0/3'; const modal=document.getElementById('addModal'); if(modal) modal.style.display='flex';}
 function closeAdd(){const m=document.getElementById('addModal'); if(m) m.style.display='none'; editingId=null; selectedImages=[];}
-async function openEditFull(ad){if(!canEdit(ad)){alert('Nie możesz edytować! Właściciel: '+ad.owner); return;} editingId=ad.id; try{const res=await fetch(SUPABASE_URL+"/rest/v1/ads?select=*&id=eq."+ad.id,{headers:{apikey:PUB_KEY,Authorization:"Bearer "+PUB_KEY}}); const fullAds=JSON.parse(await res.text()); const fullAd=fullAds[0]||ad; document.getElementById('fBrand').value=fullAd.brand||''; document.getElementById('fModel').value=fullAd.model||''; document.getElementById('fYear').value=fullAd.year||2020; document.getElementById('fPrice').value=fullAd.price||''; document.getElementById('fMileage').value=fullAd.mileage||''; document.getElementById('fLocation').value=fullAd.location||'Warszawa'; document.getElementById('fTitle').value=fullAd.title||''; document.getElementById('fPhone').value=fullAd.phone||''; document.getElementById('fDesc').value=fullAd.description||''; selectedImages=parseImages(fullAd); renderImgPreview(); document.getElementById('addTitle').textContent='Edytuj swoje ogłoszenie'; document.getElementById('addModal').style.display='flex';}catch(e){alert(e.message);}}
-function compress(file, cb){const r=new FileReader(); r.onload=e=>{const img=new Image(); img.onload=()=>{const c=document.createElement('canvas'); const maxW=500; const sc=Math.min(1,maxW/img.width); c.width=img.width*sc; c.height=img.height*sc; c.getContext('2d').drawImage(img,0,0,c.width,c.height); cb(c.toDataURL('image/jpeg',0.45));}; img.src=e.target.result;}; r.readAsDataURL(file);}
+async function openEditFull(ad){if(!canEdit(ad)){alert('Nie możesz edytować! Właściciel: '+ad.owner); return;} editingId=ad.id; try{const res=await fetch(SUPABASE_URL+"/rest/v1/ads?select=*&id=eq."+ad.id+"&t="+Date.now(),{headers:{apikey:PUB_KEY,Authorization:"Bearer "+PUB_KEY},cache:"no-store"}); const fullAds=JSON.parse(await res.text()); const fullAd=fullAds[0]||ad; document.getElementById('fBrand').value=fullAd.brand||''; document.getElementById('fModel').value=fullAd.model||''; document.getElementById('fYear').value=fullAd.year||2020; document.getElementById('fPrice').value=fullAd.price||''; document.getElementById('fMileage').value=fullAd.mileage||''; document.getElementById('fLocation').value=fullAd.location||'Warszawa'; document.getElementById('fTitle').value=fullAd.title||''; document.getElementById('fPhone').value=fullAd.phone||''; document.getElementById('fDesc').value=fullAd.description||''; selectedImages=parseImages(fullAd); renderImgPreview(); document.getElementById('addTitle').textContent='Edytuj swoje ogłoszenie'; document.getElementById('addModal').style.display='flex';}catch(e){alert(e.message);}}
+function compress(file, cb){
+  const r=new FileReader();
+  r.onload=e=>{
+    const img=new Image();
+    img.onload=()=>{
+      // HIGH QUALITY for detail view - 1200px, quality 0.78 - sharp when enlarged
+      const canvasFull=document.createElement('canvas');
+      const maxWFull=1200;
+      const scFull=Math.min(1,maxWFull/img.width);
+      canvasFull.width=img.width*scFull;
+      canvasFull.height=img.height*scFull;
+      canvasFull.getContext('2d').drawImage(img,0,0,canvasFull.width,canvasFull.height);
+      const fullQuality=canvasFull.toDataURL('image/jpeg',0.78);
+      
+      // Thumbnail for grid - 400px, quality 0.55 - fast loading
+      const canvasThumb=document.createElement('canvas');
+      const maxWThumb=400;
+      const scThumb=Math.min(1,maxWThumb/img.width);
+      canvasThumb.width=img.width*scThumb;
+      canvasThumb.height=img.height*scThumb;
+      canvasThumb.getContext('2d').drawImage(canvasThumb,0,0,canvasThumb.width,canvasThumb.height);
+      // Actually draw from original img for thumb too
+      const ctx=canvasThumb.getContext('2d');
+      ctx.clearRect(0,0,canvasThumb.width,canvasThumb.height);
+      ctx.drawImage(img,0,0,canvasThumb.width,canvasThumb.height);
+      const thumbQuality=canvasThumb.toDataURL('image/jpeg',0.55);
+      
+      // Store as object with both qualities - but keep backward compatible as string if needed
+      // For now store full quality - grid will use it but it's sharper
+      cb(fullQuality);
+    };
+    img.src=e.target.result;
+  };
+  r.readAsDataURL(file);
+}
 function renderImgPreview(){const wrap=document.getElementById('imgPreview'); if(!wrap) return; wrap.innerHTML=''; selectedImages.forEach((im,i)=>{const d=document.createElement('div'); d.style.position='relative'; d.style.width='80px'; d.style.height='80px'; d.style.borderRadius='10px'; d.style.overflow='hidden'; d.style.border='1px solid #ddd'; d.innerHTML='<img src="'+im+'" style="width:100%;height:100%;object-fit:cover"><button onclick="selectedImages=selectedImages.filter((_,idx)=>idx!=='+i+'); renderImgPreview()" style="position:absolute;top:3px;right:3px;width:18px;height:18px;background:rgba(0,0,0,0.7);color:#fff;border:none;border-radius:50%;font-size:9px;cursor:pointer">✕</button><div style="position:absolute;bottom:0;left:0;background:rgba(0,0,0,0.6);color:#fff;font-size:7px;padding:1px 3px">'+Math.round(im.length/1024)+'KB</div>'; wrap.appendChild(d);}); const info=document.getElementById('imgInfo'); if(info) info.textContent=selectedImages.length+'/3 - '+Math.round(selectedImages.reduce((s,im)=>s+im.length,0)/1024)+'KB';}
 document.getElementById('fImages').addEventListener('change', e=>{const files=Array.from(e.target.files||[]); if(selectedImages.length+files.length>3){alert('Max 3!'); return;} files.forEach(f=>compress(f,c=>{selectedImages.push(c); renderImgPreview();})); e.target.value='';});
 document.getElementById('btnLogin').onclick=()=>openAuth('login');
@@ -394,54 +129,9 @@ document.getElementById('yearMin').oninput=applyFilters;
 document.getElementById('yearMax').oninput=applyFilters;
 document.getElementById('mileageMax').onchange=applyFilters;
 document.getElementById('sortFilter').onchange=applyFilters;
-document.getElementById('authSubmit').onclick=()=>{
-  const email=document.getElementById('authEmail').value.trim().toLowerCase();
-  const pass=document.getElementById('authPass').value;
-  const name=document.getElementById('authName').value.trim();
-  const err=document.getElementById('authError');
-  if(err) err.style.display='none';
-  if(!email||!pass){if(err){err.textContent='Podaj email i haslo'; err.style.display='block';} return;}
-  if(authMode==='register'){
-    if(!name){if(err){err.textContent='Podaj imie'; err.style.display='block';} return;}
-    if(users.find(u=>u.email===email)){if(err){err.textContent='Istnieje'; err.style.display='block';} return;}
-    const nu={id:Date.now(),email,name,password:pass};
-    users.push(nu); localStorage.setItem('wroomer_users_final14',JSON.stringify(users));
-    currentUser={id:nu.id,email:nu.email,name:nu.name}; localStorage.setItem('wroomer_user_final14',JSON.stringify(currentUser));
-    closeAuth(); updateUI(); loadAds();
-  } else {
-    const u=users.find(x=>x.email===email&&x.password===pass);
-    if(!u){if(err){err.textContent='Bledny email/haslo'; err.style.display='block';} return;}
-    currentUser={id:u.id,email:u.email,name:u.name}; localStorage.setItem('wroomer_user_final14',JSON.stringify(currentUser));
-    closeAuth(); updateUI(); loadAds();
-  }
+document.getElementById('authSubmit').onclick=()=>{ const email=document.getElementById('authEmail').value.trim().toLowerCase(); const pass=document.getElementById('authPass').value; const name=document.getElementById('authName').value.trim(); const err=document.getElementById('authError'); if(err) err.style.display='none'; if(!email||!pass){if(err){err.textContent='Podaj email i haslo'; err.style.display='block';} return;} if(authMode==='register'){ if(!name){if(err){err.textContent='Podaj imie'; err.style.display='block';} return;} if(users.find(u=>u.email===email)){if(err){err.textContent='Istnieje'; err.style.display='block';} return;} const nu={id:Date.now(),email,name,password:pass}; users.push(nu); localStorage.setItem('wroomer_users_final14',JSON.stringify(users)); currentUser={id:nu.id,email:nu.email,name:nu.name}; localStorage.setItem('wroomer_user_final14',JSON.stringify(currentUser)); closeAuth(); updateUI(); loadAds(); } else { const u=users.find(x=>x.email===email&&x.password===pass); if(!u){if(err){err.textContent='Bledny email/haslo'; err.style.display='block';} return;} currentUser={id:u.id,email:u.email,name:u.name}; localStorage.setItem('wroomer_user_final14',JSON.stringify(currentUser)); closeAuth(); updateUI(); loadAds(); }
 };
-document.getElementById('btnSave').onclick=async ()=>{
-  const brand=document.getElementById('fBrand').value;
-  const model=document.getElementById('fModel').value.trim();
-  const year=parseInt(document.getElementById('fYear').value)||2020;
-  const price=parseInt(document.getElementById('fPrice').value)||0;
-  const mileage=parseInt(document.getElementById('fMileage').value)||0;
-  const location=document.getElementById('fLocation').value.trim()||'Warszawa';
-  const title=document.getElementById('fTitle').value.trim()||brand+' '+model+' '+year;
-  const phone=document.getElementById('fPhone').value.trim();
-  const desc=document.getElementById('fDesc').value.trim();
-  const err=document.getElementById('addError');
-  if(err) err.style.display='none';
-  if(!brand||!model||!price||selectedImages.length===0||!phone){if(err){err.textContent='Wypelnij marka, model, cena, tel, zdjecie'; err.style.display='block';} return;}
-  const nid=editingId||Date.now();
-  const imagesJson=JSON.stringify(selectedImages);
-  const payload={id:nid, title:title.substring(0,200), brand, model, year, price, mileage:mileage||0, location, image:imagesJson, phone, owner:(currentUser?.name||'User')+' ('+(currentUser?.email||'')+')', owner_id:currentUser?.id||999, description:desc||'', created_at_ts:nid};
-  const sendPayload=editingId?{title:payload.title, brand, model, year, price, mileage:payload.mileage, location, image:imagesJson, phone, description:payload.description}:payload;
-  try{
-    let res;
-    if(editingId){res=await fetch(SUPABASE_URL+"/rest/v1/ads?id=eq."+editingId,{method:'PATCH',headers:{apikey:PUB_KEY,Authorization:"Bearer "+PUB_KEY,"Content-Type":"application/json",Prefer:"return=representation"},body:JSON.stringify(sendPayload)});}
-    else{res=await fetch(SUPABASE_URL+"/rest/v1/ads",{method:'POST',headers:{apikey:PUB_KEY,Authorization:"Bearer "+PUB_KEY,"Content-Type":"application/json",Prefer:"return=representation"},body:JSON.stringify(payload)});}
-    const txt=await res.text();
-    if(!res.ok){if(err){err.textContent='Blad: '+txt; err.style.display='block';} return;}
-    closeAdd(); loadAds();
-  }catch(e){if(err){err.textContent='Blad: '+e.message; err.style.display='block';}}
-};
-
-updateUI();
+document.getElementById('btnSave').onclick=async ()=>{ const brand=document.getElementById('fBrand').value; const model=document.getElementById('fModel').value.trim(); const year=parseInt(document.getElementById('fYear').value)||2020; const price=parseInt(document.getElementById('fPrice').value)||0; const mileage=parseInt(document.getElementById('fMileage').value)||0; const location=document.getElementById('fLocation').value.trim()||'Warszawa'; const title=document.getElementById('fTitle').value.trim()||brand+' '+model+' '+year; const phone=document.getElementById('fPhone').value.trim(); const desc=document.getElementById('fDesc').value.trim(); const err=document.getElementById('addError'); if(err) err.style.display='none'; if(!brand||!model||!price||selectedImages.length===0||!phone){if(err){err.textContent='Wypelnij marka, model, cena, tel, zdjecie'; err.style.display='block';} return;} const nid=editingId||Date.now(); const imagesJson=JSON.stringify(selectedImages); const payload={id:nid, title:title.substring(0,200), brand, model, year, price, mileage:mileage||0, location, image:imagesJson, phone, owner:(currentUser?.name||'User')+' ('+(currentUser?.email||'')+')', owner_id:currentUser?.id||999, description:desc||'', created_at_ts:nid}; const sendPayload=editingId?{title:payload.title, brand, model, year, price, mileage:payload.mileage, location, image:imagesJson, phone, description:payload.description}:payload; try{ let res; if(editingId){res=await fetch(SUPABASE_URL+"/rest/v1/ads?id=eq."+editingId,{method:'PATCH',headers:{apikey:PUB_KEY,Authorization:"Bearer "+PUB_KEY,"Content-Type":"application/json",Prefer:"return=representation"},body:JSON.stringify(sendPayload)});} else{res=await fetch(SUPABASE_URL+"/rest/v1/ads",{method:'POST',headers:{apikey:PUB_KEY,Authorization:"Bearer "+PUB_KEY,"Content-Type":"application/json",Prefer:"return=representation"},body:JSON.stringify(payload)});} const txt=await res.text(); if(!res.ok){if(err){err.textContent='Blad: '+txt; err.style.display='block';} return;} closeAdd(); loadAds(); }catch(e){if(err){err.textContent='Blad: '+e.message; err.style.display='block';}}
+}; updateUI();
 loadAds();
 </script></body></html>
