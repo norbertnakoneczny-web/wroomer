@@ -1,236 +1,220 @@
 <!DOCTYPE html>
-<html lang="pl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>WROOMER.PL - FINAL - działa wszędzie 🌐</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+<html lang="pl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>WROOMER.PL - FINAL FULL 14 kolumn</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
 <style>
-*{font-family:Inter,sans-serif;box-sizing:border-box}body{background:#f5f5f7;margin:0;padding:0;overflow-x:hidden;width:100%;max-width:100vw}
+*{font-family:Inter,sans-serif;box-sizing:border-box}body{background:#f5f5f7;margin:0;padding:0;overflow-x:hidden}
 .header{background:#000;color:#fff;height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 12px;position:sticky;top:0;z-index:10}
 .logo{font-weight:900;font-size:16px;cursor:pointer} .logo span{color:#ffea00}
-.btn{border:none;border-radius:10px;padding:8px 14px;font-weight:900;font-size:12px;cursor:pointer;display:inline-flex;align-items:center;gap:4px}
-.btn-yellow{background:#ffea00;color:#000} .btn-black{background:#222;color:#fff} .btn-white{background:#fff;color:#000;border:1px solid #ddd} .btn-red{background:#fee;color:#a00;border:1px solid #fcc}
-.card{background:#fff;border-radius:14px;border:1px solid #e5e5e5;overflow:hidden;cursor:pointer;transition:transform 0.1s} .card:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,0,0,0.08)}
-.card img{width:100%;height:160px;object-fit:cover;background:#eee}
-.card-body{padding:10px} .price{font-weight:900;font-size:16px} .meta{font-size:10px;color:#888;display:flex;justify-content:space-between}
-.input{width:100%;background:#f5f5f7;border:1px solid #e5e5e5;border-radius:10px;padding:10px 12px;font-size:13px;outline:none;margin-top:4px}
-.input:focus{border-color:#000} .label{font-size:10px;font-weight:700;margin-top:10px;display:block}
-.modal{position:fixed;inset:0;background:rgba(0,0,0,0.7);display:flex;align-items:center;justify-content:center;z-index:100;padding:12px}
-.modal-box{background:#fff;width:100%;max-width:500px;border-radius:20px;overflow:hidden;max-height:92vh;display:flex;flex-direction:column}
-#log{background:#000;color:#0f0;padding:8px;font-size:10px;white-space:pre-wrap;max-height:120px;overflow:auto;margin:8px;border-radius:8px}
-.badge{font-size:9px;font-weight:900;padding:3px 7px;border-radius:20px}
-.badge-green{background:#ffea00;color:#000} .badge-black{background:#000;color:#fff}
-@media(max-width:768px){.card img{height:180px}}
+.btn{border:none;border-radius:10px;padding:8px 14px;font-weight:900;font-size:12px;cursor:pointer}
+.btn-yellow{background:#ffea00;color:#000} .btn-black{background:#000;color:#fff} .btn-white{background:#fff;color:#000;border:1px solid #ddd} .btn-red{background:#fee;color:#a00;border:1px solid #fcc}
+.card{background:#fff;border-radius:16px;border:1px solid #e5e5e5;overflow:hidden;cursor:pointer;transition:all 0.15s} .card:hover{transform:translateY(-3px);box-shadow:0 12px 24px rgba(0,0,0,0.1)}
+.card img{width:100%;height:170px;object-fit:cover;background:#f0f0f0}
+.card-body{padding:12px} .card-title{font-weight:700;font-size:13px;line-height:1.3;min-height:34px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.price{font-weight:900;font-size:18px;margin-top:6px} .meta{font-size:10px;color:#888;margin-top:6px;display:flex;justify-content:space-between}
+.input{width:100%;background:#f5f5f7;border:1px solid #e5e5e5;border-radius:10px;padding:11px 12px;font-size:13px;outline:none;margin-top:4px} .input:focus{border-color:#000}
+.label{font-size:10px;font-weight:700;margin-top:12px;display:block;color:#333}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,0.75);display:flex;align-items:center;justify-content:center;z-index:100;padding:12px}
+.modal-box{background:#fff;width:100%;max-width:540px;border-radius:20px;overflow:hidden;max-height:94vh;display:flex;flex-direction:column}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:12px}
+@media(max-width:600px){.grid{grid-template-columns:1fr} .card img{height:200px}}
 </style></head><body>
 <div class="header">
-  <div class="logo" onclick="location.reload()">WROOMER<span>.PL</span></div>
+  <div class="logo" onclick="location.reload()">WROOMER<span>.PL</span> <span style="font-size:9px;background:#ffea00;color:#000;padding:2px 6px;border-radius:10px;margin-left:6px">FINAL FULL 14 kol</span></div>
   <div style="display:flex;gap:6px;align-items:center">
     <span id="userInfo" style="font-size:10px;color:#aaa;display:none"></span>
     <button class="btn btn-white" id="btnLogin">Zaloguj</button>
     <button class="btn btn-yellow" id="btnRegister">Zarejestruj</button>
-    <button class="btn btn-yellow" id="btnAdd" style="display:none">+ Dodaj</button>
+    <button class="btn btn-yellow" id="btnAdd" style="display:none">+ Dodaj ogłoszenie</button>
     <button class="btn btn-black" id="btnLogout" style="display:none">Wyloguj</button>
   </div>
 </div>
-<div style="max-width:1200px;margin:0 auto;padding:12px">
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:8px">
-    <div style="background:#000;color:#fff;font-size:11px;font-weight:700;padding:6px 12px;border-radius:20px" id="status">Ładowanie z nowym kluczem publishable...</div>
-    <div style="display:flex;gap:6px">
-      <input id="searchInput" class="btn btn-white" placeholder="Szukaj BMW, Audi..." style="padding:6px 10px;font-weight:400;width:160px">
-      <select id="brandFilter" class="btn btn-white" style="padding:6px 10px"><option value="">Wszystkie marki</option><option>BMW</option><option>Audi</option><option>Volkswagen</option><option>Mercedes</option><option>Skoda</option><option>Toyota</option><option>Ford</option><option>Opel</option></select>
-      <button class="btn btn-white" onclick="loadAds()">🔄</button>
+<div style="max-width:1280px;margin:0 auto;padding:12px">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px">
+    <div style="background:#000;color:#fff;font-size:11px;font-weight:700;padding:7px 14px;border-radius:20px" id="status">Ładowanie FINAL FULL...</div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap">
+      <input id="searchInput" class="btn btn-white" placeholder="Szukaj..." style="padding:7px 12px;font-weight:400;width:160px">
+      <select id="brandFilter" class="btn btn-white" style="padding:7px 12px"><option value="">Wszystkie marki</option><option>BMW</option><option>Audi</option><option>Volkswagen</option><option>Mercedes</option><option>Skoda</option><option>Toyota</option><option>Ford</option><option>Opel</option></select>
+      <select id="sortBy" class="btn btn-white" style="padding:7px 12px"><option value="newest">Najnowsze</option><option value="price_asc">Cena ↑</option><option value="price_desc">Cena ↓</option></select>
+      <button class="btn btn-white" onclick="loadAds()">🔄 Odśwież</button>
     </div>
   </div>
-  <div id="log">Logi (nowy klucz publishable):
-</div>
-  <div id="adsGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px;margin-top:8px"></div>
-  <div id="empty" style="display:none;background:#fff;border-radius:16px;padding:24px;text-align:center;margin-top:12px">
-    <div style="font-weight:900;font-size:16px">Brak ogłoszeń</div><div style="font-size:11px;color:#888;margin-top:6px" id="emptyMsg"></div><button class="btn btn-yellow" style="margin-top:12px" onclick="document.getElementById('btnAdd').click()">+ Dodaj pierwsze ogłoszenie</button>
+  <div id="adsGrid" class="grid"></div>
+  <div id="empty" style="display:none;background:#fff;border-radius:20px;padding:32px;text-align:center;margin-top:16px">
+    <div style="font-weight:900;font-size:18px">Brak ogłoszeń</div><div style="font-size:12px;color:#888;margin-top:8px" id="emptyMsg">Dodaj pierwsze ogłoszenie!</div>
+    <button class="btn btn-yellow" style="margin-top:16px;padding:10px 20px" onclick="document.getElementById('btnAdd').click()">+ Dodaj ogłoszenie</button>
   </div>
 </div>
 
-<div id="authModal" class="modal" style="display:none"><div class="modal-box"><div style="padding:16px;border-bottom:1px solid #eee;display:flex;justify-content:space-between"><div style="font-weight:900" id="authTitle">Zaloguj</div><button class="btn btn-white" onclick="closeAuth()">X</button></div><div style="padding:16px;overflow:auto"><div id="authError" style="display:none;background:#fee;border:1px solid #fcc;color:#a00;padding:8px;border-radius:8px;font-size:11px;font-weight:700;margin-bottom:8px"></div><div id="authNameWrap"><label class="label">Imię (tylko rejestracja)</label><input id="authName" class="input" placeholder="Jan"></div><label class="label">E-mail *</label><input id="authEmail" class="input" type="email" placeholder="jan@example.com"><label class="label">Hasło *</label><input id="authPass" class="input" type="password" placeholder="••••••••"><button class="btn btn-black" style="width:100%;margin-top:16px;padding:12px" id="authSubmit">Zaloguj</button><div style="text-align:center;font-size:11px;color:#888;margin-top:10px"><span id="authSwitchText">Nie masz konta?</span> <button class="btn btn-white" style="font-size:11px;margin-left:6px" id="authSwitch">Zarejestruj</button></div></div></div></div>
+<div id="authModal" class="modal" style="display:none"><div class="modal-box"><div style="padding:16px;border-bottom:1px solid #eee;display:flex;justify-content:space-between;align-items:center"><div style="font-weight:900;font-size:16px" id="authTitle">Zaloguj się</div><button class="btn btn-white" onclick="closeAuth()">✕</button></div><div style="padding:20px;overflow:auto"><div id="authError" style="display:none;background:#fee;border:1px solid #fcc;color:#a00;padding:10px;border-radius:10px;font-size:11px;font-weight:700;margin-bottom:12px"></div><div id="authNameWrap"><label class="label">Imię *</label><input id="authName" class="input" placeholder="Jan Kowalski"></div><label class="label">E-mail *</label><input id="authEmail" class="input" type="email" placeholder="jan@example.com"><label class="label">Hasło *</label><input id="authPass" class="input" type="password" placeholder="••••••••"><button class="btn btn-black" style="width:100%;margin-top:20px;padding:14px;font-size:13px" id="authSubmit">Zaloguj się</button><div style="text-align:center;font-size:11px;color:#888;margin-top:14px"><span id="authSwitchText">Nie masz konta?</span> <button style="background:none;border:none;font-weight:900;text-decoration:underline;cursor:pointer;margin-left:6px;font-size:11px" id="authSwitch">Zarejestruj się</button></div></div></div></div>
 
-<div id="addModal" class="modal" style="display:none"><div class="modal-box"><div style="padding:16px;border-bottom:1px solid #eee;display:flex;justify-content:space-between"><div style="font-weight:900" id="addTitle">Dodaj ogłoszenie 🌐</div><button class="btn btn-white" onclick="closeAdd()">X</button></div><div style="padding:16px;overflow:auto">
-<div id="addError" style="display:none;background:#fee;border:1px solid #fcc;color:#a00;padding:8px;border-radius:8px;font-size:11px;font-weight:700;margin-bottom:8px"></div>
-<label class="label">Marka *</label><select id="fBrand" class="input"><option value="">Wybierz markę</option><option>BMW</option><option>Audi</option><option>Volkswagen</option><option>Mercedes</option><option>Skoda</option><option>Toyota</option><option>Ford</option><option>Opel</option></select>
-<label class="label">Model *</label><input id="fModel" class="input" placeholder="np. 1 Series">
-<label class="label">Rocznik *</label><input id="fYear" class="input" type="number" value="2020">
-<label class="label">Cena (zł) *</label><input id="fPrice" class="input" type="number" placeholder="50000">
-<label class="label">Tytuł (opcjonalnie)</label><input id="fTitle" class="input" placeholder="BMW 1 Series 2020 - zadbane, garażowane">
-<button class="btn btn-black" style="width:100%;margin-top:16px;padding:12px" id="btnSave">💾 Zapisz - widoczne wszędzie 🌐</button>
-<div style="font-size:9px;color:#666;margin-top:8px;background:#eef;padding:8px;border-radius:8px">✅ Nowy klucz publishable! Zapisuje 6 kolumn do Supabase (id,title,brand,model,year,price) - widać w każdej przeglądarce i na telefonie!</div>
+<div id="addModal" class="modal" style="display:none"><div class="modal-box"><div style="padding:16px;border-bottom:1px solid #eee;display:flex;justify-content:space-between;align-items:center"><div style="font-weight:900;font-size:14px" id="addTitle">Dodaj ogłoszenie - FULL 14 kolumn 🌐</div><button class="btn btn-white" onclick="closeAdd()">✕</button></div><div style="padding:16px;overflow:auto">
+<div id="addError" style="display:none;background:#fee;border:1px solid #fcc;color:#a00;padding:10px;border-radius:10px;font-size:11px;font-weight:700;margin-bottom:12px"></div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+<div><label class="label">Marka *</label><select id="fBrand" class="input"><option value="">Wybierz</option><option>BMW</option><option>Audi</option><option>Volkswagen</option><option>Mercedes</option><option>Skoda</option><option>Toyota</option><option>Ford</option><option>Opel</option></select></div>
+<div><label class="label">Model *</label><input id="fModel" class="input" placeholder="1 Series"></div>
+<div><label class="label">Rocznik *</label><input id="fYear" class="input" type="number" value="2020"></div>
+<div><label class="label">Cena (zł) *</label><input id="fPrice" class="input" type="number" placeholder="50000"></div>
+<div><label class="label">Przebieg (km)</label><input id="fMileage" class="input" type="number" placeholder="100000"></div>
+<div><label class="label">Miasto *</label><input id="fLocation" class="input" placeholder="Warszawa" value="Warszawa"></div>
+</div>
+<label class="label">Tytuł ogłoszenia</label><input id="fTitle" class="input" placeholder="BMW 1 Series 2020 - zadbane">
+<label class="label">Telefon *</label><input id="fPhone" class="input" placeholder="600123456">
+<label class="label">Opis</label><textarea id="fDesc" class="input" rows="3" placeholder="Opisz stan auta, wyposażenie, historię serwisową..."></textarea>
+<label class="label">Zdjęcia (max 3) * - kompresowane do 600px, widoczne wszędzie 🌐</label>
+<div id="imgPreview" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"></div>
+<label class="btn btn-white" style="margin-top:8px;cursor:pointer;display:inline-flex"><span>+ Dodaj zdjęcia</span><input id="fImages" type="file" accept="image/*" multiple style="display:none"></label>
+<div style="font-size:9px;color:#666;margin-top:12px;background:#e8f5e9;padding:10px;border-radius:10px;border:1px solid #c8e6c9">✅ FINAL FULL 14 kolumn! Zapisuje WSZYSTKO do Supabase: zdjęcia (base64 600px), telefon, lokalizacja, przebieg, opis, właściciel - wszystko widoczne w każdej przeglądarce, incognito i telefonie! 🌐</div>
+<button class="btn btn-black" style="width:100%;margin-top:16px;padding:14px;font-size:13px" id="btnSave">💾 Zapisz ogłoszenie - widoczne wszędzie 🌐</button>
 </div></div></div>
 
-<div id="detailModal" class="modal" style="display:none"><div class="modal-box"><div style="padding:12px;border-bottom:1px solid #eee;display:flex;justify-content:space-between"><button class="btn btn-white" onclick="closeDetail()">← Wróć</button><button class="btn btn-black" onclick="closeDetail()">X</button></div><div style="padding:0;overflow:auto" id="detailContent"></div></div></div>
+<div id="detailModal" class="modal" style="display:none"><div class="modal-box" style="max-width:600px"><div style="padding:12px;border-bottom:1px solid #eee;display:flex;justify-content:space-between"><button class="btn btn-white" onclick="closeDetail()">← Wróć</button><div style="display:flex;gap:6px"><button class="btn btn-black" id="detailEdit" style="display:none">Edytuj</button><button class="btn btn-red" id="detailDelete" style="display:none">Usuń</button><button class="btn btn-white" onclick="closeDetail()">✕</button></div></div><div style="padding:0;overflow:auto" id="detailContent"></div></div></div>
 
 <script>
 const SUPABASE_URL = 'https://rljqnhfogaqdjeirqqdj.supabase.co';
 const PUB_KEY = 'sb_publishable_j7CS5xIHzOMBMyvsqVgDmw_GeEek5hX';
-const logEl = document.getElementById('log');
-function log(msg){ const t=new Date().toLocaleTimeString(); logEl.textContent+=`[${t}] ${msg}\n`; logEl.scrollTop=logEl.scrollHeight; console.log(msg); }
+let currentUser=null, users=[], ads=[], authMode='login', editingId=null;
+let selectedImages=[];
 
-let currentUser = null;
-try{ currentUser = JSON.parse(localStorage.getItem('wroomer_user_final')||'null'); }catch{}
-let users = [];
-try{ users = JSON.parse(localStorage.getItem('wroomer_users_final')||'[]'); }catch{}
-let ads = [];
-let authMode = 'login';
+try{currentUser=JSON.parse(localStorage.getItem('wroomer_user_final14')||'null')}catch{}
+try{users=JSON.parse(localStorage.getItem('wroomer_users_final14')||'[]')}catch{}
 
 function updateUI(){
-  const info = document.getElementById('userInfo');
-  const btnLogin = document.getElementById('btnLogin');
-  const btnRegister = document.getElementById('btnRegister');
-  const btnAdd = document.getElementById('btnAdd');
-  const btnLogout = document.getElementById('btnLogout');
-  if(currentUser){
-    info.style.display='inline'; info.textContent='Cześć, '+currentUser.name+'!';
-    btnLogin.style.display='none'; btnRegister.style.display='none';
-    btnAdd.style.display='inline-block'; btnLogout.style.display='inline-block';
-  }else{
-    info.style.display='none';
-    btnLogin.style.display='inline-block'; btnRegister.style.display='inline-block';
-    btnAdd.style.display='none'; btnLogout.style.display='none';
-  }
+  const info=document.getElementById('userInfo'), bL=document.getElementById('btnLogin'), bR=document.getElementById('btnRegister'), bA=document.getElementById('btnAdd'), bO=document.getElementById('btnLogout');
+  if(currentUser){info.style.display='inline';info.textContent='Cześć, '+currentUser.name+'!'; bL.style.display='none';bR.style.display='none';bA.style.display='inline-block';bO.style.display='inline-block';}
+  else{info.style.display='none';bL.style.display='inline-block';bR.style.display='inline-block';bA.style.display='none';bO.style.display='none';}
 }
 
 async function loadAds(){
-  document.getElementById('status').textContent='Ładowanie z Supabase (nowy klucz)...';
-  log('SELECT * FROM ads ORDER BY id DESC - nowy klucz publishable');
+  document.getElementById('status').textContent='Ładowanie FINAL FULL 14 kolumn...';
   try{
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/ads?select=*&order=id.desc&limit=100`, {
-      headers: { 'apikey': PUB_KEY, 'Authorization': `Bearer ${PUB_KEY}` }
-    });
-    const text = await res.text();
-    log(`SELECT status: ${res.status}`);
-    if(!res.ok){ log(`❌ BŁĄD SELECT ${res.status}: ${text}`); document.getElementById('status').textContent=`Błąd SELECT ${res.status}`; document.getElementById('emptyMsg').textContent=text; document.getElementById('empty').style.display='block'; document.getElementById('adsGrid').innerHTML=''; return; }
-    const data = JSON.parse(text);
-    ads = data;
-    log(`✅ SELECT OK - ${data.length} ogłoszeń z serwera`);
-    if(data.length>0) data.forEach(d=>log(`  id=${d.id} "${d.title}" ${d.brand} ${d.model} ${d.price}zł`));
-    else log('⚠️ Tabela pusta - dodaj pierwsze ogłoszenie!');
+    const res=await fetch(`${SUPABASE_URL}/rest/v1/ads?select=*&order=created_at_ts.desc&limit=100`,{headers:{'apikey':PUB_KEY,'Authorization':`Bearer ${PUB_KEY}`}});
+    if(!res.ok){ // fallback to id if created_at_ts fails
+      const res2=await fetch(`${SUPABASE_URL}/rest/v1/ads?select=*&order=id.desc&limit=100`,{headers:{'apikey':PUB_KEY,'Authorization':`Bearer ${PUB_KEY}`}});
+      const txt2=await res2.text();
+      if(!res2.ok){document.getElementById('status').textContent=`Błąd ${res2.status}`; document.getElementById('emptyMsg').textContent=txt2; document.getElementById('empty').style.display='block'; return;}
+      ads=JSON.parse(txt2);
+    } else {
+      const txt=await res.text(); ads=JSON.parse(txt);
+    }
     renderAds();
-    document.getElementById('status').textContent=`✓ ${data.length} ogłoszeń z serwera - widoczne wszędzie 🌐 (nowy klucz OK!)`;
-  }catch(e){ log('❌ EXCEPTION SELECT: '+e.message); document.getElementById('status').textContent='Błąd: '+e.message; }
+    document.getElementById('status').textContent=`✓ ${ads.length} ogłoszeń - FULL 14 kolumn 🌐 - zdjęcia i telefon wszędzie!`;
+  }catch(e){document.getElementById('status').textContent='Błąd: '+e.message;}
 }
 
 function renderAds(){
-  const grid = document.getElementById('adsGrid');
-  const brand = document.getElementById('brandFilter').value;
-  const query = document.getElementById('searchInput').value.toLowerCase();
-  let filtered = ads;
-  if(brand) filtered = filtered.filter(a=>a.brand===brand);
-  if(query) filtered = filtered.filter(a=>`${a.title} ${a.brand} ${a.model}`.toLowerCase().includes(query));
+  const grid=document.getElementById('adsGrid');
+  const brand=document.getElementById('brandFilter').value;
+  const query=document.getElementById('searchInput').value.toLowerCase();
+  const sort=document.getElementById('sortBy').value;
+  let filtered=ads;
+  if(brand) filtered=filtered.filter(a=>a.brand===brand);
+  if(query) filtered=filtered.filter(a=>`${a.title} ${a.brand} ${a.model} ${a.location}`.toLowerCase().includes(query));
+  if(sort==='price_asc') filtered=[...filtered].sort((a,b)=>a.price-b.price);
+  else if(sort==='price_desc') filtered=[...filtered].sort((a,b)=>b.price-a.price);
+  else filtered=[...filtered].sort((a,b)=>(b.created_at_ts||b.id)-(a.created_at_ts||a.id));
   grid.innerHTML='';
-  if(filtered.length===0){ document.getElementById('empty').style.display='block'; document.getElementById('emptyMsg').textContent=ads.length===0?'Baza pusta - dodaj pierwsze ogłoszenie!':'Brak wyników dla filtra'; }
-  else { document.getElementById('empty').style.display='none'; }
+  if(filtered.length===0){document.getElementById('empty').style.display='block';} else {document.getElementById('empty').style.display='none';}
   filtered.forEach(ad=>{
-    const div = document.createElement('div');
-    div.className='card';
-    div.innerHTML=`<div style="position:relative"><img src="https://images.unsplash.com/photo-1555215695-3004980ad54e?w=600" alt=""><div style="position:absolute;top:8px;left:8px;background:rgba(0,0,0,0.7);color:#fff;font-size:9px;font-weight:900;padding:4px 8px;border-radius:20px">${ad.brand} ${ad.model}</div><div style="position:absolute;top:8px;right:8px;background:#ffea00;color:#000;font-size:8px;font-weight:900;padding:3px 6px;border-radius:20px">🌐 LIVE</div></div><div class="card-body"><div style="font-weight:700;font-size:12px;line-height:1.2;min-height:32px">${ad.title||ad.brand+' '+ad.model+' '+ad.year}</div><div class="price">${Number(ad.price).toLocaleString('pl-PL')} zł</div><div class="meta"><span>${ad.year} • ID:${String(ad.id).slice(-4)}</span><span>🌐</span></div></div>`;
-    div.onclick=()=>openDetail(ad);
-    grid.appendChild(div);
+    const img = ad.image && ad.image.startsWith('data:') ? ad.image : (ad.image || 'https://images.unsplash.com/photo-1555215695-3004980ad54e?w=600');
+    const div=document.createElement('div'); div.className='card';
+    div.innerHTML=`<div style="position:relative"><img src="${img}" onerror="this.src='https://images.unsplash.com/photo-1555215695-3004980ad54e?w=600'"><div style="position:absolute;top:8px;left:8px;background:rgba(0,0,0,0.75);color:#fff;font-size:9px;font-weight:900;padding:4px 8px;border-radius:20px">${ad.brand||''} ${ad.model||''}</div><div style="position:absolute;top:8px;right:8px;background:#ffea00;color:#000;font-size:8px;font-weight:900;padding:4px 7px;border-radius:20px">🌐 FULL</div><div style="position:absolute;bottom:8px;left:8px;background:rgba(0,0,0,0.7);color:#fff;font-size:9px;padding:3px 7px;border-radius:10px">📍 ${ad.location||''} • ${ad.year||''}</div></div><div class="card-body"><div class="card-title">${ad.title||ad.brand+' '+ad.model}</div><div class="price">${Number(ad.price||0).toLocaleString('pl-PL')} zł</div><div class="meta"><span>👤 ${ad.owner||'Użytkownik'} • ${ad.mileage?Number(ad.mileage).toLocaleString('pl-PL')+' km':''}</span><span>📞 ${ad.phone?ad.phone.slice(0,3)+'...':''}</span></div></div>`;
+    div.onclick=()=>openDetail(ad); grid.appendChild(div);
   });
 }
 
 function openDetail(ad){
+  const img = ad.image && ad.image.startsWith('data:') ? ad.image : (ad.image || 'https://images.unsplash.com/photo-1555215695-3004980ad54e?w=600');
+  const canEdit = currentUser && (ad.owner_id===currentUser.id || ad.owner===currentUser.name);
+  document.getElementById('detailEdit').style.display=canEdit?'inline-block':'none';
+  document.getElementById('detailDelete').style.display=canEdit?'inline-block':'none';
+  document.getElementById('detailEdit').onclick=()=>{closeDetail(); openEdit(ad);};
+  document.getElementById('detailDelete').onclick=()=>deleteAd(ad.id);
   document.getElementById('detailContent').innerHTML=`
-    <img src="https://images.unsplash.com/photo-1555215695-3004980ad54e?w=600" style="width:100%;height:280px;object-fit:cover">
+    <img src="${img}" style="width:100%;height:320px;object-fit:cover;background:#f0f0f0" onerror="this.src='https://images.unsplash.com/photo-1555215695-3004980ad54e?w=600'">
     <div style="padding:16px">
-      <div style="font-weight:900;font-size:18px">${ad.title||ad.brand+' '+ad.model}</div>
-      <div style="font-weight:900;font-size:22px;margin-top:4px">${Number(ad.price).toLocaleString('pl-PL')} zł</div>
-      <div style="margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:8px">
-        <div style="background:#f5f5f7;border-radius:10px;padding:10px"><div style="font-size:9px;color:#888">Marka</div><div style="font-weight:700;font-size:12px">${ad.brand}</div></div>
-        <div style="background:#f5f5f7;border-radius:10px;padding:10px"><div style="font-size:9px;color:#888">Model</div><div style="font-weight:700;font-size:12px">${ad.model}</div></div>
-        <div style="background:#f5f5f7;border-radius:10px;padding:10px"><div style="font-size:9px;color:#888">Rocznik</div><div style="font-weight:700;font-size:12px">${ad.year}</div></div>
-        <div style="background:#f5f5f7;border-radius:10px;padding:10px"><div style="font-size:9px;color:#888">ID</div><div style="font-weight:700;font-size:10px">${ad.id}</div></div>
+      <div style="font-weight:900;font-size:20px;line-height:1.2">${ad.title||ad.brand+' '+ad.model}</div>
+      <div style="font-weight:900;font-size:26px;margin-top:8px">${Number(ad.price||0).toLocaleString('pl-PL')} zł</div>
+      <div style="margin-top:14px;display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        <div style="background:#f5f5f7;border-radius:12px;padding:12px"><div style="font-size:9px;color:#888">Marka</div><div style="font-weight:700;font-size:13px">${ad.brand||'-'}</div></div>
+        <div style="background:#f5f5f7;border-radius:12px;padding:12px"><div style="font-size:9px;color:#888">Model</div><div style="font-weight:700;font-size:13px">${ad.model||'-'}</div></div>
+        <div style="background:#f5f5f7;border-radius:12px;padding:12px"><div style="font-size:9px;color:#888">Rocznik</div><div style="font-weight:700;font-size:13px">${ad.year||'-'}</div></div>
+        <div style="background:#f5f5f7;border-radius:12px;padding:12px"><div style="font-size:9px;color:#888">Przebieg</div><div style="font-weight:700;font-size:13px">${ad.mileage?Number(ad.mileage).toLocaleString('pl-PL')+' km':'-'}</div></div>
+        <div style="background:#f5f5f7;border-radius:12px;padding:12px"><div style="font-size:9px;color:#888">Lokalizacja</div><div style="font-weight:700;font-size:13px">📍 ${ad.location||'-'}</div></div>
+        <div style="background:#f5f5f7;border-radius:12px;padding:12px"><div style="font-size:9px;color:#888">Właściciel</div><div style="font-weight:700;font-size:13px">👤 ${ad.owner||'-'}</div></div>
       </div>
-      <div style="margin-top:12px;background:#000;color:#0f0;padding:10px;border-radius:10px;font-size:10px">🌐 Z serwera Supabase - widoczne w każdej przeglądarce i na telefonie!<br>Nowy klucz publishable działa!</div>
-      <button class="btn btn-red" style="width:100%;margin-top:12px;padding:12px" onclick="deleteAd(${ad.id})">🗑️ Usuń to ogłoszenie na stałe</button>
-      <button class="btn btn-black" style="width:100%;margin-top:8px;padding:12px" onclick="closeDetail()">Zamknij</button>
+      ${ad.description?`<div style="margin-top:12px;background:#f5f5f7;border-radius:12px;padding:12px"><div style="font-size:9px;color:#888">Opis</div><div style="font-size:13px;margin-top:6px;line-height:1.5">${ad.description}</div></div>`:''}
+      <div style="margin-top:16px;background:#000;color:#fff;border-radius:12px;padding:14px;display:flex;justify-content:space-between;align-items:center">
+        <div><div style="font-size:10px;color:#aaa">Telefon</div><div style="font-weight:900;font-size:16px">📞 ${ad.phone||'Brak'}</div></div>
+        ${ad.phone?`<a href="tel:${ad.phone}" class="btn btn-yellow" style="padding:12px 18px">Zadzwoń</a>`:''}
+      </div>
+      <div style="margin-top:12px;font-size:9px;color:#aaa;text-align:center">🌐 FULL 14 kolumn - zdjęcie, telefon, opis widoczne wszędzie • ID: ${ad.id}</div>
     </div>`;
   document.getElementById('detailModal').style.display='flex';
 }
-function closeDetail(){ document.getElementById('detailModal').style.display='none'; }
+function closeDetail(){document.getElementById('detailModal').style.display='none';}
 
 async function deleteAd(id){
-  if(!confirm('Usunąć ID '+id+' na stałe z serwera?')) return;
-  log('DELETE id='+id);
+  if(!confirm('Usunąć ogłoszenie ID '+id+' na stałe z serwera?')) return;
   try{
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/ads?id=eq.${id}`, {
-      method:'DELETE',
-      headers:{ 'apikey': PUB_KEY, 'Authorization': `Bearer ${PUB_KEY}` }
-    });
-    const text = await res.text();
-    log(`DELETE status ${res.status}`);
-    if(res.ok || res.status===204 || res.status===200){ log('✅ Usunięto id='+id); closeDetail(); loadAds(); }
-    else { log('❌ Błąd DELETE: '+text); alert('Błąd: '+text); }
-  }catch(e){ log('❌ EX DELETE: '+e.message); }
+    const res=await fetch(`${SUPABASE_URL}/rest/v1/ads?id=eq.${id}`,{method:'DELETE',headers:{'apikey':PUB_KEY,'Authorization':`Bearer ${PUB_KEY}`}});
+    if(res.ok||res.status===204){closeDetail(); loadAds();} else {const t=await res.text(); alert('Błąd: '+t);}
+  }catch(e){alert('Błąd: '+e.message);}
 }
 
-function openAuth(mode){ authMode=mode; document.getElementById('authModal').style.display='flex'; document.getElementById('authTitle').textContent=mode==='login'?'Zaloguj się':'Zarejestruj się'; document.getElementById('authSubmit').textContent=mode==='login'?'Zaloguj':'Zarejestruj'; document.getElementById('authSwitchText').textContent=mode==='login'?'Nie masz konta?':'Masz konto?'; document.getElementById('authSwitch').textContent=mode==='login'?'Zarejestruj':'Zaloguj'; document.getElementById('authNameWrap').style.display=mode==='register'?'block':'none'; document.getElementById('authError').style.display='none'; }
-function closeAuth(){ document.getElementById('authModal').style.display='none'; }
-function openAdd(){ if(!currentUser){ openAuth('login'); return; } document.getElementById('addModal').style.display='flex'; document.getElementById('addError').style.display='none'; }
-function closeAdd(){ document.getElementById('addModal').style.display='none'; }
+function openAuth(m){authMode=m;document.getElementById('authModal').style.display='flex';document.getElementById('authTitle').textContent=m==='login'?'Zaloguj się':'Zarejestruj się';document.getElementById('authSubmit').textContent=m==='login'?'Zaloguj się':'Zarejestruj się';document.getElementById('authSwitchText').textContent=m==='login'?'Nie masz konta?':'Masz konto?';document.getElementById('authSwitch').textContent=m==='login'?'Zarejestruj się':'Zaloguj się';document.getElementById('authNameWrap').style.display=m==='register'?'block':'none';document.getElementById('authError').style.display='none';}
+function closeAuth(){document.getElementById('authModal').style.display='none';}
+function openAdd(){if(!currentUser){openAuth('login');return;} editingId=null; selectedImages=[]; document.getElementById('addTitle').textContent='Dodaj ogłoszenie - FULL 🌐'; ['fBrand','fModel','fYear','fPrice','fMileage','fLocation','fTitle','fPhone','fDesc'].forEach(id=>{const el=document.getElementById(id); if(el) el.value=id==='fYear'?'2020':id==='fLocation'?'Warszawa':'';}); document.getElementById('imgPreview').innerHTML=''; document.getElementById('addModal').style.display='flex';}
+function closeAdd(){document.getElementById('addModal').style.display='none'; editingId=null; selectedImages=[];}
+function openEdit(ad){if(!currentUser){openAuth('login');return;} editingId=ad.id; document.getElementById('addTitle').textContent='Edytuj ogłoszenie'; document.getElementById('fBrand').value=ad.brand||''; document.getElementById('fModel').value=ad.model||''; document.getElementById('fYear').value=ad.year||2020; document.getElementById('fPrice').value=ad.price||''; document.getElementById('fMileage').value=ad.mileage||''; document.getElementById('fLocation').value=ad.location||'Warszawa'; document.getElementById('fTitle').value=ad.title||''; document.getElementById('fPhone').value=ad.phone||''; document.getElementById('fDesc').value=ad.description||''; selectedImages=ad.image?[ad.image]:[]; renderImgPreview(); document.getElementById('addModal').style.display='flex';}
+
+function compressImage(file, cb){const r=new FileReader(); r.onload=e=>{const img=new Image(); img.onload=()=>{const c=document.createElement('canvas'); const maxW=600; const sc=Math.min(1,maxW/img.width); c.width=img.width*sc; c.height=img.height*sc; c.getContext('2d').drawImage(img,0,0,c.width,c.height); cb(c.toDataURL('image/jpeg',0.65));}; img.src=e.target.result;}; r.readAsDataURL(file);}
+function renderImgPreview(){
+  const wrap=document.getElementById('imgPreview'); wrap.innerHTML='';
+  selectedImages.forEach((im,i)=>{
+    const d=document.createElement('div'); d.style.position='relative'; d.style.width='90px'; d.style.height='90px'; d.style.borderRadius='12px'; d.style.overflow='hidden'; d.style.border='1px solid #ddd';
+    d.innerHTML=`<img src="${im}" style="width:100%;height:100%;object-fit:cover"><button onclick="selectedImages=selectedImages.filter((_,idx)=>idx!==${i}); renderImgPreview()" style="position:absolute;top:4px;right:4px;width:20px;height:20px;background:rgba(0,0,0,0.7);color:#fff;border:none;border-radius:50%;font-size:10px;cursor:pointer">✕</button><div style="position:absolute;bottom:0;left:0;background:rgba(0,0,0,0.6);color:#fff;font-size:8px;padding:2px 4px">${Math.round(im.length/1024)}KB</div>`;
+    wrap.appendChild(d);
+  });
+}
+
+document.getElementById('fImages').addEventListener('change', e=>{
+  const files=Array.from(e.target.files||[]); if(selectedImages.length+files.length>3){alert('Max 3 zdjęcia'); return;}
+  files.forEach(f=>compressImage(f, c=>{selectedImages.push(c); renderImgPreview();})); e.target.value='';
+});
 
 document.getElementById('btnLogin').onclick=()=>openAuth('login');
 document.getElementById('btnRegister').onclick=()=>openAuth('register');
 document.getElementById('btnAdd').onclick=()=>openAdd();
-document.getElementById('btnLogout').onclick=()=>{ currentUser=null; localStorage.removeItem('wroomer_user_final'); updateUI(); log('Wylogowano'); };
-document.getElementById('authSwitch').onclick=()=>{ openAuth(authMode==='login'?'register':'login'); };
-document.getElementById('brandFilter').onchange=()=>renderAds();
-document.getElementById('searchInput').oninput=()=>renderAds();
+document.getElementById('btnLogout').onclick=()=>{currentUser=null; localStorage.removeItem('wroomer_user_final14'); updateUI();};
+document.getElementById('authSwitch').onclick=()=>openAuth(authMode==='login'?'register':'login');
+document.getElementById('brandFilter').onchange=renderAds;
+document.getElementById('searchInput').oninput=renderAds;
+document.getElementById('sortBy').onchange=renderAds;
 
 document.getElementById('authSubmit').onclick=()=>{
-  const email = document.getElementById('authEmail').value.trim().toLowerCase();
-  const pass = document.getElementById('authPass').value;
-  const name = document.getElementById('authName').value.trim();
-  const errEl = document.getElementById('authError');
+  const email=document.getElementById('authEmail').value.trim().toLowerCase(), pass=document.getElementById('authPass').value, name=document.getElementById('authName').value.trim(), errEl=document.getElementById('authError');
   errEl.style.display='none';
-  if(!email||!pass){ errEl.textContent='Podaj e-mail i hasło'; errEl.style.display='block'; return; }
-  if(authMode==='register'){
-    if(!name){ errEl.textContent='Podaj imię'; errEl.style.display='block'; return; }
-    if(users.find(u=>u.email===email)){ errEl.textContent='Użytkownik już istnieje'; errEl.style.display='block'; return; }
-    const nu={id:Date.now(), email, name, password:pass};
-    users.push(nu); localStorage.setItem('wroomer_users_final', JSON.stringify(users));
-    currentUser={id:nu.id, email:nu.email, name:nu.name}; localStorage.setItem('wroomer_user_final', JSON.stringify(currentUser));
-    log('✅ Zarejestrowano: '+email); closeAuth(); updateUI();
-  }else{
-    const u = users.find(x=>x.email===email && x.password===pass);
-    if(!u){ errEl.textContent='Błędny e-mail lub hasło'; errEl.style.display='block'; return; }
-    currentUser={id:u.id, email:u.email, name:u.name}; localStorage.setItem('wroomer_user_final', JSON.stringify(currentUser));
-    log('✅ Zalogowano: '+email); closeAuth(); updateUI();
-  }
+  if(!email||!pass){errEl.textContent='Podaj e-mail i hasło'; errEl.style.display='block'; return;}
+  if(authMode==='register'){if(!name){errEl.textContent='Podaj imię'; errEl.style.display='block'; return;} if(users.find(u=>u.email===email)){errEl.textContent='Użytkownik już istnieje'; errEl.style.display='block'; return;} const nu={id:Date.now(),email,name,password:pass}; users.push(nu); localStorage.setItem('wroomer_users_final14',JSON.stringify(users)); currentUser={id:nu.id,email:nu.email,name:nu.name}; localStorage.setItem('wroomer_user_final14',JSON.stringify(currentUser)); closeAuth(); updateUI();}
+  else{const u=users.find(x=>x.email===email&&x.password===pass); if(!u){errEl.textContent='Błędny e-mail lub hasło'; errEl.style.display='block'; return;} currentUser={id:u.id,email:u.email,name:u.name}; localStorage.setItem('wroomer_user_final14',JSON.stringify(currentUser)); closeAuth(); updateUI();}
 };
 
 document.getElementById('btnSave').onclick=async()=>{
-  const brand=document.getElementById('fBrand').value;
-  const model=document.getElementById('fModel').value.trim();
-  const year=parseInt(document.getElementById('fYear').value)||2020;
-  const price=parseInt(document.getElementById('fPrice').value)||0;
-  const title=document.getElementById('fTitle').value.trim()||`${brand} ${model} ${year}`;
-  const errEl=document.getElementById('addError');
+  const brand=document.getElementById('fBrand').value, model=document.getElementById('fModel').value.trim(), year=parseInt(document.getElementById('fYear').value)||2020, price=parseInt(document.getElementById('fPrice').value)||0, mileage=parseInt(document.getElementById('fMileage').value)||0, location=document.getElementById('fLocation').value.trim()||'Warszawa', title=document.getElementById('fTitle').value.trim()||`${brand} ${model} ${year}`, phone=document.getElementById('fPhone').value.trim(), desc=document.getElementById('fDesc').value.trim(), errEl=document.getElementById('addError');
   errEl.style.display='none';
-  if(!brand){ errEl.textContent='Wybierz markę'; errEl.style.display='block'; return; }
-  if(!model){ errEl.textContent='Podaj model'; errEl.style.display='block'; return; }
-  if(!price){ errEl.textContent='Podaj cenę'; errEl.style.display='block'; return; }
-  const nid=Date.now();
-  const payload={id:nid, title:title.substring(0,200), brand, model, year, price};
-  log('INSERT payload: '+JSON.stringify(payload));
+  if(!brand){errEl.textContent='Wybierz markę'; errEl.style.display='block'; return;} if(!model){errEl.textContent='Podaj model'; errEl.style.display='block'; return;} if(!price){errEl.textContent='Podaj cenę'; errEl.style.display='block'; return;} if(selectedImages.length===0){errEl.textContent='Dodaj min 1 zdjęcie'; errEl.style.display='block'; return;} if(!phone){errEl.textContent='Podaj telefon'; errEl.style.display='block'; return;}
+  const nid=editingId||Date.now();
+  const payload={id:nid, title:title.substring(0,200), brand, model, year, price, mileage: mileage||0, location, image: selectedImages[0]||'', phone, owner: currentUser?.name||'User', owner_id: currentUser?.id||999, description: desc||'', created_at_ts: nid};
   try{
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/ads`, {
-      method:'POST',
-      headers:{ 'apikey': PUB_KEY, 'Authorization': `Bearer ${PUB_KEY}`, 'Content-Type':'application/json', 'Prefer':'return=representation' },
-      body: JSON.stringify(payload)
-    });
-    const text = await res.text();
-    log(`INSERT status ${res.status}: ${text.substring(0,200)}`);
-    if(!res.ok){ errEl.textContent='Błąd serwera: '+text; errEl.style.display='block'; log('❌ BŁĄD INSERT: '+text); return; }
-    log('✅ INSERT OK id='+nid+' - widoczne wszędzie! 🌐');
-    closeAdd();
-    document.getElementById('fBrand').value=''; document.getElementById('fModel').value=''; document.getElementById('fPrice').value=''; document.getElementById('fTitle').value='';
-    loadAds();
-  }catch(e){ log('❌ EX INSERT: '+e.message); errEl.textContent='Błąd: '+e.message; errEl.style.display='block'; }
+    let res;
+    if(editingId){ res=await fetch(`${SUPABASE_URL}/rest/v1/ads?id=eq.${editingId}`,{method:'PATCH',headers:{'apikey':PUB_KEY,'Authorization':`Bearer ${PUB_KEY}`,'Content-Type':'application/json','Prefer':'return=representation'},body:JSON.stringify(payload)});}
+    else{ res=await fetch(`${SUPABASE_URL}/rest/v1/ads`,{method:'POST',headers:{'apikey':PUB_KEY,'Authorization':`Bearer ${PUB_KEY}`,'Content-Type':'application/json','Prefer':'return=representation'},body:JSON.stringify(payload)});}
+    const txt=await res.text();
+    if(!res.ok){errEl.textContent='Błąd serwera: '+txt; errEl.style.display='block'; return;}
+    closeAdd(); loadAds();
+  }catch(e){errEl.textContent='Błąd: '+e.message; errEl.style.display='block';}
 };
 
-updateUI();
-loadAds();
+updateUI(); loadAds();
 </script></body></html>
