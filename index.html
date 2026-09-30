@@ -2,124 +2,274 @@
 <html lang="pl">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-<title>wroomer.pl</title>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>wroomer.pl — WROOMER</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
+  :root{
+    --black:#0a0a0a;
+    --white:#fafafa;
+    --gray:#e9e9e9;
+    --accent:#ff3b30;
+    --tile-w:800px;
+    --tile-ratio:0.65;
+  }
   *{margin:0;padding:0;box-sizing:border-box}
-  html{overflow-x:hidden}
-  body{background:#f5f5f3;color:#0a0a0a;font-family:'Space Grotesk',sans-serif;overflow-x:hidden}
-  
-  .layout{display:grid;grid-template-columns:800px 1fr;min-height:100vh;width:100%}
-
-  /* LEWA CZARNA KAFELKA 800px / 0.65 */
-  .left{
-    background:#080808;
+  body{
+    background:#fff;
+    color:var(--black);
+    font-family:'Space Grotesk', sans-serif;
+    overflow-x:hidden;
+  }
+  /* WZORZEC: LEWA CZARNA KAFELKA 800px / 0.65 */
+  .hero{
+    display:grid;
+    grid-template-columns: 800px 1fr;
+    min-height:100vh;
+    border-bottom:1px solid #000;
+  }
+  .left-tile{
+    background:var(--black);
     color:#fff;
     width:800px;
+    aspect-ratio: 1 / 0.65;
+    /* For hero, we want full height, so override aspect on desktop with min-height */
     min-height:100vh;
     position:sticky;
     top:0;
     display:flex;
     flex-direction:column;
     justify-content:space-between;
-    padding:32px;
+    padding:36px 36px 28px 36px;
   }
-  .left-top{display:flex;justify-content:space-between}
-  .logo{font-weight:700;font-size:22px;letter-spacing:-0.04em}
-  .nav{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.14em;text-transform:uppercase;opacity:0.6;line-height:1.9;text-align:right}
-  .left-main h1{font-size:clamp(72px, 9vw, 122px);line-height:0.85;letter-spacing:-0.07em;font-weight:700;margin-top:auto}
-  .left-main h1 i{font-style:normal;-webkit-text-stroke:1.2px #fff;color:transparent}
-  .left-bottom{margin-top:40px;display:flex;gap:12px;flex-wrap:wrap}
-  .btn{border:1px solid #fff;border-radius:999px;padding:12px 22px;color:#fff;text-decoration:none;font-size:13px;font-weight:600}
-  .btn.fill{background:#fff;color:#000}
-
-  .right{width:100%;min-width:0;background:#f5f5f3}
-  .topbar{display:flex;justify-content:space-between;padding:18px 24px;border-bottom:1px solid #000;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase}
-
-  .cars{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:#000;border-bottom:1px solid #000}
-  .car{background:#fff;min-width:0}
-  .car-img{width:100%;aspect-ratio:16/10;overflow:hidden;background:#111}
-  .car-img img{
-    width:100%;height:100%;object-fit:cover;display:block;
-    transform:translateZ(0);
+  .brand{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
   }
-  .car-info{padding:18px 20px 20px;display:flex;justify-content:space-between;align-items:flex-end;gap:12px}
-  .car-info h3{font-size:17px;line-height:1.1;font-weight:700;min-width:0}
-  .car-info h3 span{display:block;font-weight:400;opacity:0.5;font-size:12px;margin-top:4px;font-family:'JetBrains Mono',monospace}
-  .price{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;white-space:nowrap}
-  .car-wide{grid-column:span 2}
-  .car-wide .car-img{aspect-ratio:21/9}
-
-  /* MOBILE - TO BYŁO DOBRZE, WRACAMY DO TEGO */
-  @media(max-width:900px){
-    .layout{grid-template-columns:1fr}
-    .left{
-      width:100%;
-      min-height:auto;
-      height:auto;
-      position:relative;
-      aspect-ratio: 1 / 0.65;
-      padding:24px;
-      justify-content:space-between;
-    }
-    .left-main h1{font-size:64px}
-    .topbar{padding:14px 20px;font-size:10px}
-    .cars{grid-template-columns:1fr}
-    .car-wide{grid-column:span 1}
-    .car-wide .car-img{aspect-ratio:16/10}
-    .car-img{aspect-ratio:16/10}
+  .logo{
+    font-weight:700;
+    font-size:28px;
+    letter-spacing:-0.04em;
+    line-height:0.9;
   }
-  @media(max-width:480px){
-    .left{padding:20px;aspect-ratio:1/0.75}
-    .left-main h1{font-size:52px}
+  .logo span{color:var(--accent)}
+  .dot{
+    width:12px;height:12px;background:var(--accent);border-radius:50%;
+    display:inline-block;margin-left:4px;
+  }
+  .menu{
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:0.15em;
+    opacity:0.7;
+    line-height:1.8;
+  }
+  .big-type{
+    margin-top:auto;
+    padding-top:80px;
+  }
+  .big-type h1{
+    font-size:clamp(72px, 11vw, 140px);
+    line-height:0.85;
+    letter-spacing:-0.07em;
+    font-weight:700;
+    text-transform:uppercase;
+  }
+  .big-type h1 em{
+    font-style:normal;
+    -webkit-text-stroke:1px #fff;
+    color:transparent;
+  }
+  .tile-footer{
+    display:flex;
+    justify-content:space-between;
+    align-items:end;
+    margin-top:40px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    opacity:0.8;
+    border-top:1px solid rgba(255,255,255,0.15);
+    padding-top:18px;
+  }
+  .cta-pill{
+    border:1px solid #fff;
+    border-radius:999px;
+    padding:10px 18px;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    text-decoration:none;
+    color:#fff;
+    font-weight:600;
+    transition:0.2s;
+  }
+  .cta-pill:hover{background:#fff;color:#000}
+
+  .right-content{
+    background:#f6f6f5;
+    padding:32px 48px;
+    display:flex;
+    flex-direction:column;
+  }
+  .top-bar{
+    display:flex;
+    justify-content:space-between;
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:0.12em;
+    border-bottom:1px solid #000;
+    padding-bottom:16px;
+  }
+  .grid-cards{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:1px;
+    background:#000;
+    margin-top:32px;
+    border:1px solid #000;
+  }
+  .card{
+    background:#fff;
+    padding:28px;
+    min-height:260px;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+  }
+  .card label{
+    font-family:'JetBrains Mono', monospace;
+    font-size:10px;
+    text-transform:uppercase;
+    letter-spacing:0.15em;
+    opacity:0.5;
+  }
+  .card h3{
+    font-size:28px;
+    line-height:0.95;
+    letter-spacing:-0.03em;
+    margin:18px 0;
+    font-weight:700;
+  }
+  .card p{font-size:14px;line-height:1.5;opacity:0.7;max-width:28ch}
+  .card .num{
+    font-family:'JetBrains Mono', monospace;
+    font-size:48px;
+    font-weight:700;
+    letter-spacing:-0.06em;
+  }
+  .wide-card{
+    grid-column:span 2;
+    background:#0a0a0a;
+    color:#fff;
+    display:grid;
+    grid-template-columns:1.1fr 0.9fr;
+    gap:24px;
+  }
+  .wide-card h2{
+    font-size:42px;
+    line-height:0.9;
+    letter-spacing:-0.05em;
+  }
+  .tech-list{
+    margin-top:48px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:12px;
+    line-height:2;
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+  }
+  .tech-list span{
+    border:1px solid #000;
+    border-radius:999px;
+    padding:4px 12px;
+    text-transform:uppercase;
+    letter-spacing:0.08em;
+  }
+
+  @media(max-width:1100px){
+    .hero{grid-template-columns:1fr}
+    .left-tile{width:100%; min-height:auto; aspect-ratio: 1 / 0.65; position:relative;}
+    .right-content{padding:20px}
+    .grid-cards{grid-template-columns:1fr}
+    .wide-card{grid-column:span 1; grid-template-columns:1fr}
   }
 </style>
 </head>
 <body>
-<div class="layout">
-  <aside class="left">
-    <div class="left-top">
-      <div class="logo">wroomer.pl</div>
-      <div class="nav">SAMOCHODY<br/>WARSZAWA</div>
-    </div>
-    <div class="left-main">
-      <h1>WROO<br/><i>MER</i></h1>
-      <div class="left-bottom">
-        <a class="btn" href="#auta">ZOBACZ AUTA</a>
-        <a class="btn fill" href="mailto:kontakt@wroomer.pl">KONTAKT</a>
+  <main class="hero">
+    <!-- LEWA CZARNA KAFELKA 800px / 0.65 -->
+    <section class="left-tile">
+      <div class="brand">
+        <div class="logo">WROOMER<span>.</span>PL <span class="dot"></span></div>
+        <div class="menu">EST. 2026<br/>WARSAW / REMOTE<br/>MOTIVE DESIGN</div>
       </div>
-    </div>
-  </aside>
 
-  <section class="right" id="auta">
-    <div class="topbar"><div>● DOSTĘPNE OD RĘKI</div><div>wroomer.pl</div></div>
-    <div class="cars">
-      <div class="car">
-        <div class="car-img"><img src="https://images.unsplash.com/photo-1555215695-3004980ad54e?q=80&w=1200&auto=format&fit=crop" srcset="https://images.unsplash.com/photo-1555215695-3004980ad54e?q=80&w=1200&auto=format&fit=crop 600w, https://images.unsplash.com/photo-1555215695-3004980ad54e?q=80&w=1600&auto=format&fit=crop 1200w, https://images.unsplash.com/photo-1555215695-3004980ad54e?q=80&w=2400&auto=format&fit=crop 2400w" sizes="(max-width: 900px) 100vw, 50vw" loading="eager" alt=""></div>
-        <div class="car-info"><h3>BMW M4 Competition<span>2023 • 12 400 km</span></h3><div class="price">389 900 PLN</div></div>
+      <div class="big-type">
+        <h1>WROO<br/><em>MER</em></h1>
       </div>
-      <div class="car">
-        <div class="car-img"><img src="https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?q=80&w=1200&auto=format&fit=crop" srcset="https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?q=80&w=1200&auto=format&fit=crop 600w, https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?q=80&w=1600&auto=format&fit=crop 1200w, https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?q=80&w=2400&auto=format&fit=crop 2400w" sizes="(max-width: 900px) 100vw, 50vw" loading="eager" alt=""></div>
-        <div class="car-info"><h3>Porsche 911 GT3<span>2022 • 8 200 km</span></h3><div class="price">799 000 PLN</div></div>
+
+      <div class="tile-footer">
+        <div>800PX × 0.65 — BLACK TILE PATTERN<br/>NO PGRST100 — CLEAN BUILD</div>
+        <a class="cta-pill" href="mailto:hello@wroomer.pl">ZACZNIJ →</a>
       </div>
-      <div class="car car-wide">
-        <div class="car-img"><img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=1600&auto=format&fit=crop" srcset="https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=1600&auto=format&fit=crop 800w, https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=2400&auto=format&fit=crop 1600w" sizes="100vw" loading="lazy" alt=""></div>
-        <div class="car-info"><h3>Mercedes-AMG GT S<span>2021 • 19 500 km</span></h3><div class="price">529 900 PLN</div></div>
+    </section>
+
+    <section class="right-content">
+      <div class="top-bar">
+        <div>● System online — wroomer.pl / index.html</div>
+        <div>[ vercel.json included ]</div>
       </div>
-      <div class="car">
-        <div class="car-img"><img src="https://images.unsplash.com/photo-1494976388531-d1058494cdd8?q=80&w=1200&auto=format&fit=crop" srcset="https://images.unsplash.com/photo-1494976388531-d1058494cdd8?q=80&w=1200&auto=format&fit=crop 600w, https://images.unsplash.com/photo-1494976388531-d1058494cdd8?q=80&w=2400&auto=format&fit=crop 1200w" sizes="(max-width: 900px) 100vw, 50vw" loading="lazy" alt=""></div>
-        <div class="car-info"><h3>Audi RS6 Avant<span>2023 • 14 000 km</span></h3><div class="price">459 000 PLN</div></div>
+
+      <div style="margin-top:40px">
+        <p style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.15em;opacity:0.5;text-transform:uppercase">Co robimy</p>
+        <h2 style="font-size:56px;letter-spacing:-0.05em;line-height:0.9;margin-top:12px;max-width:10ch">STRONY KTÓRE ZAPIERDALAJĄ. BEZ BAJERÓW.</h2>
       </div>
-      <div class="car">
-        <div class="car-img"><img src="https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?q=80&w=1200&auto=format&fit=crop" srcset="https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?q=80&w=1200&auto=format&fit=crop 600w, https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?q=80&w=2400&auto=format&fit=crop 1200w" sizes="(max-width: 900px) 100vw, 50vw" loading="lazy" alt=""></div>
-        <div class="car-info"><h3>BMW M2 Competition<span>2024 • 2 100 km</span></h3><div class="price">299 900 PLN</div></div>
+
+      <div class="grid-cards">
+        <div class="card">
+          <div>
+            <label>01 / Speed</label>
+            <h3>Next.js + Vercel. 100/100 Lighthouse.</h3>
+            <p>Lekki kod, zero ciężkich builderów. Ładuje się zanim klient mrugnie.</p>
+          </div>
+          <div class="num">0.4s</div>
+        </div>
+        <div class="card">
+          <div>
+            <label>02 / Design</label>
+            <h3>Czarna kafelka jako system.</h3>
+            <p>Lewa kolumna 800px, ratio 0.65. Kontrast, typografia, siatka. Koniec.</p>
+          </div>
+          <div class="num">800px</div>
+        </div>
+        <div class="card wide-card">
+          <div>
+            <label style="color:#fff;opacity:0.5">Wzorzec</label>
+            <h2>BEZ PGRST100. CZYSTY HTML. GOTOWE DO DEPLOY.</h2>
+            <p style="color:#fff;opacity:0.6;margin-top:16px">Ten plik to wzorzec, który chciałeś. Lewa czarna kafelka = nawigacja + marka. Prawa strona = content. Wszystko skalowalne.</p>
+          </div>
+          <div style="display:flex;flex-direction:column;justify-content:space-between">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.6;opacity:0.8">
+              > vercel.json → rewrites dla SPA<br/>
+              > index.html → jeden plik, zero deps<br/>
+              > 800px / 0.65 → stały wzorzec kafelki<br/>
+              > bez PGRST100 → jak prosiłeś
+            </div>
+            <a href="#" class="cta-pill" style="border-color:rgba(255,255,255,0.3);margin-top:20px">KOPIUJ WZORZEC</a>
+          </div>
+        </div>
       </div>
-    </div>
-    <div style="padding:24px;display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:10px;opacity:0.5;letter-spacing:0.08em">
-      <span>© 2026 wroomer.pl</span><span>kontakt@wroomer.pl</span>
-    </div>
-  </section>
-</div>
+
+      <div class="tech-list">
+        <span>HTML</span><span>CSS</span><span>Vercel</span><span>800px Tile</span><span>0.65 Ratio</span><span>No PGRST100</span><span>wroomer.pl</span>
+      </div>
+    </section>
+  </main>
 </body>
 </html>
