@@ -1,135 +1,379 @@
 <!doctype html>
-<html lang="pl"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<html lang="pl">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>WROOMER.PL</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <style>
-*{margin:0;padding:0;box-sizing:border-box}body{background:#f2f2f2;font-family:Inter,sans-serif;color:#111}
-.h{height:56px;background:#000;color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 14px;position:sticky;top:0;z-index:30}
-.logo{font-weight:800;font-size:20px}.logo b{color:#FFE600}
-.hRight{display:flex;gap:8px;align-items:center}
-.btnY{background:#FFE600;color:#000;border:0;border-radius:999px;padding:8px 14px;font-weight:800;cursor:pointer;font-size:13px}
-.btnD{background:#222;color:#fff;border:1px solid #333;border-radius:999px;padding:8px 12px;cursor:pointer;font-size:12px}
-.btnS{background:#fff;color:#111;border:1px solid #ddd;border-radius:999px;padding:6px 10px;cursor:pointer;font-size:12px}
-.wrap{display:grid;grid-template-columns:300px 1fr;gap:14px;max-width:1480px;margin:0 auto;padding:14px}
-.left{background:#0a0a0a;color:#fff;border-radius:16px;padding:14px;height:fit-content;position:sticky;top:70px}
-.left input,.left select{width:100%;background:#1a1a1a;border:1px solid #2a2a2a;color:#fff;border-radius:10px;padding:9px 11px;margin-top:6px;font-size:12px}
-.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
-.card{background:#fff;border-radius:14px;overflow:hidden;border:1px solid #e6e6e6;cursor:pointer;position:relative;transition:.15s}
-.card:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,.08)}
-.card .im{height:132px;background:#111;overflow:hidden;position:relative}
-.card .im img{width:100%;height:100%;object-fit:cover}
-.badge{position:absolute;bottom:6px;left:6px;background:rgba(0,0,0,.65);color:#fff;border-radius:6px;padding:2px 5px;font-size:9px;font-weight:700}
-.editTag{position:absolute;top:6px;right:6px;background:#FFE600;color:#000;border-radius:6px;padding:3px 6px;font-size:9px;font-weight:800;display:none}
-.card.own .editTag{display:block}
-.card .bo{padding:8px 9px} .card .bo h4{font-size:12px;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.meta{font-size:10px;opacity:.55;margin-top:2px} .price{font-weight:800;margin-top:3px;font-size:12px}
-.bar{background:#fff;border-radius:12px;padding:8px 10px;display:flex;justify-content:space-between;align-items:center;border:1px solid #e6e6e6;margin-bottom:10px;font-size:13px}
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;z-index:100;padding:10px} .modal.open{display:flex}
-.box{background:#111;color:#fff;width:min(700px,100%);border-radius:18px;max-height:92vh;overflow:auto;border:1px solid #222}
-.boxHead{padding:12px 14px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #222;position:sticky;top:0;background:#111;z-index:2}
-.boxBody{padding:12px 14px;display:flex;flex-direction:column;gap:10px}
-.in{background:#1e1e1e;border:1px solid #2e2e2e;color:#fff;border-radius:10px;padding:10px 11px;width:100%;font-size:12px}
-.g2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.drop{border:1.5px dashed #333;border-radius:12px;padding:16px;text-align:center;color:#888;cursor:pointer;background:#161616;font-size:12px}
-.photos{display:grid;grid-template-columns:repeat(5,1fr);gap:6px} .ph{aspect-ratio:1;background:#222;border-radius:8px;overflow:hidden;position:relative} .ph img{width:100%;height:100%;object-fit:cover} .ph button{position:absolute;top:3px;right:3px;width:18px;height:18px;border-radius:999px;border:0;background:rgba(0,0,0,.7);color:#fff;cursor:pointer;font-size:11px}
-#status{background:#1a1a1a;border:1px solid #2a2a2a;border-radius:10px;padding:8px;font-size:11px;color:#FFE600;white-space:pre-wrap;display:none} #status.show{display:block}
-/* OLX STYLE AUTH */
-.authOverlay{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;z-index:200;padding:16px} .authOverlay.open{display:flex}
-.authCard{background:#fff;width:min(440px,100%);border-radius:12px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.25)}
-.authTop{padding:22px 24px 0 24px}
-.authLogo{font-weight:800;font-size:20px;letter-spacing:-.02em;margin-bottom:14px} .authLogo b{color:#FFE600;background:#000;padding:2px 6px;border-radius:6px}
-.tabs{display:flex;border-bottom:1px solid #e8e8e8;margin-top:6px}
-.tab{flex:1;padding:12px 8px;text-align:center;font-weight:700;font-size:14px;cursor:pointer;color:#6b6b6b;border-bottom:2px solid transparent;margin-bottom:-1px}
-.tab.active{color:#000;border-bottom:2px solid #000}
-.authBody{padding:18px 24px 20px 24px}
-.authLabel{font-size:12px;font-weight:600;margin-top:12px;margin-bottom:6px;display:block;color:#222}
-.authInput{width:100%;background:#fff;border:1px solid #c7c7c7;border-radius:8px;padding:12px 12px;font-size:14px;outline:none} .authInput:focus{border-color:#000}
-.authBtn{width:100%;background:#000;color:#fff;border:0;border-radius:8px;padding:13px;font-weight:700;font-size:14px;cursor:pointer;margin-top:16px} .authBtn.yellow{background:#FFE600;color:#000}
-.authHint{font-size:11px;color:#666;margin-top:8px;line-height:1.4}
-.authSep{display:flex;align-items:center;gap:12px;margin:18px 0;color:#999;font-size:12px} .authSep::before,.authSep::after{content:"";flex:1;height:1px;background:#e5e5e5}
-.socialBtn{width:100%;border:1px solid #ddd;background:#fff;border-radius:8px;padding:11px;display:flex;align-items:center;justify-content:center;gap:8px;font-weight:600;font-size:13px;cursor:pointer;margin-top:8px}
-.authFooter{background:#f7f7f8;padding:14px 24px;font-size:11px;color:#666;border-top:1px solid #eee}
-@media(max-width:1100px){.grid{grid-template-columns:repeat(3,1fr)}}
-@media(max-width:760px){.wrap{grid-template-columns:1fr}.grid{grid-template-columns:repeat(2,1fr)}.card .im{height:118px} .left{position:relative;top:0}}
-</style></head><body>
-<div class="h"><div class="logo">WROOMER<b>.PL</b></div><div class="hRight"><span id="userEmail" style="font-size:11px;opacity:.8;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></span><button class="btnD" id="myAdsBtn" style="display:none">Moje</button><button class="btnY" id="openAdd">+ Dodaj</button><button class="btnD" id="authBtn">Zaloguj</button></div></div>
-<div class="wrap"><aside class="left"><h3 style="font-size:13px">Wyszukiwarka</h3><input id="q" placeholder="Szukaj np. BMW"/><input id="city" placeholder="Miasto" style="margin-top:8px"/><select id="brand" style="margin-top:8px"><option value="">Wszystkie marki</option><option>BMW</option><option>Audi</option><option>Mercedes</option><option>Toyota</option></select><button class="btnY" id="doSearch">Szukaj</button></aside><section><div class="bar"><span id="cnt">Ładowanie...</span><button class="btnS" id="ref">Odśwież</button></div><div class="grid" id="grid"></div></section></div>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#ececec;font-family:Inter,sans-serif;color:#111}
+.header{height:58px;background:#000;color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 16px;position:sticky;top:0;z-index:60}
+.logo{font-weight:800;font-size:20px}.logo span{color:#FFE600}
+.btnY{background:#FFE600;color:#000;border:0;border-radius:999px;padding:9px 16px;font-weight:800;cursor:pointer}
+.btnD{background:#1e1e1e;color:#fff;border:0;border-radius:999px;padding:8px 12px;font-weight:600;cursor:pointer}
+.btnS{background:#fff;color:#000;border:1px solid #ddd;border-radius:999px;padding:7px 12px;font-weight:600;cursor:pointer;font-size:12px}
+.wrap{display:grid;grid-template-columns:360px 1fr;gap:18px;padding:18px;max-width:1600px;margin:0 auto;align-items:start}
+.left{width:360px;background:#080808;color:#fff;border-radius:20px;padding:16px;position:sticky;top:76px;display:flex;flex-direction:column;gap:10px}
+.box{background:#121212;border:1px solid #1e1e1e;border-radius:14px;padding:12px}
+.lbl{font-size:10px;letter-spacing:.12em;opacity:.5;text-transform:uppercase;margin-bottom:6px}
+.inp{width:100%;background:#1c1c1c;border:1px solid #2a2a2a;color:#fff;border-radius:10px;padding:10px 12px;font-size:13px;outline:none}
+.row{display:flex;gap:8px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.chip{padding:6px 10px;border-radius:999px;background:#1c1c1c;border:1px solid #2a2a2a;font-size:11px;cursor:pointer}
+.chip.active{background:#FFE600;color:#000;border-color:#FFE600;font-weight:800}
+.btnSearch{width:100%;background:#FFE600;border:0;border-radius:12px;padding:13px;font-weight:800;font-size:14px;cursor:pointer}
+.right{min-width:0}
+.topbar{display:flex;justify-content:space-between;align-items:center;background:#fff;border-radius:12px;padding:10px 12px;border:1px solid #e3e3e3;margin-bottom:12px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.card{background:#fff;border-radius:18px;overflow:hidden;border:1px solid #e3e3e3;cursor:pointer;position:relative;display:flex;flex-direction:column}
+.card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.08)}
+.img{aspect-ratio:16/10;background:#111;overflow:hidden;position:relative}
+.img img{width:100%;height:100%;object-fit:cover;display:block}
+.badge{position:absolute;bottom:8px;left:8px;background:rgba(0,0,0,.7);color:#fff;border-radius:6px;padding:4px 6px;font-size:10px;font-weight:700}
+.badge2{position:absolute;top:8px;left:8px;background:#FFE600;color:#000;border-radius:6px;padding:4px 6px;font-size:10px;font-weight:800}
+.act{position:absolute;top:8px;right:8px;display:flex;gap:6px}
+.iconBtn{width:28px;height:28px;border-radius:999px;border:0;background:rgba(0,0,0,.6);color:#fff;backdrop-filter:blur(6px);cursor:pointer;display:grid;place-items:center}
+.body{padding:10px 12px 12px;flex:1;display:flex;flex-direction:column}
+.body h4{font-size:14px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.meta{font-size:10px;opacity:.5;margin-top:3px}
+.prc{font-weight:800;margin-top:6px;font-size:13px}
+.thumbsRow{display:flex;gap:4px;margin-top:8px}
+.thumbsRow img{width:28px;height:20px;object-fit:cover;border-radius:4px;border:1px solid #eee}
+.empty{background:#fff;border-radius:18px;padding:36px;text-align:center;border:1px solid #e3e3e3}
 
-<div class="modal" id="addModal"><div class="box"><div class="boxHead"><h3 id="fTitle">Dodaj ogłoszenie</h3><button id="closeAdd" class="btnD" style="width:28px;height:28px;padding:0">✕</button></div><div class="boxBody"><div id="status"></div><div class="drop" id="drop">Kliknij lub przeciągnij zdjęcia (max 8) <input type="file" id="file" accept="image/*" multiple hidden></div><div class="photos" id="photos"></div><div class="g2"><input class="in" id="aTitle" placeholder="Tytuł *"/><input class="in" id="aBrand" placeholder="Marka"/></div><div class="g2"><input class="in" id="aModel" placeholder="Model"/><input class="in" id="aYear" type="number" placeholder="Rocznik"/></div><div class="g2"><input class="in" id="aPrice" type="number" placeholder="Cena PLN"/><input class="in" id="aLocation" placeholder="Miasto"/></div><textarea class="in" id="aDesc" placeholder="Opis..." style="min-height:70px"></textarea><div style="display:flex;gap:8px"><button class="btnY" id="save" style="flex:1">Zapisz i pokaż</button><button id="cancel" class="btnD" style="flex:1">Anuluj</button></div></div></div></div>
-<div class="modal" id="detailModal"><div class="box" id="detailBox" style="background:#fff;color:#111;max-width:980px;width:96vw;border-radius:18px"></div></div>
+.modalBg{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;z-index:100;padding:12px}
+.modalBg.open{display:flex}
+.modalDark{background:#0e0e0e;color:#fff;width:min(820px,100%);border-radius:20px;max-height:92vh;overflow:auto}
+.modalHead{padding:16px 18px;border-bottom:1px solid #222;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:#0e0e0e;z-index:2}
+.formBody{padding:16px 18px;display:flex;flex-direction:column;gap:16px}
+.section{background:#151515;border:1px solid #222;border-radius:14px;padding:14px}
+.section h4{font-size:13px;margin-bottom:10px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.inpL{background:#1c1c1c;border:1px solid #2a2a2a;color:#fff;border-radius:10px;padding:11px 12px;font-size:13px;width:100%;outline:none}
+.textarea{min-height:90px;resize:vertical}
+.photos{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px;margin-top:8px}
+.ph{position:relative;aspect-ratio:4/3;background:#111;border-radius:10px;overflow:hidden;border:2px solid transparent}
+.ph.main{border-color:#FFE600}
+.ph img{width:100%;height:100%;object-fit:cover;display:block}
+.ph .rm{position:absolute;top:4px;right:4px;width:22px;height:22px;border-radius:999px;background:rgba(0,0,0,.7);color:#fff;border:0;cursor:pointer}
+.ph .mk{position:absolute;bottom:4px;left:4px;background:#FFE600;color:#000;border-radius:6px;padding:2px 6px;font-size:9px;font-weight:800}
+.drop{border:1.5px dashed #333;border-radius:12px;padding:20px;text-align:center;cursor:pointer;background:#121212;color:#999;font-size:13px}
+.detailMain{width:100%;aspect-ratio:16/10;object-fit:cover;background:#111;border-radius:12px}
+.detailThumbs{display:flex;gap:6px;overflow:auto;padding-top:8px}
+.detailThumbs img{width:64px;height:48px;object-fit:cover;border-radius:8px;cursor:pointer;border:2px solid transparent;opacity:.7}
+.detailThumbs img.active{border-color:#FFE600;opacity:1}
+.status{padding:10px 12px;background:#1a1a1a;border:1px solid #2a2a2a;border-radius:10px;font-size:12px;color:#FFE600;display:none}
+.status.show{display:block}
+@media(max-width:1100px){.wrap{grid-template-columns:1fr}.left{width:100%;position:relative;top:0}.grid{grid-template-columns:1fr 1fr}}
+@media(max-width:640px){.grid{grid-template-columns:1fr}.wrap{padding:10px}.grid2{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="header"><div class="logo">WROOMER<span>.PL</span></div><div style="display:flex;gap:8px;align-items:center"><span style="opacity:.7;font-size:12px">Cześć, gfng!</span><button class="btnY" id="addBtn">+ Dodaj</button><button class="btnD" id="logout">Wyloguj</button></div></div>
 
-<!-- OLX STYLE AUTH MODAL -->
-<div class="authOverlay" id="authOverlay">
-  <div class="authCard">
-    <div class="authTop">
-      <div class="authLogo">WROOMER<b>.PL</b></div>
-      <div class="tabs">
-        <div class="tab active" id="tabLogin">Logowanie</div>
-        <div class="tab" id="tabRegister">Rejestracja</div>
+<div class="wrap">
+  <aside class="left">
+    <div style="display:flex;justify-content:space-between;align-items:center"><h2 style="font-size:15px">Wyszukiwarka</h2><button class="btnS" id="clearAll" style="background:#fff;color:#000">Wyczyść</button></div>
+    <div class="box"><div class="lbl">Lokalizacja</div><div class="row"><input class="inp" id="city" placeholder="Miasto..."><button class="btnY" id="geo" style="min-width:48px">Ja</button></div><div class="lbl" style="margin-top:10px">Promień</div><div class="chips"><div class="chip active">Cała PL</div></div></div>
+    <div class="box"><div class="lbl">Marka</div><select class="inp" id="fBrand"><option value="">Wszystkie marki</option><option>BMW</option><option>Audi</option><option>Mercedes</option><option>Porsche</option><option>Toyota</option></select><div class="lbl" style="margin-top:8px">Model</div><input class="inp" id="fModel" placeholder="np. A4, 3 Series..."><div class="lbl" style="margin-top:8px">Cena</div><div class="row"><input class="inp" id="pFrom" type="number" placeholder="Od"><input class="inp" id="pTo" type="number" placeholder="Do"></div><div class="lbl" style="margin-top:8px">Rocznik</div><div class="row"><input class="inp" id="yFrom" type="number" placeholder="Od 1990"><input class="inp" id="yTo" type="number" placeholder="Do 2026"></div><div class="lbl" style="margin-top:8px">Szukaj</div><input class="inp" id="q" placeholder="np. diesel, automat..."><div class="lbl" style="margin-top:8px">Sortowanie</div><select class="inp" id="sort"><option value="new">Najnowsze</option><option value="cheap">Najtańsze</option><option value="exp">Najdroższe</option></select></div>
+    <button class="btnSearch" id="search">Szukaj</button>
+    <div style="padding-top:10px;border-top:1px solid #1e1e1e;text-align:center;font-size:10px;opacity:.5">Autor:<br><b style="color:#fff;font-size:11px;opacity:1">Norbert Nakoneczny</b></div>
+  </aside>
+
+  <section class="right">
+    <div class="topbar"><span id="cnt">Ładowanie...</span><div style="display:flex;gap:8px"><button class="btnS" id="refresh">Odśwież</button><button class="btnS" id="clearEmpty">Wyczyść filtry</button></div></div>
+    <div class="empty" id="empty" style="display:none"><h3>Brak ogłoszeń</h3><p style="opacity:.6;margin:8px 0">Zmień filtry lub dodaj ogłoszenie</p><button class="btnY" id="emptyAdd">+ Dodaj</button></div>
+    <div class="grid" id="grid"></div>
+  </section>
+</div>
+
+<div class="modalBg" id="addModal">
+  <div class="modalDark">
+    <div class="modalHead"><h3 id="formTitle">Dodaj ogłoszenie</h3><button class="btnD" id="closeAdd">✕</button></div>
+    <div class="formBody">
+      <div class="status" id="status"></div>
+      <div class="section">
+        <h4>📸 Zdjęcia na osobnym serwerze (Supabase Storage) — nie obciążają strony</h4>
+        <div class="drop" id="drop">Kliknij lub przeciągnij zdjęcia — skompresuję do WebP i wyślę do Storage<br><small>Pierwsze = miniaturka. Max 12.</small><input type="file" id="file" accept="image/*" multiple hidden></div>
+        <div class="photos" id="photos"></div>
       </div>
-    </div>
-    <div class="authBody">
-      <div id="loginForm">
-        <label class="authLabel">Adres e-mail</label>
-        <input class="authInput" id="authEmail" placeholder="Wpisz adres e-mail" type="email"/>
-        <label class="authLabel" style="display:flex;justify-content:space-between"><span>Hasło</span><span id="forgot" style="font-weight:400;color:#666;cursor:pointer;font-size:11px;text-decoration:underline">Nie pamiętasz hasła?</span></label>
-        <input class="authInput" id="authPass" placeholder="Wpisz hasło" type="password"/>
-        <button class="authBtn" id="loginBtn">Zaloguj się</button>
-        <div class="authHint">Logując się, akceptujesz <u>Regulamin</u> i <u>Politykę Prywatności</u>.</div>
+      <div class="section">
+        <h4>🚗 Dane (wzorowane na OTOMOTO / OLX)</h4>
+        <div class="grid2"><input class="inpL" id="aTitle" placeholder="Tytuł np. BMW 320d M Sport"><input class="inpL" id="aBrand" placeholder="Marka"><input class="inpL" id="aModel" placeholder="Model"><input class="inpL" id="aYear" type="number" placeholder="Rocznik"><input class="inpL" id="aMileage" type="number" placeholder="Przebieg km"><input class="inpL" id="aFuel" placeholder="Paliwo"><input class="inpL" id="aGear" placeholder="Skrzynia"><input class="inpL" id="aPower" type="number" placeholder="Moc KM"></div>
       </div>
-      <div id="registerForm" style="display:none">
-        <label class="authLabel">Adres e-mail</label>
-        <input class="authInput" id="regEmail" placeholder="Wpisz adres e-mail" type="email"/>
-        <label class="authLabel">Hasło</label>
-        <input class="authInput" id="regPass" placeholder="Min. 6 znaków" type="password"/>
-        <label style="display:flex;gap:8px;margin-top:12px;font-size:11px;line-height:1.4;color:#333"><input type="checkbox" id="terms" checked/> <span>Akceptuję <u>Regulamin</u> i <u>Politykę Prywatności</u>. Potwierdzam, że mam ukończone 18 lat.</span></label>
-        <button class="authBtn yellow" id="registerBtn">Załóż konto</button>
-        <div class="authHint">Zakładając konto zyskujesz możliwość edycji i usuwania swoich ogłoszeń — jak na OLX.</div>
+      <div class="section">
+        <h4>💰 Cena i opis</h4>
+        <div class="grid2"><input class="inpL" id="aPrice" type="number" placeholder="Cena PLN"><select class="inpL" id="aPriceType"><option>Do negocjacji</option><option>Sztywna</option></select></div>
+        <textarea class="inpL textarea" id="aDesc" placeholder="Opis..." style="margin-top:10px"></textarea>
       </div>
-      <div id="authMsg" style="margin-top:10px;font-size:12px;color:#d00;min-height:16px"></div>
-      <div class="authSep">lub kontynuuj z</div>
-      <button class="socialBtn" id="googleBtn"><span style="font-weight:800">G</span> Kontynuuj z Google</button>
-      <button class="socialBtn" id="fbBtn" style="display:none">Kontynuuj z Facebook</button>
-    </div>
-    <div class="authFooter">
-      <b>Dlaczego warto mieć konto na WROOMER.PL?</b><br/>
-      • Edytuj i usuwaj swoje ogłoszenia • Zobaczysz etykietę <b style="background:#FFE600;padding:1px 5px;border-radius:4px;color:#000">MOJE • EDYTUJ</b> na swoich kafelkach • Filtruj <b>Moje</b> ogłoszenia
-      <div style="margin-top:10px;text-align:right"><span id="closeAuth" style="cursor:pointer;text-decoration:underline">Zamknij</span></div>
+      <div class="section">
+        <h4>📍 Lokalizacja</h4>
+        <div class="grid2"><input class="inpL" id="aLocation" placeholder="Miasto"><input class="inpL" id="aVoiv" placeholder="Województwo"></div>
+      </div>
+      <div class="row"><button class="btnY" id="save" style="flex:1;padding:14px">Zapisz do Supabase</button><button class="btnD" id="cancel" style="flex:1">Anuluj</button></div>
     </div>
   </div>
 </div>
 
+<div class="modalBg" id="detailModal"><div class="modalDark" id="detailBox" style="background:#fff;color:#111;max-width:760px"></div></div>
+
 <script>
-const SB_URL="https://rljqnhfogaqdjeirqqdj.supabase.co"; const SB_KEY="sb_publishable_j7CS5xIHzOMBMyvsqVgDmw_GeEek5hX";
-let sb=null, images=[], editId=null, currentUser=null, myOnly=false, authTab='login';
-const $=id=>document.getElementById(id);
-function setStatus(t,err=false){ const s=$("status"); if(!t){s.classList.remove('show');return;} s.textContent=t; s.style.color=err?"#ff6b6b":"#FFE600"; s.classList.add('show'); }
-try{ sb=window.supabase.createClient(SB_URL, SB_KEY); }catch(e){ console.error(e); }
-async function initAuth(){ const {data}=await sb.auth.getSession(); currentUser=data?.session?.user||null; updateAuthUI(); sb.auth.onAuthStateChange((_,sess)=>{ currentUser=sess?.user||null; updateAuthUI(); loadAds(); }); }
-function updateAuthUI(){ if(currentUser){ $("userEmail").textContent=currentUser.email; $("authBtn").textContent="Wyloguj"; $("myAdsBtn").style.display="inline-block"; }else{ $("userEmail").textContent=""; $("authBtn").textContent="Zaloguj"; $("myAdsBtn").style.display="none"; myOnly=false; $("myAdsBtn").textContent="Moje"; } }
-function setAuthTab(t){ authTab=t; $("tabLogin").classList.toggle('active', t==='login'); $("tabRegister").classList.toggle('active', t==='register'); $("loginForm").style.display=t==='login'?'block':'none'; $("registerForm").style.display=t==='register'?'block':'none'; $("authMsg").textContent=""; }
-function compress(file,maxW=1280){ return new Promise(r=>{ const img=new Image(); img.onload=()=>{ let w=Math.min(img.width,maxW); let h=w*(img.height/img.width); if(h>900){h=900; w=h*(img.width/img.height);} const c=document.createElement('canvas'); c.width=w; c.height=h; c.getContext('2d').drawImage(img,0,0,w,h); c.toBlob(b=>r({blob:b, url:URL.createObjectURL(b)}),'image/webp',0.78); }; img.onerror=()=>r({blob:file, url:URL.createObjectURL(file)}); img.src=URL.createObjectURL(file); }); }
-function renderPhotos(){ const w=$("photos"); w.innerHTML=""; images.forEach((o,i)=>{ const d=document.createElement('div'); d.className='ph'; d.innerHTML=`<img src="${o.url||o.src}"><button>✕</button>`; d.querySelector('button').onclick=()=>{images.splice(i,1); renderPhotos();}; w.appendChild(d); }); }
-async function loadAds(){ const q=$("q").value.trim().toLowerCase(); const city=$("city").value.trim().toLowerCase(); const brand=$("brand").value.trim().toLowerCase(); $("cnt").textContent="Ładowanie..."; $("grid").innerHTML=""; try{ let query=sb.from('ads').select('*').order('created_at',{ascending:false}).limit(120); if(myOnly&&currentUser) query=query.eq('owner_id',currentUser.id); if(brand) query=query.ilike('brand','%'+brand+'%'); if(city) query=query.ilike('location','%'+city+'%'); if(q) query=query.or(`title.ilike.%${q}%,description.ilike.%${q}%`); const {data,error}=await query; if(error) throw error; $("cnt").textContent=myOnly?`Moje ogłoszenia: ${data.length}`:`Znaleziono: ${data.length}`; const g=$("grid"); g.innerHTML=""; if(!data.length){ g.innerHTML='<div style="background:#fff;border-radius:12px;padding:24px;text-align:center">Brak ogłoszeń</div>'; return; } data.forEach(a=>{ const imgs=a.images&&Array.isArray(a.images)&&a.images.length?a.images:(a.image_url?[a.image_url]:[]); const main=imgs[0]||'https://images.unsplash.com/photo-1494976388531-d1058494cdd8?q=80&w=400&auto=format&fit=crop'; const own=currentUser&&a.owner_id===currentUser.id; const el=document.createElement('div'); el.className='card'+(own?' own':''); el.innerHTML=`<div class="im"><img loading="lazy" src="${main}"><span class="badge">📷 ${imgs.length}</span><span class="editTag">MOJE • EDYTUJ</span></div><div class="bo"><h4>${a.title||''}</h4><div class="meta">${a.year||''} ${a.location||''}</div><div class="price">${a.price?Number(a.price).toLocaleString('pl-PL')+' PLN':''}</div></div>`; el.onclick=()=>openDetail(a); g.appendChild(el); }); }catch(e){ $("cnt").textContent="Błąd: "+e.message; } }
-function openDetail(a){
-  const imgs=a.images&&Array.isArray(a.images)&&a.images.length?a.images:(a.image_url?[a.image_url]:[]);
-  const own=currentUser&&a.owner_id===currentUser.id; const box=$("detailBox"); const views=a.views||0;
-  box.innerHTML=`<div style="padding:18px 22px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #eee;position:sticky;top:0;background:#fff;z-index:2;border-radius:18px 18px 0 0"><h3 style="font-size:20px;line-height:1.2;max-width:60%">${a.title||''}</h3><div style="display:flex;gap:8px;align-items:center"><span style="font-size:12px;opacity:.6">👁️ ${views}</span><button id="editBtn" style="display:${own?'inline-flex':'none'};background:#FFE600;border:0;border-radius:999px;padding:9px 16px;font-weight:800;font-size:13px;cursor:pointer">Edytuj</button><button id="delBtn" style="display:${own?'inline-flex':'none'};background:#111;color:#fff;border:0;border-radius:999px;padding:9px 14px;font-size:13px;cursor:pointer">Usuń</button><button onclick="document.getElementById('detailModal').classList.remove('open')" class="btnS" style="padding:9px 14px">✕</button></div></div><div style="padding:18px 22px"><img id="dMain" src="${imgs[0]||''}" style="width:100%;height:520px;object-fit:cover;border-radius:16px;background:#111;display:block"><div style="display:flex;gap:10px;overflow:auto;margin-top:12px;padding-bottom:4px">${imgs.map(s=>`<img src="${s}" style="width:96px;height:72px;object-fit:cover;border-radius:10px;cursor:pointer;border:2px solid transparent;flex-shrink:0" onclick="document.getElementById('dMain').src=this.src">`).join('')}</div><div style="display:grid;grid-template-columns:1fr 300px;gap:24px;margin-top:18px"><div><div style="font-weight:800;font-size:28px">${a.price?Number(a.price).toLocaleString('pl-PL')+' PLN':''}</div><div style="margin-top:14px;font-size:15px;white-space:pre-wrap;line-height:1.7">${a.description||''}</div></div><div><div style="background:#f7f7f7;border:1px solid #eee;border-radius:14px;padding:14px"><div style="font-weight:700;font-size:14px">Lokalizacja</div><div style="margin-top:6px;font-size:14px">📍 ${a.location||''}</div><div style="margin-top:14px"><button style="width:100%;background:#000;color:#fff;border:0;border-radius:12px;padding:14px;font-weight:700;cursor:pointer;font-size:14px">Pokaż numer</button></div><div style="margin-top:10px;font-size:11px;opacity:.6">ID: ${a.id} • ${new Date(a.created_at).toLocaleDateString('pl-PL')}</div></div></div></div></div>`;
-  if(own){ box.querySelector('#editBtn').onclick=()=>{ $("detailModal").classList.remove('open'); openEdit(a); }; box.querySelector('#delBtn').onclick=async()=>{ if(!confirm('Usunąć ogłoszenie?')) return; const {error}=await sb.from('ads').delete().eq('id',a.id).eq('owner_id',currentUser.id); if(error){alert(error.message);return;} $("detailModal").classList.remove('open'); loadAds(); }; }
-  $("detailModal").classList.add('open'); try{ sb.from('ads').update({views:views+1}).eq('id',a.id).then(()=>{}); }catch(e){}
+// ===== KONFIG SUPABASE - PODMIEŃ NA SWOJE =====
+const SUPABASE_URL = 'https://YOUR_PROJECT.supabase.co'
+const SUPABASE_ANON = 'YOUR_ANON_KEY'
+const BUCKET = 'ad-images'
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON)
+
+// fallback local gdy brak konfiguracji
+const isSupabaseConfigured = !SUPABASE_URL.includes('YOUR_PROJECT')
+const LS='wroomer_ads_v7'
+let images=[] // {type:'url'|'new', src, file?, dataUrl?}
+let editId=null
+const user={id:'gfng', name:'gfng'}
+
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,4)
+const loadLS=()=>{try{return JSON.parse(localStorage.getItem(LS)||'[]')}catch{return []}}
+const saveLS=a=>localStorage.setItem(LS, JSON.stringify(a))
+
+function showStatus(msg, isError=false){
+  const el=document.getElementById('status')
+  el.textContent=msg
+  el.style.color=isError?'#ff6b6b':'#FFE600'
+  el.classList.add('show')
+  setTimeout(()=>el.classList.remove('show'), 4000)
 }
-function openAdd(){ if(!currentUser){ $("authOverlay").classList.add('open'); setAuthTab('login'); return; } editId=null; images=[]; renderPhotos(); $("fTitle").textContent="Dodaj ogłoszenie"; $("aTitle").value=""; $("aBrand").value=""; $("aModel").value=""; $("aYear").value=""; $("aPrice").value=""; $("aLocation").value=""; $("aDesc").value=""; setStatus(""); $("addModal").classList.add('open'); }
-function openEdit(a){ editId=a.id; images=(a.images||[]).map(url=>({url,src:url,type:'url'})); renderPhotos(); $("fTitle").textContent="Edytuj ogłoszenie"; $("aTitle").value=a.title||""; $("aBrand").value=a.brand||""; $("aModel").value=a.model||""; $("aYear").value=a.year||""; $("aPrice").value=a.price||""; $("aLocation").value=a.location||""; $("aDesc").value=a.description||""; setStatus("Edytujesz swoje ogłoszenie."); $("addModal").classList.add('open'); }
-$("openAdd").onclick=openAdd; $("closeAdd").onclick=()=>$("addModal").classList.remove('open'); $("cancel").onclick=()=>$("addModal").classList.remove('open'); $("addModal").addEventListener('click',e=>{if(e.target===e.currentTarget)e.currentTarget.classList.remove('open');}); $("detailModal").addEventListener('click',e=>{if(e.target===e.currentTarget)e.currentTarget.classList.remove('open');}); $("doSearch").onclick=loadAds; $("ref").onclick=loadAds;
-$("myAdsBtn").onclick=()=>{ if(!currentUser) return; myOnly=!myOnly; $("myAdsBtn").textContent=myOnly?"Wszystkie":"Moje"; loadAds(); };
-$("authBtn").onclick=async()=>{ if(currentUser){ await sb.auth.signOut(); }else{ $("authOverlay").classList.add('open'); setAuthTab('login'); } }; $("closeAuth").onclick=()=>$("authOverlay").classList.remove('open'); $("authOverlay").addEventListener('click',e=>{if(e.target===e.currentTarget)e.currentTarget.classList.remove('open');});
-$("tabLogin").onclick=()=>setAuthTab('login'); $("tabRegister").onclick=()=>setAuthTab('register');
-$("loginBtn").onclick=async()=>{ const email=$("authEmail").value.trim(); const pass=$("authPass").value.trim(); if(!email||pass.length<6){ $("authMsg").textContent="Podaj email i hasło min 6 znaków"; return; } $("loginBtn").disabled=true; $("authMsg").textContent="Loguję..."; try{ const {error}=await sb.auth.signInWithPassword({email,password:pass}); if(error) throw error; $("authOverlay").classList.remove('open'); }catch(e){ $("authMsg").textContent=e.message; }finally{ $("loginBtn").disabled=false; } };
-$("registerBtn").onclick=async()=>{ const email=$("regEmail").value.trim()||$("authEmail").value.trim(); const pass=$("regPass").value.trim()||$("authPass").value.trim(); if(!email||pass.length<6){ $("authMsg").textContent="Podaj email i hasło min 6 znaków"; return; } if(!$("terms").checked){ $("authMsg").textContent="Zaakceptuj regulamin"; return; } $("registerBtn").disabled=true; $("authMsg").textContent="Zakładam konto..."; try{ const {data,error}=await sb.auth.signUp({email,password:pass}); if(error) throw error; if(data.session){ $("authOverlay").classList.remove('open'); }else{ $("authMsg").textContent="Konto utworzone! Sprawdź email lub przejdź do logowania."; setAuthTab('login'); } }catch(e){ $("authMsg").textContent=e.message; }finally{ $("registerBtn").disabled=false; } };
-$("googleBtn").onclick=async()=>{ try{ const {error}=await sb.auth.signInWithOAuth({provider:'google', options:{redirectTo: location.href}}); if(error) throw error; }catch(e){ $("authMsg").textContent=e.message; } };
-$("forgot").onclick=async()=>{ const email=$("authEmail").value.trim(); if(!email){ $("authMsg").textContent="Wpisz email aby zresetować hasło"; return; } const {error}=await sb.auth.resetPasswordForEmail(email); $("authMsg").textContent=error?error.message:"Link do resetu wysłany na email."; };
-const drop=$("drop"), fileIn=$("file"); drop.onclick=()=>fileIn.click(); drop.ondragover=e=>{e.preventDefault(); drop.style.borderColor='#FFE600';}; drop.ondragleave=()=>drop.style.borderColor='#333'; drop.ondrop=async e=>{ e.preventDefault(); drop.style.borderColor='#333'; const files=[...e.dataTransfer.files].filter(f=>f.type.startsWith('image/')).slice(0,8-images.length); for(const f of files){ const c=await compress(f); images.push({blob:c.blob, url:c.url, src:c.url}); } renderPhotos(); }; fileIn.onchange=async e=>{ const files=[...e.target.files].slice(0,8-images.length); for(const f of files){ const c=await compress(f); images.push({blob:c.blob, url:c.url, src:c.url}); } renderPhotos(); fileIn.value=''; };
-$("save").onclick=async()=>{ const title=$("aTitle").value.trim(); if(!title){ setStatus("❌ Tytuł wymagany",true); return; } if(images.length===0){ setStatus("❌ Dodaj min. 1 zdjęcie",true); return; } if(!currentUser){ $("authOverlay").classList.add('open'); return; } const btn=$("save"); btn.disabled=true; btn.textContent="Zapisuję..."; setStatus("⏳ Wysyłam zdjęcia..."); try{ const urls=[]; for(let i=0;i<images.length;i++){ const it=images[i]; if(it.type==='url'){ urls.push(it.url); continue; } const name=`${currentUser.id}/${Date.now()}_${i}_${Math.random().toString(36).slice(2,6)}.webp`; const {error}=await sb.storage.from('ad-images').upload(name,it.blob,{contentType:'image/webp',upsert:true}); if(error) throw new Error("Storage: "+error.message); const {data}=sb.storage.from('ad-images').getPublicUrl(name); urls.push(data.publicUrl); } setStatus("⏳ Zapisuję ogłoszenie..."); const payload={title,brand:$("aBrand").value.trim()||null,model:$("aModel").value.trim()||null,year:parseInt($("aYear").value)||null,price:parseInt($("aPrice").value)||0,location:$("aLocation").value.trim()||null,description:$("aDesc").value.trim()||null,images:urls,image_url:urls[0],owner_id:currentUser.id}; let res; if(editId){ res=await sb.from('ads').update(payload).eq('id',editId).eq('owner_id',currentUser.id).select(); } else{ res=await sb.from('ads').insert([payload]).select(); } if(res.error) throw res.error; setStatus("✅ Zapisano!"); setTimeout(()=>{ $("addModal").classList.remove('open'); setStatus(""); images=[]; loadAds(); },400); }catch(e){ setStatus("❌ "+e.message,true); }finally{ btn.disabled=false; btn.textContent=editId?"Zapisz zmiany":"Zapisz i pokaż"; } };
-initAuth(); loadAds();
-</script></body></html>
+
+async function compress(file, maxW=1400){
+  return new Promise(res=>{
+    const img=new Image()
+    img.onload=()=>{
+      let w=Math.min(img.width,maxW), h=w*(img.height/img.width)
+      if(h>900){h=900; w=h*(img.width/img.height)}
+      const c=document.createElement('canvas'); c.width=w; c.height=h
+      c.getContext('2d').drawImage(img,0,0,w,h)
+      const dataUrl=c.toDataURL('image/webp',0.82)
+      // blob do uploadu
+      c.toBlob(blob=>res({dataUrl, blob}), 'image/webp', 0.82)
+    }
+    img.src=URL.createObjectURL(file)
+  })
+}
+
+function dataUrlToBlob(dataUrl){
+  const arr=dataUrl.split(','), mime=arr[0].match(/:(.*?);/)[1]
+  const bstr=atob(arr[1])
+  let n=bstr.length, u8arr=new Uint8Array(n)
+  while(n--) u8arr[n]=bstr.charCodeAt(n)
+  return new Blob([u8arr], {type:mime})
+}
+
+function renderPhotos(){
+  const wrap=document.getElementById('photos')
+  wrap.innerHTML=''
+  images.forEach((obj,i)=>{
+    const d=document.createElement('div'); d.className='ph'+(i===0?' main':'')
+    d.innerHTML=`<img src="${obj.src}"><button class="rm">✕</button>${i===0?'<span class="mk">GŁÓWNE</span>':`<span class="mk">${i+1}</span>`}`
+    d.querySelector('.rm').onclick=()=>{images.splice(i,1); renderPhotos()}
+    d.onclick=(e)=>{ if(e.target.classList.contains('rm')) return; const [m]=images.splice(i,1); images.unshift(m); renderPhotos() }
+    wrap.appendChild(d)
+  })
+}
+
+async function uploadImagesToStorage(){
+  if(!isSupabaseConfigured) return images.map(i=>i.src)
+  const urls=[]
+  for(let i=0;i<images.length;i++){
+    const obj=images[i]
+    if(obj.type==='url'){ urls.push(obj.src); continue }
+    // nowy plik -> upload do Storage
+    const fileName=`${user.id}/${Date.now()}_${i}_${uid()}.webp`
+    const {data, error} = await supabaseClient.storage.from(BUCKET).upload(fileName, obj.blob, {contentType:'image/webp', upsert:false})
+    if(error){ showStatus('Błąd uploadu zdjęcia: '+error.message, true); throw error }
+    const {data: pub} = supabaseClient.storage.from(BUCKET).getPublicUrl(fileName)
+    urls.push(pub.publicUrl)
+  }
+  return urls
+}
+
+async function loadAds(){
+  const city=document.getElementById('city').value.toLowerCase().trim()
+  const brand=document.getElementById('fBrand').value.toLowerCase()
+  const model=document.getElementById('fModel').value.toLowerCase()
+  const q=document.getElementById('q').value.toLowerCase().replace(/[%"'()\\]/g,'')
+  const pf=parseInt(document.getElementById('pFrom').value)||0, pt=parseInt(document.getElementById('pTo').value)||Infinity
+  const yf=parseInt(document.getElementById('yFrom').value)||0, yt=parseInt(document.getElementById('yTo').value)||9999
+  const sort=document.getElementById('sort').value
+
+  let ads=[]
+  if(isSupabaseConfigured){
+    let query=supabaseClient.from('ads').select('*').order('created_at',{ascending:false}).limit(50)
+    if(brand) query=query.ilike('brand', `%${brand}%`)
+    if(model) query=query.ilike('model', `%${model}%`)
+    if(city) query=query.ilike('location', `%${city}%`)
+    // q bezpiecznie - bez cudzysłowów
+    if(q) query=query.or(`title.ilike.%${q}%,description.ilike.%${q}%`)
+    const {data, error}=await query
+    if(error){
+      console.error(error)
+      if(error.code==='PGRST100'){ showStatus('PGRST100 naprawiony - użyj filtra bez znaków specjalnych', true) }
+      else showStatus('Błąd Supabase: '+error.message+' - pokazuję lokalne', true)
+      ads=loadLS()
+    } else ads=data||[]
+  } else {
+    ads=loadLS()
+  }
+
+  // filtr po stronie klienta dla ceny/rocznika (nie obciąża bazy)
+  ads=ads.filter(a=>{
+    if((a.price||0)<pf || (a.price||0)>pt) return false
+    if((a.year||0)<yf || (a.year||0)>yt) return false
+    return true
+  })
+  if(sort==='cheap') ads.sort((a,b)=>a.price-b.price)
+  else if(sort==='exp') ads.sort((a,b)=>b.price-a.price)
+  else ads.sort((a,b)=>new Date(b.created_at)-new Date(a.created_at))
+
+  const grid=document.getElementById('grid'), empty=document.getElementById('empty'), cnt=document.getElementById('cnt')
+  cnt.textContent=ads.length?`Znaleziono: ${ads.length}`:`Brak ogłoszeń`
+  grid.innerHTML=''
+  if(!ads.length){empty.style.display='block'; return}
+  empty.style.display='none'
+  ads.forEach(a=>{
+    const imgs=a.images||[a.image_url].filter(Boolean)
+    const main=imgs[0]||'https://images.unsplash.com/photo-1494976388531-d1058494cdd8?q=80&w=600&auto=format&fit=crop'
+    const extra=imgs.slice(1,4)
+    const own=(a.owner_id||a.ownerId)===user.id
+    const d=document.createElement('div'); d.className='card'
+    d.innerHTML=`<div class="img"><img loading="lazy" src="${main}" alt=""><span class="badge">📷 ${imgs.length}</span>${own?'<span class="badge" style="left:68px;background:#FFE600;color:#000">MOJE</span>':''}<div class="act"><button class="iconBtn edit" style="${own?'':'display:none'}">✎</button><button class="iconBtn del" style="${own?'':'display:none'}">✕</button></div></div><div class="body"><h4>${a.title||''}</h4><div class="meta">${a.year||''} • ${a.mileage||''} km • ${a.fuel||''} • ${a.location||''}</div><div class="prc">${a.price?Number(a.price).toLocaleString('pl-PL')+' PLN':''}</div><div class="thumbsRow">${extra.map(s=>`<img src="${s}">`).join('')}</div></div>`
+    d.querySelector('.img').addEventListener('click',()=>openDetail(a))
+    d.querySelector('.body').addEventListener('click',()=>openDetail(a))
+    if(own){
+      d.querySelector('.edit').addEventListener('click',e=>{e.stopPropagation(); openEdit(a)})
+      d.querySelector('.del').addEventListener('click',async e=>{e.stopPropagation(); if(!confirm('Usunąć?'))return; if(isSupabaseConfigured){ const {error}=await supabaseClient.from('ads').delete().eq('id', a.id); if(error){showStatus(error.message,true);return}} saveLS(loadLS().filter(x=>x.id!==a.id)); renderAds()})
+    }
+    grid.appendChild(d)
+  })
+}
+
+function renderAds(){ loadAds() }
+
+function openDetail(a){
+  const m=document.getElementById('detailModal'), b=document.getElementById('detailBox')
+  const imgs=a.images||[a.image_url].filter(Boolean)
+  const own=(a.owner_id||a.ownerId)===user.id
+  b.innerHTML=`<div style="padding:14px;display:flex;justify-content:space-between"><h3>${a.title}</h3><button class="btnS" onclick="document.getElementById('detailModal').classList.remove('open')">✕</button></div><div style="padding:0 14px"><img class="detailMain" id="dMain" src="${imgs[0]||''}"><div class="detailThumbs">${imgs.map((s,i)=>`<img src="${s}" class="${i===0?'active':''}" data-i="${i}">`).join('')}</div></div><div style="padding:14px"><div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px"><span class="btnS">${a.brand||''} ${a.model||''}</span><span class="btnS">${a.year||''}</span><span class="btnS">${a.mileage||''} km</span><span class="btnS">${a.fuel||''}</span><span class="btnS">${a.gearbox||''}</span><span class="btnS">${a.power||''} KM</span></div><div style="font-size:22px;font-weight:800">${a.price?Number(a.price).toLocaleString('pl-PL')+' PLN':''}</div><div style="margin-top:10px;font-size:13px;line-height:1.6;white-space:pre-wrap">${a.description||''}</div><div style="margin-top:10px;font-size:12px;opacity:.6">📍 ${a.location||''}</div><div style="display:flex;gap:8px;margin-top:14px"><button class="btnY" style="flex:1" onclick="location.href='mailto:kontakt@wroomer.pl'">Kontakt</button>${own?'<button class="btnS" id="dEdit">Edytuj</button><button class="btnD" id="dDel">Usuń</button>':'<button class="btnD" style="flex:1" onclick="document.getElementById(\'detailModal\').classList.remove(\'open\')">Zamknij</button>'}</div></div>`
+  b.querySelectorAll('.detailThumbs img').forEach(im=>im.addEventListener('click',()=>{ b.querySelectorAll('.detailThumbs img').forEach(x=>x.classList.remove('active')); im.classList.add('active'); document.getElementById('dMain').src=im.src }))
+  m.classList.add('open')
+  if(own){
+    document.getElementById('dEdit').onclick=()=>{m.classList.remove('open'); openEdit(a)}
+    document.getElementById('dDel').onclick=async()=>{ if(!confirm('Usunąć?'))return; if(isSupabaseConfigured){ await supabaseClient.from('ads').delete().eq('id', a.id) } saveLS(loadLS().filter(x=>x.id!==a.id)); m.classList.remove('open'); renderAds() }
+  }
+}
+
+function openAdd(){
+  editId=null; images=[]; renderPhotos()
+  document.getElementById('formTitle').textContent='Dodaj ogłoszenie'
+  document.querySelectorAll('#addModal .inpL, #addModal textarea').forEach(i=>i.value='')
+  document.getElementById('addModal').classList.add('open')
+}
+function openEdit(a){
+  editId=a.id
+  const imgs=a.images||[a.image_url].filter(Boolean)
+  images=imgs.map(src=>({type:'url', src, blob:null}))
+  renderPhotos()
+  document.getElementById('formTitle').textContent='Edytuj ogłoszenie'
+  document.getElementById('aTitle').value=a.title||''; document.getElementById('aBrand').value=a.brand||''; document.getElementById('aModel').value=a.model||''; document.getElementById('aYear').value=a.year||''; document.getElementById('aMileage').value=a.mileage||''; document.getElementById('aFuel').value=a.fuel||''; document.getElementById('aGear').value=a.gearbox||''; document.getElementById('aPower').value=a.power||''; document.getElementById('aPrice').value=a.price||''; document.getElementById('aDesc').value=a.description||''; document.getElementById('aLocation').value=a.location||''; document.getElementById('aVoiv').value=a.voivodeship||''; document.getElementById('aPriceType').value=a.price_type||'Do negocjacji'
+  document.getElementById('addModal').classList.add('open')
+}
+
+// init
+document.getElementById('search').onclick=()=>loadAds()
+document.getElementById('refresh').onclick=()=>loadAds()
+document.getElementById('clearAll').onclick=()=>{document.querySelectorAll('.left .inp').forEach(i=>i.value=''); loadAds()}
+document.getElementById('clearEmpty').onclick=()=>document.getElementById('clearAll').click()
+document.getElementById('emptyAdd').onclick=openAdd
+document.getElementById('addBtn').onclick=openAdd
+document.getElementById('closeAdd').onclick=()=>document.getElementById('addModal').classList.remove('open')
+document.getElementById('cancel').onclick=()=>document.getElementById('addModal').classList.remove('open')
+document.getElementById('addModal').addEventListener('click',e=>{if(e.target===e.currentTarget)e.currentTarget.classList.remove('open')})
+document.getElementById('detailModal').addEventListener('click',e=>{if(e.target===e.currentTarget)e.currentTarget.classList.remove('open')})
+document.getElementById('geo').onclick=()=>{ if(navigator.geolocation) navigator.geolocation.getCurrentPosition(()=>{ document.getElementById('city').value='Warszawa'; loadAds() }) }
+document.getElementById('logout').onclick=()=>{ if(confirm('Wyczyścić lokalne i wylogować?')){ localStorage.clear(); location.reload() } }
+
+const drop=document.getElementById('drop'), fileIn=document.getElementById('file')
+drop.onclick=()=>fileIn.click()
+drop.ondragover=e=>{e.preventDefault(); drop.style.borderColor='#FFE600'}
+drop.ondragleave=()=>drop.style.borderColor='#333'
+drop.ondrop=async e=>{e.preventDefault(); drop.style.borderColor='#333'; const files=[...e.dataTransfer.files].filter(f=>f.type.startsWith('image/')).slice(0,12-images.length); for(const f of files){ const {dataUrl, blob}=await compress(f); images.push({type:'new', src:dataUrl, blob}) } renderPhotos() }
+fileIn.onchange=async e=>{ const files=[...e.target.files].slice(0,12-images.length); for(const f of files){ const {dataUrl, blob}=await compress(f); images.push({type:'new', src:dataUrl, blob}) } renderPhotos(); fileIn.value='' }
+
+document.getElementById('save').onclick=async()=>{
+  if(images.length===0){ alert('Dodaj min. 1 zdjęcie'); return }
+  const title=document.getElementById('aTitle').value.trim()
+  if(!title){ alert('Tytuł wymagany'); return }
+  const saveBtn=document.getElementById('save')
+  saveBtn.textContent='Zapisuję...'; saveBtn.disabled=true
+  try{
+    const uploadedUrls = await uploadImagesToStorage()
+    const payload={
+      title,
+      brand:document.getElementById('aBrand').value.trim(),
+      model:document.getElementById('aModel').value.trim(),
+      year:parseInt(document.getElementById('aYear').value)||null,
+      mileage:parseInt(document.getElementById('aMileage').value)||null,
+      fuel:document.getElementById('aFuel').value.trim(),
+      gearbox:document.getElementById('aGear').value.trim(),
+      power:parseInt(document.getElementById('aPower').value)||null,
+      price:parseInt(document.getElementById('aPrice').value)||0,
+      price_type:document.getElementById('aPriceType').value,
+      description:document.getElementById('aDesc').value.trim(),
+      location:document.getElementById('aLocation').value.trim()||'Warszawa',
+      voivodeship:document.getElementById('aVoiv').value.trim(),
+      images: uploadedUrls,
+      image_url: uploadedUrls[0],
+      owner_id: user.id,
+      updated_at: new Date().toISOString()
+    }
+    if(isSupabaseConfigured){
+      if(editId){
+        const {error}=await supabaseClient.from('ads').update(payload).eq('id', editId)
+        if(error) throw error
+      } else {
+        const {error}=await supabaseClient.from('ads').insert([{...payload, created_at:new Date().toISOString()}])
+        if(error) throw error
+      }
+      showStatus(editId?'Zaktualizowano w Supabase':'Zapisano w Supabase + Storage')
+    } else {
+      // fallback local
+      let all=loadLS()
+      const ad={id:editId||uid(), ownerId:user.id, ...payload, images:uploadedUrls, created_at: editId ? (all.find(x=>x.id===editId)?.created_at||new Date().toISOString()) : new Date().toISOString()}
+      if(editId) all=all.map(x=>x.id===editId?ad:x); else all.unshift(ad)
+      saveLS(all)
+      showStatus('Zapisano lokalnie (podłącz Supabase w kodzie aby zapisywać na serwer)')
+    }
+    document.getElementById('addModal').classList.remove('open')
+    editId=null; images=[]; renderPhotos()
+    document.querySelectorAll('#addModal .inpL, #addModal textarea').forEach(i=>i.value='')
+    loadAds()
+  }catch(err){
+    console.error(err)
+    showStatus('Błąd zapisu: '+(err.message||err), true)
+  }finally{
+    saveBtn.textContent='Zapisz do Supabase'; saveBtn.disabled=false
+  }
+}
+
+// seed local jeśli supabase nie skonfigurowany
+if(!isSupabaseConfigured){
+  if(loadLS().length===0){
+    saveLS([
+      {id:uid(),owner_id:'gfng',ownerId:'gfng',title:'BMW 3 320d M Sport',brand:'BMW',model:'3',year:2020,price:89900,mileage:35000,fuel:'Diesel',location:'Warszawa',description:'Zadbany',images:['https://images.unsplash.com/photo-1555215695-3004980ad54e?q=80&w=1200&auto=format&fit=crop'],image_url:'https://images.unsplash.com/photo-1555215695-3004980ad54e?q=80&w=1200&auto=format&fit=crop',created_at:new Date().toISOString()},
+    ])
+  }
+}
+loadAds()
+</script>
+</body>
+</html>
