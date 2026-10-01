@@ -88,76 +88,62 @@
 
 .brandPill{padding:5px 10px;border-radius:20px;border:1px solid #ddd;background:#f7f7f7;font-size:11px;cursor:pointer}.brandPill.active{background:#FFE600!important;font-weight:700}.brandAllBtn{padding:4px 8px;border-radius:14px;border:1px solid #ddd;background:#fff;font-size:10px;cursor:pointer}.brandAllBtn.active{background:#FFE600!important;font-weight:700}
 
-/* CLEAN OTOMOTO LAYOUT */
-body{background:#f2f2f4!important}
-.h{background:#fff!important;color:#000!important;border-bottom:1px solid #e5e5e5;height:60px!important;display:flex;align-items:center;justify-content:space-between;padding:0 16px!important;position:sticky;top:0;z-index:100}
-.h .logo{font-weight:900;font-size:24px;letter-spacing:-1px;color:#000}
-.h .logo b{color:#000}
-.h .logo .pl{color:#FFD000;background:#000;padding:2px 6px;border-radius:4px;margin-left:2px}
-.topSearch{background:#fff;padding:16px;border-bottom:1px solid #e5e5e5;box-shadow:0 2px 8px rgba(0,0,0,.06)}
-.topSearchInner{max-width:1300px;margin:0 auto;display:flex;gap:10px;align-items:end;flex-wrap:wrap}
-.topSearch .field{flex:1;min-width:150px}
-.topSearch .field label{font-size:11px;font-weight:700;opacity:.7;text-transform:uppercase;margin-bottom:4px;display:block}
-.topSearch .field select, .topSearch .field input{width:100%;height:44px;border:1px solid #d1d1d1;border-radius:8px;padding:0 12px;font-size:14px;background:#fff}
-.topSearch .btn{height:44px;padding:0 24px;border-radius:8px;background:#FFD000;color:#000;font-weight:800;border:none;cursor:pointer;min-width:180px;font-size:14px}
-.topSearch .chips{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
-.topSearch .chip{padding:7px 14px;border-radius:20px;border:1px solid #ddd;background:#f5f5f5;font-size:12px;cursor:pointer}
-.topSearch .chip.active{background:#000;color:#fff;border-color:#000}
-.wrap{max-width:1300px;margin:0 auto;display:flex;gap:16px;padding:16px;align-items:flex-start}
-.left{width:300px;min-width:300px;background:#fff!important;border-radius:12px;border:1px solid #e5e5e5;padding:14px!important;position:sticky;top:76px;height:calc(100vh - 76px);overflow-y:auto;transform:none!important}
-.right{flex:1;min-width:0}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
-.card{background:#fff;border-radius:12px;border:1px solid #e5e5e5;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.04)}
-.card .im{height:180px;background:#f2f2f2;display:flex;align-items:center;justify-content:center;overflow:hidden}
-.card .im img{width:100%;height:100%;object-fit:contain;background:#f2f2f2}
+<style>
+/* SUPER CLEAN HEADER + TOP SEARCH - niebiesko znika = poprawka */
+.h{background:#fff!important;border-bottom:1px solid #e5e5e5;height:56px!important;display:flex;align-items:center;justify-content:space-between;padding:0 16px!important;position:sticky;top:0;z-index:100}
+.h .logo{font-weight:900;font-size:22px}
+.topBar{background:#fff;border-bottom:1px solid #eee;padding:12px 16px}
+.topBarInner{max-width:1300px;margin:0 auto;display:flex;gap:8px;flex-wrap:wrap;align-items:end}
+.topBar .f{flex:1;min-width:140px}
+.topBar .f label{font-size:10px;font-weight:700;opacity:.6;text-transform:uppercase;display:block;margin-bottom:3px}
+.topBar .f select, .topBar .f input{width:100%;height:40px;border:1px solid #ddd;border-radius:8px;padding:0 10px;font-size:13px}
+.topBar .btn{height:40px;padding:0 20px;border-radius:8px;background:#FFD000;color:#000;font-weight:800;border:none;cursor:pointer;min-width:160px}
+.topBar .chips{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+.topBar .chip{padding:5px 12px;border-radius:16px;border:1px solid #ddd;background:#f5f5f5;font-size:11px;cursor:pointer}
+.topBar .chip.active{background:#000;color:#fff}
+/* Fix niebieskie zaznaczenie - usuwam outline */
+*:focus{outline:none!important;box-shadow:none!important}
+button:focus, select:focus, input:focus{outline:none!important;box-shadow:0 0 0 2px #FFD000!important;border-color:#FFD000!important}
+/* Left narrow always visible */
 @media(max-width:900px){
-  .topSearchInner{flex-direction:column}
-  .topSearch .field{width:100%;min-width:100%}
-  .topSearch .btn{width:100%}
   .wrap{flex-direction:row!important;gap:8px!important;padding:8px!important}
-  .left{width:38%!important;min-width:130px!important;max-width:170px!important;top:60px!important;height:calc(100vh - 60px)!important;padding:8px!important;transform:none!important;display:block!important}
+  .left{width:40%!important;min-width:135px!important;max-width:180px!important;display:block!important;position:sticky!important;top:56px!important;height:calc(100vh - 56px)!important;overflow-y:auto!important;transform:none!important}
   .right{flex:1!important}
-  .grid{grid-template-columns:1fr!important}
-  .card .im{height:140px!important}
 }
+</style>
 
 </style></head><body>
 
 <div class="h">
-<div class="logo"><b>WROOMER</b><span class="pl">.PL</span></div>
-<div style="display:flex;gap:12px;align-items:center">
-<div style="font-size:12px;opacity:.7">lightled1@...</div>
-<button style="height:36px;padding:0 16px;border-radius:20px;border:1px solid #ddd;background:#fff;font-size:13px;font-weight:600">Moje</button>
-<button style="height:36px;padding:0 18px;border-radius:20px;background:#FFD000;color:#000;font-weight:800;border:none;font-size:13px">+ Dodaj</button>
-<button style="height:36px;padding:0 16px;border-radius:20px;background:#000;color:#fff;font-size:13px">Wyloguj</button>
+<div class="logo">WROOMER<span style="background:#FFD000;padding:2px 6px;border-radius:4px;margin-left:4px">.PL</span></div>
+<div style="display:flex;gap:8px;align-items:center">
+<span style="font-size:12px;opacity:.6">lightled1@...</span>
+<button style="height:34px;padding:0 14px;border-radius:20px;border:1px solid #ddd;background:#fff;font-size:12px">Moje</button>
+<button style="height:34px;padding:0 16px;border-radius:20px;background:#FFD000;border:none;font-weight:800;font-size:12px">+ Dodaj</button>
+<button style="height:34px;padding:0 14px;border-radius:20px;background:#000;color:#fff;border:none;font-size:12px">Wyloguj</button>
 </div>
 </div>
-<div class="topSearch">
-<div class="topSearchInner">
-<div class="field"><label>Marka pojazdu</label><select id="topBrand"><option value="">Wybierz markę</option><option>Audi</option><option>BMW</option><option>Volkswagen</option><option>Opel</option><option>Ford</option><option>Renault</option><option>Peugeot</option><option>Toyota</option><option>Mercedes-Benz</option><option>Skoda</option><option>Fiat</option><option>Hyundai</option><option>Kia</option></select></div>
-<div class="field"><label>Model</label><input id="topModel" placeholder="np. A4, 320" /></div>
-<div class="field"><label>Cena od</label><select id="topPriceFrom"><option value="">Od</option><option value="5000">5 000 PLN</option><option value="10000">10 000 PLN</option><option value="20000">20 000 PLN</option><option value="50000">50 000 PLN</option></select></div>
-<div class="field"><label>Cena do</label><select id="topPriceTo"><option value="">Do</option><option value="50000">50 000 PLN</option><option value="100000">100 000 PLN</option><option value="200000">200 000 PLN</option></select></div>
-<div class="field"><label>Rocznik od</label><select id="topYear"><option value="">Od</option><option>2024</option><option>2020</option><option>2015</option><option>2010</option></select></div>
-<div class="field" style="flex:0 0 200px"><button class="btn" onclick="applyTopSearch()">Pokaż <span id="adCount">0</span> ogłoszeń</button></div>
+<div class="topBar">
+<div class="topBarInner">
+<div class="f"><label>Marka pojazdu</label><select id="topBrand"><option value="">Wybierz markę</option><option>Audi</option><option>BMW</option><option>Volkswagen</option><option>Opel</option><option>Ford</option><option>Renault</option><option>Peugeot</option><option>Toyota</option><option>Mercedes-Benz</option><option>Skoda</option></select></div>
+<div class="f"><label>Model</label><input id="topModel" placeholder="np. A4, 320" /></div>
+<div class="f"><label>Cena od</label><select id="topPriceFrom"><option value="">Od</option><option value="5000">5k</option><option value="10000">10k</option><option value="50000">50k</option></select></div>
+<div class="f"><label>Cena do</label><select id="topPriceTo"><option value="">Do</option><option value="50000">50k</option><option value="100000">100k</option><option value="200000">200k</option></select></div>
+<div class="f"><label>Rocznik od</label><select id="topYear"><option value="">Od</option><option>2024</option><option>2020</option><option>2015</option></select></div>
+<div class="f" style="flex:0 0 160px"><button class="btn" onclick="applyTop()">Pokaż <span id="cnt">0</span> ogłoszeń</button></div>
 </div>
-<div class="chips">
-<span class="chip" onclick="this.classList.toggle('active')">Nowe</span>
-<span class="chip" onclick="this.classList.toggle('active')">Używane</span>
-<span class="chip" onclick="this.classList.toggle('active')">Benzyna</span>
-<span class="chip" onclick="this.classList.toggle('active')">Diesel</span>
-<span class="chip" onclick="this.classList.toggle('active')">Elektryczna</span>
-<span class="chip" onclick="this.classList.toggle('active')">Automat</span>
-<span class="chip" onclick="this.classList.toggle('active')">4x4</span>
-</div>
+<div class="chips"><span class="chip" onclick="this.classList.toggle('active')">Nowe</span><span class="chip" onclick="this.classList.toggle('active')">Używane</span><span class="chip" onclick="this.classList.toggle('active')">Benzyna</span><span class="chip" onclick="this.classList.toggle('active')">Diesel</span><span class="chip" onclick="this.classList.toggle('active')">Elektryczna</span><span class="chip" onclick="this.classList.toggle('active')">Automat</span><span class="chip" onclick="this.classList.toggle('active')">4x4</span></div>
 </div>
 
-
+<div class="h"><div class="logo">WROOMER<b>.PL</b></div><div class="hRight"><span id="userEmail" style="font-size:11px;opacity:.8;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></span><button class="btnD" id="myAdsBtn" style="display:none">Moje</button><button class="btnY" id="openAdd">+ Dodaj</button><button class="btnD" id="authBtn">Zaloguj / Rejestracja</button></div></div>
+<div class="wrap"><aside class="left"><h3 style="font-size:13px">Filtry</h3><input id="q" placeholder="Szukaj np. BMW"/><input id="city" placeholder="Miasto" style="margin-top:8px"/>
+<div class="brandLetterGroup" style="margin-top:8px"><div style="font-weight:800;font-size:10px;background:#f0f0f0;padding:3px 6px;border-radius:4px">B (4)</div><div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:4px"><button type="button" class="brandAllBtn" data-brand="baic" onclick="selectBrand('BAIC')">BAIC</button><button type="button" class="brandAllBtn" data-brand="bmw" onclick="selectBrand('BMW')">BMW</button><button type="button" class="brandAllBtn" data-brand="byd" onclick="selectBrand('BYD')">BYD</button><button type="button" class="brandAllBtn" data-brand="bentley" onclick="selectBrand('Bentley')">Bentley</button></div></div><div class="brandLetterGroup" style="margin-top:8px"><div style="font-weight:800;font-size:10px;background:#f0f0f0;padding:3px 6px;border-radius:4px">C (6)</div><div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:4px"><button type="button" class="brandAllBtn" data-brand="cadillac" onclick="selectBrand('Cadillac')">Cadillac</button><button type="button" class="brandAllBtn" data-brand="chery" onclick="selectBrand('Chery')">Chery</button><button type="button" class="brandAllBtn" data-brand="chevrolet" onclick="selectBrand('Chevrolet')">Chevrolet</button><button type="button" class="brandAllBtn" data-brand="chrysler" onclick="selectBrand('Chrysler')">Chrysler</button><button type="button" class="brandAllBtn" data-brand="citroen" onclick="selectBrand('Citroen')">Citroen</button><button type="button" class="brandAllBtn" data-brand="cupra" onclick="selectBrand('Cupra')">Cupra</button></div></div><div class="brandLetterGroup" style="margin-top:8px"><div style="font-weight:800;font-size:10px;background:#f0f0f0;padding:3px 6px;border-radius:4px">D (6)</div><div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:4px"><button type="button" class="brandAllBtn" data-brand="dr automobiles" onclick="selectBrand('DR Automobiles')">DR Automobiles</button><button type="button" class="brandAllBtn" data-brand="ds automobiles" onclick="selectBrand('DS Automobiles')">DS Automobiles</button><button type="button" class="brandAllBtn" data-brand="dacia" onclick="selectBrand('Dacia')">Dacia</button><button type="button" class="brandAllBtn" data-brand="daewoo" onclick="selectBrand('Daewoo')">Daewoo</button><button type="button" class="brandAllBtn" data-brand="daihatsu" onclick="selectBrand('Daihatsu')">Daihatsu</button><button type="button" class="brandAllBtn" data-brand="dodge" onclick="selectBrand('Dodge')">Dodge</button></div></div><div class="brandLetterGroup" style="margin-top:8px"><div style="font-weight:800;font-size:10px;background:#f0f0f0;padding:3px 6px;border-radius:4px">F (4)</div><div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:4px"><button type="button" class="brandAllBtn" data-brand="ferrari" onclick="selectBrand('Ferrari')">Ferrari</button><button type="button" class="brandAllBtn" data-brand="fiat" onclick="selectBrand('Fiat')">Fiat</button><button type="button" class="brandAllBtn" data-brand="ford" onclick="selectBrand('Ford')">Ford</button><button type="button" class="brandAllBtn" data-brand="forthing" onclick="selectBrand('Forthing')">Forthing</button></div></div><div class="brandLetterGroup" style="margin-top:8px"><div style="font-weight:800;font-size:10px;background:#f0f0f0;padding:3px 6px;border-radius:4px">G (4)</div><div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:4px"><button type="button" class="brandAllBtn" data-brand="gac" onclick="selectBrand('GAC')">GAC</button><button type="button" class="brandAllBtn" data-brand="gmc" onclick="selectBrand('GMC')">GMC</button><button type="button" class="brandAllBtn" data-brand="genesis" onclick="selectBrand('Genesis')">Genesis</button><button type="button" class="brandAllBtn" data-brand="great wall" onclick="selectBrand('Great Wall')">Great Wall</button></div></div><div class="brandLetterGroup" style="margin-top:8px"><div style="font-weight:800;font-size:10px;background:#f0f0f0;padding:3px 6px;border-radius:4px">H (3)</div><div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:4px"><button type="button" class="brandAllBtn" data-brand="honda" onclick="selectBrand('Honda')">Honda</button><button type="button" class="brandAllBtn" data-brand="hummer" onclick="selectBrand('Hummer')">Hummer</button><button type="button" class="brandAllBtn" data-brand="hyundai" onclick="selectBrand('Hyundai')">Hyundai</button></div></div><div class="brandLetterGroup" style="margin-top:8px"><div style="font-weight:800;font-size:10px;background:#f0f0f0;padding:3px 6px;border-radius:4px">I (2)</div><div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:4px"><button type="button" class="brandAllBtn" data-brand="infiniti" onclick="selectBrand('Infiniti')">Infiniti</button><button type="button" class="brandAllBtn" data-brand="isuzu" onclick="selectBrand('Isuzu')">Isuzu</button></div></div><div class="brandLetterGroup" style="margin-top:8px"><div style="font-weight:800;font-size:10px;background:#f0f0f0;padding:3px 6px;border-radius:4px">J (3)</div><div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:4px"><button type="button" class="brandAllBtn" data-brand="jaecoo" onclick="selectBrand('Jaecoo')">Jaecoo</button><button type="button" class="brandAllBtn" data-brand="jaguar" onclick="selectBrand('Jaguar')">Jaguar</button><button type="button" class="brandAllBtn" data-brand="jeep" onclick="selectBrand('Jeep')">Jeep</button></div></div><div class="brandLetterGroup" style="margin-top:8px"><div style="font-weight:800;font-size:10px;background:#f0f0f0;padding:3px 6px;border-radius:4px">K (4)</div><div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:4px"><button type="button" class="brandAllBtn" data-brand="kgm" onclick="selectBrand('KGM')">KGM</button><button type="button" class="brandAllBtn" data-brand="ktm" onclick="selectBrand('KTM')">KTM</button><button type="button" class="brandAllBtn" data-brand="kia" onclick="selectBrand('Kia')">Kia</button><button type="button" class="brandAllBtn" data-brand="koenigsegg" onclick="selectBrand('Koenigsegg')">Koenigsegg</button></div></div><div class="brandLetterGroup" style="margin-top:8px"><div style="font-weight:800;font-size:10px;background:#f0f0f0;padding:3px 6px;border-radius:4px">L (9)</div><div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:4px"><button type="button" class="brandAllBtn" data-brand="lamborghini" onclick="selectBrand('Lamborghini')">Lamborghini</button><button type="button" class="brandAllBtn" data-brand="lancia" onclick="selectBrand('Lancia')">Lancia</button><button type="button" class="brandAllBtn" data-brand="land rover" onclick="selectBrand('Land Rover')">Land Rover</button><button type="button" class="brandAllBtn" data-brand="leapmotor" onclick="selectBrand('Leapmotor')">Leapmotor</button><button type="button" class="brandAllBtn" data-brand="lexus" onclick="selectBrand('Lexus')">Lexus</button><button type="button" class="brandAllBtn" data-brand="ligier" onclick="selectBrand('Ligier')">Ligier</button><button type="button" class="brandAllBtn" data-brand="lincoln" onclick="selectBrand('Lincoln')">Lincoln</button><button type="button" class="brandAllBtn" data-brand="lotus" onclick="selectBrand('Lotus')">Lotus</button><button type="button" class="brandAllBtn" data-brand="lynk & co" onclick="selectBrand('Lynk & Co')">Lynk & Co</button></div></div><div class="brandLetterGroup" style="margin-top:8px"><div style="font-weight:800;font-size:10px;background:#f0f0f0;padding:3px 6px;border-radius:4px">M (11)</div><div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:4px"><button type="button" class="brandAllBtn" data-brand="man" onclick="selectBrand('MAN')">MAN</button><button type="button" class="brandAllBtn" data-brand="mg" onclick="selectBrand('MG')">MG</button><button type="button" class="brandAllBtn" data-brand="maserati" onclick="selectBrand('Maserati')">Maserati</button><button type="button" class="brandAllBtn" data-brand="maybach" onclick="selectBrand('Maybach')">Maybach</button><button type="button" class="brandAllBtn" data-brand="mazda" onclick="selectBrand('Mazda')">Mazda</button><button type="button" class="brandAllBtn" data-brand="mclaren" onclick="selectBrand('McLaren')">McLaren</button><button type="button" class="brandAllBtn" data-brand="mercedes-benz" onclick="selectBrand('Mercedes-Benz')">Mercedes-Benz</button><button type="button" class="brandAllBtn" data-brand="microcar" onclick="selectBrand('Microcar')">Microcar</button><button type="button" class="brandAllBtn" data-brand="mini" onclick="selectBrand('Mini')">Mini</button><button type="button" class="brandAllBtn" data-brand="mitsubishi" onclick="selectBrand('Mitsubishi')">Mitsubishi</button><button type="button" class="brandAllBtn" data-brand="morgan" onclick="selectBrand('Morgan')">Morgan</button></div></div><div class="brandLetterGroup" style="margin-top:8px"><div style="font-weight:800;font-size:10px;background:#f0f0f0;padding:3px 6px;border-radius:4px">N (2)</div><div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:4px"><button type="button" class="brandAllBtn" data-brand="nio" onclick="selectBrand('Nio')">Nio</button><button type="button" class="brandAllBtn" data-brand="nissan" onclick="selectBrand('Nissan')">Nissan</button></div></div><div class="brandLetterGroup" style="margin-top:8px"><div style="font-weight:800;font-size:10px;background:#f0f0f0;padding:3px 6px;border-radius:4px">O (2)</div><div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:4px"><button type="button" class="brandAllBtn" data-brand="omoda" onclick="selectBrand('Omoda')">Omoda</button><button type="button" class="brandAllBtn" data-brand="opel" onclick="selectBrand('Opel')">Opel</button></div></div><div class="brandLetterGroup" style="margin-top:8px"><div style="font-weight:800;font-size:10px;background:#f0f0f0;padding:3px 6px;border-radius:4px">P (4)</div><div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:4px"><button type="button" class="brandAllBtn" data-brand="peugeot" onclick="selectBrand('Peugeot')">Peugeot</button><button type="button" class="brandAllBtn" data-brand="polestar" onclick="selectBrand('Polestar')">Polestar</button><button type="button" class="brandAllBtn" data-brand="pontiac" onclick="selectBrand('Pontiac')">Pontiac</button><button type="button" class="brandAllBtn" data-brand="porsche" onclick="selectBrand('Porsche')">Porsche</button></div></div><div class="brandLetterGroup" style="margin-top:8px"><div style="font-weight:800;font-size:10px;background:#f0f0f0;padding:3px 6px;border-radius:4px">R (3)</div><div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:4px"><button type="button" class="brandAllBtn" data-brand="renault" onclick="selectBrand('Renault')">Renault</button><button type="button" class="brandAllBtn" data-brand="rolls-royce" onclick="selectBrand('Rolls-Royce')">Rolls-Royce</button><button type="button" class="brandAllBtn" data-brand="rover" onclick="selectBrand('Rover')">Rover</button></div></div><div class="brandLetterGroup" style="margin-top:8px"><div style="font-weight:800;font-size:10px;background:#f0f0f0;padding:3px 6px;border-radius:4px">S (8)</div><div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:4px"><button type="button" class="brandAllBtn" data-brand="saab" onclick="selectBrand('Saab')">Saab</button><button type="button" class="brandAllBtn" data-brand="seat" onclick="selectBrand('Seat')">Seat</button><button type="button" class="brandAllBtn" data-brand="secma" onclick="selectBrand('Secma')">Secma</button><button type="button" class="brandAllBtn" data-brand="skoda" onclick="selectBrand('Skoda')">Skoda</button><button type="button" class="brandAllBtn" data-brand="smart" onclick="selectBrand('Smart')">Smart</button><button type="button" class="brandAllBtn" data-brand="ssangyong" onclick="selectBrand('SsangYong')">SsangYong</button><button type="button" class="brandAllBtn" data-brand="subaru" onclick="selectBrand('Subaru')">Subaru</button><button type="button" class="brandAllBtn" data-brand="suzuki" onclick="selectBrand('Suzuki')">Suzuki</button></div></div><div class="brandLetterGroup" style="margin-top:8px"><div style="font-weight:800;font-size:10px;background:#f0f0f0;padding:3px 6px;border-radius:4px">T (4)</div><div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:4px"><button type="button" class="brandAllBtn" data-brand="tesla" onclick="selectBrand('Tesla')">Tesla</button><button type="button" class="brandAllBtn" data-brand="toyota" onclick="selectBrand('Toyota')">Toyota</button><button type="button" class="brandAllBtn" data-brand="trabant" onclick="selectBrand('Trabant')">Trabant</button><button type="button" class="brandAllBtn" data-brand="triumph" onclick="selectBrand('Triumph')">Triumph</button></div></div><div class="brandLetterGroup" style="margin-top:8px"><div style="font-weight:800;font-size:10px;background:#f0f0f0;padding:3px 6px;border-radius:4px">V (2)</div><div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:4px"><button type="button" class="brandAllBtn" data-brand="volkswagen" onclick="selectBrand('Volkswagen')">Volkswagen</button><button type="button" class="brandAllBtn" data-brand="volvo" onclick="selectBrand('Volvo')">Volvo</button></div></div><div class="brandLetterGroup" style="margin-top:8px"><div style="font-weight:800;font-size:10px;background:#f0f0f0;padding:3px 6px;border-radius:4px">W (3)</div><div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:4px"><button type="button" class="brandAllBtn" data-brand="warszawa" onclick="selectBrand('Warszawa')">Warszawa</button><button type="button" class="brandAllBtn" data-brand="wartburg" onclick="selectBrand('Wartburg')">Wartburg</button><button type="button" class="brandAllBtn" data-brand="wolga" onclick="selectBrand('Wolga')">Wolga</button></div></div><div class="brandLetterGroup" style="margin-top:8px"><div style="font-weight:800;font-size:10px;background:#f0f0f0;padding:3px 6px;border-radius:4px">X (1)</div><div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:4px"><button type="button" class="brandAllBtn" data-brand="xpeng" onclick="selectBrand('Xpeng')">Xpeng</button></div></div><div class="brandLetterGroup" style="margin-top:8px"><div style="font-weight:800;font-size:10px;background:#f0f0f0;padding:3px 6px;border-radius:4px">Z (2)</div><div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:4px"><button type="button" class="brandAllBtn" data-brand="zaz" onclick="selectBrand('ZAZ')">ZAZ</button><button type="button" class="brandAllBtn" data-brand="zastava" onclick="selectBrand('Zastava')">Zastava</button></div></div></div>
+</div>
 
 <div class="brandBoxDesktop" style="margin:12px 0;background:#fff;border-radius:12px;padding:12px;border:1px solid #e5e5e5">
 <div style="font-weight:700;font-size:13px;margin-bottom:6px">Marka pojazdu • 49 marek</div>
-<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px"></div>
-
+<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px"><button type="button" class="brandPill" data-brand="Audi" onclick="selectBrand('Audi')">Audi</button><button type="button" class="brandPill" data-brand="BMW" onclick="selectBrand('BMW')">BMW</button><button type="button" class="brandPill" data-brand="Volkswagen" onclick="selectBrand('Volkswagen')">Volkswagen</button><button type="button" class="brandPill" data-brand="Opel" onclick="selectBrand('Opel')">Opel</button><button type="button" class="brandPill" data-brand="Ford" onclick="selectBrand('Ford')">Ford</button><button type="button" class="brandPill" data-brand="Renault" onclick="selectBrand('Renault')">Renault</button><button type="button" class="brandPill" data-brand="Peugeot" onclick="selectBrand('Peugeot')">Peugeot</button><button type="button" class="brandPill" data-brand="Toyota" onclick="selectBrand('Toyota')">Toyota</button><button type="button" class="brandPill" data-brand="Mercedes-Benz" onclick="selectBrand('Mercedes-Benz')">Mercedes-Benz</button><button type="button" class="brandPill" data-brand="Skoda" onclick="selectBrand('Skoda')">Skoda</button><button type="button" class="brandPill" data-brand="Fiat" onclick="selectBrand('Fiat')">Fiat</button><button type="button" class="brandPill" data-brand="Hyundai" onclick="selectBrand('Hyundai')">Hyundai</button><button type="button" class="brandPill" data-brand="Kia" onclick="selectBrand('Kia')">Kia</button><button type="button" class="brandPill" data-brand="Volvo" onclick="selectBrand('Volvo')">Volvo</button><button type="button" class="brandPill" data-brand="Mazda" onclick="selectBrand('Mazda')">Mazda</button><button type="button" class="brandPill" data-brand="Honda" onclick="selectBrand('Honda')">Honda</button><button type="button" class="brandPill" data-brand="Citroen" onclick="selectBrand('Citroen')">Citroen</button><button type="button" class="brandPill" data-brand="Seat" onclick="selectBrand('Seat')">Seat</button><button type="button" class="brandPill" data-brand="Nissan" onclick="selectBrand('Nissan')">Nissan</button><button type="button" class="brandPill" data-brand="Dacia" onclick="selectBrand('Dacia')">Dacia</button></div>
+<input id="brandSearch" placeholder="Szukaj marki" style="width:100%;height:36px;border-radius:8px;border:1px solid #ddd;padding:0 10px;margin-bottom:8px" oninput="filterBrandsAll(this.value)"/>
 <div id="selectedBrand" style="display:none;margin-bottom:8px"><span id="selectedBrandText" style="background:#FFE600;padding:4px 10px;border-radius:12px;font-weight:700"></span> <span onclick="clearBrand()" style="cursor:pointer"> x</span></div>
 <div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:4px"><button type="button" class="brandAllBtn" data-brand="abarth" onclick="selectBrand('Abarth')">Abarth</button><button type="button" class="brandAllBtn" data-brand="alfa romeo" onclick="selectBrand('Alfa Romeo')">Alfa Romeo</button><button type="button" class="brandAllBtn" data-brand="aston martin" onclick="selectBrand('Aston Martin')">Aston Martin</button><button type="button" class="brandAllBtn" data-brand="audi" onclick="selectBrand('Audi')">Audi</button></div></div><div style="margin-top:8px"><div style="font-weight:800;font-size:11px;background:#f2f2f2;padding:3px 6px;border-radius:4px">B</div><div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:4px"><button type="button" class="brandAllBtn" data-brand="bmw" onclick="selectBrand('BMW')">BMW</button><button type="button" class="brandAllBtn" data-brand="byd" onclick="selectBrand('BYD')">BYD</button><button type="button" class="brandAllBtn" data-brand="bentley" onclick="selectBrand('Bentley')">Bentley</button></div></div><div style="margin-top:8px"><div style="font-weight:800;font-size:11px;background:#f2f2f2;padding:3px 6px;border-radius:4px">C</div><div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:4px"><button type="button" class="brandAllBtn" data-brand="cadillac" onclick="selectBrand('Cadillac')">Cadillac</button><button type="button" class="brandAllBtn" data-brand="chery" onclick="selectBrand('Chery')">Chery</button><button type="button" class="brandAllBtn" data-brand="chevrolet" onclick="selectBrand('Chevrolet')">Chevrolet</button><button type="button" class="brandAllBtn" data-brand="chrysler" onclick="selectBrand('Chrysler')">Chrysler</button><button type="button" class="brandAllBtn" data-brand="citroen" onclick="selectBrand('Citroen')">Citroen</button><button type="button" class="brandAllBtn" data-brand="cupra" onclick="selectBrand('Cupra')">Cupra</button></div></div><div style="margin-top:8px"><div style="font-weight:800;font-size:11px;background:#f2f2f2;padding:3px 6px;border-radius:4px">D</div><div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:4px"><button type="button" class="brandAllBtn" data-brand="ds automobiles" onclick="selectBrand('DS Automobiles')">DS Automobiles</button><button type="button" class="brandAllBtn" data-brand="dacia" onclick="selectBrand('Dacia')">Dacia</button><button type="button" class="brandAllBtn" data-brand="daewoo" onclick="selectBrand('Daewoo')">Daewoo</button><button type="button" class="brandAllBtn" data-brand="dodge" onclick="selectBrand('Dodge')">Dodge</button></div></div><div style="margin-top:8px"><div style="font-weight:800;font-size:11px;background:#f2f2f2;padding:3px 6px;border-radius:4px">F</div><div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:4px"><button type="button" class="brandAllBtn" data-brand="ferrari" onclick="selectBrand('Ferrari')">Ferrari</button><button type="button" class="brandAllBtn" data-brand="fiat" onclick="selectBrand('Fiat')">Fiat</button><button type="button" class="brandAllBtn" data-brand="ford" onclick="selectBrand('Ford')">Ford</button></div></div><div style="margin-top:8px"><div style="font-weight:800;font-size:11px;background:#f2f2f2;padding:3px 6px;border-radius:4px">G</div><div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:4px"><button type="button" class="brandAllBtn" data-brand="genesis" onclick="selectBrand('Genesis')">Genesis</button></div></div><div style="margin-top:8px"><div style="font-weight:800;font-size:11px;background:#f2f2f2;padding:3px 6px;border-radius:4px">H</div><div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:4px"><button type="button" class="brandAllBtn" data-brand="honda" onclick="selectBrand('Honda')">Honda</button><button type="button" class="brandAllBtn" data-brand="hyundai" onclick="selectBrand('Hyundai')">Hyundai</button></div></div><div style="margin-top:8px"><div style="font-weight:800;font-size:11px;background:#f2f2f2;padding:3px 6px;border-radius:4px">J</div><div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:4px"><button type="button" class="brandAllBtn" data-brand="jaguar" onclick="selectBrand('Jaguar')">Jaguar</button><button type="button" class="brandAllBtn" data-brand="jeep" onclick="selectBrand('Jeep')">Jeep</button></div></div><div style="margin-top:8px"><div style="font-weight:800;font-size:11px;background:#f2f2f2;padding:3px 6px;border-radius:4px">K</div><div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:4px"><button type="button" class="brandAllBtn" data-brand="kia" onclick="selectBrand('Kia')">Kia</button></div></div><div style="margin-top:8px"><div style="font-weight:800;font-size:11px;background:#f2f2f2;padding:3px 6px;border-radius:4px">L</div><div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:4px"><button type="button" class="brandAllBtn" data-brand="lamborghini" onclick="selectBrand('Lamborghini')">Lamborghini</button><button type="button" class="brandAllBtn" data-brand="land rover" onclick="selectBrand('Land Rover')">Land Rover</button><button type="button" class="brandAllBtn" data-brand="lexus" onclick="selectBrand('Lexus')">Lexus</button></div></div><div style="margin-top:8px"><div style="font-weight:800;font-size:11px;background:#f2f2f2;padding:3px 6px;border-radius:4px">M</div><div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:4px"><button type="button" class="brandAllBtn" data-brand="maserati" onclick="selectBrand('Maserati')">Maserati</button><button type="button" class="brandAllBtn" data-brand="mazda" onclick="selectBrand('Mazda')">Mazda</button><button type="button" class="brandAllBtn" data-brand="mercedes-benz" onclick="selectBrand('Mercedes-Benz')">Mercedes-Benz</button><button type="button" class="brandAllBtn" data-brand="mini" onclick="selectBrand('Mini')">Mini</button><button type="button" class="brandAllBtn" data-brand="mitsubishi" onclick="selectBrand('Mitsubishi')">Mitsubishi</button></div></div><div style="margin-top:8px"><div style="font-weight:800;font-size:11px;background:#f2f2f2;padding:3px 6px;border-radius:4px">N</div><div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:4px"><button type="button" class="brandAllBtn" data-brand="nissan" onclick="selectBrand('Nissan')">Nissan</button></div></div><div style="margin-top:8px"><div style="font-weight:800;font-size:11px;background:#f2f2f2;padding:3px 6px;border-radius:4px">O</div><div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:4px"><button type="button" class="brandAllBtn" data-brand="opel" onclick="selectBrand('Opel')">Opel</button></div></div><div style="margin-top:8px"><div style="font-weight:800;font-size:11px;background:#f2f2f2;padding:3px 6px;border-radius:4px">P</div><div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:4px"><button type="button" class="brandAllBtn" data-brand="peugeot" onclick="selectBrand('Peugeot')">Peugeot</button><button type="button" class="brandAllBtn" data-brand="porsche" onclick="selectBrand('Porsche')">Porsche</button></div></div><div style="margin-top:8px"><div style="font-weight:800;font-size:11px;background:#f2f2f2;padding:3px 6px;border-radius:4px">R</div><div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:4px"><button type="button" class="brandAllBtn" data-brand="renault" onclick="selectBrand('Renault')">Renault</button></div></div><div style="margin-top:8px"><div style="font-weight:800;font-size:11px;background:#f2f2f2;padding:3px 6px;border-radius:4px">S</div><div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:4px"><button type="button" class="brandAllBtn" data-brand="seat" onclick="selectBrand('Seat')">Seat</button><button type="button" class="brandAllBtn" data-brand="skoda" onclick="selectBrand('Skoda')">Skoda</button><button type="button" class="brandAllBtn" data-brand="subaru" onclick="selectBrand('Subaru')">Subaru</button><button type="button" class="brandAllBtn" data-brand="suzuki" onclick="selectBrand('Suzuki')">Suzuki</button></div></div><div style="margin-top:8px"><div style="font-weight:800;font-size:11px;background:#f2f2f2;padding:3px 6px;border-radius:4px">T</div><div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:4px"><button type="button" class="brandAllBtn" data-brand="tesla" onclick="selectBrand('Tesla')">Tesla</button><button type="button" class="brandAllBtn" data-brand="toyota" onclick="selectBrand('Toyota')">Toyota</button></div></div><div style="margin-top:8px"><div style="font-weight:800;font-size:11px;background:#f2f2f2;padding:3px 6px;border-radius:4px">V</div><div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:4px"><button type="button" class="brandAllBtn" data-brand="volkswagen" onclick="selectBrand('Volkswagen')">Volkswagen</button><button type="button" class="brandAllBtn" data-brand="volvo" onclick="selectBrand('Volvo')">Volvo</button></div></div><div style="margin-top:8px"><div style="font-weight:800;font-size:11px;background:#f2f2f2;padding:3px 6px;border-radius:4px">X</div><div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:4px"><button type="button" class="brandAllBtn" data-brand="xpeng" onclick="selectBrand('Xpeng')">Xpeng</button></div></div><div style="margin-top:8px"><div style="font-weight:800;font-size:11px;background:#f2f2f2;padding:3px 6px;border-radius:4px">Z</div><div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:4px"><button type="button" class="brandAllBtn" data-brand="zastava" onclick="selectBrand('Zastava')">Zastava</button></div></div></div>
 </div>
@@ -456,43 +442,65 @@ function filterBrandsAll(q){
 
 
 <script>
-function applyTopSearch(){
+function applyTop(){
   const brand=document.getElementById('topBrand')?.value;
   const model=document.getElementById('topModel')?.value;
   if(brand){
-    const bInput=document.getElementById('brand');
-    if(bInput) bInput.value=brand;
+    const b=document.getElementById('brand');
+    if(b) b.value=brand;
     if(window.selectBrand) selectBrand(brand);
   }
-  const qInput=document.getElementById('q');
-  if(qInput){
-    if(model) qInput.value=model;
-    else if(!brand) qInput.value='';
+  const q=document.getElementById('q');
+  if(q){
+    if(model) q.value=model;
+    else if(!brand) q.value='';
   }
   if(window.renderAds) renderAds();
-  setTimeout(updateAdCount, 300);
+  setTimeout(()=>{ const c=document.querySelectorAll('.card').length; const el=document.getElementById('cnt'); if(el) el.textContent=c; }, 400);
 }
-function updateAdCount(){
-  const count=document.querySelectorAll('.card').length;
-  const el=document.getElementById('adCount');
-  if(el) el.textContent=count;
-}
-document.addEventListener('DOMContentLoaded', ()=>{
-  // Clear filters on load to show all ads (including yours)
+// Fix blue highlight - remove selection
+document.addEventListener('mousedown', function(e){
+  if(e.target.classList.contains('brandPill') || e.target.classList.contains('brandAllBtn') || e.target.classList.contains('chip')){
+    e.preventDefault();
+  }
+});
+document.addEventListener('DOMContentLoaded', function(){
+  // Ensure all brands collapsed by default (niebiesko znika = zwinięte)
+  const list=document.getElementById('allBrandsExpandable');
+  const btn=document.getElementById('toggleAllBrandsBtn');
+  if(list) list.style.display='none';
+  if(btn){ btn.textContent='Wszystkie marki (86) ▾ Rozwiń alfabetycznie'; btn.style.background='#111'; btn.style.color='#fff'; }
+  // Clear filters to show YOUR ad
   const b=document.getElementById('brand'); if(b) b.value='';
   const q=document.getElementById('q'); if(q) q.value='';
   const city=document.getElementById('city'); if(city) city.value='';
-  if(window.renderAds) renderAds();
-  setTimeout(updateAdCount, 800);
-  // Sync top brand with left
-  const topBrand=document.getElementById('topBrand');
-  const leftBrand=document.getElementById('brand');
-  if(topBrand && leftBrand){
-    topBrand.addEventListener('change', ()=>{ leftBrand.value=topBrand.value; if(window.selectBrand) selectBrand(topBrand.value); });
+  // Force render ads
+  if(window.ads && window.ads.length){
+    if(window.renderAds) renderAds();
+  } else {
+    // If ads not loaded yet, wait
+    setTimeout(()=>{ if(window.renderAds) renderAds(); updateCnt(); }, 1000);
   }
+  function updateCnt(){ const c=document.querySelectorAll('.card').length; const el=document.getElementById('cnt'); if(el) el.textContent=c; }
+  setTimeout(updateCnt, 1200);
+  setTimeout(updateCnt, 2500);
 });
-// Override old filter to not hide everything
-const oldRender = window.renderAds;
+// Fix loading...
+const origRender = window.renderAds;
+window.renderAds = function(){
+  try{
+    if(origRender) origRender();
+  } catch(e){ console.log(e); }
+  // Ensure grid visible
+  const grid=document.querySelector('.grid');
+  if(grid) grid.style.display='grid';
+  const loading=document.body.innerHTML.includes('Ładowanie');
+  // Remove blue focus
+  document.activeElement?.blur();
+  const cnt=document.querySelectorAll('.card').length;
+  const el=document.getElementById('cnt');
+  if(el) el.textContent=cnt;
+};
 </script>
 
 </body></html>
