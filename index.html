@@ -100,13 +100,75 @@ function setAuthTab(t){ authTab=t; $("tabLogin").classList.toggle('active', t===
 function compress(file,maxW=1280){ return new Promise(r=>{ const img=new Image(); img.onload=()=>{ let w=Math.min(img.width,maxW); let h=w*(img.height/img.width); if(h>900){h=900; w=h*(img.width/img.height);} const c=document.createElement('canvas'); c.width=w; c.height=h; c.getContext('2d').drawImage(img,0,0,w,h); c.toBlob(b=>r({blob:b, url:URL.createObjectURL(b)}),'image/webp',0.78); }; img.onerror=()=>r({blob:file, url:URL.createObjectURL(file)}); img.src=URL.createObjectURL(file); }); }
 function renderPhotos(){ const w=$("photos"); w.innerHTML=""; images.forEach((o,i)=>{ const d=document.createElement('div'); d.className='ph'; d.innerHTML=`<img src="${o.url||o.src}"><button>✕</button>`; d.querySelector('button').onclick=()=>{images.splice(i,1); renderPhotos();}; w.appendChild(d); }); }
 async function loadAds(){ const q=$("q").value.trim().toLowerCase(); const city=$("city").value.trim().toLowerCase(); const brand=$("brand").value.trim().toLowerCase(); $("cnt").textContent="Ładowanie..."; $("grid").innerHTML=""; try{ let query=sb.from('ads').select('*').order('created_at',{ascending:false}).limit(120); if(myOnly&&currentUser) query=query.eq('owner_id',currentUser.id); if(brand) query=query.ilike('brand','%'+brand+'%'); if(city) query=query.ilike('location','%'+city+'%'); if(q) query=query.or(`title.ilike.%${q}%,description.ilike.%${q}%`); const {data,error}=await query; if(error) throw error; $("cnt").textContent=myOnly?`Moje: ${data.length}`:`Znaleziono: ${data.length}`; const g=$("grid"); g.innerHTML=""; if(!data.length){ g.innerHTML='<div style="background:#fff;border-radius:12px;padding:24px;text-align:center">Brak ogłoszeń - dodaj pierwsze!</div>'; return; } data.forEach(a=>{ const imgs=a.images&&Array.isArray(a.images)&&a.images.length?a.images:(a.image_url?[a.image_url]:[]); const main=imgs[0]||'https://images.unsplash.com/photo-1494976388531-d1058494cdd8?q=80&w=400&auto=format&fit=crop'; const own=currentUser&&a.owner_id===currentUser.id; const el=document.createElement('div'); el.className='card'+(own?' own':''); el.innerHTML=`<div class="im"><img loading="lazy" src="${main}"><span class="badge">📷 ${imgs.length}</span><span class="editTag">MOJE • EDYTUJ</span></div><div class="bo"><h4>${a.title||''}</h4><div class="meta">${a.year||''} ${a.location||''}</div><div class="price">${a.price?Number(a.price).toLocaleString('pl-PL')+' PLN':''}</div></div>`; el.onclick=()=>openDetail(a); g.appendChild(el); }); }catch(e){ $("cnt").textContent="Błąd: "+e.message; } }
+
 function openDetail(a){
   const imgs=a.images&&Array.isArray(a.images)&&a.images.length?a.images:(a.image_url?[a.image_url]:[]);
   const own=currentUser&&a.owner_id===currentUser.id; const box=$("detailBox"); const views=a.views||0;
-  box.innerHTML=`<div style="padding:18px 22px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #eee;position:sticky;top:0;background:#fff;z-index:2;border-radius:18px 18px 0 0"><h3 style="font-size:20px;line-height:1.2;max-width:60%">${a.title||''}</h3><div style="display:flex;gap:8px;align-items:center"><span style="font-size:12px;opacity:.6">👁️ ${views}</span><button id="editBtn" style="display:${own?'inline-flex':'none'};background:#FFE600;border:0;border-radius:999px;padding:9px 16px;font-weight:800;font-size:13px;cursor:pointer">Edytuj</button><button id="delBtn" style="display:${own?'inline-flex':'none'};background:#111;color:#fff;border:0;border-radius:999px;padding:9px 14px;font-size:13px;cursor:pointer">Usuń</button><button onclick="document.getElementById('detailModal').classList.remove('open')" class="btnS" style="padding:9px 14px">✕</button></div></div><div style="padding:18px 22px"><img id="dMain" src="${imgs[0]||''}" style="width:100%;height:520px;object-fit:cover;border-radius:16px;background:#111;display:block"><div style="display:flex;gap:10px;overflow:auto;margin-top:12px;padding-bottom:4px">${imgs.map(s=>`<img src="${s}" style="width:96px;height:72px;object-fit:cover;border-radius:10px;cursor:pointer;border:2px solid transparent;flex-shrink:0" onclick="document.getElementById('dMain').src=this.src">`).join('')}</div><div style="display:grid;grid-template-columns:1fr 300px;gap:24px;margin-top:18px"><div><div style="font-weight:800;font-size:28px">${a.price?Number(a.price).toLocaleString('pl-PL')+' PLN':''}</div><div style="margin-top:14px;font-size:15px;white-space:pre-wrap;line-height:1.7">${a.description||''}</div></div><div><div style="background:#f7f7f7;border:1px solid #eee;border-radius:14px;padding:14px"><div style="font-weight:700;font-size:14px">Lokalizacja</div><div style="margin-top:6px;font-size:14px">📍 ${a.location||''}</div><div style="margin-top:14px"><button style="width:100%;background:#000;color:#fff;border:0;border-radius:12px;padding:14px;font-weight:700;cursor:pointer;font-size:14px">Pokaż numer</button></div><div style="margin-top:10px;font-size:11px;opacity:.6">ID: ${a.id} • ${new Date(a.created_at).toLocaleDateString('pl-PL')}</div></div></div></div></div>`;
-  if(own){ box.querySelector('#editBtn').onclick=()=>{ $("detailModal").classList.remove('open'); openEdit(a); }; box.querySelector('#delBtn').onclick=async()=>{ if(!confirm('Usunąć ogłoszenie?')) return; const {error}=await sb.from('ads').delete().eq('id',a.id).eq('owner_id',currentUser.id); if(error){alert(error.message);return;} $("detailModal").classList.remove('open'); loadAds(); }; }
-  $("detailModal").classList.add('open'); try{ sb.from('ads').update({views:views+1}).eq('id',a.id).then(()=>{}); }catch(e){}
+  const phone = a.phone ? String(a.phone).trim() : '';
+  const phoneMasked = phone ? phone.slice(0,3)+' *** ***' : 'Brak numeru';
+  box.innerHTML=`<div style="padding:18px 22px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #eee;position:sticky;top:0;background:#fff;z-index:2;border-radius:18px 18px 0 0"><h3 style="font-size:20px;line-height:1.2;max-width:60%">${a.title||''}</h3><div style="display:flex;gap:8px;align-items:center"><span style="font-size:12px;opacity:.6">👁️ ${views}</span><button id="editBtn" style="display:${own?'inline-flex':'none'};background:#FFE600;border:0;border-radius:999px;padding:9px 16px;font-weight:800;font-size:13px;cursor:pointer">Edytuj</button><button id="delBtn" style="display:${own?'inline-flex':'none'};background:#111;color:#fff;border:0;border-radius:999px;padding:9px 14px;font-size:13px;cursor:pointer">Usuń</button><button onclick="document.getElementById('detailModal').classList.remove('open')" class="btnS" style="padding:9px 14px">✕</button></div></div><div style="padding:18px 22px"><img id="dMain" src="${imgs[0]||''}" style="width:100%;height:520px;object-fit:cover;border-radius:16px;background:#111;display:block"><div style="display:flex;gap:10px;overflow:auto;margin-top:12px;padding-bottom:4px">${imgs.map(s=>`<img src="${s}" style="width:96px;height:72px;object-fit:cover;border-radius:10px;cursor:pointer;border:2px solid transparent;flex-shrink:0" onclick="document.getElementById('dMain').src=this.src">`).join('')}</div><div style="display:grid;grid-template-columns:1fr 340px;gap:24px;margin-top:18px"><div><div style="font-weight:800;font-size:28px">${a.price?Number(a.price).toLocaleString('pl-PL')+' PLN':''}</div><div style="margin-top:14px;font-size:15px;white-space:pre-wrap;line-height:1.7">${a.description||''}</div></div><div><div style="background:#fff;border:1px solid #e5e5e5;border-radius:16px;padding:16px;box-shadow:0 2px 12px rgba(0,0,0,.04)"><div style="display:flex;align-items:center;gap:10px"><div style="width:40px;height:40px;border-radius:999px;background:#FFE600;display:grid;place-items:center;font-weight:800">W</div><div><div style="font-weight:700;font-size:13px">Sprzedawca</div><div style="font-size:11px;opacity:.6">Na WROOMER.PL • OLX style</div></div></div><div style="margin-top:14px;display:flex;flex-direction:column;gap:8px"><button id="showPhoneBtn" style="width:100%;background:#000;color:#fff;border:0;border-radius:12px;padding:14px 14px;font-weight:700;cursor:pointer;font-size:14px;display:flex;justify-content:space-between;align-items:center"><span id="phoneText">📞 Pokaż numer - ${phoneMasked}</span><span id="phoneAction" style="background:#FFE600;color:#000;border-radius:6px;padding:2px 8px;font-size:10px">POKAŻ</span></button><div id="phoneFull" style="display:none;background:#fffbe6;border:1px dashed #e6c200;border-radius:12px;padding:14px;text-align:center"></div><button id="smsBtn" style="width:100%;background:#fff;color:#000;border:1px solid #000;border-radius:12px;padding:12px;font-weight:600;cursor:pointer;font-size:13px">💬 Napisz SMS do sprzedawcy</button><button id="msgBtn" style="width:100%;background:#FFE600;color:#000;border:0;border-radius:12px;padding:13px;font-weight:800;cursor:pointer;font-size:14px">✉️ Napisz wiadomość</button></div><div style="margin-top:12px;font-size:11px;color:#666">📍 ${a.location||''} • ID: ${String(a.id).slice(0,8)} • ${new Date(a.created_at).toLocaleDateString('pl-PL')}</div><div style="margin-top:8px;font-size:10px;color:#999">Bezpiecznie: nie wysyłaj zaliczek przed obejrzeniem.</div></div></div></div></div>`;
+  const showBtn = box.querySelector('#showPhoneBtn');
+  const phoneFullEl = box.querySelector('#phoneFull');
+  const phoneText = box.querySelector('#phoneText');
+  const phoneAction = box.querySelector('#phoneAction');
+  if(showBtn){
+    showBtn.onclick=()=>{
+      if(!phone){
+        phoneFullEl.style.display='block';
+        phoneFullEl.innerHTML='<div style="font-size:13px">❌ Sprzedawca nie podał numeru.<br/>Użyj przycisku <b>Napisz wiadomość</b> poniżej.</div>';
+        phoneText.textContent='📞 Brak numeru';
+        phoneAction.textContent='BRAK';
+        return;
+      }
+      if(phoneFullEl.style.display==='block'){
+        phoneFullEl.style.display='none';
+        phoneText.textContent='📞 Pokaż numer - '+phoneMasked;
+        phoneAction.textContent='POKAŻ';
+        return;
+      }
+      phoneFullEl.style.display='block';
+      phoneFullEl.innerHTML='<div style="font-size:20px;font-weight:800;letter-spacing:1px">📞 '+phone+'</div><div style="margin-top:10px;display:flex;gap:8px;justify-content:center"><a href="tel:'+phone+'" style="background:#000;color:#fff;padding:10px 18px;border-radius:999px;font-size:13px;font-weight:700;text-decoration:none">📞 Zadzwoń teraz</a><a href="sms:'+phone+'" style="background:#FFE600;color:#000;padding:10px 18px;border-radius:999px;font-size:13px;font-weight:700;text-decoration:none">💬 SMS</a></div>';
+      phoneText.textContent='📞 '+phone;
+      phoneAction.textContent='UKRYJ';
+      try{ sb.from('ads').update({views:views+1}).eq('id',a.id).then(()=>{}); }catch(e){}
+    };
+  }
+  const smsBtn = box.querySelector('#smsBtn');
+  if(smsBtn){
+    smsBtn.onclick=()=>{
+      if(!phone){ alert('Sprzedawca nie podał numeru. Użyj Napisz wiadomość.'); return; }
+      window.location.href='sms:'+phone+'?body='+encodeURIComponent('Cześć, piszę w sprawie ogłoszenia: '+(a.title||'')+' na WROOMER.PL');
+    };
+  }
+  const msgBtn = box.querySelector('#msgBtn');
+  if(msgBtn){
+    msgBtn.onclick=()=>{
+      const overlay = document.createElement('div');
+      overlay.className='authOverlay open';
+      overlay.innerHTML=`<div class="authCard" style="max-width:460px"><div style="padding:20px 22px"><div style="display:flex;justify-content:space-between;align-items:center"><h3 style="font-size:16px">Napisz wiadomość</h3><button id="closeMsg" class="btnS">✕</button></div><div style="margin-top:12px;background:#f6f6f6;border-radius:10px;padding:10px;display:flex;gap:8px;align-items:center"><img src="${imgs[0]||''}" style="width:48px;height:36px;object-fit:cover;border-radius:6px"><div style="font-size:12px"><b>${a.title||''}</b><br/>${a.price?Number(a.price).toLocaleString('pl-PL')+' PLN':''} • ${a.location||''}</div></div><textarea id="msgText" style="width:100%;min-height:100px;border:1px solid #ddd;border-radius:10px;padding:12px;margin-top:12px;font-size:13px">Cześć, piszę w sprawie ogłoszenia "${a.title||''}" na WROOMER.PL. Czy jest aktualne?</textarea><button id="sendMsg" style="width:100%;background:#FFE600;border:0;border-radius:10px;padding:13px;font-weight:800;margin-top:12px;cursor:pointer">Wyślij wiadomość</button><div style="margin-top:8px;font-size:10px;color:#888">OLX style - wiadomość wyśle SMS z treścią.</div></div></div>`;
+      document.body.appendChild(overlay);
+      overlay.addEventListener('click',e=>{ if(e.target===e.currentTarget) overlay.remove(); });
+      overlay.querySelector('#closeMsg').onclick=()=>overlay.remove();
+      overlay.querySelector('#sendMsg').onclick=()=>{
+        const txt = overlay.querySelector('#msgText').value.trim();
+        if(!txt){ alert('Wpisz wiadomość'); return; }
+        if(phone){ window.location.href='sms:'+phone+'?body='+encodeURIComponent(txt); }
+        else { alert('Skopiowano: '+txt); navigator.clipboard.writeText(txt); }
+        overlay.remove();
+      };
+    };
+  }
+  if(own){
+    const eb = box.querySelector('#editBtn');
+    const db = box.querySelector('#delBtn');
+    if(eb) eb.onclick=()=>{ document.getElementById('detailModal').classList.remove('open'); openEdit(a); };
+    if(db) db.onclick=async()=>{ if(!confirm('Usunąć?')) return; const {error}=await sb.from('ads').delete().eq('id',a.id).eq('owner_id',currentUser.id); if(error){alert(error.message);return;} document.getElementById('detailModal').classList.remove('open'); loadAds(); };
+  }
+  document.getElementById('detailModal').classList.add('open');
+  try{ sb.from('ads').update({views:views+1}).eq('id',a.id).then(()=>{}); }catch(e){}
 }
+
+
 function openAdd(){ if(!currentUser){ $("authOverlay").classList.add('open'); setAuthTab('login'); return; } editId=null; images=[]; renderPhotos(); $("fTitle").textContent="Dodaj ogłoszenie"; $("aTitle").value=""; $("aBrand").value=""; $("aModel").value=""; $("aYear").value=""; $("aPrice").value=""; $("aPhone").value=""; $("aLocation").value=""; $("aDesc").value=""; setStatus(""); $("addModal").classList.add('open'); }
 function openEdit(a){ editId=a.id; images=(a.images||[]).map(url=>({url,src:url,type:'url'})); renderPhotos(); $("fTitle").textContent="Edytuj ogłoszenie"; $("aTitle").value=a.title||""; $("aBrand").value=a.brand||""; $("aModel").value=a.model||""; $("aYear").value=a.year||""; $("aPrice").value=a.price||""; $("aPhone").value=a.phone||""; $("aLocation").value=a.location||""; $("aDesc").value=a.description||""; setStatus("Edytujesz swoje ogłoszenie."); $("addModal").classList.add('open'); }
 $("openAdd").onclick=openAdd; $("closeAdd").onclick=()=>$("addModal").classList.remove('open'); $("cancel").onclick=()=>$("addModal").classList.remove('open'); $("addModal").addEventListener('click',e=>{if(e.target===e.currentTarget)e.currentTarget.classList.remove('open');}); $("detailModal").addEventListener('click',e=>{if(e.target===e.currentTarget)e.currentTarget.classList.remove('open');}); $("doSearch").onclick=loadAds; $("ref").onclick=loadAds;
