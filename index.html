@@ -74,6 +74,18 @@
 .leftVisible{transform:translateX(0)!important}
 @media(max-width:760px){ .mobileFilterToggle{display:flex!important} }
 
+
+@media(max-width:760px){
+  .wrap{display:flex!important;flex-direction:row!important;gap:6px!important;padding:6px!important}
+  .left{display:block!important;width:40%!important;min-width:150px!important;max-width:190px!important;position:sticky!important;top:56px!important;height:calc(100vh - 56px)!important;overflow-y:auto!important;background:#f5f5f5!important;padding:8px!important;border-radius:10px!important;border:1px solid #ddd!important;transform:none!important;left:0!important}
+  .right{flex:1!important;min-width:0!important;padding-left:6px!important}
+  .grid{grid-template-columns:1fr!important;gap:8px!important}
+  .card .im{height:110px!important}
+  .mobileFilterToggle{display:none!important}
+  .leftHidden{transform:none!important;position:sticky!important;width:40%!important;left:0!important;display:block!important}
+  .leftVisible{transform:none!important}
+}
+
 </style></head><body>
 <div class="h"><div class="logo">WROOMER<b>.PL</b></div><div class="hRight"><span id="userEmail" style="font-size:11px;opacity:.8;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></span><button class="btnD" id="myAdsBtn" style="display:none">Moje</button><button class="btnY" id="openAdd">+ Dodaj</button><button class="btnD" id="authBtn">Zaloguj / Rejestracja</button></div></div>
 <div class="wrap"><aside class="left"><h3 style="font-size:13px">Wyszukiwarka</h3><input id="q" placeholder="Szukaj np. BMW"/><input id="city" placeholder="Miasto" style="margin-top:8px"/>
@@ -216,7 +228,7 @@ function filterBrandsAll(q){
 </script>
 
 
-<button class="mobileFilterToggle" id="mobileFilterToggle" onclick="toggleLeftFilter()">🔍 Filtry • Marki</button>
+
 <script>
 let leftVisible=true;
 function toggleLeftFilter(){
@@ -273,6 +285,50 @@ document.addEventListener('DOMContentLoaded', initMobileLeft);
     });
   };
 })();
+</script>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  // Make left always visible narrow on mobile
+  const left = document.querySelector('.left');
+  if(left){
+    left.classList.remove('leftHidden','leftVisible');
+    left.style.display='block';
+    left.style.transform='none';
+    left.style.position='sticky';
+  }
+  const toggle = document.getElementById('mobileFilterToggle');
+  if(toggle) toggle.style.display='none';
+  
+  // Make all brands collapsible - zwijane
+  const lists = [document.getElementById('allBrandsList'), document.getElementById('allBrandsListMobile')];
+  lists.forEach(function(list){
+    if(!list) return;
+    if(list.dataset.collapsible) return;
+    list.dataset.collapsible='1';
+    list.style.display='none';
+    const existingBtn = list.parentElement.querySelector('.allBrandsToggle');
+    if(existingBtn) existingBtn.remove();
+    const btn = document.createElement('button');
+    btn.type='button';
+    btn.className='allBrandsToggle';
+    btn.textContent='Wszystkie marki ▾ Rozwiń';
+    btn.style.cssText='width:100%;height:36px;border-radius:8px;border:1px solid #333;background:#111;color:#fff;font-size:12px;font-weight:700;margin-top:8px;cursor:pointer';
+    btn.onclick = function(){
+      if(list.style.display==='none'){
+        list.style.display='block';
+        this.textContent='Wszystkie marki ▴ Zwiń';
+        this.style.background='#FFE600'; this.style.color='#000'; this.style.borderColor='#FFE600';
+      } else {
+        list.style.display='none';
+        this.textContent='Wszystkie marki ▾ Rozwiń';
+        this.style.background='#111'; this.style.color='#fff'; this.style.borderColor='#333';
+      }
+    };
+    list.parentElement.insertBefore(btn, list);
+  });
+});
 </script>
 
 </body></html>
