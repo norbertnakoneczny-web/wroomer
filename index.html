@@ -61,6 +61,15 @@
 @media(max-width:760px){.mobileSearchBar{display:block;position:sticky;top:60px;z-index:9;background:#0a0a0a;padding:10px;border-bottom:1px solid #222}.mobileSearchBar .topRow{display:flex;gap:8px}.mobileSearchBar input{flex:1;height:44px;border-radius:12px;border:1px solid #333;background:#1a1a1a;color:#fff;padding:0 14px}.mobileSearchBar .searchBtn{height:44px;padding:0 18px;border-radius:12px;background:#FFE600;color:#000;font-weight:800;border:none}}
 
 .brandPill.active{background:#FFE600!important;border-color:#FFE600!important;font-weight:700}.brandItem:hover{background:#FFE600}
+
+.brandPillMobile{padding:7px 14px;border-radius:20px;border:1px solid #333;background:#1a1a1a;color:#fff;font-size:12px;white-space:nowrap;cursor:pointer;flex-shrink:0}
+.brandPillMobile.active{background:#FFE600!important;border-color:#FFE600!important;color:#000!important;font-weight:700}
+.brandScroll::-webkit-scrollbar{display:none}
+.brandItemMobile{padding:8px 10px;cursor:pointer;border-radius:8px;font-size:13px;color:#fff;border-bottom:1px solid #222}
+.brandItemMobile:hover{background:#222}
+.brandBox{margin:10px 0;background:#fff;border-radius:12px;padding:12px;border:1px solid #e5e5e5}
+@media(max-width:760px){ .brandBox{display:block!important} .left{display:none} .mobileSearchBar .brandMobileSection{display:block} }
+
 </style></head><body>
 <div class="h"><div class="logo">WROOMER<b>.PL</b></div><div class="hRight"><span id="userEmail" style="font-size:11px;opacity:.8;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></span><button class="btnD" id="myAdsBtn" style="display:none">Moje</button><button class="btnY" id="openAdd">+ Dodaj</button><button class="btnD" id="authBtn">Zaloguj / Rejestracja</button></div></div>
 <div class="wrap"><aside class="left"><h3 style="font-size:13px">Wyszukiwarka</h3><input id="q" placeholder="Szukaj np. BMW"/><input id="city" placeholder="Miasto" style="margin-top:8px"/><div style="display:flex;gap:8px;margin-top:8px"><button id="useLocBtn" class="geoBtn" onclick="useMyLocation(false)">📍 Moja lokalizacja</button><select id="radius" class="radiusSelect" onchange="renderAds()"><option value="0">Cała Polska</option><option value="5">5 km</option><option value="15">15 km</option><option value="30">30 km</option><option value="50">50 km</option><option value="100">100 km</option></select></div><div id="geoStatusDesk" style="font-size:11px;opacity:.6;margin-top:4px"></div><div class="sortRow"><span style="font-size:12px;opacity:.7">Sortuj:</span><select id="sortBy" class="sortSelect" onchange="renderAds()"><option value="newest">Najnowsze</option><option value="distance">Najbliższe</option><option value="price_asc">Cena ↑</option><option value="price_desc">Cena ↓</option><option value="mileage_asc">Przebieg ↑</option></select></div><select id="brand" style="margin-top:8px"><option value="">Wszystkie marki</option><option>BMW</option><option>Audi</option><option>Mercedes</option><option>Toyota</option></select><button class="btnY" id="doSearch">Szukaj</button></aside><section><div class="bar"><span id="cnt">Ładowanie...</span><button class="btnS" id="ref">Odśwież</button></div><div class="grid" id="grid"></div></section></div>
@@ -185,6 +194,63 @@ function filterBrands(q){ const low=q.toLowerCase(); document.querySelectorAll('
     mSort.value=cur||'newest';
   }
 })();
+</script>
+
+
+<script>
+function selectBrand(b){
+  const brandInput=document.getElementById('brand');
+  if(brandInput) brandInput.value=b;
+  const t=document.getElementById('selectedBrandText');
+  if(t) t.textContent=b;
+  const sb=document.getElementById('selectedBrand');
+  if(sb) sb.style.display='block';
+  const tm=document.getElementById('selectedBrandTextMobile');
+  if(tm) tm.textContent=b;
+  const sbm=document.getElementById('selectedBrandMobile');
+  if(sbm) sbm.style.display='block';
+  document.querySelectorAll('.brandPill').forEach(p=>{p.classList.toggle('active', p.dataset.brand===b)});
+  document.querySelectorAll('.brandPillMobile').forEach(p=>{p.classList.toggle('active', p.dataset.brand===b)});
+  if(window.renderAds) renderAds();
+}
+function clearBrand(){
+  const brandInput=document.getElementById('brand');
+  if(brandInput) brandInput.value='';
+  const sb=document.getElementById('selectedBrand');
+  if(sb) sb.style.display='none';
+  const sbm=document.getElementById('selectedBrandMobile');
+  if(sbm) sbm.style.display='none';
+  document.querySelectorAll('.brandPill').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.brandPillMobile').forEach(p=>p.classList.remove('active'));
+  const bs=document.getElementById('brandSearch'); if(bs) bs.value='';
+  const bsm=document.getElementById('brandSearchMobile'); if(bsm) bsm.value='';
+  if(window.renderAds) renderAds();
+}
+function toggleAllBrands(){
+  const l=document.getElementById('allBrandsList');
+  const b=document.getElementById('allBrandsBtn');
+  if(!l) return;
+  if(l.style.display==='none'){ l.style.display='block'; if(b) b.textContent='Ukryj'; } else { l.style.display='none'; if(b) b.textContent='Wszystkie'; }
+}
+function toggleAllBrandsMobile(){
+  const l=document.getElementById('allBrandsListMobile');
+  const b=document.getElementById('allBrandsBtnMobile');
+  if(!l) return;
+  if(l.style.display==='none'){ l.style.display='block'; if(b) b.textContent='Ukryj'; } else { l.style.display='none'; if(b) b.textContent='Wszystkie'; }
+}
+function filterBrands(q){
+  const low=q.toLowerCase();
+  document.querySelectorAll('.brandItem').forEach(e=>{ e.style.display = e.dataset.brand.includes(low) ? 'block':'none'; });
+  const l=document.getElementById('allBrandsList'); if(q.length>0 && l) l.style.display='block';
+}
+function filterBrandsMobile(q){
+  const low=q.toLowerCase();
+  document.querySelectorAll('.brandItemMobile').forEach(e=>{ e.style.display = e.dataset.brand.includes(low) ? 'block':'none'; });
+  const l=document.getElementById('allBrandsListMobile'); if(q.length>0 && l) l.style.display='block';
+  // sync desktop search too
+  const bs=document.getElementById('brandSearch'); if(bs) bs.value=q;
+  filterBrands(q);
+}
 </script>
 
 </body></html>
