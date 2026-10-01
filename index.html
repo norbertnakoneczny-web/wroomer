@@ -75,14 +75,19 @@
 
 <script>
 let userLat=null,userLng=null;
-const cityCoords={"warszawa":[52.2297,21.0122],"krakow":[50.0647,19.945],"kraków":[50.0647,19.945],"wroclaw":[51.1079,17.0385],"wrocław":[51.1079,17.0385],"gdansk":[54.352,18.6466],"gdańsk":[54.352,18.6466],"poznan":[52.4064,16.9252],"poznań":[52.4064,16.9252],"lodz":[51.7592,19.455],"łódź":[51.7592,19.455],"szczecin":[53.4285,14.5528],"katowice":[50.2649,19.0238],"lublin":[51.2465,22.5684],"bialystok":[53.1325,23.1688],"białystok":[53.1325,23.1688],"bydgoszcz":[53.1235,18.0084],"rzeszow":[50.0412,21.9991],"gdynia":[54.5189,18.5305],"czestochowa":[50.8118,19.1203],"radom":[51.4027,21.1471],"torun":[53.0138,18.5984],"kielce":[50.8661,20.6286]};
+
+function normalizePL(s){ if(!s) return ''; return s.toLowerCase().replace(/ą/g,'a').replace(/ć/g,'c').replace(/ę/g,'e').replace(/ł/g,'l').replace(/ń/g,'n').replace(/ó/g,'o').replace(/ś/g,'s').replace(/ź/g,'z').replace(/ż/g,'z').replace(/[^a-z0-9 ]/g,'').trim(); }
+const cityCoordsBase={"warszawa":[52.2297,21.0122],"krakow":[50.0647,19.945],"wroclaw":[51.1079,17.0385],"gdansk":[54.352,18.6466],"poznan":[52.4064,16.9252],"lodz":[51.7592,19.455],"szczecin":[53.4285,14.5528],"katowice":[50.2649,19.0238],"lublin":[51.2465,22.5684],"gorzyce":[49.9556,18.3986],"czyzowice":[49.9686,18.4012],"wodzislaw slaski":[50.0015,18.4644],"rybnik":[50.0926,18.5469],"rydultowy":[50.0616,18.4169],"jastrzebie zdroj":[49.9527,18.5918],"zory":[50.0446,18.7018],"raciborz":[50.0916,18.2198],"pszow":[50.0476,18.3906],"radlin":[50.0356,18.4744],"mszana":[49.9736,18.5169],"godow":[49.9236,18.4836],"lubomia":[50.0366,18.3056],"rogow":[49.9916,18.3586],"turza slaska":[49.9896,18.4246],"laziska":[50.0086,18.4446],"skrzyszow":[49.9236,18.5169],"bielsko biala":[49.8224,19.0444]};
+const cityCoords={};
+Object.keys(cityCoordsBase).forEach(k=>{ cityCoords[k]=cityCoordsBase[k]; cityCoords[normalizePL(k)]=cityCoordsBase[k]; });
+function getCityLatLng(city){ if(!city) return null; let k=city.toLowerCase().trim(); if(cityCoords[k]) return cityCoords[k]; let n=normalizePL(k); if(cityCoords[n]) return cityCoords[n]; return null; }
+
 function haversine(lat1,lon1,lat2,lon2){const R=6371;const dLat=(lat2-lat1)*Math.PI/180;const dLon=(lon2-lon1)*Math.PI/180;const a=Math.sin(dLat/2)**2+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)**2;return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));}
 
 function useMyLocation(isMobile){
   const statusEl=document.getElementById(isMobile?'geoStatus':'geoStatusDesk');
   const locInput=document.getElementById(isMobile?'mLoc':'city');
   const setStatus = (t)=>{ if(statusEl) statusEl.innerHTML=t; };
-  
   async function fallbackIP(){
     setStatus('📡 GPS niedostępny - szukam przybliżonej okolicy po IP...');
     try{
@@ -93,71 +98,40 @@ function useMyLocation(isMobile){
       }
       if(data && data.latitude){
         userLat=parseFloat(data.latitude); userLng=parseFloat(data.longitude);
-        const city=data.city||data.region||'';
+        const city=data.city||'';
         if(city && locInput && !locInput.value) locInput.value=city;
-        setStatus(`✅ Przybliżona okolica: ${city||'Twoja okolica'} ${userLat.toFixed(2)}, ${userLng.toFixed(2)} • promień aktywny (działa jak na dużych portalach)`);
+        setStatus(`✅ Przybliżona okolica: ${city} ${userLat.toFixed(2)}, ${userLng.toFixed(2)} • promień aktywny`);
         const sortEl=document.getElementById('sortBy'); if(sortEl) sortEl.value='distance';
-        const mSort=document.getElementById('mSort'); if(mSort) mSort.value='distance';
         renderAds();
         return true;
       }
-    }catch(e){ console.log('IP geo fail', e); }
-    setStatus('❌ Nie udało się wykryć. Wpisz miasto ręcznie np. Warszawa');
+    }catch(e){}
+    setStatus('❌ Wpisz miasto ręcznie np. Gorzyce, Czyżowice');
     return false;
   }
-
   async function success(pos){
     userLat=pos.coords.latitude; userLng=pos.coords.longitude;
-    const acc=Math.round(pos.coords.accuracy||100);
-    let msg=`✅ 📍 ${userLat.toFixed(4)}, ${userLng.toFixed(4)}`;
-    if(acc>1000) msg+=` • przybliżona okolica ~${(acc/1000).toFixed(1)}km`;
-    else msg+=` • dokładność ~${acc}m`;
-    msg+=` • sortowanie wg promienia`;
-    setStatus(msg);
-    try{
-      const r=await fetch('https://nominatim.openstreetmap.org/reverse?format=json&lat='+userLat+'&lon='+userLng+'&zoom=10');
-      const j=await r.json();
-      const city=j.address.city||j.address.town||j.address.village||j.address.county||'';
-      if(city && locInput) locInput.value=city;
-    }catch(e){}
+    setStatus(`✅ 📍 ${userLat.toFixed(4)}, ${userLng.toFixed(4)} • sortowanie wg promienia`);
+    try{const r=await fetch('https://nominatim.openstreetmap.org/reverse?format=json&lat='+userLat+'&lon='+userLng+'&zoom=10');const j=await r.json();const city=j.address.city||j.address.town||j.address.village||'';if(city&&locInput)locInput.value=city;}catch(e){}
     const sortEl=document.getElementById('sortBy'); if(sortEl) sortEl.value='distance';
-    const mSort=document.getElementById('mSort'); if(mSort) mSort.value='distance';
     renderAds();
   }
-
-  if(!navigator.geolocation){
-    fallbackIP();
-    return;
-  }
-
-  setStatus('⏳ Pobieram lokalizację... Zezwól w przeglądarce jeśli pyta. Szukam okolicy...');
-
+  if(!navigator.geolocation){ fallbackIP(); return; }
+  setStatus('⏳ Pobieram lokalizację...');
   navigator.geolocation.getCurrentPosition(success, async err=>{
-    console.log('geo high acc fail', err.code);
     if(err.code===2 || err.code===3){
-      setStatus('📡 Słaby sygnał GPS (w budynku?) - próbuję mniej dokładnej lokalizacji jak inne portale...');
-      navigator.geolocation.getCurrentPosition(success, async err2=>{
-        console.log('geo low acc fail', err2.code);
-        await fallbackIP();
-      }, {enableHighAccuracy:false, timeout:15000, maximumAge:60000});
+      setStatus('📡 Słaby GPS - próbuję mniej dokładnej...');
+      navigator.geolocation.getCurrentPosition(success, async err2=>{ await fallbackIP(); }, {enableHighAccuracy:false, timeout:15000, maximumAge:60000});
     } else if(err.code===1){
-      setStatus('❌ Brak zgody - kliknij 🔒 kłódkę → Lokalizacja → Zezwól. Próbuję wykryć okolicę po IP jak inne portale...');
-      setTimeout(fallbackIP, 800);
-    } else {
-      await fallbackIP();
-    }
+      setStatus('❌ Brak zgody - próbuję IP...'); setTimeout(fallbackIP, 500);
+    } else { await fallbackIP(); }
   }, {enableHighAccuracy:true, timeout:10000, maximumAge:0});
 }
 
-function getGeoFilter(){
-  const isMobile=window.innerWidth<=760;
-  const locVal=(document.getElementById(isMobile?'mLoc':'city')?.value||'').trim();
-  const radiusVal=parseInt(document.getElementById(isMobile?'mRadius':'radius')?.value||'0');
-  let lat=userLat,lng=userLng;
-  if(!lat&&locVal){const key=locVal.toLowerCase(); if(cityCoords[key]){lat=cityCoords[key][0]; lng=cityCoords[key][1];}}
+function getGeoFilter(){const isMobile=window.innerWidth<=760;const locVal=(document.getElementById(isMobile?'mLoc':'city')?.value||'').trim();const radiusVal=parseInt(document.getElementById(isMobile?'mRadius':'radius')?.value||'0');let lat=userLat,lng=userLng;if(!lat&&locVal){const c=getCityLatLng(locVal); if(c){lat=c[0]; lng=c[1];}}return{locVal,radiusVal,lat,lng};}}
   return{locVal,radiusVal,lat,lng};
 }
-async function geocodeCity(city){if(!city)return null;const key=city.toLowerCase();if(cityCoords[key])return{lat:cityCoords[key][0],lng:cityCoords[key][1]};try{const r=await fetch('https://nominatim.openstreetmap.org/search?format=json&q='+encodeURIComponent(city)+'&countrycodes=pl&limit=1');const j=await r.json();if(j[0])return{lat:parseFloat(j[0].lat),lng:parseFloat(j[0].lon)};}catch(e){}return null;}
+async function geocodeCity(city){if(!city)return null;const cc=getCityLatLng(city); if(cc) return {lat:cc[0],lng:cc[1]}; try{const r=await fetch('https://nominatim.openstreetmap.org/search?format=json&q='+encodeURIComponent(city)+'&countrycodes=pl&limit=1');const j=await r.json();if(j[0])return{lat:parseFloat(j[0].lat),lng:parseFloat(j[0].lon)};}catch(e){}return null;};try{const r=await fetch('https://nominatim.openstreetmap.org/search?format=json&q='+encodeURIComponent(city)+'&countrycodes=pl&limit=1');const j=await r.json();if(j[0])return{lat:parseFloat(j[0].lat),lng:parseFloat(j[0].lon)};}catch(e){}return null;}
 </script>
 <script>
 const SB_URL="https://rljqnhfogaqdjeirqqdj.supabase.co"; const SB_KEY="sb_publishable_j7CS5xIHzOMBMyvsqVgDmw_GeEek5hX";
@@ -183,44 +157,6 @@ $("registerBtn").onclick=async()=>{ const email=$("regEmail").value.trim()||$("a
 $("googleBtn").onclick=async()=>{ try{ const {error}=await sb.auth.signInWithOAuth({provider:'google', options:{redirectTo: location.href}}); if(error) throw error; }catch(e){ showAuthMsg("<span style='color:#d00'>"+e.message+"</span>"); } };
 $("forgot").onclick=async()=>{ const email=$("authEmail").value.trim(); if(!email){ showAuthMsg("<span style='color:#d00'>Wpisz e-mail aby wysłać link resetujący.</span>"); return; } showAuthMsg("Wysyłam link..."); const {error}=await sb.auth.resetPasswordForEmail(email, {redirectTo: location.href}); if(error) showAuthMsg("<span style='color:#d00'>"+error.message+"</span>"); else showAuthMsg("<span style='color:#0a0'>Link do resetu wysłany na "+email+"</span>"); };
 const drop=$("drop"), fileIn=$("file"); drop.onclick=()=>fileIn.click(); drop.ondragover=e=>{e.preventDefault(); drop.style.borderColor='#FFE600';}; drop.ondragleave=()=>drop.style.borderColor='#333'; drop.ondrop=async e=>{ e.preventDefault(); drop.style.borderColor='#333'; const files=[...e.dataTransfer.files].filter(f=>f.type.startsWith('image/')).slice(0,8-images.length); for(const f of files){ const c=await compress(f); images.push({blob:c.blob, url:c.url, src:c.url}); } renderPhotos(); }; fileIn.onchange=async e=>{ const files=[...e.target.files].slice(0,8-images.length); for(const f of files){ const c=await compress(f); images.push({blob:c.blob, url:c.url, src:c.url}); } renderPhotos(); fileIn.value=''; };
-$("save").onclick=async()=>{ const title=$("aTitle").value.trim(); if(!title){ setStatus("❌ Tytuł wymagany",true); return; } if(images.length===0){ setStatus("❌ Dodaj min. 1 zdjęcie",true); return; } if(!currentUser){ $("authOverlay").classList.add('open'); return; } const btn=$("save"); btn.disabled=true; btn.textContent="Zapisuję..."; setStatus("⏳ Wysyłam zdjęcia..."); try{ const urls=[]; for(let i=0;i<images.length;i++){ const it=images[i]; if(it.type==='url'){ urls.push(it.url); continue; } const name=`${currentUser.id}/${Date.now()}_${i}_${Math.random().toString(36).slice(2,6)}.webp`; const {error}=await sb.storage.from('ad-images').upload(name,it.blob,{contentType:'image/webp',upsert:true}); if(error) throw new Error("Storage: "+error.message); const {data}=sb.storage.from('ad-images').getPublicUrl(name); urls.push(data.publicUrl); } setStatus("⏳ Zapisuję ogłoszenie..."); const _locForGeo=document.getElementById('aLocation')?.value||''; let _g=null; if(_locForGeo){ const _k=_locForGeo.toLowerCase(); if(cityCoords[_k]) _g={lat:cityCoords[_k][0],lng:cityCoords[_k][1]}; } if(_g) window._lastGeo=_g; else { try{ const _gr=await geocodeCity(_locForGeo); if(_gr) window._lastGeo=_gr; }catch(e){} } const payload={title,brand:$("aBrand").value.trim()||null,model:$("aModel").value.trim()||null,year:parseInt($("aYear").value)||null,price:parseInt($("aPrice").value)||0,location:$("aLocation").value.trim()||null,phone:$("aPhone").value.trim()||null,description:$("aDesc").value.trim()||null,images:urls,image_url:urls[0],owner_id:currentUser.id}; let res; if(editId){ res=await sb.from('ads').update(payload).eq('id',editId).eq('owner_id',currentUser.id).select(); } else{ res=await sb.from('ads').insert([payload]).select(); } if(res.error) throw res.error; setStatus("✅ Zapisano!"); setTimeout(()=>{ $("addModal").classList.remove('open'); setStatus(""); images=[]; loadAds(); },400); }catch(e){ setStatus("❌ "+e.message,true); }finally{ btn.disabled=false; btn.textContent=editId?"Zapisz zmiany":"Zapisz i pokaż"; } };
+$("save").onclick=async()=>{ const title=$("aTitle").value.trim(); if(!title){ setStatus("❌ Tytuł wymagany",true); return; } if(images.length===0){ setStatus("❌ Dodaj min. 1 zdjęcie",true); return; } if(!currentUser){ $("authOverlay").classList.add('open'); return; } const btn=$("save"); btn.disabled=true; btn.textContent="Zapisuję..."; setStatus("⏳ Wysyłam zdjęcia..."); try{ const urls=[]; for(let i=0;i<images.length;i++){ const it=images[i]; if(it.type==='url'){ urls.push(it.url); continue; } const name=`${currentUser.id}/${Date.now()}_${i}_${Math.random().toString(36).slice(2,6)}.webp`; const {error}=await sb.storage.from('ad-images').upload(name,it.blob,{contentType:'image/webp',upsert:true}); if(error) throw new Error("Storage: "+error.message); const {data}=sb.storage.from('ad-images').getPublicUrl(name); urls.push(data.publicUrl); } setStatus("⏳ Zapisuję ogłoszenie..."); const _locForGeo=document.getElementById('aLocation')?.value||''; let _g=null; if(_locForGeo){ const _k=_locForGeo.toLowerCase(); if(getCityLatLng(a.location)[0],lng:cityCoords[_k][1]}; } if(_g) window._lastGeo=_g; else { try{ const _gr=await geocodeCity(_locForGeo); if(_gr) window._lastGeo=_gr; }catch(e){} } const payload={title,brand:$("aBrand").value.trim()||null,model:$("aModel").value.trim()||null,year:parseInt($("aYear").value)||null,price:parseInt($("aPrice").value)||0,location:$("aLocation").value.trim()||null,phone:$("aPhone").value.trim()||null,description:$("aDesc").value.trim()||null,images:urls,image_url:urls[0],owner_id:currentUser.id}; let res; if(editId){ res=await sb.from('ads').update(payload).eq('id',editId).eq('owner_id',currentUser.id).select(); } else{ res=await sb.from('ads').insert([payload]).select(); } if(res.error) throw res.error; setStatus("✅ Zapisano!"); setTimeout(()=>{ $("addModal").classList.remove('open'); setStatus(""); images=[]; loadAds(); },400); }catch(e){ setStatus("❌ "+e.message,true); }finally{ btn.disabled=false; btn.textContent=editId?"Zapisz zmiany":"Zapisz i pokaż"; } };
 initAuth(); loadAds();
-</script>
-<script>
-document.addEventListener('DOMContentLoaded', ()=>{
-  // Auto detect approximate location on load like big portals
-  setTimeout(async ()=>{
-    if(userLat) return;
-    const cityInput=document.getElementById('city');
-    const mLocInput=document.getElementById('mLoc');
-    if((cityInput && cityInput.value) || (mLocInput && mLocInput.value)) return; // user already typed
-    try{
-      const r=await fetch('https://ipapi.co/json/');
-      const j=await r.json();
-      if(j && j.city){
-        userLat=j.latitude; userLng=j.longitude;
-        if(cityInput && !cityInput.value) cityInput.value=j.city;
-        if(mLocInput && !mLocInput.value) mLocInput.value=j.city;
-        const statusDesk=document.getElementById('geoStatusDesk');
-        const status=document.getElementById('geoStatus');
-        const msg=`📍 Wykryto Twoją okolicę: ${j.city} - wybierz promień aby szukać w pobliżu`;
-        if(statusDesk) statusDesk.textContent=msg;
-        if(status) status.textContent=msg;
-      }
-    }catch(e){}
-  }, 1200);
-  
-  const cityInput=document.getElementById('city');
-  const mLocInput=document.getElementById('mLoc');
-  const tryGeocode = async (val)=>{
-    if(!val || val.length<3) return;
-    const key=val.toLowerCase();
-    if(cityCoords[key]){ userLat=cityCoords[key][0]; userLng=cityCoords[key][1]; renderAds(); return; }
-    try{ const r=await fetch('https://nominatim.openstreetmap.org/search?format=json&q='+encodeURIComponent(val)+'&countrycodes=pl&limit=1'); const j=await r.json(); if(j[0]){ userLat=parseFloat(j[0].lat); userLng=parseFloat(j[0].lon); renderAds(); } }catch(e){}
-  };
-  if(cityInput) cityInput.addEventListener('change', e=>tryGeocode(e.target.value));
-  if(mLocInput) mLocInput.addEventListener('change', e=>tryGeocode(e.target.value));
-});
-</script>
-
-</body></html>
+</script></body></html>
