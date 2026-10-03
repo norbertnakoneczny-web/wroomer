@@ -8,44 +8,73 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0;font-family:Inter,system-ui,sans-serif}
 body{background:#f5f5f0;color:#111}
-header{background:#fff;border-bottom:1px solid #e5e5e0;position:sticky;top:0;z-index:50;padding:10px 16px;display:flex;align-items:center;justify-content:space-between}
-.logo{font-weight:900;font-size:20px;letter-spacing:-1px}
+header{background:#fff;border-bottom:1px solid #e5e5e0;position:sticky;top:0;z-index:50;padding:10px 12px;}
+.top-row{display:flex;align-items:center;justify-content:space-between;gap:10px;max-width:1280px;margin:0 auto}
+.logo{font-weight:900;font-size:22px;letter-spacing:-1px;cursor:pointer}
 .logo span{color:#ffcb00}
-.btn{border:0;cursor:pointer;padding:9px 16px;border-radius:8px;font-weight:700}
+.search-bar{max-width:1280px;margin:10px auto 0;display:flex;gap:8px;flex-wrap:wrap;padding:0}
+.search-bar input, .search-bar select{padding:10px 12px;border:1px solid #ddd;border-radius:8px;font-size:13px;flex:1;min-width:140px;background:#fff}
+.search-bar input.search-main{flex:2;min-width:200px}
+.btn{border:0;cursor:pointer;padding:10px 16px;border-radius:8px;font-weight:700;font-size:13px;white-space:nowrap}
 .btn-black{background:#111;color:#fff}
 .btn-yellow{background:#ffcb00;color:#111}
+.btn-white{background:#fff;border:1px solid #ddd}
 .grid{max-width:1280px;margin:18px auto;padding:0 12px;display:grid;grid-template-columns:repeat(auto-fill,minmax(132px,1fr));gap:10px}
-.card{background:#fff;border-radius:10px;overflow:hidden;border:1px solid #e9e9e6;cursor:pointer;position:relative}
-.card img{width:100%;height:96px;object-fit:cover;background:#eee}
+.card{background:#fff;border-radius:10px;overflow:hidden;border:1px solid #e9e9e6;cursor:pointer;position:relative;transition:transform .1s}
+.card:hover{transform:translateY(-2px)}
+.card img{width:100%;height:96px;object-fit:contain;background:#f4f4f4}
 .card .info{padding:6px 7px}
 .card .title{font-size:11px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .card .price{font-size:12px;font-weight:900;margin-top:2px}
+.card .loc{font-size:10px;color:#777;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .badge{position:absolute;top:5px;left:5px;background:#ffcb00;color:#111;font-size:9px;font-weight:900;padding:3px 5px;border-radius:5px}
 #detail{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:100;display:none;align-items:center;justify-content:center;padding:12px}
 .detail-box{background:#fff;width:100%;max-width:980px;border-radius:14px;overflow:hidden;max-height:92vh;display:flex;flex-direction:column}
-.detail-img{width:100%;height:520px;object-fit:cover;background:#eee}
+.detail-img{width:100%;height:520px;object-fit:contain;background:#f5f5f5}
 .detail-content{padding:16px;overflow:auto}
 #authModal{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:200;display:none;align-items:center;justify-content:center;padding:12px}
 .auth-box{background:#fff;width:100%;max-width:400px;border-radius:14px;padding:18px}
 .tabs{display:flex;gap:6px;margin:12px 0}
 .tab{flex:1;padding:10px;border:1px solid #ddd;border-radius:8px;background:#fff;cursor:pointer;font-weight:700;font-size:13px}
 .tab.active{background:#111;color:#fff;border-color:#111}
-input{width:100%;padding:12px;border:1px solid #ddd;border-radius:8px;margin-top:8px}
+input, textarea, select{width:100%;padding:12px;border:1px solid #ddd;border-radius:8px;margin-top:8px;font-size:13px}
 .log{position:fixed;left:10px;bottom:10px;background:#111;color:#ff0;font-size:11px;padding:8px 10px;border-radius:8px;max-width:320px;max-height:200px;overflow:auto;z-index:300}
+#resultsInfo{max-width:1280px;margin:10px auto 0;padding:0 12px;font-size:12px;color:#666}
 </style>
 </head>
 <body>
 <header>
-<div class="logo">WROOMER<span>.PL</span></div>
+<div class="top-row">
+<div class="logo" onclick="location.reload()">WROOMER<span>.PL</span></div>
 <div style="display:flex;gap:8px;align-items:center">
 <button class="btn btn-yellow" onclick="openAdd()">+ Dodaj</button>
-<button id="myBtn" class="btn" style="display:none;border:1px solid #ddd" onclick="filterMy()">Moje</button>
+<button id="myBtn" class="btn btn-white" style="display:none" onclick="filterMy()">Moje</button>
 <button id="authBtn" class="btn btn-black" onclick="openAuth()">Zaloguj / Rejestracja</button>
 <span id="userEmail" style="display:none;font-size:12px;font-weight:700"></span>
-<button id="logoutBtn" class="btn" style="display:none;border:1px solid #ddd" onclick="logout()">Wyloguj</button>
+<button id="logoutBtn" class="btn btn-white" style="display:none" onclick="logout()">Wyloguj</button>
+</div>
+</div>
+
+<div class="search-bar">
+<input id="searchInput" class="search-main" placeholder="Szukaj: np. BMW, Audi A4, 2.0 TDI..." oninput="renderAds()">
+<select id="brandFilter" onchange="renderAds()">
+<option value="">Wszystkie marki</option>
+<option>BMW</option><option>Audi</option><option>Mercedes</option><option>Volkswagen</option>
+<option>Toyota</option><option>Ford</option><option>Opel</option><option>Skoda</option>
+<option>Honda</option><option>Peugeot</option><option>Renault</option>
+</select>
+<input id="locationInput" placeholder="Lokalizacja: np. Katowice, Kraków..." oninput="renderAds()">
+<button class="btn btn-white" onclick="getMyLocation()" title="Użyj mojej lokalizacji">📍 Blisko mnie</button>
+<select id="sortFilter" onchange="renderAds()">
+<option value="newest">Najnowsze</option>
+<option value="price_asc">Cena rosnąco</option>
+<option value="price_desc">Cena malejąco</option>
+</select>
+<button class="btn btn-white" onclick="clearFilters()">Wyczyść</button>
 </div>
 </header>
 
+<div id="resultsInfo"></div>
 <div id="adsGrid" class="grid"></div>
 <div id="log" class="log">Log: start...</div>
 
@@ -56,10 +85,11 @@ input{width:100%;padding:12px;border:1px solid #ddd;border-radius:8px;margin-top
 <div class="detail-content">
 <h2 id="detailTitle"></h2>
 <p id="detailPrice" style="font-weight:900;margin:8px 0"></p>
-<p id="detailDesc" style="font-size:13px;color:#555"></p>
+<p id="detailLoc" style="font-size:12px;color:#666"></p>
+<p id="detailDesc" style="font-size:13px;color:#555;margin-top:8px"></p>
 <div style="margin-top:12px;display:flex;gap:8px">
 <button id="editBtn" class="btn btn-yellow" style="display:none" onclick="openEdit()">Edytuj</button>
-<button id="deleteBtn" class="btn" style="display:none;border:1px solid #ddd" onclick="deleteAd()">Usuń</button>
+<button id="deleteBtn" class="btn btn-white" style="display:none" onclick="deleteAd()">Usuń</button>
 <button class="btn btn-black" onclick="closeDetail()">Zamknij</button>
 </div>
 </div>
@@ -88,7 +118,6 @@ input{width:100%;padding:12px;border:1px solid #ddd;border-radius:8px;margin-top
 <input id="regPass" type="password" placeholder="Hasło (min. 6 znaków)">
 <label style="font-size:11px;display:flex;gap:6px;margin-top:8px"><input type="checkbox" id="regCheck" style="width:auto"> Akceptuję regulamin WROOMER.PL</label>
 <button class="btn btn-yellow" style="width:100%;margin-top:10px" onclick="register()">Załóż konto</button>
-<p style="font-size:11px;color:#666;margin-top:8px">Rejestracja bez potwierdzania e-mail - po kliknięciu jesteś od razu zalogowany (tryb testowy).</p>
 </div>
 
 <div id="resetTab" class="auth-tab-content" style="display:none">
@@ -103,7 +132,6 @@ input{width:100%;padding:12px;border:1px solid #ddd;border-radius:8px;margin-top
 <p style="font-size:12px;color:#666">Wpisz nowe hasło dla konta <span id="recoveryEmail" style="font-weight:700"></span></p>
 <input id="newPasswordInput" type="password" placeholder="Nowe hasło (min. 6 znaków)">
 <button class="btn btn-black" style="width:100%;margin-top:12px" onclick="setNewPassword()">Zapisz nowe hasło</button>
-<p style="font-size:11px;color:#666;margin-top:8px">Po zapisaniu zostaniesz zalogowany nowym hasłem.</p>
 </div>
 
 </div>
@@ -113,42 +141,135 @@ input{width:100%;padding:12px;border:1px solid #ddd;border-radius:8px;margin-top
 const SUPABASE_URL = 'https://rljqnhfogaqdjeirqqdj.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_j7CS5xIHzOMBMyvsqVgDmw_GeEek5hX';
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-let ads=[], currentAd=null, myFilter=false;
 
-function log(m){document.getElementById('log').innerHTML+='<br>'+m; console.log(m)}
+let allAds=[], myFilter=false, currentAd=null;
+let userLocationCoords=null;
+
+function log(t){const el=document.getElementById('log'); el.innerHTML+= '<br>'+t; el.scrollTop=el.scrollHeight; console.log(t)}
 
 async function loadAds(){
- log('Ładuję ogłoszenia...');
- const {data, error} = await supabaseClient.from('ads').select('*').order('created_at',{ascending:false}).limit(100);
- if(error){log('❌ Błąd ładowania: '+error.message); return}
- ads=data||[];
- renderAds();
- log('✅ Załadowano '+ads.length);
+ try{
+  const {data, error}=await supabaseClient.from('ads').select('*').order('created_at',{ascending:false}).limit(200);
+  if(error) throw error;
+  allAds=data||[];
+  log('✅ Załadowano '+allAds.length+' ogłoszeń');
+  renderAds();
+ }catch(e){log('❌ Błąd ładowania: '+e.message); document.getElementById('adsGrid').innerHTML='<p style="padding:20px">BŁĄD ŁADOWANIA: '+e.message+'</p>'}
 }
+
 function renderAds(){
+ let filtered=[...allAds];
+ const q=document.getElementById('searchInput').value.toLowerCase().trim();
+ const brand=document.getElementById('brandFilter').value;
+ const locQ=document.getElementById('locationInput').value.toLowerCase().trim();
+ const sort=document.getElementById('sortFilter').value;
+
+ if(q){
+  filtered=filtered.filter(a=>
+   (a.title||'').toLowerCase().includes(q) ||
+   (a.description||'').toLowerCase().includes(q) ||
+   (a.brand||'').toLowerCase().includes(q) ||
+   (a.model||'').toLowerCase().includes(q)
+  );
+ }
+ if(brand){
+  filtered=filtered.filter(a=>(a.brand||a.title||'').toLowerCase().includes(brand.toLowerCase()));
+ }
+ if(locQ){
+  filtered=filtered.filter(a=>
+   (a.location||'').toLowerCase().includes(locQ) ||
+   (a.city||'').toLowerCase().includes(locQ)
+  );
+ }
+ if(myFilter && window.currentUserId){
+  filtered=filtered.filter(a=>a.owner_id===window.currentUserId);
+ }
+
+ // sort
+ if(sort==='price_asc') filtered.sort((a,b)=>(parseInt(a.price)||0)-(parseInt(b.price)||0));
+ if(sort==='price_desc') filtered.sort((a,b)=>(parseInt(b.price)||0)-(parseInt(a.price)||0));
+
+ // geolocation sort if we have coords
+ if(userLocationCoords && document.getElementById('locationInput').value.includes('Blisko')){
+  filtered.sort((a,b)=>{
+   const da=getDistance(userLocationCoords, a.lat, a.lng);
+   const db=getDistance(userLocationCoords, b.lat, b.lng);
+   return da-db;
+  });
+ }
+
+ document.getElementById('resultsInfo').innerText=`Znaleziono ${filtered.length} ogłoszeń${q?` dla "${q}"`:''}${locQ?` w "${locQ}"`:''}`;
  const grid=document.getElementById('adsGrid');
- let list=myFilter ? ads.filter(a=>a.owner_id===window.currentUserId) : ads;
- grid.innerHTML='';
- list.forEach(ad=>{
-  const img=(ad.images && ad.images[0]) || ad.image_url || 'https://via.placeholder.com/200';
-  const isMine = ad.owner_id && ad.owner_id===window.currentUserId;
-  grid.innerHTML+=`<div class="card" onclick="openDetail('${ad.id}')">${isMine?'<div class="badge">MOJE • EDYTUJ</div>':''}<img src="${img}"><div class="info"><div class="title">${ad.title||ad.brand+' '+ad.model}</div><div class="price">${ad.price||''} zł</div></div></div>`;
+ if(filtered.length===0){grid.innerHTML='<p style="grid-column:1/-1;padding:20px;color:#777">Brak ogłoszeń dla tych filtrów</p>'; return}
+ grid.innerHTML=filtered.map(a=>{
+  const img=a.image_url || (a.images&&a.images[0]) || 'https://via.placeholder.com/132x96?text=WROOMER';
+  const title=(a.title||'Bez tytułu').slice(0,40);
+  const loc=a.location || a.city || '';
+  return `<div class="card" onclick="openDetail('${a.id}')">
+   ${a.brand?`<span class="badge">${a.brand}</span>`:''}
+   <img src="${img}" loading="lazy" onerror="this.src='https://via.placeholder.com/132x96?text=WROOMER'">
+   <div class="info"><div class="title">${title}</div><div class="price">${a.price? a.price+' PLN' : ''}</div><div class="loc">${loc}</div></div>
+  </div>`;
+ }).join('');
+}
+
+function clearFilters(){
+ document.getElementById('searchInput').value='';
+ document.getElementById('brandFilter').value='';
+ document.getElementById('locationInput').value='';
+ document.getElementById('sortFilter').value='newest';
+ userLocationCoords=null;
+ renderAds();
+}
+
+function getMyLocation(){
+ if(!navigator.geolocation){alert('Geolokalizacja nie jest wspierana'); return}
+ log('📍 Pobieram lokalizację...');
+ navigator.geolocation.getCurrentPosition(async pos=>{
+  userLocationCoords={lat:pos.coords.latitude, lng:pos.coords.longitude};
+  log(`📍 Lokalizacja: ${userLocationCoords.lat.toFixed(4)}, ${userLocationCoords.lng.toFixed(4)}`);
+  // reverse geocode via nominatim
+  try{
+   const res=await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${userLocationCoords.lat}&lon=${userLocationCoords.lng}&zoom=10`);
+   const data=await res.json();
+   const city=data.address?.city || data.address?.town || data.address?.village || data.address?.county || '';
+   document.getElementById('locationInput').value=city ? `${city} (Blisko mnie)` : `Blisko mnie`;
+  }catch(e){
+   document.getElementById('locationInput').value='Blisko mnie';
+  }
+  renderAds();
+ }, err=>{
+  alert('Nie udało się pobrać lokalizacji: '+err.message);
+  log('❌ Geolocation error: '+err.message);
  });
 }
 
+function getDistance(coords, lat2, lng2){
+ if(!coords || !lat2 || !lng2) return 999999;
+ const R=6371;
+ const dLat=(lat2-coords.lat)*Math.PI/180;
+ const dLng=(lng2-coords.lng)*Math.PI/180;
+ const a=Math.sin(dLat/2)**2 + Math.cos(coords.lat*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLng/2)**2;
+ return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+}
+
 function openDetail(id){
- const ad=ads.find(a=>a.id==id); if(!ad)return; currentAd=ad;
- document.getElementById('detailImg').src=(ad.images&&ad.images[0])||ad.image_url||'';
- document.getElementById('detailTitle').innerText=ad.title||ad.brand+' '+ad.model;
- document.getElementById('detailPrice').innerText=(ad.price||'')+' zł';
- document.getElementById('detailDesc').innerText=ad.description||'';
- const mine=ad.owner_id===window.currentUserId;
- document.getElementById('editBtn').style.display=mine?'block':'none';
- document.getElementById('deleteBtn').style.display=mine?'block':'none';
+ const a=allAds.find(x=>String(x.id)===String(id));
+ if(!a)return;
+ currentAd=a;
+ document.getElementById('detailImg').src=a.image_url || (a.images&&a.images[0]) || 'https://via.placeholder.com/600x520?text=WROOMER';
+ document.getElementById('detailTitle').innerText=a.title||'';
+ document.getElementById('detailPrice').innerText=a.price? a.price+' PLN' : '';
+ document.getElementById('detailLoc').innerText=a.location || a.city || '';
+ document.getElementById('detailDesc').innerText=a.description||'';
+ const owned=window.currentUserId && a.owner_id===window.currentUserId;
+ document.getElementById('editBtn').style.display=owned?'block':'none';
+ document.getElementById('deleteBtn').style.display=owned?'block':'none';
  document.getElementById('detail').style.display='flex';
 }
-function closeDetail(){document.getElementById('detail').style.display='none'}
+function closeDetail(){document.getElementById('detail').style.display='none'; currentAd=null}
 
+// AUTH - same as before
 function openAuth(){document.getElementById('authModal').style.display='flex'; showTab('login')}
 function closeAuth(){document.getElementById('authModal').style.display='none'}
 function showTab(name){
@@ -167,19 +288,16 @@ function showTabOnlyNewPassword(email){
  document.getElementById('authTitle').innerText='WROOMER reset hasła';
  document.getElementById('recoveryEmail').innerText=email||'';
 }
-
 async function login(){
  const email=document.getElementById('loginEmail').value.trim();
  const pass=document.getElementById('loginPass').value;
  const {data, error}=await supabaseClient.auth.signInWithPassword({email,password:pass});
  if(error){
-  let msg='Nieprawidłowy e-mail lub hasło. Jeśli nie masz konta - przejdź do zakładki Rejestracja.';
-  if(error.message.includes('Email not confirmed')) msg='Musisz potwierdzić adres e-mail. Sprawdź skrzynkę '+email+' (także SPAM).';
+  let msg='Nieprawidłowy e-mail lub hasło.';
+  if(error.message.includes('Email not confirmed')) msg='Potwierdź e-mail: '+email;
   document.getElementById('loginInfo').innerText=msg;
   log('❌ Login błąd: '+error.message);
- } else {
-  log('✅ Zalogowano '+email); closeAuth(); checkUser();
- }
+ } else {log('✅ Zalogowano '+email); closeAuth(); checkUser();}
 }
 async function register(){
  if(!document.getElementById('regCheck').checked){alert('Zaznacz regulamin');return}
@@ -188,8 +306,7 @@ async function register(){
  if(pass.length<6){alert('Hasło min. 6 znaków');return}
  const {data, error}=await supabaseClient.auth.signUp({email,password:pass});
  if(error){alert('Błąd: '+error.message); return}
- // tryb bez potwierdzania - od razu login
- const {data:loginData}=await supabaseClient.auth.signInWithPassword({email,password:pass});
+ await supabaseClient.auth.signInWithPassword({email,password:pass});
  log('✅ Konto utworzone '+email); closeAuth(); checkUser();
 }
 async function sendReset(){
@@ -197,14 +314,14 @@ async function sendReset(){
  if(!email){alert('Wpisz e-mail');return}
  const {error}=await supabaseClient.auth.resetPasswordForEmail(email,{redirectTo: window.location.origin});
  if(error){document.getElementById('resetInfo').innerText='Błąd: '+error.message}
- else {document.getElementById('resetInfo').innerText='Wysłaliśmy wiadomość na '+email+'. Temat: WROOMER reset hasła. Sprawdź skrzynkę i kliknij link, aby ustawić nowe hasło.'; log('✅ Reset wysłany na '+email)}
+ else {document.getElementById('resetInfo').innerText='Wysłaliśmy wiadomość na '+email; log('✅ Reset wysłany na '+email)}
 }
 async function setNewPassword(){
  const newPass=document.getElementById('newPasswordInput').value;
- if(newPass.length<6){alert('Hasło musi mieć min. 6 znaków');return}
+ if(newPass.length<6){alert('Hasło min. 6 znaków');return}
  const {data, error}=await supabaseClient.auth.updateUser({password:newPass});
  if(error){alert('Błąd: '+error.message); log('❌ updateUser: '+error.message)}
- else {alert('Hasło zmienione! Zalogowano nowym hasłem.'); log('✅ Hasło zmienione'); window.location.hash=''; closeAuth(); checkUser();}
+ else {alert('Hasło zmienione!'); window.location.hash=''; closeAuth(); checkUser();}
 }
 async function checkUser(){
  const {data:{user}}=await supabaseClient.auth.getUser();
@@ -226,21 +343,34 @@ async function checkUser(){
  }
 }
 async function logout(){await supabaseClient.auth.signOut(); location.reload()}
-
 function filterMy(){myFilter=!myFilter; document.getElementById('myBtn').innerText=myFilter?'Wszystkie':'Moje'; renderAds()}
 
-// ADD
+// ADD with location
 function openAdd(){
- const t=prompt('Tytuł ogłoszenia:'); if(!t)return;
- const p=prompt('Cena:'); const imgUrl=prompt('Link do zdjęcia (opcjonalnie) lub zostaw puste:');
- addAd({title:t, price:p, image_url:imgUrl});
+ const t=prompt('Tytuł ogłoszenia (np. BMW 320d 2019):'); if(!t)return;
+ const p=prompt('Cena PLN:');
+ const loc=prompt('Lokalizacja (miasto):','Katowice')||'';
+ const imgUrl=prompt('Link do zdjęcia (opcjonalnie):');
+ addAd({title:t, price:p, location:loc, image_url:imgUrl});
 }
 async function addAd(obj){
  const {data:{user}}=await supabaseClient.auth.getUser();
  if(!user){alert('Zaloguj się aby dodać'); openAuth(); return}
- const toInsert={title:obj.title, price:obj.price, image_url:obj.image_url, images: obj.image_url?[obj.image_url]:[], owner_id:user.id, brand:obj.title, model:'', description:obj.title};
+ let lat=null,lng=null;
+ if(obj.location){
+  try{
+   const res=await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(obj.location)}&limit=1`);
+   const d=await res.json();
+   if(d[0]){lat=parseFloat(d[0].lat); lng=parseFloat(d[0].lon);}
+  }catch(e){}
+ }
+ const toInsert={
+  title:obj.title, price:obj.price, image_url:obj.image_url, images: obj.image_url?[obj.image_url]:[],
+  owner_id:user.id, brand:obj.title.split(' ')[0], model:'', description:obj.title,
+  location:obj.location, city:obj.location, lat:lat, lng:lng
+ };
  const {data, error}=await supabaseClient.from('ads').insert(toInsert).select();
- if(error){log('❌ Insert błąd: '+error.message); alert('Błąd zapisu: '+error.message)} else {log('✅ Zapisano ID='+data[0].id); loadAds()}
+ if(error){log('❌ Insert błąd: '+error.message); alert('Błąd: '+error.message)} else {log('✅ Zapisano ID='+data[0].id); loadAds()}
 }
 async function deleteAd(){
  if(!currentAd)return; if(!confirm('Usunąć?'))return;
@@ -252,16 +382,11 @@ function openEdit(){
  supabaseClient.from('ads').update({title:t}).eq('id',currentAd.id).then(()=>{closeDetail(); loadAds()});
 }
 
-// CRITICAL: PASSWORD_RECOVERY handling
 supabaseClient.auth.onAuthStateChange(async (event, session)=>{
- console.log('Auth event:',event);
  if(event==='PASSWORD_RECOVERY'){
-  const email=session?.user?.email||'';
-  log('🔑 PASSWORD_RECOVERY - pokaż ustaw nowe hasło');
-  showTabOnlyNewPassword(email);
+  showTabOnlyNewPassword(session?.user?.email||'');
  }
  if(event==='SIGNED_IN'){
-  // jeśli to recovery, nie zamykaj automatycznie - czekaj na nowe hasło
   if(window.location.hash.includes('type=recovery') || window.location.search.includes('type=recovery')) return;
   checkUser();
  }
