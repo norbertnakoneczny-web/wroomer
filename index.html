@@ -30,6 +30,27 @@ header{background:#fff;border-bottom:1px solid #e5e5e0;position:sticky;top:0;z-i
 .card .loc{font-size:10px;color:#777;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .badge{position:absolute;top:6px;left:6px;background:#ffcb00;color:#111;font-size:9px;font-weight:900;padding:4px 6px;border-radius:6px}
 
+/* SMARTFON - 2 schludne kolumny obok siebie */
+@media(max-width:600px){
+ .search-bar{gap:6px}
+ .search-bar input, .search-bar select{min-width:100px;font-size:12px;padding:9px 10px}
+ .grid{grid-template-columns:repeat(2,1fr);gap:8px;padding:0 8px;margin:10px auto}
+ .card{border-radius:10px}
+ .card img{height:110px}
+ .card .info{padding:6px 8px}
+ .card .title{font-size:11px}
+ .card .price{font-size:12px}
+ .detail-box{max-width:100%;border-radius:12px;max-height:96vh}
+ .detail-img{height:50vh;min-height:280px;max-height:400px}
+ .top-row{flex-wrap:wrap}
+ #userEmail{display:none !important}
+}
+
+.contact-box{margin-top:16px;padding:14px;background:#f9f9f6;border:1px solid #e9e9e6;border-radius:12px}
+.contact-box h4{font-size:13px;margin-bottom:10px}
+.contact-btns{display:flex;flex-wrap:wrap;gap:8px}
+.contact-btns .btn{flex:1;min-width:120px;justify-content:center;display:flex;align-items:center;gap:6px}
+
 #detail{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:100;display:none;align-items:center;justify-content:center;padding:16px}
 .detail-box{background:#fff;width:100%;max-width:1150px;border-radius:16px;overflow:hidden;max-height:95vh;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.3)}
 .detail-img{width:100%;height:68vh;min-height:480px;max-height:720px;object-fit:contain;background:#f5f5f5}
@@ -96,6 +117,20 @@ header{background:#fff;border-bottom:1px solid #e5e5e0;position:sticky;top:0;z-i
 <p id="detailLoc" style="font-size:13px;color:#666"></p>
 <p id="detailDesc" style="font-size:14px;color:#444;margin-top:10px;white-space:pre-wrap"></p>
 <div id="detailImages" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"></div>
+
+<!-- KONTAKT ZE SPRZEDAJĄCYM -->
+<div class="contact-box">
+<h4>📞 Kontakt ze sprzedającym</h4>
+<p id="detailSeller" style="font-size:12px;color:#666;margin-bottom:10px"></p>
+<div class="contact-btns">
+<button id="btnCall" class="btn btn-black" onclick="contactCall()">📞 Zadzwoń</button>
+<button id="btnSms" class="btn btn-white" onclick="contactSms()">💬 SMS</button>
+<button id="btnWhats" class="btn btn-white" style="background:#25D366;color:#fff;border-color:#25D366" onclick="contactWhats()">WhatsApp</button>
+<button id="btnShowPhone" class="btn btn-yellow" onclick="showPhone()">Pokaż numer</button>
+</div>
+<p id="phoneNumber" style="margin-top:10px;font-weight:900;font-size:16px;display:none"></p>
+</div>
+
 <div style="margin-top:16px;display:flex;gap:8px">
 <button id="editBtn" class="btn btn-yellow" style="display:none" onclick="openEditFromDetail()">Edytuj</button>
 <button id="deleteBtn" class="btn btn-white" style="display:none" onclick="deleteAd()">Usuń</button>
@@ -129,6 +164,10 @@ header{background:#fff;border-bottom:1px solid #e5e5e0;position:sticky;top:0;z-i
 <div>
 <label>Lokalizacja / Miasto *</label>
 <input id="addLocation" placeholder="np. Gorzyce">
+</div>
+<div>
+<label>Telefon do kontaktu *</label>
+<input id="addPhone" type="tel" placeholder="np. 600 123 456">
 </div>
 <div class="full">
 <label>Opis</label>
@@ -262,17 +301,44 @@ function openDetail(id){
  document.getElementById('detailImg').src=a.image_url || (a.images&&a.images[0]) || 'https://via.placeholder.com/800x600?text=WROOMER';
  document.getElementById('detailTitle').innerText=a.title||'';
  document.getElementById('detailPrice').innerText=a.price? a.price+' PLN':'';
- document.getElementById('detailLoc').innerText=a.location||a.city||'';
+ document.getElementById('detailLoc').innerText=(a.location||a.city||'') + (a.brand? ` • ${a.brand} ${a.model||''}`:'');
  document.getElementById('detailDesc').innerText=a.description||'';
  const cont=document.getElementById('detailImages');
  const imgs=a.images||[];
  cont.innerHTML=imgs.map(src=>`<img src="${src}" style="width:120px;height:90px;object-fit:cover;border-radius:8px;cursor:pointer" onclick="document.getElementById('detailImg').src='${src}'">`).join('');
+ // kontakt
+ document.getElementById('detailSeller').innerText=`Ogłoszenie z ${a.location||a.city||'Polski'} • Wystawione: ${new Date(a.created_at).toLocaleDateString('pl-PL')}`;
+ document.getElementById('phoneNumber').style.display='none';
+ document.getElementById('phoneNumber').innerText=a.phone||'Brak numeru - napisz wiadomość';
  const owned=window.currentUserId && a.owner_id===window.currentUserId;
  document.getElementById('editBtn').style.display=owned?'block':'none';
  document.getElementById('deleteBtn').style.display=owned?'block':'none';
  document.getElementById('detail').style.display='flex';
 }
 function closeDetail(){document.getElementById('detail').style.display='none';currentAd=null}
+
+function showPhone(){
+ const num=currentAd?.phone||'';
+ if(!num){alert('Brak numeru telefonu w tym ogłoszeniu');return}
+ document.getElementById('phoneNumber').style.display='block';
+ document.getElementById('phoneNumber').innerText='📞 '+num;
+}
+function contactCall(){
+ const num=currentAd?.phone||''; 
+ if(!num){showPhone();return}
+ window.location.href='tel:'+num.replace(/\s/g,'');
+}
+function contactSms(){
+ const num=currentAd?.phone||'';
+ if(!num){alert('Brak numeru');return}
+ window.location.href='sms:'+num.replace(/\s/g,'');
+}
+function contactWhats(){
+ const num=currentAd?.phone||'';
+ if(!num){alert('Brak numeru');return}
+ const clean=num.replace(/\s/g,'').replace(/^0/,'+48');
+ window.open(`https://wa.me/${clean.replace('+','')}?text=Cześć, piszę z WROOMER.PL w sprawie: ${encodeURIComponent(currentAd.title||'')}`,'_blank');
+}
 
 // ADD MODAL
 function openAdd(){
@@ -283,6 +349,7 @@ function openAdd(){
  document.getElementById('addModel').value='';
  document.getElementById('addPrice').value='';
  document.getElementById('addLocation').value='';
+ document.getElementById('addPhone').value='';
  document.getElementById('addDesc').value='';
  document.getElementById('addImagesLinks').value='';
  selectedImagesBase64=[];
@@ -299,6 +366,7 @@ function openEditFromDetail(){
  document.getElementById('addModel').value=currentAd.model||'';
  document.getElementById('addPrice').value=currentAd.price||'';
  document.getElementById('addLocation').value=currentAd.location||'';
+ document.getElementById('addPhone').value=currentAd.phone||'';
  document.getElementById('addDesc').value=currentAd.description||'';
  document.getElementById('addImagesLinks').value=(currentAd.images||[]).join(', ');
  selectedImagesBase64=[...(currentAd.images||[])];
@@ -327,15 +395,16 @@ async function submitAdd(){
  const title=document.getElementById('addTitleInput').value.trim();
  const price=document.getElementById('addPrice').value.trim();
  const location=document.getElementById('addLocation').value.trim();
+ const phone=document.getElementById('addPhone').value.trim();
  if(!title){document.getElementById('addInfo').innerText='Wpisz tytuł';return}
  if(!price){document.getElementById('addInfo').innerText='Wpisz cenę';return}
- if(!location){document.getElementById('addInfo').innerText='Wpisz lokalizację';return}
+ if(!location){document.getElementById('addInfo').innerText='Wpisz lokalizację (miejscowość)';return}
+ if(!phone){document.getElementById('addInfo').innerText='Wpisz telefon kontaktowy';return}
  const brand=document.getElementById('addBrand').value.trim()||title.split(' ')[0];
  const model=document.getElementById('addModel').value.trim();
  const desc=document.getElementById('addDesc').value.trim();
  let links=document.getElementById('addImagesLinks').value.split(',').map(s=>s.trim()).filter(Boolean);
  let images=[...selectedImagesBase64, ...links].slice(0,10);
- if(images.length===0) images=[];
 
  const {data:{user}}=await supabaseClient.auth.getUser();
  if(!user){alert('Zaloguj się');openAuth();return}
@@ -349,13 +418,10 @@ async function submitAdd(){
   const d=await res.json(); if(d[0]){lat=parseFloat(d[0].lat);lng=parseFloat(d[0].lon);}
  }catch(e){}
 
- // try upload base64 to storage if bucket exists, else keep as is (supabase can store text, but base64 might be big - we store first image as image_url if possible)
- // For simplicity, store images as is - if base64 too large, supabase text column may hold, but better upload
  let finalImages=[];
  let image_url=images[0]||'';
  for(let img of images){
   if(img.startsWith('data:')){
-   // upload to storage bucket 'ad-images' if exists
    try{
     const blob=await (await fetch(img)).blob();
     const name=`${user.id}/${Date.now()}_${Math.random().toString(36).slice(2)}.jpg`;
@@ -363,33 +429,39 @@ async function submitAdd(){
     if(!error){
      const {data}=supabaseClient.storage.from('ad-images').getPublicUrl(name);
      finalImages.push(data.publicUrl);
-    }else{
-     finalImages.push(img); // fallback
-    }
+    }else{finalImages.push(img);}
    }catch(e){finalImages.push(img);}
   }else{finalImages.push(img);}
  }
  if(finalImages.length>0) image_url=finalImages[0];
 
- const payload={title, price, image_url, images:finalImages, owner_id:user.id, brand, model, description:desc, location, city:location, lat, lng};
+ // pełny payload
+ let payload={title, price, image_url, images:finalImages, owner_id:user.id, brand, model, description:desc, location, city:location, lat, lng, phone};
 
  let result;
- // profesjonalny fallback: najpierw próba z pełną lokalizacją, jak brak kolumn - bez nich
- if(editingAd){
-  result=await supabaseClient.from('ads').update(payload).eq('id',editingAd.id).select();
-  if(result.error && result.error.message.includes('city')){
-   const {city, lat, lng, ...minimal}=payload;
-   result=await supabaseClient.from('ads').update(minimal).eq('id',editingAd.id).select();
-   if(!result.error) document.getElementById('addInfo').innerHTML='<span style="color:#b8860b">Zapisano, ale dodaj kolumny w Supabase SQL poniżej dla lepszego szukania po mapie.</span>';
+ const tryInsert = async (p) => editingAd ? await supabaseClient.from('ads').update(p).eq('id',editingAd.id).select() : await supabaseClient.from('ads').insert(p).select();
+
+ result=await tryInsert(payload);
+ // profesjonalny fallback jeśli brak kolumn
+ if(result.error && (result.error.message.includes('city') || result.error.message.includes('phone') || result.error.message.includes('lat') || result.error.message.includes('schema'))){
+  // usuwamy brakujące kolumny po kolei
+  const minimal={title, price, image_url, images:finalImages, owner_id:user.id, brand, model, description:desc, location, phone};
+  let retry=await tryInsert(minimal);
+  if(retry.error && retry.error.message.includes('phone')){
+   const {phone, ...noPhone}=minimal;
+   retry=await tryInsert(noPhone);
   }
- }else{
-  result=await supabaseClient.from('ads').insert(payload).select();
-  if(result.error && result.error.message.includes('city')){
-   const {city, lat, lng, ...minimal}=payload;
-   result=await supabaseClient.from('ads').insert(minimal).select();
-   if(!result.error) document.getElementById('addInfo').innerHTML='<span style="color:#b8860b">Zapisano, ale dodaj kolumny w Supabase SQL poniżej dla lepszego szukania po mapie.</span>';
+  result=retry;
+  if(!result.error && payload.phone){
+   document.getElementById('addInfo').innerHTML='<span style="color:#b8860b">Zapisano, ale dodaj kolumny w Supabase: phone, city, lat, lng (SQL poniżej).</span>';
+   // nie zamykaj od razu, pokaż info
+   setTimeout(()=>{closeAdd(); loadAds();}, 1500);
+   document.getElementById('addSubmitBtn').disabled=false;
+   document.getElementById('addSubmitBtn').innerText='Zatwierdź';
+   return;
   }
  }
+
  document.getElementById('addSubmitBtn').disabled=false;
  document.getElementById('addSubmitBtn').innerText='Zatwierdź';
  if(result.error){document.getElementById('addInfo').innerText='Błąd: '+result.error.message; return}
