@@ -4,25 +4,25 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>WROOMER.PL</title>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://unpkg.com/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;font-family:Inter,system-ui,sans-serif}
 body{background:#f5f5f0;color:#111}
 header{background:#fff;border-bottom:1px solid #e5e5e0;position:sticky;top:0;z-index:50;padding:10px 12px}
 .top-row{display:flex;align-items:center;justify-content:space-between;gap:10px;max-width:1280px;margin:0 auto}
-.logo{font-weight:900;font-size:22px;letter-spacing:-1px;cursor:pointer} .logo span{color:#ffcb00}
+.logo{font-weight:900;font-size:22px;letter-spacing:-1px;cursor:pointer}.logo span{color:#ffcb00}
 .search-bar{max-width:1280px;margin:10px auto 0;display:flex;gap:8px;flex-wrap:wrap}
 .search-bar input, .search-bar select{padding:10px 12px;border:1px solid #ddd;border-radius:8px;font-size:13px;flex:1;min-width:120px;background:#fff}
 .search-bar input.search-main{flex:2;min-width:180px}
 .btn{border:0;cursor:pointer;padding:10px 16px;border-radius:8px;font-weight:700;font-size:13px;white-space:nowrap}
-.btn-black{background:#111;color:#fff} .btn-yellow{background:#ffcb00;color:#111} .btn-white{background:#fff;border:1px solid #ddd}
+.btn-black{background:#111;color:#fff}.btn-yellow{background:#ffcb00;color:#111}.btn-white{background:#fff;border:1px solid #ddd}
 .grid{max-width:1280px;margin:18px auto;padding:0 12px;display:grid;grid-template-columns:repeat(auto-fill,minmax(198px,1fr));gap:12px}
 .card{background:#fff;border-radius:12px;overflow:hidden;border:1px solid #e9e9e6;cursor:pointer;position:relative}
 .card img{width:100%;height:144px;object-fit:contain;background:#f4f4f4}
-.card .info{padding:8px 10px} .card .title{font-size:12px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.card .price{font-size:13px;font-weight:900;margin-top:3px} .card .loc{font-size:10px;color:#777;margin-top:3px} .card .dist{font-size:10px;color:#ff7a00;font-weight:700}
+.card .info{padding:8px 10px}.card .title{font-size:12px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card .price{font-size:13px;font-weight:900;margin-top:3px}.card .loc{font-size:10px;color:#777;margin-top:3px}.card .dist{font-size:10px;color:#ff7a00;font-weight:700}
 .badge{position:absolute;top:6px;left:6px;background:#ffcb00;color:#111;font-size:9px;font-weight:900;padding:4px 6px;border-radius:6px}
-@media(max-width:600px){.grid{grid-template-columns:repeat(2,1fr);gap:8px;padding:0 8px} .card img{height:110px}}
+@media(max-width:600px){.grid{grid-template-columns:repeat(2,1fr);gap:8px;padding:0 8px}.card img{height:110px}}
 .contact-box{margin-top:16px;padding:14px;background:#f9f9f6;border:1px solid #e9e9e6;border-radius:12px}
 .contact-btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
 #detail{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:100;display:none;align-items:center;justify-content:center;padding:16px}
@@ -32,11 +32,11 @@ header{background:#fff;border-bottom:1px solid #e5e5e0;position:sticky;top:0;z-i
 #authModal,#addModal{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:200;display:none;align-items:center;justify-content:center;padding:12px}
 .auth-box{background:#fff;width:100%;max-width:420px;border-radius:14px;padding:18px}
 .add-box{background:#fff;width:100%;max-width:640px;border-radius:16px;padding:20px;max-height:92vh;overflow:auto}
-.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px} .form-grid .full{grid-column:1/-1}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.form-grid .full{grid-column:1/-1}
 .add-box label{font-size:11px;font-weight:700;color:#444;margin-top:6px;display:block}
 .add-box input, .add-box textarea{width:100%;padding:11px;border:1px solid #ddd;border-radius:8px;margin-top:4px;font-size:13px}
-.preview-images{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px} .preview-images img{width:80px;height:80px;object-fit:cover;border-radius:8px;border:1px solid #ddd}
-.tabs{display:flex;gap:6px;margin:12px 0} .tab{flex:1;padding:10px;border:1px solid #ddd;border-radius:8px;background:#fff;cursor:pointer;font-weight:700;font-size:13px} .tab.active{background:#111;color:#fff;border-color:#111}
+.preview-images{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}.preview-images img{width:80px;height:80px;object-fit:cover;border-radius:8px;border:1px solid #ddd}
+.tabs{display:flex;gap:6px;margin:12px 0}.tab{flex:1;padding:10px;border:1px solid #ddd;border-radius:8px;background:#fff;cursor:pointer;font-weight:700;font-size:13px}.tab.active{background:#111;color:#fff;border-color:#111}
 #resultsInfo{max-width:1280px;margin:10px auto 0;padding:0 12px;font-size:12px;color:#666}
 </style>
 </head>
@@ -62,8 +62,8 @@ header{background:#fff;border-bottom:1px solid #e5e5e0;position:sticky;top:0;z-i
 <button class="btn btn-white" onclick="clearFilters()">Wyczyść</button>
 </div>
 </header>
-<div id="resultsInfo"></div>
-<div id="adsGrid" class="grid"><p style="padding:20px">Ładowanie...</p></div>
+<div id="resultsInfo">Ładowanie ogłoszeń...</div>
+<div id="adsGrid" class="grid"></div>
 
 <div id="detail" onclick="if(event.target.id==='detail')closeDetail()">
 <div class="detail-box">
@@ -81,7 +81,7 @@ header{background:#fff;border-bottom:1px solid #e5e5e0;position:sticky;top:0;z-i
 <div class="form-grid">
 <div class="full"><label>Tytuł *</label><input id="addTitleInput"></div>
 <div><label>Marka</label><input id="addBrand"></div><div><label>Model</label><input id="addModel"></div>
-<div><label>Cena PLN *</label><input id="addPrice" type="number"></div><div><label>Miejscowość *</label><input id="addLocation" placeholder="np. Gorzyce - wymagane!"></div>
+<div><label>Cena PLN *</label><input id="addPrice" type="number"></div><div><label>Miejscowość *</label><input id="addLocation" placeholder="np. Gorzyce"></div>
 <div class="full"><label>Telefon *</label><input id="addPhone" type="tel" placeholder="600 123 456"></div>
 <div class="full"><label>Opis</label><textarea id="addDesc" rows="3"></textarea></div>
 <div class="full"><label>Zdjęcia (max 10)</label><input id="addImagesFile" type="file" accept="image/*" multiple onchange="handleFiles(this.files)"><div id="addPreview" class="preview-images"></div><input id="addImagesLinks" placeholder="lub linki https://..." style="margin-top:6px"></div>
@@ -91,8 +91,8 @@ header{background:#fff;border-bottom:1px solid #e5e5e0;position:sticky;top:0;z-i
 </div></div>
 
 <div id="authModal" onclick="if(event.target.id==='authModal')closeAuth()">
-<div class="auth-box"><h3 id="authTitle">WROOMER.PL</h3>
-<div class="tabs" id="authTabs"><button class="tab active" id="loginTabBtn" onclick="showTab('login')">Logowanie</button><button class="tab" id="registerTabBtn" onclick="showTab('register')">Rejestracja</button></div>
+<div class="auth-box"><h3>WROOMER.PL</h3>
+<div class="tabs"><button class="tab active" id="loginTabBtn" onclick="showTab('login')">Logowanie</button><button class="tab" id="registerTabBtn" onclick="showTab('register')">Rejestracja</button></div>
 <div id="loginTab" class="auth-tab-content"><input id="loginEmail" placeholder="E-mail"><input id="loginPass" type="password" placeholder="Hasło"><button class="btn btn-black" style="width:100%;margin-top:10px" onclick="login()">Zaloguj</button><p style="font-size:12px;margin-top:8px"><a href="#" onclick="showTab('reset');return false">Nie pamiętasz hasła?</a></p><p id="loginInfo" style="color:#c00;font-size:11px"></p></div>
 <div id="registerTab" class="auth-tab-content" style="display:none"><input id="regEmail" placeholder="E-mail"><input id="regPass" type="password" placeholder="Hasło min 6 znaków"><label style="font-size:11px;display:flex;gap:6px;margin-top:8px"><input type="checkbox" id="regCheck" style="width:auto"> Regulamin</label><button class="btn btn-yellow" style="width:100%;margin-top:10px" onclick="register()">Załóż konto</button></div>
 <div id="resetTab" class="auth-tab-content" style="display:none"><input id="resetEmail" placeholder="E-mail"><button class="btn btn-black" style="width:100%;margin-top:10px" onclick="sendReset()">Wyślij reset</button><p id="resetInfo" style="font-size:11px"></p></div>
@@ -100,24 +100,33 @@ header{background:#fff;border-bottom:1px solid #e5e5e0;position:sticky;top:0;z-i
 </div></div>
 
 <script>
-const SUPABASE_URL = 'https://rljqnhfogaqdjeirqqdj.supabase.co';
-const SUPABASE_ANON_KEY = 'sb_publishable_j7CS5xIHzOMBMyvsqVgDmw_GeEek5hX';
-const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-let allAds=[], myFilter=false, currentAd=null, editingAd=null, userLocationCoords=null, searchLocationCoords=null, selectedImagesBase64=[], locTimeout=null;
+// === FUNKCJE UI ZAWSZE DZIAŁAJĄ, NAWET BEZ SUPABASE ===
+let allAds=[], myFilter=false, currentAd=null, editingAd=null, userLocationCoords=null, searchLocationCoords=null, selectedImagesBase64=[], locTimeout=null, supabaseClient=null;
 
-async function loadAds(){
- try{
-  console.log('loadAds start');
-  const {data, error} = await supabaseClient.from('ads').select('*').order('created_at',{ascending:false}).limit(300);
-  if(error) throw error;
-  allAds = data || [];
-  console.log('loaded', allAds.length);
-  renderAds();
- }catch(e){
-  console.error(e);
-  document.getElementById('adsGrid').innerHTML = '<p style="padding:20px;color:#c00">Błąd ładowania: '+e.message+'<br>Sprawdź w Supabase czy RLS jest wyłączony lub dodaj policy dla anon.</p>';
- }
-}
+function openAdd(){ console.log('openAdd'); document.getElementById('addModal').style.display='flex'; }
+function closeAdd(){ document.getElementById('addModal').style.display='none'; }
+function openAuth(){ document.getElementById('authModal').style.display='flex'; showTab('login'); }
+function closeAuth(){ document.getElementById('authModal').style.display='none'; }
+function showTab(name){ document.querySelectorAll('.auth-tab-content').forEach(d=>d.style.display='none'); document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active')); const el=document.getElementById(name+'Tab'); if(el) el.style.display='block'; const btn=document.getElementById(name+'TabBtn'); if(btn) btn.classList.add('active'); }
+function showTabOnlyNewPassword(e){ document.getElementById('authModal').style.display='flex'; document.querySelectorAll('.auth-tab-content').forEach(d=>d.style.display='none'); document.getElementById('newPasswordTab').style.display='block'; document.getElementById('recoveryEmail').innerText=e||''; }
+function closeDetail(){ document.getElementById('detail').style.display='none'; currentAd=null; }
+function showPhone(){ const n=currentAd?.phone; if(!n){alert('Brak numeru');return} document.getElementById('phoneNumber').style.display='block'; document.getElementById('phoneNumber').innerText='📞 '+n; }
+function contactCall(){ const n=currentAd?.phone; if(!n){showPhone();return} window.location.href='tel:'+n.replace(/\s/g,''); }
+function contactSms(){ const n=currentAd?.phone; if(!n){alert('Brak');return} window.location.href='sms:'+n.replace(/\s/g,''); }
+function contactWhats(){ const n=currentAd?.phone; if(!n){alert('Brak');return} const c=n.replace(/\s/g,'').replace(/^0/,'+48'); window.open(`https://wa.me/${c.replace('+','')}?text=Cześć, piszę z WROOMER.PL: ${encodeURIComponent(currentAd.title||'')}`,'_blank'); }
+function filterMy(){ myFilter=!myFilter; document.getElementById('myBtn').innerText=myFilter?'Wszystkie':'Moje'; renderAds(); }
+function clearFilters(){ document.getElementById('searchInput').value=''; document.getElementById('brandFilter').value=''; document.getElementById('locationInput').value=''; document.getElementById('radiusFilter').value='25'; document.getElementById('sortFilter').value='newest'; userLocationCoords=null; searchLocationCoords=null; renderAds(); }
+function handleFiles(files){ for(let f of files){ if(selectedImagesBase64.length>=10) break; const r=new FileReader(); r.onload=e=>{selectedImagesBase64.push(e.target.result); renderPreview();}; r.readAsDataURL(f);} }
+function renderPreview(){ const el=document.getElementById('addPreview'); if(!el) return; el.innerHTML=selectedImagesBase64.map((s,i)=>`<div style="position:relative"><img src="${s}"><button onclick="removeImg(${i})" style="position:absolute;top:-6px;right:-6px;background:#111;color:#fff;border:0;border-radius:50%;width:20px;height:20px">×</button></div>`).join(''); }
+function removeImg(i){ selectedImagesBase64.splice(i,1); renderPreview(); }
+
+// === SUPABASE INIT Z TIMEOUTEM ===
+try{
+ if(window.supabase){
+  supabaseClient = window.supabase.createClient('https://rljqnhfogaqdjeirqqdj.supabase.co', 'sb_publishable_j7CS5xIHzOMBMyvsqVgDmw_GeEek5hX');
+  console.log('Supabase OK');
+ }else{ console.error('supabase lib not loaded'); }
+}catch(e){ console.error('Supabase init error', e); }
 
 function getDistance(c, lat2, lng2){
  if(!c || !lat2 || !lng2) return null;
@@ -180,7 +189,7 @@ function renderAds(){
   }
   document.getElementById('resultsInfo').innerText=`Znaleziono ${filtered.length} ogłoszeń${locQ?` w promieniu ${radius===9999?'cała Polska':radius+'km od '+locQ}:''}${q?` dla "${q}"`:''}`;
   const grid=document.getElementById('adsGrid');
-  if(filtered.length===0){grid.innerHTML='<p style="grid-column:1/-1;padding:20px;color:#777">Brak ogłoszeń. Zwiększ promień lub wybierz Cała Polska.</p>'; return}
+  if(filtered.length===0){grid.innerHTML='<p style="grid-column:1/-1;padding:20px;color:#777">Brak ogłoszeń. Zwiększ promień do 50-100km lub wybierz Cała Polska.<br><br><button class="btn btn-black" onclick="clearFilters()">Pokaż wszystkie</button></p>'; return}
   grid.innerHTML=filtered.map(a=>{
    const img=a.image_url || (a.images&&a.images[0]) || 'https://via.placeholder.com/300x200?text=WROOMER';
    const title=(a.title||'Bez tytułu').slice(0,40);
@@ -188,10 +197,9 @@ function renderAds(){
    const dist=a._dist!=null? a._dist.toFixed(1)+' km':''; 
    return `<div class="card" onclick="openDetail('${a.id}')">${a.brand?`<span class="badge">${(a.brand||'').toUpperCase()}</span>`:''}<img src="${img}" loading="lazy" onerror="this.src='https://via.placeholder.com/300x200?text=WROOMER'"><div class="info"><div class="title">${title}</div><div class="price">${a.price? a.price+' PLN':''}</div><div class="loc">${loc}</div>${dist?`<div class="dist">📍 ${dist}</div>`:''}</div></div>`;
   }).join('');
- }catch(e){console.error('render error', e)}
+ }catch(e){console.error('render error', e); document.getElementById('resultsInfo').innerText='Błąd renderowania: '+e.message}
 }
 
-function clearFilters(){document.getElementById('searchInput').value='';document.getElementById('brandFilter').value='';document.getElementById('locationInput').value='';document.getElementById('radiusFilter').value='25';document.getElementById('sortFilter').value='newest';userLocationCoords=null;searchLocationCoords=null;renderAds();}
 function getMyLocation(){
  if(!navigator.geolocation){alert('Brak geolokalizacji');return}
  navigator.geolocation.getCurrentPosition(async pos=>{
@@ -212,25 +220,16 @@ function openDetail(id){
  document.getElementById('editBtn').style.display=owned?'block':'none'; document.getElementById('deleteBtn').style.display=owned?'block':'none';
  document.getElementById('detail').style.display='flex';
 }
-function closeDetail(){document.getElementById('detail').style.display='none';currentAd=null}
-function showPhone(){const n=currentAd?.phone; if(!n){alert('Brak numeru');return} document.getElementById('phoneNumber').style.display='block'; document.getElementById('phoneNumber').innerText='📞 '+n;}
-function contactCall(){const n=currentAd?.phone; if(!n){showPhone();return} window.location.href='tel:'+n.replace(/\s/g,'');}
-function contactSms(){const n=currentAd?.phone; if(!n){alert('Brak');return} window.location.href='sms:'+n.replace(/\s/g,'');}
-function contactWhats(){const n=currentAd?.phone; if(!n){alert('Brak');return} const c=n.replace(/\s/g,'').replace(/^0/,'+48'); window.open(`https://wa.me/${c.replace('+','')}?text=Cześć, piszę z WROOMER.PL: ${encodeURIComponent(currentAd.title||'')}`,'_blank');}
 
-function openAdd(){editingAd=null; ['addTitleInput','addBrand','addModel','addPrice','addLocation','addPhone','addDesc','addImagesLinks'].forEach(id=>{const el=document.getElementById(id); if(el) el.value='';}); selectedImagesBase64=[]; const p=document.getElementById('addPreview'); if(p) p.innerHTML=''; document.getElementById('addInfo').innerText=''; document.getElementById('addModal').style.display='flex';}
 function openEditFromDetail(){if(!currentAd) return; editingAd=currentAd; document.getElementById('addTitle').innerText='Edytuj'; document.getElementById('addTitleInput').value=currentAd.title||''; document.getElementById('addBrand').value=currentAd.brand||''; document.getElementById('addModel').value=currentAd.model||''; document.getElementById('addPrice').value=currentAd.price||''; document.getElementById('addLocation').value=currentAd.location||''; document.getElementById('addPhone').value=currentAd.phone||''; document.getElementById('addDesc').value=currentAd.description||''; document.getElementById('addImagesLinks').value=(currentAd.images||[]).join(', '); selectedImagesBase64=[...(currentAd.images||[])]; renderPreview(); document.getElementById('addModal').style.display='flex'; closeDetail();}
-function closeAdd(){document.getElementById('addModal').style.display='none';}
-function handleFiles(files){for(let f of files){ if(selectedImagesBase64.length>=10) break; const r=new FileReader(); r.onload=e=>{selectedImagesBase64.push(e.target.result); renderPreview();}; r.readAsDataURL(f);} }
-function renderPreview(){const el=document.getElementById('addPreview'); if(!el) return; el.innerHTML=selectedImagesBase64.map((s,i)=>`<div style="position:relative"><img src="${s}"><button onclick="removeImg(${i})" style="position:absolute;top:-6px;right:-6px;background:#111;color:#fff;border:0;border-radius:50%;width:20px;height:20px">×</button></div>`).join('');}
-function removeImg(i){selectedImagesBase64.splice(i,1);renderPreview();}
 
 async function submitAdd(){
  const title=document.getElementById('addTitleInput').value.trim();
  const price=document.getElementById('addPrice').value.trim();
  const loc=document.getElementById('addLocation').value.trim();
  const phone=document.getElementById('addPhone').value.trim();
- if(!title||!price||!loc||!phone){document.getElementById('addInfo').innerText='Uzupełnij pola *'; return;}
+ if(!title||!price||!loc||!phone){document.getElementById('addInfo').innerText='Uzupełnij wszystkie pola *'; return;}
+ if(!supabaseClient){document.getElementById('addInfo').innerText='Błąd: Brak połączenia z bazą. Odśwież stronę.'; return;}
  const brand=document.getElementById('addBrand').value.trim()||title.split(' ')[0];
  const model=document.getElementById('addModel').value.trim();
  const desc=document.getElementById('addDesc').value.trim();
@@ -246,12 +245,9 @@ async function submitAdd(){
  const trySave = async (p)=> editingAd ? await supabaseClient.from('ads').update(p).eq('id',editingAd.id).select() : await supabaseClient.from('ads').insert(p).select();
  let result=await trySave(payload);
  if(result.error){
-  // fallback bez nowych kolumn
   let minimal={title, price, image_url, images:finalImages, owner_id:user.id, brand, model, description:desc, location:loc, phone};
   let retry=await trySave(minimal);
-  if(retry.error && retry.error.message.includes('phone')){
-   const {phone, ...rest}=minimal; retry=await trySave(rest);
-  }
+  if(retry.error && retry.error.message.includes('phone')){ const {phone, ...rest}=minimal; retry=await trySave(rest); }
   result=retry;
  }
  document.getElementById('addSubmitBtn').disabled=false; document.getElementById('addSubmitBtn').innerText='Zatwierdź';
@@ -259,20 +255,38 @@ async function submitAdd(){
  closeAdd(); loadAds();
 }
 
-function openAuth(){document.getElementById('authModal').style.display='flex'; showTab('login')}
-function closeAuth(){document.getElementById('authModal').style.display='none'}
-function showTab(name){document.querySelectorAll('.auth-tab-content').forEach(d=>d.style.display='none'); document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active')); if(name==='login'){document.getElementById('loginTab').style.display='block';document.getElementById('loginTabBtn').classList.add('active')} if(name==='register'){document.getElementById('registerTab').style.display='block';document.getElementById('registerTabBtn').classList.add('active')} if(name==='reset'){document.getElementById('resetTab').style.display='block'}}
-function showTabOnlyNewPassword(e){document.getElementById('authModal').style.display='flex';document.querySelectorAll('.auth-tab-content').forEach(d=>d.style.display='none');document.getElementById('newPasswordTab').style.display='block';document.getElementById('recoveryEmail').innerText=e||'';}
-async function login(){const e=document.getElementById('loginEmail').value.trim();const p=document.getElementById('loginPass').value;const {error}=await supabaseClient.auth.signInWithPassword({email:e,password:p}); if(error) document.getElementById('loginInfo').innerText=error.message; else{closeAuth(); checkUser();}}
-async function register(){if(!document.getElementById('regCheck').checked){alert('Regulamin');return}const e=document.getElementById('regEmail').value.trim();const p=document.getElementById('regPass').value;const {error}=await supabaseClient.auth.signUp({email:e,password:p}); if(error){alert(error.message);return} await supabaseClient.auth.signInWithPassword({email:e,password:p}); closeAuth(); checkUser();}
-async function sendReset(){const e=document.getElementById('resetEmail').value.trim();const {error}=await supabaseClient.auth.resetPasswordForEmail(e,{redirectTo:window.location.origin}); document.getElementById('resetInfo').innerText=error? error.message : 'Wysłano';}
-async function setNewPassword(){const p=document.getElementById('newPasswordInput').value; if(p.length<6){alert('Min 6');return}const {error}=await supabaseClient.auth.updateUser({password:p}); if(error) alert(error.message); else{alert('Zmienione');closeAuth();checkUser();}}
-async function checkUser(){const {data:{user}}=await supabaseClient.auth.getUser(); if(user){window.currentUserId=user.id; document.getElementById('authBtn').style.display='none'; document.getElementById('userEmail').style.display='block'; document.getElementById('userEmail').innerText=user.email; document.getElementById('logoutBtn').style.display='block'; document.getElementById('myBtn').style.display='block';}else{window.currentUserId=null; document.getElementById('authBtn').style.display='block'; document.getElementById('userEmail').style.display='none'; document.getElementById('logoutBtn').style.display='none'; document.getElementById('myBtn').style.display='none';}}
-async function logout(){await supabaseClient.auth.signOut(); location.reload()}
-function filterMy(){myFilter=!myFilter; document.getElementById('myBtn').innerText=myFilter?'Wszystkie':'Moje'; renderAds()}
-async function deleteAd(){if(!currentAd)return; if(!confirm('Usunąć?'))return; const {error}=await supabaseClient.from('ads').delete().eq('id',currentAd.id); if(error) alert(error.message); else{closeDetail(); loadAds();}}
-supabaseClient.auth.onAuthStateChange((ev,se)=>{if(ev==='PASSWORD_RECOVERY') showTabOnlyNewPassword(se?.user?.email||''); if(ev==='SIGNED_IN'&&!location.hash.includes('type=recovery')) checkUser();});
-loadAds(); checkUser();
+async function login(){ if(!supabaseClient){alert('Brak Supabase');return} const e=document.getElementById('loginEmail').value.trim();const p=document.getElementById('loginPass').value;const {error}=await supabaseClient.auth.signInWithPassword({email:e,password:p}); if(error) document.getElementById('loginInfo').innerText=error.message; else{closeAuth(); checkUser();}}
+async function register(){ if(!supabaseClient){alert('Brak Supabase');return} if(!document.getElementById('regCheck').checked){alert('Regulamin');return}const e=document.getElementById('regEmail').value.trim();const p=document.getElementById('regPass').value;const {error}=await supabaseClient.auth.signUp({email:e,password:p}); if(error){alert(error.message);return} await supabaseClient.auth.signInWithPassword({email:e,password:p}); closeAuth(); checkUser();}
+async function sendReset(){ if(!supabaseClient) return; const e=document.getElementById('resetEmail').value.trim();const {error}=await supabaseClient.auth.resetPasswordForEmail(e,{redirectTo:window.location.origin}); document.getElementById('resetInfo').innerText=error? error.message : 'Wysłano';}
+async function setNewPassword(){ const p=document.getElementById('newPasswordInput').value; if(p.length<6){alert('Min 6');return}const {error}=await supabaseClient.auth.updateUser({password:p}); if(error) alert(error.message); else{alert('Zmienione');closeAuth();checkUser();}}
+async function checkUser(){ if(!supabaseClient) return; const {data:{user}}=await supabaseClient.auth.getUser(); if(user){window.currentUserId=user.id; document.getElementById('authBtn').style.display='none'; document.getElementById('userEmail').style.display='block'; document.getElementById('userEmail').innerText=user.email; document.getElementById('logoutBtn').style.display='block'; document.getElementById('myBtn').style.display='block';}else{window.currentUserId=null; document.getElementById('authBtn').style.display='block'; document.getElementById('userEmail').style.display='none'; document.getElementById('logoutBtn').style.display='none'; document.getElementById('myBtn').style.display='none';}}
+async function logout(){ if(supabaseClient) await supabaseClient.auth.signOut(); location.reload()}
+async function deleteAd(){ if(!currentAd)return; if(!confirm('Usunąć?'))return; const {error}=await supabaseClient.from('ads').delete().eq('id',currentAd.id); if(error) alert(error.message); else{closeDetail(); loadAds();}}
+
+async function loadAds(){
+ if(!supabaseClient){ document.getElementById('resultsInfo').innerText='Błąd: Supabase nie załadowane. Odśwież CTRL+F5.'; return; }
+ try{
+  const controller=new AbortController(); const timeout=setTimeout(()=>controller.abort(), 8000);
+  const {data, error} = await supabaseClient.from('ads').select('*').order('created_at',{ascending:false}).limit(300).abortSignal(controller.signal);
+  clearTimeout(timeout);
+  if(error) throw error;
+  allAds=data||[];
+  console.log('loaded', allAds.length);
+  renderAds();
+ }catch(e){
+  console.error(e);
+  document.getElementById('adsGrid').innerHTML=`<div style="padding:20px"><p style="color:#c00">Błąd ładowania: ${e.message}</p><p style="font-size:12px;margin-top:10px">Sprawdź w Supabase:<br>1. Table Editor → ads - czy są dane?<br>2. SQL Editor → uruchom:<br><code>ALTER TABLE ads DISABLE ROW LEVEL SECURITY;</code><br>3. Odśwież stronę.</p><button class="btn btn-black" onclick="loadAds()" style="margin-top:10px">Spróbuj ponownie</button></div>`;
+  document.getElementById('resultsInfo').innerText=`Błąd: ${e.message}`;
+ }
+}
+
+if(supabaseClient){
+ supabaseClient.auth.onAuthStateChange((ev,se)=>{if(ev==='PASSWORD_RECOVERY') showTabOnlyNewPassword(se?.user?.email||''); if(ev==='SIGNED_IN'&&!location.hash.includes('type=recovery')) checkUser();});
+ loadAds(); checkUser();
+}else{
+ document.getElementById('resultsInfo').innerText='Ładowanie biblioteki... odśwież jeśli nie zniknie.';
+ setTimeout(()=>{ if(!supabaseClient){ document.getElementById('adsGrid').innerHTML='<p style="padding:20px">Nie udało się załadować Supabase. Sprawdź połączenie internetowe i odśwież.</p>'; }}, 3000);
+}
 </script>
 </body>
 </html>
