@@ -6,117 +6,120 @@
 <title>WROOMER.PL</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;font-family:Inter,system-ui,sans-serif}
-body{background:#f5f5f0;color:#111}
-header{background:#fff;border-bottom:1px solid #e5e5e0;position:sticky;top:0;z-index:50;padding:10px 12px}
-.top-row{display:flex;align-items:center;justify-content:space-between;gap:10px;max-width:1280px;margin:0 auto}
-.logo{font-weight:900;font-size:22px;letter-spacing:-1px;cursor:pointer;white-space:nowrap}.logo span{color:#ffcb00}
-.top-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-.search-bar{max-width:1280px;margin:10px auto 0;display:flex;gap:8px;flex-wrap:wrap}
-.search-bar input, .search-bar select{padding:10px 12px;border:1px solid #ddd;border-radius:8px;font-size:13px;flex:1;min-width:120px;background:#fff}
-.search-bar input.search-main{flex:2;min-width:180px}
-.btn{border:0;cursor:pointer;padding:10px 16px;border-radius:8px;font-weight:700;font-size:13px;white-space:nowrap}
+body{background:#f5f5f0;color:#111;font-size:15px}
+header{background:#fff;border-bottom:1px solid #e5e5e0;position:sticky;top:0;z-index:50;padding:12px 14px}
+.top-row{display:flex;align-items:center;justify-content:space-between;gap:12px;max-width:1280px;margin:0 auto}
+.logo{font-weight:900;font-size:24px;letter-spacing:-1px;cursor:pointer;white-space:nowrap}.logo span{color:#ffcb00}
+.top-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.search-bar{max-width:1280px;margin:12px auto 0;display:flex;gap:10px;flex-wrap:wrap}
+.search-bar input, .search-bar select{padding:12px 14px;border:1px solid #ddd;border-radius:8px;font-size:15px;flex:1;min-width:130px;background:#fff}
+.search-bar input.search-main{flex:2;min-width:200px}
+.btn{border:0;cursor:pointer;padding:12px 18px;border-radius:8px;font-weight:700;font-size:15px;white-space:nowrap}
 .btn-black{background:#111;color:#fff}.btn-yellow{background:#ffcb00;color:#111}.btn-white{background:#fff;border:1px solid #ddd}
 .btn-green{background:#25D366;color:#fff}.btn-blue{background:#0084FF;color:#fff}.btn-orange{background:#FF6600;color:#fff}
-.grid{max-width:1280px;margin:18px auto;padding:0 12px;display:grid;grid-template-columns:repeat(auto-fill,minmax(198px,1fr));gap:12px}
+.grid{max-width:1280px;margin:20px auto;padding:0 14px;display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px}
 .card{background:#fff;border-radius:12px;overflow:hidden;border:1px solid #e9e9e6;cursor:pointer;position:relative}
-.card img{width:100%;height:144px;object-fit:contain;background:#f4f4f4}
-.card .info{padding:8px 10px}.card .title{font-size:12px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.card .price{font-size:13px;font-weight:900}.card .loc{font-size:10px;color:#777}
-.badge{position:absolute;top:6px;left:6px;background:#ffcb00;color:#111;font-size:9px;font-weight:900;padding:4px 6px;border-radius:6px}
+.card img{width:100%;height:150px;object-fit:contain;background:#f4f4f4}
+.card .info{padding:10px 12px}.card .title{font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card .price{font-size:15px;font-weight:900}.card .loc{font-size:12px;color:#777}
+.badge{position:absolute;top:6px;left:6px;background:#ffcb00;color:#111;font-size:11px;font-weight:900;padding:4px 7px;border-radius:6px}
 #detail{position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:100;display:none;align-items:center;justify-content:center;padding:0}
 .detail-box{background:#fff;width:100%;max-width:1200px;height:100vh;max-height:100vh;display:flex;flex-direction:column;border-radius:0}
- .gallery-wrap{position:relative;width:100%;height:74vh;min-height:74vh;flex:0 0 74vh;background:#000;display:flex;align-items:center;justify-content:center;overflow:hidden;touch-action:pan-y}
+.gallery-wrap{position:relative;width:100%;height:70vh;min-height:70vh;flex:0 0 70vh;background:#000;display:flex;align-items:center;justify-content:center;overflow:hidden;touch-action:pan-y}
 .gallery-wrap img{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;display:block;margin:auto;user-select:none;transition:opacity .15s}
-.gallery-arrow{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.9);border:0;width:48px;height:48px;border-radius:50%;font-size:26px;font-weight:900;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:5;box-shadow:0 2px 10px rgba(0,0,0,.4)}
-.gallery-arrow:hover{background:#fff}
+.gallery-arrow{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.9);border:0;width:50px;height:50px;border-radius:50%;font-size:28px;font-weight:900;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:5;box-shadow:0 2px 10px rgba(0,0,0,.4)}
 .gallery-arrow.prev{left:14px}.gallery-arrow.next{right:14px}
-.gallery-counter{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.75);color:#fff;padding:5px 12px;border-radius:20px;font-size:11px;font-weight:700;z-index:5}
+.gallery-counter{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.75);color:#fff;padding:5px 12px;border-radius:20px;font-size:13px;font-weight:700;z-index:5}
 .gallery-dots{position:absolute;bottom:46px;left:50%;transform:translateX(-50%);display:flex;gap:6px;z-index:5}
-.gallery-dots span{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,0.5);cursor:pointer}
+.gallery-dots span{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,0.5);cursor:pointer}
 .gallery-dots span.active{background:#ffcb00}
- .detail-content{padding:14px 16px;overflow:auto;flex:1 1 26vh;max-height:26vh;background:#fff}
-.detail-content h2{font-size:18px}
-.detail-content #detailPrice{font-size:14px;margin-top:2px}
-.detail-content #detailLoc{font-size:11px;margin-top:2px}
-.detail-content #detailDesc{font-size:11px;margin-top:6px;line-height:1.3;max-height:40px;overflow:hidden}
-#detailImages{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
-#detailImages img{width:56px;height:42px;object-fit:cover;border-radius:6px;cursor:pointer;border:2px solid transparent}
+.detail-content{padding:16px 18px;overflow:auto;flex:1 1 30vh;max-height:30vh;background:#fff}
+.detail-content h2{font-size:20px}
+.detail-content #detailPrice{font-size:20px;margin-top:4px}
+.detail-content #detailLoc{font-size:15px;margin-top:3px}
+.detail-content #detailDesc{font-size:15px;margin-top:8px;line-height:1.4}
+#detailImages{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+#detailImages img{width:64px;height:48px;object-fit:cover;border-radius:6px;cursor:pointer;border:2px solid transparent}
 #detailImages img.active{border-color:#ffcb00}
-.contact-grid{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
- .contact-grid .btn{flex:1 1 calc(50% - 3px);min-width:90px;padding:9px 12px;font-size:13px;justify-content:center;display:flex;align-items:center;gap:4px}
-.msg-box{background:#fff;border:1px solid #e9e9e6;border-radius:10px;padding:10px;margin-top:8px}
-.msg-box h3{font-size:14px;font-weight:900;margin-bottom:6px}
-.msg-textarea{width:100%;min-height:70px;padding:10px;border:1px solid #ddd;border-radius:6px;font-size:13px;resize:vertical}
-.msg-channels{display:flex;gap:5px;flex-wrap:wrap;margin-top:8px}
-.msg-channel{flex:1 1 calc(25% - 5px);min-width:80px;padding:7px 6px;border:2px solid #e9e9e6;border-radius:8px;cursor:pointer;text-align:center;transition:all .15s;background:#fff}
-.msg-channel:hover{border-color:#111}
+.contact-grid{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.contact-grid .btn{flex:1 1 calc(50% - 4px);min-width:110px;padding:10px 12px;font-size:14px;justify-content:center;display:flex;align-items:center;gap:5px}
+.msg-box{background:#fff;border:1px solid #e9e9e6;border-radius:10px;padding:12px;margin-top:10px}
+.msg-box h3{font-size:16px;font-weight:900;margin-bottom:8px}
+.msg-textarea{width:100%;min-height:80px;padding:10px;border:1px solid #ddd;border-radius:8px;font-size:14px;resize:vertical}
+.msg-channels{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.msg-channel{flex:1 1 calc(25% - 6px);min-width:90px;padding:9px 8px;border:2px solid #e9e9e6;border-radius:10px;cursor:pointer;text-align:center;transition:all .15s;background:#fff}
+.msg-channel b{display:block;font-size:13px}
+.msg-channel small{font-size:11px;color:#666;display:block;margin-top:2px}
 .msg-channel.active{border-color:#111;background:#111;color:#fff}
-.msg-channel b{display:block;font-size:12px}
-.msg-channel small{font-size:10px;color:#666;display:block;margin-top:1px}
 .msg-channel.wa.active{border-color:#25D366;background:#25D366}
 .msg-channel.messenger.active{border-color:#0084FF;background:#0084FF}
 .msg-channel.sms.active{border-color:#FF6600;background:#FF6600}
 .msg-channel.wroomer.active{border-color:#ffcb00;background:#ffcb00;color:#111}
 #inboxModal{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:300;display:none;align-items:center;justify-content:center;padding:12px}
 .inbox-box{background:#fff;width:100%;max-width:700px;border-radius:16px;max-height:90vh;display:flex;flex-direction:column;overflow:hidden}
-.inbox-header{padding:14px 16px;border-bottom:1px solid #eee;display:flex;justify-content:space-between;align-items:center}
+.inbox-header{padding:16px 18px;border-bottom:1px solid #eee;display:flex;justify-content:space-between;align-items:center;font-size:16px}
 .inbox-list{overflow:auto;flex:1}
-.inbox-item{padding:12px 16px;border-bottom:1px solid #f0f0f0;cursor:pointer}
-.inbox-item:hover{background:#fafafa}
-.inbox-item.unread{background:#fffbe6}
-.inbox-item b{font-size:13px}
-.inbox-item p{font-size:12px;color:#555;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.inbox-item small{font-size:10px;color:#999}
+.inbox-item{padding:14px 18px;border-bottom:1px solid #f0f0f0;cursor:pointer}
+.inbox-item b{font-size:15px}
+.inbox-item p{font-size:13px;color:#555;margin-top:4px}
+.inbox-item small{font-size:11px;color:#999}
 #chatModal{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:310;display:none;align-items:center;justify-content:center;padding:12px}
 .chat-box{background:#fff;width:100%;max-width:600px;border-radius:16px;max-height:85vh;display:flex;flex-direction:column;overflow:hidden}
-.chat-header{padding:12px 16px;border-bottom:1px solid #eee;display:flex;justify-content:space-between;align-items:center;background:#111;color:#fff}
-.chat-messages{flex:1;overflow:auto;padding:12px;display:flex;flex-direction:column;gap:8px;background:#f5f5f0}
-.chat-msg{max-width:75%;padding:8px 12px;border-radius:12px;font-size:13px;line-height:1.4}
+.chat-header{padding:14px 18px;border-bottom:1px solid #eee;display:flex;justify-content:space-between;align-items:center;background:#111;color:#fff;font-size:15px}
+.chat-messages{flex:1;overflow:auto;padding:14px;display:flex;flex-direction:column;gap:10px;background:#f5f5f0}
+.chat-msg{max-width:75%;padding:10px 14px;border-radius:12px;font-size:14px;line-height:1.4}
 .chat-msg.mine{align-self:flex-end;background:#111;color:#fff;border-bottom-right-radius:4px}
 .chat-msg.theirs{align-self:flex-start;background:#fff;border:1px solid #e9e9e6;border-bottom-left-radius:4px}
-.chat-input{padding:10px;display:flex;gap:8px;border-top:1px solid #eee}
-.chat-input input{flex:1;padding:10px;border:1px solid #ddd;border-radius:20px;font-size:13px}
+.chat-input{padding:12px;display:flex;gap:10px;border-top:1px solid #eee}
+.chat-input input{flex:1;padding:12px;border:1px solid #ddd;border-radius:20px;font-size:15px}
 #authModal,#addModal{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:200;display:none;align-items:center;justify-content:center;padding:12px}
-.auth-box,.add-box{background:#fff;width:100%;max-width:650px;border-radius:16px;padding:20px;max-height:92vh;overflow:auto}
-.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.form-grid .full{grid-column:1/-1}
-.add-box label{font-size:11px;font-weight:700;color:#444;margin-top:6px;display:block}
-.add-box input, .add-box textarea, .add-box select{width:100%;padding:11px;border:1px solid #ddd;border-radius:8px;margin-top:4px;font-size:13px;background:#fff}
-.preview-images{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}.preview-images img{width:80px;height:80px;object-fit:cover;border-radius:8px;border:1px solid #ddd}
-#resultsInfo{max-width:1280px;margin:10px auto 0;padding:0 12px;font-size:12px;color:#666}
-.addr-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.auth-box,.add-box{background:#fff;width:100%;max-width:650px;border-radius:16px;padding:22px;max-height:92vh;overflow:auto}
+.auth-box h3{font-size:18px}
+.auth-box input{font-size:15px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.form-grid .full{grid-column:1/-1}
+.add-box label{font-size:13px;font-weight:700;color:#444;margin-top:8px;display:block}
+.add-box input, .add-box textarea, .add-box select{width:100%;padding:13px;border:1px solid #ddd;border-radius:8px;margin-top:5px;font-size:15px;background:#fff}
+.preview-images{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}.preview-images img{width:90px;height:90px;object-fit:cover;border-radius:8px;border:1px solid #ddd}
+#resultsInfo{max-width:1280px;margin:12px auto 0;padding:0 14px;font-size:14px;color:#666}
+.addr-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
 @media(max-width:700px){
-  header{padding:6px 8px}
-  .top-row{gap:6px;flex-wrap:nowrap}
-  .logo{font-size:15px}
+  body{font-size:14px}
+  header{padding:8px 10px}
+  .top-row{gap:8px;flex-wrap:nowrap}
+  .logo{font-size:17px}
   .logo span:last-child{display:none}
-  .top-actions{gap:4px;flex-wrap:nowrap;margin-left:auto}
-  .top-actions .btn{padding:6px 10px;font-size:11px;border-radius:6px}
-  .search-bar{gap:5px;margin-top:6px}
-  .search-bar input, .search-bar select{padding:7px 9px;font-size:12px;min-width:0}
+  .top-actions{gap:5px;flex-wrap:nowrap;margin-left:auto}
+  .top-actions .btn{padding:8px 12px;font-size:13px;border-radius:6px}
+  .search-bar{gap:6px;margin-top:8px}
+  .search-bar input, .search-bar select{padding:9px 11px;font-size:14px;min-width:0}
   .search-bar input.search-main{flex:1 1 100%;order:-1}
   .search-bar select{flex:1 1 calc(50% - 3px)}
-  .search-bar .btn{flex:1 1 calc(50% - 3px);padding:7px 8px;font-size:11px}
-  .grid{grid-template-columns:repeat(2,1fr);gap:8px;padding:0 8px}
-  #detail{padding:0}
-  .detail-box{height:100vh;max-height:100vh;border-radius:0}
-  .gallery-wrap{height:68vh;min-height:68vh;flex:0 0 68vh}
-   .detail-content{flex:1 1 32vh;max-height:32vh;padding:10px 12px}
-  .detail-content h2{font-size:16px}
-  .msg-channel{flex:1 1 calc(50% - 5px)}
-  .contact-grid .btn{flex:1 1 calc(50% - 3px);font-size:10px;padding:6px 8px}
+  .search-bar .btn{flex:1 1 calc(50% - 3px);padding:9px 10px;font-size:13px}
+  #resultsInfo{font-size:13px}
+  .grid{grid-template-columns:repeat(2,1fr);gap:10px;padding:0 10px}
+  .card .title{font-size:13px}
+  .card .price{font-size:14px}
+  .card .loc{font-size:11px}
+  .gallery-wrap{height:64vh;min-height:64vh;flex:0 0 64vh}
+  .detail-content{flex:1 1 36vh;max-height:36vh;padding:14px}
+  .detail-content h2{font-size:18px}
+  .detail-content #detailPrice{font-size:18px}
+  .detail-content #detailDesc{font-size:14px}
+  .msg-channel{flex:1 1 calc(50% - 6px)}
+  .contact-grid .btn{flex:1 1 calc(50% - 4px);font-size:13px}
 }
 </style>
 </head>
 <body>
 <header>
 <div class="top-row">
-<div class="logo" onclick="location.reload()">WROOMER<span>.PL</span> <span style="font-size:9px;background:#111;color:#fff;padding:2px 6px;border-radius:4px">v3.4 BIG FOTO + FONT</span></div>
+<div class="logo" onclick="location.reload()">WROOMER<span>.PL</span> <span style="font-size:10px;background:#111;color:#fff;padding:2px 6px;border-radius:4px">v3.5 FONT+2 WSZĘDZIE</span></div>
 <div class="top-actions">
 <button class="btn btn-yellow" onclick="openAdd()">+ Dodaj</button>
-<button id="inboxBtn" class="btn btn-black" style="display:none" onclick="openInbox()">💬 Wiad. <span id="inboxCount" style="background:#ffcb00;color:#111;padding:2px 6px;border-radius:10px;font-size:10px;display:none">0</span></button>
+<button id="inboxBtn" class="btn btn-black" style="display:none" onclick="openInbox()">💬 Wiad. <span id="inboxCount" style="background:#ffcb00;color:#111;padding:2px 6px;border-radius:10px;font-size:11px;display:none">0</span></button>
 <button id="myBtn" class="btn btn-white" style="display:none" onclick="filterMy()">Moje</button>
 <button id="authBtn" class="btn btn-black" onclick="openAuth()">Zaloguj</button>
-<span id="userEmail" style="display:none;font-size:12px;font-weight:700"></span>
+<span id="userEmail" style="display:none;font-size:14px;font-weight:700"></span>
 <button id="logoutBtn" class="btn btn-white" style="display:none" onclick="logout()">Wyloguj</button>
 </div>
 </div>
@@ -144,35 +147,33 @@ header{background:#fff;border-bottom:1px solid #e5e5e0;position:sticky;top:0;z-i
 </div>
 <div class="detail-content">
 <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px">
-<div><h2 id="detailTitle" style="font-size:14px"></h2><p id="detailPrice" style="font-weight:900;font-size:14px;margin-top:2px"></p><p id="detailLoc" style="font-size:11px;color:#666;margin-top:1px"></p></div>
-<button class="btn btn-white" style="padding:6px 10px;font-size:11px" onclick="closeDetail()">✕</button>
+<div><h2 id="detailTitle"></h2><p id="detailPrice" style="font-weight:900"></p><p id="detailLoc" style="color:#666"></p></div>
+<button class="btn btn-white" style="padding:8px 12px" onclick="closeDetail()">✕</button>
 </div>
-<p id="detailDesc" style="white-space:pre-wrap;margin-top:8px;font-size:14px;line-height:1.3;color:#444;max-height:36px;overflow:hidden;text-overflow:ellipsis"></p>
+<p id="detailDesc" style="white-space:pre-wrap;color:#444"></p>
 <div id="detailImages"></div>
-
 <div class="msg-box">
 <h3>💬 Zostaw wiadomość</h3>
 <textarea id="msgText" class="msg-textarea" placeholder="Cześć! Czy aktualne?"></textarea>
 <div class="msg-channels">
-<div class="msg-channel sms" data-channel="sms" onclick="selectChannel('sms')"><b>💬 SMS</b></div>
-<div class="msg-channel messenger" data-channel="messenger" onclick="selectChannel('messenger')"><b>💙 Messenger</b></div>
-<div class="msg-channel wa" data-channel="whatsapp" onclick="selectChannel('whatsapp')"><b>🟢 WhatsApp</b></div>
-<div class="msg-channel wroomer active" data-channel="wroomer" onclick="selectChannel('wroomer')"><b>⭐ WROOMER</b></div>
+<div class="msg-channel sms" data-channel="sms" onclick="selectChannel('sms')"><b>💬 SMS</b><small>Wyślij SMS</small></div>
+<div class="msg-channel messenger" data-channel="messenger" onclick="selectChannel('messenger')"><b>💙 Messenger</b><small>Facebook</small></div>
+<div class="msg-channel wa" data-channel="whatsapp" onclick="selectChannel('whatsapp')"><b>🟢 WhatsApp</b><small>Szybki kontakt</small></div>
+<div class="msg-channel wroomer active" data-channel="wroomer" onclick="selectChannel('wroomer')"><b>⭐ WROOMER</b><small>Czat na stronie</small></div>
 </div>
-<div style="display:flex;gap:6px;margin-top:8px">
-<button class="btn btn-black" style="flex:1;padding:8px;font-size:11px" id="sendMsgBtn" onclick="sendMessage()">📤 Wyślij przez WROOMER.PL</button>
+<div style="display:flex;gap:8px;margin-top:10px">
+<button class="btn btn-black" style="flex:1" id="sendMsgBtn" onclick="sendMessage()">📤 Wyślij przez WROOMER.PL</button>
 </div>
-<p id="msgInfo" style="font-size:10px;margin-top:4px;color:#666"></p>
+<p id="msgInfo" style="font-size:12px;margin-top:6px;color:#666"></p>
 </div>
-
-<div style="margin-top:8px;padding:8px;background:#f9f9f6;border-radius:8px">
-<p style="font-size:11px;font-weight:900;margin-bottom:4px">📞 SZYBKI KONTAKT</p>
-<p id="phoneNumber" style="font-weight:900;display:none;margin-bottom:4px;font-size:12px"></p>
+<div style="margin-top:10px;padding:10px;background:#f9f9f6;border-radius:8px">
+<p style="font-size:13px;font-weight:900;margin-bottom:6px">📞 SZYBKI KONTAKT</p>
+<p id="phoneNumber" style="font-weight:900;display:none;margin-bottom:6px;font-size:14px"></p>
 <div class="contact-grid">
 <button class="btn btn-black" onclick="contactCall()">📞 Zadzwoń</button>
 <button class="btn btn-white" onclick="showPhone()">👁️ Numer</button>
 <button class="btn btn-white" style="background:#f0f0f0" onclick="quickSMS()">💬 SMS</button>
-<button class="btn btn-green" onclick="quickWhatsApp()">🟢 WA</button>
+<button class="btn btn-green" onclick="quickWhatsApp()">🟢 WhatsApp</button>
 </div>
 </div>
 </div>
@@ -182,24 +183,24 @@ header{background:#fff;border-bottom:1px solid #e5e5e0;position:sticky;top:0;z-i
 <div id="inboxModal" onclick="if(event.target.id==='inboxModal')closeInbox()"><div class="inbox-box"><div class="inbox-header"><b>💬 Wiadomości</b><button class="btn btn-white" onclick="closeInbox()">✕</button></div><div id="inboxList" class="inbox-list"><p style="padding:20px;text-align:center;color:#888">Ładowanie...</p></div></div></div>
 <div id="chatModal" onclick="if(event.target.id==='chatModal')closeChat()"><div class="chat-box"><div class="chat-header"><div><b id="chatTitle">Czat</b><br><small id="chatSubtitle" style="opacity:.7"></small></div><button class="btn btn-white" style="padding:6px 10px" onclick="closeChat()">✕</button></div><div id="chatMessages" class="chat-messages"></div><div class="chat-input"><input id="chatInput" placeholder="Napisz..." onkeypress="if(event.key==='Enter')sendChatMessage()"><button class="btn btn-black" onclick="sendChatMessage()">Wyślij</button></div></div></div>
 
-<div id="addModal" onclick="if(event.target.id==='addModal')closeAdd()"><div class="add-box"><h2 id="addTitle">Dodaj ogłoszenie</h2><div class="form-grid">
+<div id="addModal" onclick="if(event.target.id==='addModal')closeAdd()"><div class="add-box"><h2 id="addTitle" style="font-size:20px">Dodaj ogłoszenie</h2><div class="form-grid">
 <div class="full"><label>Tytuł *</label><input id="addTitleInput"></div>
 <div><label>Marka *</label><select id="addBrand" onchange="updateModelOptions()"><option value="">Wybierz markę *</option><option>BMW</option><option>Audi</option><option>Mercedes</option><option>Volkswagen</option><option>Toyota</option><option>Ford</option><option>Opel</option><option>Skoda</option><option>Mitsubishi</option><option>Honda</option><option>Peugeot</option><option>Renault</option><option>Fiat</option><option>Hyundai</option><option>Kia</option><option>Seat</option><option>Suzuki</option><option>Mazda</option><option>Nissan</option><option>Citroen</option><option>Dacia</option><option>Volvo</option><option>Lexus</option><option>Jeep</option><option>Subaru</option><option>Alfa Romeo</option><option>Chevrolet</option><option>Inna</option></select></div>
 <div><label>Model *</label><select id="addModel"><option value="">Najpierw wybierz markę</option></select></div>
 <div><label>Cena PLN *</label><input id="addPrice" type="number"></div>
 <div><label>Telefon *</label><input id="addPhone" type="tel"></div>
-<div class="full" style="margin-top:8px;padding:12px;background:#f9f9f6;border-radius:10px;border:1px solid #e9e9e6"><label style="font-size:12px;font-weight:900;margin-top:0">📍 ADRES - tylko wybór + GPS</label>
-<button class="btn btn-black" style="width:100%;margin-top:6px;font-size:12px" onclick="getMyLocationForAdd()">📍 Użyj mojej lokalizacji (GPS)</button>
-<div class="addr-row" style="margin-top:10px">
+<div class="full" style="margin-top:10px;padding:14px;background:#f9f9f6;border-radius:10px;border:1px solid #e9e9e6"><label style="font-size:14px;font-weight:900;margin-top:0">📍 ADRES - tylko wybór + GPS</label>
+<button class="btn btn-black" style="width:100%;margin-top:8px;font-size:14px" onclick="getMyLocationForAdd()">📍 Użyj mojej lokalizacji (GPS)</button>
+<div class="addr-row" style="margin-top:12px">
 <div><label>Województwo *</label><select id="addWoj" onchange="updatePowiatOptions()"><option value="">Wybierz województwo *</option><option value="dolnośląskie">Dolnośląskie</option><option value="kujawsko-pomorskie">Kujawsko-pomorskie</option><option value="lubelskie">Lubelskie</option><option value="lubuskie">Lubuskie</option><option value="łódzkie">Łódzkie</option><option value="małopolskie">Małopolskie</option><option value="mazowieckie">Mazowieckie</option><option value="opolskie">Opolskie</option><option value="podkarpackie">Podkarpackie</option><option value="podlaskie">Podlaskie</option><option value="pomorskie">Pomorskie</option><option value="śląskie">Śląskie</option><option value="świętokrzyskie">Świętokrzyskie</option><option value="warmińsko-mazurskie">Warmińsko-mazurskie</option><option value="wielkopolskie">Wielkopolskie</option><option value="zachodniopomorskie">Zachodniopomorskie</option></select></div>
 <div><label>Powiat *</label><select id="addPowiat" onchange="updateMiejscowoscOptions()" disabled><option value="">Najpierw woj.</option></select></div>
 <div><label>Miejscowość *</label><select id="addMiejscowosc" onchange="checkCustomMiejsc()" disabled><option value="">Najpierw powiat</option></select></div>
-</div><div id="customMiejscRow" style="display:none;margin-top:8px"><label>Wpisz miejscowość</label><input id="addMiejscCustom" placeholder="np. Gorzyce"></div><p id="addrInfo" style="font-size:10px;color:#666;margin-top:6px"></p></div>
+</div><div id="customMiejscRow" style="display:none;margin-top:8px"><label>Wpisz miejscowość</label><input id="addMiejscCustom" placeholder="np. Gorzyce"></div><p id="addrInfo" style="font-size:12px;color:#666;margin-top:8px"></p></div>
 <div class="full"><label>Opis</label><textarea id="addDesc" rows="3"></textarea></div>
-<div class="full"><label>Zdjęcia (max 10)</label><input id="addImagesFile" type="file" accept="image/*" multiple onchange="handleFiles(this.files)"><div id="addPreview" class="preview-images"></div><input id="addImagesLinks" placeholder="lub linki https://..." style="margin-top:6px"></div>
-</div><div style="display:flex;gap:8px;margin-top:16px"><button class="btn btn-black" style="flex:1" id="addSubmitBtn" onclick="submitAdd()">Zatwierdź</button><button class="btn btn-white" style="flex:1" onclick="closeAdd()">Anuluj</button></div><p id="addInfo" style="font-size:12px;color:#c00;margin-top:8px"></p></div></div>
+<div class="full"><label>Zdjęcia (max 10)</label><input id="addImagesFile" type="file" accept="image/*" multiple onchange="handleFiles(this.files)"><div id="addPreview" class="preview-images"></div><input id="addImagesLinks" placeholder="lub linki https://..." style="margin-top:8px"></div>
+</div><div style="display:flex;gap:10px;margin-top:18px"><button class="btn btn-black" style="flex:1" id="addSubmitBtn" onclick="submitAdd()">Zatwierdź</button><button class="btn btn-white" style="flex:1" onclick="closeAdd()">Anuluj</button></div><p id="addInfo" style="font-size:13px;color:#c00;margin-top:10px"></p></div></div>
 
-<div id="authModal" onclick="if(event.target.id==='authModal')closeAuth()"><div class="auth-box"><h3>WROOMER.PL - Logowanie</h3><div style="display:flex;gap:8px;margin:12px 0"><button class="btn btn-black" style="flex:1" id="loginTabBtn" onclick="showTab('login')">Logowanie</button><button class="btn btn-white" style="flex:1" id="registerTabBtn" onclick="showTab('register')">Rejestracja</button></div><div id="loginTab"><input id="loginEmail" placeholder="E-mail" style="width:100%;padding:10px;margin-top:8px"><input id="loginPass" type="password" placeholder="Hasło" style="width:100%;padding:10px;margin-top:8px"><button class="btn btn-black" style="width:100%;margin-top:10px" onclick="login()">Zaloguj się</button><p id="loginInfo" style="font-size:11px;color:#c00;margin-top:8px"></p></div><div id="registerTab" style="display:none"><input id="regEmail" placeholder="E-mail" style="width:100%;padding:10px;margin-top:8px"><input id="regPass" type="password" placeholder="Hasło min 6 znaków" style="width:100%;padding:10px;margin-top:8px"><label style="font-size:11px;display:flex;gap:6px;margin-top:8px"><input type="checkbox" id="regCheck"> Regulamin</label><button class="btn btn-yellow" style="width:100%;margin-top:10px" onclick="register()">Załóż konto</button><p id="regInfo" style="font-size:11px;color:#c00;margin-top:8px"></p></div><div id="resetTab" style="display:none"><input id="resetEmail" placeholder="E-mail" style="width:100%;padding:10px;margin-top:8px"><button class="btn btn-black" style="width:100%;margin-top:10px" onclick="sendReset()">Wyślij reset</button><p id="resetInfo" style="font-size:11px;margin-top:8px"></p><button class="btn btn-white" style="width:100%;margin-top:8px" onclick="showTab('login')">Wróć</button></div><p style="font-size:11px;margin-top:10px"><a href="#" onclick="showTab('reset');return false">Nie pamiętasz hasła?</a></p></div></div>
+<div id="authModal" onclick="if(event.target.id==='authModal')closeAuth()"><div class="auth-box"><h3>WROOMER.PL - Logowanie</h3><div style="display:flex;gap:10px;margin:14px 0"><button class="btn btn-black" style="flex:1" id="loginTabBtn" onclick="showTab('login')">Logowanie</button><button class="btn btn-white" style="flex:1" id="registerTabBtn" onclick="showTab('register')">Rejestracja</button></div><div id="loginTab"><input id="loginEmail" placeholder="E-mail" style="width:100%;padding:12px;margin-top:10px"><input id="loginPass" type="password" placeholder="Hasło" style="width:100%;padding:12px;margin-top:10px"><button class="btn btn-black" style="width:100%;margin-top:12px" onclick="login()">Zaloguj się</button><p id="loginInfo" style="font-size:13px;color:#c00;margin-top:10px"></p></div><div id="registerTab" style="display:none"><input id="regEmail" placeholder="E-mail" style="width:100%;padding:12px;margin-top:10px"><input id="regPass" type="password" placeholder="Hasło min 6 znaków" style="width:100%;padding:12px;margin-top:10px"><label style="font-size:13px;display:flex;gap:8px;margin-top:10px"><input type="checkbox" id="regCheck"> Regulamin</label><button class="btn btn-yellow" style="width:100%;margin-top:12px" onclick="register()">Załóż konto</button><p id="regInfo" style="font-size:13px;color:#c00;margin-top:10px"></p></div><div id="resetTab" style="display:none"><input id="resetEmail" placeholder="E-mail" style="width:100%;padding:12px;margin-top:10px"><button class="btn btn-black" style="width:100%;margin-top:12px" onclick="sendReset()">Wyślij reset</button><p id="resetInfo" style="font-size:13px;margin-top:10px"></p><button class="btn btn-white" style="width:100%;margin-top:10px" onclick="showTab('login')">Wróć</button></div><p style="font-size:13px;margin-top:12px"><a href="#" onclick="showTab('reset');return false">Nie pamiętasz hasła?</a></p></div></div>
 
 <script>
 var allAds=[], currentAd=null, editingAd=null, userLocationCoords=null, searchLocationCoords=null, selectedImagesBase64=[], locTimeout=null, currentUser=null, authToken=null, userRealLocationName='';
@@ -212,128 +213,26 @@ var MIEJSCOWOSCI = {'wodzisławski': ['Wodzisław Śląski','Gorzyce','Gorzyczki
 var KNOWN_COORDS = {'gorzyce': {lat:49.962, lng:18.397},'rydułtowy': {lat:50.058, lng:18.405},'rydultowy': {lat:50.058, lng:18.405},'ryhultowy': {lat:50.058, lng:18.405},'wodzisław śląski': {lat:50.022, lng:18.456},'radlin': {lat:50.041, lng:18.468},'pszów': {lat:50.045, lng:18.394},'rybnik': {lat:50.097, lng:18.542},'racibórz': {lat:50.091, lng:18.219},'katowice': {lat:50.264, lng:19.023},'warszawa': {lat:52.229, lng:21.012},'kraków': {lat:50.064, lng:19.945},'wrocław': {lat:51.107, lng:17.038},'poznań': {lat:52.406, lng:16.925}};
 function getCoordsForPlace(name){ if(!name) return null; var n=name.toLowerCase().trim(); if(KNOWN_COORDS[n]) return KNOWN_COORDS[n]; for(var k in KNOWN_COORDS){ if(n.indexOf(k)!==-1 || k.indexOf(n)!==-1) return KNOWN_COORDS[k]; } return null; }
 function ensureAdCoords(ad){ if(ad.lat && ad.lng) return ad; var loc=(ad.location||ad.city||'').toLowerCase(); var c=getCoordsForPlace(loc); if(c){ ad.lat=c.lat; ad.lng=c.lng; } else { var parts=loc.split(','); for(var i=0;i<parts.length;i++){ var cc=getCoordsForPlace(parts[i].trim()); if(cc){ ad.lat=cc.lat; ad.lng=cc.lng; break; } } } return ad; }
-function showImage(idx){
- if(!galleryImages.length) return;
- if(idx<0) idx=galleryImages.length-1;
- if(idx>=galleryImages.length) idx=0;
- currentImageIndex=idx;
- var img=document.getElementById('detailImg');
- img.style.opacity='0';
- setTimeout(function(){ img.src=galleryImages[currentImageIndex]; img.style.opacity='1'; }, 80);
- document.getElementById('galleryCounter').innerText=(currentImageIndex+1)+' / '+galleryImages.length;
- var dots=document.getElementById('galleryDots');
- var dh=''; for(var i=0;i<galleryImages.length;i++){ dh+='<span class="'+(i===currentImageIndex?'active':'')+'" onclick="showImage('+i+')"></span>'; } dots.innerHTML=dh;
- var thumbs=document.querySelectorAll('#detailImages img');
- for(var t=0;t<thumbs.length;t++){ thumbs[t].classList.toggle('active', t===currentImageIndex); thumbs[t].style.borderColor=t===currentImageIndex?'#ffcb00':'transparent'; }
-}
+function showImage(idx){ if(!galleryImages.length) return; if(idx<0) idx=galleryImages.length-1; if(idx>=galleryImages.length) idx=0; currentImageIndex=idx; var img=document.getElementById('detailImg'); img.style.opacity='0'; setTimeout(function(){ img.src=galleryImages[currentImageIndex]; img.style.opacity='1'; }, 80); document.getElementById('galleryCounter').innerText=(currentImageIndex+1)+' / '+galleryImages.length; var dots=document.getElementById('galleryDots'); var dh=''; for(var i=0;i<galleryImages.length;i++){ dh+='<span class="'+(i===currentImageIndex?'active':'')+'" onclick="showImage('+i+')"></span>'; } dots.innerHTML=dh; var thumbs=document.querySelectorAll('#detailImages img'); for(var t=0;t<thumbs.length;t++){ thumbs[t].classList.toggle('active', t===currentImageIndex); thumbs[t].style.borderColor=t===currentImageIndex?'#ffcb00':'transparent'; } }
 function nextImage(e){ if(e) e.stopPropagation(); showImage(currentImageIndex+1); }
 function prevImage(e){ if(e) e.stopPropagation(); showImage(currentImageIndex-1); }
-document.addEventListener('DOMContentLoaded', function(){
- var wrap=document.getElementById('galleryWrap');
- if(!wrap) return;
- wrap.addEventListener('touchstart', function(e){ touchStartX=e.changedTouches[0].screenX; }, {passive:true});
- wrap.addEventListener('touchend', function(e){ var touchEndX=e.changedTouches[0].screenX; var diff=touchStartX-touchEndX; if(Math.abs(diff)>50){ if(diff>0) nextImage(); else prevImage(); } }, {passive:true});
- document.addEventListener('keydown', function(e){ var detail=document.getElementById('detail'); if(detail.style.display!=='flex') return; if(e.key==='ArrowRight') nextImage(); if(e.key==='ArrowLeft') prevImage(); if(e.key==='Escape') closeDetail(); });
-});
-function selectChannel(ch){
- currentChannel=ch;
- document.querySelectorAll('.msg-channel').forEach(function(el){ el.classList.remove('active'); });
- document.querySelector('.msg-channel[data-channel="'+ch+'"]').classList.add('active');
- var btn=document.getElementById('sendMsgBtn');
- var texts={sms:'💬 Wyślij SMS', messenger:'💙 Messenger', whatsapp:'🟢 WhatsApp', wroomer:'⭐ Wyślij WROOMER.PL'};
- btn.innerText=texts[ch]||'Wyślij';
- btn.className='btn '+(ch==='whatsapp'?'btn-green':ch==='messenger'?'btn-blue':ch==='sms'?'btn-orange':'btn-black');
- btn.style.flex='1'; btn.style.padding='8px'; btn.style.fontSize='11px';
-}
-function getCleanPhone(){
- var n=currentAd&&currentAd.phone; if(!n) return null;
- var clean=n.replace(/\s/g,'').replace(/-/g,'');
- if(clean.indexOf('+')!==0){ if(clean.length===9) clean='+48'+clean; else if(clean.indexOf('00')===0) clean='+'+clean.substring(2); else if(clean.indexOf('48')===0) clean='+'+clean; else clean='+48'+clean; }
- return clean;
-}
-function getMessageWithLink(){
- var txt=document.getElementById('msgText').value.trim();
- if(!txt) txt='Cześć! Czy ogłoszenie jest aktualne?';
- var title=currentAd? currentAd.title : '';
- var price=currentAd? currentAd.price : '';
- var loc=currentAd? (currentAd.location||'') : '';
- var url=window.location.href;
- var full='Cześć! 👋\nZainteresowało mnie Twoje ogłoszenie na WROOMER.PL:\n*'+title+'*\n💰 '+price+' PLN\n📍 '+loc+'\n\nMoja wiadomość:\n'+txt+'\n\nLink: '+url;
- return {raw:txt, full:full, title:title, url:url};
-}
-function sendMessage(){
- var phone=getCleanPhone();
- var msg=getMessageWithLink();
- if(!msg.raw){ document.getElementById('msgInfo').innerText='Wpisz wiadomość!'; return; }
- if(currentChannel==='sms'){
-  if(!phone){ alert('Brak numeru'); return; }
-  window.location.href='sms:'+phone+'?body='+encodeURIComponent(msg.full);
-  document.getElementById('msgInfo').innerText='✅ Otwieram SMS...';
- } else if(currentChannel==='whatsapp'){
-  if(!phone){ alert('Brak numeru'); return; }
-  window.open('https://wa.me/'+phone.replace('+','').replace(/\s/g,'')+'?text='+encodeURIComponent(msg.full), '_blank');
-  document.getElementById('msgInfo').innerText='✅ Otwieram WhatsApp...';
- } else if(currentChannel==='messenger'){
-  navigator.clipboard.writeText(msg.full).then(function(){ document.getElementById('msgInfo').innerText='✅ Skopiowano! Otwieram Messenger.'; });
-  window.open('https://www.messenger.com/', '_blank');
- } else if(currentChannel==='wroomer'){
-  if(!currentUser){ alert('Zaloguj się!'); openAuth(); return; }
-  if(currentAd && currentAd.owner_id===currentUser.id){ alert('Nie możesz pisać do siebie!'); return; }
-  sendWroomerMessage(msg.raw);
- }
-}
-function sendWroomerMessage(text){
- if(!currentAd || !currentUser) return;
- var btn=document.getElementById('sendMsgBtn');
- btn.disabled=true; btn.innerText='Wysyłam...';
- var payload={ad_id: currentAd.id, ad_title: currentAd.title, sender_id: currentUser.id, sender_email: currentUser.email, receiver_id: currentAd.owner_id, message: text, created_at: new Date().toISOString(), is_read: false};
- fetch(SUPABASE_URL+'/rest/v1/messages',{method:'POST',headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+authToken,'Content-Type':'application/json','Prefer':'return=representation'},body:JSON.stringify(payload)}).then(function(res){
-  if(!res.ok){ return res.text().then(function(t){ if(t.indexOf('messages')!==-1 || t.indexOf('does not exist')!==-1){ var localMsgs=JSON.parse(localStorage.getItem('wroomer_messages')||'[]'); localMsgs.push(payload); localStorage.setItem('wroomer_messages', JSON.stringify(localMsgs)); throw new Error('TABELA_MESSAGES_BRAK'); } else throw new Error(t); }); }
-  return res.json();
- }).then(function(){ btn.disabled=false; btn.innerText='⭐ Wyślij WROOMER.PL'; document.getElementById('msgInfo').innerText='✅ Wysłano przez WROOMER.PL!'; document.getElementById('msgText').value=''; setTimeout(function(){ alert('✅ Wiadomość wysłana!'); }, 300); }).catch(function(e){ btn.disabled=false; btn.innerText='⭐ Wyślij WROOMER.PL'; if(e.message==='TABELA_MESSAGES_BRAK'){ document.getElementById('msgInfo').innerHTML='⚠️ Zapisano lokalnie. Dodaj tabelę messages w Supabase SQL Editor żeby działało globalnie.'; document.getElementById('msgText').value=''; } else { document.getElementById('msgInfo').innerText='Błąd: '+e.message; } });
-}
+document.addEventListener('DOMContentLoaded', function(){ var wrap=document.getElementById('galleryWrap'); if(!wrap) return; wrap.addEventListener('touchstart', function(e){ touchStartX=e.changedTouches[0].screenX; }, {passive:true}); wrap.addEventListener('touchend', function(e){ var touchEndX=e.changedTouches[0].screenX; var diff=touchStartX-touchEndX; if(Math.abs(diff)>50){ if(diff>0) nextImage(); else prevImage(); } }, {passive:true}); document.addEventListener('keydown', function(e){ var detail=document.getElementById('detail'); if(detail.style.display!=='flex') return; if(e.key==='ArrowRight') nextImage(); if(e.key==='ArrowLeft') prevImage(); if(e.key==='Escape') closeDetail(); }); });
+function selectChannel(ch){ currentChannel=ch; document.querySelectorAll('.msg-channel').forEach(function(el){ el.classList.remove('active'); }); document.querySelector('.msg-channel[data-channel="'+ch+'"]').classList.add('active'); var btn=document.getElementById('sendMsgBtn'); var texts={sms:'💬 Wyślij SMS', messenger:'💙 Messenger', whatsapp:'🟢 WhatsApp', wroomer:'⭐ Wyślij WROOMER.PL'}; btn.innerText=texts[ch]||'Wyślij'; btn.className='btn '+(ch==='whatsapp'?'btn-green':ch==='messenger'?'btn-blue':ch==='sms'?'btn-orange':'btn-black'); btn.style.flex='1'; }
+function getCleanPhone(){ var n=currentAd&&currentAd.phone; if(!n) return null; var clean=n.replace(/\s/g,'').replace(/-/g,''); if(clean.indexOf('+')!==0){ if(clean.length===9) clean='+48'+clean; else if(clean.indexOf('00')===0) clean='+'+clean.substring(2); else if(clean.indexOf('48')===0) clean='+'+clean; else clean='+48'+clean; } return clean; }
+function getMessageWithLink(){ var txt=document.getElementById('msgText').value.trim(); if(!txt) txt='Cześć! Czy ogłoszenie jest aktualne?'; var title=currentAd? currentAd.title : ''; var price=currentAd? currentAd.price : ''; var loc=currentAd? (currentAd.location||'') : ''; var url=window.location.href; var full='Cześć! 👋\nZainteresowało mnie Twoje ogłoszenie na WROOMER.PL:\n*'+title+'*\n💰 '+price+' PLN\n📍 '+loc+'\n\nMoja wiadomość:\n'+txt+'\n\nLink: '+url; return {raw:txt, full:full, title:title, url:url}; }
+function sendMessage(){ var phone=getCleanPhone(); var msg=getMessageWithLink(); if(!msg.raw){ document.getElementById('msgInfo').innerText='Wpisz wiadomość!'; return; } if(currentChannel==='sms'){ if(!phone){ alert('Brak numeru'); return; } window.location.href='sms:'+phone+'?body='+encodeURIComponent(msg.full); document.getElementById('msgInfo').innerText='✅ Otwieram SMS...'; } else if(currentChannel==='whatsapp'){ if(!phone){ alert('Brak numeru'); return; } window.open('https://wa.me/'+phone.replace('+','').replace(/\s/g,'')+'?text='+encodeURIComponent(msg.full), '_blank'); document.getElementById('msgInfo').innerText='✅ Otwieram WhatsApp...'; } else if(currentChannel==='messenger'){ navigator.clipboard.writeText(msg.full).then(function(){ document.getElementById('msgInfo').innerText='✅ Skopiowano! Otwieram Messenger.'; }); window.open('https://www.messenger.com/', '_blank'); } else if(currentChannel==='wroomer'){ if(!currentUser){ alert('Zaloguj się!'); openAuth(); return; } if(currentAd && currentAd.owner_id===currentUser.id){ alert('Nie możesz pisać do siebie!'); return; } sendWroomerMessage(msg.raw); } }
+function sendWroomerMessage(text){ if(!currentAd || !currentUser) return; var btn=document.getElementById('sendMsgBtn'); btn.disabled=true; btn.innerText='Wysyłam...'; var payload={ad_id: currentAd.id, ad_title: currentAd.title, sender_id: currentUser.id, sender_email: currentUser.email, receiver_id: currentAd.owner_id, message: text, created_at: new Date().toISOString(), is_read: false}; fetch(SUPABASE_URL+'/rest/v1/messages',{method:'POST',headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+authToken,'Content-Type':'application/json','Prefer':'return=representation'},body:JSON.stringify(payload)}).then(function(res){ if(!res.ok){ return res.text().then(function(t){ if(t.indexOf('messages')!==-1 || t.indexOf('does not exist')!==-1){ var localMsgs=JSON.parse(localStorage.getItem('wroomer_messages')||'[]'); localMsgs.push(payload); localStorage.setItem('wroomer_messages', JSON.stringify(localMsgs)); throw new Error('TABELA_MESSAGES_BRAK'); } else throw new Error(t); }); } return res.json(); }).then(function(){ btn.disabled=false; btn.innerText='⭐ Wyślij WROOMER.PL'; document.getElementById('msgInfo').innerText='✅ Wysłano przez WROOMER.PL!'; document.getElementById('msgText').value=''; setTimeout(function(){ alert('✅ Wiadomość wysłana!'); }, 300); }).catch(function(e){ btn.disabled=false; btn.innerText='⭐ Wyślij WROOMER.PL'; if(e.message==='TABELA_MESSAGES_BRAK'){ document.getElementById('msgInfo').innerHTML='⚠️ Zapisano lokalnie. Dodaj tabelę messages w Supabase.'; document.getElementById('msgText').value=''; } else { document.getElementById('msgInfo').innerText='Błąd: '+e.message; } }); }
 function quickSMS(){ var phone=getCleanPhone(); if(!phone){ alert('Brak numeru'); return; } var msg=getMessageWithLink(); window.location.href='sms:'+phone+'?body='+encodeURIComponent(msg.full); }
 function quickWhatsApp(){ var phone=getCleanPhone(); if(!phone){ alert('Brak numeru'); return; } var msg=getMessageWithLink(); window.open('https://wa.me/'+phone.replace('+','').replace(/\s/g,'')+'?text='+encodeURIComponent(msg.full), '_blank'); }
 function openInbox(){ if(!currentUser){ alert('Zaloguj się!'); openAuth(); return; } document.getElementById('inboxModal').style.display='flex'; loadInbox(); }
 function closeInbox(){ document.getElementById('inboxModal').style.display='none'; }
-function loadInbox(){
- var listEl=document.getElementById('inboxList');
- listEl.innerHTML='<p style="padding:20px;text-align:center">Ładowanie...</p>';
- fetch(SUPABASE_URL+'/rest/v1/messages?or=(receiver_id.eq.'+currentUser.id+',sender_id.eq.'+currentUser.id+')&order=created_at.desc&limit=100',{headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+authToken}}).then(function(r){ if(!r.ok) throw new Error('no table'); return r.json(); }).then(function(msgs){ renderInbox(msgs); updateInboxCount(msgs); }).catch(function(){ var localMsgs=JSON.parse(localStorage.getItem('wroomer_messages')||'[]'); var myMsgs=localMsgs.filter(function(m){ return m.receiver_id===currentUser.id || m.sender_id===currentUser.id; }); myMsgs.sort(function(a,b){ return new Date(b.created_at)-new Date(a.created_at); }); renderInbox(myMsgs); updateInboxCount(myMsgs); });
-}
-function renderInbox(msgs){
- var listEl=document.getElementById('inboxList');
- if(msgs.length===0){ listEl.innerHTML='<p style="padding:20px;text-align:center;color:#888">Brak wiadomości.</p>'; return; }
- var html=''; var groups={}; for(var i=0;i<msgs.length;i++){ var m=msgs[i]; var key=m.ad_id+'_'+(m.sender_id===currentUser.id? m.receiver_id : m.sender_id); if(!groups[key]) groups[key]=[]; groups[key].push(m); }
- for(var k in groups){ var g=groups[k]; var last=g[0]; var unread=g.some(function(x){ return !x.is_read && x.receiver_id===currentUser.id; }); var preview=last.message.slice(0,60); html+='<div class="inbox-item '+(unread?'unread':'')+'" onclick="openChat(\''+k+'\')"><b>'+(last.ad_title||'Ogłoszenie')+'</b> <small>'+new Date(last.created_at).toLocaleString()+'</small><p>'+(last.sender_id===currentUser.id?'Ty: ':'')+preview+'</p><small>'+last.sender_email+'</small> '+(unread?'<span style="background:#ffcb00;padding:2px 6px;border-radius:10px;font-size:9px">NOWA</span>':'')+'</div>'; }
- listEl.innerHTML=html;
-}
+function loadInbox(){ var listEl=document.getElementById('inboxList'); listEl.innerHTML='<p style="padding:20px;text-align:center">Ładowanie...</p>'; fetch(SUPABASE_URL+'/rest/v1/messages?or=(receiver_id.eq.'+currentUser.id+',sender_id.eq.'+currentUser.id+')&order=created_at.desc&limit=100',{headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+authToken}}).then(function(r){ if(!r.ok) throw new Error('no table'); return r.json(); }).then(function(msgs){ renderInbox(msgs); updateInboxCount(msgs); }).catch(function(){ var localMsgs=JSON.parse(localStorage.getItem('wroomer_messages')||'[]'); var myMsgs=localMsgs.filter(function(m){ return m.receiver_id===currentUser.id || m.sender_id===currentUser.id; }); myMsgs.sort(function(a,b){ return new Date(b.created_at)-new Date(a.created_at); }); renderInbox(myMsgs); updateInboxCount(myMsgs); }); }
+function renderInbox(msgs){ var listEl=document.getElementById('inboxList'); if(msgs.length===0){ listEl.innerHTML='<p style="padding:20px;text-align:center;color:#888">Brak wiadomości.</p>'; return; } var html=''; var groups={}; for(var i=0;i<msgs.length;i++){ var m=msgs[i]; var key=m.ad_id+'_'+(m.sender_id===currentUser.id? m.receiver_id : m.sender_id); if(!groups[key]) groups[key]=[]; groups[key].push(m); } for(var k in groups){ var g=groups[k]; var last=g[0]; var unread=g.some(function(x){ return !x.is_read && x.receiver_id===currentUser.id; }); var preview=last.message.slice(0,60); html+='<div class="inbox-item '+(unread?'unread':'')+'" onclick="openChat(\''+k+'\')"><b>'+(last.ad_title||'Ogłoszenie')+'</b> <small>'+new Date(last.created_at).toLocaleString()+'</small><p>'+(last.sender_id===currentUser.id?'Ty: ':'')+preview+'</p><small>'+last.sender_email+'</small> '+(unread?'<span style="background:#ffcb00;padding:2px 6px;border-radius:10px;font-size:11px">NOWA</span>':'')+'</div>'; } listEl.innerHTML=html; }
 function updateInboxCount(msgs){ var unread=msgs.filter(function(m){ return !m.is_read && m.receiver_id===currentUser.id; }).length; var countEl=document.getElementById('inboxCount'); if(unread>0){ countEl.style.display='inline-block'; countEl.innerText=unread; } else { countEl.style.display='none'; } }
-function openChat(groupKey){
- fetch(SUPABASE_URL+'/rest/v1/messages?or=(receiver_id.eq.'+currentUser.id+',sender_id.eq.'+currentUser.id+')&order=created_at.asc&limit=200',{headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+authToken}}).then(function(r){ return r.ok? r.json(): JSON.parse(localStorage.getItem('wroomer_messages')||'[]'); }).then(function(allMsgs){
-  var filtered=allMsgs.filter(function(m){ var key=m.ad_id+'_'+(m.sender_id===currentUser.id? m.receiver_id : m.sender_id); return key===groupKey; });
-  currentChatMessages=filtered; currentChatAd=filtered[0];
-  document.getElementById('chatTitle').innerText=currentChatAd.ad_title||'Czat';
-  document.getElementById('chatSubtitle').innerText='Ogłoszenie: '+(currentChatAd.ad_id||'');
-  renderChatMessages();
-  document.getElementById('chatModal').style.display='flex';
-  document.getElementById('inboxModal').style.display='none';
- });
-}
+function openChat(groupKey){ fetch(SUPABASE_URL+'/rest/v1/messages?or=(receiver_id.eq.'+currentUser.id+',sender_id.eq.'+currentUser.id+')&order=created_at.asc&limit=200',{headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+authToken}}).then(function(r){ return r.ok? r.json(): JSON.parse(localStorage.getItem('wroomer_messages')||'[]'); }).then(function(allMsgs){ var filtered=allMsgs.filter(function(m){ var key=m.ad_id+'_'+(m.sender_id===currentUser.id? m.receiver_id : m.sender_id); return key===groupKey; }); currentChatMessages=filtered; currentChatAd=filtered[0]; document.getElementById('chatTitle').innerText=currentChatAd.ad_title||'Czat'; document.getElementById('chatSubtitle').innerText='Ogłoszenie: '+(currentChatAd.ad_id||''); renderChatMessages(); document.getElementById('chatModal').style.display='flex'; document.getElementById('inboxModal').style.display='none'; }); }
 function closeChat(){ document.getElementById('chatModal').style.display='none'; openInbox(); }
-function renderChatMessages(){
- var box=document.getElementById('chatMessages');
- box.innerHTML='';
- for(var i=0;i<currentChatMessages.length;i++){ var m=currentChatMessages[i]; var mine=m.sender_id===currentUser.id; var div=document.createElement('div'); div.className='chat-msg '+(mine?'mine':'theirs'); div.innerText=m.message; var small=document.createElement('small'); small.style.display='block'; small.style.fontSize='9px'; small.style.opacity='.6'; small.style.marginTop='4px'; small.innerText=new Date(m.created_at).toLocaleTimeString(); div.appendChild(small); box.appendChild(div); }
- box.scrollTop=box.scrollHeight;
-}
-function sendChatMessage(){
- var input=document.getElementById('chatInput');
- var text=input.value.trim();
- if(!text || !currentChatAd) return;
- var payload={ad_id: currentChatAd.ad_id, ad_title: currentChatAd.ad_title, sender_id: currentUser.id, sender_email: currentUser.email, receiver_id: currentChatAd.sender_id===currentUser.id? currentChatAd.receiver_id : currentChatAd.sender_id, message: text, created_at: new Date().toISOString(), is_read: false};
- fetch(SUPABASE_URL+'/rest/v1/messages',{method:'POST',headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+authToken,'Content-Type':'application/json','Prefer':'return=representation'},body:JSON.stringify(payload)}).then(function(r){ if(!r.ok){ var localMsgs=JSON.parse(localStorage.getItem('wroomer_messages')||'[]'); localMsgs.push(payload); localStorage.setItem('wroomer_messages', JSON.stringify(localMsgs)); return [payload]; } return r.json(); }).then(function(){ currentChatMessages.push(payload); input.value=''; renderChatMessages(); });
-}
+function renderChatMessages(){ var box=document.getElementById('chatMessages'); box.innerHTML=''; for(var i=0;i<currentChatMessages.length;i++){ var m=currentChatMessages[i]; var mine=m.sender_id===currentUser.id; var div=document.createElement('div'); div.className='chat-msg '+(mine?'mine':'theirs'); div.innerText=m.message; var small=document.createElement('small'); small.style.display='block'; small.style.fontSize='10px'; small.style.opacity='.6'; small.style.marginTop='4px'; small.innerText=new Date(m.created_at).toLocaleTimeString(); div.appendChild(small); box.appendChild(div); } box.scrollTop=box.scrollHeight; }
+function sendChatMessage(){ var input=document.getElementById('chatInput'); var text=input.value.trim(); if(!text || !currentChatAd) return; var payload={ad_id: currentChatAd.ad_id, ad_title: currentChatAd.ad_title, sender_id: currentUser.id, sender_email: currentUser.email, receiver_id: currentChatAd.sender_id===currentUser.id? currentChatAd.receiver_id : currentChatAd.sender_id, message: text, created_at: new Date().toISOString(), is_read: false}; fetch(SUPABASE_URL+'/rest/v1/messages',{method:'POST',headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+authToken,'Content-Type':'application/json','Prefer':'return=representation'},body:JSON.stringify(payload)}).then(function(r){ if(!r.ok){ var localMsgs=JSON.parse(localStorage.getItem('wroomer_messages')||'[]'); localMsgs.push(payload); localStorage.setItem('wroomer_messages', JSON.stringify(localMsgs)); return [payload]; } return r.json(); }).then(function(){ currentChatMessages.push(payload); input.value=''; renderChatMessages(); }); }
 function updateModelOptions(){ var brand=document.getElementById('addBrand').value; var modelSelect=document.getElementById('addModel'); var list=MODELS[brand] || ['Wybierz markę najpierw']; modelSelect.innerHTML=''; for(var i=0;i<list.length;i++){ var opt=document.createElement('option'); opt.value=list[i]; opt.text=list[i]; modelSelect.appendChild(opt); } var titleInput=document.getElementById('addTitleInput'); if(!titleInput.value && brand){ titleInput.value=brand+' '+(list[0]!=='Inny'?list[0]:''); } }
 function updatePowiatOptions(){ var woj=document.getElementById('addWoj').value; var powiatSelect=document.getElementById('addPowiat'); var list=POWIATY[woj] || []; powiatSelect.innerHTML='<option value="">Wybierz powiat *</option>'; for(var i=0;i<list.length;i++){ var opt=document.createElement('option'); opt.value=list[i]; opt.text=list[i]; powiatSelect.appendChild(opt); } powiatSelect.disabled=list.length===0; document.getElementById('addMiejscowosc').innerHTML='<option value="">Najpierw powiat</option>'; document.getElementById('addMiejscowosc').disabled=true; document.getElementById('customMiejscRow').style.display='none'; if(woj==='śląskie'){ powiatSelect.value='wodzisławski'; updateMiejscowoscOptions(); } }
 function updateMiejscowoscOptions(){ var powiat=document.getElementById('addPowiat').value; var miejsSelect=document.getElementById('addMiejscowosc'); if(!powiat){ miejsSelect.innerHTML='<option value="">Najpierw powiat</option>'; miejsSelect.disabled=true; return; } miejsSelect.disabled=false; document.getElementById('customMiejscRow').style.display='none'; if(MIEJSCOWOSCI[powiat]){ var list=MIEJSCOWOSCI[powiat]; miejsSelect.innerHTML='<option value="">Wybierz miejscowość *</option>'; for(var i=0;i<list.length;i++){ var opt=document.createElement('option'); opt.value=list[i]; opt.text=list[i]; miejsSelect.appendChild(opt); } miejsSelect.innerHTML+='<option value="__custom">➕ Inna miejscowość (wpisz)</option>'; if(powiat==='wodzisławski'){ miejsSelect.value='Gorzyce'; } } else { miejsSelect.innerHTML='<option value="">Wybierz miejscowość *</option><option>Gorzyce</option><option>Wodzisław Śląski</option><option>Rydułtowy</option><option>Rybnik</option><option>Katowice</option><option value="__custom">➕ Inna (wpisz)</option>'; } }
@@ -391,7 +290,7 @@ function renderAds(){
  document.getElementById('resultsInfo').innerText=info;
  var grid=document.getElementById('adsGrid');
  if(filtered.length===0){ grid.innerHTML='<p style="padding:20px">Brak ogłoszeń w promieniu '+radius+'km od '+(userRealLocationName||locQ)+'.</p>'; return; }
- var h=''; for(var i=0;i<filtered.length;i++){var a=filtered[i]; var img=a.image_url||(a.images&&a.images[0])||'https://via.placeholder.com/300x200'; var title=(a.title||'').slice(0,40); var loc=a.location||a.city||''; var dist=a._dist!=null? a._dist.toFixed(1)+' km':''; h+='<div class="card" onclick="openDetail(\''+a.id+'\')"><span class="badge">'+(a.brand||'').toUpperCase()+'</span><img src="'+img+'"><div class="info"><div class="title">'+title+'</div><div class="price">'+(a.price? a.price+' PLN':'')+'</div><div class="loc">'+loc+'</div><div style="font-size:10px;color:#ff7a00;font-weight:700">'+(dist?'📍 '+dist:'')+'</div></div></div>';} grid.innerHTML=h;
+ var h=''; for(var i=0;i<filtered.length;i++){var a=filtered[i]; var img=a.image_url||(a.images&&a.images[0])||'https://via.placeholder.com/300x200'; var title=(a.title||'').slice(0,40); var loc=a.location||a.city||''; var dist=a._dist!=null? a._dist.toFixed(1)+' km':''; h+='<div class="card" onclick="openDetail(\''+a.id+'\')"><span class="badge">'+(a.brand||'').toUpperCase()+'</span><img src="'+img+'"><div class="info"><div class="title">'+title+'</div><div class="price">'+(a.price? a.price+' PLN':'')+'</div><div class="loc">'+loc+'</div><div style="font-size:12px;color:#ff7a00;font-weight:700">'+(dist?'📍 '+dist:'')+'</div></div></div>';} grid.innerHTML=h;
 }
 function getMyLocation(){
  var btn=document.querySelector('button[onclick="getMyLocation()"]');
@@ -438,7 +337,7 @@ function openDetail(id){
  document.getElementById('detailImg').src=galleryImages[0];
  document.getElementById('galleryCounter').innerText='1 / '+galleryImages.length;
  var dots=document.getElementById('galleryDots'); var dh=''; for(var i=0;i<galleryImages.length;i++){ dh+='<span class="'+(i===0?'active':'')+'" onclick="showImage('+i+')"></span>'; } dots.innerHTML=dh;
- var thumbsHtml=''; for(var t=0;t<galleryImages.length;t++){ thumbsHtml+='<img src="'+galleryImages[t]+'" class="'+(t===0?'active':'')+'" onclick="showImage('+t+')" style="width:56px;height:42px;object-fit:cover;border-radius:6px;cursor:pointer;border:2px solid '+(t===0?'#ffcb00':'transparent')+'">'; } document.getElementById('detailImages').innerHTML=thumbsHtml;
+ var thumbsHtml=''; for(var t=0;t<galleryImages.length;t++){ thumbsHtml+='<img src="'+galleryImages[t]+'" class="'+(t===0?'active':'')+'" onclick="showImage('+t+')" style="width:64px;height:48px;object-fit:cover;border-radius:6px;cursor:pointer;border:2px solid '+(t===0?'#ffcb00':'transparent')+'">'; } document.getElementById('detailImages').innerHTML=thumbsHtml;
  var arrows=document.querySelectorAll('.gallery-arrow'); for(var aa=0;aa<arrows.length;aa++){ arrows[aa].style.display=galleryImages.length<=1?'none':'flex'; }
  document.getElementById('detailTitle').innerText=a.title||''; document.getElementById('detailPrice').innerText=a.price? a.price+' PLN':''; document.getElementById('detailLoc').innerText=(a.location||a.city||'')+(a._dist? ' • '+a._dist.toFixed(1)+' km od Ciebie':''); document.getElementById('detailDesc').innerText=a.description||''; document.getElementById('phoneNumber').innerText='📞 '+(a.phone||'Brak'); document.getElementById('phoneNumber').style.display='none'; document.getElementById('msgText').value=''; document.getElementById('msgInfo').innerText=''; selectChannel('wroomer'); document.getElementById('detail').style.display='flex';
 }
