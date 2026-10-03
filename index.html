@@ -15,6 +15,7 @@ header{background:#fff;border-bottom:1px solid #e5e5e0;position:sticky;top:0;z-i
 .search-bar input.search-main{flex:2;min-width:180px}
 .btn{border:0;cursor:pointer;padding:10px 16px;border-radius:8px;font-weight:700;font-size:13px;white-space:nowrap}
 .btn-black{background:#111;color:#fff}.btn-yellow{background:#ffcb00;color:#111}.btn-white{background:#fff;border:1px solid #ddd}
+.btn:disabled{opacity:.5}
 .grid{max-width:1280px;margin:18px auto;padding:0 12px;display:grid;grid-template-columns:repeat(auto-fill,minmax(198px,1fr));gap:12px}
 .card{background:#fff;border-radius:12px;overflow:hidden;border:1px solid #e9e9e6;cursor:pointer;position:relative}
 .card img{width:100%;height:144px;object-fit:contain;background:#f4f4f4}
@@ -34,17 +35,24 @@ header{background:#fff;border-bottom:1px solid #e5e5e0;position:sticky;top:0;z-i
 .add-box label{font-size:11px;font-weight:700;color:#444;margin-top:6px;display:block}
 .add-box input, .add-box textarea{width:100%;padding:11px;border:1px solid #ddd;border-radius:8px;margin-top:4px;font-size:13px}
 .preview-images{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}.preview-images img{width:80px;height:80px;object-fit:cover;border-radius:8px;border:1px solid #ddd}
+.tabs{display:flex;gap:6px;margin:12px 0}.tab{flex:1;padding:10px;border:1px solid #ddd;border-radius:8px;background:#fff;cursor:pointer;font-weight:700;font-size:13px}.tab.active{background:#111;color:#fff;border-color:#111}
 #resultsInfo{max-width:1280px;margin:10px auto 0;padding:0 12px;font-size:12px;color:#666}
 </style>
 <script>
-// === WSZYSTKIE FUNKCJE UI NA SAMEJ GÓRZE - DZIAŁAJĄ NAWET BEZ BAZY ===
-let allAds=[], currentAd=null, userLocationCoords=null, searchLocationCoords=null, selectedImagesBase64=[], locTimeout=null;
-function openAdd(){ document.getElementById('addModal').style.display='flex'; }
+// UI ZAWSZE DZIAŁA - DEFINIOWANE NA GÓRZE
+let allAds=[], currentAd=null, editingAd=null, userLocationCoords=null, searchLocationCoords=null, selectedImagesBase64=[], locTimeout=null, currentUser=null, authToken=null;
+function openAdd(){ 
+ if(!currentUser){ alert('Musisz się zalogować żeby dodać ogłoszenie!'); openAuth(); return; }
+ editingAd=null; document.getElementById('addTitle').innerText='Dodaj ogłoszenie';
+ ['addTitleInput','addBrand','addModel','addPrice','addLocation','addPhone','addDesc','addImagesLinks'].forEach(id=>{const e=document.getElementById(id); if(e) e.value='';});
+ selectedImagesBase64=[]; const p=document.getElementById('addPreview'); if(p) p.innerHTML=''; document.getElementById('addInfo').innerText=''; document.getElementById('addModal').style.display='flex'; 
+}
 function closeAdd(){ document.getElementById('addModal').style.display='none'; }
-function openAuth(){ document.getElementById('authModal').style.display='flex'; }
+function openAuth(){ document.getElementById('authModal').style.display='flex'; showTab('login'); }
 function closeAuth(){ document.getElementById('authModal').style.display='none'; }
-function closeDetail(){ document.getElementById('detail').style.display='none'; }
-function clearFilters(){ document.getElementById('searchInput').value=''; document.getElementById('locationInput').value=''; document.getElementById('radiusFilter').value='25'; renderAds(); }
+function showTab(n){ document.querySelectorAll('.auth-tab-content').forEach(d=>d.style.display='none'); document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active')); const el=document.getElementById(n+'Tab'); if(el) el.style.display='block'; const b=document.getElementById(n+'TabBtn'); if(b) b.classList.add('active'); }
+function closeDetail(){ document.getElementById('detail').style.display='none'; currentAd=null; }
+function clearFilters(){ document.getElementById('searchInput').value=''; document.getElementById('locationInput').value=''; document.getElementById('radiusFilter').value='25'; document.getElementById('brandFilter').value=''; renderAds(); }
 function showPhone(){ const n=currentAd?.phone; if(!n){alert('Brak numeru');return} document.getElementById('phoneNumber').style.display='block'; document.getElementById('phoneNumber').innerText='📞 '+n; }
 function contactCall(){ const n=currentAd?.phone; if(!n){showPhone();return} location.href='tel:'+n.replace(/\s/g,''); }
 function contactSms(){ const n=currentAd?.phone; if(!n){alert('Brak');return} location.href='sms:'+n.replace(/\s/g,''); }
@@ -61,36 +69,48 @@ function onLocationInput(){
  locTimeout=setTimeout(()=>{ fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(v)}&limit=1&countrycodes=pl`).then(r=>r.json()).then(j=>{ if(j[0]) searchLocationCoords={lat:parseFloat(j[0].lat),lng:parseFloat(j[0].lon)}; else searchLocationCoords=null; renderAds(); }).catch(()=>{searchLocationCoords=null; renderAds();}); }, 500);
  renderAds();
 }
+function getMyLocation(){ if(!navigator.geolocation){alert('Brak geo');return} navigator.geolocation.getCurrentPosition(p=>{ userLocationCoords={lat:p.coords.latitude,lng:p.coords.longitude}; searchLocationCoords=userLocationCoords; document.getElementById('locationInput').value='Blisko mnie'; document.getElementById('radiusFilter').value='25'; renderAds(); }); }
 function renderAds(){
  let filtered=[...allAds];
  const q=(document.getElementById('searchInput').value||'').toLowerCase().trim();
+ const brand=(document.getElementById('brandFilter')?.value||'').toLowerCase().trim();
  const locQ=(document.getElementById('locationInput').value||'').toLowerCase().trim();
  const radius=parseInt(document.getElementById('radiusFilter').value||'25');
- if(q) filtered=filtered.filter(a=> (a.title||'').toLowerCase().includes(q));
+ if(q) filtered=filtered.filter(a=> (a.title||'').toLowerCase().includes(q) || (a.description||'').toLowerCase().includes(q));
+ if(brand) filtered=filtered.filter(a=> (a.brand||'').toLowerCase().includes(brand) || (a.title||'').toLowerCase().includes(brand));
  let center=null; if(locQ.includes('blisko')&&userLocationCoords) center=userLocationCoords; else if(searchLocationCoords) center=searchLocationCoords;
  if(center && locQ && radius!==9999){
-  filtered=filtered.filter(a=>{ const d=getDistance(center,a.lat,a.lng); if(d===null) return (a.location||'').toLowerCase().includes(locQ); return d<=radius; });
+  filtered=filtered.filter(a=>{ const d=getDistance(center,a.lat,a.lng); if(d===null) return (a.location||'').toLowerCase().includes(locQ) || (a.city||'').toLowerCase().includes(locQ); return d<=radius; });
   filtered.forEach(a=>a._dist=getDistance(center,a.lat,a.lng));
  }else if(locQ && radius!==9999){ filtered=filtered.filter(a=> (a.location||'').toLowerCase().includes(locQ) || (a.city||'').toLowerCase().includes(locQ)); }
- document.getElementById('resultsInfo').innerText=`Znaleziono ${filtered.length} z ${allAds.length} ogłoszeń${locQ?` w ${radius}km od ${locQ}`:''}`;
+ document.getElementById('resultsInfo').innerText=`Znaleziono ${filtered.length} z ${allAds.length} ogłoszeń${locQ?` w ${radius===9999?'cała Polska':radius+'km od '+locQ}:''}${q?` dla "${q}"`:''}`;
  const grid=document.getElementById('adsGrid');
- if(filtered.length===0){ grid.innerHTML='<p style="padding:20px">Brak ogłoszeń w tym promieniu. Ustaw Cała Polska lub Wyczyść.<br><br>Jeśli w Supabase masz ogłoszenia a tu nie ma, to RLS blokuje - uruchom w Supabase SQL:<br><code>ALTER TABLE ads DISABLE ROW LEVEL SECURITY;</code></p>'; return }
+ if(filtered.length===0){ grid.innerHTML='<p style="padding:20px">Brak ogłoszeń w tym promieniu. Ustaw Cała Polska lub Wyczyść.</p>'; return }
  grid.innerHTML=filtered.map(a=>{
   const img=a.image_url || (a.images&&a.images[0]) || 'https://via.placeholder.com/300x200?text=WROOMER';
   const title=(a.title||'Bez tytułu').slice(0,40);
   const loc=a.location||a.city||'';
   const dist=a._dist!=null? a._dist.toFixed(1)+' km':'';
-  return `<div class="card" onclick="openDetail('${a.id}')"><img src="${img}"><div class="info"><div class="title">${title}</div><div class="price">${a.price? a.price+' PLN':''}</div><div class="loc">${loc}</div><div class="dist">${dist}</div></div></div>`;
+  return `<div class="card" onclick="openDetail('${a.id}')">${a.brand?`<span class="badge">${(a.brand||'').toUpperCase()}</span>`:''}<img src="${img}" loading="lazy"><div class="info"><div class="title">${title}</div><div class="price">${a.price? a.price+' PLN':''}</div><div class="loc">${loc}</div><div class="dist">${dist?`📍 ${dist}`:''}</div></div></div>`;
  }).join('');
 }
-function getMyLocation(){ if(!navigator.geolocation){alert('Brak geo');return} navigator.geolocation.getCurrentPosition(p=>{ userLocationCoords={lat:p.coords.latitude,lng:p.coords.longitude}; searchLocationCoords=userLocationCoords; document.getElementById('locationInput').value='Blisko mnie'; renderAds(); }); }
 function openDetail(id){
  const a=allAds.find(x=>String(x.id)===String(id)); if(!a)return; currentAd=a;
  document.getElementById('detailImg').src=a.image_url || (a.images&&a.images[0]) || 'https://via.placeholder.com/800x600';
- document.getElementById('detailTitle').innerText=a.title||''; document.getElementById('detailPrice').innerText=a.price? a.price+' PLN':''; document.getElementById('detailLoc').innerText=a.location||a.city||''; document.getElementById('detailDesc').innerText=a.description||'';
+ document.getElementById('detailTitle').innerText=a.title||''; document.getElementById('detailPrice').innerText=a.price? a.price+' PLN':''; document.getElementById('detailLoc').innerText=(a.location||a.city||'') + (a._dist? ` • ${a._dist.toFixed(1)} km`:''); document.getElementById('detailDesc').innerText=a.description||'';
  document.getElementById('detailImages').innerHTML=(a.images||[]).map(s=>`<img src="${s}" style="width:80px;height:60px;object-fit:cover;border-radius:8px;cursor:pointer" onclick="document.getElementById('detailImg').src='${s}'">`).join('');
+ document.getElementById('detailSeller').innerText=`Z ${a.location||a.city||'Polski'} • ${new Date(a.created_at).toLocaleDateString('pl-PL')}`;
  document.getElementById('phoneNumber').innerText='📞 '+(a.phone||'Brak'); document.getElementById('phoneNumber').style.display='none';
  document.getElementById('detail').style.display='flex';
+}
+function openEditFromDetail(){
+ if(!currentAd) return; editingAd=currentAd;
+ document.getElementById('addTitle').innerText='Edytuj ogłoszenie';
+ document.getElementById('addTitleInput').value=currentAd.title||''; document.getElementById('addBrand').value=currentAd.brand||''; document.getElementById('addModel').value=currentAd.model||'';
+ document.getElementById('addPrice').value=currentAd.price||''; document.getElementById('addLocation').value=currentAd.location||''; document.getElementById('addPhone').value=currentAd.phone||'';
+ document.getElementById('addDesc').value=currentAd.description||''; document.getElementById('addImagesLinks').value=(currentAd.images||[]).join(', ');
+ selectedImagesBase64=[...(currentAd.images||[])]; renderPreview();
+ document.getElementById('addModal').style.display='flex'; closeDetail();
 }
 </script>
 </head>
@@ -100,57 +120,176 @@ function openDetail(id){
 <div class="logo" onclick="location.reload()">WROOMER<span>.PL</span></div>
 <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
 <button class="btn btn-yellow" onclick="openAdd()">+ Dodaj</button>
-<button class="btn btn-black" onclick="openAuth()">Zaloguj</button>
+<button id="myBtn" class="btn btn-white" style="display:none" onclick="filterMy()">Moje</button>
+<button id="authBtn" class="btn btn-black" onclick="openAuth()">Zaloguj / Rejestracja</button>
+<span id="userEmail" style="display:none;font-size:12px;font-weight:700;max-width:180px;overflow:hidden;text-overflow:ellipsis"></span>
+<button id="logoutBtn" class="btn btn-white" style="display:none" onclick="logout()">Wyloguj</button>
 </div>
 </div>
 <div class="search-bar">
-<input id="searchInput" class="search-main" placeholder="Szukaj: BMW, Audi..." oninput="renderAds()">
+<input id="searchInput" class="search-main" placeholder="Szukaj: np. BMW, Audi A4..." oninput="renderAds()">
+<select id="brandFilter" onchange="renderAds()"><option value="">Wszystkie marki</option><option>BMW</option><option>Audi</option><option>Mercedes</option><option>Volkswagen</option><option>Toyota</option><option>Ford</option><option>Opel</option><option>Skoda</option><option>Mitsubishi</option></select>
 <input id="locationInput" placeholder="Miejscowość: Gorzyce, Katowice..." oninput="onLocationInput()">
-<select id="radiusFilter" onchange="renderAds()"><option value="0">+0 km</option><option value="5">+5 km</option><option value="25" selected>+25 km</option><option value="50">+50 km</option><option value="100">+100 km</option><option value="9999">Cała Polska</option></select>
+<select id="radiusFilter" onchange="renderAds()"><option value="0">+0 km</option><option value="5">+5 km</option><option value="10">+10 km</option><option value="25" selected>+25 km</option><option value="50">+50 km</option><option value="100">+100 km</option><option value="200">+200 km</option><option value="9999">Cała Polska</option></select>
 <button class="btn btn-white" onclick="getMyLocation()">📍 Blisko mnie</button>
+<select id="sortFilter" onchange="renderAds()"><option value="newest">Najnowsze</option><option value="price_asc">Cena rosnąco</option><option value="price_desc">Cena malejąco</option><option value="distance">Najbliższe</option></select>
 <button class="btn btn-white" onclick="clearFilters()">Wyczyść</button>
 </div>
 </header>
 
-<div id="resultsInfo">Ładowanie...</div>
-<div id="adsGrid" class="grid"><p style="padding:20px">Ładowanie ogłoszeń...</p></div>
+<div id="resultsInfo">Ładowanie ogłoszeń...</div>
+<div id="adsGrid" class="grid"></div>
 
-<div id="detail" onclick="if(event.target.id==='detail')closeDetail()"><div class="detail-box"><img id="detailImg" class="detail-img"><div class="detail-content"><h2 id="detailTitle"></h2><p id="detailPrice" style="font-weight:900"></p><p id="detailLoc"></p><p id="detailDesc" style="white-space:pre-wrap"></p><div id="detailImages" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"></div><div style="margin-top:12px"><p id="phoneNumber" style="font-weight:900;display:none"></p><div style="display:flex;gap:8px;margin-top:8px"><button class="btn btn-black" onclick="contactCall()">📞 Zadzwoń</button><button class="btn btn-white" onclick="showPhone()">Pokaż numer</button><button class="btn btn-black" onclick="closeDetail()">Zamknij</button></div></div></div></div></div>
+<div id="detail" onclick="if(event.target.id==='detail')closeDetail()"><div class="detail-box"><img id="detailImg" class="detail-img"><div class="detail-content"><h2 id="detailTitle"></h2><p id="detailPrice" style="font-weight:900;margin:8px 0;font-size:18px"></p><p id="detailLoc" style="font-size:13px;color:#666"></p><p id="detailDesc" style="font-size:14px;color:#444;margin-top:10px;white-space:pre-wrap"></p><div id="detailImages" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"></div><div class="contact-box"><h4>📞 Kontakt ze sprzedającym</h4><p id="detailSeller" style="font-size:12px;color:#666"></p><div class="contact-btns"><button class="btn btn-black" onclick="contactCall()">📞 Zadzwoń</button><button class="btn btn-white" onclick="contactSms()">💬 SMS</button><button class="btn btn-white" style="background:#25D366;color:#fff" onclick="contactWhats()">WhatsApp</button><button class="btn btn-yellow" onclick="showPhone()">Pokaż numer</button></div><p id="phoneNumber" style="margin-top:10px;font-weight:900;display:none"></p></div><div style="margin-top:12px;display:flex;gap:8px"><button id="editBtn" class="btn btn-yellow" style="display:none" onclick="openEditFromDetail()">Edytuj</button><button id="deleteBtn" class="btn btn-white" style="display:none" onclick="deleteAd()">Usuń</button><button class="btn btn-black" onclick="closeDetail()">Zamknij</button></div></div></div></div>
 
-<div id="addModal" onclick="if(event.target.id==='addModal')closeAdd()"><div class="add-box"><h2>Dodaj ogłoszenie</h2><input id="addTitleInput" placeholder="Tytuł *" style="width:100%;padding:10px;margin-top:8px;border:1px solid #ddd;border-radius:8px"><input id="addPrice" placeholder="Cena PLN *" type="number" style="width:100%;padding:10px;margin-top:8px;border:1px solid #ddd;border-radius:8px"><input id="addLocation" placeholder="Miejscowość * np. Gorzyce" style="width:100%;padding:10px;margin-top:8px;border:1px solid #ddd;border-radius:8px"><input id="addPhone" placeholder="Telefon *" style="width:100%;padding:10px;margin-top:8px;border:1px solid #ddd;border-radius:8px"><textarea id="addDesc" placeholder="Opis" style="width:100%;padding:10px;margin-top:8px;border:1px solid #ddd;border-radius:8px"></textarea><input id="addImagesFile" type="file" accept="image/*" multiple onchange="handleFiles(this.files)" style="margin-top:8px"><div id="addPreview" class="preview-images"></div><div style="display:flex;gap:8px;margin-top:12px"><button class="btn btn-black" style="flex:1" onclick="alert('Dodam zapis po naprawieniu ładowania')">Zatwierdź</button><button class="btn btn-white" style="flex:1" onclick="closeAdd()">Anuluj</button></div><p id="addInfo" style="font-size:12px;color:#c00;margin-top:8px">Tryb naprawy - najpierw musimy naprawić ładowanie ogłoszeń</p></div></div>
+<div id="addModal" onclick="if(event.target.id==='addModal')closeAdd()"><div class="add-box"><h2 id="addTitle">Dodaj ogłoszenie</h2><div class="form-grid"><div class="full"><label>Tytuł ogłoszenia *</label><input id="addTitleInput" placeholder="np. Mitsubishi Colt 1.3"></div><div><label>Marka</label><input id="addBrand" placeholder="Mitsubishi"></div><div><label>Model</label><input id="addModel" placeholder="Colt"></div><div><label>Cena PLN *</label><input id="addPrice" type="number" placeholder="7900"></div><div><label>Miejscowość *</label><input id="addLocation" placeholder="np. Gorzyce - wymagane!"></div><div><label>Telefon *</label><input id="addPhone" type="tel" placeholder="600 123 456"></div><div class="full"><label>Opis</label><textarea id="addDesc" rows="3" placeholder="Rok, przebieg, paliwo..."></textarea></div><div class="full"><label>Zdjęcia (max 10) - wybierz z telefonu</label><input id="addImagesFile" type="file" accept="image/*" multiple onchange="handleFiles(this.files)"><div id="addPreview" class="preview-images"></div><p style="font-size:11px;color:#888;margin-top:6px">Lub wklej linki:</p><input id="addImagesLinks" placeholder="https://..."></div></div><div style="display:flex;gap:8px;margin-top:16px"><button class="btn btn-black" style="flex:1" id="addSubmitBtn" onclick="submitAdd()">Zatwierdź</button><button class="btn btn-white" style="flex:1" onclick="closeAdd()">Anuluj</button></div><p id="addInfo" style="font-size:12px;color:#c00;margin-top:8px"></p></div></div>
 
-<div id="authModal" onclick="if(event.target.id==='authModal')closeAuth()"><div class="auth-box"><h3>Logowanie</h3><p style="font-size:12px;margin-top:8px">Wersja naprawcza - logowanie po naprawieniu bazy</p><button class="btn btn-black" style="width:100%;margin-top:10px" onclick="closeAuth()">Zamknij</button></div></div>
+<div id="authModal" onclick="if(event.target.id==='authModal')closeAuth()"><div class="auth-box"><h3 id="authTitle">WROOMER.PL</h3><div class="tabs"><button class="tab active" id="loginTabBtn" onclick="showTab('login')">Logowanie</button><button class="tab" id="registerTabBtn" onclick="showTab('register')">Rejestracja</button></div><div id="loginTab" class="auth-tab-content"><input id="loginEmail" placeholder="E-mail"><input id="loginPass" type="password" placeholder="Hasło"><button class="btn btn-black" style="width:100%;margin-top:10px" onclick="login()">Zaloguj się</button><p style="font-size:12px;margin-top:8px"><a href="#" onclick="showTab('reset');return false">Nie pamiętasz hasła?</a></p><p id="loginInfo" style="font-size:11px;color:#c00"></p></div><div id="registerTab" class="auth-tab-content" style="display:none"><input id="regEmail" placeholder="E-mail"><input id="regPass" type="password" placeholder="Hasło min 6 znaków"><label style="font-size:11px;display:flex;gap:6px;margin-top:8px"><input type="checkbox" id="regCheck" style="width:auto"> Regulamin</label><button class="btn btn-yellow" style="width:100%;margin-top:10px" onclick="register()">Załóż konto</button></div><div id="resetTab" class="auth-tab-content" style="display:none"><input id="resetEmail" placeholder="E-mail"><button class="btn btn-black" style="width:100%;margin-top:10px" onclick="sendReset()">Wyślij reset</button><p id="resetInfo" style="font-size:11px"></p></div><div id="newPasswordTab" class="auth-tab-content" style="display:none"><h3>Nowe hasło</h3><input id="newPasswordInput" type="password" placeholder="Nowe hasło"><button class="btn btn-black" style="width:100%;margin-top:10px" onclick="setNewPassword()">Zapisz</button></div></div></div>
 
 <script>
-// === ŁADOWANIE BEZ ŻADNEJ BIBLIOTEKI - CZYSTY FETCH ===
+// === SUPABASE VIA REST - BEZ BLOKUJĄCEJ BIBLIOTEKI ===
 const SUPABASE_URL = 'https://rljqnhfogaqdjeirqqdj.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_j7CS5xIHzOMBMyvsqVgDmw_GeEek5hX';
 
-async function loadAds(){
- console.log('loadAds via REST');
- document.getElementById('resultsInfo').innerText='Ładowanie ogłoszeń z bazy...';
- try{
-  const url = `${SUPABASE_URL}/rest/v1/ads?select=*&order=created_at.desc&limit=300`;
-  const res = await fetch(url, {
-   headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY },
-   signal: AbortSignal.timeout(8000)
-  });
-  if(!res.ok){
-   const txt=await res.text();
-   throw new Error(`HTTP ${res.status}: ${txt.slice(0,300)}`);
-  }
-  const data=await res.json();
-  allAds=data;
-  console.log('Loaded', data.length);
-  renderAds();
- }catch(e){
-  console.error(e);
-  document.getElementById('resultsInfo').innerText='Błąd: '+e.message;
-  document.getElementById('adsGrid').innerHTML=`<div style="padding:20px"><p style="color:#c00;font-weight:700">Nie udało się pobrać ogłoszeń</p><p style="font-size:13px;margin-top:10px">Błąd: ${e.message}</p><p style="font-size:12px;margin-top:12px">Rozwiązanie - wejdź w Supabase → SQL Editor i uruchom:</p><pre style="background:#111;color:#0f0;padding:10px;border-radius:8px;margin-top:8px;font-size:11px">ALTER TABLE ads DISABLE ROW LEVEL SECURITY;</pre><button class="btn btn-black" style="margin-top:12px" onclick="loadAds()">Spróbuj ponownie</button></div>`;
+function saveAuth(token, user){ localStorage.setItem('sb_token', token); localStorage.setItem('sb_user', JSON.stringify(user)); authToken=token; currentUser=user; updateAuthUI(); }
+function loadAuth(){ try{ authToken=localStorage.getItem('sb_token'); currentUser=JSON.parse(localStorage.getItem('sb_user')||'null'); }catch(e){} updateAuthUI(); }
+function updateAuthUI(){
+ if(currentUser){
+  document.getElementById('authBtn').style.display='none'; document.getElementById('userEmail').style.display='block'; document.getElementById('userEmail').innerText=currentUser.email; document.getElementById('logoutBtn').style.display='block'; document.getElementById('myBtn').style.display='block';
+ }else{
+  document.getElementById('authBtn').style.display='block'; document.getElementById('userEmail').style.display='none'; document.getElementById('logoutBtn').style.display='none'; document.getElementById('myBtn').style.display='none';
+ }
+}
+function logout(){ localStorage.removeItem('sb_token'); localStorage.removeItem('sb_user'); currentUser=null; authToken=null; updateAuthUI(); location.reload(); }
+function filterMy(){ 
+ // prosto: pokaż tylko moje
+ if(!currentUser){ alert('Zaloguj się'); return; }
+ const btn=document.getElementById('myBtn');
+ const isMy=btn.innerText==='Moje';
+ if(isMy){ 
+  allAds = allAds.filter(a=>a.owner_id===currentUser.id); // tymczasowo filtruj lokalnie? lepiej przeładuj z filtrem
+  btn.innerText='Wszystkie'; 
+  // przeładuj wszystkie i filtruj
+  loadAds().then(()=>{ allAds=allAds.filter(a=>a.owner_id===currentUser.id); renderAds(); });
+ }else{
+  btn.innerText='Moje'; loadAds();
  }
 }
 
-// Start
+async function loadAds(){
+ document.getElementById('resultsInfo').innerText='Ładowanie...';
+ try{
+  const url=`${SUPABASE_URL}/rest/v1/ads?select=*&order=created_at.desc&limit=300`;
+  const res=await fetch(url,{headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY}, signal:AbortSignal.timeout(8000)});
+  if(!res.ok){ const t=await res.text(); throw new Error(`HTTP ${res.status}: ${t.slice(0,200)}`); }
+  allAds=await res.json();
+  renderAds();
+ }catch(e){
+  document.getElementById('resultsInfo').innerText='Błąd: '+e.message;
+  document.getElementById('adsGrid').innerHTML=`<div style="padding:20px"><p style="color:#c00">Błąd: ${e.message}</p><p style="font-size:12px;margin-top:8px">Uruchom w Supabase SQL:<br><code>ALTER TABLE ads DISABLE ROW LEVEL SECURITY;</code></p><button class="btn btn-black" style="margin-top:10px" onclick="loadAds()">Spróbuj ponownie</button></div>`;
+ }
+}
+
+async function login(){
+ const email=document.getElementById('loginEmail').value.trim(); const pass=document.getElementById('loginPass').value;
+ if(!email||!pass){document.getElementById('loginInfo').innerText='Wpisz e-mail i hasło'; return}
+ try{
+  const res=await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`,{method:'POST',headers:{'apikey':SUPABASE_KEY,'Content-Type':'application/json'},body:JSON.stringify({email,password:pass})});
+  const j=await res.json();
+  if(!res.ok) throw new Error(j.error_description||j.msg||JSON.stringify(j));
+  saveAuth(j.access_token, j.user);
+  closeAuth();
+ }catch(e){ document.getElementById('loginInfo').innerText='Błąd: '+e.message; }
+}
+async function register(){
+ if(!document.getElementById('regCheck').checked){alert('Zaznacz regulamin');return}
+ const email=document.getElementById('regEmail').value.trim(); const pass=document.getElementById('regPass').value;
+ try{
+  const res=await fetch(`${SUPABASE_URL}/auth/v1/signup`,{method:'POST',headers:{'apikey':SUPABASE_KEY,'Content-Type':'application/json'},body:JSON.stringify({email,password:pass})});
+  const j=await res.json();
+  if(!res.ok) throw new Error(j.msg||JSON.stringify(j));
+  // auto login
+  await loginAfterRegister(email, pass);
+ }catch(e){ alert('Błąd: '+e.message); }
+}
+async function loginAfterRegister(email, pass){
+ try{
+  const res=await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`,{method:'POST',headers:{'apikey':SUPABASE_KEY,'Content-Type':'application/json'},body:JSON.stringify({email,password:pass})});
+  const j=await res.json();
+  if(res.ok){ saveAuth(j.access_token, j.user); closeAuth(); }
+  else alert('Konto założone, zaloguj się');
+ }catch(e){ alert('Konto założone, zaloguj się'); }
+}
+async function sendReset(){
+ const email=document.getElementById('resetEmail').value.trim();
+ try{
+  const res=await fetch(`${SUPABASE_URL}/auth/v1/recover`,{method:'POST',headers:{'apikey':SUPABASE_KEY,'Content-Type':'application/json'},body:JSON.stringify({email})});
+  const j=await res.json();
+  document.getElementById('resetInfo').innerText=res.ok?'Wysłano link na '+email : 'Błąd: '+JSON.stringify(j);
+ }catch(e){ document.getElementById('resetInfo').innerText='Błąd: '+e.message; }
+}
+async function setNewPassword(){ alert('Reset hasła - użyj linku z e-maila'); }
+
+async function submitAdd(){
+ const title=document.getElementById('addTitleInput').value.trim();
+ const price=document.getElementById('addPrice').value.trim();
+ const loc=document.getElementById('addLocation').value.trim();
+ const phone=document.getElementById('addPhone').value.trim();
+ if(!title||!price||!loc||!phone){ document.getElementById('addInfo').innerText='Uzupełnij pola *'; return; }
+ if(!currentUser||!authToken){ document.getElementById('addInfo').innerText='Musisz być zalogowany'; openAuth(); return; }
+ const brand=document.getElementById('addBrand').value.trim()||title.split(' ')[0];
+ const model=document.getElementById('addModel').value.trim();
+ const desc=document.getElementById('addDesc').value.trim();
+ let links=(document.getElementById('addImagesLinks').value||'').split(',').map(s=>s.trim()).filter(Boolean);
+ let images=[...selectedImagesBase64, ...links].slice(0,10);
+ document.getElementById('addSubmitBtn').disabled=true; document.getElementById('addSubmitBtn').innerText='Zapisuję...';
+ let lat=null,lng=null; try{ const r=await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(loc)}&limit=1&countrycodes=pl`); const j=await r.json(); if(j[0]){lat=parseFloat(j[0].lat); lng=parseFloat(j[0].lon);} }catch(e){}
+ let finalImages=[]; let image_url=images[0]||'';
+ // upload base64 - spróbuj do storage via REST? Na razie zapisz jako base64 jeśli małe, lub użyj publicznego URL jeśli link
+ for(let img of images){
+  if(img.startsWith('data:')){
+   // jeśli base64, spróbuj wysłać do storage via supabase-js REST - uproszczenie: zapisz base64 (może być duże, ale zadziała dla małych)
+   finalImages.push(img);
+  }else finalImages.push(img);
+ }
+ if(finalImages.length>0) image_url=finalImages[0];
+ let payload={title, price, image_url, images:finalImages, owner_id:currentUser.id, brand, model, description:desc, location:loc, city:loc, lat, lng, phone};
+ try{
+  let res=await fetch(`${SUPABASE_URL}/rest/v1/ads`,{method:'POST',headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+authToken,'Content-Type':'application/json','Prefer':'return=representation'},body:JSON.stringify(payload)});
+  if(!res.ok){
+   const txt=await res.text();
+   // fallback bez city/lat/lng/phone
+   if(txt.includes('city')||txt.includes('lat')||txt.includes('phone')){
+    let minimal={title, price, image_url, images:finalImages, owner_id:currentUser.id, brand, model, description:desc, location:loc, phone};
+    res=await fetch(`${SUPABASE_URL}/rest/v1/ads`,{method:'POST',headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+authToken,'Content-Type':'application/json','Prefer':'return=representation'},body:JSON.stringify(minimal)});
+    if(!res.ok){
+     const txt2=await res.text();
+     if(txt2.includes('phone')){
+      const {phone, ...rest}=minimal;
+      res=await fetch(`${SUPABASE_URL}/rest/v1/ads`,{method:'POST',headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+authToken,'Content-Type':'application/json','Prefer':'return=representation'},body:JSON.stringify(rest)});
+     }
+    }
+   }
+   if(!res.ok){ const t=await res.text(); throw new Error(t.slice(0,500)); }
+  }
+  document.getElementById('addSubmitBtn').disabled=false; document.getElementById('addSubmitBtn').innerText='Zatwierdź';
+  closeAdd(); loadAds();
+ }catch(e){
+  document.getElementById('addSubmitBtn').disabled=false; document.getElementById('addSubmitBtn').innerText='Zatwierdź';
+  document.getElementById('addInfo').innerText='Błąd: '+e.message;
+ }
+}
+
+async function deleteAd(){
+ if(!currentAd) return; if(!confirm('Usunąć?')) return;
+ try{
+  const res=await fetch(`${SUPABASE_URL}/rest/v1/ads?id=eq.${currentAd.id}`,{method:'DELETE',headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+authToken}});
+  if(!res.ok) throw new Error(await res.text());
+  closeDetail(); loadAds();
+ }catch(e){ alert('Błąd: '+e.message); }
+}
+
+loadAuth();
 loadAds();
 </script>
 </body>
