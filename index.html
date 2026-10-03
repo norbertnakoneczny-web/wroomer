@@ -22,10 +22,22 @@ header{background:#fff;border-bottom:1px solid #e5e5e0;position:sticky;top:0;z-i
 .card .info{padding:8px 10px}.card .title{font-size:12px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .card .price{font-size:13px;font-weight:900}.card .loc{font-size:10px;color:#777}
 .badge{position:absolute;top:6px;left:6px;background:#ffcb00;color:#111;font-size:9px;font-weight:900;padding:4px 6px;border-radius:6px}
-#detail{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:100;display:none;align-items:center;justify-content:center;padding:16px}
-.detail-box{background:#fff;width:100%;max-width:1100px;border-radius:16px;overflow:hidden;max-height:95vh;display:flex;flex-direction:column}
-.detail-img{width:100%;height:60vh;min-height:300px;object-fit:contain;background:#f5f5f5}
-.detail-content{padding:18px;overflow:auto}
+#detail{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:100;display:none;align-items:center;justify-content:center;padding:12px}
+.detail-box{background:#fff;width:100%;max-width:1100px;border-radius:16px;overflow:hidden;max-height:96vh;display:flex;flex-direction:column}
+.gallery-wrap{position:relative;width:100%;height:65vh;min-height:320px;background:#111;display:flex;align-items:center;justify-content:center;overflow:hidden;touch-action:pan-y}
+.gallery-wrap img{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;display:block;margin:auto;user-select:none;-webkit-user-drag:none}
+.gallery-arrow{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.9);border:0;width:42px;height:42px;border-radius:50%;font-size:22px;font-weight:900;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:5;box-shadow:0 2px 8px rgba(0,0,0,0.3)}
+.gallery-arrow:hover{background:#fff}
+.gallery-arrow.prev{left:12px}
+.gallery-arrow.next{right:12px}
+.gallery-counter{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.7);color:#fff;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700;z-index:5}
+.gallery-dots{position:absolute;bottom:40px;left:50%;transform:translateX(-50%);display:flex;gap:6px;z-index:5}
+.gallery-dots span{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.5);cursor:pointer}
+.gallery-dots span.active{background:#ffcb00}
+.detail-content{padding:16px;overflow:auto;flex:1}
+#detailImages{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+#detailImages img{width:80px;height:60px;object-fit:cover;border-radius:8px;cursor:pointer;border:2px solid transparent}
+#detailImages img.active{border-color:#ffcb00}
 #authModal,#addModal{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:200;display:none;align-items:center;justify-content:center;padding:12px}
 .auth-box,.add-box{background:#fff;width:100%;max-width:650px;border-radius:16px;padding:20px;max-height:92vh;overflow:auto}
 .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.form-grid .full{grid-column:1/-1}
@@ -34,43 +46,33 @@ header{background:#fff;border-bottom:1px solid #e5e5e0;position:sticky;top:0;z-i
 .preview-images{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}.preview-images img{width:80px;height:80px;object-fit:cover;border-radius:8px;border:1px solid #ddd}
 #resultsInfo{max-width:1280px;margin:10px auto 0;padding:0 12px;font-size:12px;color:#666}
 .addr-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
-
-/* === WERSJA MOBILNA - ZWARTA, NIE ROZLAZŁA === */
 @media(max-width:700px){
   header{padding:6px 8px}
   .top-row{gap:6px;flex-wrap:nowrap;align-items:center}
-  .logo{font-size:15px;letter-spacing:-0.5px}
-  .logo span:last-child{display:none} /* ukryj v2.8 badge na mobile */
+  .logo{font-size:15px}
+  .logo span:last-child{display:none}
   .top-actions{gap:4px;flex-wrap:nowrap;margin-left:auto}
-  .top-actions .btn{padding:6px 10px;font-size:11px;border-radius:6px;line-height:1.2}
-  .top-actions #userEmail{font-size:10px;max-width:70px;overflow:hidden;text-overflow:ellipsis}
+  .top-actions .btn{padding:6px 10px;font-size:11px;border-radius:6px}
   .search-bar{gap:5px;margin-top:6px}
   .search-bar input, .search-bar select{padding:7px 9px;font-size:12px;min-width:0}
-  .search-bar input.search-main{flex:1 1 100%;min-width:100%;order:-1} /* szukaj na całą szerokość u góry */
+  .search-bar input.search-main{flex:1 1 100%;min-width:100%;order:-1}
   .search-bar select{flex:1 1 calc(50% - 3px);min-width:calc(50% - 3px)}
   .search-bar .btn{flex:1 1 calc(50% - 3px);padding:7px 8px;font-size:11px}
   #resultsInfo{font-size:11px;padding:0 8px;margin-top:6px}
   .grid{grid-template-columns:repeat(2,1fr);gap:8px;padding:0 8px;margin-top:10px}
   .card img{height:110px}
-  .card .info{padding:6px 8px}
-  .card .title{font-size:11px}
-  .card .price{font-size:12px}
-  .card .loc{font-size:9px}
+  .gallery-wrap{height:55vh;min-height:260px}
+  .gallery-arrow{width:36px;height:36px;font-size:18px}
+  .gallery-arrow.prev{left:6px}
+  .gallery-arrow.next{right:6px}
   .addr-row{grid-template-columns:1fr}
-  .add-box{padding:14px}
-  .detail-content{padding:12px}
-}
-@media(max-width:400px){
-  .logo{font-size:13px}
-  .top-actions .btn{padding:5px 8px;font-size:10px}
-  .search-bar select{flex:1 1 100%}
 }
 </style>
 </head>
 <body>
 <header>
 <div class="top-row">
-<div class="logo" onclick="location.reload()">WROOMER<span>.PL</span> <span style="font-size:9px;background:#111;color:#fff;padding:2px 6px;border-radius:4px">v2.9 MOBILE</span></div>
+<div class="logo" onclick="location.reload()">WROOMER<span>.PL</span> <span style="font-size:9px;background:#111;color:#fff;padding:2px 6px;border-radius:4px">v3.0 GALERIA</span></div>
 <div class="top-actions">
 <button class="btn btn-yellow" onclick="openAdd()">+ Dodaj</button>
 <button id="myBtn" class="btn btn-white" style="display:none" onclick="filterMy()">Moje</button>
@@ -92,7 +94,32 @@ header{background:#fff;border-bottom:1px solid #e5e5e0;position:sticky;top:0;z-i
 <div id="resultsInfo">Ładowanie ogłoszeń...</div>
 <div id="adsGrid" class="grid"></div>
 
-<div id="detail" onclick="if(event.target.id==='detail')closeDetail()"><div class="detail-box"><img id="detailImg" class="detail-img"><div class="detail-content"><h2 id="detailTitle"></h2><p id="detailPrice" style="font-weight:900"></p><p id="detailLoc"></p><p id="detailDesc" style="white-space:pre-wrap"></p><div id="detailImages" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"></div><div style="margin-top:12px"><p id="phoneNumber" style="font-weight:900;display:none"></p><div style="display:flex;gap:8px;margin-top:8px"><button class="btn btn-black" onclick="contactCall()">📞 Zadzwoń</button><button class="btn btn-white" onclick="showPhone()">Pokaż numer</button><button class="btn btn-black" onclick="closeDetail()">Zamknij</button></div></div></div></div></div>
+<div id="detail" onclick="if(event.target.id==='detail')closeDetail()">
+<div class="detail-box">
+<div class="gallery-wrap" id="galleryWrap">
+<button class="gallery-arrow prev" onclick="prevImage(event)">‹</button>
+<img id="detailImg" src="" alt="" draggable="false">
+<button class="gallery-arrow next" onclick="nextImage(event)">›</button>
+<div class="gallery-counter" id="galleryCounter">1 / 1</div>
+<div class="gallery-dots" id="galleryDots"></div>
+</div>
+<div class="detail-content">
+<h2 id="detailTitle"></h2>
+<p id="detailPrice" style="font-weight:900;font-size:16px;margin-top:4px"></p>
+<p id="detailLoc" style="font-size:13px;color:#666;margin-top:2px"></p>
+<p id="detailDesc" style="white-space:pre-wrap;margin-top:10px;font-size:13px"></p>
+<div id="detailImages"></div>
+<div style="margin-top:12px">
+<p id="phoneNumber" style="font-weight:900;display:none"></p>
+<div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
+<button class="btn btn-black" onclick="contactCall()">📞 Zadzwoń</button>
+<button class="btn btn-white" onclick="showPhone()">Pokaż numer</button>
+<button class="btn btn-white" onclick="closeDetail()">Zamknij</button>
+</div>
+</div>
+</div>
+</div>
+</div>
 
 <div id="addModal" onclick="if(event.target.id==='addModal')closeAdd()"><div class="add-box"><h2 id="addTitle">Dodaj ogłoszenie</h2><div class="form-grid">
 <div class="full"><label>Tytuł *</label><input id="addTitleInput"></div>
@@ -115,14 +142,64 @@ header{background:#fff;border-bottom:1px solid #e5e5e0;position:sticky;top:0;z-i
 
 <script>
 var allAds=[], currentAd=null, editingAd=null, userLocationCoords=null, searchLocationCoords=null, selectedImagesBase64=[], locTimeout=null, currentUser=null, authToken=null, userRealLocationName='';
+var currentImageIndex=0, galleryImages=[], touchStartX=0, touchEndX=0;
 var SUPABASE_URL='https://rljqnhfogaqdjeirqqdj.supabase.co';
 var SUPABASE_KEY='sb_publishable_j7CS5xIHzOMBMyvsqVgDmw_GeEek5hX';
 var MODELS = {'BMW':['Seria 1','Seria 3','Seria 5','X1','X3','X5','Inny'],'Audi':['A3','A4','A6','Q5','Q7','Inny'],'Mercedes':['A Klasa','C Klasa','E Klasa','GLC','Inny'],'Volkswagen':['Golf','Passat','Polo','Tiguan','Inny'],'Toyota':['Corolla','Yaris','RAV4','Inny'],'Ford':['Focus','Mondeo','Fiesta','Kuga','Inny'],'Opel':['Astra','Corsa','Insignia','Mokka','Inny'],'Skoda':['Octavia','Fabia','Superb','Kodiaq','Inny'],'Mitsubishi':['Colt','Lancer','Outlander','ASX','Inny'],'Honda':['Civic','CR-V','Inny'],'Peugeot':['208','308','3008','Inny'],'Renault':['Clio','Megane','Captur','Inny'],'Fiat':['Panda','500','Doblo','Inny'],'Hyundai':['i30','Tucson','Inny'],'Kia':['Ceed','Sportage','Inny'],'Seat':['Ibiza','Leon','Ateca','Inny'],'Inna':['Inny model']};
 var POWIATY = {'śląskie': ['będziński','bielski','bieruńsko-lędziński','cieszyński','częstochowski','gliwicki','kłobucki','lubliniecki','mikołowski','myszkowski','pszczyński','raciborski','rybnicki','tarnogórski','wodzisławski','zawierciański','żywiecki','m. Katowice','m. Rybnik','m. Tychy','m. Gliwice','m. Zabrze','m. Bytom','m. Ruda Śląska','m. Chorzów','m. Dąbrowa Górnicza','m. Sosnowiec','m. Bielsko-Biała','m. Częstochowa','m. Jastrzębie-Zdrój'],'dolnośląskie': ['wrocławski','m. Wrocław'],'mazowieckie': ['m. Warszawa','warszawski zachodni'],'małopolskie': ['krakowski','m. Kraków'],'wielkopolskie': ['poznański','m. Poznań']};
 var MIEJSCOWOSCI = {'wodzisławski': ['Wodzisław Śląski','Gorzyce','Gorzyczki','Rydułtowy','Pszów','Radlin','Lubomia','Godów','Mszana','Marklowice','Czyżowice','Turza Śląska','Rogów','Syrynia'],'raciborski': ['Racibórz','Kuźnia Raciborska','Krzanowice','Nędza'],'rybnicki': ['Rybnik','Czerwionka-Leszczyny','Świerklany','Gaszowice'],'m. Katowice': ['Katowice'],'m. Rybnik': ['Rybnik'],'m. Warszawa': ['Warszawa'],'m. Kraków': ['Kraków'],'m. Wrocław': ['Wrocław'],'m. Poznań': ['Poznań']};
 var KNOWN_COORDS = {'gorzyce': {lat:49.962, lng:18.397},'rydułtowy': {lat:50.058, lng:18.405},'rydultowy': {lat:50.058, lng:18.405},'ryhultowy': {lat:50.058, lng:18.405},'wodzisław śląski': {lat:50.022, lng:18.456},'radlin': {lat:50.041, lng:18.468},'pszów': {lat:50.045, lng:18.394},'rybnik': {lat:50.097, lng:18.542},'racibórz': {lat:50.091, lng:18.219},'katowice': {lat:50.264, lng:19.023},'warszawa': {lat:52.229, lng:21.012},'kraków': {lat:50.064, lng:19.945},'wrocław': {lat:51.107, lng:17.038},'poznań': {lat:52.406, lng:16.925}};
+
 function getCoordsForPlace(name){ if(!name) return null; var n=name.toLowerCase().trim(); if(KNOWN_COORDS[n]) return KNOWN_COORDS[n]; for(var k in KNOWN_COORDS){ if(n.indexOf(k)!==-1 || k.indexOf(n)!==-1) return KNOWN_COORDS[k]; } return null; }
 function ensureAdCoords(ad){ if(ad.lat && ad.lng) return ad; var loc=(ad.location||ad.city||'').toLowerCase(); var c=getCoordsForPlace(loc); if(c){ ad.lat=c.lat; ad.lng=c.lng; } else { var parts=loc.split(','); for(var i=0;i<parts.length;i++){ var cc=getCoordsForPlace(parts[i].trim()); if(cc){ ad.lat=cc.lat; ad.lng=cc.lng; break; } } } return ad; }
+
+// GALERIA - wyśrodkowana, strzałki, swipe
+function showImage(idx){
+ if(!galleryImages.length) return;
+ if(idx<0) idx=galleryImages.length-1;
+ if(idx>=galleryImages.length) idx=0;
+ currentImageIndex=idx;
+ var img=document.getElementById('detailImg');
+ img.style.opacity='0';
+ setTimeout(function(){
+  img.src=galleryImages[currentImageIndex];
+  img.style.opacity='1';
+ }, 100);
+ document.getElementById('galleryCounter').innerText=(currentImageIndex+1)+' / '+galleryImages.length;
+ var dots=document.getElementById('galleryDots');
+ var dh='';
+ for(var i=0;i<galleryImages.length;i++){ dh+='<span class="'+(i===currentImageIndex?'active':'')+'" onclick="showImage('+i+')"></span>'; }
+ dots.innerHTML=dh;
+ var thumbs=document.querySelectorAll('#detailImages img');
+ for(var t=0;t<thumbs.length;t++){ thumbs[t].classList.toggle('active', t===currentImageIndex); }
+ var arrows=document.querySelectorAll('.gallery-arrow');
+ for(var a=0;a<arrows.length;a++){ arrows[a].style.display=galleryImages.length<=1?'none':'flex'; }
+}
+function nextImage(e){ if(e) e.stopPropagation(); showImage(currentImageIndex+1); }
+function prevImage(e){ if(e) e.stopPropagation(); showImage(currentImageIndex-1); }
+// swipe na smartfonie
+document.addEventListener('DOMContentLoaded', function(){
+ var wrap=document.getElementById('galleryWrap');
+ if(!wrap) return;
+ wrap.addEventListener('touchstart', function(e){ touchStartX=e.changedTouches[0].screenX; }, {passive:true});
+ wrap.addEventListener('touchend', function(e){
+  touchEndX=e.changedTouches[0].screenX;
+  var diff=touchStartX-touchEndX;
+  if(Math.abs(diff)>50){
+   if(diff>0) nextImage();
+   else prevImage();
+  }
+ }, {passive:true});
+ // klawiatura strzałki
+ document.addEventListener('keydown', function(e){
+  var detail=document.getElementById('detail');
+  if(detail.style.display!=='flex') return;
+  if(e.key==='ArrowRight') nextImage();
+  if(e.key==='ArrowLeft') prevImage();
+  if(e.key==='Escape') closeDetail();
+ });
+});
+
 function updateModelOptions(){ var brand=document.getElementById('addBrand').value; var modelSelect=document.getElementById('addModel'); var list=MODELS[brand] || ['Wybierz markę najpierw']; modelSelect.innerHTML=''; for(var i=0;i<list.length;i++){ var opt=document.createElement('option'); opt.value=list[i]; opt.text=list[i]; modelSelect.appendChild(opt); } var titleInput=document.getElementById('addTitleInput'); if(!titleInput.value && brand){ titleInput.value=brand+' '+(list[0]!=='Inny'?list[0]:''); } }
 function updatePowiatOptions(){ var woj=document.getElementById('addWoj').value; var powiatSelect=document.getElementById('addPowiat'); var list=POWIATY[woj] || []; powiatSelect.innerHTML='<option value="">Wybierz powiat *</option>'; for(var i=0;i<list.length;i++){ var opt=document.createElement('option'); opt.value=list[i]; opt.text=list[i]; powiatSelect.appendChild(opt); } powiatSelect.disabled=list.length===0; document.getElementById('addMiejscowosc').innerHTML='<option value="">Najpierw powiat</option>'; document.getElementById('addMiejscowosc').disabled=true; document.getElementById('customMiejscRow').style.display='none'; if(woj==='śląskie'){ powiatSelect.value='wodzisławski'; updateMiejscowoscOptions(); } }
 function updateMiejscowoscOptions(){ var powiat=document.getElementById('addPowiat').value; var miejsSelect=document.getElementById('addMiejscowosc'); if(!powiat){ miejsSelect.innerHTML='<option value="">Najpierw powiat</option>'; miejsSelect.disabled=true; return; } miejsSelect.disabled=false; document.getElementById('customMiejscRow').style.display='none'; if(MIEJSCOWOSCI[powiat]){ var list=MIEJSCOWOSCI[powiat]; miejsSelect.innerHTML='<option value="">Wybierz miejscowość *</option>'; for(var i=0;i<list.length;i++){ var opt=document.createElement('option'); opt.value=list[i]; opt.text=list[i]; miejsSelect.appendChild(opt); } miejsSelect.innerHTML+='<option value="__custom">➕ Inna miejscowość (wpisz)</option>'; if(powiat==='wodzisławski'){ miejsSelect.value='Gorzyce'; } } else { miejsSelect.innerHTML='<option value="">Wybierz miejscowość *</option><option>Gorzyce</option><option>Wodzisław Śląski</option><option>Rydułtowy</option><option>Rybnik</option><option>Katowice</option><option value="__custom">➕ Inna (wpisz)</option>'; } }
@@ -132,7 +209,7 @@ function closeAdd(){ document.getElementById('addModal').style.display='none'; }
 function openAuth(){ document.getElementById('authModal').style.display='flex'; showTab('login'); }
 function closeAuth(){ document.getElementById('authModal').style.display='none'; }
 function showTab(n){ document.getElementById('loginTab').style.display=n==='login'?'block':'none'; document.getElementById('registerTab').style.display=n==='register'?'block':'none'; document.getElementById('resetTab').style.display=n==='reset'?'block':'none'; }
-function closeDetail(){ document.getElementById('detail').style.display='none'; }
+function closeDetail(){ document.getElementById('detail').style.display='none'; galleryImages=[]; currentImageIndex=0; }
 function clearFilters(){ document.getElementById('searchInput').value=''; document.getElementById('locationInput').value=''; document.getElementById('radiusFilter').value='25'; document.getElementById('brandFilter').value=''; searchLocationCoords=null; userLocationCoords=null; userRealLocationName=''; renderAds(); }
 function showPhone(){ var n=currentAd&&currentAd.phone; if(!n){alert('Brak numeru');return} var el=document.getElementById('phoneNumber'); el.style.display='block'; el.innerText='📞 '+n; }
 function contactCall(){ var n=currentAd&&currentAd.phone; if(!n){showPhone();return} window.location.href='tel:'+n.replace(/\s/g,''); }
@@ -218,10 +295,7 @@ function getMyLocation(){
    if(btn) btn.innerText='📍 Blisko mnie'; renderAds();
   }).catch(function(){ if(btn) btn.innerText='📍 Blisko mnie'; renderAds(); });
   renderAds();
- }, function(err){
-  if(btn) btn.innerText=origText;
-  alert('Błąd GPS: '+err.message);
- }, {enableHighAccuracy:true, timeout:10000, maximumAge:0});
+ }, function(err){ if(btn) btn.innerText=origText; alert('Błąd GPS: '+err.message); }, {enableHighAccuracy:true, timeout:10000, maximumAge:0});
 }
 function getMyLocationForAdd(){
  var btn=document.querySelector('button[onclick="getMyLocationForAdd()"]');
@@ -237,22 +311,47 @@ function getMyLocationForAdd(){
     var city=j.address.city||j.address.town||j.address.village||'';
     var wojMap={'dolnośląskie':'dolnośląskie','kujawsko-pomorskie':'kujawsko-pomorskie','lubelskie':'lubelskie','lubuskie':'lubuskie','łódzkie':'łódzkie','małopolskie':'małopolskie','mazowieckie':'mazowieckie','opolskie':'opolskie','podkarpackie':'podkarpackie','podlaskie':'podlaskie','pomorskie':'pomorskie','śląskie':'śląskie','świętokrzyskie':'świętokrzyskie','warmińsko-mazurskie':'warmińsko-mazurskie','wielkopolskie':'wielkopolskie','zachodniopomorskie':'zachodniopomorskie'};
     var foundWoj=''; for(var k in wojMap){ if(wojRaw.indexOf(k)!==-1){ foundWoj=k; break; } }
-    if(foundWoj){
-     document.getElementById('addWoj').value=foundWoj; updatePowiatOptions();
-     var powiatSelect=document.getElementById('addPowiat');
-     var powiatNorm=powiatRaw.toLowerCase().replace('powiat ','').trim();
-     for(var i=0;i<powiatSelect.options.length;i++){ if(powiatSelect.options[i].value.toLowerCase().indexOf(powiatNorm)!==-1){ powiatSelect.value=powiatSelect.options[i].value; break; } }
-     updateMiejscowoscOptions();
-     var miejsSelect=document.getElementById('addMiejscowosc');
-     for(var j=0;j<miejsSelect.options.length;j++){ if(miejsSelect.options[j].value.toLowerCase()===city.toLowerCase()){ miejsSelect.value=miejsSelect.options[j].value; break; } }
-     document.getElementById('addrInfo').innerText='📍 GPS: '+city+', '+powiatRaw+', '+j.address.state;
-    }
+    if(foundWoj){ document.getElementById('addWoj').value=foundWoj; updatePowiatOptions(); var powiatSelect=document.getElementById('addPowiat'); var powiatNorm=powiatRaw.toLowerCase().replace('powiat ','').trim(); for(var i=0;i<powiatSelect.options.length;i++){ if(powiatSelect.options[i].value.toLowerCase().indexOf(powiatNorm)!==-1){ powiatSelect.value=powiatSelect.options[i].value; break; } } updateMiejscowoscOptions(); var miejsSelect=document.getElementById('addMiejscowosc'); for(var j=0;j<miejsSelect.options.length;j++){ if(miejsSelect.options[j].value.toLowerCase()===city.toLowerCase()){ miejsSelect.value=miejsSelect.options[j].value; break; } } document.getElementById('addrInfo').innerText='📍 GPS: '+city+', '+powiatRaw+', '+j.address.state; }
    }
    if(btn) btn.innerText='✅ GPS wykryty!'; setTimeout(function(){ if(btn) btn.innerText=orig; }, 2000);
   }).catch(function(){ if(btn) btn.innerText=orig; });
  }, function(err){ if(btn) btn.innerText=orig; alert('Błąd GPS: '+err.message); }, {enableHighAccuracy:true, timeout:10000, maximumAge:0});
 }
-function openDetail(id){ var a=null; for(var i=0;i<allAds.length;i++){if(String(allAds[i].id)===String(id)){a=allAds[i];break;}} if(!a)return; currentAd=a; document.getElementById('detailImg').src=a.image_url||(a.images&&a.images[0])||'https://via.placeholder.com/800x600'; document.getElementById('detailTitle').innerText=a.title||''; document.getElementById('detailPrice').innerText=a.price? a.price+' PLN':''; document.getElementById('detailLoc').innerText=(a.location||a.city||'')+(a._dist? ' • '+a._dist.toFixed(1)+' km od Ciebie':''); document.getElementById('detailDesc').innerText=a.description||''; document.getElementById('detailImages').innerHTML=(a.images||[]).map(function(s){return '<img src="'+s+'" style="width:80px;height:60px;object-fit:cover;border-radius:8px;cursor:pointer" onclick="document.getElementById(\'detailImg\').src=\''+s+'\'">'}).join(''); document.getElementById('phoneNumber').innerText='📞 '+(a.phone||'Brak'); document.getElementById('phoneNumber').style.display='none'; document.getElementById('detail').style.display='flex'; }
+function openDetail(id){
+ var a=null; for(var i=0;i<allAds.length;i++){if(String(allAds[i].id)===String(id)){a=allAds[i];break;}} if(!a)return;
+ currentAd=a;
+ // przygotuj galerię - wszystkie zdjęcia
+ var imgs=[];
+ if(a.images && a.images.length>0) imgs=a.images.slice();
+ else if(a.image_url) imgs=[a.image_url];
+ else imgs=['https://via.placeholder.com/800x600?text=Brak+zdjecia'];
+ galleryImages=imgs;
+ currentImageIndex=0;
+ document.getElementById('detailImg').src=galleryImages[0];
+ document.getElementById('galleryCounter').innerText='1 / '+galleryImages.length;
+ // kropki
+ var dots=document.getElementById('galleryDots');
+ var dh='';
+ for(var i=0;i<galleryImages.length;i++){ dh+='<span class="'+(i===0?'active':'')+'" onclick="showImage('+i+')"></span>'; }
+ dots.innerHTML=dh;
+ // miniaturki
+ var thumbsHtml='';
+ for(var t=0;t<galleryImages.length;t++){
+  thumbsHtml+='<img src="'+galleryImages[t]+'" class="'+(t===0?'active':'')+'" onclick="showImage('+t+')" style="width:80px;height:60px;object-fit:cover;border-radius:8px;cursor:pointer;border:2px solid '+(t===0?'#ffcb00':'transparent')+'">';
+ }
+ document.getElementById('detailImages').innerHTML=thumbsHtml;
+ // pokaż/ukryj strzałki jeśli 1 zdjęcie
+ var arrows=document.querySelectorAll('.gallery-arrow');
+ for(var aa=0;aa<arrows.length;aa++){ arrows[aa].style.display=galleryImages.length<=1?'none':'flex'; }
+
+ document.getElementById('detailTitle').innerText=a.title||'';
+ document.getElementById('detailPrice').innerText=a.price? a.price+' PLN':'';
+ document.getElementById('detailLoc').innerText=(a.location||a.city||'')+(a._dist? ' • '+a._dist.toFixed(1)+' km od Ciebie':'');
+ document.getElementById('detailDesc').innerText=a.description||'';
+ document.getElementById('phoneNumber').innerText='📞 '+(a.phone||'Brak');
+ document.getElementById('phoneNumber').style.display='none';
+ document.getElementById('detail').style.display='flex';
+}
 function saveAuth(t,u){ localStorage.setItem('sb_token',t); localStorage.setItem('sb_user',JSON.stringify(u)); authToken=t; currentUser=u; updateAuthUI(); }
 function loadAuth(){ try{ authToken=localStorage.getItem('sb_token'); currentUser=JSON.parse(localStorage.getItem('sb_user')||'null'); }catch(e){} updateAuthUI(); }
 function updateAuthUI(){ if(currentUser){ document.getElementById('authBtn').style.display='none'; document.getElementById('userEmail').style.display='block'; document.getElementById('userEmail').innerText=currentUser.email; document.getElementById('logoutBtn').style.display='block'; var b=document.getElementById('myBtn'); if(b) b.style.display='block'; } else { document.getElementById('authBtn').style.display='block'; document.getElementById('userEmail').style.display='none'; document.getElementById('logoutBtn').style.display='none'; var b2=document.getElementById('myBtn'); if(b2) b2.style.display='none'; } }
