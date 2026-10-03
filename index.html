@@ -74,8 +74,8 @@ header{background:#fff;border-bottom:1px solid #e5e5e0;position:sticky;top:0;z-i
 <div class="full" style="margin-top:8px;padding:12px;background:#f9f9f6;border-radius:10px;border:1px solid #e9e9e6"><label style="font-size:12px;font-weight:900;margin-top:0">📍 ADRES - tylko wybór</label><div class="addr-row" style="margin-top:6px">
 <div><label>Województwo *</label><select id="addWoj" onchange="updatePowiatOptions()"><option value="">Wybierz województwo *</option><option value="dolnośląskie">Dolnośląskie</option><option value="kujawsko-pomorskie">Kujawsko-pomorskie</option><option value="lubelskie">Lubelskie</option><option value="lubuskie">Lubuskie</option><option value="łódzkie">Łódzkie</option><option value="małopolskie">Małopolskie</option><option value="mazowieckie">Mazowieckie</option><option value="opolskie">Opolskie</option><option value="podkarpackie">Podkarpackie</option><option value="podlaskie">Podlaskie</option><option value="pomorskie">Pomorskie</option><option value="śląskie">Śląskie</option><option value="świętokrzyskie">Świętokrzyskie</option><option value="warmińsko-mazurskie">Warmińsko-mazurskie</option><option value="wielkopolskie">Wielkopolskie</option><option value="zachodniopomorskie">Zachodniopomorskie</option></select></div>
 <div><label>Powiat *</label><select id="addPowiat" onchange="updateMiejscowoscOptions()" disabled><option value="">Najpierw woj.</option></select></div>
-<div><label>Miejscowość *</label><select id="addMiejscowosc" disabled><option value="">Najpierw powiat</option></select></div>
-</div><p id="addrInfo" style="font-size:10px;color:#666;margin-top:6px"></p></div>
+<div><label>Miejscowość *</label><select id="addMiejscowosc" onchange="checkCustomMiejsc()" disabled><option value="">Najpierw powiat</option></select></div>
+</div><div id="customMiejscRow" style="display:none;margin-top:8px"><label>Wpisz miejscowość (jeśli nie ma na liście)</label><input id="addMiejscCustom" placeholder="np. Gorzyce"></div><p id="addrInfo" style="font-size:10px;color:#666;margin-top:6px"></p></div>
 
 <div class="full"><label>Opis</label><textarea id="addDesc" rows="3" placeholder="Rok, przebieg, paliwo..."></textarea></div>
 <div class="full"><label>Zdjęcia (max 10)</label><input id="addImagesFile" type="file" accept="image/*" multiple onchange="handleFiles(this.files)"><div id="addPreview" class="preview-images"></div><input id="addImagesLinks" placeholder="lub linki https://..." style="margin-top:6px"></div>
@@ -138,15 +138,36 @@ var POWIATY = {
  'zachodniopomorskie': ['białogardzki','choszczeński','drawski','goleniowski','gryficki','gryfiński','kamieński','kołobrzeski','koszaliński','łobeski','myśliborski','policki','pyrzycki','sławieński','stargardzki','szczecinecki','świdwiński','wałecki','m. Szczecin','m. Koszalin','m. Świnoujście']
 };
 
-var MIEJSCOWOSCI_SLASKIE = {
- 'wodzisławski': ['Wodzisław Śląski','Gorzyce','Gorzyczki','Rydułtowy','Pszów','Radlin','Lubomia','Godów','Mszana','Marklowice','Czyżowice','Turza Śląska','Rogów','Bełsznica','Bluszczów','Odra','Uchylsko','Kolonia Fryderyk'],
- 'raciborski': ['Racibórz','Kornowac','Krzanowice','Kuźnia Raciborska','Nędza','Pietrowice Wielkie','Rudnik'],
- 'rybnicki': ['Rybnik','Czerwionka-Leszczyny','Knurów','Leszczyny','Świerklany','Gaszowice','Lyski','Jejkowice'],
- 'tarnogórski': ['Tarnowskie Góry','Radzionków','Miasteczko Śląskie','Krupski Młyn','Kalety','Ożarowice','Świerklaniec','Zbrosławice','Tworóg'],
- 'm. Katowice': ['Katowice'],
- 'bielski': ['Bielsko-Biała','Czechowice-Dziedzice','Jasienica','Jaworze','Wilkowice','Kozy','Porąbka','Szczyrk','Wilamowice'],
- 'cieszyński': ['Cieszyn','Ustroń','Wisła','Skoczów','Strumień','Brenna','Chybie','Dębowiec','Goleszów','Hażlach','Istebna','Zebrzydowice'],
- 'm. Rybnik': ['Rybnik']
+// PEŁNA BAZA MIEJSCOWOŚCI DLA ŚLĄSKIEGO - wszystko jako wybór!
+var MIEJSCOWOSCI = {
+ 'wodzisławski': ['Wodzisław Śląski','Gorzyce','Gorzyczki','Rydułtowy','Pszów','Radlin','Lubomia','Godów','Mszana','Marklowice','Czyżowice','Turza Śląska','Rogów','Bełsznica','Bluszczów','Odra','Uchylsko','Kolonia Fryderyk','Skrzyszów','Krostoszowice','Łaziska','Osiny','Syrynia','Gołkowice','Skrzyszów','Łaziska'],
+ 'raciborski': ['Racibórz','Kuźnia Raciborska','Krzanowice','Nędza','Pietrowice Wielkie','Rudnik','Kornowac','Rudy','Ruda','Kuźnia','Turze','Samborowice','Chałupki','Zabełków','Krzyżanowice','Tworków','Bieńkowice','Borucin','Owsiszcze'],
+ 'rybnicki': ['Rybnik','Czerwionka-Leszczyny','Knurów','Leszczyny','Świerklany','Gaszowice','Lyski','Jejkowice','Czuchów','Dębieńsko','Bełk','Palowice','Stanowice','Szczejkowice','Książenice','Przegędza','Szczerbice'],
+ 'tarnogórski': ['Tarnowskie Góry','Radzionków','Kalety','Miasteczko Śląskie','Krupski Młyn','Ożarowice','Świerklaniec','Zbrosławice','Tworóg','Brynek','Boruszowice','Hanusek','Koty','Miedary','Pniowiec','Repty','Wieszowa'],
+ 'będziński': ['Będzin','Czeladź','Wojkowice','Siewierz','Sławków','Psary','Bobrowniki','Mierzęcice','Sączów','Będzin-Łagisza','Grodziec'],
+ 'bielski': ['Bielsko-Biała','Czechowice-Dziedzice','Jasienica','Jaworze','Wilkowice','Kozy','Porąbka','Szczyrk','Wilamowice','Bestwina','Buczkowice','Stare Bielsko','Wapienica','Hałcnów','Komorowice'],
+ 'bieruńsko-lędziński': ['Bieruń','Lędziny','Imielin','Chełm Śląski','Bojszowy','Bojszowy Nowe','Jedlina'],
+ 'cieszyński': ['Cieszyn','Ustroń','Wisła','Skoczów','Strumień','Brenna','Chybie','Dębowiec','Goleszów','Hażlach','Istebna','Zebrzydowice','Kończyce Wielkie','Pruchna','Kaczyce','Pogwizdów','Kończyce Małe','Bąków'],
+ 'częstochowski': ['Częstochowa','Blachownia','Konopiska','Poczesna','Mykanów','Olsztyn','Mstów','Kłobuck','Rędziny','Dąbrowa Zielona','Janów','Kłomnice','Koniecpol','Kruszyna','Lelów','Przyrów','Starcza'],
+ 'gliwicki': ['Gliwice','Knurów','Pyskowice','Sośnicowice','Toszek','Wielowieś','Pilchowice','Rudziniec','Gierałtowice','Kotulin','Paczyna','Wilkowiczki','Żernica','Nieborowice','Przyszowice'],
+ 'kłobucki': ['Kłobuck','Krzepice','Lipie','Miedźno','Opatów','Panki','Popów','Przystajń','Wręczyca Wielka','Wręczyca Mała','Kalej','Łobodno'],
+ 'lubliniecki': ['Lubliniec','Woźniki','Boronów','Ciasna','Herby','Kochanowice','Koszęcin','Pawonków','Psary','Lubsza','Hadra','Rusinowice'],
+ 'mikołowski': ['Mikołów','Łaziska Górne','Orzesze','Ornontowice','Wyry','Gardawice','Zawiść','Woszczyce','Jaśkowice','Mościska'],
+ 'myszkowski': ['Myszków','Koziegłowy','Żarki','Poraj','Niegowa','Żarki-Letnisko','Choroń','Jastrząb','Kotowice','Lgota Wielka'],
+ 'pszczyński': ['Pszczyna','Pawłowice','Suszec','Goczałkowice-Zdrój','Kobiór','Miedźna','Frydek','Gilowice','Golasowice','Jarząbkowice','Krzyżowice','Pielgrzymowice','Rudołtowice','Studzionka','Wisła Wielka'],
+ 'zawierciański': ['Zawiercie','Ogrodzieniec','Łazy','Pilica','Szczekociny','Włodowice','Żarnowiec','Irządze','Kroczyce','Wysoka','Chruszczobród','Marciszów','Rokitno'],
+ 'żywiecki': ['Żywiec','Czernichów','Gilowice','Jeleśnia','Koszarawa','Lipowa','Łękawica','Łodygowice','Milówka','Rajcza','Ślemień','Świnna','Ujsoły','Węgierska Górka','Korbielów','Sopotnia','Zabłocie'],
+ 'm. Katowice': ['Katowice','Katowice-Centrum','Ligota','Panewniki','Piotrowice','Zawodzie','Bogucice','Dąb','Szopienice','Giszowiec','Murcki','Kostuchna','Podlesie'],
+ 'm. Bielsko-Biała': ['Bielsko-Biała','Bielsko','Biała','Wapienica','Stare Bielsko','Komorowice','Hałcnów','Lipnik','Straconka'],
+ 'm. Rybnik': ['Rybnik','Rybnik-Centrum','Chwałowice','Niedobczyce','Paruszowiec','Północ','Południe','Maroko-Nowiny','Gotartowice','Kamień','Kłokocin','Ligota','Boguszowice','Chwałęcice'],
+ 'm. Tychy': ['Tychy','Tychy-Centrum','Paprocany','Czułów','Wilkowyje','Zawodzie','Wartogłowiec','Zawiść'],
+ 'm. Gliwice': ['Gliwice','Gliwice-Centrum','Sośnica','Łabędy','Szobiszowice','Trynek','Zatorze','Bojków','Brzezinka','Ostropa'],
+ 'm. Zabrze': ['Zabrze','Zabrze-Centrum','Biskupice','Grzybowice','Guido','Helenka','Kończyce','Maciejów','Mikulczyce','Rokitnica','Zaborze'],
+ 'm. Bytom': ['Bytom','Bytom-Centrum','Bobrek','Górniki','Kar-b','Łagiewniki','Miechowice','Rozbark','Stolarzowice','Stroszek','Sucha Góra','Szombierki'],
+ 'm. Ruda Śląska': ['Ruda Śląska','Ruda','Godula','Orzegów','Wirek','Halemba','Kochłowice','Bielszowice','Bykowina','Chebzie','Nowy Bytom'],
+ 'm. Chorzów': ['Chorzów','Chorzów-Centrum','Chorzów Batory','Chorzów Stary','Chorzów II'],
+ 'm. Dąbrowa Górnicza': ['Dąbrowa Górnicza','Gołonóg','Ząbkowice','Strzemieszyce','Łosień','Trzebiesławice','Ujejsce','Okradzionów'],
+ 'm. Sosnowiec': ['Sosnowiec','Sosnowiec-Centrum','Zagórze','Klimontów','Kazimierz','Porąbka','Niwka','Dańdówka','Modrzejów','Jęzor','Maczki']
 };
 
 function updateModelOptions(){
@@ -168,55 +189,50 @@ function updatePowiatOptions(){
  powiatSelect.disabled=list.length===0;
  miejsSelect.innerHTML='<option value="">Najpierw powiat</option>';
  miejsSelect.disabled=true;
+ document.getElementById('customMiejscRow').style.display='none';
  document.getElementById('addrInfo').innerText=woj?'Wybierz powiat w woj. '+woj:'';
- if(woj==='śląskie'){
-  // auto wybierz wodzisławski dla Gorzyc
-  powiatSelect.value='wodzisławski';
-  updateMiejscowoscOptions();
- }
+ if(woj==='śląskie'){ powiatSelect.value='wodzisławski'; updateMiejscowoscOptions(); }
 }
 function updateMiejscowoscOptions(){
- var woj=document.getElementById('addWoj').value;
  var powiat=document.getElementById('addPowiat').value;
  var miejsSelect=document.getElementById('addMiejscowosc');
  var addrInfo=document.getElementById('addrInfo');
  if(!powiat){ miejsSelect.innerHTML='<option value="">Najpierw powiat</option>'; miejsSelect.disabled=true; return; }
  miejsSelect.disabled=false;
- // dla śląskiego mamy gotowe miejscowości
- if(MIEJSCOWOSCI_SLASKIE[powiat]){
-  var list=MIEJSCOWOSCI_SLASKIE[powiat];
+ document.getElementById('customMiejscRow').style.display='none';
+ if(MIEJSCOWOSCI[powiat]){
+  var list=MIEJSCOWOSCI[powiat];
   miejsSelect.innerHTML='<option value="">Wybierz miejscowość *</option>';
   for(var i=0;i<list.length;i++){ var opt=document.createElement('option'); opt.value=list[i]; opt.text=list[i]; miejsSelect.appendChild(opt); }
-  addrInfo.innerText='Wybrano: '+powiat+', '+woj;
-  // auto Gorzyce
+  miejsSelect.innerHTML+='<option value="__custom">➕ Inna miejscowość (wpisz)</option>';
+  addrInfo.innerText='Wybierz z '+list.length+' miejscowości w powiecie '+powiat;
   if(powiat==='wodzisławski'){ miejsSelect.value='Gorzyce'; }
  } else {
-  // dla innych powiatów - pobierz z OSM lub pokaż uniwersalne
   miejsSelect.innerHTML='<option value="">Ładowanie miejscowości...</option>';
-  // próba pobrania miejscowości z powiatu via OSM
-  fetch('https://nominatim.openstreetmap.org/search?format=json&county='+encodeURIComponent(powiat)+'&state='+encodeURIComponent(woj)+'&countrycodes=pl&limit=40&addressdetails=1').then(function(r){return r.json()}).then(function(j){
-   var places={};
-   for(var k=0;k<j.length;k++){ var name=j[k].display_name.split(',')[0]; places[name]=true; }
+  var woj=document.getElementById('addWoj').value;
+  fetch('https://nominatim.openstreetmap.org/search?format=json&county='+encodeURIComponent(powiat)+'&state='+encodeURIComponent(woj)+'&countrycodes=pl&limit=50').then(function(r){return r.json()}).then(function(j){
+   var places={}; for(var k=0;k<j.length;k++){ var name=j[k].display_name.split(',')[0]; places[name]=true; }
    var keys=Object.keys(places);
+   miejsSelect.innerHTML='<option value="">Wybierz miejscowość *</option>';
+   for(var p=0;p<keys.length;p++){ var opt=document.createElement('option'); opt.value=keys[p]; opt.text=keys[p]; miejsSelect.appendChild(opt); }
+   miejsSelect.innerHTML+='<option value="__custom">➕ Inna miejscowość (wpisz)</option>';
+   addrInfo.innerText='Znaleziono '+keys.length+' miejscowości - wybierz z listy';
    if(keys.length===0){
-    // fallback - wpisz ręcznie ale jako select z opcją wpisania
-    miejsSelect.innerHTML='<option value="">Wybierz miejscowość *</option><option value="__custom">Wpisz inną...</option>';
-    // dodaj najpopularniejsze miasta powiatu jako fallback
-    var fallback=['Miasto powiatowe','Centrum'];
-    for(var f=0;f<fallback.length;f++){ var o=document.createElement('option'); o.value=fallback[f]; o.text=fallback[f]; miejsSelect.appendChild(o); }
-   } else {
-    miejsSelect.innerHTML='<option value="">Wybierz miejscowość *</option>';
-    for(var p=0;p<keys.length;p++){ var opt=document.createElement('option'); opt.value=keys[p]; opt.text=keys[p]; miejsSelect.appendChild(opt); }
-    miejsSelect.innerHTML+='<option value="__custom">Inna miejscowość...</option>';
+    miejsSelect.innerHTML='<option value="">Wybierz miejscowość *</option><option>Gorzyce</option><option>Wodzisław Śląski</option><option>Rybnik</option><option>Katowice</option><option value="__custom">➕ Inna (wpisz)</option>';
    }
-   addrInfo.innerText='Znaleziono '+keys.length+' miejscowości w powiecie '+powiat;
   }).catch(function(){
-   miejsSelect.innerHTML='<option value="">Wybierz miejscowość *</option><option>Gorzyce</option><option>Wodzisław Śląski</option><option>Rybnik</option><option>Katowice</option><option value="__custom">Inna...</option>';
+   miejsSelect.innerHTML='<option value="">Wybierz miejscowość *</option><option>Gorzyce</option><option>Wodzisław Śląski</option><option>Rybnik</option><option>Katowice</option><option>Jastrzębie-Zdrój</option><option>Żory</option><option value="__custom">➕ Inna (wpisz)</option>';
   });
  }
 }
+function checkCustomMiejsc(){
+ var val=document.getElementById('addMiejscowosc').value;
+ var row=document.getElementById('customMiejscRow');
+ if(val==='__custom'){ row.style.display='block'; document.getElementById('addMiejscCustom').focus(); }
+ else { row.style.display='none'; }
+}
 
-function openAdd(){ if(!currentUser){ alert('Musisz się zalogować!'); openAuth(); return; } editingAd=null; document.getElementById('addTitle').innerText='Dodaj ogłoszenie'; var ids=['addTitleInput','addPrice','addPhone','addDesc','addImagesLinks']; for(var i=0;i<ids.length;i++){var e=document.getElementById(ids[i]); if(e) e.value='';} document.getElementById('addBrand').value=''; document.getElementById('addModel').innerHTML='<option value="">Najpierw wybierz markę</option>'; document.getElementById('addWoj').value=''; document.getElementById('addPowiat').innerHTML='<option value="">Najpierw woj.</option>'; document.getElementById('addPowiat').disabled=true; document.getElementById('addMiejscowosc').innerHTML='<option value="">Najpierw powiat</option>'; document.getElementById('addMiejscowosc').disabled=true; selectedImagesBase64=[]; var p=document.getElementById('addPreview'); if(p) p.innerHTML=''; document.getElementById('addInfo').innerText=''; document.getElementById('addModal').style.display='flex'; }
+function openAdd(){ if(!currentUser){ alert('Musisz się zalogować!'); openAuth(); return; } editingAd=null; document.getElementById('addTitle').innerText='Dodaj ogłoszenie'; var ids=['addTitleInput','addPrice','addPhone','addDesc','addImagesLinks']; for(var i=0;i<ids.length;i++){var e=document.getElementById(ids[i]); if(e) e.value='';} document.getElementById('addBrand').value=''; document.getElementById('addModel').innerHTML='<option value="">Najpierw wybierz markę</option>'; document.getElementById('addWoj').value=''; document.getElementById('addPowiat').innerHTML='<option value="">Najpierw woj.</option>'; document.getElementById('addPowiat').disabled=true; document.getElementById('addMiejscowosc').innerHTML='<option value="">Najpierw powiat</option>'; document.getElementById('addMiejscowosc').disabled=true; document.getElementById('customMiejscRow').style.display='none'; selectedImagesBase64=[]; var p=document.getElementById('addPreview'); if(p) p.innerHTML=''; document.getElementById('addInfo').innerText=''; document.getElementById('addModal').style.display='flex'; }
 function closeAdd(){ document.getElementById('addModal').style.display='none'; }
 function openAuth(){ document.getElementById('authModal').style.display='flex'; showTab('login'); }
 function closeAuth(){ document.getElementById('authModal').style.display='none'; }
@@ -281,17 +297,16 @@ function submitAdd(){
  var price=document.getElementById('addPrice').value.trim();
  var woj=document.getElementById('addWoj').value;
  var powiat=document.getElementById('addPowiat').value;
- var miejs=document.getElementById('addMiejscowosc').value;
+ var miejsSelect=document.getElementById('addMiejscowosc');
+ var miejs=miejsSelect.value;
+ var customInput=document.getElementById('addMiejscCustom');
+ if(miejs==='__custom'){ miejs=customInput.value.trim(); }
  var phone=document.getElementById('addPhone').value.trim();
  if(!brand){ document.getElementById('addInfo').innerText='Wybierz markę!'; return; }
  if(!model){ document.getElementById('addInfo').innerText='Wybierz model!'; return; }
  if(!woj){ document.getElementById('addInfo').innerText='Wybierz województwo!'; return; }
  if(!powiat){ document.getElementById('addInfo').innerText='Wybierz powiat!'; return; }
- if(!miejs||miejs==='__custom'){ 
-  var custom=prompt('Wpisz nazwę miejscowości:'); 
-  if(!custom){ document.getElementById('addInfo').innerText='Wybierz miejscowość!'; return; }
-  miejs=custom;
- }
+ if(!miejs){ document.getElementById('addInfo').innerText='Wybierz miejscowość z listy!'; return; }
  if(!title){ title=brand+' '+model; }
  if(!price||!phone){document.getElementById('addInfo').innerText='Uzupełnij cenę i telefon *'; return}
  if(!currentUser||!authToken){document.getElementById('addInfo').innerText='Musisz być zalogowany'; openAuth(); return}
@@ -308,7 +323,6 @@ function submitAdd(){
   var payload={title:title, price:price, image_url:image_url, images:finalImages, owner_id:currentUser.id, brand:brand, model:model, description:desc, location:fullLocation, city:miejs, lat:lat, lng:lng, phone:phone, wojewodztwo:woj, powiat:powiat};
   fetch(SUPABASE_URL+'/rest/v1/ads',{method:'POST',headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+authToken,'Content-Type':'application/json','Prefer':'return=representation'},body:JSON.stringify(payload)}).then(function(res){
    if(!res.ok){ return res.text().then(function(t){ 
-    // fallback bez nowych kolumn
     if(t.indexOf('wojewodztwo')!==-1||t.indexOf('powiat')!==-1||t.indexOf('city')!==-1||t.indexOf('lat')!==-1||t.indexOf('phone')!==-1){
      var minimal={title:title, price:price, image_url:image_url, images:finalImages, owner_id:currentUser.id, brand:brand, model:model, description:desc, location:fullLocation, phone:phone};
      return fetch(SUPABASE_URL+'/rest/v1/ads',{method:'POST',headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+authToken,'Content-Type':'application/json','Prefer':'return=representation'},body:JSON.stringify(minimal)}).then(function(r2){
