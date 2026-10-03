@@ -1,87 +1,273 @@
-<!doctype html>
-<html lang="pl"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>WROOMER.PL</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WROOMER.PL - Ogłoszenia motoryzacyjne</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-*{margin:0;padding:0;box-sizing:border-box}body{background:#f2f2f2;font-family:Inter,sans-serif;color:#111}
-.h{height:56px;background:#000;color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 14px;position:sticky;top:0;z-index:30}
-.logo{font-weight:800;font-size:20px}.logo b{color:#FFE600}
-.hRight{display:flex;gap:8px;align-items:center}
-.btnY{background:#FFE600;color:#000;border:0;border-radius:999px;padding:8px 14px;font-weight:800;cursor:pointer;font-size:13px}
-.btnD{background:#222;color:#fff;border:1px solid #333;border-radius:999px;padding:8px 12px;cursor:pointer;font-size:12px}
-.btnS{background:#fff;color:#111;border:1px solid #ddd;border-radius:999px;padding:6px 10px;cursor:pointer;font-size:12px}
-.wrap{display:grid;grid-template-columns:300px 1fr;gap:14px;max-width:1480px;margin:0 auto;padding:14px}
-.left{background:#0a0a0a;color:#fff;border-radius:16px;padding:14px;height:fit-content;position:sticky;top:70px}
-.left input,.left select{width:100%;background:#1a1a1a;border:1px solid #2a2a2a;color:#fff;border-radius:10px;padding:9px 11px;margin-top:6px;font-size:12px}
-.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
-.card{background:#fff;border-radius:14px;overflow:hidden;border:1px solid #e6e6e6;cursor:pointer;position:relative;transition:.15s}
-.card:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,.08)}
-.card .im{height:160px;background:#f2f2f2;overflow:hidden;position:relative;display:flex;align-items:center;justify-content:center}
-.card .im img{width:100%;height:100%;object-fit:contain;background:#f2f2f2}
-.badge{position:absolute;bottom:6px;left:6px;background:rgba(0,0,0,.65);color:#fff;border-radius:6px;padding:2px 5px;font-size:9px;font-weight:700}
-.editTag{position:absolute;top:6px;right:6px;background:#FFE600;color:#000;border-radius:6px;padding:3px 6px;font-size:9px;font-weight:800;display:none}
-.card.own .editTag{display:block}
-.card .bo{padding:8px 9px} .card .bo h4{font-size:12px;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.meta{font-size:10px;opacity:.55;margin-top:2px} .price{font-weight:800;margin-top:3px;font-size:12px}
-.bar{background:#fff;border-radius:12px;padding:8px 10px;display:flex;justify-content:space-between;align-items:center;border:1px solid #e6e6e6;margin-bottom:10px;font-size:13px}
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;z-index:100;padding:10px} .modal.open{display:flex}
-.box{background:#111;color:#fff;width:min(700px,100%);border-radius:18px;max-height:92vh;overflow:auto;border:1px solid #222}
-.boxHead{padding:12px 14px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #222;position:sticky;top:0;background:#111;z-index:2}
-.boxBody{padding:12px 14px;display:flex;flex-direction:column;gap:10px}
-.in{background:#1e1e1e;border:1px solid #2e2e2e;color:#fff;border-radius:10px;padding:10px 11px;width:100%;font-size:12px}
-.g2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.drop{border:1.5px dashed #333;border-radius:12px;padding:16px;text-align:center;color:#888;cursor:pointer;background:#161616;font-size:12px}
-.photos{display:grid;grid-template-columns:repeat(5,1fr);gap:6px} .ph{aspect-ratio:1;background:#222;border-radius:8px;overflow:hidden;position:relative} .ph img{width:100%;height:100%;object-fit:contain} .ph button{position:absolute;top:3px;right:3px;width:18px;height:18px;border-radius:999px;border:0;background:rgba(0,0,0,.7);color:#fff;cursor:pointer;font-size:11px}
-#status{background:#1a1a1a;border:1px solid #2a2a2a;border-radius:10px;padding:8px;font-size:11px;color:#FFE600;white-space:pre-wrap;display:none} #status.show{display:block}
-.authOverlay{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;z-index:200;padding:16px} .authOverlay.open{display:flex}
-.authCard{background:#fff;width:min(440px,100%);border-radius:12px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.25)}
-.authTop{padding:22px 24px 0 24px}
-.authLogo{font-weight:800;font-size:20px;letter-spacing:-.02em;margin-bottom:14px} .authLogo b{color:#FFE600;background:#000;padding:2px 6px;border-radius:6px}
-.tabs{display:flex;border-bottom:1px solid #e8e8e8;margin-top:6px}
-.tab{flex:1;padding:12px 8px;text-align:center;font-weight:700;font-size:14px;cursor:pointer;color:#6b6b6b;border-bottom:2px solid transparent;margin-bottom:-1px}
-.tab.active{color:#000;border-bottom:2px solid #000}
-.authBody{padding:18px 24px 20px 24px}
-.authLabel{font-size:12px;font-weight:600;margin-top:12px;margin-bottom:6px;display:block;color:#222}
-.authInput{width:100%;background:#fff;border:1px solid #c7c7c7;border-radius:8px;padding:12px 12px;font-size:14px;outline:none} .authInput:focus{border-color:#000}
-.authBtn{width:100%;background:#000;color:#fff;border:0;border-radius:8px;padding:13px;font-weight:700;font-size:14px;cursor:pointer;margin-top:16px} .authBtn.yellow{background:#FFE600;color:#000}
-.authHint{font-size:11px;color:#666;margin-top:8px;line-height:1.4}
-.authSep{display:flex;align-items:center;gap:12px;margin:18px 0;color:#999;font-size:12px} .authSep::before,.authSep::after{content:"";flex:1;height:1px;background:#e5e5e5}
-.socialBtn{width:100%;border:1px solid #ddd;background:#fff;border-radius:8px;padding:11px;display:flex;align-items:center;justify-content:center;gap:8px;font-weight:600;font-size:13px;cursor:pointer;margin-top:8px}
-.authFooter{background:#f7f7f8;padding:14px 24px;font-size:11px;color:#666;border-top:1px solid #eee}
-@media(max-width:1100px){.grid{grid-template-columns:repeat(3,1fr)}}
-@media(max-width:760px){.wrap{grid-template-columns:1fr}.grid{grid-template-columns:repeat(2,1fr)}.card .im{height:160px;background:#f2f2f2;overflow:hidden;position:relative;display:flex;align-items:center;justify-content:center} .left{position:relative;top:0}}
-</style></head><body>
-<div class="h"><div class="logo">WROOMER<b>.PL</b></div><div class="hRight"><span id="userEmail" style="font-size:11px;opacity:.8;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></span><button class="btnD" id="myAdsBtn" style="display:none">Moje</button><button class="btnY" id="openAdd">+ Dodaj</button><button class="btnD" id="authBtn">Zaloguj / Rejestracja</button></div></div>
-<div class="wrap"><aside class="left"><h3 style="font-size:13px">Wyszukiwarka</h3><input id="q" placeholder="Szukaj np. BMW"/><input id="city" placeholder="Miasto" style="margin-top:8px"/><select id="brand" style="margin-top:8px"><option value="">Wszystkie marki</option><option>BMW</option><option>Audi</option><option>Mercedes</option><option>Toyota</option></select><button class="btnY" id="doSearch">Szukaj</button></aside><section><div class="bar"><span id="cnt">Ładowanie...</span><button class="btnS" id="ref">Odśwież</button></div><div class="grid" id="grid"></div></section></div>
-<div class="modal" id="addModal"><div class="box"><div class="boxHead"><h3 id="fTitle">Dodaj ogłoszenie</h3><button id="closeAdd" class="btnD" style="width:28px;height:28px;padding:0">✕</button></div><div class="boxBody"><div id="status"></div><div class="drop" id="drop">Kliknij lub przeciągnij zdjęcia (max 8) <input type="file" id="file" accept="image/*" multiple hidden></div><div class="photos" id="photos"></div><div class="g2"><input class="in" id="aTitle" placeholder="Tytuł *"/><input class="in" id="aBrand" placeholder="Marka"/></div><div class="g2"><input class="in" id="aModel" placeholder="Model"/><input class="in" id="aYear" type="number" placeholder="Rocznik"/></div><div class="g2"><input class="in" id="aPrice" type="number" placeholder="Cena PLN"/><input class="in" id="aPhone" placeholder="Telefon np. 600123456"/></div><div class="g2"><input class="in" id="aLocation" placeholder="Miasto"/><input class="in" id="aBrand" placeholder="Marka" style="display:none"/></div><textarea class="in" id="aDesc" placeholder="Opis..." style="min-height:70px"></textarea><div style="display:flex;gap:8px"><button class="btnY" id="save" style="flex:1">Zapisz i pokaż</button><button id="cancel" class="btnD" style="flex:1">Anuluj</button></div></div></div></div>
-<div class="modal" id="detailModal"><div class="box" id="detailBox" style="background:#fff;color:#111;max-width:980px;width:96vw;border-radius:18px"></div></div>
-<div class="authOverlay" id="authOverlay"> <div class="authCard"> <div class="authTop"> <div class="authLogo">WROOMER<b>.PL</b></div> <div class="tabs"><div class="tab active" id="tabLogin">Logowanie</div><div class="tab" id="tabRegister">Rejestracja</div></div> </div> <div class="authBody"> <div id="loginForm"> <label class="authLabel">Adres e-mail</label> <input class="authInput" id="authEmail" placeholder="Wpisz adres e-mail" type="email"/> <label class="authLabel" style="display:flex;justify-content:space-between"><span>Hasło</span><span id="forgot" style="font-weight:400;color:#666;cursor:pointer;font-size:11px;text-decoration:underline">Nie pamiętasz hasła?</span></label> <input class="authInput" id="authPass" placeholder="Wpisz hasło" type="password"/> <button class="authBtn" id="loginBtn">Zaloguj się</button> <div class="authHint">Bez potwierdzania e-mail — logowanie od razu. Dla wszystkich.</div> </div> <div id="registerForm" style="display:none"> <label class="authLabel">Adres e-mail</label> <input class="authInput" id="regEmail" placeholder="Wpisz adres e-mail" type="email"/> <label class="authLabel">Hasło</label> <input class="authInput" id="regPass" placeholder="Min. 6 znaków" type="password"/> <label style="display:flex;gap:8px;margin-top:12px;font-size:11px;line-height:1.4;color:#333"><input type="checkbox" id="terms" checked/> <span>Akceptuję Regulamin i Politykę Prywatności.</span></label> <button class="authBtn yellow" id="registerBtn">Załóż konto</button> <div class="authHint">Konto bez potwierdzania maila — od razu zalogowany i możesz dodawać ogłoszenia.</div> </div> <div id="authMsg" style="margin-top:12px;font-size:12px;min-height:20px;background:#fffbe6;border:1px solid #ffe58f;border-radius:8px;padding:8px 10px;display:none"></div> <div id="authInfo" style="margin-top:10px;font-size:11px;color:#555;background:#f6f6f6;border-radius:8px;padding:8px 10px">ℹ️ Rejestracja bez potwierdzania e-mail — dla wszystkich. Po założeniu konta jesteś od razu zalogowany.</div> <div class="authSep">lub kontynuuj z</div> <button class="socialBtn" id="googleBtn"><span style="font-weight:800">G</span> Kontynuuj z Google</button> </div> <div class="authFooter"><b>Dlaczego warto mieć konto na WROOMER.PL?</b><br/>• Edytuj i usuwaj swoje ogłoszenia • Zobaczysz etykietę <b style="background:#FFE600;padding:1px 5px;border-radius:4px;color:#000">MOJE • EDYTUJ</b> • Filtruj Moje<div style="margin-top:10px;text-align:right"><span id="closeAuth" style="cursor:pointer;text-decoration:underline">Zamknij</span></div></div> </div>
+*{box-sizing:border-box;margin:0;padding:0;font-family:Inter,system-ui,sans-serif}
+body{background:#f5f5f0;color:#111}
+header{background:#fff;border-bottom:1px solid #e5e5e0;position:sticky;top:0;z-index:50;padding:10px 16px;display:flex;align-items:center;justify-content:space-between}
+.logo{font-weight:900;font-size:20px;letter-spacing:-1px}
+.logo span{color:#ffcb00}
+.btn{border:0;cursor:pointer;padding:9px 16px;border-radius:8px;font-weight:700}
+.btn-black{background:#111;color:#fff}
+.btn-yellow{background:#ffcb00;color:#111}
+.grid{max-width:1280px;margin:18px auto;padding:0 12px;display:grid;grid-template-columns:repeat(auto-fill,minmax(132px,1fr));gap:10px}
+.card{background:#fff;border-radius:10px;overflow:hidden;border:1px solid #e9e9e6;cursor:pointer;position:relative}
+.card img{width:100%;height:96px;object-fit:cover;background:#eee}
+.card .info{padding:6px 7px}
+.card .title{font-size:11px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card .price{font-size:12px;font-weight:900;margin-top:2px}
+.badge{position:absolute;top:5px;left:5px;background:#ffcb00;color:#111;font-size:9px;font-weight:900;padding:3px 5px;border-radius:5px}
+#detail{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:100;display:none;align-items:center;justify-content:center;padding:12px}
+.detail-box{background:#fff;width:100%;max-width:980px;border-radius:14px;overflow:hidden;max-height:92vh;display:flex;flex-direction:column}
+.detail-img{width:100%;height:520px;object-fit:cover;background:#eee}
+.detail-content{padding:16px;overflow:auto}
+#authModal{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:200;display:none;align-items:center;justify-content:center;padding:12px}
+.auth-box{background:#fff;width:100%;max-width:400px;border-radius:14px;padding:18px}
+.tabs{display:flex;gap:6px;margin:12px 0}
+.tab{flex:1;padding:10px;border:1px solid #ddd;border-radius:8px;background:#fff;cursor:pointer;font-weight:700;font-size:13px}
+.tab.active{background:#111;color:#fff;border-color:#111}
+input{width:100%;padding:12px;border:1px solid #ddd;border-radius:8px;margin-top:8px}
+.log{position:fixed;left:10px;bottom:10px;background:#111;color:#ff0;font-size:11px;padding:8px 10px;border-radius:8px;max-width:320px;max-height:200px;overflow:auto;z-index:300}
+</style>
+</head>
+<body>
+<header>
+<div class="logo">WROOMER<span>.PL</span></div>
+<div style="display:flex;gap:8px;align-items:center">
+<button class="btn btn-yellow" onclick="openAdd()">+ Dodaj</button>
+<button id="myBtn" class="btn" style="display:none;border:1px solid #ddd" onclick="filterMy()">Moje</button>
+<button id="authBtn" class="btn btn-black" onclick="openAuth()">Zaloguj / Rejestracja</button>
+<span id="userEmail" style="display:none;font-size:12px;font-weight:700"></span>
+<button id="logoutBtn" class="btn" style="display:none;border:1px solid #ddd" onclick="logout()">Wyloguj</button>
 </div>
+</header>
+
+<div id="adsGrid" class="grid"></div>
+<div id="log" class="log">Log: start...</div>
+
+<!-- DETAIL -->
+<div id="detail" onclick="if(event.target.id==='detail')closeDetail()">
+<div class="detail-box">
+<img id="detailImg" class="detail-img">
+<div class="detail-content">
+<h2 id="detailTitle"></h2>
+<p id="detailPrice" style="font-weight:900;margin:8px 0"></p>
+<p id="detailDesc" style="font-size:13px;color:#555"></p>
+<div style="margin-top:12px;display:flex;gap:8px">
+<button id="editBtn" class="btn btn-yellow" style="display:none" onclick="openEdit()">Edytuj</button>
+<button id="deleteBtn" class="btn" style="display:none;border:1px solid #ddd" onclick="deleteAd()">Usuń</button>
+<button class="btn btn-black" onclick="closeDetail()">Zamknij</button>
+</div>
+</div>
+</div>
+</div>
+
+<!-- AUTH MODAL -->
+<div id="authModal" onclick="if(event.target.id==='authModal')closeAuth()">
+<div class="auth-box">
+<h3 id="authTitle">WROOMER.PL</h3>
+<div class="tabs" id="authTabs">
+<button class="tab active" id="loginTabBtn" onclick="showTab('login')">Logowanie</button>
+<button class="tab" id="registerTabBtn" onclick="showTab('register')">Rejestracja</button>
+</div>
+
+<div id="loginTab" class="auth-tab-content">
+<input id="loginEmail" placeholder="Adres e-mail">
+<input id="loginPass" type="password" placeholder="Hasło">
+<button class="btn btn-black" style="width:100%;margin-top:10px" onclick="login()">Zaloguj się</button>
+<p style="margin-top:8px;font-size:12px"><a href="#" onclick="showTab('reset');return false">Nie pamiętasz hasła?</a></p>
+<p id="loginInfo" style="font-size:11px;color:#c00;margin-top:8px"></p>
+</div>
+
+<div id="registerTab" class="auth-tab-content" style="display:none">
+<input id="regEmail" placeholder="Adres e-mail">
+<input id="regPass" type="password" placeholder="Hasło (min. 6 znaków)">
+<label style="font-size:11px;display:flex;gap:6px;margin-top:8px"><input type="checkbox" id="regCheck" style="width:auto"> Akceptuję regulamin WROOMER.PL</label>
+<button class="btn btn-yellow" style="width:100%;margin-top:10px" onclick="register()">Załóż konto</button>
+<p style="font-size:11px;color:#666;margin-top:8px">Rejestracja bez potwierdzania e-mail - po kliknięciu jesteś od razu zalogowany (tryb testowy).</p>
+</div>
+
+<div id="resetTab" class="auth-tab-content" style="display:none">
+<p style="font-size:13px">Podaj e-mail, wyślemy link do resetu hasła.</p>
+<input id="resetEmail" placeholder="Adres e-mail">
+<button class="btn btn-black" style="width:100%;margin-top:10px" onclick="sendReset()">Wyślij link resetujący</button>
+<p id="resetInfo" style="font-size:11px;margin-top:8px"></p>
+</div>
+
+<div id="newPasswordTab" class="auth-tab-content" style="display:none">
+<h3 style="margin-bottom:6px">Ustaw nowe hasło</h3>
+<p style="font-size:12px;color:#666">Wpisz nowe hasło dla konta <span id="recoveryEmail" style="font-weight:700"></span></p>
+<input id="newPasswordInput" type="password" placeholder="Nowe hasło (min. 6 znaków)">
+<button class="btn btn-black" style="width:100%;margin-top:12px" onclick="setNewPassword()">Zapisz nowe hasło</button>
+<p style="font-size:11px;color:#666;margin-top:8px">Po zapisaniu zostaniesz zalogowany nowym hasłem.</p>
+</div>
+
+</div>
+</div>
+
 <script>
-const SB_URL="https://rljqnhfogaqdjeirqqdj.supabase.co"; const SB_KEY="sb_publishable_j7CS5xIHzOMBMyvsqVgDmw_GeEek5hX";
-let sb=null, images=[], editId=null, currentUser=null, myOnly=false, authTab='login';
-const $=id=>document.getElementById(id);
-function setStatus(t,err=false){ const s=$("status"); if(!t){s.classList.remove('show');return;} s.textContent=t; s.style.color=err?"#ff6b6b":"#FFE600"; s.classList.add('show'); }
-try{ sb=window.supabase.createClient(SB_URL, SB_KEY); }catch(e){ console.error(e); }
-async function initAuth(){ const {data}=await sb.auth.getSession(); currentUser=data?.session?.user||null; updateAuthUI(); sb.auth.onAuthStateChange((_,sess)=>{ currentUser=sess?.user||null; updateAuthUI(); loadAds(); }); }
-function updateAuthUI(){ if(currentUser){ $("userEmail").textContent=currentUser.email; $("authBtn").textContent="Wyloguj ("+currentUser.email.split('@')[0]+")"; $("myAdsBtn").style.display="inline-block"; }else{ $("userEmail").textContent=""; $("authBtn").textContent="Zaloguj / Rejestracja"; $("myAdsBtn").style.display="none"; myOnly=false; } }
-function setAuthTab(t){ authTab=t; $("tabLogin").classList.toggle('active', t==='login'); $("tabRegister").classList.toggle('active', t==='register'); $("loginForm").style.display=t==='login'?'block':'none'; $("registerForm").style.display=t==='register'?'block':'none'; $("authMsg").style.display='none'; }
-function compress(file,maxW=1280){ return new Promise(r=>{ const img=new Image(); img.onload=()=>{ let w=Math.min(img.width,maxW); let h=w*(img.height/img.width); if(h>900){h=900; w=h*(img.width/img.height);} const c=document.createElement('canvas'); c.width=w; c.height=h; c.getContext('2d').drawImage(img,0,0,w,h); c.toBlob(b=>r({blob:b, url:URL.createObjectURL(b)}),'image/webp',0.78); }; img.onerror=()=>r({blob:file, url:URL.createObjectURL(file)}); img.src=URL.createObjectURL(file); }); }
-function renderPhotos(){ const w=$("photos"); w.innerHTML=""; images.forEach((o,i)=>{ const d=document.createElement('div'); d.className='ph'; d.innerHTML=`<img src="${o.url||o.src}"><button>✕</button>`; d.querySelector('button').onclick=()=>{images.splice(i,1); renderPhotos();}; w.appendChild(d); }); }
-async function loadAds(){ const q=$("q").value.trim().toLowerCase(); const city=$("city").value.trim().toLowerCase(); const brand=$("brand").value.trim().toLowerCase(); $("cnt").textContent="Ładowanie..."; $("grid").innerHTML=""; try{ let query=sb.from('ads').select('*').order('created_at',{ascending:false}).limit(120); if(myOnly&&currentUser) query=query.eq('owner_id',currentUser.id); if(brand) query=query.ilike('brand','%'+brand+'%'); if(city) query=query.ilike('location','%'+city+'%'); if(q) query=query.or(`title.ilike.%${q}%,description.ilike.%${q}%`); const {data,error}=await query; if(error) throw error; $("cnt").textContent=myOnly?`Moje: ${data.length}`:`Znaleziono: ${data.length}`; const g=$("grid"); g.innerHTML=""; if(!data.length){ g.innerHTML='<div style="background:#fff;border-radius:12px;padding:24px;text-align:center">Brak ogłoszeń - dodaj pierwsze!</div>'; return; } data.forEach(a=>{ const imgs=a.images&&Array.isArray(a.images)&&a.images.length?a.images:(a.image_url?[a.image_url]:[]); const main=imgs[0]||'https://images.unsplash.com/photo-1494976388531-d1058494cdd8?q=80&w=400&auto=format&fit=crop'; const own=currentUser&&a.owner_id===currentUser.id; const el=document.createElement('div'); el.className='card'+(own?' own':''); el.innerHTML=`<div class="im"><img loading="lazy" src="${main}"><span class="badge">📷 ${imgs.length}</span><span class="editTag">MOJE • EDYTUJ</span></div><div class="bo"><h4>${a.title||''}</h4><div class="meta">${a.year||''} ${a.location||''}</div><div class="price">${a.price?Number(a.price).toLocaleString('pl-PL')+' PLN':''}</div></div>`; el.onclick=()=>openDetail(a); g.appendChild(el); }); }catch(e){ $("cnt").textContent="Błąd: "+e.message; } } function openDetail(a){ const imgs=a.images&&Array.isArray(a.images)&&a.images.length?a.images:(a.image_url?[a.image_url]:[]); const own=currentUser&&a.owner_id===currentUser.id; const box=$("detailBox"); const views=a.views||0; const phone = a.phone ? String(a.phone).trim() : ''; const phoneMasked = phone ? phone.slice(0,3)+' *** ***' : 'Brak numeru'; box.innerHTML=`<div style="padding:18px 22px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #eee;position:sticky;top:0;background:#fff;z-index:2;border-radius:18px 18px 0 0"><h3 style="font-size:20px;line-height:1.2;max-width:60%">${a.title||''}</h3><div style="display:flex;gap:8px;align-items:center"><span style="font-size:12px;opacity:.6">👁️ ${views}</span><button id="editBtn" style="display:${own?'inline-flex':'none'};background:#FFE600;border:0;border-radius:999px;padding:9px 16px;font-weight:800;font-size:13px;cursor:pointer">Edytuj</button><button id="delBtn" style="display:${own?'inline-flex':'none'};background:#111;color:#fff;border:0;border-radius:999px;padding:9px 14px;font-size:13px;cursor:pointer">Usuń</button><button onclick="document.getElementById('detailModal').classList.remove('open')" class="btnS" style="padding:9px 14px">✕</button></div></div><div style="padding:18px 22px"><img id="dMain" src="${imgs[0]||''}" style="width:100%;height:520px;object-fit:contain;border-radius:16px;background:#111;display:block"><div style="display:flex;gap:10px;overflow:auto;margin-top:12px;padding-bottom:4px">${imgs.map(s=>`<img src="${s}" style="width:96px;height:72px;object-fit:contain;border-radius:10px;cursor:pointer;border:2px solid transparent;flex-shrink:0" onclick="document.getElementById('dMain').src=this.src">`).join('')}</div><div style="display:grid;grid-template-columns:1fr 340px;gap:24px;margin-top:18px"><div><div style="font-weight:800;font-size:28px">${a.price?Number(a.price).toLocaleString('pl-PL')+' PLN':''}</div><div style="margin-top:14px;font-size:15px;white-space:pre-wrap;line-height:1.7">${a.description||''}</div></div><div><div style="background:#fff;border:1px solid #e5e5e5;border-radius:16px;padding:16px;box-shadow:0 2px 12px rgba(0,0,0,.04)"><div style="display:flex;align-items:center;gap:10px"><div style="width:40px;height:40px;border-radius:999px;background:#FFE600;display:grid;place-items:center;font-weight:800">W</div><div><div style="font-weight:700;font-size:13px">Sprzedawca</div><div style="font-size:11px;opacity:.6">Na WROOMER.PL</div></div></div><div style="margin-top:14px;display:flex;flex-direction:column;gap:8px"><button id="showPhoneBtn" style="width:100%;background:#000;color:#fff;border:0;border-radius:12px;padding:14px 14px;font-weight:700;cursor:pointer;font-size:14px;display:flex;justify-content:space-between;align-items:center"><span id="phoneText">📞 Pokaż numer - ${phoneMasked}</span><span id="phoneAction" style="background:#FFE600;color:#000;border-radius:6px;padding:2px 8px;font-size:10px">POKAŻ</span></button><div id="phoneFull" style="display:none;background:#fffbe6;border:1px dashed #e6c200;border-radius:12px;padding:14px;text-align:center"></div><button id="smsBtn" style="width:100%;background:#fff;color:#000;border:1px solid #000;border-radius:12px;padding:12px;font-weight:600;cursor:pointer;font-size:13px">💬 Napisz SMS do sprzedawcy</button><button id="msgBtn" style="width:100%;background:#FFE600;color:#000;border:0;border-radius:12px;padding:13px;font-weight:800;cursor:pointer;font-size:14px">✉️ Napisz wiadomość</button></div><div style="margin-top:12px;font-size:11px;color:#666">📍 ${a.location||''} • ID: ${String(a.id).slice(0,8)} • ${new Date(a.created_at).toLocaleDateString('pl-PL')}</div><div style="margin-top:8px;font-size:10px;color:#999">Bezpiecznie: nie wysyłaj zaliczek przed obejrzeniem.</div></div></div></div></div>`; const showBtn = box.querySelector('#showPhoneBtn'); const phoneFullEl = box.querySelector('#phoneFull'); const phoneText = box.querySelector('#phoneText'); const phoneAction = box.querySelector('#phoneAction'); if(showBtn){ showBtn.onclick=()=>{ if(!phone){ phoneFullEl.style.display='block'; phoneFullEl.innerHTML='<div style="font-size:13px">❌ Sprzedawca nie podał numeru.<br/>Użyj przycisku <b>Napisz wiadomość</b> poniżej.</div>'; phoneText.textContent='📞 Brak numeru'; phoneAction.textContent='BRAK'; return; } if(phoneFullEl.style.display==='block'){ phoneFullEl.style.display='none'; phoneText.textContent='📞 Pokaż numer - '+phoneMasked; phoneAction.textContent='POKAŻ'; return; } phoneFullEl.style.display='block'; phoneFullEl.innerHTML='<div style="font-size:20px;font-weight:800;letter-spacing:1px">📞 '+phone+'</div><div style="margin-top:10px;display:flex;gap:8px;justify-content:center"><a href="tel:'+phone+'" style="background:#000;color:#fff;padding:10px 18px;border-radius:999px;font-size:13px;font-weight:700;text-decoration:none">📞 Zadzwoń teraz</a><a href="sms:'+phone+'" style="background:#FFE600;color:#000;padding:10px 18px;border-radius:999px;font-size:13px;font-weight:700;text-decoration:none">💬 SMS</a></div>'; phoneText.textContent='📞 '+phone; phoneAction.textContent='UKRYJ'; try{ sb.from('ads').update({views:views+1}).eq('id',a.id).then(()=>{}); }catch(e){} }; } const smsBtn = box.querySelector('#smsBtn'); if(smsBtn){ smsBtn.onclick=()=>{ if(!phone){ alert('Sprzedawca nie podał numeru. Użyj Napisz wiadomość.'); return; } window.location.href='sms:'+phone+'?body='+encodeURIComponent('Cześć, piszę w sprawie ogłoszenia: '+(a.title||'')+' na WROOMER.PL'); }; } const msgBtn = box.querySelector('#msgBtn'); if(msgBtn){ msgBtn.onclick=()=>{ const overlay = document.createElement('div'); overlay.className='authOverlay open'; overlay.innerHTML=`<div class="authCard" style="max-width:460px"><div style="padding:20px 22px"><div style="display:flex;justify-content:space-between;align-items:center"><h3 style="font-size:16px">Napisz wiadomość</h3><button id="closeMsg" class="btnS">✕</button></div><div style="margin-top:12px;background:#f6f6f6;border-radius:10px;padding:10px;display:flex;gap:8px;align-items:center"><img src="${imgs[0]||''}" style="width:48px;height:36px;object-fit:contain;border-radius:6px"><div style="font-size:12px"><b>${a.title||''}</b><br/>${a.price?Number(a.price).toLocaleString('pl-PL')+' PLN':''} • ${a.location||''}</div></div><textarea id="msgText" style="width:100%;min-height:100px;border:1px solid #ddd;border-radius:10px;padding:12px;margin-top:12px;font-size:13px">Cześć, piszę w sprawie ogłoszenia "${a.title||''}" na WROOMER.PL. Czy jest aktualne?</textarea><button id="sendMsg" style="width:100%;background:#FFE600;border:0;border-radius:10px;padding:13px;font-weight:800;margin-top:12px;cursor:pointer">Wyślij wiadomość</button><div style="margin-top:8px;font-size:10px;color:#888">wiadomość wyśle SMS z treścią.</div></div></div>`; document.body.appendChild(overlay); overlay.addEventListener('click',e=>{ if(e.target===e.currentTarget) overlay.remove(); }); overlay.querySelector('#closeMsg').onclick=()=>overlay.remove(); overlay.querySelector('#sendMsg').onclick=()=>{ const txt = overlay.querySelector('#msgText').value.trim(); if(!txt){ alert('Wpisz wiadomość'); return; } if(phone){ window.location.href='sms:'+phone+'?body='+encodeURIComponent(txt); } else { alert('Skopiowano: '+txt); navigator.clipboard.writeText(txt); } overlay.remove(); }; }; } if(own){ const eb = box.querySelector('#editBtn'); const db = box.querySelector('#delBtn'); if(eb) eb.onclick=()=>{ document.getElementById('detailModal').classList.remove('open'); openEdit(a); }; if(db) db.onclick=async()=>{ if(!confirm('Usunąć?')) return; const {error}=await sb.from('ads').delete().eq('id',a.id).eq('owner_id',currentUser.id); if(error){alert(error.message);return;} document.getElementById('detailModal').classList.remove('open'); loadAds(); }; } document.getElementById('detailModal').classList.add('open'); try{ sb.from('ads').update({views:views+1}).eq('id',a.id).then(()=>{}); }catch(e){}
-} function openAdd(){ if(!currentUser){ $("authOverlay").classList.add('open'); setAuthTab('login'); return; } editId=null; images=[]; renderPhotos(); $("fTitle").textContent="Dodaj ogłoszenie"; $("aTitle").value=""; $("aBrand").value=""; $("aModel").value=""; $("aYear").value=""; $("aPrice").value=""; $("aPhone").value=""; $("aLocation").value=""; $("aDesc").value=""; setStatus(""); $("addModal").classList.add('open'); }
-function openEdit(a){ editId=a.id; images=(a.images||[]).map(url=>({url,src:url,type:'url'})); renderPhotos(); $("fTitle").textContent="Edytuj ogłoszenie"; $("aTitle").value=a.title||""; $("aBrand").value=a.brand||""; $("aModel").value=a.model||""; $("aYear").value=a.year||""; $("aPrice").value=a.price||""; $("aPhone").value=a.phone||""; $("aLocation").value=a.location||""; $("aDesc").value=a.description||""; setStatus("Edytujesz swoje ogłoszenie."); $("addModal").classList.add('open'); }
-$("openAdd").onclick=openAdd; $("closeAdd").onclick=()=>$("addModal").classList.remove('open'); $("cancel").onclick=()=>$("addModal").classList.remove('open'); $("addModal").addEventListener('click',e=>{if(e.target===e.currentTarget)e.currentTarget.classList.remove('open');}); $("detailModal").addEventListener('click',e=>{if(e.target===e.currentTarget)e.currentTarget.classList.remove('open');}); $("doSearch").onclick=loadAds; $("ref").onclick=loadAds;
-$("myAdsBtn").onclick=()=>{ if(!currentUser) return; myOnly=!myOnly; $("myAdsBtn").textContent=myOnly?"Wszystkie":"Moje"; loadAds(); };
-$("authBtn").onclick=async()=>{ if(currentUser){ await sb.auth.signOut(); }else{ $("authOverlay").classList.add('open'); setAuthTab('login'); } }; $("closeAuth").onclick=()=>$("authOverlay").classList.remove('open'); $("authOverlay").addEventListener('click',e=>{if(e.target===e.currentTarget)e.currentTarget.classList.remove('open');});
-$("tabLogin").onclick=()=>setAuthTab('login'); $("tabRegister").onclick=()=>setAuthTab('register');
-function showAuthMsg(html){ const m=$("authMsg"); m.style.display='block'; m.innerHTML=html; }
-$("loginBtn").onclick=async()=>{ const email=$("authEmail").value.trim(); const pass=$("authPass").value.trim(); if(!email||pass.length<6){ showAuthMsg("<span style='color:#d00'>Podaj poprawny email i hasło (min 6 znaków).</span>"); return; } $("loginBtn").disabled=true; showAuthMsg("Loguję..."); try{ const {error}=await sb.auth.signInWithPassword({email,password:pass}); if(error) throw error; $("authOverlay").classList.remove('open'); }catch(e){ const msg=(e.message||'').toLowerCase(); if(msg.includes('email not confirmed')){ showAuthMsg("<span style='color:#d00'>Konto czeka na potwierdzenie. Uruchom SQL: <code>update auth.users set email_confirmed_at=now() where email='"+email+"'</code><br/>Lub wyłącz Confirm email w Dashboardzie.</span>"); } else if(msg.includes('invalid login credentials')){ showAuthMsg("<span style='color:#d00'><b>Nieprawidłowy e-mail lub hasło.</b><br/>• Jeśli nie masz konta — przejdź do <b>Rejestracja</b><br/>• Jeśli masz konto — sprawdź hasło lub kliknij <b>Nie pamiętasz hasła?</b></span>"); } else { showAuthMsg("<span style='color:#d00'>"+e.message+"</span>"); } }finally{ $("loginBtn").disabled=false; } };
-$("registerBtn").onclick=async()=>{ const email=$("regEmail").value.trim()||$("authEmail").value.trim(); const pass=$("regPass").value.trim()||$("authPass").value.trim(); if(!email||pass.length<6){ showAuthMsg("<span style='color:#d00'>Podaj poprawny e-mail i hasło (min. 6 znaków).</span>"); return; } if(!$("terms").checked){ showAuthMsg("<span style='color:#d00'>Zaakceptuj Regulamin.</span>"); return; } $("registerBtn").disabled=true; showAuthMsg("Zakładam konto..."); try{ const {data,error}=await sb.auth.signUp({email,password:pass}); if(error) throw error; if(data.session){ $("authOverlay").classList.remove('open'); showAuthMsg("<span style='color:#0a0'>Konto założone i zalogowano!</span>"); } else { showAuthMsg("<span style='color:#0a0'><b>Konto utworzone!</b><br/>Dla wszystkich bez potwierdzania — jeśli widzisz ten komunikat, uruchom SQL: <code>update auth.users set email_confirmed_at=now() where email='"+email+"'</code> i zaloguj się ponownie.</span>"); setAuthTab('login'); $("authEmail").value=email; } }catch(e){ const m=e.message.toLowerCase(); if(m.includes('already registered')){ showAuthMsg("<span style='color:#d00'>Ten e-mail ma już konto. Przejdź do <b>Logowanie</b>.</span>"); } else { showAuthMsg("<span style='color:#d00'>"+e.message+"</span>"); } }finally{ $("registerBtn").disabled=false; } };
-$("googleBtn").onclick=async()=>{ try{ const {error}=await sb.auth.signInWithOAuth({provider:'google', options:{redirectTo: location.href}}); if(error) throw error; }catch(e){ showAuthMsg("<span style='color:#d00'>"+e.message+"</span>"); } };
-$("forgot").onclick=async()=>{ const email=$("authEmail").value.trim(); if(!email){ showAuthMsg("<span style='color:#d00'>Wpisz e-mail aby wysłać link resetujący.</span>"); return; } showAuthMsg("Wysyłam link..."); const {error}=await sb.auth.resetPasswordForEmail(email, {redirectTo: location.href}); if(error) showAuthMsg("<span style='color:#d00'>"+error.message+"</span>"); else showAuthMsg("<span style='color:#0a0'>Link do resetu wysłany na "+email+"</span>"); };
-const drop=$("drop"), fileIn=$("file"); drop.onclick=()=>fileIn.click(); drop.ondragover=e=>{e.preventDefault(); drop.style.borderColor='#FFE600';}; drop.ondragleave=()=>drop.style.borderColor='#333'; drop.ondrop=async e=>{ e.preventDefault(); drop.style.borderColor='#333'; const files=[...e.dataTransfer.files].filter(f=>f.type.startsWith('image/')).slice(0,8-images.length); for(const f of files){ const c=await compress(f); images.push({blob:c.blob, url:c.url, src:c.url}); } renderPhotos(); }; fileIn.onchange=async e=>{ const files=[...e.target.files].slice(0,8-images.length); for(const f of files){ const c=await compress(f); images.push({blob:c.blob, url:c.url, src:c.url}); } renderPhotos(); fileIn.value=''; };
-$("save").onclick=async()=>{ const title=$("aTitle").value.trim(); if(!title){ setStatus("❌ Tytuł wymagany",true); return; } if(images.length===0){ setStatus("❌ Dodaj min. 1 zdjęcie",true); return; } if(!currentUser){ $("authOverlay").classList.add('open'); return; } const btn=$("save"); btn.disabled=true; btn.textContent="Zapisuję..."; setStatus("⏳ Wysyłam zdjęcia..."); try{ const urls=[]; for(let i=0;i<images.length;i++){ const it=images[i]; if(it.type==='url'){ urls.push(it.url); continue; } const name=`${currentUser.id}/${Date.now()}_${i}_${Math.random().toString(36).slice(2,6)}.webp`; const {error}=await sb.storage.from('ad-images').upload(name,it.blob,{contentType:'image/webp',upsert:true}); if(error) throw new Error("Storage: "+error.message); const {data}=sb.storage.from('ad-images').getPublicUrl(name); urls.push(data.publicUrl); } setStatus("⏳ Zapisuję ogłoszenie..."); const payload={title,brand:$("aBrand").value.trim()||null,model:$("aModel").value.trim()||null,year:parseInt($("aYear").value)||null,price:parseInt($("aPrice").value)||0,location:$("aLocation").value.trim()||null,phone:$("aPhone").value.trim()||null,description:$("aDesc").value.trim()||null,images:urls,image_url:urls[0],owner_id:currentUser.id}; let res; if(editId){ res=await sb.from('ads').update(payload).eq('id',editId).eq('owner_id',currentUser.id).select(); } else{ res=await sb.from('ads').insert([payload]).select(); } if(res.error) throw res.error; setStatus("✅ Zapisano!"); setTimeout(()=>{ $("addModal").classList.remove('open'); setStatus(""); images=[]; loadAds(); },400); }catch(e){ setStatus("❌ "+e.message,true); }finally{ btn.disabled=false; btn.textContent=editId?"Zapisz zmiany":"Zapisz i pokaż"; } };
-initAuth(); loadAds();
-</script></body></html>
+const SUPABASE_URL = 'https://rljqnhfogaqdjeirqqdj.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_j7CS5xIHzOMBMyvsqVgDmw_GeEek5hX';
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+let ads=[], currentAd=null, myFilter=false;
+
+function log(m){document.getElementById('log').innerHTML+='<br>'+m; console.log(m)}
+
+async function loadAds(){
+ log('Ładuję ogłoszenia...');
+ const {data, error} = await supabaseClient.from('ads').select('*').order('created_at',{ascending:false}).limit(100);
+ if(error){log('❌ Błąd ładowania: '+error.message); return}
+ ads=data||[];
+ renderAds();
+ log('✅ Załadowano '+ads.length);
+}
+function renderAds(){
+ const grid=document.getElementById('adsGrid');
+ let list=myFilter ? ads.filter(a=>a.owner_id===window.currentUserId) : ads;
+ grid.innerHTML='';
+ list.forEach(ad=>{
+  const img=(ad.images && ad.images[0]) || ad.image_url || 'https://via.placeholder.com/200';
+  const isMine = ad.owner_id && ad.owner_id===window.currentUserId;
+  grid.innerHTML+=`<div class="card" onclick="openDetail('${ad.id}')">${isMine?'<div class="badge">MOJE • EDYTUJ</div>':''}<img src="${img}"><div class="info"><div class="title">${ad.title||ad.brand+' '+ad.model}</div><div class="price">${ad.price||''} zł</div></div></div>`;
+ });
+}
+
+function openDetail(id){
+ const ad=ads.find(a=>a.id==id); if(!ad)return; currentAd=ad;
+ document.getElementById('detailImg').src=(ad.images&&ad.images[0])||ad.image_url||'';
+ document.getElementById('detailTitle').innerText=ad.title||ad.brand+' '+ad.model;
+ document.getElementById('detailPrice').innerText=(ad.price||'')+' zł';
+ document.getElementById('detailDesc').innerText=ad.description||'';
+ const mine=ad.owner_id===window.currentUserId;
+ document.getElementById('editBtn').style.display=mine?'block':'none';
+ document.getElementById('deleteBtn').style.display=mine?'block':'none';
+ document.getElementById('detail').style.display='flex';
+}
+function closeDetail(){document.getElementById('detail').style.display='none'}
+
+function openAuth(){document.getElementById('authModal').style.display='flex'; showTab('login')}
+function closeAuth(){document.getElementById('authModal').style.display='none'}
+function showTab(name){
+ document.querySelectorAll('.auth-tab-content').forEach(d=>d.style.display='none');
+ document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+ if(name==='login'){document.getElementById('loginTab').style.display='block';document.getElementById('loginTabBtn').classList.add('active');document.getElementById('authTitle').innerText='Logowanie'}
+ if(name==='register'){document.getElementById('registerTab').style.display='block';document.getElementById('registerTabBtn').classList.add('active');document.getElementById('authTitle').innerText='Rejestracja'}
+ if(name==='reset'){document.getElementById('resetTab').style.display='block';document.getElementById('authTitle').innerText='Reset hasła'}
+ if(name==='newPassword'){document.getElementById('newPasswordTab').style.display='block';document.getElementById('authTabs').style.display='none';document.getElementById('authTitle').innerText='WROOMER reset hasła'}
+}
+function showTabOnlyNewPassword(email){
+ document.getElementById('authModal').style.display='flex';
+ document.querySelectorAll('.auth-tab-content').forEach(d=>d.style.display='none');
+ document.getElementById('authTabs').style.display='none';
+ document.getElementById('newPasswordTab').style.display='block';
+ document.getElementById('authTitle').innerText='WROOMER reset hasła';
+ document.getElementById('recoveryEmail').innerText=email||'';
+}
+
+async function login(){
+ const email=document.getElementById('loginEmail').value.trim();
+ const pass=document.getElementById('loginPass').value;
+ const {data, error}=await supabaseClient.auth.signInWithPassword({email,password:pass});
+ if(error){
+  let msg='Nieprawidłowy e-mail lub hasło. Jeśli nie masz konta - przejdź do zakładki Rejestracja.';
+  if(error.message.includes('Email not confirmed')) msg='Musisz potwierdzić adres e-mail. Sprawdź skrzynkę '+email+' (także SPAM).';
+  document.getElementById('loginInfo').innerText=msg;
+  log('❌ Login błąd: '+error.message);
+ } else {
+  log('✅ Zalogowano '+email); closeAuth(); checkUser();
+ }
+}
+async function register(){
+ if(!document.getElementById('regCheck').checked){alert('Zaznacz regulamin');return}
+ const email=document.getElementById('regEmail').value.trim();
+ const pass=document.getElementById('regPass').value;
+ if(pass.length<6){alert('Hasło min. 6 znaków');return}
+ const {data, error}=await supabaseClient.auth.signUp({email,password:pass});
+ if(error){alert('Błąd: '+error.message); return}
+ // tryb bez potwierdzania - od razu login
+ const {data:loginData}=await supabaseClient.auth.signInWithPassword({email,password:pass});
+ log('✅ Konto utworzone '+email); closeAuth(); checkUser();
+}
+async function sendReset(){
+ const email=document.getElementById('resetEmail').value.trim();
+ if(!email){alert('Wpisz e-mail');return}
+ const {error}=await supabaseClient.auth.resetPasswordForEmail(email,{redirectTo: window.location.origin});
+ if(error){document.getElementById('resetInfo').innerText='Błąd: '+error.message}
+ else {document.getElementById('resetInfo').innerText='Wysłaliśmy wiadomość na '+email+'. Temat: WROOMER reset hasła. Sprawdź skrzynkę i kliknij link, aby ustawić nowe hasło.'; log('✅ Reset wysłany na '+email)}
+}
+async function setNewPassword(){
+ const newPass=document.getElementById('newPasswordInput').value;
+ if(newPass.length<6){alert('Hasło musi mieć min. 6 znaków');return}
+ const {data, error}=await supabaseClient.auth.updateUser({password:newPass});
+ if(error){alert('Błąd: '+error.message); log('❌ updateUser: '+error.message)}
+ else {alert('Hasło zmienione! Zalogowano nowym hasłem.'); log('✅ Hasło zmienione'); window.location.hash=''; closeAuth(); checkUser();}
+}
+async function checkUser(){
+ const {data:{user}}=await supabaseClient.auth.getUser();
+ if(user){
+  window.currentUserId=user.id;
+  document.getElementById('authBtn').style.display='none';
+  document.getElementById('userEmail').style.display='block';
+  document.getElementById('userEmail').innerText=user.email;
+  document.getElementById('logoutBtn').style.display='block';
+  document.getElementById('myBtn').style.display='block';
+  log('Zalogowany jako '+user.email);
+  renderAds();
+ } else {
+  window.currentUserId=null;
+  document.getElementById('authBtn').style.display='block';
+  document.getElementById('userEmail').style.display='none';
+  document.getElementById('logoutBtn').style.display='none';
+  document.getElementById('myBtn').style.display='none';
+ }
+}
+async function logout(){await supabaseClient.auth.signOut(); location.reload()}
+
+function filterMy(){myFilter=!myFilter; document.getElementById('myBtn').innerText=myFilter?'Wszystkie':'Moje'; renderAds()}
+
+// ADD
+function openAdd(){
+ const t=prompt('Tytuł ogłoszenia:'); if(!t)return;
+ const p=prompt('Cena:'); const imgUrl=prompt('Link do zdjęcia (opcjonalnie) lub zostaw puste:');
+ addAd({title:t, price:p, image_url:imgUrl});
+}
+async function addAd(obj){
+ const {data:{user}}=await supabaseClient.auth.getUser();
+ if(!user){alert('Zaloguj się aby dodać'); openAuth(); return}
+ const toInsert={title:obj.title, price:obj.price, image_url:obj.image_url, images: obj.image_url?[obj.image_url]:[], owner_id:user.id, brand:obj.title, model:'', description:obj.title};
+ const {data, error}=await supabaseClient.from('ads').insert(toInsert).select();
+ if(error){log('❌ Insert błąd: '+error.message); alert('Błąd zapisu: '+error.message)} else {log('✅ Zapisano ID='+data[0].id); loadAds()}
+}
+async function deleteAd(){
+ if(!currentAd)return; if(!confirm('Usunąć?'))return;
+ const {error}=await supabaseClient.from('ads').delete().eq('id',currentAd.id);
+ if(error)alert(error.message); else {closeDetail(); loadAds();}
+}
+function openEdit(){
+ const t=prompt('Nowy tytuł:', currentAd.title); if(!t)return;
+ supabaseClient.from('ads').update({title:t}).eq('id',currentAd.id).then(()=>{closeDetail(); loadAds()});
+}
+
+// CRITICAL: PASSWORD_RECOVERY handling
+supabaseClient.auth.onAuthStateChange(async (event, session)=>{
+ console.log('Auth event:',event);
+ if(event==='PASSWORD_RECOVERY'){
+  const email=session?.user?.email||'';
+  log('🔑 PASSWORD_RECOVERY - pokaż ustaw nowe hasło');
+  showTabOnlyNewPassword(email);
+ }
+ if(event==='SIGNED_IN'){
+  // jeśli to recovery, nie zamykaj automatycznie - czekaj na nowe hasło
+  if(window.location.hash.includes('type=recovery') || window.location.search.includes('type=recovery')) return;
+  checkUser();
+ }
+});
+
+loadAds(); checkUser();
+</script>
+</body>
+</html>
