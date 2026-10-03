@@ -27,12 +27,14 @@ header{background:#fff;border-bottom:1px solid #e5e5e0;position:sticky;top:0;z-i
 .detail-img{width:100%;height:60vh;min-height:300px;object-fit:contain;background:#f5f5f5}
 .detail-content{padding:18px;overflow:auto}
 #authModal,#addModal{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:200;display:none;align-items:center;justify-content:center;padding:12px}
-.auth-box,.add-box{background:#fff;width:100%;max-width:600px;border-radius:16px;padding:20px;max-height:92vh;overflow:auto}
+.auth-box,.add-box{background:#fff;width:100%;max-width:650px;border-radius:16px;padding:20px;max-height:92vh;overflow:auto}
 .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.form-grid .full{grid-column:1/-1}
 .add-box label{font-size:11px;font-weight:700;color:#444;margin-top:6px;display:block}
 .add-box input, .add-box textarea, .add-box select{width:100%;padding:11px;border:1px solid #ddd;border-radius:8px;margin-top:4px;font-size:13px;background:#fff}
 .preview-images{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}.preview-images img{width:80px;height:80px;object-fit:cover;border-radius:8px;border:1px solid #ddd}
 #resultsInfo{max-width:1280px;margin:10px auto 0;padding:0 12px;font-size:12px;color:#666}
+.addr-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+@media(max-width:600px){.addr-row{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -49,11 +51,10 @@ header{background:#fff;border-bottom:1px solid #e5e5e0;position:sticky;top:0;z-i
 </div>
 <div class="search-bar">
 <input id="searchInput" class="search-main" placeholder="Szukaj: BMW, Audi..." oninput="renderAds()">
-<select id="brandFilter" onchange="renderAds()"><option value="">Wszystkie marki</option><option>BMW</option><option>Audi</option><option>Mercedes</option><option>Volkswagen</option><option>Toyota</option><option>Ford</option><option>Opel</option><option>Skoda</option><option>Mitsubishi</option><option>Honda</option><option>Peugeot</option><option>Renault</option><option>Fiat</option><option>Hyundai</option><option>Kia</option><option>Seat</option></select>
+<select id="brandFilter" onchange="renderAds()"><option value="">Wszystkie marki</option><option>BMW</option><option>Audi</option><option>Mercedes</option><option>Volkswagen</option><option>Toyota</option><option>Ford</option><option>Opel</option><option>Skoda</option><option>Mitsubishi</option></select>
 <input id="locationInput" placeholder="Miejscowość: Gorzyce, Katowice..." oninput="onLocationInput()">
 <select id="radiusFilter" onchange="renderAds()"><option value="0">+0 km</option><option value="5">+5 km</option><option value="25" selected>+25 km</option><option value="50">+50 km</option><option value="100">+100 km</option><option value="9999">Cała Polska</option></select>
 <button class="btn btn-white" onclick="getMyLocation()">📍 Blisko mnie</button>
-<select id="sortFilter" onchange="renderAds()"><option value="newest">Najnowsze</option><option value="price_asc">Cena ↑</option><option value="price_desc">Cena ↓</option><option value="distance">Najbliższe</option></select>
 <button class="btn btn-white" onclick="clearFilters()">Wyczyść</button>
 </div>
 </header>
@@ -64,73 +65,158 @@ header{background:#fff;border-bottom:1px solid #e5e5e0;position:sticky;top:0;z-i
 <div id="detail" onclick="if(event.target.id==='detail')closeDetail()"><div class="detail-box"><img id="detailImg" class="detail-img"><div class="detail-content"><h2 id="detailTitle"></h2><p id="detailPrice" style="font-weight:900"></p><p id="detailLoc"></p><p id="detailDesc" style="white-space:pre-wrap"></p><div id="detailImages" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"></div><div style="margin-top:12px"><p id="phoneNumber" style="font-weight:900;display:none"></p><div style="display:flex;gap:8px;margin-top:8px"><button class="btn btn-black" onclick="contactCall()">📞 Zadzwoń</button><button class="btn btn-white" onclick="showPhone()">Pokaż numer</button><button class="btn btn-black" onclick="closeDetail()">Zamknij</button></div></div></div></div></div>
 
 <div id="addModal" onclick="if(event.target.id==='addModal')closeAdd()"><div class="add-box"><h2 id="addTitle">Dodaj ogłoszenie</h2><div class="form-grid">
-<div class="full"><label>Tytuł ogłoszenia * (automatycznie z marki i modelu)</label><input id="addTitleInput" placeholder="np. Mitsubishi Colt 1.3 95KM"></div>
+<div class="full"><label>Tytuł *</label><input id="addTitleInput" placeholder="np. Mitsubishi Colt 1.3"></div>
 <div><label>Marka *</label><select id="addBrand" onchange="updateModelOptions()"><option value="">Wybierz markę *</option><option>BMW</option><option>Audi</option><option>Mercedes</option><option>Volkswagen</option><option>Toyota</option><option>Ford</option><option>Opel</option><option>Skoda</option><option>Mitsubishi</option><option>Honda</option><option>Peugeot</option><option>Renault</option><option>Fiat</option><option>Hyundai</option><option>Kia</option><option>Seat</option><option>Suzuki</option><option>Mazda</option><option>Nissan</option><option>Citroen</option><option>Dacia</option><option>Volvo</option><option>Lexus</option><option>Jeep</option><option>Subaru</option><option>Alfa Romeo</option><option>Chevrolet</option><option>Inna</option></select></div>
 <div><label>Model *</label><select id="addModel"><option value="">Najpierw wybierz markę</option></select></div>
 <div><label>Cena PLN *</label><input id="addPrice" type="number" placeholder="7900"></div>
-<div><label>Miejscowość *</label><input id="addLocation" placeholder="np. Gorzyce"></div>
-<div class="full"><label>Telefon *</label><input id="addPhone" type="tel" placeholder="600 123 456"></div>
-<div class="full"><label>Opis</label><textarea id="addDesc" rows="3" placeholder="Rok, przebieg, paliwo, pojemność..."></textarea></div>
+<div><label>Telefon *</label><input id="addPhone" type="tel" placeholder="600 123 456"></div>
+
+<div class="full" style="margin-top:8px;padding:12px;background:#f9f9f6;border-radius:10px;border:1px solid #e9e9e6"><label style="font-size:12px;font-weight:900;margin-top:0">📍 ADRES - tylko wybór</label><div class="addr-row" style="margin-top:6px">
+<div><label>Województwo *</label><select id="addWoj" onchange="updatePowiatOptions()"><option value="">Wybierz województwo *</option><option value="dolnośląskie">Dolnośląskie</option><option value="kujawsko-pomorskie">Kujawsko-pomorskie</option><option value="lubelskie">Lubelskie</option><option value="lubuskie">Lubuskie</option><option value="łódzkie">Łódzkie</option><option value="małopolskie">Małopolskie</option><option value="mazowieckie">Mazowieckie</option><option value="opolskie">Opolskie</option><option value="podkarpackie">Podkarpackie</option><option value="podlaskie">Podlaskie</option><option value="pomorskie">Pomorskie</option><option value="śląskie">Śląskie</option><option value="świętokrzyskie">Świętokrzyskie</option><option value="warmińsko-mazurskie">Warmińsko-mazurskie</option><option value="wielkopolskie">Wielkopolskie</option><option value="zachodniopomorskie">Zachodniopomorskie</option></select></div>
+<div><label>Powiat *</label><select id="addPowiat" onchange="updateMiejscowoscOptions()" disabled><option value="">Najpierw woj.</option></select></div>
+<div><label>Miejscowość *</label><select id="addMiejscowosc" disabled><option value="">Najpierw powiat</option></select></div>
+</div><p id="addrInfo" style="font-size:10px;color:#666;margin-top:6px"></p></div>
+
+<div class="full"><label>Opis</label><textarea id="addDesc" rows="3" placeholder="Rok, przebieg, paliwo..."></textarea></div>
 <div class="full"><label>Zdjęcia (max 10)</label><input id="addImagesFile" type="file" accept="image/*" multiple onchange="handleFiles(this.files)"><div id="addPreview" class="preview-images"></div><input id="addImagesLinks" placeholder="lub linki https://..." style="margin-top:6px"></div>
 </div><div style="display:flex;gap:8px;margin-top:16px"><button class="btn btn-black" style="flex:1" id="addSubmitBtn" onclick="submitAdd()">Zatwierdź</button><button class="btn btn-white" style="flex:1" onclick="closeAdd()">Anuluj</button></div><p id="addInfo" style="font-size:12px;color:#c00;margin-top:8px"></p></div></div>
 
-<div id="authModal" onclick="if(event.target.id==='authModal')closeAuth()"><div class="auth-box"><h3>WROOMER.PL - Logowanie</h3><div style="display:flex;gap:8px;margin:12px 0"><button class="btn btn-black" style="flex:1" id="loginTabBtn" onclick="showTab('login')">Logowanie</button><button class="btn btn-white" style="flex:1" id="registerTabBtn" onclick="showTab('register')">Rejestracja</button></div><div id="loginTab"><input id="loginEmail" placeholder="E-mail" style="width:100%;padding:10px;margin-top:8px"><input id="loginPass" type="password" placeholder="Hasło" style="width:100%;padding:10px;margin-top:8px"><button class="btn btn-black" style="width:100%;margin-top:10px" onclick="login()">Zaloguj się</button><p id="loginInfo" style="font-size:11px;color:#c00;margin-top:8px;white-space:pre-wrap"></p></div><div id="registerTab" style="display:none"><input id="regEmail" placeholder="E-mail" style="width:100%;padding:10px;margin-top:8px"><input id="regPass" type="password" placeholder="Hasło min 6 znaków" style="width:100%;padding:10px;margin-top:8px"><label style="font-size:11px;display:flex;gap:6px;margin-top:8px"><input type="checkbox" id="regCheck"> Regulamin</label><button class="btn btn-yellow" style="width:100%;margin-top:10px" onclick="register()">Załóż konto</button><p id="regInfo" style="font-size:11px;color:#c00;margin-top:8px"></p></div><div id="resetTab" style="display:none"><input id="resetEmail" placeholder="E-mail" style="width:100%;padding:10px;margin-top:8px"><button class="btn btn-black" style="width:100%;margin-top:10px" onclick="sendReset()">Wyślij reset</button><p id="resetInfo" style="font-size:11px;margin-top:8px"></p><button class="btn btn-white" style="width:100%;margin-top:8px" onclick="showTab('login')">Wróć</button></div><p style="font-size:11px;margin-top:10px"><a href="#" onclick="showTab('reset');return false">Nie pamiętasz hasła?</a></p></div></div>
+<div id="authModal" onclick="if(event.target.id==='authModal')closeAuth()"><div class="auth-box"><h3>WROOMER.PL - Logowanie</h3><div style="display:flex;gap:8px;margin:12px 0"><button class="btn btn-black" style="flex:1" id="loginTabBtn" onclick="showTab('login')">Logowanie</button><button class="btn btn-white" style="flex:1" id="registerTabBtn" onclick="showTab('register')">Rejestracja</button></div><div id="loginTab"><input id="loginEmail" placeholder="E-mail" style="width:100%;padding:10px;margin-top:8px"><input id="loginPass" type="password" placeholder="Hasło" style="width:100%;padding:10px;margin-top:8px"><button class="btn btn-black" style="width:100%;margin-top:10px" onclick="login()">Zaloguj się</button><p id="loginInfo" style="font-size:11px;color:#c00;margin-top:8px"></p></div><div id="registerTab" style="display:none"><input id="regEmail" placeholder="E-mail" style="width:100%;padding:10px;margin-top:8px"><input id="regPass" type="password" placeholder="Hasło min 6 znaków" style="width:100%;padding:10px;margin-top:8px"><label style="font-size:11px;display:flex;gap:6px;margin-top:8px"><input type="checkbox" id="regCheck"> Regulamin</label><button class="btn btn-yellow" style="width:100%;margin-top:10px" onclick="register()">Załóż konto</button><p id="regInfo" style="font-size:11px;color:#c00;margin-top:8px"></p></div><div id="resetTab" style="display:none"><input id="resetEmail" placeholder="E-mail" style="width:100%;padding:10px;margin-top:8px"><button class="btn btn-black" style="width:100%;margin-top:10px" onclick="sendReset()">Wyślij reset</button><p id="resetInfo" style="font-size:11px;margin-top:8px"></p><button class="btn btn-white" style="width:100%;margin-top:8px" onclick="showTab('login')">Wróć</button></div><p style="font-size:11px;margin-top:10px"><a href="#" onclick="showTab('reset');return false">Nie pamiętasz hasła?</a></p></div></div>
 
 <script>
 var allAds=[], currentAd=null, editingAd=null, userLocationCoords=null, searchLocationCoords=null, selectedImagesBase64=[], locTimeout=null, currentUser=null, authToken=null;
 var SUPABASE_URL='https://rljqnhfogaqdjeirqqdj.supabase.co';
 var SUPABASE_KEY='sb_publishable_j7CS5xIHzOMBMyvsqVgDmw_GeEek5hX';
 
-// MAPA MODELI - tylko wybór
 var MODELS = {
  'BMW': ['Seria 1','Seria 3','Seria 5','Seria 7','X1','X3','X5','X6','Inny'],
- 'Audi': ['A3','A4','A6','A8','Q3','Q5','Q7','Q8','TT','Inny'],
- 'Mercedes': ['A Klasa','C Klasa','E Klasa','S Klasa','GLA','GLC','GLE','GLS','Vito','Inny'],
- 'Volkswagen': ['Golf','Passat','Polo','Tiguan','Touareg','Touran','Caddy','Transporter','Inny'],
+ 'Audi': ['A3','A4','A6','A8','Q3','Q5','Q7','Q8','Inny'],
+ 'Mercedes': ['A Klasa','C Klasa','E Klasa','S Klasa','GLA','GLC','GLE','Inny'],
+ 'Volkswagen': ['Golf','Passat','Polo','Tiguan','Touareg','Touran','Caddy','Inny'],
  'Toyota': ['Corolla','Avensis','Yaris','RAV4','Auris','Camry','Hilux','Inny'],
- 'Ford': ['Focus','Mondeo','Fiesta','Kuga','Transit','S-Max','Galaxy','Inny'],
- 'Opel': ['Astra','Corsa','Insignia','Mokka','Zafira','Crossland','Grandland','Inny'],
- 'Skoda': ['Octavia','Fabia','Superb','Kodiaq','Karoq','Scala','Inny'],
+ 'Ford': ['Focus','Mondeo','Fiesta','Kuga','Transit','Inny'],
+ 'Opel': ['Astra','Corsa','Insignia','Mokka','Zafira','Inny'],
+ 'Skoda': ['Octavia','Fabia','Superb','Kodiaq','Karoq','Inny'],
  'Mitsubishi': ['Colt','Lancer','Outlander','ASX','Pajero','Space Star','Inny'],
- 'Honda': ['Civic','Accord','CR-V','Jazz','HR-V','Inny'],
+ 'Honda': ['Civic','Accord','CR-V','Jazz','Inny'],
  'Peugeot': ['208','308','3008','5008','Partner','Inny'],
- 'Renault': ['Clio','Megane','Scenic','Captur','Kadjar','Master','Inny'],
- 'Fiat': ['Panda','500','Punto','Doblo','Ducato','Tipo','Inny'],
+ 'Renault': ['Clio','Megane','Scenic','Captur','Kadjar','Inny'],
+ 'Fiat': ['Panda','500','Punto','Doblo','Ducato','Inny'],
  'Hyundai': ['i30','i20','Tucson','Santa Fe','Kona','Inny'],
- 'Kia': ['Ceed','Sportage','Rio','Sorento','Stonic','Inny'],
- 'Seat': ['Ibiza','Leon','Ateca','Arona','Alhambra','Inny'],
- 'Suzuki': ['Swift','Vitara','SX4','Ignis','Inny'],
- 'Mazda': ['3','6','CX-3','CX-5','CX-30','Inny'],
- 'Nissan': ['Qashqai','Juke','X-Trail','Micra','Navara','Inny'],
- 'Citroen': ['C3','C4','C5','Berlingo','Jumper','Inny'],
- 'Dacia': ['Duster','Logan','Sandero','Dokker','Inny'],
- 'Volvo': ['V40','V60','XC60','XC90','S60','Inny'],
- 'Lexus': ['IS','RX','NX','CT','Inny'],
+ 'Kia': ['Ceed','Sportage','Rio','Sorento','Inny'],
+ 'Seat': ['Ibiza','Leon','Ateca','Arona','Inny'],
+ 'Suzuki': ['Swift','Vitara','SX4','Inny'],
+ 'Mazda': ['3','6','CX-3','CX-5','Inny'],
+ 'Nissan': ['Qashqai','Juke','X-Trail','Micra','Inny'],
+ 'Citroen': ['C3','C4','C5','Berlingo','Inny'],
+ 'Dacia': ['Duster','Logan','Sandero','Inny'],
+ 'Volvo': ['V40','V60','XC60','XC90','Inny'],
+ 'Lexus': ['IS','RX','NX','Inny'],
  'Jeep': ['Compass','Renegade','Cherokee','Wrangler','Inny'],
- 'Subaru': ['Impreza','Forester','Outback','XV','Inny'],
- 'Alfa Romeo': ['Giulia','Stelvio','Giulietta','Mito','Inny'],
- 'Chevrolet': ['Cruze','Aveo','Captiva','Orlando','Inny'],
+ 'Subaru': ['Impreza','Forester','Outback','Inny'],
+ 'Alfa Romeo': ['Giulia','Stelvio','Giulietta','Inny'],
+ 'Chevrolet': ['Cruze','Aveo','Captiva','Inny'],
  'Inna': ['Inny model']
+};
+
+var POWIATY = {
+ 'dolnośląskie': ['bolesławiecki','dzierżoniowski','głogowski','górowski','jaworski','jeleniogórski','kamiennogórski','kłodzki','legnicki','lubański','lubiński','lwówecki','milicki','oleśnicki','oławski','polkowicki','strzeliński','średzki','świdnicki','trzebnicki','wałbrzyski','wołowski','wrocławski','ząbkowicki','zgorzelecki','złotoryjski','m. Wrocław','m. Legnica','m. Jelenia Góra','m. Wałbrzych'],
+ 'kujawsko-pomorskie': ['aleksandrowski','brodnicki','bydgoski','chełmiński','golubsko-dobrzyński','grudziądzki','inowrocławski','lipnowski','mogileński','nakielski','radziejowski','rypiński','sępoleński','świecki','toruński','tucholski','wąbrzeski','włocławski','żniński','m. Bydgoszcz','m. Toruń','m. Włocławek','m. Grudziądz'],
+ 'lubelskie': ['bialski','biłgorajski','chełmski','hrubieszowski','janowski','krasnostawski','kraśnicki','lubartowski','lubelski','łęczyński','łukowski','opolski','parczewski','puławski','radzyński','rycki','świdnicki','tomaszowski','włodawski','zamojski','m. Lublin','m. Zamość','m. Chełm','m. Biała Podlaska'],
+ 'lubuskie': ['gorzowski','krośnieński','międzyrzecki','nowosolski','słubicki','strzelecko-drezdenecki','sulęciński','świebodziński','wschowski','zielonogórski','żagański','żarski','m. Gorzów Wlkp.','m. Zielona Góra'],
+ 'łódzkie': ['bełchatowski','brzeziński','kutnowski','łaski','łęczycki','łowicki','łódzki wschodni','opoczyński','pabianicki','pajęczański','piotrkowski','poddębicki','radomszczański','rawski','sieradzki','skierniewicki','tomaszowski','wieluński','wieruszowski','zduńskowolski','zgierski','m. Łódź','m. Piotrków Tryb.','m. Skierniewice'],
+ 'małopolskie': ['bocheński','brzeski','chrzanowski','dąbrowski','gorlicki','krakowski','limanowski','miechowski','myślenicki','nowosądecki','nowotarski','olkuski','oświęcimski','proszowicki','suski','tarnowski','tatrzański','wadowicki','wielicki','m. Kraków','m. Nowy Sącz','m. Tarnów'],
+ 'mazowieckie': ['białobrzeski','ciechanowski','garwoliński','gostyniński','grodziski','grójecki','kozienicki','legionowski','lipski','łosicki','makowski','miński','mławski','nowodworski','ostrołęcki','ostrowski','otwocki','piaseczyński','płocki','płoński','pruszkowski','przasnyski','przysuski','pułtuski','radomski','siedlecki','sierpecki','sochaczewski','sokołowski','szydłowiecki','warszawski zachodni','węgrowski','wołomiński','wyszkowski','zwoleński','żuromiński','m. Warszawa','m. Radom','m. Płock','m. Siedlce','m. Ostrołęka'],
+ 'opolskie': ['brzeski','głubczycki','kędzierzyńsko-kozielski','kluczborski','krapkowicki','namysłowski','nyski','oleski','opolski','prudnicki','strzelecki','m. Opole'],
+ 'podkarpackie': ['bieszczadzki','brzozowski','dębicki','jarosławski','jasielski','kolbuszowski','krośnieński','leski','leżajski','lubaczowski','łańcucki','mielecki','niżański','przemyski','przeworski','ropczycko-sędziszowski','rzeszowski','sanocki','stalowowolski','strzyżowski','tarnobrzeski','m. Rzeszów','m. Przemyśl','m. Krosno','m. Tarnobrzeg'],
+ 'podlaskie': ['augustowski','białostocki','bielski','grajewski','hajnowski','kolneński','łomżyński','moniecki','sejneński','siemiatycki','sokólski','suwalski','wysokomazowiecki','zambrowski','m. Białystok','m. Łomża','m. Suwałki'],
+ 'pomorskie': ['bytowski','chojnicki','człuchowski','gdański','kartuski','kościerski','kwidzyński','lęborski','malborski','nowodworski','pucki','słupski','starogardzki','sztumski','tczewski','wejherowski','m. Gdańsk','m. Gdynia','m. Słupsk','m. Sopot'],
+ 'śląskie': ['będziński','bielski','bieruńsko-lędziński','cieszyński','częstochowski','gliwicki','kłobucki','lubliniecki','mikołowski','myszkowski','pszczyński','raciborski','rybnicki','tarnogórski','wodzisławski','zawierciański','żywiecki','m. Katowice','m. Bielsko-Biała','m. Bytom','m. Chorzów','m. Częstochowa','m. Dąbrowa Górnicza','m. Gliwice','m. Jastrzębie-Zdrój','m. Jaworzno','m. Mysłowice','m. Piekary Śląskie','m. Ruda Śląska','m. Rybnik','m. Siemianowice Śląskie','m. Sosnowiec','m. Świętochłowice','m. Tychy','m. Zabrze','m. Żory'],
+ 'świętokrzyskie': ['buski','jędrzejowski','kazimierski','kielecki','konecki','opatowski','ostrowiecki','pińczowski','sandomierski','skarżyski','starachowicki','staszowski','włoszczowski','m. Kielce'],
+ 'warmińsko-mazurskie': ['bartoszycki','braniewski','diałdowski','elbląski','ełcki','giżycki','gołdapski','iławski','kętrzyński','lidzbarski','mrągowski','nidzicki','nowomiejski','olecki','olsztyński','ostródzki','piski','szczycieński','węgorzewski','m. Olsztyn','m. Elbląg'],
+ 'wielkopolskie': ['chodzieski','czarnkowsko-trzcianecki','gnieźnieński','gostyński','grodziski','jarociński','kaliski','kępiński','kolski','koniński','kościański','krotoszyński','leszczyński','międzychodzki','nowotomyski','obornicki','ostrowski','ostrzeszowski','pilski','pleszewski','poznański','rawicki','słupecki','szamotulski','średzki','śremski','turecki','wągrowiecki','wolsztyński','wrzesiński','złotowski','m. Poznań','m. Kalisz','m. Konin','m. Leszno'],
+ 'zachodniopomorskie': ['białogardzki','choszczeński','drawski','goleniowski','gryficki','gryfiński','kamieński','kołobrzeski','koszaliński','łobeski','myśliborski','policki','pyrzycki','sławieński','stargardzki','szczecinecki','świdwiński','wałecki','m. Szczecin','m. Koszalin','m. Świnoujście']
+};
+
+var MIEJSCOWOSCI_SLASKIE = {
+ 'wodzisławski': ['Wodzisław Śląski','Gorzyce','Gorzyczki','Rydułtowy','Pszów','Radlin','Lubomia','Godów','Mszana','Marklowice','Czyżowice','Turza Śląska','Rogów','Bełsznica','Bluszczów','Odra','Uchylsko','Kolonia Fryderyk'],
+ 'raciborski': ['Racibórz','Kornowac','Krzanowice','Kuźnia Raciborska','Nędza','Pietrowice Wielkie','Rudnik'],
+ 'rybnicki': ['Rybnik','Czerwionka-Leszczyny','Knurów','Leszczyny','Świerklany','Gaszowice','Lyski','Jejkowice'],
+ 'tarnogórski': ['Tarnowskie Góry','Radzionków','Miasteczko Śląskie','Krupski Młyn','Kalety','Ożarowice','Świerklaniec','Zbrosławice','Tworóg'],
+ 'm. Katowice': ['Katowice'],
+ 'bielski': ['Bielsko-Biała','Czechowice-Dziedzice','Jasienica','Jaworze','Wilkowice','Kozy','Porąbka','Szczyrk','Wilamowice'],
+ 'cieszyński': ['Cieszyn','Ustroń','Wisła','Skoczów','Strumień','Brenna','Chybie','Dębowiec','Goleszów','Hażlach','Istebna','Zebrzydowice'],
+ 'm. Rybnik': ['Rybnik']
 };
 
 function updateModelOptions(){
  var brand=document.getElementById('addBrand').value;
  var modelSelect=document.getElementById('addModel');
- var titleInput=document.getElementById('addTitleInput');
  var list=MODELS[brand] || ['Wybierz markę najpierw'];
  modelSelect.innerHTML='';
- for(var i=0;i<list.length;i++){
-  var opt=document.createElement('option');
-  opt.value=list[i]; opt.text=list[i];
-  modelSelect.appendChild(opt);
+ for(var i=0;i<list.length;i++){ var opt=document.createElement('option'); opt.value=list[i]; opt.text=list[i]; modelSelect.appendChild(opt); }
+ var titleInput=document.getElementById('addTitleInput');
+ if(!titleInput.value && brand){ titleInput.value=brand+' '+(list[0]!=='Inny'?list[0]:''); }
+}
+function updatePowiatOptions(){
+ var woj=document.getElementById('addWoj').value;
+ var powiatSelect=document.getElementById('addPowiat');
+ var miejsSelect=document.getElementById('addMiejscowosc');
+ var list=POWIATY[woj] || [];
+ powiatSelect.innerHTML='<option value="">Wybierz powiat *</option>';
+ for(var i=0;i<list.length;i++){ var opt=document.createElement('option'); opt.value=list[i]; opt.text=list[i]; powiatSelect.appendChild(opt); }
+ powiatSelect.disabled=list.length===0;
+ miejsSelect.innerHTML='<option value="">Najpierw powiat</option>';
+ miejsSelect.disabled=true;
+ document.getElementById('addrInfo').innerText=woj?'Wybierz powiat w woj. '+woj:'';
+ if(woj==='śląskie'){
+  // auto wybierz wodzisławski dla Gorzyc
+  powiatSelect.value='wodzisławski';
+  updateMiejscowoscOptions();
  }
- // auto uzupełnij tytuł jeśli pusty
- if(!titleInput.value && brand){
-  titleInput.value=brand+' '+(list[0]!=='Inny'?list[0]:'');
+}
+function updateMiejscowoscOptions(){
+ var woj=document.getElementById('addWoj').value;
+ var powiat=document.getElementById('addPowiat').value;
+ var miejsSelect=document.getElementById('addMiejscowosc');
+ var addrInfo=document.getElementById('addrInfo');
+ if(!powiat){ miejsSelect.innerHTML='<option value="">Najpierw powiat</option>'; miejsSelect.disabled=true; return; }
+ miejsSelect.disabled=false;
+ // dla śląskiego mamy gotowe miejscowości
+ if(MIEJSCOWOSCI_SLASKIE[powiat]){
+  var list=MIEJSCOWOSCI_SLASKIE[powiat];
+  miejsSelect.innerHTML='<option value="">Wybierz miejscowość *</option>';
+  for(var i=0;i<list.length;i++){ var opt=document.createElement('option'); opt.value=list[i]; opt.text=list[i]; miejsSelect.appendChild(opt); }
+  addrInfo.innerText='Wybrano: '+powiat+', '+woj;
+  // auto Gorzyce
+  if(powiat==='wodzisławski'){ miejsSelect.value='Gorzyce'; }
+ } else {
+  // dla innych powiatów - pobierz z OSM lub pokaż uniwersalne
+  miejsSelect.innerHTML='<option value="">Ładowanie miejscowości...</option>';
+  // próba pobrania miejscowości z powiatu via OSM
+  fetch('https://nominatim.openstreetmap.org/search?format=json&county='+encodeURIComponent(powiat)+'&state='+encodeURIComponent(woj)+'&countrycodes=pl&limit=40&addressdetails=1').then(function(r){return r.json()}).then(function(j){
+   var places={};
+   for(var k=0;k<j.length;k++){ var name=j[k].display_name.split(',')[0]; places[name]=true; }
+   var keys=Object.keys(places);
+   if(keys.length===0){
+    // fallback - wpisz ręcznie ale jako select z opcją wpisania
+    miejsSelect.innerHTML='<option value="">Wybierz miejscowość *</option><option value="__custom">Wpisz inną...</option>';
+    // dodaj najpopularniejsze miasta powiatu jako fallback
+    var fallback=['Miasto powiatowe','Centrum'];
+    for(var f=0;f<fallback.length;f++){ var o=document.createElement('option'); o.value=fallback[f]; o.text=fallback[f]; miejsSelect.appendChild(o); }
+   } else {
+    miejsSelect.innerHTML='<option value="">Wybierz miejscowość *</option>';
+    for(var p=0;p<keys.length;p++){ var opt=document.createElement('option'); opt.value=keys[p]; opt.text=keys[p]; miejsSelect.appendChild(opt); }
+    miejsSelect.innerHTML+='<option value="__custom">Inna miejscowość...</option>';
+   }
+   addrInfo.innerText='Znaleziono '+keys.length+' miejscowości w powiecie '+powiat;
+  }).catch(function(){
+   miejsSelect.innerHTML='<option value="">Wybierz miejscowość *</option><option>Gorzyce</option><option>Wodzisław Śląski</option><option>Rybnik</option><option>Katowice</option><option value="__custom">Inna...</option>';
+  });
  }
 }
 
-function openAdd(){ if(!currentUser){ alert('Musisz się zalogować!'); openAuth(); return; } editingAd=null; document.getElementById('addTitle').innerText='Dodaj ogłoszenie'; var ids=['addTitleInput','addPrice','addLocation','addPhone','addDesc','addImagesLinks']; for(var i=0;i<ids.length;i++){var e=document.getElementById(ids[i]); if(e) e.value='';} document.getElementById('addBrand').value=''; document.getElementById('addModel').innerHTML='<option value="">Najpierw wybierz markę</option>'; selectedImagesBase64=[]; var p=document.getElementById('addPreview'); if(p) p.innerHTML=''; document.getElementById('addInfo').innerText=''; document.getElementById('addModal').style.display='flex'; }
+function openAdd(){ if(!currentUser){ alert('Musisz się zalogować!'); openAuth(); return; } editingAd=null; document.getElementById('addTitle').innerText='Dodaj ogłoszenie'; var ids=['addTitleInput','addPrice','addPhone','addDesc','addImagesLinks']; for(var i=0;i<ids.length;i++){var e=document.getElementById(ids[i]); if(e) e.value='';} document.getElementById('addBrand').value=''; document.getElementById('addModel').innerHTML='<option value="">Najpierw wybierz markę</option>'; document.getElementById('addWoj').value=''; document.getElementById('addPowiat').innerHTML='<option value="">Najpierw woj.</option>'; document.getElementById('addPowiat').disabled=true; document.getElementById('addMiejscowosc').innerHTML='<option value="">Najpierw powiat</option>'; document.getElementById('addMiejscowosc').disabled=true; selectedImagesBase64=[]; var p=document.getElementById('addPreview'); if(p) p.innerHTML=''; document.getElementById('addInfo').innerText=''; document.getElementById('addModal').style.display='flex'; }
 function closeAdd(){ document.getElementById('addModal').style.display='none'; }
 function openAuth(){ document.getElementById('authModal').style.display='flex'; showTab('login'); }
 function closeAuth(){ document.getElementById('authModal').style.display='none'; }
@@ -155,14 +241,10 @@ function renderAds(){
  var center=null; if(locQ.indexOf('blisko')!==-1 && userLocationCoords) center=userLocationCoords; else if(searchLocationCoords) center=searchLocationCoords;
  if(center && locQ && radius!==9999){ filtered=filtered.filter(function(a){var d=getDistance(center,a.lat,a.lng); if(d===null) return (a.location||'').toLowerCase().indexOf(locQ)!==-1 || (a.city||'').toLowerCase().indexOf(locQ)!==-1; return d<=radius}); for(var i=0;i<filtered.length;i++) filtered[i]._dist=getDistance(center,filtered[i].lat,filtered[i].lng); }
  else if(locQ && radius!==9999){ filtered=filtered.filter(function(a){return (a.location||'').toLowerCase().indexOf(locQ)!==-1 || (a.city||'').toLowerCase().indexOf(locQ)!==-1}); }
- var sortEl=document.getElementById('sortFilter'); var sort=sortEl? sortEl.value:'newest';
- if(sort==='price_asc') filtered.sort(function(a,b){return (parseInt(a.price)||0)-(parseInt(b.price)||0)});
- else if(sort==='price_desc') filtered.sort(function(a,b){return (parseInt(b.price)||0)-(parseInt(a.price)||0)});
- else if(sort==='distance'){ var c=center||userLocationCoords||searchLocationCoords; if(c) filtered.sort(function(a,b){var da=getDistance(c,a.lat,a.lng); var db=getDistance(c,b.lat,b.lng); if(da===null) return 1; if(db===null) return -1; return da-db}); }
- document.getElementById('resultsInfo').innerText='Znaleziono '+filtered.length+' z '+allAds.length+' ogłoszeń'+(locQ? ' w promieniu '+radius+'km od '+locQ:'');
+ document.getElementById('resultsInfo').innerText='Znaleziono '+filtered.length+' z '+allAds.length+' ogłoszeń';
  var grid=document.getElementById('adsGrid');
  if(filtered.length===0){ grid.innerHTML='<p style="padding:20px">Brak ogłoszeń. Ustaw Cała Polska lub Wyczyść.</p>'; return; }
- var h=''; for(var i=0;i<filtered.length;i++){var a=filtered[i]; var img=a.image_url||(a.images&&a.images[0])||'https://via.placeholder.com/300x200?text=WROOMER'; var title=(a.title||'').slice(0,40); var loc=a.location||a.city||''; var dist=a._dist? a._dist.toFixed(1)+' km':''; h+='<div class="card" onclick="openDetail(\''+a.id+'\')"><span class="badge">'+(a.brand||'').toUpperCase()+'</span><img src="'+img+'"><div class="info"><div class="title">'+title+'</div><div class="price">'+(a.price? a.price+' PLN':'')+'</div><div class="loc">'+loc+'</div><div style="font-size:10px;color:#ff7a00">'+(dist?'📍 '+dist:'')+'</div></div></div>';} grid.innerHTML=h;
+ var h=''; for(var i=0;i<filtered.length;i++){var a=filtered[i]; var img=a.image_url||(a.images&&a.images[0])||'https://via.placeholder.com/300x200'; var title=(a.title||'').slice(0,40); var loc=a.location||a.city||''; var dist=a._dist? a._dist.toFixed(1)+' km':''; h+='<div class="card" onclick="openDetail(\''+a.id+'\')"><span class="badge">'+(a.brand||'').toUpperCase()+'</span><img src="'+img+'"><div class="info"><div class="title">'+title+'</div><div class="price">'+(a.price? a.price+' PLN':'')+'</div><div class="loc">'+loc+'</div><div style="font-size:10px;color:#ff7a00">'+(dist?'📍 '+dist:'')+'</div></div></div>';} grid.innerHTML=h;
 }
 function getMyLocation(){ if(!navigator.geolocation){alert('Brak geo');return} navigator.geolocation.getCurrentPosition(function(p){ userLocationCoords={lat:p.coords.latitude,lng:p.coords.longitude}; searchLocationCoords=userLocationCoords; document.getElementById('locationInput').value='Blisko mnie'; renderAds(); }); }
 function openDetail(id){ var a=null; for(var i=0;i<allAds.length;i++){if(String(allAds[i].id)===String(id)){a=allAds[i];break;}} if(!a)return; currentAd=a; document.getElementById('detailImg').src=a.image_url||(a.images&&a.images[0])||'https://via.placeholder.com/800x600'; document.getElementById('detailTitle').innerText=a.title||''; document.getElementById('detailPrice').innerText=a.price? a.price+' PLN':''; document.getElementById('detailLoc').innerText=(a.location||a.city||'')+(a._dist? ' • '+a._dist.toFixed(1)+' km':''); document.getElementById('detailDesc').innerText=a.description||''; document.getElementById('detailImages').innerHTML=(a.images||[]).map(function(s){return '<img src="'+s+'" style="width:80px;height:60px;object-fit:cover;border-radius:8px;cursor:pointer" onclick="document.getElementById(\'detailImg\').src=\''+s+'\'">'}).join(''); document.getElementById('phoneNumber').innerText='📞 '+(a.phone||'Brak'); document.getElementById('phoneNumber').style.display='none'; document.getElementById('detail').style.display='flex'; }
@@ -174,13 +256,7 @@ function filterMy(){ if(!currentUser){alert('Zaloguj');return} var btn=document.
 function loadAds(){
  document.getElementById('resultsInfo').innerText='Ładowanie ogłoszeń...';
  var url=SUPABASE_URL+'/rest/v1/ads?select=*&order=created_at.desc&limit=300';
- return fetch(url,{headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY}}).then(function(res){
-  if(!res.ok){ return res.text().then(function(t){ throw new Error('HTTP '+res.status); }); }
-  return res.json();
- }).then(function(data){ allAds=data; renderAds(); }).catch(function(e){
-  document.getElementById('resultsInfo').innerText='Błąd: '+e.message;
-  document.getElementById('adsGrid').innerHTML='<div style="padding:20px"><p style="color:#c00">Błąd: '+e.message+'</p><button class="btn btn-black" style="margin-top:10px" onclick="loadAds()">Spróbuj ponownie</button></div>';
- });
+ return fetch(url,{headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY}}).then(function(res){ if(!res.ok){ return res.text().then(function(t){ throw new Error('HTTP '+res.status); }); } return res.json(); }).then(function(data){ allAds=data; renderAds(); }).catch(function(e){ document.getElementById('resultsInfo').innerText='Błąd: '+e.message; document.getElementById('adsGrid').innerHTML='<div style="padding:20px"><p style="color:#c00">Błąd: '+e.message+'</p><button class="btn btn-black" style="margin-top:10px" onclick="loadAds()">Spróbuj ponownie</button></div>'; });
 }
 function login(){
  var email=document.getElementById('loginEmail').value.trim(); var pass=document.getElementById('loginPass').value;
@@ -203,24 +279,41 @@ function submitAdd(){
  var brand=document.getElementById('addBrand').value;
  var model=document.getElementById('addModel').value;
  var price=document.getElementById('addPrice').value.trim();
- var loc=document.getElementById('addLocation').value.trim();
+ var woj=document.getElementById('addWoj').value;
+ var powiat=document.getElementById('addPowiat').value;
+ var miejs=document.getElementById('addMiejscowosc').value;
  var phone=document.getElementById('addPhone').value.trim();
  if(!brand){ document.getElementById('addInfo').innerText='Wybierz markę!'; return; }
  if(!model){ document.getElementById('addInfo').innerText='Wybierz model!'; return; }
- if(!title){ title=brand+' '+model; document.getElementById('addTitleInput').value=title; }
- if(!price||!loc||!phone){document.getElementById('addInfo').innerText='Uzupełnij cenę, miejscowość i telefon *'; return}
+ if(!woj){ document.getElementById('addInfo').innerText='Wybierz województwo!'; return; }
+ if(!powiat){ document.getElementById('addInfo').innerText='Wybierz powiat!'; return; }
+ if(!miejs||miejs==='__custom'){ 
+  var custom=prompt('Wpisz nazwę miejscowości:'); 
+  if(!custom){ document.getElementById('addInfo').innerText='Wybierz miejscowość!'; return; }
+  miejs=custom;
+ }
+ if(!title){ title=brand+' '+model; }
+ if(!price||!phone){document.getElementById('addInfo').innerText='Uzupełnij cenę i telefon *'; return}
  if(!currentUser||!authToken){document.getElementById('addInfo').innerText='Musisz być zalogowany'; openAuth(); return}
  var desc=document.getElementById('addDesc').value.trim();
  var links=(document.getElementById('addImagesLinks').value||'').split(',').map(function(s){return s.trim()}).filter(function(b){return b});
  var images=selectedImagesBase64.concat(links).slice(0,10);
  document.getElementById('addSubmitBtn').disabled=true; document.getElementById('addSubmitBtn').innerText='Zapisuję...';
+ var fullLocation=miejs+', pow. '+powiat+', woj. '+woj;
  var lat=null,lng=null;
- fetch('https://nominatim.openstreetmap.org/search?format=json&q='+encodeURIComponent(loc)+'&limit=1&countrycodes=pl').then(function(r){return r.json()}).then(function(j){ if(j[0]){lat=parseFloat(j[0].lat); lng=parseFloat(j[0].lon);} save(); }).catch(function(){ save(); });
+ fetch('https://nominatim.openstreetmap.org/search?format=json&q='+encodeURIComponent(miejs+', '+powiat+', '+woj)+', Polska&limit=1').then(function(r){return r.json()}).then(function(j){ if(j[0]){lat=parseFloat(j[0].lat); lng=parseFloat(j[0].lon);} save(); }).catch(function(){ save(); });
  function save(){
   var finalImages=[]; for(var i=0;i<images.length;i++) finalImages.push(images[i]);
-  var image_url=finalImages[0]||''; var payload={title:title, price:price, image_url:image_url, images:finalImages, owner_id:currentUser.id, brand:brand, model:model, description:desc, location:loc, city:loc, lat:lat, lng:lng, phone:phone};
+  var image_url=finalImages[0]||''; 
+  var payload={title:title, price:price, image_url:image_url, images:finalImages, owner_id:currentUser.id, brand:brand, model:model, description:desc, location:fullLocation, city:miejs, lat:lat, lng:lng, phone:phone, wojewodztwo:woj, powiat:powiat};
   fetch(SUPABASE_URL+'/rest/v1/ads',{method:'POST',headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+authToken,'Content-Type':'application/json','Prefer':'return=representation'},body:JSON.stringify(payload)}).then(function(res){
-   if(!res.ok){ return res.text().then(function(t){ if(t.indexOf('city')!==-1||t.indexOf('lat')!==-1||t.indexOf('phone')!==-1){ var minimal={title:title, price:price, image_url:image_url, images:finalImages, owner_id:currentUser.id, brand:brand, model:model, description:desc, location:loc, phone:phone}; return fetch(SUPABASE_URL+'/rest/v1/ads',{method:'POST',headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+authToken,'Content-Type':'application/json','Prefer':'return=representation'},body:JSON.stringify(minimal)}).then(function(r2){ if(!r2.ok) return r2.text().then(function(t2){ if(t2.indexOf('phone')!==-1){ var rest={title:title, price:price, image_url:image_url, images:finalImages, owner_id:currentUser.id, brand:brand, model:model, description:desc, location:loc}; return fetch(SUPABASE_URL+'/rest/v1/ads',{method:'POST',headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+authToken,'Content-Type':'application/json','Prefer':'return=representation'},body:JSON.stringify(rest)}); } else throw new Error(t2); }); return r2; }); } else throw new Error(t); }); }
+   if(!res.ok){ return res.text().then(function(t){ 
+    // fallback bez nowych kolumn
+    if(t.indexOf('wojewodztwo')!==-1||t.indexOf('powiat')!==-1||t.indexOf('city')!==-1||t.indexOf('lat')!==-1||t.indexOf('phone')!==-1){
+     var minimal={title:title, price:price, image_url:image_url, images:finalImages, owner_id:currentUser.id, brand:brand, model:model, description:desc, location:fullLocation, phone:phone};
+     return fetch(SUPABASE_URL+'/rest/v1/ads',{method:'POST',headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+authToken,'Content-Type':'application/json','Prefer':'return=representation'},body:JSON.stringify(minimal)}).then(function(r2){
+      if(!r2.ok) return r2.text().then(function(t2){ if(t2.indexOf('phone')!==-1){ var rest={title:title, price:price, image_url:image_url, images:finalImages, owner_id:currentUser.id, brand:brand, model:model, description:desc, location:fullLocation}; return fetch(SUPABASE_URL+'/rest/v1/ads',{method:'POST',headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+authToken,'Content-Type':'application/json','Prefer':'return=representation'},body:JSON.stringify(rest)}); } else throw new Error(t2); }); return r2; });
+    } else throw new Error(t); }); }
    return res;
   }).then(function(r){ if(!r.ok) return r.text().then(function(t){throw new Error(t)}); return r.json(); }).then(function(){ document.getElementById('addSubmitBtn').disabled=false; document.getElementById('addSubmitBtn').innerText='Zatwierdź'; closeAdd(); loadAds(); }).catch(function(e){ document.getElementById('addSubmitBtn').disabled=false; document.getElementById('addSubmitBtn').innerText='Zatwierdź'; document.getElementById('addInfo').innerText='Błąd: '+e.message.slice(0,300); });
  }
