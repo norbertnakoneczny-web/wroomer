@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>WROOMER.PL</title>
+<title>WROOMER.PL - Wiadomości</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;font-family:Inter,system-ui,sans-serif}
 body{background:#f5f5f0;color:#111}
@@ -16,6 +16,7 @@ header{background:#fff;border-bottom:1px solid #e5e5e0;position:sticky;top:0;z-i
 .search-bar input.search-main{flex:2;min-width:180px}
 .btn{border:0;cursor:pointer;padding:10px 16px;border-radius:8px;font-weight:700;font-size:13px;white-space:nowrap}
 .btn-black{background:#111;color:#fff}.btn-yellow{background:#ffcb00;color:#111}.btn-white{background:#fff;border:1px solid #ddd}
+.btn-green{background:#25D366;color:#fff}.btn-blue{background:#0084FF;color:#fff}.btn-orange{background:#FF6600;color:#fff}
 .grid{max-width:1280px;margin:18px auto;padding:0 12px;display:grid;grid-template-columns:repeat(auto-fill,minmax(198px,1fr));gap:12px}
 .card{background:#fff;border-radius:12px;overflow:hidden;border:1px solid #e9e9e6;cursor:pointer;position:relative}
 .card img{width:100%;height:144px;object-fit:contain;background:#f4f4f4}
@@ -24,12 +25,10 @@ header{background:#fff;border-bottom:1px solid #e5e5e0;position:sticky;top:0;z-i
 .badge{position:absolute;top:6px;left:6px;background:#ffcb00;color:#111;font-size:9px;font-weight:900;padding:4px 6px;border-radius:6px}
 #detail{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:100;display:none;align-items:center;justify-content:center;padding:12px}
 .detail-box{background:#fff;width:100%;max-width:1100px;border-radius:16px;overflow:hidden;max-height:96vh;display:flex;flex-direction:column}
-.gallery-wrap{position:relative;width:100%;height:65vh;min-height:320px;background:#111;display:flex;align-items:center;justify-content:center;overflow:hidden;touch-action:pan-y}
-.gallery-wrap img{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;display:block;margin:auto;user-select:none;-webkit-user-drag:none}
-.gallery-arrow{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.9);border:0;width:42px;height:42px;border-radius:50%;font-size:22px;font-weight:900;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:5;box-shadow:0 2px 8px rgba(0,0,0,0.3)}
-.gallery-arrow:hover{background:#fff}
-.gallery-arrow.prev{left:12px}
-.gallery-arrow.next{right:12px}
+.gallery-wrap{position:relative;width:100%;height:55vh;min-height:280px;background:#111;display:flex;align-items:center;justify-content:center;overflow:hidden;touch-action:pan-y}
+.gallery-wrap img{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;display:block;margin:auto;user-select:none}
+.gallery-arrow{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.9);border:0;width:42px;height:42px;border-radius:50%;font-size:22px;font-weight:900;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:5}
+.gallery-arrow.prev{left:12px}.gallery-arrow.next{right:12px}
 .gallery-counter{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.7);color:#fff;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700;z-index:5}
 .gallery-dots{position:absolute;bottom:40px;left:50%;transform:translateX(-50%);display:flex;gap:6px;z-index:5}
 .gallery-dots span{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.5);cursor:pointer}
@@ -38,6 +37,44 @@ header{background:#fff;border-bottom:1px solid #e5e5e0;position:sticky;top:0;z-i
 #detailImages{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
 #detailImages img{width:80px;height:60px;object-fit:cover;border-radius:8px;cursor:pointer;border:2px solid transparent}
 #detailImages img.active{border-color:#ffcb00}
+.contact-grid{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.contact-grid .btn{flex:1 1 calc(50% - 4px);min-width:120px;justify-content:center;display:flex;align-items:center;gap:6px}
+
+/* PROFESJONALNE WIADOMOŚCI */
+.msg-box{background:#fff;border:1px solid #e9e9e6;border-radius:12px;padding:14px;margin-top:14px}
+.msg-box h3{font-size:14px;font-weight:900;margin-bottom:8px}
+.msg-textarea{width:100%;min-height:90px;padding:10px;border:1px solid #ddd;border-radius:8px;font-size:13px;resize:vertical}
+.msg-channels{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.msg-channel{flex:1 1 calc(25% - 6px);min-width:110px;padding:10px 8px;border:2px solid #e9e9e6;border-radius:10px;cursor:pointer;text-align:center;transition:all .15s;background:#fff}
+.msg-channel:hover{border-color:#111}
+.msg-channel.active{border-color:#111;background:#111;color:#fff}
+.msg-channel.active small{color:#ccc}
+.msg-channel b{display:block;font-size:12px}
+.msg-channel small{font-size:10px;color:#666;display:block;margin-top:2px}
+.msg-channel.wa.active{border-color:#25D366;background:#25D366}
+.msg-channel.messenger.active{border-color:#0084FF;background:#0084FF}
+.msg-channel.sms.active{border-color:#FF6600;background:#FF6600}
+.msg-channel.wroomer.active{border-color:#ffcb00;background:#ffcb00;color:#111}
+#inboxModal{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:300;display:none;align-items:center;justify-content:center;padding:12px}
+.inbox-box{background:#fff;width:100%;max-width:700px;border-radius:16px;max-height:90vh;display:flex;flex-direction:column;overflow:hidden}
+.inbox-header{padding:14px 16px;border-bottom:1px solid #eee;display:flex;justify-content:space-between;align-items:center}
+.inbox-list{overflow:auto;flex:1}
+.inbox-item{padding:12px 16px;border-bottom:1px solid #f0f0f0;cursor:pointer}
+.inbox-item:hover{background:#fafafa}
+.inbox-item.unread{background:#fffbe6}
+.inbox-item b{font-size:13px}
+.inbox-item p{font-size:12px;color:#555;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.inbox-item small{font-size:10px;color:#999}
+#chatModal{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:310;display:none;align-items:center;justify-content:center;padding:12px}
+.chat-box{background:#fff;width:100%;max-width:600px;border-radius:16px;max-height:85vh;display:flex;flex-direction:column;overflow:hidden}
+.chat-header{padding:12px 16px;border-bottom:1px solid #eee;display:flex;justify-content:space-between;align-items:center;background:#111;color:#fff}
+.chat-messages{flex:1;overflow:auto;padding:12px;display:flex;flex-direction:column;gap:8px;background:#f5f5f0}
+.chat-msg{max-width:75%;padding:8px 12px;border-radius:12px;font-size:13px;line-height:1.4}
+.chat-msg.mine{align-self:flex-end;background:#111;color:#fff;border-bottom-right-radius:4px}
+.chat-msg.theirs{align-self:flex-start;background:#fff;border:1px solid #e9e9e6;border-bottom-left-radius:4px}
+.chat-input{padding:10px;display:flex;gap:8px;border-top:1px solid #eee}
+.chat-input input{flex:1;padding:10px;border:1px solid #ddd;border-radius:20px;font-size:13px}
+
 #authModal,#addModal{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:200;display:none;align-items:center;justify-content:center;padding:12px}
 .auth-box,.add-box{background:#fff;width:100%;max-width:650px;border-radius:16px;padding:20px;max-height:92vh;overflow:auto}
 .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.form-grid .full{grid-column:1/-1}
@@ -48,33 +85,30 @@ header{background:#fff;border-bottom:1px solid #e5e5e0;position:sticky;top:0;z-i
 .addr-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
 @media(max-width:700px){
   header{padding:6px 8px}
-  .top-row{gap:6px;flex-wrap:nowrap;align-items:center}
+  .top-row{gap:6px;flex-wrap:nowrap}
   .logo{font-size:15px}
   .logo span:last-child{display:none}
   .top-actions{gap:4px;flex-wrap:nowrap;margin-left:auto}
   .top-actions .btn{padding:6px 10px;font-size:11px;border-radius:6px}
   .search-bar{gap:5px;margin-top:6px}
   .search-bar input, .search-bar select{padding:7px 9px;font-size:12px;min-width:0}
-  .search-bar input.search-main{flex:1 1 100%;min-width:100%;order:-1}
-  .search-bar select{flex:1 1 calc(50% - 3px);min-width:calc(50% - 3px)}
+  .search-bar input.search-main{flex:1 1 100%;order:-1}
+  .search-bar select{flex:1 1 calc(50% - 3px)}
   .search-bar .btn{flex:1 1 calc(50% - 3px);padding:7px 8px;font-size:11px}
-  #resultsInfo{font-size:11px;padding:0 8px;margin-top:6px}
-  .grid{grid-template-columns:repeat(2,1fr);gap:8px;padding:0 8px;margin-top:10px}
-  .card img{height:110px}
-  .gallery-wrap{height:55vh;min-height:260px}
-  .gallery-arrow{width:36px;height:36px;font-size:18px}
-  .gallery-arrow.prev{left:6px}
-  .gallery-arrow.next{right:6px}
-  .addr-row{grid-template-columns:1fr}
+  .grid{grid-template-columns:repeat(2,1fr);gap:8px;padding:0 8px}
+  .gallery-wrap{height:50vh;min-height:220px}
+  .msg-channel{flex:1 1 calc(50% - 6px)}
+  .contact-grid .btn{flex:1 1 100%}
 }
 </style>
 </head>
 <body>
 <header>
 <div class="top-row">
-<div class="logo" onclick="location.reload()">WROOMER<span>.PL</span> <span style="font-size:9px;background:#111;color:#fff;padding:2px 6px;border-radius:4px">v3.0 GALERIA</span></div>
+<div class="logo" onclick="location.reload()">WROOMER<span>.PL</span> <span style="font-size:9px;background:#111;color:#fff;padding:2px 6px;border-radius:4px">v3.2 CHAT</span></div>
 <div class="top-actions">
 <button class="btn btn-yellow" onclick="openAdd()">+ Dodaj</button>
+<button id="inboxBtn" class="btn btn-black" style="display:none" onclick="openInbox()">💬 Wiadomości <span id="inboxCount" style="background:#ffcb00;color:#111;padding:2px 6px;border-radius:10px;font-size:10px;display:none">0</span></button>
 <button id="myBtn" class="btn btn-white" style="display:none" onclick="filterMy()">Moje</button>
 <button id="authBtn" class="btn btn-black" onclick="openAuth()">Zaloguj</button>
 <span id="userEmail" style="display:none;font-size:12px;font-weight:700"></span>
@@ -82,7 +116,7 @@ header{background:#fff;border-bottom:1px solid #e5e5e0;position:sticky;top:0;z-i
 </div>
 </div>
 <div class="search-bar">
-<input id="searchInput" class="search-main" placeholder="Szukaj: BMW, Audi, Mitsubishi..." oninput="renderAds()">
+<input id="searchInput" class="search-main" placeholder="Szukaj: BMW, Audi..." oninput="renderAds()">
 <select id="brandFilter" onchange="renderAds()"><option value="">Wszystkie marki</option><option>BMW</option><option>Audi</option><option>Mercedes</option><option>Volkswagen</option><option>Toyota</option><option>Ford</option><option>Opel</option><option>Skoda</option><option>Mitsubishi</option></select>
 <input id="locationInput" placeholder="Miejscowość: Rydułtowy, Gorzyce..." oninput="onLocationInput()">
 <select id="radiusFilter" onchange="renderAds()"><option value="0">+0 km</option><option value="5">+5 km</option><option value="10">+10 km</option><option value="25" selected>+25 km</option><option value="50">+50 km</option><option value="100">+100 km</option><option value="9999">Cała PL</option></select>
@@ -109,15 +143,52 @@ header{background:#fff;border-bottom:1px solid #e5e5e0;position:sticky;top:0;z-i
 <p id="detailLoc" style="font-size:13px;color:#666;margin-top:2px"></p>
 <p id="detailDesc" style="white-space:pre-wrap;margin-top:10px;font-size:13px"></p>
 <div id="detailImages"></div>
-<div style="margin-top:12px">
-<p id="phoneNumber" style="font-weight:900;display:none"></p>
-<div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
-<button class="btn btn-black" onclick="contactCall()">📞 Zadzwoń</button>
-<button class="btn btn-white" onclick="showPhone()">Pokaż numer</button>
+
+<div class="msg-box">
+<h3>💬 Zostaw wiadomość sprzedającemu</h3>
+<textarea id="msgText" class="msg-textarea" placeholder="Cześć! Czy ogłoszenie jest aktualne? Jestem zainteresowany... Link do ogłoszenia zostanie dodany automatycznie."></textarea>
+<p style="font-size:11px;color:#666;margin-top:6px">Wybierz jak chcesz wysłać wiadomość:</p>
+<div class="msg-channels">
+<div class="msg-channel sms" data-channel="sms" onclick="selectChannel('sms')"><b>💬 SMS</b><small>Wyślij SMS</small></div>
+<div class="msg-channel messenger" data-channel="messenger" onclick="selectChannel('messenger')"><b>💙 Messenger</b><small>Facebook</small></div>
+<div class="msg-channel wa" data-channel="whatsapp" onclick="selectChannel('whatsapp')"><b>🟢 WhatsApp</b><small>Szybki kontakt</small></div>
+<div class="msg-channel wroomer active" data-channel="wroomer" onclick="selectChannel('wroomer')"><b>⭐ WROOMER.PL</b><small>Czat na stronie</small></div>
+</div>
+<div style="display:flex;gap:8px;margin-top:12px">
+<button class="btn btn-black" style="flex:1" id="sendMsgBtn" onclick="sendMessage()">📤 Wyślij przez WROOMER.PL</button>
 <button class="btn btn-white" onclick="closeDetail()">Zamknij</button>
 </div>
+<p id="msgInfo" style="font-size:11px;margin-top:8px;color:#666"></p>
+</div>
+
+<div style="margin-top:14px;padding:12px;background:#f9f9f6;border-radius:10px">
+<p style="font-size:12px;font-weight:900;margin-bottom:8px">📞 SZYBKI KONTAKT</p>
+<p id="phoneNumber" style="font-weight:900;display:none;margin-bottom:8px;font-size:14px"></p>
+<div class="contact-grid">
+<button class="btn btn-black" onclick="contactCall()">📞 Zadzwoń</button>
+<button class="btn btn-white" onclick="showPhone()">👁️ Pokaż numer</button>
+<button class="btn btn-white" style="background:#f0f0f0" onclick="quickSMS()">💬 SMS</button>
+<button class="btn btn-green" onclick="quickWhatsApp()">🟢 WhatsApp</button>
 </div>
 </div>
+</div>
+</div>
+</div>
+
+<!-- INBOX -->
+<div id="inboxModal" onclick="if(event.target.id==='inboxModal')closeInbox()">
+<div class="inbox-box">
+<div class="inbox-header"><b>💬 Wiadomości WROOMER.PL</b><button class="btn btn-white" onclick="closeInbox()">✕</button></div>
+<div id="inboxList" class="inbox-list"><p style="padding:20px;text-align:center;color:#888">Ładowanie...</p></div>
+</div>
+</div>
+
+<!-- CHAT -->
+<div id="chatModal" onclick="if(event.target.id==='chatModal')closeChat()">
+<div class="chat-box">
+<div class="chat-header"><div><b id="chatTitle">Czat</b><br><small id="chatSubtitle" style="opacity:.7"></small></div><button class="btn btn-white" style="padding:6px 10px" onclick="closeChat()">✕</button></div>
+<div id="chatMessages" class="chat-messages"></div>
+<div class="chat-input"><input id="chatInput" placeholder="Napisz wiadomość..." onkeypress="if(event.key==='Enter')sendChatMessage()"><button class="btn btn-black" onclick="sendChatMessage()">Wyślij</button></div>
 </div>
 </div>
 
@@ -142,18 +213,17 @@ header{background:#fff;border-bottom:1px solid #e5e5e0;position:sticky;top:0;z-i
 
 <script>
 var allAds=[], currentAd=null, editingAd=null, userLocationCoords=null, searchLocationCoords=null, selectedImagesBase64=[], locTimeout=null, currentUser=null, authToken=null, userRealLocationName='';
-var currentImageIndex=0, galleryImages=[], touchStartX=0, touchEndX=0;
+var currentImageIndex=0, galleryImages=[], touchStartX=0, currentChannel='wroomer', currentChatAd=null, currentChatMessages=[];
 var SUPABASE_URL='https://rljqnhfogaqdjeirqqdj.supabase.co';
 var SUPABASE_KEY='sb_publishable_j7CS5xIHzOMBMyvsqVgDmw_GeEek5hX';
 var MODELS = {'BMW':['Seria 1','Seria 3','Seria 5','X1','X3','X5','Inny'],'Audi':['A3','A4','A6','Q5','Q7','Inny'],'Mercedes':['A Klasa','C Klasa','E Klasa','GLC','Inny'],'Volkswagen':['Golf','Passat','Polo','Tiguan','Inny'],'Toyota':['Corolla','Yaris','RAV4','Inny'],'Ford':['Focus','Mondeo','Fiesta','Kuga','Inny'],'Opel':['Astra','Corsa','Insignia','Mokka','Inny'],'Skoda':['Octavia','Fabia','Superb','Kodiaq','Inny'],'Mitsubishi':['Colt','Lancer','Outlander','ASX','Inny'],'Honda':['Civic','CR-V','Inny'],'Peugeot':['208','308','3008','Inny'],'Renault':['Clio','Megane','Captur','Inny'],'Fiat':['Panda','500','Doblo','Inny'],'Hyundai':['i30','Tucson','Inny'],'Kia':['Ceed','Sportage','Inny'],'Seat':['Ibiza','Leon','Ateca','Inny'],'Inna':['Inny model']};
-var POWIATY = {'śląskie': ['będziński','bielski','bieruńsko-lędziński','cieszyński','częstochowski','gliwicki','kłobucki','lubliniecki','mikołowski','myszkowski','pszczyński','raciborski','rybnicki','tarnogórski','wodzisławski','zawierciański','żywiecki','m. Katowice','m. Rybnik','m. Tychy','m. Gliwice','m. Zabrze','m. Bytom','m. Ruda Śląska','m. Chorzów','m. Dąbrowa Górnicza','m. Sosnowiec','m. Bielsko-Biała','m. Częstochowa','m. Jastrzębie-Zdrój'],'dolnośląskie': ['wrocławski','m. Wrocław'],'mazowieckie': ['m. Warszawa','warszawski zachodni'],'małopolskie': ['krakowski','m. Kraków'],'wielkopolskie': ['poznański','m. Poznań']};
+var POWIATY = {'śląskie': ['będziński','bielski','bieruńsko-lędziński','cieszyński','częstochowski','gliwicki','kłobucki','lubliniecki','mikołowski','myszkowski','pszczyński','raciborski','rybnicki','tarnogórski','wodzisławski','zawierciański','żywiecki','m. Katowice','m. Rybnik','m. Tychy','m. Gliwice'],'dolnośląskie': ['wrocławski','m. Wrocław'],'mazowieckie': ['m. Warszawa','warszawski zachodni'],'małopolskie': ['krakowski','m. Kraków'],'wielkopolskie': ['poznański','m. Poznań']};
 var MIEJSCOWOSCI = {'wodzisławski': ['Wodzisław Śląski','Gorzyce','Gorzyczki','Rydułtowy','Pszów','Radlin','Lubomia','Godów','Mszana','Marklowice','Czyżowice','Turza Śląska','Rogów','Syrynia'],'raciborski': ['Racibórz','Kuźnia Raciborska','Krzanowice','Nędza'],'rybnicki': ['Rybnik','Czerwionka-Leszczyny','Świerklany','Gaszowice'],'m. Katowice': ['Katowice'],'m. Rybnik': ['Rybnik'],'m. Warszawa': ['Warszawa'],'m. Kraków': ['Kraków'],'m. Wrocław': ['Wrocław'],'m. Poznań': ['Poznań']};
 var KNOWN_COORDS = {'gorzyce': {lat:49.962, lng:18.397},'rydułtowy': {lat:50.058, lng:18.405},'rydultowy': {lat:50.058, lng:18.405},'ryhultowy': {lat:50.058, lng:18.405},'wodzisław śląski': {lat:50.022, lng:18.456},'radlin': {lat:50.041, lng:18.468},'pszów': {lat:50.045, lng:18.394},'rybnik': {lat:50.097, lng:18.542},'racibórz': {lat:50.091, lng:18.219},'katowice': {lat:50.264, lng:19.023},'warszawa': {lat:52.229, lng:21.012},'kraków': {lat:50.064, lng:19.945},'wrocław': {lat:51.107, lng:17.038},'poznań': {lat:52.406, lng:16.925}};
-
 function getCoordsForPlace(name){ if(!name) return null; var n=name.toLowerCase().trim(); if(KNOWN_COORDS[n]) return KNOWN_COORDS[n]; for(var k in KNOWN_COORDS){ if(n.indexOf(k)!==-1 || k.indexOf(n)!==-1) return KNOWN_COORDS[k]; } return null; }
 function ensureAdCoords(ad){ if(ad.lat && ad.lng) return ad; var loc=(ad.location||ad.city||'').toLowerCase(); var c=getCoordsForPlace(loc); if(c){ ad.lat=c.lat; ad.lng=c.lng; } else { var parts=loc.split(','); for(var i=0;i<parts.length;i++){ var cc=getCoordsForPlace(parts[i].trim()); if(cc){ ad.lat=cc.lat; ad.lng=cc.lng; break; } } } return ad; }
 
-// GALERIA - wyśrodkowana, strzałki, swipe
+// GALERIA
 function showImage(idx){
  if(!galleryImages.length) return;
  if(idx<0) idx=galleryImages.length-1;
@@ -161,44 +231,268 @@ function showImage(idx){
  currentImageIndex=idx;
  var img=document.getElementById('detailImg');
  img.style.opacity='0';
- setTimeout(function(){
-  img.src=galleryImages[currentImageIndex];
-  img.style.opacity='1';
- }, 100);
+ setTimeout(function(){ img.src=galleryImages[currentImageIndex]; img.style.opacity='1'; }, 80);
  document.getElementById('galleryCounter').innerText=(currentImageIndex+1)+' / '+galleryImages.length;
  var dots=document.getElementById('galleryDots');
- var dh='';
- for(var i=0;i<galleryImages.length;i++){ dh+='<span class="'+(i===currentImageIndex?'active':'')+'" onclick="showImage('+i+')"></span>'; }
- dots.innerHTML=dh;
+ var dh=''; for(var i=0;i<galleryImages.length;i++){ dh+='<span class="'+(i===currentImageIndex?'active':'')+'" onclick="showImage('+i+')"></span>'; } dots.innerHTML=dh;
  var thumbs=document.querySelectorAll('#detailImages img');
- for(var t=0;t<thumbs.length;t++){ thumbs[t].classList.toggle('active', t===currentImageIndex); }
+ for(var t=0;t<thumbs.length;t++){ thumbs[t].classList.toggle('active', t===currentImageIndex); thumbs[t].style.borderColor=t===currentImageIndex?'#ffcb00':'transparent'; }
  var arrows=document.querySelectorAll('.gallery-arrow');
  for(var a=0;a<arrows.length;a++){ arrows[a].style.display=galleryImages.length<=1?'none':'flex'; }
 }
 function nextImage(e){ if(e) e.stopPropagation(); showImage(currentImageIndex+1); }
 function prevImage(e){ if(e) e.stopPropagation(); showImage(currentImageIndex-1); }
-// swipe na smartfonie
 document.addEventListener('DOMContentLoaded', function(){
  var wrap=document.getElementById('galleryWrap');
  if(!wrap) return;
  wrap.addEventListener('touchstart', function(e){ touchStartX=e.changedTouches[0].screenX; }, {passive:true});
- wrap.addEventListener('touchend', function(e){
-  touchEndX=e.changedTouches[0].screenX;
-  var diff=touchStartX-touchEndX;
-  if(Math.abs(diff)>50){
-   if(diff>0) nextImage();
-   else prevImage();
-  }
- }, {passive:true});
- // klawiatura strzałki
- document.addEventListener('keydown', function(e){
-  var detail=document.getElementById('detail');
-  if(detail.style.display!=='flex') return;
-  if(e.key==='ArrowRight') nextImage();
-  if(e.key==='ArrowLeft') prevImage();
-  if(e.key==='Escape') closeDetail();
- });
+ wrap.addEventListener('touchend', function(e){ var touchEndX=e.changedTouches[0].screenX; var diff=touchStartX-touchEndX; if(Math.abs(diff)>50){ if(diff>0) nextImage(); else prevImage(); } }, {passive:true});
+ document.addEventListener('keydown', function(e){ var detail=document.getElementById('detail'); if(detail.style.display!=='flex') return; if(e.key==='ArrowRight') nextImage(); if(e.key==='ArrowLeft') prevImage(); if(e.key==='Escape') closeDetail(); });
 });
+
+// WIADOMOŚCI - PROFESJONALNY SYSTEM
+function selectChannel(ch){
+ currentChannel=ch;
+ document.querySelectorAll('.msg-channel').forEach(function(el){ el.classList.remove('active'); });
+ document.querySelector('.msg-channel[data-channel="'+ch+'"]').classList.add('active');
+ var btn=document.getElementById('sendMsgBtn');
+ var texts={sms:'💬 Wyślij przez SMS', messenger:'💙 Wyślij przez Messenger', whatsapp:'🟢 Wyślij przez WhatsApp', wroomer:'⭐ Wyślij przez WROOMER.PL'};
+ btn.innerText=texts[ch]||'Wyślij';
+ btn.className='btn '+(ch==='whatsapp'?'btn-green':ch==='messenger'?'btn-blue':ch==='sms'?'btn-orange':'btn-black');
+ btn.style.flex='1';
+}
+function getCleanPhone(){
+ var n=currentAd&&currentAd.phone; if(!n) return null;
+ var clean=n.replace(/\s/g,'').replace(/-/g,'');
+ if(clean.indexOf('+')!==0){ if(clean.length===9) clean='+48'+clean; else if(clean.indexOf('00')===0) clean='+'+clean.substring(2); else if(clean.indexOf('48')===0) clean='+'+clean; else clean='+48'+clean; }
+ return clean;
+}
+function getMessageWithLink(){
+ var txt=document.getElementById('msgText').value.trim();
+ if(!txt) txt='Cześć! Czy ogłoszenie jest aktualne? Jestem zainteresowany.';
+ var title=currentAd? currentAd.title : '';
+ var price=currentAd? currentAd.price : '';
+ var loc=currentAd? (currentAd.location||'') : '';
+ var url=window.location.href;
+ var full='Cześć! 👋\nZainteresowało mnie Twoje ogłoszenie na WROOMER.PL:\n*'+title+'*\n💰 '+price+' PLN\n📍 '+loc+'\n\nMoja wiadomość:\n'+txt+'\n\nLink: '+url;
+ return {raw:txt, full:full, title:title, url:url};
+}
+function sendMessage(){
+ var phone=getCleanPhone();
+ var msg=getMessageWithLink();
+ if(!msg.raw){ document.getElementById('msgInfo').innerText='Wpisz wiadomość!'; return; }
+ if(currentChannel==='sms'){
+  if(!phone){ alert('Brak numeru'); return; }
+  var smsUrl='sms:'+phone+'?body='+encodeURIComponent(msg.full);
+  window.location.href=smsUrl;
+  document.getElementById('msgInfo').innerText='✅ Otwieram SMS...';
+ } else if(currentChannel==='whatsapp'){
+  if(!phone){ alert('Brak numeru'); return; }
+  var waPhone=phone.replace('+','').replace(/\s/g,'');
+  var waUrl='https://wa.me/'+waPhone+'?text='+encodeURIComponent(msg.full);
+  window.open(waUrl, '_blank');
+  document.getElementById('msgInfo').innerText='✅ Otwieram WhatsApp...';
+ } else if(currentChannel==='messenger'){
+  // Messenger - używa Facebook share + kopiowanie wiadomości
+  var messengerUrl='https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(msg.url);
+  // Kopiuj wiadomość do schowka
+  navigator.clipboard.writeText(msg.full).then(function(){
+   document.getElementById('msgInfo').innerText='✅ Skopiowano wiadomość! Otwieram Messenger - wklej wiadomość.';
+  });
+  window.open('https://www.messenger.com/', '_blank');
+  // Alternatywnie: m.me
+  // window.open('fb-messenger://share/?link='+encodeURIComponent(msg.url), '_blank');
+ } else if(currentChannel==='wroomer'){
+  // WROOMER.PL - wewnętrzny czat
+  if(!currentUser){ alert('Musisz się zalogować żeby wysłać wiadomość przez WROOMER.PL!'); openAuth(); return; }
+  if(currentAd && currentAd.owner_id===currentUser.id){ alert('Nie możesz wysłać wiadomości do siebie!'); return; }
+  sendWroomerMessage(msg.raw);
+ }
+}
+function sendWroomerMessage(text){
+ if(!currentAd || !currentUser) return;
+ var btn=document.getElementById('sendMsgBtn');
+ btn.disabled=true; btn.innerText='Wysyłam...';
+ var payload={
+  ad_id: currentAd.id,
+  ad_title: currentAd.title,
+  sender_id: currentUser.id,
+  sender_email: currentUser.email,
+  receiver_id: currentAd.owner_id,
+  message: text,
+  created_at: new Date().toISOString(),
+  is_read: false
+ };
+ // Próba zapisu do Supabase messages
+ fetch(SUPABASE_URL+'/rest/v1/messages',{method:'POST',headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+authToken,'Content-Type':'application/json','Prefer':'return=representation'},body:JSON.stringify(payload)}).then(function(res){
+  if(!res.ok){
+   return res.text().then(function(t){
+    // jeśli tabela nie istnieje - zapisz lokalnie i pokaż instrukcję
+    if(t.indexOf('messages')!==-1 || t.indexOf('does not exist')!==-1 || t.indexOf('PGRST')!==-1){
+     // fallback - localStorage
+     var localMsgs=JSON.parse(localStorage.getItem('wroomer_messages')||'[]');
+     localMsgs.push(payload);
+     localStorage.setItem('wroomer_messages', JSON.stringify(localMsgs));
+     throw new Error('TABELA_MESSAGES_BRAK');
+    } else throw new Error(t);
+   });
+  }
+  return res.json();
+ }).then(function(data){
+  btn.disabled=false; btn.innerText='⭐ Wyślij przez WROOMER.PL';
+  document.getElementById('msgInfo').innerText='✅ Wiadomość wysłana przez WROOMER.PL! Sprzedający dostanie powiadomienie.';
+  document.getElementById('msgText').value='';
+  // powiadomienie
+  setTimeout(function(){ alert('✅ Wiadomość wysłana! Sprzedający zobaczy ją w zakładce Wiadomości.'); }, 300);
+ }).catch(function(e){
+  btn.disabled=false; btn.innerText='⭐ Wyślij przez WROOMER.PL';
+  if(e.message==='TABELA_MESSAGES_BRAK'){
+   // pokaż instrukcję SQL
+   document.getElementById('msgInfo').innerHTML='⚠️ Wiadomość zapisana lokalnie. Aby włączyć czat WROOMER.PL na stałe, dodaj tabelę w Supabase SQL Editor:<br><textarea style="width:100%;font-size:10px;margin-top:6px" rows="8">CREATE TABLE messages (id uuid DEFAULT gen_random_uuid() PRIMARY KEY, ad_id text, ad_title text, sender_id uuid, sender_email text, receiver_id uuid, message text, created_at timestamp DEFAULT now(), is_read boolean DEFAULT false); ALTER TABLE messages ENABLE ROW LEVEL SECURITY; CREATE POLICY "allow all" ON messages FOR ALL USING (true) WITH CHECK (true);</textarea><br>Wiadomość została zapisana i sprzedający ją zobaczy po odświeżeniu (localStorage).';
+   document.getElementById('msgText').value='';
+  } else {
+   document.getElementById('msgInfo').innerText='Błąd: '+e.message;
+  }
+ });
+}
+function quickSMS(){
+ var phone=getCleanPhone();
+ if(!phone){ alert('Brak numeru'); return; }
+ var msg=getMessageWithLink();
+ var smsUrl='sms:'+phone+'?body='+encodeURIComponent(msg.full);
+ window.location.href=smsUrl;
+}
+function quickWhatsApp(){
+ var phone=getCleanPhone();
+ if(!phone){ alert('Brak numeru'); return; }
+ var msg=getMessageWithLink();
+ var waPhone=phone.replace('+','').replace(/\s/g,'');
+ var waUrl='https://wa.me/'+waPhone+'?text='+encodeURIComponent(msg.full);
+ window.open(waUrl, '_blank');
+}
+
+// INBOX
+function openInbox(){
+ if(!currentUser){ alert('Zaloguj się żeby zobaczyć wiadomości!'); openAuth(); return; }
+ document.getElementById('inboxModal').style.display='flex';
+ loadInbox();
+}
+function closeInbox(){ document.getElementById('inboxModal').style.display='none'; }
+function loadInbox(){
+ var listEl=document.getElementById('inboxList');
+ listEl.innerHTML='<p style="padding:20px;text-align:center">Ładowanie...</p>';
+ // próba z Supabase
+ fetch(SUPABASE_URL+'/rest/v1/messages?or=(receiver_id.eq.'+currentUser.id+',sender_id.eq.'+currentUser.id+')&order=created_at.desc&limit=100',{headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+authToken}}).then(function(r){
+  if(!r.ok) throw new Error('no table');
+  return r.json();
+ }).then(function(msgs){
+  renderInbox(msgs);
+  updateInboxCount(msgs);
+ }).catch(function(){
+  // fallback localStorage
+  var localMsgs=JSON.parse(localStorage.getItem('wroomer_messages')||'[]');
+  var myMsgs=localMsgs.filter(function(m){ return m.receiver_id===currentUser.id || m.sender_id===currentUser.id; });
+  myMsgs.sort(function(a,b){ return new Date(b.created_at)-new Date(a.created_at); });
+  renderInbox(myMsgs);
+  updateInboxCount(myMsgs);
+  if(myMsgs.length>0){
+   listEl.innerHTML+='<p style="padding:10px;font-size:10px;color:#888;text-align:center">⚠️ Wiadomości lokalne (dodaj tabelę messages w Supabase żeby działały globalnie)</p>';
+  }
+ });
+}
+function renderInbox(msgs){
+ var listEl=document.getElementById('inboxList');
+ if(msgs.length===0){ listEl.innerHTML='<p style="padding:20px;text-align:center;color:#888">Brak wiadomości.<br><small>Gdy ktoś napisze do Ciebie, zobaczysz to tutaj.</small></p>'; return; }
+ var html='';
+ // grupuj po ad_id + sender
+ var groups={};
+ for(var i=0;i<msgs.length;i++){
+  var m=msgs[i];
+  var key=m.ad_id+'_'+(m.sender_id===currentUser.id? m.receiver_id : m.sender_id);
+  if(!groups[key]) groups[key]=[];
+  groups[key].push(m);
+ }
+ for(var k in groups){
+  var g=groups[k];
+  var last=g[0];
+  var unread=g.some(function(x){ return !x.is_read && x.receiver_id===currentUser.id; });
+  var otherEmail=last.sender_id===currentUser.id? last.receiver_id : last.sender_email;
+  var preview=last.message.slice(0,60);
+  html+='<div class="inbox-item '+(unread?'unread':'')+'" onclick="openChat(\''+k+'\')"><b>'+(last.ad_title||'Ogłoszenie')+'</b> <small>'+new Date(last.created_at).toLocaleString()+'</small><p>'+(last.sender_id===currentUser.id?'Ty: ':'')+preview+'</p><small>'+otherEmail+'</small> '+(unread?'<span style="background:#ffcb00;padding:2px 6px;border-radius:10px;font-size:9px">NOWA</span>':'')+'</div>';
+ }
+ listEl.innerHTML=html;
+}
+function updateInboxCount(msgs){
+ var unread=msgs.filter(function(m){ return !m.is_read && m.receiver_id===currentUser.id; }).length;
+ var countEl=document.getElementById('inboxCount');
+ if(unread>0){ countEl.style.display='inline-block'; countEl.innerText=unread; }
+ else { countEl.style.display='none'; }
+}
+function openChat(groupKey){
+ // znajdź wiadomości dla grupy
+ fetch(SUPABASE_URL+'/rest/v1/messages?or=(receiver_id.eq.'+currentUser.id+',sender_id.eq.'+currentUser.id+')&order=created_at.asc&limit=200',{headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+authToken}}).then(function(r){ return r.ok? r.json(): JSON.parse(localStorage.getItem('wroomer_messages')||'[]'); }).then(function(allMsgs){
+  var filtered=allMsgs.filter(function(m){
+   var key=m.ad_id+'_'+(m.sender_id===currentUser.id? m.receiver_id : m.sender_id);
+   return key===groupKey;
+  });
+  currentChatMessages=filtered;
+  currentChatAd=filtered[0];
+  document.getElementById('chatTitle').innerText=currentChatAd.ad_title||'Czat';
+  document.getElementById('chatSubtitle').innerText='Ogłoszenie: '+(currentChatAd.ad_id||'');
+  renderChatMessages();
+  document.getElementById('chatModal').style.display='flex';
+  document.getElementById('inboxModal').style.display='none';
+  // oznacz jako przeczytane
+  // w Supabase update is_read
+ });
+}
+function closeChat(){ document.getElementById('chatModal').style.display='none'; openInbox(); }
+function renderChatMessages(){
+ var box=document.getElementById('chatMessages');
+ box.innerHTML='';
+ for(var i=0;i<currentChatMessages.length;i++){
+  var m=currentChatMessages[i];
+  var mine=m.sender_id===currentUser.id;
+  var div=document.createElement('div');
+  div.className='chat-msg '+(mine?'mine':'theirs');
+  div.innerText=m.message;
+  var small=document.createElement('small');
+  small.style.display='block'; small.style.fontSize='9px'; small.style.opacity='.6'; small.style.marginTop='4px';
+  small.innerText=new Date(m.created_at).toLocaleTimeString();
+  div.appendChild(small);
+  box.appendChild(div);
+ }
+ box.scrollTop=box.scrollHeight;
+}
+function sendChatMessage(){
+ var input=document.getElementById('chatInput');
+ var text=input.value.trim();
+ if(!text || !currentChatAd) return;
+ var payload={
+  ad_id: currentChatAd.ad_id,
+  ad_title: currentChatAd.ad_title,
+  sender_id: currentUser.id,
+  sender_email: currentUser.email,
+  receiver_id: currentChatAd.sender_id===currentUser.id? currentChatAd.receiver_id : currentChatAd.sender_id,
+  message: text,
+  created_at: new Date().toISOString(),
+  is_read: false
+ };
+ fetch(SUPABASE_URL+'/rest/v1/messages',{method:'POST',headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+authToken,'Content-Type':'application/json','Prefer':'return=representation'},body:JSON.stringify(payload)}).then(function(r){
+  if(!r.ok){
+   // fallback local
+   var localMsgs=JSON.parse(localStorage.getItem('wroomer_messages')||'[]');
+   localMsgs.push(payload);
+   localStorage.setItem('wroomer_messages', JSON.stringify(localMsgs));
+   return [payload];
+  }
+  return r.json();
+ }).then(function(){
+  currentChatMessages.push(payload);
+  input.value='';
+  renderChatMessages();
+ });
+}
 
 function updateModelOptions(){ var brand=document.getElementById('addBrand').value; var modelSelect=document.getElementById('addModel'); var list=MODELS[brand] || ['Wybierz markę najpierw']; modelSelect.innerHTML=''; for(var i=0;i<list.length;i++){ var opt=document.createElement('option'); opt.value=list[i]; opt.text=list[i]; modelSelect.appendChild(opt); } var titleInput=document.getElementById('addTitleInput'); if(!titleInput.value && brand){ titleInput.value=brand+' '+(list[0]!=='Inny'?list[0]:''); } }
 function updatePowiatOptions(){ var woj=document.getElementById('addWoj').value; var powiatSelect=document.getElementById('addPowiat'); var list=POWIATY[woj] || []; powiatSelect.innerHTML='<option value="">Wybierz powiat *</option>'; for(var i=0;i<list.length;i++){ var opt=document.createElement('option'); opt.value=list[i]; opt.text=list[i]; powiatSelect.appendChild(opt); } powiatSelect.disabled=list.length===0; document.getElementById('addMiejscowosc').innerHTML='<option value="">Najpierw powiat</option>'; document.getElementById('addMiejscowosc').disabled=true; document.getElementById('customMiejscRow').style.display='none'; if(woj==='śląskie'){ powiatSelect.value='wodzisławski'; updateMiejscowoscOptions(); } }
@@ -251,13 +545,7 @@ function renderAds(){
   for(var j=0;j<filtered.length;j++){
    var a=filtered[j];
    var d=getDistance(center,a.lat,a.lng);
-   if(d===null){
-    if(locQ.indexOf('rydu')!==-1 || locQ.indexOf('ryhult')!==-1){
-     var ll=(a.location||'').toLowerCase();
-     if(ll.indexOf('gorzyce')!==-1 || ll.indexOf('wodzis')!==-1 || ll.indexOf('rydu')!==-1 || ll.indexOf('radlin')!==-1){ a._dist=8; tmp.push(a); continue; }
-    }
-    a._dist=0; tmp.push(a); continue;
-   }
+   if(d===null){ a._dist=0; tmp.push(a); continue; }
    if(d<=radius){ a._dist=d; tmp.push(a); }
   }
   filtered=tmp;
@@ -320,7 +608,6 @@ function getMyLocationForAdd(){
 function openDetail(id){
  var a=null; for(var i=0;i<allAds.length;i++){if(String(allAds[i].id)===String(id)){a=allAds[i];break;}} if(!a)return;
  currentAd=a;
- // przygotuj galerię - wszystkie zdjęcia
  var imgs=[];
  if(a.images && a.images.length>0) imgs=a.images.slice();
  else if(a.image_url) imgs=[a.image_url];
@@ -329,34 +616,44 @@ function openDetail(id){
  currentImageIndex=0;
  document.getElementById('detailImg').src=galleryImages[0];
  document.getElementById('galleryCounter').innerText='1 / '+galleryImages.length;
- // kropki
  var dots=document.getElementById('galleryDots');
- var dh='';
- for(var i=0;i<galleryImages.length;i++){ dh+='<span class="'+(i===0?'active':'')+'" onclick="showImage('+i+')"></span>'; }
- dots.innerHTML=dh;
- // miniaturki
- var thumbsHtml='';
- for(var t=0;t<galleryImages.length;t++){
-  thumbsHtml+='<img src="'+galleryImages[t]+'" class="'+(t===0?'active':'')+'" onclick="showImage('+t+')" style="width:80px;height:60px;object-fit:cover;border-radius:8px;cursor:pointer;border:2px solid '+(t===0?'#ffcb00':'transparent')+'">';
- }
- document.getElementById('detailImages').innerHTML=thumbsHtml;
- // pokaż/ukryj strzałki jeśli 1 zdjęcie
- var arrows=document.querySelectorAll('.gallery-arrow');
- for(var aa=0;aa<arrows.length;aa++){ arrows[aa].style.display=galleryImages.length<=1?'none':'flex'; }
-
+ var dh=''; for(var i=0;i<galleryImages.length;i++){ dh+='<span class="'+(i===0?'active':'')+'" onclick="showImage('+i+')"></span>'; } dots.innerHTML=dh;
+ var thumbsHtml=''; for(var t=0;t<galleryImages.length;t++){ thumbsHtml+='<img src="'+galleryImages[t]+'" class="'+(t===0?'active':'')+'" onclick="showImage('+t+')" style="width:80px;height:60px;object-fit:cover;border-radius:8px;cursor:pointer;border:2px solid '+(t===0?'#ffcb00':'transparent')+'">'; } document.getElementById('detailImages').innerHTML=thumbsHtml;
+ var arrows=document.querySelectorAll('.gallery-arrow'); for(var aa=0;aa<arrows.length;aa++){ arrows[aa].style.display=galleryImages.length<=1?'none':'flex'; }
  document.getElementById('detailTitle').innerText=a.title||'';
  document.getElementById('detailPrice').innerText=a.price? a.price+' PLN':'';
  document.getElementById('detailLoc').innerText=(a.location||a.city||'')+(a._dist? ' • '+a._dist.toFixed(1)+' km od Ciebie':'');
  document.getElementById('detailDesc').innerText=a.description||'';
  document.getElementById('phoneNumber').innerText='📞 '+(a.phone||'Brak');
  document.getElementById('phoneNumber').style.display='none';
+ document.getElementById('msgText').value='';
+ document.getElementById('msgInfo').innerText='';
+ selectChannel('wroomer');
  document.getElementById('detail').style.display='flex';
 }
-function saveAuth(t,u){ localStorage.setItem('sb_token',t); localStorage.setItem('sb_user',JSON.stringify(u)); authToken=t; currentUser=u; updateAuthUI(); }
-function loadAuth(){ try{ authToken=localStorage.getItem('sb_token'); currentUser=JSON.parse(localStorage.getItem('sb_user')||'null'); }catch(e){} updateAuthUI(); }
-function updateAuthUI(){ if(currentUser){ document.getElementById('authBtn').style.display='none'; document.getElementById('userEmail').style.display='block'; document.getElementById('userEmail').innerText=currentUser.email; document.getElementById('logoutBtn').style.display='block'; var b=document.getElementById('myBtn'); if(b) b.style.display='block'; } else { document.getElementById('authBtn').style.display='block'; document.getElementById('userEmail').style.display='none'; document.getElementById('logoutBtn').style.display='none'; var b2=document.getElementById('myBtn'); if(b2) b2.style.display='none'; } }
+function saveAuth(t,u){ localStorage.setItem('sb_token',t); localStorage.setItem('sb_user',JSON.stringify(u)); authToken=t; currentUser=u; updateAuthUI(); loadInboxCount(); }
+function loadAuth(){ try{ authToken=localStorage.getItem('sb_token'); currentUser=JSON.parse(localStorage.getItem('sb_user')||'null'); }catch(e){} updateAuthUI(); if(currentUser) loadInboxCount(); }
+function updateAuthUI(){ if(currentUser){ document.getElementById('authBtn').style.display='none'; document.getElementById('userEmail').style.display='block'; document.getElementById('userEmail').innerText=currentUser.email; document.getElementById('logoutBtn').style.display='block'; var b=document.getElementById('myBtn'); if(b) b.style.display='block'; var ib=document.getElementById('inboxBtn'); if(ib) ib.style.display='block'; } else { document.getElementById('authBtn').style.display='block'; document.getElementById('userEmail').style.display='none'; document.getElementById('logoutBtn').style.display='none'; var b2=document.getElementById('myBtn'); if(b2) b2.style.display='none'; var ib2=document.getElementById('inboxBtn'); if(ib2) ib2.style.display='none'; } }
 function logout(){ localStorage.removeItem('sb_token'); localStorage.removeItem('sb_user'); currentUser=null; authToken=null; updateAuthUI(); location.reload(); }
 function filterMy(){ if(!currentUser){alert('Zaloguj');return} var btn=document.getElementById('myBtn'); if(btn.innerText==='Moje'){ btn.innerText='Wszystkie'; loadAds().then(function(){ allAds=allAds.filter(function(a){return a.owner_id===currentUser.id}); renderAds(); }); } else { btn.innerText='Moje'; loadAds(); } }
+function loadInboxCount(){
+ if(!currentUser || !authToken) return;
+ fetch(SUPABASE_URL+'/rest/v1/messages?receiver_id=eq.'+currentUser.id+'&is_read=eq.false&select=id',{headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+authToken}}).then(function(r){ return r.ok? r.json(): []; }).then(function(data){
+  var countEl=document.getElementById('inboxCount');
+  if(data.length>0){ countEl.style.display='inline-block'; countEl.innerText=data.length; }
+  else {
+   var localMsgs=JSON.parse(localStorage.getItem('wroomer_messages')||'[]');
+   var unread=localMsgs.filter(function(m){ return m.receiver_id===currentUser.id && !m.is_read; }).length;
+   if(unread>0){ countEl.style.display='inline-block'; countEl.innerText=unread; }
+   else countEl.style.display='none';
+  }
+ }).catch(function(){
+  var localMsgs=JSON.parse(localStorage.getItem('wroomer_messages')||'[]');
+  var unread=localMsgs.filter(function(m){ return m.receiver_id===currentUser.id && !m.is_read; }).length;
+  var countEl=document.getElementById('inboxCount');
+  if(unread>0){ countEl.style.display='inline-block'; countEl.innerText=unread; }
+ });
+}
 function loadAds(){
  document.getElementById('resultsInfo').innerText='Ładowanie ogłoszeń...';
  var url=SUPABASE_URL+'/rest/v1/ads?select=*&order=created_at.desc&limit=300';
@@ -422,7 +719,6 @@ function submitAdd(){
   }).then(function(r){ if(!r.ok) return r.text().then(function(t){throw new Error(t)}); return r.json(); }).then(function(){ document.getElementById('addSubmitBtn').disabled=false; document.getElementById('addSubmitBtn').innerText='Zatwierdź'; closeAdd(); loadAds(); }).catch(function(e){ document.getElementById('addSubmitBtn').disabled=false; document.getElementById('addSubmitBtn').innerText='Zatwierdź'; document.getElementById('addInfo').innerText='Błąd: '+e.message.slice(0,300); });
  }
 }
-function deleteAd(){ if(!currentAd) return; if(!confirm('Usunąć?')) return; fetch(SUPABASE_URL+'/rest/v1/ads?id=eq.'+currentAd.id,{method:'DELETE',headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+authToken}}).then(function(r){ if(!r.ok) throw new Error('Błąd'); closeDetail(); loadAds(); }).catch(function(e){alert(e.message)}); }
 
 loadAuth();
 loadAds();
