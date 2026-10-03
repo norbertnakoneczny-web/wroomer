@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>WROOMER.PL</title>
+<title>WROOMER.PL v2.2</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;font-family:Inter,system-ui,sans-serif}
 body{background:#f5f5f0;color:#111}
@@ -20,10 +20,7 @@ header{background:#fff;border-bottom:1px solid #e5e5e0;position:sticky;top:0;z-i
 .card img{width:100%;height:144px;object-fit:contain;background:#f4f4f4}
 .card .info{padding:8px 10px}.card .title{font-size:12px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .card .price{font-size:13px;font-weight:900}.card .loc{font-size:10px;color:#777}.card .dist{font-size:10px;color:#ff7a00;font-weight:700}
-.badge{position:absolute;top:6px;left:6px;background:#ffcb00;color:#111;font-size:9px;font-weight:900;padding:4px 6px;border-radius:6px}
 @media(max-width:600px){.grid{grid-template-columns:repeat(2,1fr);gap:8px;padding:0 8px}.card img{height:110px}}
-.contact-box{margin-top:16px;padding:14px;background:#f9f9f6;border:1px solid #e9e9e6;border-radius:12px}
-.contact-btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
 #detail{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:100;display:none;align-items:center;justify-content:center;padding:16px}
 .detail-box{background:#fff;width:100%;max-width:1100px;border-radius:16px;overflow:hidden;max-height:95vh;display:flex;flex-direction:column}
 .detail-img{width:100%;height:60vh;min-height:300px;object-fit:contain;background:#f5f5f5}
@@ -34,269 +31,165 @@ header{background:#fff;border-bottom:1px solid #e5e5e0;position:sticky;top:0;z-i
 .add-box label{font-size:11px;font-weight:700;color:#444;margin-top:6px;display:block}
 .add-box input, .add-box textarea{width:100%;padding:11px;border:1px solid #ddd;border-radius:8px;margin-top:4px;font-size:13px}
 .preview-images{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}.preview-images img{width:80px;height:80px;object-fit:cover;border-radius:8px;border:1px solid #ddd}
-.tabs{display:flex;gap:6px;margin:12px 0}.tab{flex:1;padding:10px;border:1px solid #ddd;border-radius:8px;background:#fff;cursor:pointer;font-weight:700;font-size:13px}.tab.active{background:#111;color:#fff;border-color:#111}
 #resultsInfo{max-width:1280px;margin:10px auto 0;padding:0 12px;font-size:12px;color:#666}
+.debug{max-width:1280px;margin:10px auto;padding:10px 12px;font-size:11px;background:#111;color:#0f0;border-radius:8px;white-space:pre-wrap;display:none}
 </style>
 </head>
 <body>
 <header>
 <div class="top-row">
-<div class="logo" onclick="window.location.reload()">WROOMER<span>.PL</span></div>
+<div class="logo" onclick="location.reload()">WROOMER<span>.PL</span> <span style="font-size:9px;background:#ffcb00;color:#111;padding:2px 6px;border-radius:4px">v2.2 DZIAŁA</span></div>
 <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
 <button class="btn btn-yellow" onclick="openAdd()">+ Dodaj</button>
 <button id="myBtn" class="btn btn-white" style="display:none" onclick="filterMy()">Moje</button>
 <button id="authBtn" class="btn btn-black" onclick="openAuth()">Zaloguj / Rejestracja</button>
-<span id="userEmail" style="display:none;font-size:12px;font-weight:700;max-width:180px;overflow:hidden;text-overflow:ellipsis"></span>
+<span id="userEmail" style="display:none;font-size:12px;font-weight:700"></span>
 <button id="logoutBtn" class="btn btn-white" style="display:none" onclick="logout()">Wyloguj</button>
 </div>
 </div>
 <div class="search-bar">
-<input id="searchInput" class="search-main" placeholder="Szukaj: np. BMW, Audi A4..." oninput="window.renderAds()">
-<select id="brandFilter" onchange="window.renderAds()"><option value="">Wszystkie marki</option><option>BMW</option><option>Audi</option><option>Mercedes</option><option>Volkswagen</option><option>Toyota</option><option>Ford</option><option>Opel</option><option>Skoda</option><option>Mitsubishi</option></select>
-<input id="locationInput" placeholder="Miejscowość: Gorzyce, Katowice..." oninput="window.onLocationInput()">
-<select id="radiusFilter" onchange="window.renderAds()"><option value="0">+0 km</option><option value="5">+5 km</option><option value="10">+10 km</option><option value="25" selected>+25 km</option><option value="50">+50 km</option><option value="100">+100 km</option><option value="200">+200 km</option><option value="9999">Cała Polska</option></select>
-<button class="btn btn-white" onclick="window.getMyLocation()">📍 Blisko mnie</button>
-<select id="sortFilter" onchange="window.renderAds()"><option value="newest">Najnowsze</option><option value="price_asc">Cena rosnąco</option><option value="price_desc">Cena malejąco</option><option value="distance">Najbliższe</option></select>
-<button class="btn btn-white" onclick="window.clearFilters()">Wyczyść</button>
+<input id="searchInput" class="search-main" placeholder="Szukaj: BMW, Audi..." oninput="renderAds()">
+<select id="brandFilter" onchange="renderAds()"><option value="">Wszystkie marki</option><option>BMW</option><option>Audi</option><option>Mercedes</option><option>Volkswagen</option><option>Toyota</option><option>Ford</option><option>Opel</option><option>Skoda</option><option>Mitsubishi</option></select>
+<input id="locationInput" placeholder="Miejscowość: Gorzyce, Katowice..." oninput="onLocationInput()">
+<select id="radiusFilter" onchange="renderAds()"><option value="0">+0 km</option><option value="5">+5 km</option><option value="25" selected>+25 km</option><option value="50">+50 km</option><option value="100">+100 km</option><option value="9999">Cała Polska</option></select>
+<button class="btn btn-white" onclick="getMyLocation()">📍 Blisko mnie</button>
+<select id="sortFilter" onchange="renderAds()"><option value="newest">Najnowsze</option><option value="price_asc">Cena ↑</option><option value="price_desc">Cena ↓</option></select>
+<button class="btn btn-white" onclick="clearFilters()">Wyczyść</button>
 </div>
 </header>
 
-<div id="resultsInfo">Ładowanie ogłoszeń...</div>
+<div id="resultsInfo">Ładowanie...</div>
 <div id="adsGrid" class="grid"></div>
+<div id="debug" class="debug"></div>
 
-<div id="detail" onclick="if(event.target.id==='detail')window.closeDetail()"><div class="detail-box"><img id="detailImg" class="detail-img"><div class="detail-content"><h2 id="detailTitle"></h2><p id="detailPrice" style="font-weight:900;margin:8px 0;font-size:18px"></p><p id="detailLoc" style="font-size:13px;color:#666"></p><p id="detailDesc" style="font-size:14px;color:#444;margin-top:10px;white-space:pre-wrap"></p><div id="detailImages" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"></div><div class="contact-box"><h4>📞 Kontakt ze sprzedającym</h4><p id="detailSeller" style="font-size:12px;color:#666"></p><div class="contact-btns"><button class="btn btn-black" onclick="window.contactCall()">📞 Zadzwoń</button><button class="btn btn-white" onclick="window.contactSms()">💬 SMS</button><button class="btn btn-white" style="background:#25D366;color:#fff" onclick="window.contactWhats()">WhatsApp</button><button class="btn btn-yellow" onclick="window.showPhone()">Pokaż numer</button></div><p id="phoneNumber" style="margin-top:10px;font-weight:900;display:none"></p></div><div style="margin-top:12px;display:flex;gap:8px"><button id="editBtn" class="btn btn-yellow" style="display:none" onclick="window.openEditFromDetail()">Edytuj</button><button id="deleteBtn" class="btn btn-white" style="display:none" onclick="window.deleteAd()">Usuń</button><button class="btn btn-black" onclick="window.closeDetail()">Zamknij</button></div></div></div></div>
+<div id="detail" onclick="if(event.target.id==='detail')closeDetail()"><div class="detail-box"><img id="detailImg" class="detail-img"><div class="detail-content"><h2 id="detailTitle"></h2><p id="detailPrice" style="font-weight:900"></p><p id="detailLoc"></p><p id="detailDesc" style="white-space:pre-wrap"></p><div id="detailImages" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"></div><div style="margin-top:12px"><p id="phoneNumber" style="font-weight:900;display:none"></p><div style="display:flex;gap:8px;margin-top:8px"><button class="btn btn-black" onclick="contactCall()">📞 Zadzwoń</button><button class="btn btn-white" onclick="showPhone()">Pokaż numer</button><button class="btn btn-black" onclick="closeDetail()">Zamknij</button></div></div></div></div></div>
 
-<div id="addModal" onclick="if(event.target.id==='addModal')window.closeAdd()"><div class="add-box"><h2 id="addTitle">Dodaj ogłoszenie</h2><div class="form-grid"><div class="full"><label>Tytuł ogłoszenia *</label><input id="addTitleInput" placeholder="np. Mitsubishi Colt 1.3"></div><div><label>Marka</label><input id="addBrand" placeholder="Mitsubishi"></div><div><label>Model</label><input id="addModel" placeholder="Colt"></div><div><label>Cena PLN *</label><input id="addPrice" type="number" placeholder="7900"></div><div><label>Miejscowość *</label><input id="addLocation" placeholder="np. Gorzyce - wymagane!"></div><div><label>Telefon *</label><input id="addPhone" type="tel" placeholder="600 123 456"></div><div class="full"><label>Opis</label><textarea id="addDesc" rows="3" placeholder="Rok, przebieg, paliwo..."></textarea></div><div class="full"><label>Zdjęcia (max 10) - wybierz z telefonu</label><input id="addImagesFile" type="file" accept="image/*" multiple onchange="window.handleFiles(this.files)"><div id="addPreview" class="preview-images"></div><p style="font-size:11px;color:#888;margin-top:6px">Lub wklej linki:</p><input id="addImagesLinks" placeholder="https://..."></div></div><div style="display:flex;gap:8px;margin-top:16px"><button class="btn btn-black" style="flex:1" id="addSubmitBtn" onclick="window.submitAdd()">Zatwierdź</button><button class="btn btn-white" style="flex:1" onclick="window.closeAdd()">Anuluj</button></div><p id="addInfo" style="font-size:12px;color:#c00;margin-top:8px"></p></div></div>
+<div id="addModal" onclick="if(event.target.id==='addModal')closeAdd()"><div class="add-box"><h2 id="addTitle">Dodaj ogłoszenie</h2><div class="form-grid"><div class="full"><label>Tytuł *</label><input id="addTitleInput"></div><div><label>Marka</label><input id="addBrand"></div><div><label>Model</label><input id="addModel"></div><div><label>Cena *</label><input id="addPrice" type="number"></div><div><label>Miejscowość *</label><input id="addLocation"></div><div><label>Telefon *</label><input id="addPhone"></div><div class="full"><label>Opis</label><textarea id="addDesc" rows="3"></textarea></div><div class="full"><label>Zdjęcia (max 10)</label><input id="addImagesFile" type="file" accept="image/*" multiple onchange="handleFiles(this.files)"><div id="addPreview" class="preview-images"></div><input id="addImagesLinks" placeholder="lub linki https://..." style="margin-top:6px"></div></div><div style="display:flex;gap:8px;margin-top:16px"><button class="btn btn-black" style="flex:1" id="addSubmitBtn" onclick="submitAdd()">Zatwierdź</button><button class="btn btn-white" style="flex:1" onclick="closeAdd()">Anuluj</button></div><p id="addInfo" style="font-size:12px;color:#c00;margin-top:8px"></p></div></div>
 
-<div id="authModal" onclick="if(event.target.id==='authModal')window.closeAuth()"><div class="auth-box"><h3 id="authTitle">WROOMER.PL</h3><div class="tabs"><button class="tab active" id="loginTabBtn" onclick="window.showTab('login')">Logowanie</button><button class="tab" id="registerTabBtn" onclick="window.showTab('register')">Rejestracja</button></div><div id="loginTab" class="auth-tab-content"><input id="loginEmail" placeholder="E-mail"><input id="loginPass" type="password" placeholder="Hasło"><button class="btn btn-black" style="width:100%;margin-top:10px" onclick="window.login()">Zaloguj się</button><p style="font-size:12px;margin-top:8px"><a href="#" onclick="window.showTab('reset');return false">Nie pamiętasz hasła?</a></p><p id="loginInfo" style="font-size:11px;color:#c00"></p></div><div id="registerTab" class="auth-tab-content" style="display:none"><input id="regEmail" placeholder="E-mail"><input id="regPass" type="password" placeholder="Hasło min 6 znaków"><label style="font-size:11px;display:flex;gap:6px;margin-top:8px"><input type="checkbox" id="regCheck" style="width:auto"> Regulamin</label><button class="btn btn-yellow" style="width:100%;margin-top:10px" onclick="window.register()">Załóż konto</button></div><div id="resetTab" class="auth-tab-content" style="display:none"><input id="resetEmail" placeholder="E-mail"><button class="btn btn-black" style="width:100%;margin-top:10px" onclick="window.sendReset()">Wyślij reset</button><p id="resetInfo" style="font-size:11px"></p></div><div id="newPasswordTab" class="auth-tab-content" style="display:none"><h3>Nowe hasło</h3><input id="newPasswordInput" type="password" placeholder="Nowe hasło"><button class="btn btn-black" style="width:100%;margin-top:10px" onclick="window.setNewPassword()">Zapisz</button></div></div></div>
-
-<script>
-// PROSTE FUNKCJE BEZ NOWOCZESNEJ SKŁADNI - KOMPATYBILNE ZE WSZYSTKIM
-window.allAds = [];
-window.currentAd = null;
-window.editingAd = null;
-window.userLocationCoords = null;
-window.searchLocationCoords = null;
-window.selectedImagesBase64 = [];
-window.locTimeout = null;
-window.currentUser = null;
-window.authToken = null;
-
-window.openAdd = function(){ 
- if(!window.currentUser){ alert('Musisz się zalogować żeby dodać ogłoszenie!'); window.openAuth(); return; }
- window.editingAd=null; document.getElementById('addTitle').innerText='Dodaj ogłoszenie';
- var ids=['addTitleInput','addBrand','addModel','addPrice','addLocation','addPhone','addDesc','addImagesLinks'];
- for(var i=0;i<ids.length;i++){var e=document.getElementById(ids[i]); if(e) e.value='';}
- window.selectedImagesBase64=[]; var p=document.getElementById('addPreview'); if(p) p.innerHTML=''; document.getElementById('addInfo').innerText=''; document.getElementById('addModal').style.display='flex'; 
-}
-window.closeAdd = function(){ document.getElementById('addModal').style.display='none'; }
-window.openAuth = function(){ document.getElementById('authModal').style.display='flex'; window.showTab('login'); }
-window.closeAuth = function(){ document.getElementById('authModal').style.display='none'; }
-window.showTab = function(n){ 
- var contents=document.querySelectorAll('.auth-tab-content'); for(var i=0;i<contents.length;i++) contents[i].style.display='none';
- var tabs=document.querySelectorAll('.tab'); for(var j=0;j<tabs.length;j++) tabs[j].classList.remove('active');
- var el=document.getElementById(n+'Tab'); if(el) el.style.display='block'; var b=document.getElementById(n+'TabBtn'); if(b) b.classList.add('active');
-}
-window.closeDetail = function(){ document.getElementById('detail').style.display='none'; window.currentAd=null; }
-window.clearFilters = function(){ document.getElementById('searchInput').value=''; document.getElementById('locationInput').value=''; document.getElementById('radiusFilter').value='25'; var bf=document.getElementById('brandFilter'); if(bf) bf.value=''; window.searchLocationCoords=null; window.userLocationCoords=null; window.renderAds(); }
-window.showPhone = function(){ var n=window.currentAd && window.currentAd.phone; if(!n){alert('Brak numeru');return} document.getElementById('phoneNumber').style.display='block'; document.getElementById('phoneNumber').innerText='📞 '+n; }
-window.contactCall = function(){ var n=window.currentAd && window.currentAd.phone; if(!n){window.showPhone();return} window.location.href='tel:'+n.replace(/\s/g,''); }
-window.contactSms = function(){ var n=window.currentAd && window.currentAd.phone; if(!n){alert('Brak');return} window.location.href='sms:'+n.replace(/\s/g,''); }
-window.contactWhats = function(){ var n=window.currentAd && window.currentAd.phone; if(!n){alert('Brak');return} var c=n.replace(/\s/g,'').replace(/^0/,'+48'); window.open('https://wa.me/'+c.replace('+','')+'?text=WROOMER: '+(window.currentAd.title||''),'_blank'); }
-window.handleFiles = function(files){ for(var i=0;i<files.length;i++){ if(window.selectedImagesBase64.length>=10) break; (function(file){ var r=new FileReader(); r.onload=function(e){window.selectedImagesBase64.push(e.target.result); window.renderPreview();}; r.readAsDataURL(file); })(files[i]); } }
-window.renderPreview = function(){ var el=document.getElementById('addPreview'); if(!el) return; var html=''; for(var i=0;i<window.selectedImagesBase64.length;i++){ html+='<div style="position:relative"><img src="'+window.selectedImagesBase64[i]+'"><button onclick="window.removeImg('+i+')" style="position:absolute;top:-6px;right:-6px;background:#111;color:#fff;border:0;border-radius:50%;width:20px;height:20px">×</button></div>'; } el.innerHTML=html; }
-window.removeImg = function(i){ window.selectedImagesBase64.splice(i,1); window.renderPreview(); }
-window.getDistance = function(c,lat2,lng2){ if(!c||!lat2||!lng2) return null; var R=6371; var dLat=(lat2-c.lat)*Math.PI/180; var dLng=(lng2-c.lng)*Math.PI/180; var a=Math.sin(dLat/2)*Math.sin(dLat/2)+Math.cos(c.lat*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLng/2)*Math.sin(dLng/2); return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a)); }
-window.onLocationInput = function(){
- var v=document.getElementById('locationInput').value.trim();
- clearTimeout(window.locTimeout);
- if(v.length<2){ window.searchLocationCoords=null; window.renderAds(); return; }
- if(v.toLowerCase().indexOf('blisko')!==-1){ window.renderAds(); return; }
- window.locTimeout=setTimeout(function(){ fetch('https://nominatim.openstreetmap.org/search?format=json&q='+encodeURIComponent(v)+'&limit=1&countrycodes=pl').then(function(r){return r.json()}).then(function(j){ if(j[0]) window.searchLocationCoords={lat:parseFloat(j[0].lat),lng:parseFloat(j[0].lon)}; else window.searchLocationCoords=null; window.renderAds(); }).catch(function(){window.searchLocationCoords=null; window.renderAds();}); }, 500);
- window.renderAds();
-}
-window.renderAds = function(){
- try{
-  var filtered=window.allAds.slice();
-  var q=(document.getElementById('searchInput').value||'').toLowerCase().trim();
-  var brandEl=document.getElementById('brandFilter'); var brand=brandEl? brandEl.value.toLowerCase().trim() : '';
-  var locQ=(document.getElementById('locationInput').value||'').toLowerCase().trim();
-  var radius=parseInt(document.getElementById('radiusFilter').value||'25');
-  if(q){ filtered=filtered.filter(function(a){ return (a.title||'').toLowerCase().indexOf(q)!==-1 || (a.description||'').toLowerCase().indexOf(q)!==-1; }); }
-  if(brand){ filtered=filtered.filter(function(a){ return (a.brand||'').toLowerCase().indexOf(brand)!==-1 || (a.title||'').toLowerCase().indexOf(brand)!==-1; }); }
-  var center=null; if(locQ.indexOf('blisko')!==-1 && window.userLocationCoords) center=window.userLocationCoords; else if(window.searchLocationCoords) center=window.searchLocationCoords;
-  if(center && locQ && radius!==9999){
-   filtered=filtered.filter(function(a){ var d=window.getDistance(center,a.lat,a.lng); if(d===null) return (a.location||'').toLowerCase().indexOf(locQ)!==-1 || (a.city||'').toLowerCase().indexOf(locQ)!==-1; return d<=radius; });
-   for(var k=0;k<filtered.length;k++){ filtered[k]._dist=window.getDistance(center,filtered[k].lat,filtered[k].lng); }
-  }else if(locQ && radius!==9999){ filtered=filtered.filter(function(a){ return (a.location||'').toLowerCase().indexOf(locQ)!==-1 || (a.city||'').toLowerCase().indexOf(locQ)!==-1; }); }
-  var sortEl=document.getElementById('sortFilter'); var sort=sortEl? sortEl.value : 'newest';
-  if(sort==='price_asc'){ filtered.sort(function(a,b){return (parseInt(a.price)||0)-(parseInt(b.price)||0)}); }
-  else if(sort==='price_desc'){ filtered.sort(function(a,b){return (parseInt(b.price)||0)-(parseInt(a.price)||0)}); }
-  else if(sort==='distance'){
-   var c=center||window.userLocationCoords||window.searchLocationCoords;
-   if(c){ filtered.sort(function(a,b){var da=window.getDistance(c,a.lat,a.lng); var db=window.getDistance(c,b.lat,b.lng); if(da===null) return 1; if(db===null) return -1; return da-db;}); }
-  }
-  document.getElementById('resultsInfo').innerText='Znaleziono '+filtered.length+' z '+window.allAds.length+' ogłoszeń'+(locQ? ' w '+radius+'km od '+locQ:'');
-  var grid=document.getElementById('adsGrid');
-  if(filtered.length===0){ grid.innerHTML='<p style="padding:20px">Brak ogłoszeń w tym promieniu. Ustaw Cała Polska lub Wyczyść.</p>'; return }
-  var html='';
-  for(var i=0;i<filtered.length;i++){
-   var a=filtered[i];
-   var img=a.image_url || (a.images&&a.images[0]) || 'https://via.placeholder.com/300x200?text=WROOMER';
-   var title=(a.title||'Bez tytułu').slice(0,40);
-   var loc=a.location||a.city||'';
-   var dist=a._dist!=null? a._dist.toFixed(1)+' km':'';
-   html+='<div class="card" onclick="window.openDetail(\''+a.id+'\')">'+(a.brand?'<span class="badge">'+(a.brand||'').toUpperCase()+'</span>':'')+'<img src="'+img+'" loading="lazy"><div class="info"><div class="title">'+title+'</div><div class="price">'+(a.price? a.price+' PLN':'')+'</div><div class="loc">'+loc+'</div><div class="dist">'+(dist?'📍 '+dist:'')+'</div></div></div>';
-  }
-  grid.innerHTML=html;
- }catch(e){ console.error(e); document.getElementById('resultsInfo').innerText='Błąd render: '+e.message; }
-}
-window.getMyLocation = function(){ if(!navigator.geolocation){alert('Brak geo');return} navigator.geolocation.getCurrentPosition(function(p){ window.userLocationCoords={lat:p.coords.latitude,lng:p.coords.longitude}; window.searchLocationCoords=window.userLocationCoords; document.getElementById('locationInput').value='Blisko mnie'; document.getElementById('radiusFilter').value='25'; window.renderAds(); }); }
-window.openDetail = function(id){
- var a=null; for(var i=0;i<window.allAds.length;i++){ if(String(window.allAds[i].id)===String(id)){a=window.allAds[i];break;} } if(!a)return; window.currentAd=a;
- document.getElementById('detailImg').src=a.image_url || (a.images&&a.images[0]) || 'https://via.placeholder.com/800x600';
- document.getElementById('detailTitle').innerText=a.title||''; document.getElementById('detailPrice').innerText=a.price? a.price+' PLN':''; document.getElementById('detailLoc').innerText=(a.location||a.city||'') + (a._dist? ' • '+a._dist.toFixed(1)+' km':''); document.getElementById('detailDesc').innerText=a.description||'';
- var cont=document.getElementById('detailImages'); var html=''; var imgs=a.images||[]; for(var j=0;j<imgs.length;j++){ html+='<img src="'+imgs[j]+'" style="width:80px;height:60px;object-fit:cover;border-radius:8px;cursor:pointer" onclick="document.getElementById(\'detailImg\').src=\''+imgs[j]+'\'">'; } cont.innerHTML=html;
- document.getElementById('detailSeller').innerText='Z '+(a.location||a.city||'Polski')+' • '+new Date(a.created_at).toLocaleDateString('pl-PL');
- document.getElementById('phoneNumber').innerText='📞 '+(a.phone||'Brak'); document.getElementById('phoneNumber').style.display='none';
- var owned=window.currentUser && a.owner_id===window.currentUser.id;
- document.getElementById('editBtn').style.display=owned?'block':'none'; document.getElementById('deleteBtn').style.display=owned?'block':'none';
- document.getElementById('detail').style.display='flex';
-}
-window.openEditFromDetail = function(){
- if(!window.currentAd) return; window.editingAd=window.currentAd;
- document.getElementById('addTitle').innerText='Edytuj ogłoszenie';
- document.getElementById('addTitleInput').value=window.currentAd.title||''; document.getElementById('addBrand').value=window.currentAd.brand||''; document.getElementById('addModel').value=window.currentAd.model||'';
- document.getElementById('addPrice').value=window.currentAd.price||''; document.getElementById('addLocation').value=window.currentAd.location||''; document.getElementById('addPhone').value=window.currentAd.phone||'';
- document.getElementById('addDesc').value=window.currentAd.description||''; document.getElementById('addImagesLinks').value=(window.currentAd.images||[]).join(', ');
- window.selectedImagesBase64=(window.currentAd.images||[]).slice(); window.renderPreview();
- document.getElementById('addModal').style.display='flex'; window.closeDetail();
-}
-</script>
+<div id="authModal" onclick="if(event.target.id==='authModal')closeAuth()"><div class="auth-box"><h3>WROOMER.PL - Logowanie</h3><div style="display:flex;gap:8px;margin:12px 0"><button class="btn btn-black" style="flex:1" id="loginTabBtn" onclick="showTab('login')">Logowanie</button><button class="btn btn-white" style="flex:1" id="registerTabBtn" onclick="showTab('register')">Rejestracja</button></div><div id="loginTab"><input id="loginEmail" placeholder="E-mail" style="width:100%;padding:10px;margin-top:8px"><input id="loginPass" type="password" placeholder="Hasło" style="width:100%;padding:10px;margin-top:8px"><button class="btn btn-black" style="width:100%;margin-top:10px" onclick="login()">Zaloguj się</button><p id="loginInfo" style="font-size:11px;color:#c00;margin-top:8px;white-space:pre-wrap"></p></div><div id="registerTab" style="display:none"><input id="regEmail" placeholder="E-mail" style="width:100%;padding:10px;margin-top:8px"><input id="regPass" type="password" placeholder="Hasło min 6 znaków" style="width:100%;padding:10px;margin-top:8px"><label style="font-size:11px;display:flex;gap:6px;margin-top:8px"><input type="checkbox" id="regCheck"> Regulamin</label><button class="btn btn-yellow" style="width:100%;margin-top:10px" onclick="register()">Załóż konto</button><p id="regInfo" style="font-size:11px;color:#c00;margin-top:8px"></p></div><div id="resetTab" style="display:none"><input id="resetEmail" placeholder="E-mail" style="width:100%;padding:10px;margin-top:8px"><button class="btn btn-black" style="width:100%;margin-top:10px" onclick="sendReset()">Wyślij reset</button><p id="resetInfo" style="font-size:11px;margin-top:8px"></p><button class="btn btn-white" style="width:100%;margin-top:8px" onclick="showTab('login')">Wróć</button></div><p style="font-size:11px;margin-top:10px"><a href="#" onclick="showTab('reset');return false">Nie pamiętasz hasła?</a> | <a href="#" onclick="document.getElementById('debug').style.display='block';return false">Pokaż logi</a></p></div></div>
 
 <script>
-// SUPABASE VIA REST - BEZ BIBLIOTEKI, BEZ AbortSignal.timeout
-var SUPABASE_URL = 'https://rljqnhfogaqdjeirqqdj.supabase.co';
-var SUPABASE_KEY = 'sb_publishable_j7CS5xIHzOMBMyvsqVgDmw_GeEek5hX';
+var allAds=[], currentAd=null, editingAd=null, userLocationCoords=null, searchLocationCoords=null, selectedImagesBase64=[], locTimeout=null, currentUser=null, authToken=null;
+var SUPABASE_URL='https://rljqnhfogaqdjeirqqdj.supabase.co';
+var SUPABASE_KEY='sb_publishable_j7CS5xIHzOMBMyvsqVgDmw_GeEek5hX';
 
-window.saveAuth = function(token, user){ localStorage.setItem('sb_token', token); localStorage.setItem('sb_user', JSON.stringify(user)); window.authToken=token; window.currentUser=user; window.updateAuthUI(); }
-window.loadAuth = function(){ try{ window.authToken=localStorage.getItem('sb_token'); window.currentUser=JSON.parse(localStorage.getItem('sb_user')||'null'); }catch(e){} window.updateAuthUI(); }
-window.updateAuthUI = function(){
- if(window.currentUser){
-  document.getElementById('authBtn').style.display='none'; document.getElementById('userEmail').style.display='block'; document.getElementById('userEmail').innerText=window.currentUser.email; document.getElementById('logoutBtn').style.display='block'; var mb=document.getElementById('myBtn'); if(mb) mb.style.display='block';
- }else{
-  document.getElementById('authBtn').style.display='block'; document.getElementById('userEmail').style.display='none'; document.getElementById('logoutBtn').style.display='none'; var mb2=document.getElementById('myBtn'); if(mb2) mb2.style.display='none';
- }
-}
-window.logout = function(){ localStorage.removeItem('sb_token'); localStorage.removeItem('sb_user'); window.currentUser=null; window.authToken=null; window.updateAuthUI(); window.location.reload(); }
-window.filterMy = function(){ 
- if(!window.currentUser){ alert('Zaloguj się'); return; }
- var btn=document.getElementById('myBtn');
- if(btn.innerText==='Moje'){ btn.innerText='Wszystkie'; window.loadAds().then(function(){ window.allAds=window.allAds.filter(function(a){return a.owner_id===window.currentUser.id}); window.renderAds(); }); }
- else{ btn.innerText='Moje'; window.loadAds(); }
-}
+function log(m){ console.log(m); var d=document.getElementById('debug'); d.style.display='block'; d.innerText+=m+'\n'; }
 
-window.loadAds = function(){
+function openAdd(){ if(!currentUser){ alert('Musisz się zalogować!'); openAuth(); return; } editingAd=null; var ids=['addTitleInput','addBrand','addModel','addPrice','addLocation','addPhone','addDesc','addImagesLinks']; for(var i=0;i<ids.length;i++){var e=document.getElementById(ids[i]); if(e) e.value='';} selectedImagesBase64=[]; var p=document.getElementById('addPreview'); if(p) p.innerHTML=''; document.getElementById('addInfo').innerText=''; document.getElementById('addModal').style.display='flex'; }
+function closeAdd(){ document.getElementById('addModal').style.display='none'; }
+function openAuth(){ document.getElementById('authModal').style.display='flex'; showTab('login'); }
+function closeAuth(){ document.getElementById('authModal').style.display='none'; }
+function showTab(n){ document.getElementById('loginTab').style.display=n==='login'?'block':'none'; document.getElementById('registerTab').style.display=n==='register'?'block':'none'; document.getElementById('resetTab').style.display=n==='reset'?'block':'none'; document.getElementById('loginTabBtn').style.background=n==='login'?'#111':'#fff'; document.getElementById('loginTabBtn').style.color=n==='login'?'#fff':'#111'; document.getElementById('registerTabBtn').style.background=n==='register'?'#111':'#fff'; document.getElementById('registerTabBtn').style.color=n==='register'?'#fff':'#111'; }
+function closeDetail(){ document.getElementById('detail').style.display='none'; }
+function clearFilters(){ document.getElementById('searchInput').value=''; document.getElementById('locationInput').value=''; document.getElementById('radiusFilter').value='25'; document.getElementById('brandFilter').value=''; searchLocationCoords=null; userLocationCoords=null; renderAds(); }
+function showPhone(){ var n=currentAd&&currentAd.phone; if(!n){alert('Brak numeru');return} var el=document.getElementById('phoneNumber'); el.style.display='block'; el.innerText='📞 '+n; }
+function contactCall(){ var n=currentAd&&currentAd.phone; if(!n){showPhone();return} window.location.href='tel:'+n.replace(/\s/g,''); }
+function handleFiles(files){ for(var i=0;i<files.length;i++){ if(selectedImagesBase64.length>=10) break; (function(f){var r=new FileReader(); r.onload=function(e){selectedImagesBase64.push(e.target.result); renderPreview();}; r.readAsDataURL(f);})(files[i]); } }
+function renderPreview(){ var el=document.getElementById('addPreview'); if(!el) return; var h=''; for(var i=0;i<selectedImagesBase64.length;i++){ h+='<div style="position:relative"><img src="'+selectedImagesBase64[i]+'"><button onclick="removeImg('+i+')" style="position:absolute;top:-6px;right:-6px;background:#111;color:#fff;border:0;border-radius:50%;width:20px;height:20px">×</button></div>'; } el.innerHTML=h; }
+function removeImg(i){ selectedImagesBase64.splice(i,1); renderPreview(); }
+function getDistance(c,lat2,lng2){ if(!c||!lat2||!lng2) return null; var R=6371; var dLat=(lat2-c.lat)*Math.PI/180; var dLng=(lng2-c.lng)*Math.PI/180; var a=Math.sin(dLat/2)*Math.sin(dLat/2)+Math.cos(c.lat*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLng/2)*Math.sin(dLng/2); return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a)); }
+function onLocationInput(){ var v=document.getElementById('locationInput').value.trim(); clearTimeout(locTimeout); if(v.length<2){ searchLocationCoords=null; renderAds(); return; } if(v.toLowerCase().indexOf('blisko')!==-1){ renderAds(); return; } locTimeout=setTimeout(function(){ fetch('https://nominatim.openstreetmap.org/search?format=json&q='+encodeURIComponent(v)+'&limit=1&countrycodes=pl').then(function(r){return r.json()}).then(function(j){ if(j[0]) searchLocationCoords={lat:parseFloat(j[0].lat),lng:parseFloat(j[0].lon)}; else searchLocationCoords=null; renderAds(); }).catch(function(){searchLocationCoords=null; renderAds();}); }, 600); renderAds(); }
+function renderAds(){
+ var filtered=allAds.slice();
+ var q=(document.getElementById('searchInput').value||'').toLowerCase().trim();
+ var locQ=(document.getElementById('locationInput').value||'').toLowerCase().trim();
+ var radius=parseInt(document.getElementById('radiusFilter').value||'25');
+ if(q) filtered=filtered.filter(function(a){return (a.title||'').toLowerCase().indexOf(q)!==-1});
+ var center=null; if(locQ.indexOf('blisko')!==-1 && userLocationCoords) center=userLocationCoords; else if(searchLocationCoords) center=searchLocationCoords;
+ if(center && locQ && radius!==9999){ filtered=filtered.filter(function(a){var d=getDistance(center,a.lat,a.lng); if(d===null) return (a.location||'').toLowerCase().indexOf(locQ)!==-1; return d<=radius}); for(var i=0;i<filtered.length;i++) filtered[i]._dist=getDistance(center,filtered[i].lat,filtered[i].lng); }
+ else if(locQ && radius!==9999){ filtered=filtered.filter(function(a){return (a.location||'').toLowerCase().indexOf(locQ)!==-1 || (a.city||'').toLowerCase().indexOf(locQ)!==-1}); }
+ document.getElementById('resultsInfo').innerText='Znaleziono '+filtered.length+' z '+allAds.length+' ogłoszeń';
+ var grid=document.getElementById('adsGrid');
+ if(filtered.length===0){ grid.innerHTML='<p style="padding:20px">Brak ogłoszeń. Ustaw Cała Polska lub Wyczyść.</p>'; return; }
+ var h=''; for(var i=0;i<filtered.length;i++){var a=filtered[i]; var img=a.image_url||(a.images&&a.images[0])||'https://via.placeholder.com/300x200'; var title=(a.title||'').slice(0,40); var loc=a.location||a.city||''; var dist=a._dist? a._dist.toFixed(1)+' km':''; h+='<div class="card" onclick="openDetail(\''+a.id+'\')"><img src="'+img+'"><div class="info"><div class="title">'+title+'</div><div class="price">'+(a.price? a.price+' PLN':'')+'</div><div class="loc">'+loc+'</div><div style="font-size:10px;color:#ff7a00">'+(dist?'📍 '+dist:'')+'</div></div></div>';} grid.innerHTML=h;
+}
+function getMyLocation(){ if(!navigator.geolocation){alert('Brak geo');return} navigator.geolocation.getCurrentPosition(function(p){ userLocationCoords={lat:p.coords.latitude,lng:p.coords.longitude}; searchLocationCoords=userLocationCoords; document.getElementById('locationInput').value='Blisko mnie'; renderAds(); }); }
+function openDetail(id){ var a=null; for(var i=0;i<allAds.length;i++){if(String(allAds[i].id)===String(id)){a=allAds[i];break;}} if(!a)return; currentAd=a; document.getElementById('detailImg').src=a.image_url||(a.images&&a.images[0])||'https://via.placeholder.com/800x600'; document.getElementById('detailTitle').innerText=a.title||''; document.getElementById('detailPrice').innerText=a.price? a.price+' PLN':''; document.getElementById('detailLoc').innerText=a.location||a.city||''; document.getElementById('detailDesc').innerText=a.description||''; document.getElementById('detailImages').innerHTML=(a.images||[]).map(function(s){return '<img src="'+s+'" style="width:80px;height:60px;object-fit:cover;border-radius:8px;cursor:pointer" onclick="document.getElementById(\'detailImg\').src=\''+s+'\'">'}).join(''); document.getElementById('phoneNumber').innerText='📞 '+(a.phone||'Brak'); document.getElementById('phoneNumber').style.display='none'; document.getElementById('detail').style.display='flex'; }
+function openEditFromDetail(){ if(!currentAd) return; editingAd=currentAd; document.getElementById('addTitleInput').value=currentAd.title||''; document.getElementById('addBrand').value=currentAd.brand||''; document.getElementById('addModel').value=currentAd.model||''; document.getElementById('addPrice').value=currentAd.price||''; document.getElementById('addLocation').value=currentAd.location||''; document.getElementById('addPhone').value=currentAd.phone||''; document.getElementById('addDesc').value=currentAd.description||''; document.getElementById('addImagesLinks').value=(currentAd.images||[]).join(', '); selectedImagesBase64=(currentAd.images||[]).slice(); renderPreview(); document.getElementById('addModal').style.display='flex'; closeDetail(); }
+
+function saveAuth(t,u){ localStorage.setItem('sb_token',t); localStorage.setItem('sb_user',JSON.stringify(u)); authToken=t; currentUser=u; updateAuthUI(); }
+function loadAuth(){ try{ authToken=localStorage.getItem('sb_token'); currentUser=JSON.parse(localStorage.getItem('sb_user')||'null'); }catch(e){} updateAuthUI(); }
+function updateAuthUI(){ if(currentUser){ document.getElementById('authBtn').style.display='none'; document.getElementById('userEmail').style.display='block'; document.getElementById('userEmail').innerText=currentUser.email; document.getElementById('logoutBtn').style.display='block'; var b=document.getElementById('myBtn'); if(b) b.style.display='block'; } else { document.getElementById('authBtn').style.display='block'; document.getElementById('userEmail').style.display='none'; document.getElementById('logoutBtn').style.display='none'; var b2=document.getElementById('myBtn'); if(b2) b2.style.display='none'; } }
+function logout(){ localStorage.removeItem('sb_token'); localStorage.removeItem('sb_user'); currentUser=null; authToken=null; updateAuthUI(); location.reload(); }
+function filterMy(){ if(!currentUser){alert('Zaloguj');return} var btn=document.getElementById('myBtn'); if(btn.innerText==='Moje'){ btn.innerText='Wszystkie'; loadAds().then(function(){ allAds=allAds.filter(function(a){return a.owner_id===currentUser.id}); renderAds(); }); } else { btn.innerText='Moje'; loadAds(); } }
+
+function loadAds(){
  document.getElementById('resultsInfo').innerText='Ładowanie ogłoszeń...';
+ log('loadAds start - URL: '+SUPABASE_URL+'/rest/v1/ads');
  var url=SUPABASE_URL+'/rest/v1/ads?select=*&order=created_at.desc&limit=300';
  return fetch(url,{headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY}}).then(function(res){
-  if(!res.ok){ return res.text().then(function(t){ throw new Error('HTTP '+res.status+': '+t.slice(0,200)); }); }
+  log('loadAds status: '+res.status);
+  if(!res.ok){ return res.text().then(function(t){ log('loadAds error body: '+t.slice(0,500)); throw new Error('HTTP '+res.status+': '+t.slice(0,200)); }); }
   return res.json();
  }).then(function(data){
-  window.allAds=data;
-  window.renderAds();
+  log('loadAds OK - pobrano: '+data.length);
+  allAds=data; renderAds();
  }).catch(function(e){
-  console.error(e);
-  document.getElementById('resultsInfo').innerText='Błąd: '+e.message;
-  document.getElementById('adsGrid').innerHTML='<div style="padding:20px"><p style="color:#c00">Błąd: '+e.message+'</p><p style="font-size:12px;margin-top:8px">Uruchom w Supabase SQL:<br><code>ALTER TABLE ads DISABLE ROW LEVEL SECURITY;</code></p><button class="btn btn-black" style="margin-top:10px" onclick="window.loadAds()">Spróbuj ponownie</button></div>';
+  log('loadAds FAIL: '+e.message);
+  document.getElementById('resultsInfo').innerText='Błąd ładowania: '+e.message;
+  document.getElementById('adsGrid').innerHTML='<div style="padding:20px"><p style="color:#c00">Błąd: '+e.message+'</p><p style="font-size:12px;margin-top:8px">W Supabase SQL uruchom:<br><code>ALTER TABLE ads DISABLE ROW LEVEL SECURITY;</code></p><button class="btn btn-black" style="margin-top:10px" onclick="loadAds()">Spróbuj ponownie</button><button class="btn btn-white" style="margin-top:10px" onclick="document.getElementById(\'debug\').style.display=\'block\'">Pokaż logi</button></div>';
  });
 }
 
-window.login = function(){
+function login(){
  var email=document.getElementById('loginEmail').value.trim(); var pass=document.getElementById('loginPass').value;
+ log('login attempt: '+email);
  if(!email||!pass){document.getElementById('loginInfo').innerText='Wpisz e-mail i hasło'; return}
- fetch(SUPABASE_URL+'/auth/v1/token?grant_type=password',{method:'POST',headers:{'apikey':SUPABASE_KEY,'Content-Type':'application/json'},body:JSON.stringify({email:email,password:pass})}).then(function(r){return r.json().then(function(j){ return {ok:r.ok, json:j}; })}).then(function(res){
-  if(!res.ok) throw new Error(res.json.error_description||res.json.msg||JSON.stringify(res.json));
-  window.saveAuth(res.json.access_token, res.json.user);
-  window.closeAuth();
- }).catch(function(e){ document.getElementById('loginInfo').innerText='Błąd: '+e.message; });
+ document.getElementById('loginInfo').innerText='Logowanie...';
+ fetch(SUPABASE_URL+'/auth/v1/token?grant_type=password',{method:'POST',headers:{'apikey':SUPABASE_KEY,'Content-Type':'application/json'},body:JSON.stringify({email:email,password:pass})}).then(function(r){
+  log('login status: '+r.status);
+  return r.json().then(function(j){ return {ok:r.ok, json:j}; });
+ }).then(function(res){
+  log('login response: '+JSON.stringify(res.json).slice(0,500));
+  if(!res.ok) throw new Error(res.json.error_description||res.json.error||res.json.msg||JSON.stringify(res.json));
+  saveAuth(res.json.access_token, res.json.user);
+  log('login OK - user: '+res.json.user.email);
+  closeAuth();
+ }).catch(function(e){ log('login FAIL: '+e.message); document.getElementById('loginInfo').innerText='Błąd: '+e.message; });
 }
-window.register = function(){
- var chk=document.getElementById('regCheck'); if(!chk || !chk.checked){alert('Zaznacz regulamin');return}
+function register(){
+ var chk=document.getElementById('regCheck'); if(!chk||!chk.checked){alert('Zaznacz regulamin');return}
  var email=document.getElementById('regEmail').value.trim(); var pass=document.getElementById('regPass').value;
+ log('register: '+email);
  fetch(SUPABASE_URL+'/auth/v1/signup',{method:'POST',headers:{'apikey':SUPABASE_KEY,'Content-Type':'application/json'},body:JSON.stringify({email:email,password:pass})}).then(function(r){return r.json().then(function(j){return {ok:r.ok, json:j}})}).then(function(res){
+  log('register response: '+JSON.stringify(res.json).slice(0,300));
   if(!res.ok) throw new Error(res.json.msg||JSON.stringify(res.json));
+  log('register OK, auto login...');
   // auto login
   return fetch(SUPABASE_URL+'/auth/v1/token?grant_type=password',{method:'POST',headers:{'apikey':SUPABASE_KEY,'Content-Type':'application/json'},body:JSON.stringify({email:email,password:pass})}).then(function(r){return r.json().then(function(j){return {ok:r.ok, json:j}})}).then(function(r2){
-   if(r2.ok){ window.saveAuth(r2.json.access_token, r2.json.user); window.closeAuth(); } else alert('Konto założone, zaloguj się');
+   if(r2.ok){ saveAuth(r2.json.access_token, r2.json.user); closeAuth(); } else { alert('Konto założone, zaloguj się teraz'); showTab('login'); }
   });
- }).catch(function(e){ alert('Błąd: '+e.message); });
+ }).catch(function(e){ log('register FAIL: '+e.message); document.getElementById('regInfo').innerText='Błąd: '+e.message; });
 }
-window.sendReset = function(){
+function sendReset(){
  var email=document.getElementById('resetEmail').value.trim();
- fetch(SUPABASE_URL+'/auth/v1/recover',{method:'POST',headers:{'apikey':SUPABASE_KEY,'Content-Type':'application/json'},body:JSON.stringify({email:email})}).then(function(r){return r.json()}).then(function(j){ document.getElementById('resetInfo').innerText='Wysłano link na '+email; }).catch(function(e){ document.getElementById('resetInfo').innerText='Błąd: '+e.message; });
+ fetch(SUPABASE_URL+'/auth/v1/recover',{method:'POST',headers:{'apikey':SUPABASE_KEY,'Content-Type':'application/json'},body:JSON.stringify({email:email})}).then(function(r){return r.json()}).then(function(){ document.getElementById('resetInfo').innerText='Wysłano link na '+email; }).catch(function(e){ document.getElementById('resetInfo').innerText='Błąd: '+e.message; });
 }
-window.setNewPassword = function(){ alert('Użyj linku z e-maila'); }
-
-window.submitAdd = function(){
- var title=document.getElementById('addTitleInput').value.trim();
- var price=document.getElementById('addPrice').value.trim();
- var loc=document.getElementById('addLocation').value.trim();
- var phone=document.getElementById('addPhone').value.trim();
- if(!title||!price||!loc||!phone){ document.getElementById('addInfo').innerText='Uzupełnij wszystkie pola *'; return; }
- if(!window.currentUser||!window.authToken){ document.getElementById('addInfo').innerText='Musisz być zalogowany'; window.openAuth(); return; }
- var brand=document.getElementById('addBrand').value.trim()||title.split(' ')[0];
- var model=document.getElementById('addModel').value.trim();
- var desc=document.getElementById('addDesc').value.trim();
+function submitAdd(){
+ var title=document.getElementById('addTitleInput').value.trim(); var price=document.getElementById('addPrice').value.trim(); var loc=document.getElementById('addLocation').value.trim(); var phone=document.getElementById('addPhone').value.trim();
+ if(!title||!price||!loc||!phone){document.getElementById('addInfo').innerText='Uzupełnij pola *'; return}
+ if(!currentUser||!authToken){document.getElementById('addInfo').innerText='Musisz być zalogowany'; openAuth(); return}
+ var brand=document.getElementById('addBrand').value.trim()||title.split(' ')[0]; var model=document.getElementById('addModel').value.trim(); var desc=document.getElementById('addDesc').value.trim();
  var links=(document.getElementById('addImagesLinks').value||'').split(',').map(function(s){return s.trim()}).filter(function(b){return b});
- var images=window.selectedImagesBase64.concat(links).slice(0,10);
+ var images=selectedImagesBase64.concat(links).slice(0,10);
  document.getElementById('addSubmitBtn').disabled=true; document.getElementById('addSubmitBtn').innerText='Zapisuję...';
  var lat=null,lng=null;
- fetch('https://nominatim.openstreetmap.org/search?format=json&q='+encodeURIComponent(loc)+'&limit=1&countrycodes=pl').then(function(r){return r.json()}).then(function(j){ if(j[0]){lat=parseFloat(j[0].lat); lng=parseFloat(j[0].lon);} saveAd(); }).catch(function(){ saveAd(); });
- function saveAd(){
-  var finalImages=[]; var image_url=images[0]||'';
-  for(var i=0;i<images.length;i++){ finalImages.push(images[i]); }
-  if(finalImages.length>0) image_url=finalImages[0];
-  var payload={title:title, price:price, image_url:image_url, images:finalImages, owner_id:window.currentUser.id, brand:brand, model:model, description:desc, location:loc, city:loc, lat:lat, lng:lng, phone:phone};
-  fetch(SUPABASE_URL+'/rest/v1/ads',{method: window.editingAd? 'PATCH' : 'POST', headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+window.authToken,'Content-Type':'application/json','Prefer':'return=representation'}, body:JSON.stringify(payload)}).then(function(res){
-   if(!res.ok){ return res.text().then(function(t){ 
-    if(t.indexOf('city')!==-1 || t.indexOf('lat')!==-1 || t.indexOf('phone')!==-1){
-     var minimal={title:title, price:price, image_url:image_url, images:finalImages, owner_id:window.currentUser.id, brand:brand, model:model, description:desc, location:loc, phone:phone};
-     return fetch(SUPABASE_URL+'/rest/v1/ads',{method: window.editingAd? 'PATCH' : 'POST', headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+window.authToken,'Content-Type':'application/json','Prefer':'return=representation'}, body:JSON.stringify(minimal)}).then(function(r2){
-      if(!r2.ok) return r2.text().then(function(t2){
-       if(t2.indexOf('phone')!==-1){
-        var rest={title:title, price:price, image_url:image_url, images:finalImages, owner_id:window.currentUser.id, brand:brand, model:model, description:desc, location:loc};
-        return fetch(SUPABASE_URL+'/rest/v1/ads',{method: window.editingAd? 'PATCH' : 'POST', headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+window.authToken,'Content-Type':'application/json','Prefer':'return=representation'}, body:JSON.stringify(rest)});
-       } else throw new Error(t2);
-      });
-      return r2;
-     });
-    } else throw new Error(t);
-   }); 
+ fetch('https://nominatim.openstreetmap.org/search?format=json&q='+encodeURIComponent(loc)+'&limit=1&countrycodes=pl').then(function(r){return r.json()}).then(function(j){ if(j[0]){lat=parseFloat(j[0].lat); lng=parseFloat(j[0].lon);} save(); }).catch(function(){ save(); });
+ function save(){
+  var finalImages=[]; for(var i=0;i<images.length;i++) finalImages.push(images[i]);
+  var image_url=finalImages[0]||''; var payload={title:title, price:price, image_url:image_url, images:finalImages, owner_id:currentUser.id, brand:brand, model:model, description:desc, location:loc, city:loc, lat:lat, lng:lng, phone:phone};
+  log('submitAdd payload: '+JSON.stringify(payload).slice(0,300));
+  fetch(SUPABASE_URL+'/rest/v1/ads',{method:'POST',headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+authToken,'Content-Type':'application/json','Prefer':'return=representation'},body:JSON.stringify(payload)}).then(function(res){
+   log('submitAdd status: '+res.status);
+   if(!res.ok){ return res.text().then(function(t){ log('submitAdd error: '+t.slice(0,500)); if(t.indexOf('city')!==-1||t.indexOf('lat')!==-1||t.indexOf('phone')!==-1){ var minimal={title:title, price:price, image_url:image_url, images:finalImages, owner_id:currentUser.id, brand:brand, model:model, description:desc, location:loc, phone:phone}; return fetch(SUPABASE_URL+'/rest/v1/ads',{method:'POST',headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+authToken,'Content-Type':'application/json','Prefer':'return=representation'},body:JSON.stringify(minimal)}).then(function(r2){ if(!r2.ok) return r2.text().then(function(t2){ if(t2.indexOf('phone')!==-1){ var rest={title:title, price:price, image_url:image_url, images:finalImages, owner_id:currentUser.id, brand:brand, model:model, description:desc, location:loc}; return fetch(SUPABASE_URL+'/rest/v1/ads',{method:'POST',headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+authToken,'Content-Type':'application/json','Prefer':'return=representation'},body:JSON.stringify(rest)}); } else throw new Error(t2); }); return r2; }); } else throw new Error(t); }); }
    return res;
-  }).then(function(r){
-   if(!r.ok) return r.text().then(function(t){throw new Error(t)});
-   return r.json();
-  }).then(function(){
-   document.getElementById('addSubmitBtn').disabled=false; document.getElementById('addSubmitBtn').innerText='Zatwierdź';
-   window.closeAdd(); window.loadAds();
-  }).catch(function(e){
-   document.getElementById('addSubmitBtn').disabled=false; document.getElementById('addSubmitBtn').innerText='Zatwierdź';
-   document.getElementById('addInfo').innerText='Błąd: '+e.message.slice(0,300);
-  });
+  }).then(function(r){ if(!r.ok) return r.text().then(function(t){throw new Error(t)}); return r.json(); }).then(function(){ document.getElementById('addSubmitBtn').disabled=false; document.getElementById('addSubmitBtn').innerText='Zatwierdź'; closeAdd(); loadAds(); }).catch(function(e){ log('submitAdd FAIL: '+e.message); document.getElementById('addSubmitBtn').disabled=false; document.getElementById('addSubmitBtn').innerText='Zatwierdź'; document.getElementById('addInfo').innerText='Błąd: '+e.message.slice(0,300); });
  }
 }
+function deleteAd(){ if(!currentAd) return; if(!confirm('Usunąć?')) return; fetch(SUPABASE_URL+'/rest/v1/ads?id=eq.'+currentAd.id,{method:'DELETE',headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+authToken}}).then(function(r){ if(!r.ok) throw new Error('Błąd'); closeDetail(); loadAds(); }).catch(function(e){alert(e.message)}); }
 
-window.deleteAd = function(){
- if(!window.currentAd) return; if(!confirm('Usunąć?')) return;
- fetch(SUPABASE_URL+'/rest/v1/ads?id=eq.'+window.currentAd.id,{method:'DELETE',headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+window.authToken}}).then(function(r){
-  if(!r.ok) throw new Error('Błąd usuwania');
-  window.closeDetail(); window.loadAds();
- }).catch(function(e){ alert('Błąd: '+e.message); });
-}
-
-window.loadAuth();
-window.loadAds();
+loadAuth();
+loadAds();
 </script>
 </body>
 </html>
