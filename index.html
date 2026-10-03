@@ -374,10 +374,21 @@ async function submitAdd(){
  const payload={title, price, image_url, images:finalImages, owner_id:user.id, brand, model, description:desc, location, city:location, lat, lng};
 
  let result;
+ // profesjonalny fallback: najpierw próba z pełną lokalizacją, jak brak kolumn - bez nich
  if(editingAd){
   result=await supabaseClient.from('ads').update(payload).eq('id',editingAd.id).select();
+  if(result.error && result.error.message.includes('city')){
+   const {city, lat, lng, ...minimal}=payload;
+   result=await supabaseClient.from('ads').update(minimal).eq('id',editingAd.id).select();
+   if(!result.error) document.getElementById('addInfo').innerHTML='<span style="color:#b8860b">Zapisano, ale dodaj kolumny w Supabase SQL poniżej dla lepszego szukania po mapie.</span>';
+  }
  }else{
   result=await supabaseClient.from('ads').insert(payload).select();
+  if(result.error && result.error.message.includes('city')){
+   const {city, lat, lng, ...minimal}=payload;
+   result=await supabaseClient.from('ads').insert(minimal).select();
+   if(!result.error) document.getElementById('addInfo').innerHTML='<span style="color:#b8860b">Zapisano, ale dodaj kolumny w Supabase SQL poniżej dla lepszego szukania po mapie.</span>';
+  }
  }
  document.getElementById('addSubmitBtn').disabled=false;
  document.getElementById('addSubmitBtn').innerText='Zatwierdź';
