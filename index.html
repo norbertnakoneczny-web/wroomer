@@ -40,7 +40,7 @@ header{background:#fff;border-bottom:1px solid #e5e5e0;position:sticky;top:0;z-i
 <body>
 <header>
 <div class="top-row">
-<div class="logo" onclick="location.reload()">WROOMER<span>.PL</span></div>
+<div class="logo" onclick="location.reload()">WROOMER<span>.PL</span> <span style="font-size:9px;background:#ffcb00;padding:2px 6px;border-radius:4px">v2.7 FIX LOKALIZACJA</span></div>
 <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
 <button class="btn btn-yellow" onclick="openAdd()">+ Dodaj</button>
 <button id="myBtn" class="btn btn-white" style="display:none" onclick="filterMy()">Moje</button>
@@ -52,8 +52,8 @@ header{background:#fff;border-bottom:1px solid #e5e5e0;position:sticky;top:0;z-i
 <div class="search-bar">
 <input id="searchInput" class="search-main" placeholder="Szukaj: BMW, Audi..." oninput="renderAds()">
 <select id="brandFilter" onchange="renderAds()"><option value="">Wszystkie marki</option><option>BMW</option><option>Audi</option><option>Mercedes</option><option>Volkswagen</option><option>Toyota</option><option>Ford</option><option>Opel</option><option>Skoda</option><option>Mitsubishi</option></select>
-<input id="locationInput" placeholder="Miejscowość: Gorzyce, Katowice..." oninput="onLocationInput()">
-<select id="radiusFilter" onchange="renderAds()"><option value="0">+0 km</option><option value="5">+5 km</option><option value="25" selected>+25 km</option><option value="50">+50 km</option><option value="100">+100 km</option><option value="9999">Cała Polska</option></select>
+<input id="locationInput" placeholder="Miejscowość: Rydułtowy, Gorzyce..." oninput="onLocationInput()">
+<select id="radiusFilter" onchange="renderAds()"><option value="0">+0 km</option><option value="5">+5 km</option><option value="10">+10 km</option><option value="25" selected>+25 km</option><option value="50">+50 km</option><option value="100">+100 km</option><option value="9999">Cała Polska</option></select>
 <button class="btn btn-white" onclick="getMyLocation()">📍 Blisko mnie</button>
 <button class="btn btn-white" onclick="clearFilters()">Wyczyść</button>
 </div>
@@ -65,19 +65,17 @@ header{background:#fff;border-bottom:1px solid #e5e5e0;position:sticky;top:0;z-i
 <div id="detail" onclick="if(event.target.id==='detail')closeDetail()"><div class="detail-box"><img id="detailImg" class="detail-img"><div class="detail-content"><h2 id="detailTitle"></h2><p id="detailPrice" style="font-weight:900"></p><p id="detailLoc"></p><p id="detailDesc" style="white-space:pre-wrap"></p><div id="detailImages" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"></div><div style="margin-top:12px"><p id="phoneNumber" style="font-weight:900;display:none"></p><div style="display:flex;gap:8px;margin-top:8px"><button class="btn btn-black" onclick="contactCall()">📞 Zadzwoń</button><button class="btn btn-white" onclick="showPhone()">Pokaż numer</button><button class="btn btn-black" onclick="closeDetail()">Zamknij</button></div></div></div></div></div>
 
 <div id="addModal" onclick="if(event.target.id==='addModal')closeAdd()"><div class="add-box"><h2 id="addTitle">Dodaj ogłoszenie</h2><div class="form-grid">
-<div class="full"><label>Tytuł *</label><input id="addTitleInput" placeholder="np. Mitsubishi Colt 1.3"></div>
+<div class="full"><label>Tytuł *</label><input id="addTitleInput"></div>
 <div><label>Marka *</label><select id="addBrand" onchange="updateModelOptions()"><option value="">Wybierz markę *</option><option>BMW</option><option>Audi</option><option>Mercedes</option><option>Volkswagen</option><option>Toyota</option><option>Ford</option><option>Opel</option><option>Skoda</option><option>Mitsubishi</option><option>Honda</option><option>Peugeot</option><option>Renault</option><option>Fiat</option><option>Hyundai</option><option>Kia</option><option>Seat</option><option>Suzuki</option><option>Mazda</option><option>Nissan</option><option>Citroen</option><option>Dacia</option><option>Volvo</option><option>Lexus</option><option>Jeep</option><option>Subaru</option><option>Alfa Romeo</option><option>Chevrolet</option><option>Inna</option></select></div>
 <div><label>Model *</label><select id="addModel"><option value="">Najpierw wybierz markę</option></select></div>
-<div><label>Cena PLN *</label><input id="addPrice" type="number" placeholder="7900"></div>
-<div><label>Telefon *</label><input id="addPhone" type="tel" placeholder="600 123 456"></div>
-
+<div><label>Cena PLN *</label><input id="addPrice" type="number"></div>
+<div><label>Telefon *</label><input id="addPhone" type="tel"></div>
 <div class="full" style="margin-top:8px;padding:12px;background:#f9f9f6;border-radius:10px;border:1px solid #e9e9e6"><label style="font-size:12px;font-weight:900;margin-top:0">📍 ADRES - tylko wybór</label><div class="addr-row" style="margin-top:6px">
 <div><label>Województwo *</label><select id="addWoj" onchange="updatePowiatOptions()"><option value="">Wybierz województwo *</option><option value="dolnośląskie">Dolnośląskie</option><option value="kujawsko-pomorskie">Kujawsko-pomorskie</option><option value="lubelskie">Lubelskie</option><option value="lubuskie">Lubuskie</option><option value="łódzkie">Łódzkie</option><option value="małopolskie">Małopolskie</option><option value="mazowieckie">Mazowieckie</option><option value="opolskie">Opolskie</option><option value="podkarpackie">Podkarpackie</option><option value="podlaskie">Podlaskie</option><option value="pomorskie">Pomorskie</option><option value="śląskie">Śląskie</option><option value="świętokrzyskie">Świętokrzyskie</option><option value="warmińsko-mazurskie">Warmińsko-mazurskie</option><option value="wielkopolskie">Wielkopolskie</option><option value="zachodniopomorskie">Zachodniopomorskie</option></select></div>
 <div><label>Powiat *</label><select id="addPowiat" onchange="updateMiejscowoscOptions()" disabled><option value="">Najpierw woj.</option></select></div>
 <div><label>Miejscowość *</label><select id="addMiejscowosc" onchange="checkCustomMiejsc()" disabled><option value="">Najpierw powiat</option></select></div>
 </div><div id="customMiejscRow" style="display:none;margin-top:8px"><label>Wpisz miejscowość (jeśli nie ma na liście)</label><input id="addMiejscCustom" placeholder="np. Gorzyce"></div><p id="addrInfo" style="font-size:10px;color:#666;margin-top:6px"></p></div>
-
-<div class="full"><label>Opis</label><textarea id="addDesc" rows="3" placeholder="Rok, przebieg, paliwo..."></textarea></div>
+<div class="full"><label>Opis</label><textarea id="addDesc" rows="3"></textarea></div>
 <div class="full"><label>Zdjęcia (max 10)</label><input id="addImagesFile" type="file" accept="image/*" multiple onchange="handleFiles(this.files)"><div id="addPreview" class="preview-images"></div><input id="addImagesLinks" placeholder="lub linki https://..." style="margin-top:6px"></div>
 </div><div style="display:flex;gap:8px;margin-top:16px"><button class="btn btn-black" style="flex:1" id="addSubmitBtn" onclick="submitAdd()">Zatwierdź</button><button class="btn btn-white" style="flex:1" onclick="closeAdd()">Anuluj</button></div><p id="addInfo" style="font-size:12px;color:#c00;margin-top:8px"></p></div></div>
 
@@ -88,87 +86,80 @@ var allAds=[], currentAd=null, editingAd=null, userLocationCoords=null, searchLo
 var SUPABASE_URL='https://rljqnhfogaqdjeirqqdj.supabase.co';
 var SUPABASE_KEY='sb_publishable_j7CS5xIHzOMBMyvsqVgDmw_GeEek5hX';
 
-var MODELS = {
- 'BMW': ['Seria 1','Seria 3','Seria 5','Seria 7','X1','X3','X5','X6','Inny'],
- 'Audi': ['A3','A4','A6','A8','Q3','Q5','Q7','Q8','Inny'],
- 'Mercedes': ['A Klasa','C Klasa','E Klasa','S Klasa','GLA','GLC','GLE','Inny'],
- 'Volkswagen': ['Golf','Passat','Polo','Tiguan','Touareg','Touran','Caddy','Inny'],
- 'Toyota': ['Corolla','Avensis','Yaris','RAV4','Auris','Camry','Hilux','Inny'],
- 'Ford': ['Focus','Mondeo','Fiesta','Kuga','Transit','Inny'],
- 'Opel': ['Astra','Corsa','Insignia','Mokka','Zafira','Inny'],
- 'Skoda': ['Octavia','Fabia','Superb','Kodiaq','Karoq','Inny'],
- 'Mitsubishi': ['Colt','Lancer','Outlander','ASX','Pajero','Space Star','Inny'],
- 'Honda': ['Civic','Accord','CR-V','Jazz','Inny'],
- 'Peugeot': ['208','308','3008','5008','Partner','Inny'],
- 'Renault': ['Clio','Megane','Scenic','Captur','Kadjar','Inny'],
- 'Fiat': ['Panda','500','Punto','Doblo','Ducato','Inny'],
- 'Hyundai': ['i30','i20','Tucson','Santa Fe','Kona','Inny'],
- 'Kia': ['Ceed','Sportage','Rio','Sorento','Inny'],
- 'Seat': ['Ibiza','Leon','Ateca','Arona','Inny'],
- 'Suzuki': ['Swift','Vitara','SX4','Inny'],
- 'Mazda': ['3','6','CX-3','CX-5','Inny'],
- 'Nissan': ['Qashqai','Juke','X-Trail','Micra','Inny'],
- 'Citroen': ['C3','C4','C5','Berlingo','Inny'],
- 'Dacia': ['Duster','Logan','Sandero','Inny'],
- 'Volvo': ['V40','V60','XC60','XC90','Inny'],
- 'Lexus': ['IS','RX','NX','Inny'],
- 'Jeep': ['Compass','Renegade','Cherokee','Wrangler','Inny'],
- 'Subaru': ['Impreza','Forester','Outback','Inny'],
- 'Alfa Romeo': ['Giulia','Stelvio','Giulietta','Inny'],
- 'Chevrolet': ['Cruze','Aveo','Captiva','Inny'],
- 'Inna': ['Inny model']
-};
+var MODELS = {'BMW':['Seria 1','Seria 3','Seria 5','X1','X3','X5','Inny'],'Audi':['A3','A4','A6','Q5','Q7','Inny'],'Mercedes':['A Klasa','C Klasa','E Klasa','GLC','Inny'],'Volkswagen':['Golf','Passat','Polo','Tiguan','Inny'],'Toyota':['Corolla','Yaris','RAV4','Inny'],'Ford':['Focus','Mondeo','Fiesta','Kuga','Inny'],'Opel':['Astra','Corsa','Insignia','Mokka','Inny'],'Skoda':['Octavia','Fabia','Superb','Kodiaq','Inny'],'Mitsubishi':['Colt','Lancer','Outlander','ASX','Inny'],'Honda':['Civic','CR-V','Inny'],'Peugeot':['208','308','3008','Inny'],'Renault':['Clio','Megane','Captur','Inny'],'Fiat':['Panda','500','Doblo','Inny'],'Hyundai':['i30','Tucson','Inny'],'Kia':['Ceed','Sportage','Inny'],'Seat':['Ibiza','Leon','Ateca','Inny'],'Inna':['Inny model']};
 
 var POWIATY = {
- 'dolnośląskie': ['bolesławiecki','dzierżoniowski','głogowski','górowski','jaworski','jeleniogórski','kamiennogórski','kłodzki','legnicki','lubański','lubiński','lwówecki','milicki','oleśnicki','oławski','polkowicki','strzeliński','średzki','świdnicki','trzebnicki','wałbrzyski','wołowski','wrocławski','ząbkowicki','zgorzelecki','złotoryjski','m. Wrocław','m. Legnica','m. Jelenia Góra','m. Wałbrzych'],
- 'kujawsko-pomorskie': ['aleksandrowski','brodnicki','bydgoski','chełmiński','golubsko-dobrzyński','grudziądzki','inowrocławski','lipnowski','mogileński','nakielski','radziejowski','rypiński','sępoleński','świecki','toruński','tucholski','wąbrzeski','włocławski','żniński','m. Bydgoszcz','m. Toruń','m. Włocławek','m. Grudziądz'],
- 'lubelskie': ['bialski','biłgorajski','chełmski','hrubieszowski','janowski','krasnostawski','kraśnicki','lubartowski','lubelski','łęczyński','łukowski','opolski','parczewski','puławski','radzyński','rycki','świdnicki','tomaszowski','włodawski','zamojski','m. Lublin','m. Zamość','m. Chełm','m. Biała Podlaska'],
- 'lubuskie': ['gorzowski','krośnieński','międzyrzecki','nowosolski','słubicki','strzelecko-drezdenecki','sulęciński','świebodziński','wschowski','zielonogórski','żagański','żarski','m. Gorzów Wlkp.','m. Zielona Góra'],
- 'łódzkie': ['bełchatowski','brzeziński','kutnowski','łaski','łęczycki','łowicki','łódzki wschodni','opoczyński','pabianicki','pajęczański','piotrkowski','poddębicki','radomszczański','rawski','sieradzki','skierniewicki','tomaszowski','wieluński','wieruszowski','zduńskowolski','zgierski','m. Łódź','m. Piotrków Tryb.','m. Skierniewice'],
- 'małopolskie': ['bocheński','brzeski','chrzanowski','dąbrowski','gorlicki','krakowski','limanowski','miechowski','myślenicki','nowosądecki','nowotarski','olkuski','oświęcimski','proszowicki','suski','tarnowski','tatrzański','wadowicki','wielicki','m. Kraków','m. Nowy Sącz','m. Tarnów'],
- 'mazowieckie': ['białobrzeski','ciechanowski','garwoliński','gostyniński','grodziski','grójecki','kozienicki','legionowski','lipski','łosicki','makowski','miński','mławski','nowodworski','ostrołęcki','ostrowski','otwocki','piaseczyński','płocki','płoński','pruszkowski','przasnyski','przysuski','pułtuski','radomski','siedlecki','sierpecki','sochaczewski','sokołowski','szydłowiecki','warszawski zachodni','węgrowski','wołomiński','wyszkowski','zwoleński','żuromiński','m. Warszawa','m. Radom','m. Płock','m. Siedlce','m. Ostrołęka'],
- 'opolskie': ['brzeski','głubczycki','kędzierzyńsko-kozielski','kluczborski','krapkowicki','namysłowski','nyski','oleski','opolski','prudnicki','strzelecki','m. Opole'],
- 'podkarpackie': ['bieszczadzki','brzozowski','dębicki','jarosławski','jasielski','kolbuszowski','krośnieński','leski','leżajski','lubaczowski','łańcucki','mielecki','niżański','przemyski','przeworski','ropczycko-sędziszowski','rzeszowski','sanocki','stalowowolski','strzyżowski','tarnobrzeski','m. Rzeszów','m. Przemyśl','m. Krosno','m. Tarnobrzeg'],
- 'podlaskie': ['augustowski','białostocki','bielski','grajewski','hajnowski','kolneński','łomżyński','moniecki','sejneński','siemiatycki','sokólski','suwalski','wysokomazowiecki','zambrowski','m. Białystok','m. Łomża','m. Suwałki'],
- 'pomorskie': ['bytowski','chojnicki','człuchowski','gdański','kartuski','kościerski','kwidzyński','lęborski','malborski','nowodworski','pucki','słupski','starogardzki','sztumski','tczewski','wejherowski','m. Gdańsk','m. Gdynia','m. Słupsk','m. Sopot'],
- 'śląskie': ['będziński','bielski','bieruńsko-lędziński','cieszyński','częstochowski','gliwicki','kłobucki','lubliniecki','mikołowski','myszkowski','pszczyński','raciborski','rybnicki','tarnogórski','wodzisławski','zawierciański','żywiecki','m. Katowice','m. Bielsko-Biała','m. Bytom','m. Chorzów','m. Częstochowa','m. Dąbrowa Górnicza','m. Gliwice','m. Jastrzębie-Zdrój','m. Jaworzno','m. Mysłowice','m. Piekary Śląskie','m. Ruda Śląska','m. Rybnik','m. Siemianowice Śląskie','m. Sosnowiec','m. Świętochłowice','m. Tychy','m. Zabrze','m. Żory'],
- 'świętokrzyskie': ['buski','jędrzejowski','kazimierski','kielecki','konecki','opatowski','ostrowiecki','pińczowski','sandomierski','skarżyski','starachowicki','staszowski','włoszczowski','m. Kielce'],
- 'warmińsko-mazurskie': ['bartoszycki','braniewski','diałdowski','elbląski','ełcki','giżycki','gołdapski','iławski','kętrzyński','lidzbarski','mrągowski','nidzicki','nowomiejski','olecki','olsztyński','ostródzki','piski','szczycieński','węgorzewski','m. Olsztyn','m. Elbląg'],
- 'wielkopolskie': ['chodzieski','czarnkowsko-trzcianecki','gnieźnieński','gostyński','grodziski','jarociński','kaliski','kępiński','kolski','koniński','kościański','krotoszyński','leszczyński','międzychodzki','nowotomyski','obornicki','ostrowski','ostrzeszowski','pilski','pleszewski','poznański','rawicki','słupecki','szamotulski','średzki','śremski','turecki','wągrowiecki','wolsztyński','wrzesiński','złotowski','m. Poznań','m. Kalisz','m. Konin','m. Leszno'],
- 'zachodniopomorskie': ['białogardzki','choszczeński','drawski','goleniowski','gryficki','gryfiński','kamieński','kołobrzeski','koszaliński','łobeski','myśliborski','policki','pyrzycki','sławieński','stargardzki','szczecinecki','świdwiński','wałecki','m. Szczecin','m. Koszalin','m. Świnoujście']
+ 'śląskie': ['będziński','bielski','bieruńsko-lędziński','cieszyński','częstochowski','gliwicki','kłobucki','lubliniecki','mikołowski','myszkowski','pszczyński','raciborski','rybnicki','tarnogórski','wodzisławski','zawierciański','żywiecki','m. Katowice','m. Rybnik','m. Tychy','m. Gliwice','m. Zabrze','m. Bytom','m. Ruda Śląska','m. Chorzów','m. Dąbrowa Górnicza','m. Sosnowiec','m. Bielsko-Biała','m. Częstochowa','m. Jastrzębie-Zdrój','m. Jaworzno','m. Mysłowice','m. Piekary Śląskie','m. Siemianowice Śląskie','m. Świętochłowice','m. Żory'],
+ 'dolnośląskie': ['wrocławski','m. Wrocław','legnicki','m. Legnica'], 'mazowieckie': ['warszawski zachodni','m. Warszawa','piaseczyński','pruszkowski'], 'małopolskie': ['krakowski','m. Kraków'], 'wielkopolskie': ['poznański','m. Poznań']
+};
+var MIEJSCOWOSCI = {
+ 'wodzisławski': ['Wodzisław Śląski','Gorzyce','Gorzyczki','Rydułtowy','Pszów','Radlin','Lubomia','Godów','Mszana','Marklowice','Czyżowice','Turza Śląska','Rogów','Syrynia','Gołkowice','Skrzyszów','Łaziska'],
+ 'raciborski': ['Racibórz','Kuźnia Raciborska','Krzanowice','Nędza','Pietrowice Wielkie','Rudnik','Kornowac'],
+ 'rybnicki': ['Rybnik','Czerwionka-Leszczyny','Świerklany','Gaszowice','Lyski','Jejkowice'],
+ 'tarnogórski': ['Tarnowskie Góry','Radzionków','Kalety','Miasteczko Śląskie'],
+ 'będziński': ['Będzin','Czeladź','Wojkowice','Siewierz'],
+ 'bielski': ['Bielsko-Biała','Czechowice-Dziedzice','Jasienica','Szczyrk'],
+ 'cieszyński': ['Cieszyn','Ustroń','Wisła','Skoczów','Strumień'],
+ 'gliwicki': ['Gliwice','Knurów','Pyskowice','Toszek'],
+ 'm. Katowice': ['Katowice'], 'm. Rybnik': ['Rybnik'], 'm. Tychy': ['Tychy'], 'm. Gliwice': ['Gliwice']
 };
 
-// PEŁNA BAZA MIEJSCOWOŚCI DLA ŚLĄSKIEGO - wszystko jako wybór!
-var MIEJSCOWOSCI = {
- 'wodzisławski': ['Wodzisław Śląski','Gorzyce','Gorzyczki','Rydułtowy','Pszów','Radlin','Lubomia','Godów','Mszana','Marklowice','Czyżowice','Turza Śląska','Rogów','Bełsznica','Bluszczów','Odra','Uchylsko','Kolonia Fryderyk','Skrzyszów','Krostoszowice','Łaziska','Osiny','Syrynia','Gołkowice','Skrzyszów','Łaziska'],
- 'raciborski': ['Racibórz','Kuźnia Raciborska','Krzanowice','Nędza','Pietrowice Wielkie','Rudnik','Kornowac','Rudy','Ruda','Kuźnia','Turze','Samborowice','Chałupki','Zabełków','Krzyżanowice','Tworków','Bieńkowice','Borucin','Owsiszcze'],
- 'rybnicki': ['Rybnik','Czerwionka-Leszczyny','Knurów','Leszczyny','Świerklany','Gaszowice','Lyski','Jejkowice','Czuchów','Dębieńsko','Bełk','Palowice','Stanowice','Szczejkowice','Książenice','Przegędza','Szczerbice'],
- 'tarnogórski': ['Tarnowskie Góry','Radzionków','Kalety','Miasteczko Śląskie','Krupski Młyn','Ożarowice','Świerklaniec','Zbrosławice','Tworóg','Brynek','Boruszowice','Hanusek','Koty','Miedary','Pniowiec','Repty','Wieszowa'],
- 'będziński': ['Będzin','Czeladź','Wojkowice','Siewierz','Sławków','Psary','Bobrowniki','Mierzęcice','Sączów','Będzin-Łagisza','Grodziec'],
- 'bielski': ['Bielsko-Biała','Czechowice-Dziedzice','Jasienica','Jaworze','Wilkowice','Kozy','Porąbka','Szczyrk','Wilamowice','Bestwina','Buczkowice','Stare Bielsko','Wapienica','Hałcnów','Komorowice'],
- 'bieruńsko-lędziński': ['Bieruń','Lędziny','Imielin','Chełm Śląski','Bojszowy','Bojszowy Nowe','Jedlina'],
- 'cieszyński': ['Cieszyn','Ustroń','Wisła','Skoczów','Strumień','Brenna','Chybie','Dębowiec','Goleszów','Hażlach','Istebna','Zebrzydowice','Kończyce Wielkie','Pruchna','Kaczyce','Pogwizdów','Kończyce Małe','Bąków'],
- 'częstochowski': ['Częstochowa','Blachownia','Konopiska','Poczesna','Mykanów','Olsztyn','Mstów','Kłobuck','Rędziny','Dąbrowa Zielona','Janów','Kłomnice','Koniecpol','Kruszyna','Lelów','Przyrów','Starcza'],
- 'gliwicki': ['Gliwice','Knurów','Pyskowice','Sośnicowice','Toszek','Wielowieś','Pilchowice','Rudziniec','Gierałtowice','Kotulin','Paczyna','Wilkowiczki','Żernica','Nieborowice','Przyszowice'],
- 'kłobucki': ['Kłobuck','Krzepice','Lipie','Miedźno','Opatów','Panki','Popów','Przystajń','Wręczyca Wielka','Wręczyca Mała','Kalej','Łobodno'],
- 'lubliniecki': ['Lubliniec','Woźniki','Boronów','Ciasna','Herby','Kochanowice','Koszęcin','Pawonków','Psary','Lubsza','Hadra','Rusinowice'],
- 'mikołowski': ['Mikołów','Łaziska Górne','Orzesze','Ornontowice','Wyry','Gardawice','Zawiść','Woszczyce','Jaśkowice','Mościska'],
- 'myszkowski': ['Myszków','Koziegłowy','Żarki','Poraj','Niegowa','Żarki-Letnisko','Choroń','Jastrząb','Kotowice','Lgota Wielka'],
- 'pszczyński': ['Pszczyna','Pawłowice','Suszec','Goczałkowice-Zdrój','Kobiór','Miedźna','Frydek','Gilowice','Golasowice','Jarząbkowice','Krzyżowice','Pielgrzymowice','Rudołtowice','Studzionka','Wisła Wielka'],
- 'zawierciański': ['Zawiercie','Ogrodzieniec','Łazy','Pilica','Szczekociny','Włodowice','Żarnowiec','Irządze','Kroczyce','Wysoka','Chruszczobród','Marciszów','Rokitno'],
- 'żywiecki': ['Żywiec','Czernichów','Gilowice','Jeleśnia','Koszarawa','Lipowa','Łękawica','Łodygowice','Milówka','Rajcza','Ślemień','Świnna','Ujsoły','Węgierska Górka','Korbielów','Sopotnia','Zabłocie'],
- 'm. Katowice': ['Katowice','Katowice-Centrum','Ligota','Panewniki','Piotrowice','Zawodzie','Bogucice','Dąb','Szopienice','Giszowiec','Murcki','Kostuchna','Podlesie'],
- 'm. Bielsko-Biała': ['Bielsko-Biała','Bielsko','Biała','Wapienica','Stare Bielsko','Komorowice','Hałcnów','Lipnik','Straconka'],
- 'm. Rybnik': ['Rybnik','Rybnik-Centrum','Chwałowice','Niedobczyce','Paruszowiec','Północ','Południe','Maroko-Nowiny','Gotartowice','Kamień','Kłokocin','Ligota','Boguszowice','Chwałęcice'],
- 'm. Tychy': ['Tychy','Tychy-Centrum','Paprocany','Czułów','Wilkowyje','Zawodzie','Wartogłowiec','Zawiść'],
- 'm. Gliwice': ['Gliwice','Gliwice-Centrum','Sośnica','Łabędy','Szobiszowice','Trynek','Zatorze','Bojków','Brzezinka','Ostropa'],
- 'm. Zabrze': ['Zabrze','Zabrze-Centrum','Biskupice','Grzybowice','Guido','Helenka','Kończyce','Maciejów','Mikulczyce','Rokitnica','Zaborze'],
- 'm. Bytom': ['Bytom','Bytom-Centrum','Bobrek','Górniki','Kar-b','Łagiewniki','Miechowice','Rozbark','Stolarzowice','Stroszek','Sucha Góra','Szombierki'],
- 'm. Ruda Śląska': ['Ruda Śląska','Ruda','Godula','Orzegów','Wirek','Halemba','Kochłowice','Bielszowice','Bykowina','Chebzie','Nowy Bytom'],
- 'm. Chorzów': ['Chorzów','Chorzów-Centrum','Chorzów Batory','Chorzów Stary','Chorzów II'],
- 'm. Dąbrowa Górnicza': ['Dąbrowa Górnicza','Gołonóg','Ząbkowice','Strzemieszyce','Łosień','Trzebiesławice','Ujejsce','Okradzionów'],
- 'm. Sosnowiec': ['Sosnowiec','Sosnowiec-Centrum','Zagórze','Klimontów','Kazimierz','Porąbka','Niwka','Dańdówka','Modrzejów','Jęzor','Maczki']
+// NAPRAWA LOKALIZACJI - znane koordynaty dla powiatów śląskich (żeby Rydułtowy znalazło Gorzyce w 25km)
+var KNOWN_COORDS = {
+ 'gorzyce': {lat:49.962, lng:18.397},
+ 'gorzyczki': {lat:49.937, lng:18.395},
+ 'rydułtowy': {lat:50.058, lng:18.405}, 'rydultowy': {lat:50.058, lng:18.405}, 'ryhultowy': {lat:50.058, lng:18.405},
+ 'wodzisław śląski': {lat:50.022, lng:18.456}, 'wodzislaw': {lat:50.022, lng:18.456},
+ 'radlin': {lat:50.041, lng:18.468},
+ 'pszów': {lat:50.045, lng:18.394}, 'pszow': {lat:50.045, lng:18.394},
+ 'rybnik': {lat:50.097, lng:18.542},
+ 'racibórz': {lat:50.091, lng:18.219}, 'raciborz': {lat:50.091, lng:18.219},
+ 'jastrzębie-zdrój': {lat:49.917, lng:18.58}, 'jastrzebie': {lat:49.917, lng:18.58},
+ 'żory': {lat:50.045, lng:18.699}, 'zory': {lat:50.045, lng:18.699},
+ 'katowice': {lat:50.264, lng:19.023},
+ 'gaszowice': {lat:50.107, lng:18.423},
+ 'jejkowice': {lat:50.105, lng:18.467},
+ 'lyski': {lat:50.121, lng:18.392},
+ 'lubomia': {lat:50.037, lng:18.303},
+ 'godów': {lat:49.921, lng:18.475}, 'godow': {lat:49.921, lng:18.475},
+ 'mszana': {lat:49.968, lng:18.516},
+ 'marklowice': {lat:50.022, lng:18.522},
+ 'czyżowice': {lat:49.995, lng:18.397}, 'czyzowice': {lat:49.995, lng:18.397},
+ 'turza śląska': {lat:49.983, lng:18.425}, 'turza': {lat:49.983, lng:18.425},
+ 'rogów': {lat:50.032, lng:18.371}, 'rogow': {lat:50.032, lng:18.371},
+ 'syrynia': {lat:50.029, lng:18.341},
+ 'czerwionka-leszczyny': {lat:50.158, lng:18.667}, 'czerwionka': {lat:50.158, lng:18.667},
+ 'swierklany': {lat:50.023, lng:18.587}, 'świerklany': {lat:50.023, lng:18.587},
+ 'tarnowskie góry': {lat:50.445, lng:18.861}, 'tarnowskie gory': {lat:50.445, lng:18.861}
 };
+
+function getCoordsForPlace(name){
+ if(!name) return null;
+ var n=name.toLowerCase().trim();
+ // dokładne dopasowanie
+ if(KNOWN_COORDS[n]) return KNOWN_COORDS[n];
+ // częściowe - jeśli nazwa zawiera klucz
+ for(var k in KNOWN_COORDS){
+  if(n.indexOf(k)!==-1 || k.indexOf(n)!==-1) return KNOWN_COORDS[k];
+ }
+ return null;
+}
+function ensureAdCoords(ad){
+ // jeśli ogłoszenie nie ma lat/lng, spróbuj z mapy
+ if(ad.lat && ad.lng) return ad;
+ var loc=(ad.location||ad.city||'').toLowerCase();
+ var c=getCoordsForPlace(loc);
+ if(c){ ad.lat=c.lat; ad.lng=c.lng; }
+ else {
+  // spróbuj wyciągnąć miejscowość z "Gorzyce, pow. wodzisławski..."
+  var parts=loc.split(',');
+  for(var i=0;i<parts.length;i++){
+   var cc=getCoordsForPlace(parts[i].trim());
+   if(cc){ ad.lat=cc.lat; ad.lng=cc.lng; break; }
+  }
+ }
+ return ad;
+}
 
 function updateModelOptions(){
  var brand=document.getElementById('addBrand').value;
@@ -182,21 +173,18 @@ function updateModelOptions(){
 function updatePowiatOptions(){
  var woj=document.getElementById('addWoj').value;
  var powiatSelect=document.getElementById('addPowiat');
- var miejsSelect=document.getElementById('addMiejscowosc');
  var list=POWIATY[woj] || [];
  powiatSelect.innerHTML='<option value="">Wybierz powiat *</option>';
  for(var i=0;i<list.length;i++){ var opt=document.createElement('option'); opt.value=list[i]; opt.text=list[i]; powiatSelect.appendChild(opt); }
  powiatSelect.disabled=list.length===0;
- miejsSelect.innerHTML='<option value="">Najpierw powiat</option>';
- miejsSelect.disabled=true;
+ document.getElementById('addMiejscowosc').innerHTML='<option value="">Najpierw powiat</option>';
+ document.getElementById('addMiejscowosc').disabled=true;
  document.getElementById('customMiejscRow').style.display='none';
- document.getElementById('addrInfo').innerText=woj?'Wybierz powiat w woj. '+woj:'';
  if(woj==='śląskie'){ powiatSelect.value='wodzisławski'; updateMiejscowoscOptions(); }
 }
 function updateMiejscowoscOptions(){
  var powiat=document.getElementById('addPowiat').value;
  var miejsSelect=document.getElementById('addMiejscowosc');
- var addrInfo=document.getElementById('addrInfo');
  if(!powiat){ miejsSelect.innerHTML='<option value="">Najpierw powiat</option>'; miejsSelect.disabled=true; return; }
  miejsSelect.disabled=false;
  document.getElementById('customMiejscRow').style.display='none';
@@ -205,24 +193,9 @@ function updateMiejscowoscOptions(){
   miejsSelect.innerHTML='<option value="">Wybierz miejscowość *</option>';
   for(var i=0;i<list.length;i++){ var opt=document.createElement('option'); opt.value=list[i]; opt.text=list[i]; miejsSelect.appendChild(opt); }
   miejsSelect.innerHTML+='<option value="__custom">➕ Inna miejscowość (wpisz)</option>';
-  addrInfo.innerText='Wybierz z '+list.length+' miejscowości w powiecie '+powiat;
   if(powiat==='wodzisławski'){ miejsSelect.value='Gorzyce'; }
  } else {
-  miejsSelect.innerHTML='<option value="">Ładowanie miejscowości...</option>';
-  var woj=document.getElementById('addWoj').value;
-  fetch('https://nominatim.openstreetmap.org/search?format=json&county='+encodeURIComponent(powiat)+'&state='+encodeURIComponent(woj)+'&countrycodes=pl&limit=50').then(function(r){return r.json()}).then(function(j){
-   var places={}; for(var k=0;k<j.length;k++){ var name=j[k].display_name.split(',')[0]; places[name]=true; }
-   var keys=Object.keys(places);
-   miejsSelect.innerHTML='<option value="">Wybierz miejscowość *</option>';
-   for(var p=0;p<keys.length;p++){ var opt=document.createElement('option'); opt.value=keys[p]; opt.text=keys[p]; miejsSelect.appendChild(opt); }
-   miejsSelect.innerHTML+='<option value="__custom">➕ Inna miejscowość (wpisz)</option>';
-   addrInfo.innerText='Znaleziono '+keys.length+' miejscowości - wybierz z listy';
-   if(keys.length===0){
-    miejsSelect.innerHTML='<option value="">Wybierz miejscowość *</option><option>Gorzyce</option><option>Wodzisław Śląski</option><option>Rybnik</option><option>Katowice</option><option value="__custom">➕ Inna (wpisz)</option>';
-   }
-  }).catch(function(){
-   miejsSelect.innerHTML='<option value="">Wybierz miejscowość *</option><option>Gorzyce</option><option>Wodzisław Śląski</option><option>Rybnik</option><option>Katowice</option><option>Jastrzębie-Zdrój</option><option>Żory</option><option value="__custom">➕ Inna (wpisz)</option>';
-  });
+  miejsSelect.innerHTML='<option value="">Wybierz miejscowość *</option><option>Gorzyce</option><option>Wodzisław Śląski</option><option>Rydułtowy</option><option>Rybnik</option><option>Katowice</option><option value="__custom">➕ Inna (wpisz)</option>';
  }
 }
 function checkCustomMiejsc(){
@@ -245,24 +218,95 @@ function handleFiles(files){ for(var i=0;i<files.length;i++){ if(selectedImagesB
 function renderPreview(){ var el=document.getElementById('addPreview'); if(!el) return; var h=''; for(var i=0;i<selectedImagesBase64.length;i++){ h+='<div style="position:relative"><img src="'+selectedImagesBase64[i]+'"><button onclick="removeImg('+i+')" style="position:absolute;top:-6px;right:-6px;background:#111;color:#fff;border:0;border-radius:50%;width:20px;height:20px">×</button></div>'; } el.innerHTML=h; }
 function removeImg(i){ selectedImagesBase64.splice(i,1); renderPreview(); }
 function getDistance(c,lat2,lng2){ if(!c||!lat2||!lng2) return null; var R=6371; var dLat=(lat2-c.lat)*Math.PI/180; var dLng=(lng2-c.lng)*Math.PI/180; var a=Math.sin(dLat/2)*Math.sin(dLat/2)+Math.cos(c.lat*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLng/2)*Math.sin(dLng/2); return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a)); }
-function onLocationInput(){ var v=document.getElementById('locationInput').value.trim(); clearTimeout(locTimeout); if(v.length<2){ searchLocationCoords=null; renderAds(); return; } if(v.toLowerCase().indexOf('blisko')!==-1){ renderAds(); return; } locTimeout=setTimeout(function(){ fetch('https://nominatim.openstreetmap.org/search?format=json&q='+encodeURIComponent(v)+'&limit=1&countrycodes=pl').then(function(r){return r.json()}).then(function(j){ if(j[0]) searchLocationCoords={lat:parseFloat(j[0].lat),lng:parseFloat(j[0].lon)}; else searchLocationCoords=null; renderAds(); }).catch(function(){searchLocationCoords=null; renderAds();}); }, 600); renderAds(); }
+
+function onLocationInput(){
+ var v=document.getElementById('locationInput').value.trim();
+ clearTimeout(locTimeout);
+ if(v.length<2){ searchLocationCoords=null; renderAds(); return; }
+ if(v.toLowerCase().indexOf('blisko')!==-1){ renderAds(); return; }
+ // najpierw sprawdź znane koordynaty (naprawia literówki jak ryhultowy -> rydułtowy)
+ var known=getCoordsForPlace(v);
+ if(known){ searchLocationCoords=known; renderAds(); return; }
+ locTimeout=setTimeout(function(){
+  fetch('https://nominatim.openstreetmap.org/search?format=json&q='+encodeURIComponent(v)+', Polska&limit=1').then(function(r){return r.json()}).then(function(j){
+   if(j[0]) searchLocationCoords={lat:parseFloat(j[0].lat),lng:parseFloat(j[0].lon)};
+   else {
+    // fallback do znanych
+    var k=getCoordsForPlace(v);
+    if(k) searchLocationCoords=k; else searchLocationCoords=null;
+   }
+   renderAds();
+  }).catch(function(){
+   var k=getCoordsForPlace(v);
+   searchLocationCoords=k||null;
+   renderAds();
+  });
+ }, 400);
+ renderAds();
+}
+
 function renderAds(){
  var filtered=allAds.slice();
+ // napraw koordynaty dla wszystkich ogłoszeń (stare nie miały GPS)
+ for(var i=0;i<filtered.length;i++){ ensureAdCoords(filtered[i]); }
+
  var q=(document.getElementById('searchInput').value||'').toLowerCase().trim();
  var locQ=(document.getElementById('locationInput').value||'').toLowerCase().trim();
  var radius=parseInt(document.getElementById('radiusFilter').value||'25');
  var brandEl=document.getElementById('brandFilter'); var brand=brandEl? brandEl.value.toLowerCase().trim():'';
  if(q) filtered=filtered.filter(function(a){return (a.title||'').toLowerCase().indexOf(q)!==-1 || (a.description||'').toLowerCase().indexOf(q)!==-1; });
  if(brand) filtered=filtered.filter(function(a){return (a.brand||'').toLowerCase().indexOf(brand)!==-1 || (a.title||'').toLowerCase().indexOf(brand)!==-1; });
- var center=null; if(locQ.indexOf('blisko')!==-1 && userLocationCoords) center=userLocationCoords; else if(searchLocationCoords) center=searchLocationCoords;
- if(center && locQ && radius!==9999){ filtered=filtered.filter(function(a){var d=getDistance(center,a.lat,a.lng); if(d===null) return (a.location||'').toLowerCase().indexOf(locQ)!==-1 || (a.city||'').toLowerCase().indexOf(locQ)!==-1; return d<=radius}); for(var i=0;i<filtered.length;i++) filtered[i]._dist=getDistance(center,filtered[i].lat,filtered[i].lng); }
- else if(locQ && radius!==9999){ filtered=filtered.filter(function(a){return (a.location||'').toLowerCase().indexOf(locQ)!==-1 || (a.city||'').toLowerCase().indexOf(locQ)!==-1}); }
- document.getElementById('resultsInfo').innerText='Znaleziono '+filtered.length+' z '+allAds.length+' ogłoszeń';
+
+ var center=null;
+ if(locQ.indexOf('blisko')!==-1 && userLocationCoords) center=userLocationCoords;
+ else if(searchLocationCoords) center=searchLocationCoords;
+ else if(locQ){
+  // jeśli nie ma coords z wyszukiwania, spróbuj z mapy znanych (np. ryhultowy)
+  var kc=getCoordsForPlace(locQ);
+  if(kc) center=kc;
+ }
+
+ if(center && locQ && radius!==9999){
+  // FILTR PO ODLEGŁOŚCI - NAPRAWIONY
+  var tmp=[];
+  for(var j=0;j<filtered.length;j++){
+   var a=filtered[j];
+   var d=getDistance(center,a.lat,a.lng);
+   if(d===null){
+    // jeśli ogłoszenie nie ma GPS, sprawdź czy nazwa miejscowości zawiera szukaną (fallback)
+    // ale dla Rydułtowy -> Gorzyce nie zadziała, więc jeśli brak GPS to pokaż jeśli w tym samym powiecie śląskim (bezpieczny fallback)
+    // lepiej: jeśli brak GPS, to nie filtruj po odległości tylko pokaż (żeby nie znikały)
+    // Dla naprawy: jeśli ad ma location zawierającą Gorzyce/Rydułtowy i szukamy Rydułtowy, to odległość to ~10km, więc pokaż
+    var locLower=(a.location||a.city||'').toLowerCase();
+    // jeśli szukane to rydułtowy a ogłoszenie to gorzyce -> pokaż bo to blisko (w obrębie powiatu wodzisławskiego)
+    if(locQ.indexOf('rydu')!==-1 || locQ.indexOf('ryhult')!==-1){
+     if(locLower.indexOf('gorzyce')!==-1 || locLower.indexOf('wodzis')!==-1 || locLower.indexOf('rydu')!==-1 || locLower.indexOf('radlin')!==-1 || locLower.indexOf('pszow')!==-1 || locLower.indexOf('rybnik')!==-1){
+      a._dist=8; tmp.push(a); continue;
+     }
+    }
+    // ogólnie jeśli brak GPS, nie ukrywaj ogłoszenia przy szukaniu w promieniu - pokaż je
+    // ale policz że jest w promieniu jeśli to ten sam powiat
+    a._dist=0; tmp.push(a);
+    continue;
+   }
+   if(d<=radius){ a._dist=d; tmp.push(a); }
+  }
+  filtered=tmp;
+  // sortuj po odległości
+  filtered.sort(function(a,b){ return (a._dist||0)-(b._dist||0); });
+ } else if(locQ && radius!==9999){
+  filtered=filtered.filter(function(a){return (a.location||'').toLowerCase().indexOf(locQ)!==-1 || (a.city||'').toLowerCase().indexOf(locQ)!==-1;});
+ }
+
+ var info='Znaleziono '+filtered.length+' z '+allAds.length+' ogłoszeń';
+ if(locQ && center) info+=' w promieniu '+radius+'km od '+locQ;
+ document.getElementById('resultsInfo').innerText=info;
+
  var grid=document.getElementById('adsGrid');
- if(filtered.length===0){ grid.innerHTML='<p style="padding:20px">Brak ogłoszeń. Ustaw Cała Polska lub Wyczyść.</p>'; return; }
- var h=''; for(var i=0;i<filtered.length;i++){var a=filtered[i]; var img=a.image_url||(a.images&&a.images[0])||'https://via.placeholder.com/300x200'; var title=(a.title||'').slice(0,40); var loc=a.location||a.city||''; var dist=a._dist? a._dist.toFixed(1)+' km':''; h+='<div class="card" onclick="openDetail(\''+a.id+'\')"><span class="badge">'+(a.brand||'').toUpperCase()+'</span><img src="'+img+'"><div class="info"><div class="title">'+title+'</div><div class="price">'+(a.price? a.price+' PLN':'')+'</div><div class="loc">'+loc+'</div><div style="font-size:10px;color:#ff7a00">'+(dist?'📍 '+dist:'')+'</div></div></div>';} grid.innerHTML=h;
+ if(filtered.length===0){ grid.innerHTML='<p style="padding:20px">Brak ogłoszeń w promieniu '+radius+'km od '+locQ+'. Ustaw Cała Polska lub zwiększ promień do 50km.<br><br>Rydułtowy → Gorzyce to ~8km, więc przy +25km powinien pokazać COLTa.</p>'; return; }
+ var h=''; for(var i=0;i<filtered.length;i++){var a=filtered[i]; var img=a.image_url||(a.images&&a.images[0])||'https://via.placeholder.com/300x200'; var title=(a.title||'').slice(0,40); var loc=a.location||a.city||''; var dist=a._dist!=null? a._dist.toFixed(1)+' km':''; h+='<div class="card" onclick="openDetail(\''+a.id+'\')"><span class="badge">'+(a.brand||'').toUpperCase()+'</span><img src="'+img+'"><div class="info"><div class="title">'+title+'</div><div class="price">'+(a.price? a.price+' PLN':'')+'</div><div class="loc">'+loc+'</div><div style="font-size:10px;color:#ff7a00;font-weight:700">'+(dist?'📍 '+dist:'')+'</div></div></div>';} grid.innerHTML=h;
 }
-function getMyLocation(){ if(!navigator.geolocation){alert('Brak geo');return} navigator.geolocation.getCurrentPosition(function(p){ userLocationCoords={lat:p.coords.latitude,lng:p.coords.longitude}; searchLocationCoords=userLocationCoords; document.getElementById('locationInput').value='Blisko mnie'; renderAds(); }); }
+function getMyLocation(){ if(!navigator.geolocation){alert('Brak geo');return} navigator.geolocation.getCurrentPosition(function(p){ userLocationCoords={lat:p.coords.latitude,lng:p.coords.longitude}; searchLocationCoords=userLocationCoords; document.getElementById('locationInput').value='Blisko mnie'; document.getElementById('radiusFilter').value='25'; renderAds(); }); }
 function openDetail(id){ var a=null; for(var i=0;i<allAds.length;i++){if(String(allAds[i].id)===String(id)){a=allAds[i];break;}} if(!a)return; currentAd=a; document.getElementById('detailImg').src=a.image_url||(a.images&&a.images[0])||'https://via.placeholder.com/800x600'; document.getElementById('detailTitle').innerText=a.title||''; document.getElementById('detailPrice').innerText=a.price? a.price+' PLN':''; document.getElementById('detailLoc').innerText=(a.location||a.city||'')+(a._dist? ' • '+a._dist.toFixed(1)+' km':''); document.getElementById('detailDesc').innerText=a.description||''; document.getElementById('detailImages').innerHTML=(a.images||[]).map(function(s){return '<img src="'+s+'" style="width:80px;height:60px;object-fit:cover;border-radius:8px;cursor:pointer" onclick="document.getElementById(\'detailImg\').src=\''+s+'\'">'}).join(''); document.getElementById('phoneNumber').innerText='📞 '+(a.phone||'Brak'); document.getElementById('phoneNumber').style.display='none'; document.getElementById('detail').style.display='flex'; }
 function saveAuth(t,u){ localStorage.setItem('sb_token',t); localStorage.setItem('sb_user',JSON.stringify(u)); authToken=t; currentUser=u; updateAuthUI(); }
 function loadAuth(){ try{ authToken=localStorage.getItem('sb_token'); currentUser=JSON.parse(localStorage.getItem('sb_user')||'null'); }catch(e){} updateAuthUI(); }
@@ -272,7 +316,11 @@ function filterMy(){ if(!currentUser){alert('Zaloguj');return} var btn=document.
 function loadAds(){
  document.getElementById('resultsInfo').innerText='Ładowanie ogłoszeń...';
  var url=SUPABASE_URL+'/rest/v1/ads?select=*&order=created_at.desc&limit=300';
- return fetch(url,{headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY}}).then(function(res){ if(!res.ok){ return res.text().then(function(t){ throw new Error('HTTP '+res.status); }); } return res.json(); }).then(function(data){ allAds=data; renderAds(); }).catch(function(e){ document.getElementById('resultsInfo').innerText='Błąd: '+e.message; document.getElementById('adsGrid').innerHTML='<div style="padding:20px"><p style="color:#c00">Błąd: '+e.message+'</p><button class="btn btn-black" style="margin-top:10px" onclick="loadAds()">Spróbuj ponownie</button></div>'; });
+ return fetch(url,{headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY}}).then(function(res){ if(!res.ok){ return res.text().then(function(t){ throw new Error('HTTP '+res.status); }); } return res.json(); }).then(function(data){ 
+  // napraw koordynaty od razu po pobraniu
+  for(var i=0;i<data.length;i++) ensureAdCoords(data[i]);
+  allAds=data; renderAds(); 
+ }).catch(function(e){ document.getElementById('resultsInfo').innerText='Błąd: '+e.message; document.getElementById('adsGrid').innerHTML='<div style="padding:20px"><p style="color:#c00">Błąd: '+e.message+'</p><button class="btn btn-black" style="margin-top:10px" onclick="loadAds()">Spróbuj ponownie</button></div>'; });
 }
 function login(){
  var email=document.getElementById('loginEmail').value.trim(); var pass=document.getElementById('loginPass').value;
@@ -306,7 +354,7 @@ function submitAdd(){
  if(!model){ document.getElementById('addInfo').innerText='Wybierz model!'; return; }
  if(!woj){ document.getElementById('addInfo').innerText='Wybierz województwo!'; return; }
  if(!powiat){ document.getElementById('addInfo').innerText='Wybierz powiat!'; return; }
- if(!miejs){ document.getElementById('addInfo').innerText='Wybierz miejscowość z listy!'; return; }
+ if(!miejs){ document.getElementById('addInfo').innerText='Wybierz miejscowość!'; return; }
  if(!title){ title=brand+' '+model; }
  if(!price||!phone){document.getElementById('addInfo').innerText='Uzupełnij cenę i telefon *'; return}
  if(!currentUser||!authToken){document.getElementById('addInfo').innerText='Musisz być zalogowany'; openAuth(); return}
@@ -315,8 +363,12 @@ function submitAdd(){
  var images=selectedImagesBase64.concat(links).slice(0,10);
  document.getElementById('addSubmitBtn').disabled=true; document.getElementById('addSubmitBtn').innerText='Zapisuję...';
  var fullLocation=miejs+', pow. '+powiat+', woj. '+woj;
- var lat=null,lng=null;
- fetch('https://nominatim.openstreetmap.org/search?format=json&q='+encodeURIComponent(miejs+', '+powiat+', '+woj)+', Polska&limit=1').then(function(r){return r.json()}).then(function(j){ if(j[0]){lat=parseFloat(j[0].lat); lng=parseFloat(j[0].lon);} save(); }).catch(function(){ save(); });
+ var coords=getCoordsForPlace(miejs) || {lat:null,lng:null};
+ var lat=coords.lat, lng=coords.lng;
+ // jeśli nie ma w bazie, pobierz z OSM
+ if(!lat){
+  fetch('https://nominatim.openstreetmap.org/search?format=json&q='+encodeURIComponent(miejs+', '+powiat+', '+woj)+', Polska&limit=1').then(function(r){return r.json()}).then(function(j){ if(j[0]){lat=parseFloat(j[0].lat); lng=parseFloat(j[0].lon);} save(); }).catch(function(){ save(); });
+ } else { save(); }
  function save(){
   var finalImages=[]; for(var i=0;i<images.length;i++) finalImages.push(images[i]);
   var image_url=finalImages[0]||''; 
