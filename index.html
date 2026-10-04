@@ -423,6 +423,16 @@ header{position:relative !important;top:auto !important;z-index:10 !important}
   .top-actions{justify-content:center}
 }
 
+
+/* v8.3.1 MOBILE FIX - detail zawsze na 1 plan */
+#detail{position:fixed !important;inset:0 !important;z-index:9999 !important;display:none;align-items:flex-start !important;justify-content:center !important;overflow:auto !important;-webkit-overflow-scrolling:touch !important}
+#detail[style*="display: flex"], #detail[style*="display:flex"]{display:flex !important}
+.detail-box{position:relative;z-index:10000;min-height:100vh}
+@media(max-width:768px){
+  #detail{padding:0 !important;align-items:flex-start !important}
+  .detail-box{width:100% !important;max-width:100% !important;height:auto !important;min-height:100vh !important}
+}
+
 </style>
 </head>
 <body>
@@ -1044,11 +1054,11 @@ document.addEventListener('DOMContentLoaded', function(){
 function addSwipeIndicators(){
   var style = document.createElement('style');
   style.innerHTML = `
-    #detail{position:relative;touch-action:pan-y}
-    .swipe-hint{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,0.6);color:#fff;padding:12px 8px;border-radius:20px;font-size:20px;z-index:10;pointer-events:none;opacity:0;transition:opacity 0.3s}
+    #detail{touch-action:pan-y}
+    .swipe-hint{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,0.6);color:#fff;padding:12px 8px;border-radius:20px;font-size:20px;z-index:101;pointer-events:none;opacity:0;transition:opacity 0.3s}
     .swipe-hint.left{left:10px}
     .swipe-hint.right{right:10px}
-    .swipe-counter{position:absolute;top:10px;right:50%;transform:translateX(50%);background:rgba(0,0,0,0.7);color:#fff;padding:6px 12px;border-radius:20px;font-size:12px;font-weight:700;z-index:10}
+    .swipe-counter{position:fixed;top:10px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.85);color:#fff;padding:8px 16px;border-radius:20px;font-size:12px;font-weight:700;z-index:101;pointer-events:none}
     #detail:active .swipe-hint{opacity:0.8}
     @media(max-width:768px){
       .swipe-hint{opacity:0.6}
