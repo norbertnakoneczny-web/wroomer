@@ -1,1 +1,8 @@
-{"@context": "https://schema.org", "@type": "WebSite", "name": "WROOMER.PL", "url": "https://www.wroomer.pl/"}
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "WROOMER.PL",
+  "url": "https://www.wroomer.pl/",
+  "datePublished": "04.10.2026 16:28:00",
+  "version": "v9.0 CLEAR 04.10.2026 16:28:00"
+}

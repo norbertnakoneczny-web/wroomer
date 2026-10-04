@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
+<!-- WROOMER.PL - PODPISANA WERSJA FINALNA -->
+<!-- Data: 04.10.2026 16:22:35 -->
+<!-- Wersja: v8.9.1 FINAL - OSTATECZNA NA DZIS -->
+<!-- Podpis: WROOMER.PL © 2026 - 04.10.2026 16:22:35 -->
+
 <link rel="preconnect" href="https://rbrziqtvwpsegyvjsxsu.supabase.co" crossorigin>
 <link rel="dns-prefetch" href="https://rbrziqtvwpsegyvjsxsu.supabase.co">
 <link rel="preconnect" href="https://nominatim.openstreetmap.org">
@@ -349,6 +354,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>WROOMER.PL - Ogłoszenia motoryzacyjne Gorzyce, Rydułtowy, Rybnik</title>
+<meta name="version" content="v8.9.1 FINAL 04.10.2026 16:22:35"><meta name="build-date" content="04.10.2026 16:22:35">
 <meta name="description" content="WROOMER.PL - lokalne ogłoszenia motoryzacyjne Gorzyce, Rydułtowy, Rybnik, Wodzisław. Samochody, części, szybko, lokalnie.">
 <link rel="preconnect" href="https://rljqnhfogaqdjeirqqdj.supabase.co" crossorigin>
 <link rel="ai-catalog" href="/.well-known/ai-catalog.json">
@@ -1384,7 +1390,43 @@ function openAuth(){ var el=document.getElementById('authModal'); if(el){ el.sty
 function closeAuth(){ var el=document.getElementById('authModal'); if(el) el.style.display='none'; }
 function showTab(n){ var l=document.getElementById('loginTab'); var r=document.getElementById('registerTab'); var rs=document.getElementById('resetTab'); if(l) l.style.display=n==='login'?'block':'none'; if(r) r.style.display=n==='register'?'block':'none'; if(rs) rs.style.display=n==='reset'?'block':'none'; }
 function closeDetail(){ var el=document.getElementById('detail'); if(el) el.style.display='none'; }
-function clearFilters(){ var s=document.getElementById('searchInput'); if(s) s.value=''; var loc=document.getElementById('locationInput'); if(loc) loc.value=''; var rad=document.getElementById('radiusFilter'); if(rad) rad.value='25'; currentPage=0; renderAds(); }
+function clearFilters(){
+  var s=document.getElementById('searchInput'); if(s) s.value='';
+  var loc=document.getElementById('locationInput'); if(loc) loc.value='';
+  var rad=document.getElementById('radiusFilter'); if(rad) rad.value='25';
+  var brand=document.getElementById('brandFilter'); if(brand) brand.value='';
+  var model=document.getElementById('modelFilter'); if(model) model.value='';
+  var woj=document.getElementById('wojFilter'); if(woj) woj.value='';
+  var priceFrom=document.getElementById('priceFrom'); if(priceFrom) priceFrom.value='';
+  var priceTo=document.getElementById('priceTo'); if(priceTo) priceTo.value='';
+  var cat=document.getElementById('categoryFilter'); if(cat) cat.value='';
+  var sort=document.getElementById('sortFilter'); if(sort) sort.value='newest';
+  // Reset global vars
+  try{
+    if(typeof currentFilters!=='undefined'){ currentFilters={}; }
+    if(typeof selectedWoj!=='undefined'){ selectedWoj=''; }
+    if(typeof selectedBrand!=='undefined'){ selectedBrand=''; }
+    if(typeof selectedModel!=='undefined'){ selectedModel=''; }
+    if(typeof currentLocation!=='undefined'){ currentLocation=null; }
+    if(typeof userLocation!=='undefined'){ userLocation=null; }
+    if(typeof searchQuery!=='undefined'){ searchQuery=''; }
+    // Wyczyść localStorage preferencji wyszukiwania
+    localStorage.removeItem('wroomer_filters');
+    localStorage.removeItem('wroomer_location');
+    localStorage.removeItem('wroomer_search');
+    localStorage.removeItem('lastSearch');
+    localStorage.removeItem('searchHistory');
+  }catch(e){}
+  currentPage=0;
+  // Odśwież URL bez parametrów
+  try{ history.replaceState(null,'',location.pathname); }catch(e){}
+  if(typeof loadAds==='function') loadAds(); else if(typeof renderAds==='function') renderAds();
+  // Wizualny feedback
+  try{
+    var btn=document.querySelector('button[onclick="clearFilters()"]');
+    if(btn){ var orig=btn.innerText; btn.innerText='✓ Wyczyszczono'; setTimeout(function(){ btn.innerText=orig; }, 1500); }
+  }catch(e){}
+}
 function showPhone(){ var el=document.getElementById('phoneNumber'); if(el){ el.style.display='block'; el.innerText='📞 '+(currentAd&&currentAd.phone||'Brak'); } }
 function contactCall(){ if(currentAd&&currentAd.phone) window.location.href='tel:'+currentAd.phone.replace(/\s/g,''); }
 async function handleFiles(files){
@@ -1732,6 +1774,14 @@ loadAds();
     }
   }, 800);
 })();
+</script>
+
+
+<div id="wroomer-signature" style="position:fixed;bottom:2px;right:4px;background:rgba(0,0,0,0.6);color:rgba(255,255,255,0.5);font-size:8px;padding:2px 6px;border-radius:4px;z-index:99999;pointer-events:none;font-family:monospace;">WROOMER.PL FINAL 04.10.2026 16:22:35 v8.9.1</div>
+<script>
+// Podpis w konsoli
+console.log("%cWROOMER.PL FINAL 04.10.2026 16:22:35 v8.9.1","color:#facc15;font-size:14px;font-weight:bold");
+console.log("Podpisano: 04.10.2026 16:22:35");
 </script>
 
 </body>

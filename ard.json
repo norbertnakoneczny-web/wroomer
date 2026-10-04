@@ -1,1 +1,12 @@
-{"@context": "https://agenticresourcediscovery.org/context/v1", "entries": [{"identifier": "urn:air:wroomer.pl:web:homepage", "displayName": "WROOMER.PL", "type": "text/html", "url": "https://www.wroomer.pl/"}]}
+{
+  "@context": "https://agenticresourcediscovery.org/context/v1",
+  "entries": [
+    {
+      "identifier": "urn:air:wroomer.pl:web:homepage",
+      "displayName": "WROOMER.PL FINAL 04.10.2026 16:28:00",
+      "type": "text/html",
+      "url": "https://www.wroomer.pl/",
+      "buildDate": "04.10.2026 16:28:00"
+    }
+  ]
+}

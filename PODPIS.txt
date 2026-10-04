@@ -1,0 +1,6 @@
+WROOMER.PL FINAL
+Data: 04.10.2026
+Godzina: 16:28:00
+Full: 04.10.2026 16:28:00
+Wersja: v9.0 CLEAR ALL
+Funkcja: Wyczysc resetuje WSZYSTKIE preferencje
