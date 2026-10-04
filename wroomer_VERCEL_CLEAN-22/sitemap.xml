@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://wroomer.pl/</loc><priority>1.0</priority><changefreq>hourly</changefreq></url>
+  <url><loc>https://wroomer.pl/?city=Warszawa</loc><priority>0.8</priority></url>
+  <url><loc>https://wroomer.pl/?city=Kraków</loc><priority>0.8</priority></url>
+  <url><loc>https://wroomer.pl/?city=Wrocław</loc><priority>0.8</priority></url>
+  <url><loc>https://wroomer.pl/?city=Gdańsk</loc><priority>0.8</priority></url>
+  <url><loc>https://wroomer.pl/?city=Katowice</loc><priority>0.8</priority></url>
+  <url><loc>https://wroomer.pl/?city=Rybnik</loc><priority>0.8</priority></url>
+  <url><loc>https://wroomer.pl/?brand=BMW</loc><priority>0.8</priority></url>
+  <url><loc>https://wroomer.pl/?brand=Audi</loc><priority>0.8</priority></url>
+  <url><loc>https://wroomer.pl/?brand=Mercedes</loc><priority>0.8</priority></url>
+</urlset>
