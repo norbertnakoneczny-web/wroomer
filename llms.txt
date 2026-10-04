@@ -5,7 +5,7 @@
 ## Główne
 
 - [Strona główna](https://www.wroomer.pl/): Lista ogłoszeń
-- [Dodaj ogłoszenie](https://www.wroomer.pl/): Formularz z GPS
+- [Dodaj](https://www.wroomer.pl/): Dodaj ogłoszenie GPS
 
 ## Lokalizacje
 
