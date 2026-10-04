@@ -486,12 +486,16 @@ async function submitAdd(){
  var titleEl=document.getElementById('addTitleInput'); var brandEl=document.getElementById('addBrand'); var modelEl=document.getElementById('addModel'); var priceEl=document.getElementById('addPrice'); var phoneEl=document.getElementById('addPhone');
  var wojEl=document.getElementById('addWoj'); var powEl=document.getElementById('addPowiat'); var miejsEl=document.getElementById('addMiejscowosc'); var customEl=document.getElementById('addMiejscCustom');
  if(!titleEl||!brandEl||!modelEl||!priceEl||!phoneEl){ alert('Błąd formularza'); return; }
- var title=titleEl.value.trim(); var brand=brandEl.value; var model=modelEl.value; var price=priceEl.value.trim(); var phone=phoneEl.value.trim();
+ var title=titleEl.value.trim(); var brand=brandEl.value; var model=modelEl.value; var priceRaw=priceEl.value.trim(); var phone=phoneEl.value.trim();
  var woj=wojEl? wojEl.value:''; var pow=powEl? powEl.value:''; var miejs=miejsEl? miejsEl.value:''; if(miejs==='__custom' && customEl) miejs=customEl.value.trim();
  var infoEl=document.getElementById('addInfo');
  if(!brand||!model||!miejs){ if(infoEl) infoEl.innerText='Uzupełnij markę, model, miejscowość *'; return; }
  if(!title) title=brand+' '+model;
- if(!price||!phone){ if(infoEl) infoEl.innerText='Cena i telefon *'; return; }
+ if(!priceRaw||!phone){ if(infoEl) infoEl.innerText='Cena i telefon *'; return; }
+ // FIX 22P02: price must be integer, handle 25.000, 25 000, 25,000 formats
+ var priceClean = priceRaw.replace(/\s/g,'').replace(/\./g,'').replace(/,/g,'').replace(/[^0-9]/g,'');
+ var price = priceClean ? parseInt(priceClean, 10) : 0;
+ if(!price || isNaN(price)){ if(infoEl) infoEl.innerText='Podaj poprawną cenę (np. 25000)'; return; }
  if(!currentUser||!authToken){ if(infoEl) infoEl.innerText='Zaloguj się'; openAuth(); return; }
  var descEl=document.getElementById('addDesc'); var desc=descEl? descEl.value.trim():'';
  var linksEl=document.getElementById('addImagesLinks'); var links=linksEl? (linksEl.value||'').split(',').map(function(s){return s.trim()}).filter(Boolean):[];
@@ -511,8 +515,8 @@ async function submitAdd(){
    description: desc,
    location: fullLocation,
    city: miejs,
-   lat: coords.lat,
-   lng: coords.lng,
+   lat: coords.lat!=null ? parseFloat(coords.lat) : null,
+   lng: coords.lng!=null ? parseFloat(coords.lng) : null,
    phone: phone
  };
  async function doPost(token){

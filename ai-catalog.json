@@ -1,14 +1,8 @@
 {
   "version": "1.0",
   "name": "WROOMER.PL",
-  "description": "Lokalne ogłoszenia motoryzacyjne",
+  "description": "Lokalne",
   "url": "https://www.wroomer.pl/",
-  "capabilities": [
-    {
-      "type": "web",
-      "url": "https://www.wroomer.pl/"
-    }
-  ],
   "representativeQueries": [
     "ogłoszenia Gorzyce"
   ]
