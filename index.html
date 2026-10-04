@@ -1739,7 +1739,6 @@ async function submitAdd(){
    }
    if(!result.ok) throw new Error(result.txt);
    if(submitBtn){ submitBtn.disabled=false; submitBtn.innerText='Zatwierdź'; } closeAdd(); loadAds();
-try{setTimeout(function(){var u='https://wroomer.pl/';var b=document.createElement('div');b.id='viralBox';b.style.cssText='position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#ffeb00;color:#000;padding:18px 22px;border-radius:16px;z-index:99999;max-width:94%;text-align:center;font-weight:900;box-shadow:0 12px 40px rgba(0,0,0,0.6);border:3px solid #000';b.innerHTML='<div>✅ Ogłoszenie dodane!</div><div style="font-size:13px;margin-top:4px">Udostępnij i bądź na GÓRZE 24h GRATIS! 🚀</div><div style="display:flex;gap:8px;margin-top:12px;justify-content:center"><button onclick="window.open(\'https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent('https://wroomer.pl/')+'\',\'_blank\')" style="background:#1877f2;color:#fff;border:none;padding:10px 14px;border-radius:10px;font-weight:900;cursor:pointer">📘 Facebook</button><button onclick="navigator.clipboard.writeText(\'https://wroomer.pl/\');this.innerText=\'✅ Skopiowano!\'" style="background:#000;color:#ffeb00;border:none;padding:10px 14px;border-radius:10px;font-weight:900;cursor:pointer">🔗 Kopiuj</button><button onclick="this.parentElement.parentElement.remove()" style="background:#fff;color:#000;border:2px solid #000;padding:10px 14px;border-radius:10px;font-weight:900;cursor:pointer">X</button></div>';document.body.appendChild(b);setTimeout(function(){var x=document.getElementById('viralBox');if(x)x.remove()},15000)},500)}catch(e){}
    alert('✅ Dodano! GPS: '+(coords.lat? coords.lat.toFixed(4)+', '+coords.lng.toFixed(4):'z miejscowości'));
  }catch(e){
    if(submitBtn){ submitBtn.disabled=false; submitBtn.innerText='Zatwierdź'; }
@@ -1923,7 +1922,72 @@ setTimeout(detectBraveAndBlockers, 1000);
 </script>
 
 
-<style>#seoCities a:hover,#seoBrands a:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,0.15)}</style>
+<style>#seoCities a:hover,#seoBrands a:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,0.15)}
+/* ===== WROOMER FIX MINIATUR 05.10.2026 - POPRAWA RESIZE ===== */
+/* Strona główna - miniatury */
+#adsGrid .ad-card, #adsGrid > div, .ad-card {
+  overflow:hidden !important;
+  border-radius:16px !important;
+}
+#adsGrid img, .ad-card img, #adsGrid > div img {
+  width:100% !important;
+  height:200px !important;
+  min-height:200px !important;
+  max-height:200px !important;
+  aspect-ratio:16/10 !important;
+  object-fit:cover !important;
+  object-position:center center !important;
+  display:block !important;
+  background:#1a1a1a !important;
+}
+@media(max-width:768px){
+  #adsGrid img, .ad-card img {
+    height:160px !important;
+    min-height:160px !important;
+    max-height:160px !important;
+  }
+}
+@media(min-width:1400px){
+  #adsGrid img, .ad-card img {
+    height:220px !important;
+    min-height:220px !important;
+    max-height:220px !important;
+  }
+}
+
+/* Po otwarciu ogłoszenia - większe */
+.gallery-wrap{
+  min-height:60vh !important;
+  max-height:70vh !important;
+  height:65vh !important;
+}
+.gallery-wrap img#detailImg{
+  max-height:70vh !important;
+  height:100% !important;
+  object-fit:contain !important;
+  background:#000 !important;
+}
+@media(max-width:768px){
+  .gallery-wrap{
+    min-height:55vh !important;
+    max-height:65vh !important;
+    height:60vh !important;
+  }
+  .gallery-wrap img#detailImg{
+    max-height:65vh !important;
+  }
+}
+/* Miniaturki w szczegole - wieksze */
+#detailImages img{
+  width:90px !important;
+  height:68px !important;
+  min-width:90px !important;
+  max-width:90px !important;
+  flex:0 0 90px !important;
+}
+/* END FIX */
+
+</style>
 <section id="seoCities" style="max-width:1200px;margin:50px auto 20px;padding:0 20px">
 <h2 style="font-size:22px;font-weight:900;margin-bottom:16px;color:#111">🚗 Samochody na sprzedaż w Twoim mieście - całkowicie za darmo</h2>
 <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px">
@@ -1963,5 +2027,9 @@ setTimeout(detectBraveAndBlockers, 1000);
 <b>⚖️ Informacja prawna:</b> Serwis WROOMER.PL pełni wyłącznie funkcję platformy umożliwiającej publikację ogłoszeń motoryzacyjnych. Za treść, rzetelność, prawdziwość oraz zgodność z prawem zamieszczanych ogłoszeń odpowiadają wyłącznie osoby je zamieszczające. Administracja serwisu nie ponosi odpowiedzialności za treść ogłoszeń, skutki transakcji oraz ewentualne roszczenia wynikające z zawartych umów pomiędzy użytkownikami.
 </div>
 
+
+<script>
+try{var _oldClose=window.closeAdd; window.closeAdd=function(){if(_oldClose)_oldClose(); setTimeout(function(){var u='https://wroomer.pl/';var b=document.createElement('div');b.id='viralBox';b.style.cssText='position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#ffeb00;color:#000;padding:18px 22px;border-radius:16px;z-index:99999;max-width:94%;text-align:center;font-weight:900;box-shadow:0 12px 40px rgba(0,0,0,0.6);border:3px solid #000';b.innerHTML='<div>✅ Ogłoszenie dodane!</div><div style="font-size:13px;margin-top:4px">Udostępnij i bądź na GÓRZE 24h GRATIS! 🚀</div><div style="display:flex;gap:8px;margin-top:12px;justify-content:center"><button onclick="window.open(\'https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent('https://wroomer.pl/')+'\',\'_blank\')" style="background:#1877f2;color:#fff;border:none;padding:10px 14px;border-radius:10px;font-weight:900;cursor:pointer">📘 Facebook</button><button onclick="navigator.clipboard.writeText(\'https://wroomer.pl/\');this.innerText=\'✅ Skopiowano!\'" style="background:#000;color:#ffeb00;border:none;padding:10px 14px;border-radius:10px;font-weight:900;cursor:pointer">🔗 Kopiuj</button><button onclick="this.parentElement.parentElement.remove()" style="background:#fff;color:#000;border:2px solid #000;padding:10px 14px;border-radius:10px;font-weight:900;cursor:pointer">X</button></div>';document.body.appendChild(b);setTimeout(function(){var x=document.getElementById('viralBox');if(x)x.remove()},15000)},500)}catch(e){}
+</script>
 </body>
 </html>
