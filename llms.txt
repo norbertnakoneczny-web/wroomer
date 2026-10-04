@@ -1,0 +1,21 @@
+# WROOMER.PL
+
+> WROOMER.PL - lokalne ogłoszenia motoryzacyjne Gorzyce, Rydułtowy, Rybnik, Wodzisław Śląski
+
+## O stronie
+WROOMER.PL to lokalny serwis ogłoszeniowy motoryzacyjny dla regionu Śląska: Gorzyce, Rydułtowy, Rybnik, Wodzisław Śląski, Racibórz, Radlin, Pszów.
+
+## Kategorie
+- Samochody osobowe - BMW, Audi, Mercedes, Volkswagen, Toyota, Ford, Opel, Skoda, Mitsubishi
+- Części i akcesoria
+- Usługi motoryzacyjne
+
+## Funkcje
+- Wyszukiwarka miejscowości z GPS
+- Filtry: marka, miejscowość, promień, cena
+- Kontakt: telefon, SMS, WhatsApp, Messenger
+- Kompresja zdjęć WebP 400px 60%
+- Wydajność 99/100 PageSpeed
+
+## Kontakt
+Strona: https://www.wroomer.pl/

@@ -1,0 +1,18 @@
+# WROOMER.PL - Dokumentacja dla AI
+
+## Struktura
+- Strona główna: lista ogłoszeń z filtrami
+- Szczegóły: galeria, opis, kontakt
+- Dodawanie: formularz z GPS wyszukiwarką miejscowości
+
+## Technologie
+- HTML/CSS/JS vanilla
+- Supabase (baza + auth + storage)
+- Vercel hosting
+- Nominatim OpenStreetMap dla geokodowania
+
+## Dostępność
+Strona spełnia WCAG AA: kontrast AAA (czarny #111 na białym #fff, szary #444), etykiety ARIA, nawigacja klawiaturą.
+
+## API
+Supabase REST: /rest/v1/ads

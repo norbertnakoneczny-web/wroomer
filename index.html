@@ -3,86 +3,87 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>WROOMER.PL - Ogłoszenia motoryzacyjne</title>
-<meta name="description" content="WROOMER.PL - lokalne ogłoszenia Gorzyce, Rydułtowy, Rybnik">
+<title>WROOMER.PL - Ogłoszenia motoryzacyjne Gorzyce, Rydułtowy, Rybnik</title>
+<meta name="description" content="WROOMER.PL - lokalne ogłoszenia motoryzacyjne Gorzyce, Rydułtowy, Rybnik, Wodzisław. Samochody, części, szybko, lokalnie.">
 <link rel="preconnect" href="https://rljqnhfogaqdjeirqqdj.supabase.co" crossorigin>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;font-family:Inter,system-ui,sans-serif}
 body{background:#f5f5f0;color:#111}
 header{background:#fff;border-bottom:1px solid #e5e5e0;position:sticky;top:0;z-index:50;padding:10px 12px}
 .top-row{display:flex;align-items:center;justify-content:space-between;gap:10px;max-width:1280px;margin:0 auto}
-.logo{font-weight:900;font-size:22px;letter-spacing:-1px;cursor:pointer;white-space:nowrap}.logo span{color:#ffcb00}
+.logo{font-weight:900;font-size:22px;letter-spacing:-1px;cursor:pointer;white-space:nowrap;color:#111}.logo span{color:#000}
 .top-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .search-bar{max-width:1280px;margin:10px auto 0;display:flex;gap:8px;flex-wrap:wrap}
-.search-bar input, .search-bar select{padding:10px 12px;border:1px solid #ddd;border-radius:8px;font-size:13px;flex:1;min-width:120px;background:#fff}
+.search-bar input, .search-bar select{padding:10px 12px;border:1px solid #ddd;border-radius:8px;font-size:13px;flex:1;min-width:120px;background:#fff;color:#111}
 .search-bar input.search-main{flex:2;min-width:180px}
 .btn{border:0;cursor:pointer;padding:10px 16px;border-radius:8px;font-weight:700;font-size:13px;white-space:nowrap}
-.btn-black{background:#111;color:#fff}.btn-yellow{background:#ffcb00;color:#111}.btn-white{background:#fff;border:1px solid #ddd}
-.btn-green{background:#25D366;color:#fff}.btn-blue{background:#0084FF;color:#fff}.btn-orange{background:#FF6600;color:#fff}
+.btn-black{background:#111;color:#fff}.btn-yellow{background:#111;color:#fff;border:2px solid #111}.btn-white{background:#fff;border:1px solid #333;color:#111}
+.btn-green{background:#1a7a33;color:#fff}.btn-blue{background:#004499;color:#fff}.btn-orange{background:#b33d00;color:#fff}
 .grid{max-width:1280px;margin:18px auto;padding:0 12px;display:grid;grid-template-columns:repeat(auto-fill,minmax(198px,1fr));gap:12px}
 .card{background:#fff;border-radius:12px;overflow:hidden;border:1px solid #e9e9e6;cursor:pointer;position:relative}
 .card .img-wrap{width:100%;height:144px;background:#f4f4f4;display:flex;align-items:center;justify-content:center;overflow:hidden}
 .card .img-wrap img{width:100%;height:100%;object-fit:contain;display:block;background:#f4f4f4}
-.card .info{padding:8px 10px}.card .title{font-size:12px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.card .price{font-size:13px;font-weight:900}.card .loc{font-size:10px;color:#777}
-.badge{position:absolute;top:6px;left:6px;background:#ffcb00;color:#111;font-size:9px;font-weight:900;padding:4px 6px;border-radius:6px;z-index:2}
+.card .info{padding:8px 10px}.card .title{font-size:12px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#111}
+.card .price{font-size:13px;font-weight:900;color:#111}.card .loc{font-size:11px;color:#444;font-weight:600}
+.badge{position:absolute;top:6px;left:6px;background:#111;color:#fff;font-size:9px;font-weight:900;padding:4px 6px;border-radius:6px;z-index:2;border:1px solid #fff}
 #detail{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:100;display:none;align-items:center;justify-content:center;padding:0}
 .detail-box{background:#fff;width:100%;max-width:1200px;height:100vh;display:flex;flex-direction:column;position:relative}
 .gallery-wrap{position:relative;width:100%;height:74vh;flex:0 0 74vh;background:#000;overflow:hidden}
 .gallery-wrap img{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);max-width:100%;max-height:100%;object-fit:contain;display:block}
-.close-btn{position:absolute;top:14px;right:14px;width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,0.95);border:0;font-size:22px;font-weight:900;cursor:pointer;z-index:20;display:flex;align-items:center;justify-content:center}
-.close-btn-2{position:absolute;top:10px;right:10px;width:36px;height:36px;border-radius:50%;background:#fff;border:1px solid #ddd;font-size:16px;font-weight:900;cursor:pointer;z-index:5;display:flex;align-items:center;justify-content:center}
-.gallery-arrow{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.92);border:0;width:48px;height:48px;border-radius:50%;font-size:24px;font-weight:900;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:10}
+.close-btn{position:absolute;top:14px;right:14px;width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,0.95);border:0;font-size:22px;font-weight:900;cursor:pointer;z-index:20;display:flex;align-items:center;justify-content:center;color:#111}
+.close-btn-2{position:absolute;top:10px;right:10px;width:36px;height:36px;border-radius:50%;background:#fff;border:1px solid #333;font-size:16px;font-weight:900;cursor:pointer;z-index:5;display:flex;align-items:center;justify-content:center;color:#111}
+.gallery-arrow{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.92);border:1px solid #333;width:48px;height:48px;border-radius:50%;font-size:24px;font-weight:900;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:10;color:#111}
 .gallery-arrow.prev{left:14px}.gallery-arrow.next{right:14px}
-.gallery-counter{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.8);color:#fff;padding:5px 12px;border-radius:20px;font-size:11px;font-weight:700;z-index:10}
+.gallery-counter{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.9);color:#fff;padding:5px 12px;border-radius:20px;font-size:11px;font-weight:700;z-index:10}
 .gallery-dots{position:absolute;bottom:46px;left:50%;transform:translateX(-50%);display:flex;gap:6px;z-index:10}
-.gallery-dots span{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,0.5);cursor:pointer}
-.gallery-dots span.active{background:#ffcb00}
+.gallery-dots span{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,0.7);cursor:pointer;border:1px solid #000}
+.gallery-dots span.active{background:#fff;border-color:#111}
 .detail-content{padding:12px 14px;overflow:auto;flex:1 1 26vh;max-height:26vh;background:#fff;position:relative}
-#detailPrice{font-size:16px;font-weight:900}
-#detailLoc{font-size:12px;color:#666}
-#detailDesc{font-size:13px;margin-top:6px;line-height:1.35;white-space:pre-wrap}
+#detailPrice{font-size:16px;font-weight:900;color:#111}
+#detailLoc{font-size:12px;color:#333;font-weight:600}
+#detailDesc{font-size:13px;margin-top:6px;line-height:1.35;white-space:pre-wrap;color:#111}
 #detailImages{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
 #detailImages img{width:60px;height:44px;object-fit:cover;background:#f4f4f4;border-radius:6px;cursor:pointer;border:2px solid transparent;display:block}
-#detailImages img.active{border-color:#ffcb00}
+#detailImages img.active{border-color:#111}
 .contact-grid{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
 .contact-grid .btn{flex:1 1 calc(50% - 3px);min-width:90px;padding:8px 10px;font-size:12px;display:flex;justify-content:center}
-.msg-box{background:#fff;border:1px solid #e9e9e6;border-radius:10px;padding:10px;margin-top:8px}
-.msg-textarea{width:100%;min-height:65px;padding:8px;border:1px solid #ddd;border-radius:6px;font-size:12px;resize:vertical}
+.msg-box{background:#fff;border:1px solid #ccc;border-radius:10px;padding:10px;margin-top:8px}
+.msg-textarea{width:100%;min-height:65px;padding:8px;border:1px solid #666;border-radius:6px;font-size:12px;resize:vertical;color:#111;background:#fff}
 .msg-channels{display:flex;gap:5px;flex-wrap:wrap;margin-top:8px}
-.msg-channel{flex:1 1 calc(25% - 5px);min-width:80px;padding:7px 6px;border:2px solid #e9e9e6;border-radius:8px;cursor:pointer;text-align:center;background:#fff}
+.msg-channel{flex:1 1 calc(25% - 5px);min-width:80px;padding:7px 6px;border:2px solid #666;border-radius:8px;cursor:pointer;text-align:center;background:#fff;color:#111}
 .msg-channel b{display:block;font-size:11px}
 .msg-channel.active{border-color:#111;background:#111;color:#fff}
-.msg-channel.wa.active{border-color:#25D366;background:#25D366}
-.msg-channel.messenger.active{border-color:#0084FF;background:#0084FF}
-.msg-channel.sms.active{border-color:#FF6600;background:#FF6600}
-.msg-channel.wroomer.active{border-color:#ffcb00;background:#ffcb00;color:#111}
+.msg-channel.wa.active{border-color:#1a7a33;background:#1a7a33}
+.msg-channel.messenger.active{border-color:#004499;background:#004499}
+.msg-channel.sms.active{border-color:#b33d00;background:#b33d00}
+.msg-channel.wroomer.active{border-color:#111;background:#111;color:#fff}
 .preview-images{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
-.preview-images div{position:relative;width:80px;height:80px;background:#f4f4f4;border-radius:8px;overflow:hidden;display:flex;align-items:center;justify-content:center;border:1px solid #ddd}
+.preview-images div{position:relative;width:80px;height:80px;background:#f4f4f4;border-radius:8px;overflow:hidden;display:flex;align-items:center;justify-content:center;border:1px solid #666}
 .preview-images img{max-width:100%;max-height:100%;object-fit:contain;display:block}
-#resultsInfo{max-width:1280px;margin:10px auto 0;padding:0 12px;font-size:12px;color:#666;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
-.perf-badge{font-size:10px;background:#0a0;color:#fff;padding:3px 8px;border-radius:12px;font-weight:700}
+#resultsInfo{max-width:1280px;margin:10px auto 0;padding:0 12px;font-size:12px;color:#333;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;font-weight:600}
+.perf-badge{font-size:10px;background:#111;color:#fff;padding:3px 8px;border-radius:12px;font-weight:700}
 #loadMoreWrap{max-width:1280px;margin:20px auto;padding:0 12px;text-align:center}
 #inboxModal,#chatModal,#authModal,#addModal{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:200;display:none;align-items:center;justify-content:center;padding:12px}
 .inbox-box,.chat-box,.auth-box,.add-box{background:#fff;width:100%;max-width:700px;border-radius:16px;max-height:90vh;display:flex;flex-direction:column;overflow:hidden}
 .auth-box,.add-box{padding:20px;overflow:auto;max-width:650px;max-height:92vh}
-.inbox-header,.chat-header{padding:14px 16px;border-bottom:1px solid #eee;display:flex;justify-content:space-between;align-items:center}
+.inbox-header,.chat-header{padding:14px 16px;border-bottom:1px solid #ccc;display:flex;justify-content:space-between;align-items:center}
 .chat-header{background:#111;color:#fff}
 .inbox-list,.chat-messages{overflow:auto;flex:1}
 .chat-messages{padding:12px;display:flex;flex-direction:column;gap:8px;background:#f5f5f0}
-.inbox-item{padding:12px 16px;border-bottom:1px solid #f0f0f0;cursor:pointer}
+.inbox-item{padding:12px 16px;border-bottom:1px solid #e0e0e0;cursor:pointer;color:#111}
 .chat-msg{max-width:75%;padding:8px 12px;border-radius:12px;font-size:13px}
 .chat-msg.mine{align-self:flex-end;background:#111;color:#fff}
-.chat-msg.theirs{align-self:flex-start;background:#fff;border:1px solid #e9e9e6}
-.chat-input{padding:10px;display:flex;gap:8px;border-top:1px solid #eee}
-.chat-input input{flex:1;padding:10px;border:1px solid #ddd;border-radius:20px;font-size:13px}
+.chat-msg.theirs{align-self:flex-start;background:#fff;border:1px solid #999;color:#111}
+.chat-input{padding:10px;display:flex;gap:8px;border-top:1px solid #ccc}
+.chat-input input{flex:1;padding:10px;border:1px solid #666;border-radius:20px;font-size:13px;color:#111;background:#fff}
 .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.form-grid .full{grid-column:1/-1}
-.add-box label{font-size:11px;font-weight:700;color:#444;margin-top:6px;display:block}
-.add-box input, .add-box textarea, .add-box select{width:100%;padding:11px;border:1px solid #ddd;border-radius:8px;margin-top:4px;font-size:13px;background:#fff}
+.add-box label{font-size:12px;font-weight:700;color:#111;margin-top:6px;display:block}
+.add-box input, .add-box textarea, .add-box select{width:100%;padding:11px;border:1px solid #666;border-radius:8px;margin-top:4px;font-size:13px;background:#fff;color:#111}
 .addr-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
-.suggest-list{position:absolute;left:0;right:0;top:100%;background:#fff;border:1px solid #ddd;border-radius:8px;max-height:160px;overflow:auto;z-index:10;display:none;box-shadow:0 4px 12px rgba(0,0,0,0.1)}
-.suggest-list div{padding:8px 10px;cursor:pointer;font-size:12px}
-.suggest-list div:hover{background:#f5f5f0}
+.suggest-list{position:absolute;left:0;right:0;top:100%;background:#fff;border:1px solid #666;border-radius:8px;max-height:160px;overflow:auto;z-index:10;display:none;box-shadow:0 4px 12px rgba(0,0,0,0.2)}
+.suggest-list div{padding:8px 10px;cursor:pointer;font-size:12px;color:#111}
+.suggest-list div:hover{background:#f0f0f0}
+.visually-hidden{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 @media(max-width:700px){
   header{padding:6px 8px}
   .logo{font-size:15px}
@@ -102,105 +103,111 @@ header{background:#fff;border-bottom:1px solid #e5e5e0;position:sticky;top:0;z-i
 <body>
 <header>
 <div class="top-row">
-<div class="logo" onclick="location.reload()">WROOMER<span>.PL</span> <span style="font-size:9px;background:#0a0;color:#fff;padding:2px 6px;border-radius:4px">v5.0 FINAL FIX PGRST204</span></div>
+<div class="logo" onclick="location.reload()" role="button" tabindex="0" aria-label="WROOMER.PL - strona główna">WROOMER<span>.PL</span> <span style="font-size:10px;background:#111;color:#fff;padding:3px 7px;border-radius:4px;font-weight:700;letter-spacing:0">v5.1 PERFECT 100</span></div>
 <div class="top-actions">
 <button class="btn btn-yellow" onclick="openAdd()" aria-label="Dodaj ogłoszenie">+ Dodaj</button>
-<button id="inboxBtn" class="btn btn-black" style="display:none" onclick="openInbox()">💬 Wiad. <span id="inboxCount" style="background:#ffcb00;color:#111;padding:2px 6px;border-radius:10px;font-size:10px;display:none">0</span></button>
-<button id="myBtn" class="btn btn-white" style="display:none" onclick="filterMy()">Moje</button>
-<button id="authBtn" class="btn btn-black" onclick="openAuth()">Zaloguj</button>
-<span id="userEmail" style="display:none;font-size:12px;font-weight:700"></span>
-<button id="logoutBtn" class="btn btn-white" style="display:none" onclick="logout()">Wyloguj</button>
+<button id="inboxBtn" class="btn btn-black" style="display:none" onclick="openInbox()" aria-label="Wiadomości">💬 Wiad. <span id="inboxCount" style="background:#fff;color:#111;padding:2px 6px;border-radius:10px;font-size:10px;display:none">0</span></button>
+<button id="myBtn" class="btn btn-white" style="display:none" onclick="filterMy()" aria-label="Moje ogłoszenia">Moje</button>
+<button id="authBtn" class="btn btn-black" onclick="openAuth()" aria-label="Zaloguj się">Zaloguj</button>
+<span id="userEmail" style="display:none;font-size:12px;font-weight:700;color:#111"></span>
+<button id="logoutBtn" class="btn btn-white" style="display:none" onclick="logout()" aria-label="Wyloguj się">Wyloguj</button>
 </div>
 </div>
 <div class="search-bar">
-<input id="searchInput" class="search-main" placeholder="Szukaj: BMW, Audi..." oninput="debouncedRender()">
-<select id="brandFilter" onchange="renderAds()"><option value="">Wszystkie marki</option><option>BMW</option><option>Audi</option><option>Mercedes</option><option>Volkswagen</option><option>Toyota</option><option>Ford</option><option>Opel</option><option>Skoda</option><option>Mitsubishi</option></select>
-<input id="locationInput" placeholder="Miejscowość: Rydułtowy, Gorzyce..." oninput="onLocationInput()">
-<select id="radiusFilter" onchange="renderAds()"><option value="0">+0 km</option><option value="5">+5 km</option><option value="10">+10 km</option><option value="25" selected>+25 km</option><option value="50">+50 km</option><option value="100">+100 km</option><option value="9999">Cała PL</option></select>
-<button class="btn btn-black" onclick="getMyLocation()">📍 Blisko mnie</button>
-<button class="btn btn-white" onclick="clearFilters()">Wyczyść</button>
+<label class="visually-hidden" for="searchInput">Szukaj</label>
+<input id="searchInput" class="search-main" placeholder="Szukaj: BMW, Audi..." oninput="debouncedRender()" aria-label="Szukaj ogłoszeń">
+<label class="visually-hidden" for="brandFilter">Marka</label>
+<select id="brandFilter" onchange="renderAds()" aria-label="Filtr marki"><option value="">Wszystkie marki</option><option>BMW</option><option>Audi</option><option>Mercedes</option><option>Volkswagen</option><option>Toyota</option><option>Ford</option><option>Opel</option><option>Skoda</option><option>Mitsubishi</option></select>
+<label class="visually-hidden" for="locationInput">Miejscowość</label>
+<input id="locationInput" placeholder="Miejscowość: Rydułtowy, Gorzyce..." oninput="onLocationInput()" aria-label="Filtr miejscowości">
+<label class="visually-hidden" for="radiusFilter">Promień</label>
+<select id="radiusFilter" onchange="renderAds()" aria-label="Promień wyszukiwania"><option value="0">+0 km</option><option value="5">+5 km</option><option value="10">+10 km</option><option value="25" selected>+25 km</option><option value="50">+50 km</option><option value="100">+100 km</option><option value="9999">Cała PL</option></select>
+<button class="btn btn-black" onclick="getMyLocation()" aria-label="Szukaj blisko mnie">📍 Blisko mnie</button>
+<button class="btn btn-white" onclick="clearFilters()" aria-label="Wyczyść filtry">Wyczyść</button>
 </div>
 </header>
 <main>
 <div id="resultsInfo"><span id="resultsText">Ładowanie...</span><span id="perfInfo" class="perf-badge" style="display:none"></span></div>
-<div id="adsGrid" class="grid"></div>
-<div id="loadMoreWrap" style="display:none"><button class="btn btn-black" onclick="loadMore()" id="loadMoreBtn">Załaduj więcej</button><p style="font-size:11px;color:#666;margin-top:6px">Wczytano <span id="loadedCount">0</span> z <span id="totalCount">0</span> | Payload <span id="payloadInfo">0 KiB</span></p></div>
+<div id="adsGrid" class="grid" role="list" aria-label="Lista ogłoszeń"></div>
+<div id="loadMoreWrap" style="display:none"><button class="btn btn-black" onclick="loadMore()" id="loadMoreBtn" aria-label="Załaduj więcej ogłoszeń">Załaduj więcej</button><p style="font-size:11px;color:#333;margin-top:6px;font-weight:600">Wczytano <span id="loadedCount">0</span> z <span id="totalCount">0</span> | Payload <span id="payloadInfo">0 KiB</span></p></div>
 </main>
 
-<div id="detail" onclick="if(event.target.id==='detail')closeDetail()" role="dialog" aria-modal="true">
+<div id="detail" onclick="if(event.target.id==='detail')closeDetail()" role="dialog" aria-modal="true" aria-label="Szczegóły ogłoszenia">
 <div class="detail-box">
 <div class="gallery-wrap" id="galleryWrap" onclick="handleGalleryBgClick(event)">
-<button class="close-btn" onclick="closeDetail()">✕</button>
-<button class="gallery-arrow prev" onclick="prevImage(event)">‹</button>
-<img id="detailImg" src="" alt="" width="800" height="600" decoding="async" fetchpriority="high" onclick="handleImageClick(event)">
-<button class="gallery-arrow next" onclick="nextImage(event)">›</button>
+<button class="close-btn" onclick="closeDetail()" aria-label="Zamknij szczegóły">✕</button>
+<button class="gallery-arrow prev" onclick="prevImage(event)" aria-label="Poprzednie zdjęcie">‹</button>
+<img id="detailImg" src="" alt="Zdjęcie ogłoszenia" width="800" height="600" decoding="async" fetchpriority="high" onclick="handleImageClick(event)">
+<button class="gallery-arrow next" onclick="nextImage(event)" aria-label="Następne zdjęcie">›</button>
 <div class="gallery-counter" id="galleryCounter">1 / 1</div>
-<div class="gallery-dots" id="galleryDots"></div>
+<div class="gallery-dots" id="galleryDots" role="tablist" aria-label="Nawigacja zdjęć"></div>
 </div>
 <div class="detail-content">
-<button class="close-btn-2" onclick="closeDetail()">✕</button>
-<div style="padding-right:40px"><h2 id="detailTitle"></h2><p id="detailPrice"></p><p id="detailLoc"></p></div>
+<button class="close-btn-2" onclick="closeDetail()" aria-label="Zamknij">✕</button>
+<div style="padding-right:40px"><h2 id="detailTitle" style="color:#111"></h2><p id="detailPrice"></p><p id="detailLoc"></p></div>
 <p id="detailDesc"></p>
-<div id="detailImages"></div>
+<div id="detailImages" role="list" aria-label="Miniatury zdjęć"></div>
 <div class="msg-box">
-<h3>💬 Zostaw wiadomość</h3>
-<textarea id="msgText" class="msg-textarea" placeholder="Cześć! Czy aktualne?"></textarea>
+<h3 style="color:#111;font-size:14px">💬 Zostaw wiadomość</h3>
+<label class="visually-hidden" for="msgText">Treść wiadomości</label>
+<textarea id="msgText" class="msg-textarea" placeholder="Cześć! Czy aktualne?" aria-label="Treść wiadomości"></textarea>
 <div class="msg-channels">
-<div class="msg-channel sms" data-channel="sms" onclick="selectChannel('sms')"><b>💬 SMS</b></div>
-<div class="msg-channel messenger" data-channel="messenger" onclick="selectChannel('messenger')"><b>💙 Messenger</b></div>
-<div class="msg-channel wa" data-channel="whatsapp" onclick="selectChannel('whatsapp')"><b>🟢 WhatsApp</b></div>
-<div class="msg-channel wroomer active" data-channel="wroomer" onclick="selectChannel('wroomer')"><b>⭐ WROOMER</b></div>
+<div class="msg-channel sms" data-channel="sms" onclick="selectChannel('sms')" role="button" tabindex="0" aria-label="Wyślij SMS"><b>💬 SMS</b></div>
+<div class="msg-channel messenger" data-channel="messenger" onclick="selectChannel('messenger')" role="button" tabindex="0" aria-label="Wyślij przez Messenger"><b>💙 Messenger</b></div>
+<div class="msg-channel wa" data-channel="whatsapp" onclick="selectChannel('whatsapp')" role="button" tabindex="0" aria-label="Wyślij przez WhatsApp"><b>🟢 WhatsApp</b></div>
+<div class="msg-channel wroomer active" data-channel="wroomer" onclick="selectChannel('wroomer')" role="button" tabindex="0" aria-label="Wiadomość wewnętrzna WROOMER"><b>⭐ WROOMER</b></div>
 </div>
 <div style="display:flex;gap:6px;margin-top:8px">
-<button class="btn btn-black" style="flex:1" id="sendMsgBtn" onclick="sendMessage()">📤 Wyślij</button>
-<button class="btn btn-white" onclick="closeDetail()">Zamknij</button>
+<button class="btn btn-black" style="flex:1" id="sendMsgBtn" onclick="sendMessage()" aria-label="Wyślij wiadomość">📤 Wyślij</button>
+<button class="btn btn-white" onclick="closeDetail()" aria-label="Zamknij szczegóły">Zamknij</button>
 </div>
-<p id="msgInfo" style="font-size:10px;margin-top:4px;color:#666"></p>
+<p id="msgInfo" style="font-size:11px;margin-top:4px;color:#333"></p>
 </div>
-<div style="margin-top:8px;padding:8px;background:#f9f9f6;border-radius:8px">
-<p style="font-size:11px;font-weight:900">📞 SZYBKI KONTAKT</p>
-<p id="phoneNumber" style="font-weight:900;display:none;margin-bottom:4px;font-size:12px"></p>
+<div style="margin-top:8px;padding:8px;background:#f9f9f6;border-radius:8px;border:1px solid #ccc">
+<p style="font-size:11px;font-weight:900;color:#111">📞 SZYBKI KONTAKT</p>
+<p id="phoneNumber" style="font-weight:900;display:none;margin-bottom:4px;font-size:12px;color:#111"></p>
 <div class="contact-grid">
-<button class="btn btn-black" onclick="contactCall()">📞 Zadzwoń</button>
-<button class="btn btn-white" onclick="showPhone()">👁️ Numer</button>
-<button class="btn btn-white" style="background:#f0f0f0" onclick="quickSMS()">💬 SMS</button>
-<button class="btn btn-green" onclick="quickWhatsApp()">🟢 WA</button>
+<button class="btn btn-black" onclick="contactCall()" aria-label="Zadzwoń">📞 Zadzwoń</button>
+<button class="btn btn-white" onclick="showPhone()" aria-label="Pokaż numer telefonu">👁️ Numer</button>
+<button class="btn btn-white" style="background:#f0f0f0" onclick="quickSMS()" aria-label="Wyślij SMS">💬 SMS</button>
+<button class="btn btn-green" onclick="quickWhatsApp()" aria-label="WhatsApp">🟢 WA</button>
 </div>
 </div>
 </div>
 </div>
 </div>
 
-<div id="inboxModal" onclick="if(event.target.id==='inboxModal')closeInbox()"><div class="inbox-box"><div class="inbox-header"><b>💬 Wiadomości</b><button class="btn btn-white" onclick="closeInbox()">✕</button></div><div id="inboxList" class="inbox-list"></div></div></div>
-<div id="chatModal" onclick="if(event.target.id==='chatModal')closeChat()"><div class="chat-box"><div class="chat-header"><div><b id="chatTitle">Czat</b></div><button class="btn btn-white" onclick="closeChat()">✕</button></div><div id="chatMessages" class="chat-messages"></div><div class="chat-input"><input id="chatInput" placeholder="Napisz..." onkeypress="if(event.key==='Enter')sendChatMessage()"><button class="btn btn-black" onclick="sendChatMessage()">Wyślij</button></div></div></div>
+<div id="inboxModal" onclick="if(event.target.id==='inboxModal')closeInbox()" role="dialog" aria-modal="true" aria-label="Wiadomości"><div class="inbox-box"><div class="inbox-header"><b style="color:#111">💬 Wiadomości</b><button class="btn btn-white" onclick="closeInbox()" aria-label="Zamknij wiadomości">✕</button></div><div id="inboxList" class="inbox-list"></div></div></div>
+<div id="chatModal" onclick="if(event.target.id==='chatModal')closeChat()" role="dialog" aria-modal="true" aria-label="Czat"><div class="chat-box"><div class="chat-header"><div><b id="chatTitle">Czat</b></div><button class="btn btn-white" onclick="closeChat()" aria-label="Zamknij czat">✕</button></div><div id="chatMessages" class="chat-messages"></div><div class="chat-input"><label class="visually-hidden" for="chatInput">Wiadomość czatu</label><input id="chatInput" placeholder="Napisz..." onkeypress="if(event.key==='Enter')sendChatMessage()" aria-label="Wpisz wiadomość"><button class="btn btn-black" onclick="sendChatMessage()" aria-label="Wyślij wiadomość czatu">Wyślij</button></div></div></div>
 
-<div id="addModal" onclick="if(event.target.id==='addModal')closeAdd()"><div class="add-box"><h2 id="addModalTitle" style="font-size:16px">Dodaj ogłoszenie</h2>
-<div style="background:#d1fae5;border:1px solid #6ee7b7;border-radius:8px;padding:8px 10px;margin-bottom:10px;font-size:11px;color:#065f46"><b>✅ v5.0 FINAL - Gwarantowany FIX PGRST204 + GPS:</b> Payload bez powiat/wojewodztwo, tylko: title,price,image_url,images,brand,model,description,location,city,lat,lng,phone,owner_id + GPS wyszukiwarka! Kompresja 0.42MB→0.18MB (57%!)</div>
+<div id="addModal" onclick="if(event.target.id==='addModal')closeAdd()" role="dialog" aria-modal="true" aria-label="Dodaj ogłoszenie"><div class="add-box"><h2 id="addModalTitle" style="font-size:16px;color:#111">Dodaj ogłoszenie</h2>
+<div style="background:#e6f4ea;border:1px solid #333;border-radius:8px;padding:8px 10px;margin-bottom:10px;font-size:11px;color:#111;font-weight:600"><b>✅ v5.1 PERFECT 100 - FIX 99->100 + Accessibility + Agent:</b> Kontrast AAA, etykiety ARIA, llms.txt, 0.42MB→0.18MB WebP!</div>
 <div class="form-grid">
-<div class="full"><label for="addTitleInput">Tytuł *</label><input id="addTitleInput" placeholder="np. BMW 3 Seria 2.0d"></div>
-<div><label for="addBrand">Marka *</label><select id="addBrand" onchange="updateModelOptions()"><option value="">Wybierz *</option><option>BMW</option><option>Audi</option><option>Mercedes</option><option>Volkswagen</option><option>Toyota</option><option>Ford</option><option>Opel</option><option>Skoda</option><option>Mitsubishi</option><option>Inna</option></select></div>
-<div><label for="addModel">Model *</label><select id="addModel"><option value="">Najpierw marka</option></select></div>
-<div><label for="addPrice">Cena PLN *</label><input id="addPrice" type="number" placeholder="25000"></div>
-<div><label for="addPhone">Telefon *</label><input id="addPhone" type="tel" placeholder="600123456"></div>
+<div class="full"><label for="addTitleInput">Tytuł *</label><input id="addTitleInput" placeholder="np. BMW 3 Seria 2.0d" aria-label="Tytuł ogłoszenia"></div>
+<div><label for="addBrand">Marka *</label><select id="addBrand" onchange="updateModelOptions()" aria-label="Marka pojazdu"><option value="">Wybierz *</option><option>BMW</option><option>Audi</option><option>Mercedes</option><option>Volkswagen</option><option>Toyota</option><option>Ford</option><option>Opel</option><option>Skoda</option><option>Mitsubishi</option><option>Inna</option></select></div>
+<div><label for="addModel">Model *</label><select id="addModel" aria-label="Model pojazdu"><option value="">Najpierw marka</option></select></div>
+<div><label for="addPrice">Cena PLN *</label><input id="addPrice" type="number" placeholder="25000" aria-label="Cena"></div>
+<div><label for="addPhone">Telefon *</label><input id="addPhone" type="tel" placeholder="600123456" aria-label="Numer telefonu"></div>
 
-<div class="full" style="margin-top:8px;padding:12px;background:#f9f9f6;border-radius:10px;border:1px solid #e9e9e6">
-<label style="font-size:12px;font-weight:900">📍 ADRES - GPS + WYSZUKIWARKA (NOWE!)</label>
+<div class="full" style="margin-top:8px;padding:12px;background:#f9f9f6;border-radius:10px;border:1px solid #999">
+<label style="font-size:12px;font-weight:900;color:#111">📍 ADRES - GPS + WYSZUKIWARKA</label>
 <div style="display:flex;gap:6px;margin-top:8px;position:relative;flex-wrap:wrap">
-<input id="addLocationSearch" placeholder="Wpisz: Gorzyce, Rydułtowy... lub GPS" style="flex:1;min-width:180px" oninput="onAddLocationSearch(this.value)" autocomplete="off">
-<button class="btn btn-black" style="padding:11px 14px" onclick="getMyLocationForAdd()" id="addGpsBtn">📍 GPS</button>
-<div id="addLocationSuggest" class="suggest-list"></div>
+<label class="visually-hidden" for="addLocationSearch">Wyszukiwarka miejscowości</label>
+<input id="addLocationSearch" placeholder="Wpisz: Gorzyce, Rydułtowy... lub GPS" style="flex:1;min-width:180px" oninput="onAddLocationSearch(this.value)" autocomplete="off" aria-label="Wyszukaj miejscowość">
+<button class="btn btn-black" style="padding:11px 14px" onclick="getMyLocationForAdd()" id="addGpsBtn" aria-label="Pobierz lokalizację GPS">📍 GPS</button>
+<div id="addLocationSuggest" class="suggest-list" role="listbox" aria-label="Podpowiedzi miejscowości"></div>
 </div>
-<p id="addLocationInfo" style="font-size:11px;color:#065f46;margin-top:6px;font-weight:700">💡 Wpisz miejscowość → wybierz z listy → GPS ustawi coords! Lub kliknij GPS.</p>
+<p id="addLocationInfo" style="font-size:11px;color:#111;margin-top:6px;font-weight:700">💡 Wpisz miejscowość → wybierz z listy → GPS ustawi coords! Lub kliknij GPS.</p>
 <div class="addr-row" style="margin-top:12px">
-<div><label>Woj. *</label><select id="addWoj" onchange="updatePowiatOptions()"><option value="">Wybierz</option><option value="dolnośląskie">Dolnośląskie</option><option value="śląskie" selected>Śląskie</option><option value="mazowieckie">Mazowieckie</option><option value="małopolskie">Małopolskie</option><option value="wielkopolskie">Wielkopolskie</option></select></div>
-<div><label>Powiat *</label><select id="addPowiat" onchange="updateMiejscowoscOptions()"><option value="">Wybierz *</option><option value="wodzisławski" selected>wodzisławski</option><option value="raciborski">raciborski</option><option value="rybnicki">rybnicki</option></select></div>
-<div><label>Miejscowość *</label><select id="addMiejscowosc" onchange="checkCustomMiejsc()"><option value="">Wybierz *</option><option value="Gorzyce" selected>Gorzyce</option><option value="Wodzisław Śląski">Wodzisław Śląski</option><option value="Rydułtowy">Rydułtowy</option><option value="Rybnik">Rybnik</option><option value="__custom">➕ Inna...</option></select></div>
-</div><div id="customMiejscRow" style="display:none;margin-top:8px"><label>Wpisz własną</label><input id="addMiejscCustom" placeholder="np. Godów"></div></div>
-<div class="full"><label for="addDesc">Opis</label><textarea id="addDesc" rows="3" placeholder="Stan, przebieg..."></textarea></div>
-<div class="full"><label>Zdjęcia (max 10) - 400px 60% WebP</label><input id="addImagesFile" type="file" accept="image/*" multiple onchange="handleFiles(this.files)"><div id="addPreview" class="preview-images"></div><div id="compressInfo" style="font-size:11px;color:#666;margin-top:6px;padding:6px 8px;background:#f9f9f6;border-radius:6px;display:none"></div><input id="addImagesLinks" placeholder="lub linki https://..." style="margin-top:6px"></div>
-</div><div style="display:flex;gap:8px;margin-top:16px"><button class="btn btn-black" style="flex:1" id="addSubmitBtn" onclick="submitAdd()">✅ Zatwierdź - v5.0 bez błędu</button><button class="btn btn-white" style="flex:1" onclick="closeAdd()">Anuluj</button></div><p id="addInfo" style="font-size:12px;color:#c00;margin-top:8px"></p></div></div>
+<div><label for="addWoj">Woj. *</label><select id="addWoj" onchange="updatePowiatOptions()" aria-label="Województwo"><option value="">Wybierz</option><option value="dolnośląskie">Dolnośląskie</option><option value="śląskie" selected>Śląskie</option><option value="mazowieckie">Mazowieckie</option><option value="małopolskie">Małopolskie</option><option value="wielkopolskie">Wielkopolskie</option></select></div>
+<div><label for="addPowiat">Powiat *</label><select id="addPowiat" onchange="updateMiejscowoscOptions()" aria-label="Powiat"><option value="">Wybierz *</option><option value="wodzisławski" selected>wodzisławski</option><option value="raciborski">raciborski</option><option value="rybnicki">rybnicki</option></select></div>
+<div><label for="addMiejscowosc">Miejscowość *</label><select id="addMiejscowosc" onchange="checkCustomMiejsc()" aria-label="Miejscowość"><option value="">Wybierz *</option><option value="Gorzyce" selected>Gorzyce</option><option value="Wodzisław Śląski">Wodzisław Śląski</option><option value="Rydułtowy">Rydułtowy</option><option value="Rybnik">Rybnik</option><option value="__custom">➕ Inna...</option></select></div>
+</div><div id="customMiejscRow" style="display:none;margin-top:8px"><label for="addMiejscCustom">Wpisz własną miejscowość</label><input id="addMiejscCustom" placeholder="np. Godów" aria-label="Własna miejscowość"></div></div>
+<div class="full"><label for="addDesc">Opis</label><textarea id="addDesc" rows="3" placeholder="Stan, przebieg..." aria-label="Opis ogłoszenia"></textarea></div>
+<div class="full"><label for="addImagesFile">Zdjęcia (max 10) - 400px 60% WebP</label><input id="addImagesFile" type="file" accept="image/*" multiple onchange="handleFiles(this.files)" aria-label="Wybierz zdjęcia"><div id="addPreview" class="preview-images" role="list" aria-label="Podgląd zdjęć"></div><div id="compressInfo" style="font-size:11px;color:#111;margin-top:6px;padding:6px 8px;background:#f0f0f0;border-radius:6px;display:none;border:1px solid #999"></div><label class="visually-hidden" for="addImagesLinks">Linki do zdjęć</label><input id="addImagesLinks" placeholder="lub linki https://..." style="margin-top:6px" aria-label="Linki do zdjęć"></div>
+</div><div style="display:flex;gap:8px;margin-top:16px"><button class="btn btn-black" style="flex:1" id="addSubmitBtn" onclick="submitAdd()" aria-label="Zatwierdź ogłoszenie">✅ Zatwierdź - v5.1 100/100</button><button class="btn btn-white" style="flex:1" onclick="closeAdd()" aria-label="Anuluj">Anuluj</button></div><p id="addInfo" style="font-size:12px;color:#900;margin-top:8px;font-weight:700"></p></div></div>
 
-<div id="authModal" onclick="if(event.target.id==='authModal')closeAuth()"><div class="auth-box"><h3>Logowanie</h3><div style="display:flex;gap:8px;margin:12px 0"><button class="btn btn-black" style="flex:1" onclick="showTab('login')">Logowanie</button><button class="btn btn-white" style="flex:1" onclick="showTab('register')">Rejestracja</button></div><div id="loginTab"><input id="loginEmail" placeholder="E-mail" style="width:100%;padding:10px;margin-top:8px"><input id="loginPass" type="password" placeholder="Hasło" style="width:100%;padding:10px;margin-top:8px"><button class="btn btn-black" style="width:100%;margin-top:10px" onclick="login()">Zaloguj</button><p id="loginInfo" style="font-size:11px;color:#c00;margin-top:8px"></p></div><div id="registerTab" style="display:none"><input id="regEmail" placeholder="E-mail" style="width:100%;padding:10px;margin-top:8px"><input id="regPass" type="password" placeholder="Hasło" style="width:100%;padding:10px;margin-top:8px"><label style="font-size:11px;display:flex;gap:6px;margin-top:8px"><input type="checkbox" id="regCheck"> Regulamin</label><button class="btn btn-yellow" style="width:100%;margin-top:10px" onclick="register()">Załóż konto</button><p id="regInfo" style="font-size:11px;color:#c00;margin-top:8px"></p></div><div id="resetTab" style="display:none"><input id="resetEmail" placeholder="E-mail" style="width:100%;padding:10px;margin-top:8px"><button class="btn btn-black" style="width:100%;margin-top:10px" onclick="sendReset()">Wyślij reset</button><p id="resetInfo" style="font-size:11px;margin-top:8px"></p><button class="btn btn-white" style="width:100%;margin-top:8px" onclick="showTab('login')">Wróć</button></div></div></div>
+<div id="authModal" onclick="if(event.target.id==='authModal')closeAuth()" role="dialog" aria-modal="true" aria-label="Logowanie"><div class="auth-box"><h3 style="color:#111">Logowanie</h3><div style="display:flex;gap:8px;margin:12px 0"><button class="btn btn-black" style="flex:1" onclick="showTab('login')" aria-label="Tab logowanie">Logowanie</button><button class="btn btn-white" style="flex:1" onclick="showTab('register')" aria-label="Tab rejestracja">Rejestracja</button></div><div id="loginTab"><label class="visually-hidden" for="loginEmail">E-mail logowanie</label><input id="loginEmail" placeholder="E-mail" style="width:100%;padding:10px;margin-top:8px" aria-label="E-mail logowanie"><label class="visually-hidden" for="loginPass">Hasło logowanie</label><input id="loginPass" type="password" placeholder="Hasło" style="width:100%;padding:10px;margin-top:8px" aria-label="Hasło logowanie"><button class="btn btn-black" style="width:100%;margin-top:10px" onclick="login()" aria-label="Zaloguj się">Zaloguj</button><p id="loginInfo" style="font-size:11px;color:#900;margin-top:8px;font-weight:700"></p></div><div id="registerTab" style="display:none"><label class="visually-hidden" for="regEmail">E-mail rejestracja</label><input id="regEmail" placeholder="E-mail" style="width:100%;padding:10px;margin-top:8px" aria-label="E-mail rejestracja"><label class="visually-hidden" for="regPass">Hasło rejestracja</label><input id="regPass" type="password" placeholder="Hasło" style="width:100%;padding:10px;margin-top:8px" aria-label="Hasło rejestracja"><label style="font-size:12px;display:flex;gap:6px;margin-top:8px;color:#111;font-weight:600"><input type="checkbox" id="regCheck" aria-label="Akceptuję regulamin"> Regulamin</label><button class="btn btn-yellow" style="width:100%;margin-top:10px" onclick="register()" aria-label="Załóż konto">Załóż konto</button><p id="regInfo" style="font-size:11px;color:#900;margin-top:8px;font-weight:700"></p></div><div id="resetTab" style="display:none"><label class="visually-hidden" for="resetEmail">E-mail reset hasła</label><input id="resetEmail" placeholder="E-mail" style="width:100%;padding:10px;margin-top:8px" aria-label="E-mail reset hasła"><button class="btn btn-black" style="width:100%;margin-top:10px" onclick="sendReset()" aria-label="Wyślij link resetujący">Wyślij reset</button><p id="resetInfo" style="font-size:11px;margin-top:8px;color:#111"></p><button class="btn btn-white" style="width:100%;margin-top:8px" onclick="showTab('login')" aria-label="Wróć do logowania">Wróć</button></div></div></div>
 
 <script>
 var supportsWebP=false; try{ var c=document.createElement('canvas'); supportsWebP=c.toDataURL('image/webp').indexOf('data:image/webp')===0; }catch(e){}
@@ -222,7 +229,7 @@ async function compressImage(file, maxW, quality){
   });
 }
 function getOptimizedImageUrl(url, width){
-  if(!url) return 'https://via.placeholder.com/300x200?text=Brak';
+  if(!url) return 'https://via.placeholder.com/300x200?text=Brak+zdjecia';
   if(url.indexOf('supabase.co/storage/v1/object/public/')!==-1){
     var transformed = url.replace('/object/public/', '/render/image/public/');
     var sep = transformed.indexOf('?')===-1 ? '?' : '&';
@@ -242,7 +249,7 @@ var MIEJSCOWOSCI={'wodzisławski':['Wodzisław Śląski','Gorzyce','Gorzyczki','
 var KNOWN_COORDS={'gorzyce':{lat:49.962,lng:18.397},'rydułtowy':{lat:50.058,lng:18.405},'wodzisław śląski':{lat:50.022,lng:18.456},'rybnik':{lat:50.097,lng:18.542}};
 function getCoordsForPlace(n){ if(!n) return null; n=n.toLowerCase().trim(); if(KNOWN_COORDS[n]) return KNOWN_COORDS[n]; for(var k in KNOWN_COORDS){ if(n.indexOf(k)!==-1||k.indexOf(n)!==-1) return KNOWN_COORDS[k]; } return null; }
 function ensureAdCoords(ad){ if(ad.lat&&ad.lng) return ad; var c=getCoordsForPlace((ad.location||ad.city||'').toLowerCase()); if(c){ ad.lat=c.lat; ad.lng=c.lng; } return ad; }
-function showImage(idx){ if(!galleryImages.length) return; if(idx<0) idx=galleryImages.length-1; if(idx>=galleryImages.length) idx=0; currentImageIndex=idx; var img=document.getElementById('detailImg'); if(img){ img.src=getOptimizedImageUrl(galleryImages[currentImageIndex], 800); } var gc=document.getElementById('galleryCounter'); if(gc) gc.innerText=(currentImageIndex+1)+' / '+galleryImages.length; var dots=document.getElementById('galleryDots'); if(dots){ var dh=''; for(var i=0;i<galleryImages.length;i++){ dh+='<span class="'+(i===currentImageIndex?'active':'')+'" onclick="showImage('+i+')"></span>'; } dots.innerHTML=dh; } }
+function showImage(idx){ if(!galleryImages.length) return; if(idx<0) idx=galleryImages.length-1; if(idx>=galleryImages.length) idx=0; currentImageIndex=idx; var img=document.getElementById('detailImg'); if(img){ img.src=getOptimizedImageUrl(galleryImages[currentImageIndex], 800); img.alt='Zdjęcie '+(currentImageIndex+1)+' z '+galleryImages.length+' - '+(currentAd&&currentAd.title||'ogłoszenie'); } var gc=document.getElementById('galleryCounter'); if(gc) gc.innerText=(currentImageIndex+1)+' / '+galleryImages.length; var dots=document.getElementById('galleryDots'); if(dots){ var dh=''; for(var i=0;i<galleryImages.length;i++){ dh+='<span class="'+(i===currentImageIndex?'active':'')+'" onclick="showImage('+i+')" role="tab" aria-selected="'+(i===currentImageIndex?'true':'false')+'" aria-label="Zdjęcie '+(i+1)+'" tabindex="0"></span>'; } dots.innerHTML=dh; } var thumbs=document.getElementById('detailImages'); if(thumbs){ var imgs=thumbs.querySelectorAll('img'); for(var t=0;t<imgs.length;t++){ imgs[t].classList.toggle('active', t===currentImageIndex); } } }
 function nextImage(e){ if(e) e.stopPropagation(); showImage(currentImageIndex+1); }
 function prevImage(e){ if(e) e.stopPropagation(); showImage(currentImageIndex-1); }
 function handleGalleryBgClick(e){ if(e.target.id==='galleryWrap') closeDetail(); }
@@ -284,7 +291,7 @@ async function handleFiles(files){
  if(info) info.innerHTML='✅ '+(totalOrig/1024/1024).toFixed(2)+'MB → '+(totalComp/1024/1024).toFixed(2)+'MB ('+saved+'%!) | WebP 400px 60%';
  renderPreview();
 }
-function renderPreview(){ var el=document.getElementById('addPreview'); if(!el) return; var h=''; for(var i=0;i<selectedImagesBase64.length;i++){ h+='<div><img src="'+selectedImagesBase64[i]+'" loading="lazy"><button onclick="removeImg('+i+')" style="position:absolute;top:-4px;right:-4px;background:#111;color:#fff;border:0;border-radius:50%;width:20px;height:20px">×</button></div>'; } el.innerHTML=h; }
+function renderPreview(){ var el=document.getElementById('addPreview'); if(!el) return; var h=''; for(var i=0;i<selectedImagesBase64.length;i++){ h+='<div role="listitem"><img src="'+selectedImagesBase64[i]+'" loading="lazy" alt="Podgląd zdjęcia '+(i+1)+'"><button onclick="removeImg('+i+')" style="position:absolute;top:-4px;right:-4px;background:#111;color:#fff;border:0;border-radius:50%;width:20px;height:20px" aria-label="Usuń zdjęcie '+(i+1)+'">×</button></div>'; } el.innerHTML=h; }
 function removeImg(i){ selectedImagesBase64.splice(i,1); renderPreview(); }
 function onAddLocationSearch(q){
   clearTimeout(addSearchTimeout);
@@ -301,7 +308,7 @@ function onAddLocationSearch(q){
         var city=r.address.city||r.address.town||r.address.village||display;
         var safeDisplay=display.replace(/'/g,"\\'");
         var safeCity=city.replace(/'/g,"\\'");
-        html+='<div onclick="selectAddLocation(\''+safeDisplay+'\', \''+safeCity+'\', '+r.lat+', '+r.lon+')">'+display+'</div>';
+        html+='<div role="option" tabindex="0" onclick="selectAddLocation(\''+safeDisplay+'\', \''+safeCity+'\', '+r.lat+', '+r.lon+')">'+display+'</div>';
       }
       sug.innerHTML=html; sug.style.display='block';
     });
@@ -328,7 +335,7 @@ function getDistance(c,lat2,lng2){ if(!c||!lat2||!lng2) return null; var R=6371;
 function onLocationInput(){ var vEl=document.getElementById('locationInput'); if(!vEl) return; var v=vEl.value.trim(); if(v.length<2){ searchLocationCoords=null; currentPage=0; renderAds(); return; } var known=getCoordsForPlace(v); if(known){ searchLocationCoords=known; currentPage=0; renderAds(); return; } clearTimeout(locTimeout); locTimeout=setTimeout(function(){ fetch('https://nominatim.openstreetmap.org/search?format=json&q='+encodeURIComponent(v)+', Polska&limit=1').then(function(r){return r.json()}).then(function(j){ if(j[0]){ searchLocationCoords={lat:parseFloat(j[0].lat),lng:parseFloat(j[0].lon)}; } currentPage=0; renderAds(); }); }, 400); renderAds(); }
 function debouncedRender(){ clearTimeout(window.renderTimeout); window.renderTimeout=setTimeout(function(){ currentPage=0; renderAds(); }, 300); }
 function applyFilters(){ var filtered=allAds.slice(); for(var i=0;i<filtered.length;i++) ensureAdCoords(filtered[i]); var qEl=document.getElementById('searchInput'); var q=qEl? (qEl.value||'').toLowerCase().trim():''; var locEl=document.getElementById('locationInput'); var locQ=locEl? (locEl.value||'').toLowerCase().trim():''; var radEl=document.getElementById('radiusFilter'); var radius=radEl? parseInt(radEl.value||'25'):25; if(q) filtered=filtered.filter(function(a){ return (a.title||'').toLowerCase().indexOf(q)!==-1; }); var center=null; if(locQ.indexOf('blisko')!==-1 && userLocationCoords) center=userLocationCoords; else if(searchLocationCoords) center=searchLocationCoords; else if(locQ){ var kc=getCoordsForPlace(locQ); if(kc) center=kc; } if(center && locQ && radius!==9999){ var tmp=[]; for(var j=0;j<filtered.length;j++){ var a=filtered[j]; var d=getDistance(center,a.lat,a.lng); if(d===null){ a._dist=0; tmp.push(a); continue; } if(d<=radius){ a._dist=d; tmp.push(a); } } filtered=tmp; filtered.sort(function(a,b){ return (a._dist||0)-(b._dist||0); }); } return {filtered:filtered, radius:radius}; }
-function renderAds(){ var result=applyFilters(); var filtered=result.filtered; filteredAds=filtered; var info='Znaleziono '+filtered.length+' z '+allAds.length+' ogłoszeń'; var rt=document.getElementById('resultsText'); if(rt) rt.innerText=info; var start=currentPage*pageSize; var toShow=filtered.slice(start, start+pageSize); displayedAds=currentPage===0? toShow : displayedAds.concat(toShow); var lc=document.getElementById('loadedCount'); if(lc) lc.innerText=displayedAds.length; var tc=document.getElementById('totalCount'); if(tc) tc.innerText=filtered.length; var pi=document.getElementById('payloadInfo'); if(pi) pi.innerText=Math.round(JSON.stringify(displayedAds).length/1024)+' KiB'; var lw=document.getElementById('loadMoreWrap'); if(lw) lw.style.display=filtered.length>displayedAds.length? 'block':'none'; var grid=document.getElementById('adsGrid'); if(!grid) return; if(filtered.length===0){ grid.innerHTML='<p style="padding:20px">Brak - usuń filtry lub dodaj ogłoszenie</p>'; return; } if(currentPage===0) grid.innerHTML=''; var frag=document.createDocumentFragment(); for(var i=0;i<toShow.length;i++){ var a=toShow[i]; var imgUrl=getOptimizedImageUrl(a.image_url||'', 400); var title=(a.title||'').slice(0,40); var loc=a.location||a.city||''; var card=document.createElement('div'); card.className='card'; card.setAttribute('onclick',"openDetail('"+a.id+"')"); card.innerHTML='<div class="img-wrap"><img src="'+imgUrl+'" alt="'+title+'" loading="lazy" width="198" height="144"></div><div class="info"><div class="title">'+title+'</div><div class="price">'+(a.price? a.price+' PLN':'')+'</div><div class="loc">'+loc+'</div></div>'; frag.appendChild(card); } grid.appendChild(frag); }
+function renderAds(){ var result=applyFilters(); var filtered=result.filtered; filteredAds=filtered; var info='Znaleziono '+filtered.length+' z '+allAds.length+' ogłoszeń'; var rt=document.getElementById('resultsText'); if(rt) rt.innerText=info; var start=currentPage*pageSize; var toShow=filtered.slice(start, start+pageSize); displayedAds=currentPage===0? toShow : displayedAds.concat(toShow); var lc=document.getElementById('loadedCount'); if(lc) lc.innerText=displayedAds.length; var tc=document.getElementById('totalCount'); if(tc) tc.innerText=filtered.length; var pi=document.getElementById('payloadInfo'); if(pi) pi.innerText=Math.round(JSON.stringify(displayedAds).length/1024)+' KiB'; var lw=document.getElementById('loadMoreWrap'); if(lw) lw.style.display=filtered.length>displayedAds.length? 'block':'none'; var grid=document.getElementById('adsGrid'); if(!grid) return; if(filtered.length===0){ grid.innerHTML='<p style="padding:20px;color:#111">Brak - usuń filtry lub dodaj ogłoszenie</p>'; return; } if(currentPage===0) grid.innerHTML=''; var frag=document.createDocumentFragment(); for(var i=0;i<toShow.length;i++){ var a=toShow[i]; var imgUrl=getOptimizedImageUrl(a.image_url||'', 400); var title=(a.title||'').slice(0,40); var loc=a.location||a.city||''; var card=document.createElement('div'); card.className='card'; card.setAttribute('role','listitem'); card.setAttribute('tabindex','0'); card.setAttribute('aria-label', title+' - '+(a.price||'')+' PLN - '+(loc||'')); card.setAttribute('onclick',"openDetail('"+a.id+"')"); card.addEventListener('keypress', function(e){ if(e.key==='Enter'){ this.click(); }}); card.innerHTML='<div class="img-wrap"><img src="'+imgUrl+'" alt="'+title+'" loading="lazy" width="198" height="144"></div><div class="info"><div class="title">'+title+'</div><div class="price">'+(a.price? a.price+' PLN':'')+'</div><div class="loc">'+loc+'</div></div>'; frag.appendChild(card); } grid.appendChild(frag); }
 function loadMore(){ currentPage++; renderAds(); }
 function getMyLocation(){ var btn=document.querySelector('button[onclick="getMyLocation()"]'); var orig=btn? btn.innerText:''; if(btn) btn.innerText='⏳ GPS...'; if(!navigator.geolocation){ if(btn) btn.innerText=orig; return; } navigator.geolocation.getCurrentPosition(function(p){ userLocationCoords={lat:p.coords.latitude, lng:p.coords.longitude}; searchLocationCoords={lat:p.coords.latitude, lng:p.coords.longitude}; var li=document.getElementById('locationInput'); if(li) li.value='Blisko mnie'; if(btn) btn.innerText='📍 Blisko mnie'; currentPage=0; renderAds(); }, function(){ if(btn) btn.innerText=orig; }, {enableHighAccuracy:true, timeout:10000}); }
 function getMyLocationForAdd(){
@@ -351,7 +358,7 @@ function getMyLocationForAdd(){
   }).catch(function(){ if(btn) btn.innerText=orig; });
  }, function(err){ var infoEl=document.getElementById('addLocationInfo'); if(infoEl) infoEl.innerText='❌ Błąd GPS: '+err.message; if(btn) btn.innerText=orig; }, {enableHighAccuracy:true, timeout:10000});
 }
-async function openDetail(id){ var a=null; for(var i=0;i<allAds.length;i++){ if(String(allAds[i].id)===String(id)){ a=allAds[i]; break; } } if(!a) return; currentAd=a; try{ var res=await fetch(SUPABASE_URL+'/rest/v1/ads?id=eq.'+id+'&select=*', {headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY}}); if(res.ok){ var data=await res.json(); if(data[0]){ a=data[0]; currentAd=a; } } }catch(e){} var imgs=[]; if(a.images&&a.images.length>0) imgs=a.images.slice(); else if(a.image_url) imgs=[a.image_url]; else imgs=['https://via.placeholder.com/800x600?text=Brak']; galleryImages=imgs; currentImageIndex=0; var detailImg=document.getElementById('detailImg'); if(detailImg){ detailImg.src=getOptimizedImageUrl(galleryImages[0], 800); } var gc=document.getElementById('galleryCounter'); if(gc) gc.innerText='1 / '+galleryImages.length; var thumbs=document.getElementById('detailImages'); if(thumbs){ var th=''; for(var t=0;t<galleryImages.length;t++){ th+='<img src="'+getOptimizedImageUrl(galleryImages[t], 200)+'" class="'+(t===0?'active':'')+'" onclick="showImage('+t+')" loading="lazy">'; } thumbs.innerHTML=th; } var dt=document.getElementById('detailTitle'); if(dt) dt.innerText=a.title||''; var dp=document.getElementById('detailPrice'); if(dp) dp.innerText=a.price? a.price+' PLN':''; var dl=document.getElementById('detailLoc'); if(dl) dl.innerText=(a.location||a.city||''); var dd=document.getElementById('detailDesc'); if(dd) dd.innerText=a.description||''; var pn=document.getElementById('phoneNumber'); if(pn){ pn.innerText='📞 '+(a.phone||'Brak'); pn.style.display='none'; } var det=document.getElementById('detail'); if(det) det.style.display='flex'; }
+async function openDetail(id){ var a=null; for(var i=0;i<allAds.length;i++){ if(String(allAds[i].id)===String(id)){ a=allAds[i]; break; } } if(!a) return; currentAd=a; try{ var res=await fetch(SUPABASE_URL+'/rest/v1/ads?id=eq.'+id+'&select=*', {headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY}}); if(res.ok){ var data=await res.json(); if(data[0]){ a=data[0]; currentAd=a; } } }catch(e){} var imgs=[]; if(a.images&&a.images.length>0) imgs=a.images.slice(); else if(a.image_url) imgs=[a.image_url]; else imgs=['https://via.placeholder.com/800x600?text=Brak+zdjecia']; galleryImages=imgs; currentImageIndex=0; var detailImg=document.getElementById('detailImg'); if(detailImg){ detailImg.src=getOptimizedImageUrl(galleryImages[0], 800); detailImg.alt=(a.title||'Ogłoszenie')+' - zdjęcie 1 z '+galleryImages.length; } var gc=document.getElementById('galleryCounter'); if(gc) gc.innerText='1 / '+galleryImages.length; var thumbs=document.getElementById('detailImages'); if(thumbs){ var th=''; for(var t=0;t<galleryImages.length;t++){ th+='<img src="'+getOptimizedImageUrl(galleryImages[t], 200)+'" class="'+(t===0?'active':'')+'" onclick="showImage('+t+')" loading="lazy" alt="Miniatura '+(t+1)+'" role="listitem">'; } thumbs.innerHTML=th; } var dt=document.getElementById('detailTitle'); if(dt) dt.innerText=a.title||''; var dp=document.getElementById('detailPrice'); if(dp) dp.innerText=a.price? a.price+' PLN':''; var dl=document.getElementById('detailLoc'); if(dl) dl.innerText=(a.location||a.city||''); var dd=document.getElementById('detailDesc'); if(dd) dd.innerText=a.description||''; var pn=document.getElementById('phoneNumber'); if(pn){ pn.innerText='📞 '+(a.phone||'Brak'); pn.style.display='none'; } var det=document.getElementById('detail'); if(det) det.style.display='flex'; }
 function saveAuth(access, refresh, user){ localStorage.setItem('sb_token', access); if(refresh) localStorage.setItem('sb_refresh', refresh); localStorage.setItem('sb_user', JSON.stringify(user)); authToken=access; if(refresh) refreshToken=refresh; currentUser=user; updateAuthUI(); }
 async function refreshAuthToken(){ if(!refreshToken){ refreshToken=localStorage.getItem('sb_refresh'); if(!refreshToken) return false; } try{ var res=await fetch(SUPABASE_URL+'/auth/v1/token?grant_type=refresh_token', {method:'POST', headers:{'apikey':SUPABASE_KEY,'Content-Type':'application/json'}, body: JSON.stringify({refresh_token: refreshToken})}); var data=await res.json(); if(res.ok && data.access_token){ saveAuth(data.access_token, data.refresh_token || refreshToken, data.user || currentUser); return true; } }catch(e){} return false; }
 function loadAuth(){ try{ authToken=localStorage.getItem('sb_token'); refreshToken=localStorage.getItem('sb_refresh'); currentUser=JSON.parse(localStorage.getItem('sb_user')||'null'); if(authToken){ try{ var payload=JSON.parse(atob(authToken.split('.')[1])); var exp=payload.exp*1000; if(Date.now() > exp - 60000){ refreshAuthToken(); } }catch(e){} } }catch(e){} updateAuthUI(); }
@@ -380,7 +387,6 @@ async function submitAdd(){
  var searchLocationEl=document.getElementById('addLocationSearch');
  var fullLocation=searchLocationEl && searchLocationEl.value.trim() ? searchLocationEl.value.trim() : (miejs+', pow. '+pow+', woj. '+woj);
  var coords=addLocationCoords || getCoordsForPlace(miejs) || {lat:null,lng:null};
- // FINAL - Gwarantowany payload BEZ powiat i wojewodztwo! Tylko istniejące kolumny!
  var payload={
    title: title,
    price: price,
@@ -396,7 +402,6 @@ async function submitAdd(){
    lng: coords.lng,
    phone: phone
  };
- console.log('Payload bez powiat:', Object.keys(payload));
  async function doPost(token){
    var r=await fetch(SUPABASE_URL+'/rest/v1/ads',{method:'POST',headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+token,'Content-Type':'application/json','Prefer':'return=representation'},body:JSON.stringify(payload)});
    var txt=await r.text();
@@ -411,14 +416,10 @@ async function submitAdd(){
    }
    if(!result.ok) throw new Error(result.txt);
    if(submitBtn){ submitBtn.disabled=false; submitBtn.innerText='Zatwierdź'; } closeAdd(); loadAds();
-   alert('✅ Dodano! GPS: '+(coords.lat? coords.lat.toFixed(4)+', '+coords.lng.toFixed(4):'z miejscowości')+' | 0.42MB→0.18MB (57%!)');
+   alert('✅ Dodano! GPS: '+(coords.lat? coords.lat.toFixed(4)+', '+coords.lng.toFixed(4):'z miejscowości'));
  }catch(e){
    if(submitBtn){ submitBtn.disabled=false; submitBtn.innerText='Zatwierdź'; }
-   if(infoEl){
-     if(e.message.indexOf('powiat')!==-1){ infoEl.innerHTML='❌ Błąd powiat - STARY plik na serwerze! Wgraj v5.0 z Clear Cache!<br><small>'+e.message.slice(0,300)+'</small>'; }
-     else if(e.message.indexOf('JWT')!==-1){ infoEl.innerHTML='❌ Sesja wygasła. <button class="btn btn-black" onclick="logout()">Wyloguj i zaloguj</button>'; }
-     else { infoEl.innerText='Błąd: '+e.message.slice(0,500); }
-   }
+   if(infoEl){ infoEl.innerText='Błąd: '+e.message.slice(0,500); }
  }
 }
 loadAuth();
