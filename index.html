@@ -185,114 +185,19 @@ header{background:#fff;border-bottom:1px solid #e5e5e0;position:sticky;top:0;z-i
 }
 
 
-@media(min-width:901px){
-  body{background:#f5f4ef}
-  header{background:#fff;border-bottom:1px solid #e8e6e0;box-shadow:0 2px 20px rgba(0,0,0,0.04);padding:14px 24px !important;position:sticky;top:0;z-index:50}
-  .top-row{max-width:1280px;margin:0 auto;justify-content:flex-start !important;gap:20px}
-  .logo{font-size:28px !important}
-  .logo span:first-child{width:38px !important;height:38px !important;font-size:22px !important;border-radius:11px !important}
-  .top-actions{gap:10px !important}
-  .top-actions .btn{padding:10px 18px !important;font-size:14px !important;border-radius:12px !important;font-weight:700 !important;box-shadow:0 2px 8px rgba(0,0,0,0.08)}
-  .top-actions .btn-yellow{background:#111 !important;color:#fff !important}
-  .top-actions .btn-yellow:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,0.15)}
-  #userEmailWrap{max-width:1280px;margin:8px auto 0 !important;padding:0 2px;font-size:13px !important;color:#666 !important}
-  #userEmailWrap span{color:#111 !important}
-  .search-bar{max-width:1280px !important;margin:16px auto 0 !important;background:#fff;padding:14px 16px;border-radius:16px;border:1px solid #e8e6e0;box-shadow:0 4px 20px rgba(0,0,0,0.06);display:flex !important;gap:10px !important;align-items:center;grid-template-columns:none !important}
-  .search-bar input.search-main{flex:2 !important;grid-column:auto !important;padding:13px 16px !important;font-size:15px !important;border-radius:12px !important;border:1px solid #ddd !important;background:#f9f8f5 !important}
-  .search-bar select{flex:1 !important;width:auto !important;padding:13px 12px !important;font-size:14px !important;border-radius:12px !important;border:1px solid #ddd !important;background:#fff !important;min-width:140px}
-  .search-bar .btn{flex:0 0 auto !important;width:auto !important;padding:13px 18px !important;font-size:14px !important;border-radius:12px !important;white-space:nowrap}
-  #resultsInfo{max-width:1280px;margin:12px auto 0;padding:0 24px;font-size:13px;color:#555}
-  .grid{max-width:1280px;margin:0 auto;grid-template-columns:repeat(auto-fill,minmax(260px,1fr)) !important;gap:18px !important;padding:16px 24px 40px !important}
-  .card{background:#fff;border-radius:16px !important;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.06);border:1px solid #eee;transition:all 0.2s}
-  .card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,0.10);border-color:#ddd}
-  .card .img-wrap{height:190px !important}
-  .card .info{padding:12px 14px !important}
-  .card .title{font-size:14px !important}
-}
-@media(min-width:1200px){
-  .grid{grid-template-columns:repeat(auto-fill,minmax(280px,1fr)) !important}
-}
-
-
-/* FIX mobile gallery - show all thumbnails with horizontal scroll */
-#detailImages{display:flex !important;gap:8px !important;flex-wrap:nowrap !important;overflow-x:auto !important;-webkit-overflow-scrolling:touch;padding-bottom:6px;margin-top:12px !important}
-#detailImages img{width:70px !important;height:52px !important;flex:0 0 70px !important;border-radius:8px !important}
-#detailImages::-webkit-scrollbar{display:none}
-.gallery-wrap{position:relative}
-@media(max-width:640px){
-  .gallery-wrap{min-height:45vh !important}
-  #detailImages img{width:64px !important;height:48px !important;flex:0 0 64px !important}
-  .gallery-arrow{width:36px !important;height:36px !important;font-size:20px !important}
-}
-
-
-/* v6.4 PRO - gallery mobile fix */
-#detailImages{display:flex !important;gap:10px !important;flex-wrap:nowrap !important;overflow-x:auto !important;overflow-y:hidden !important;-webkit-overflow-scrolling:touch;padding:10px 2px 12px !important;margin-top:16px !important;background:rgba(255,255,255,0.04);border-radius:12px;border:1px solid rgba(255,255,255,0.08)}
-#detailImages img{width:80px !important;height:60px !important;flex:0 0 80px !important;border-radius:10px !important;border:2px solid rgba(255,255,255,0.15) !important;transition:all 0.2s;cursor:pointer}
-#detailImages img.active{border-color:#fff !important;transform:scale(1.05);box-shadow:0 2px 12px rgba(255,255,255,0.3)}
-#detailImages img:hover{border-color:rgba(255,255,255,0.5) !important}
-#detailImages::-webkit-scrollbar{height:6px}
-#detailImages::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.2);border-radius:3px}
-#detailImages::-webkit-scrollbar-track{background:rgba(255,255,255,0.05)}
-.gallery-wrap{position:relative;background:#0a0a0a !important;min-height:50vh !important;display:flex;align-items:center;justify-content:center}
-.gallery-wrap img{max-width:100% !important;max-height:75vh !important;object-fit:contain !important}
-.gallery-arrow{background:rgba(255,255,255,0.9) !important;width:44px !important;height:44px !important;border-radius:50% !important;display:flex !important;align-items:center;justify-content:center;box-shadow:0 2px 10px rgba(0,0,0,0.3)}
-.gallery-dots{display:flex !important;gap:8px !important;bottom:16px !important}
-.gallery-dots span{width:10px !important;height:10px !important;background:rgba(255,255,255,0.4) !important;cursor:pointer;transition:all 0.2s}
-.gallery-dots span.active{background:#fff !important;transform:scale(1.3)}
-.gallery-counter{background:rgba(0,0,0,0.8) !important;color:#fff !important;padding:6px 12px !important;border-radius:20px !important;font-size:12px !important}
-@media(max-width:640px){
-  .gallery-wrap{min-height:40vh !important}
-  .gallery-wrap img{max-height:55vh !important}
-  #detailImages img{width:68px !important;height:52px !important;flex:0 0 68px !important}
-  .gallery-arrow{width:38px !important;height:38px !important}
-  .detail-content{padding-bottom:30px !important}
-}
-
-
-/* v6.6 FIX - gallery visible on mobile */
-#detailImages{
-  display:flex !important;
-  flex-wrap:nowrap !important;
-  overflow-x:auto !important;
-  overflow-y:hidden !important;
-  -webkit-overflow-scrolling:touch !important;
-  gap:10px !important;
-  padding:12px !important;
-  margin-top:14px !important;
-  background:#222 !important;
-  border:2px solid #444 !important;
-  border-radius:12px !important;
-  min-height:76px !important;
-  width:100% !important;
-  box-sizing:border-box !important;
-}
-#detailImages img{
-  width:80px !important;
-  height:60px !important;
-  min-width:80px !important;
-  flex:0 0 80px !important;
-  object-fit:cover !important;
-  border-radius:8px !important;
-  border:2px solid #555 !important;
-  background:#333 !important;
-  display:block !important;
-}
+/* v6.7 CLEAN - gallery must be visible */
+#detailImages{display:flex !important;gap:10px !important;flex-wrap:nowrap !important;overflow-x:auto !important;overflow-y:hidden !important;-webkit-overflow-scrolling:touch !important;padding:12px !important;margin-top:14px !important;background:#222 !important;border:2px solid #444 !important;border-radius:12px !important;min-height:76px !important;width:100% !important}
+#detailImages img{width:80px !important;height:60px !important;min-width:80px !important;flex:0 0 80px !important;object-fit:cover !important;border-radius:8px !important;border:2px solid #555 !important;background:#333 !important;display:block !important}
 #detailImages img.active{border-color:#fff !important;box-shadow:0 0 10px rgba(255,255,255,0.5) !important}
-#detailImages::-webkit-scrollbar{height:6px}
-#detailImages::-webkit-scrollbar-thumb{background:#888;border-radius:3px}
-@media(max-width:640px){
-  #detailImages{margin-left:0 !important;margin-right:0 !important;min-height:84px !important}
-  #detailImages img{width:72px !important;height:54px !important;min-width:72px !important;flex:0 0 72px !important}
-  .gallery-wrap{max-height:55vh !important;min-height:40vh !important}
-}
+@media(max-width:640px){#detailImages{margin:12px 0 0 0 !important} #detailImages img{width:72px !important;height:54px !important;min-width:72px !important;flex:0 0 72px !important}}
+#detailDamaged{display:none}
 
 </style>
 </head>
 <body>
 <header>
 <div class="top-row">
-<div class="logo" onclick="location.reload()" role="button" tabindex="0" aria-label="WROOMER.PL - strona główna" style="font-weight:900;font-size:26px;letter-spacing:-1.5px;cursor:pointer;white-space:nowrap;color:#111;display:flex;align-items:center;gap:6px"><span style="display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;background:#111;color:#fff;border-radius:10px;font-size:20px;transform:rotate(-6deg)">W</span><span>WROOMER<span style="color:#666;font-weight:700">.PL</span></span></div>
+<div class="logo" onclick="location.reload()" role="button" tabindex="0" aria-label="WROOMER.PL - strona główna" style="font-weight:900;font-size:22px;letter-spacing:-1px;cursor:pointer;white-space:nowrap;color:#111">WROOMER.PL</div>
 <div class="top-actions">
 <button class="btn btn-yellow" onclick="openAdd()" aria-label="Dodaj ogłoszenie">+ Dodaj</button>
 <button id="myBtn" class="btn btn-white" style="display:none" onclick="filterMy()" aria-label="Moje ogłoszenia">Moje</button>
@@ -302,21 +207,14 @@ header{background:#fff;border-bottom:1px solid #e5e5e0;position:sticky;top:0;z-i
 <div id="userEmailWrap" style="display:none;max-width:1280px;margin:6px auto 0;padding:0 2px;font-size:12px;font-weight:600;color:#444"><span id="userEmail" style="font-weight:700;color:#111"></span></div>
 </div>
 <div class="search-bar">
-<label class="visually-hidden" for="searchInput">Szukaj</label>
 <input id="searchInput" class="search-main" placeholder="Szukaj: BMW, Audi..." oninput="debouncedRender()" aria-label="Szukaj ogłoszeń">
-<label class="visually-hidden" for="brandFilter">Marka</label>
 <select id="brandFilter" onchange="updateSearchModelOptions();renderAds()" aria-label="Filtr marki"><option value="">Wszystkie marki</option><option>Abarth</option><option>Acura</option><option>Alfa Romeo</option><option>Aston Martin</option><option>Audi</option><option>Bentley</option><option>BMW</option><option>Cadillac</option><option>Chevrolet</option><option>Chrysler</option><option>Citroen</option><option>Dacia</option><option>Daewoo</option><option>Dodge</option><option>DS</option><option>Ferrari</option><option>Fiat</option><option>Ford</option><option>Genesis</option><option>Honda</option><option>Hyundai</option><option>Infiniti</option><option>Isuzu</option><option>Jaguar</option><option>Jeep</option><option>Kia</option><option>Lamborghini</option><option>Lancia</option><option>Land Rover</option><option>Lexus</option><option>Maserati</option><option>Mazda</option><option>McLaren</option><option>Mercedes</option><option>Mini</option><option>Mitsubishi</option><option>Nissan</option><option>Opel</option><option>Peugeot</option><option>Porsche</option><option>Renault</option><option>Rolls-Royce</option><option>Seat</option><option>Skoda</option><option>Smart</option><option>Subaru</option><option>Suzuki</option><option>Tesla</option><option>Toyota</option><option>Volkswagen</option><option>Volvo</option></select>
 <select id="modelFilter" onchange="renderAds()" aria-label="Filtr modelu"><option value="">Wszystkie modele</option></select>
-<label class="visually-hidden" for="yearFromFilter">Rocznik od</label>
 <select id="yearFromFilter" onchange="renderAds()" aria-label="Rocznik od"><option value="">Rok od</option><option value="1960">1960</option><option value="1961">1961</option><option value="1962">1962</option><option value="1963">1963</option><option value="1964">1964</option><option value="1965">1965</option><option value="1966">1966</option><option value="1967">1967</option><option value="1968">1968</option><option value="1969">1969</option><option value="1970">1970</option><option value="1971">1971</option><option value="1972">1972</option><option value="1973">1973</option><option value="1974">1974</option><option value="1975">1975</option><option value="1976">1976</option><option value="1977">1977</option><option value="1978">1978</option><option value="1979">1979</option><option value="1980">1980</option><option value="1981">1981</option><option value="1982">1982</option><option value="1983">1983</option><option value="1984">1984</option><option value="1985">1985</option><option value="1986">1986</option><option value="1987">1987</option><option value="1988">1988</option><option value="1989">1989</option><option value="1990">1990</option><option value="1991">1991</option><option value="1992">1992</option><option value="1993">1993</option><option value="1994">1994</option><option value="1995">1995</option><option value="1996">1996</option><option value="1997">1997</option><option value="1998">1998</option><option value="1999">1999</option><option value="2000">2000</option><option value="2001">2001</option><option value="2002">2002</option><option value="2003">2003</option><option value="2004">2004</option><option value="2005">2005</option><option value="2006">2006</option><option value="2007">2007</option><option value="2008">2008</option><option value="2009">2009</option><option value="2010">2010</option><option value="2011">2011</option><option value="2012">2012</option><option value="2013">2013</option><option value="2014">2014</option><option value="2015">2015</option><option value="2016">2016</option><option value="2017">2017</option><option value="2018">2018</option><option value="2019">2019</option><option value="2020">2020</option><option value="2021">2021</option><option value="2022">2022</option><option value="2023">2023</option><option value="2024">2024</option><option value="2025">2025</option><option value="2026">2026</option></select>
-<label class="visually-hidden" for="yearToFilter">Rocznik do</label>
 <select id="yearToFilter" onchange="renderAds()" aria-label="Rocznik do"><option value="">Rok do</option><option value="1960">1960</option><option value="1961">1961</option><option value="1962">1962</option><option value="1963">1963</option><option value="1964">1964</option><option value="1965">1965</option><option value="1966">1966</option><option value="1967">1967</option><option value="1968">1968</option><option value="1969">1969</option><option value="1970">1970</option><option value="1971">1971</option><option value="1972">1972</option><option value="1973">1973</option><option value="1974">1974</option><option value="1975">1975</option><option value="1976">1976</option><option value="1977">1977</option><option value="1978">1978</option><option value="1979">1979</option><option value="1980">1980</option><option value="1981">1981</option><option value="1982">1982</option><option value="1983">1983</option><option value="1984">1984</option><option value="1985">1985</option><option value="1986">1986</option><option value="1987">1987</option><option value="1988">1988</option><option value="1989">1989</option><option value="1990">1990</option><option value="1991">1991</option><option value="1992">1992</option><option value="1993">1993</option><option value="1994">1994</option><option value="1995">1995</option><option value="1996">1996</option><option value="1997">1997</option><option value="1998">1998</option><option value="1999">1999</option><option value="2000">2000</option><option value="2001">2001</option><option value="2002">2002</option><option value="2003">2003</option><option value="2004">2004</option><option value="2005">2005</option><option value="2006">2006</option><option value="2007">2007</option><option value="2008">2008</option><option value="2009">2009</option><option value="2010">2010</option><option value="2011">2011</option><option value="2012">2012</option><option value="2013">2013</option><option value="2014">2014</option><option value="2015">2015</option><option value="2016">2016</option><option value="2017">2017</option><option value="2018">2018</option><option value="2019">2019</option><option value="2020">2020</option><option value="2021">2021</option><option value="2022">2022</option><option value="2023">2023</option><option value="2024">2024</option><option value="2025">2025</option><option value="2026">2026</option></select>
-<label class="visually-hidden" for="mileageFilter">Przebieg</label>
 <select id="mileageFilter" onchange="renderAds()" aria-label="Przebieg"><option value="">Przebieg</option><option value="50000">do 50 tys.</option><option value="100000">do 100 tys.</option><option value="150000">do 150 tys.</option><option value="200000">do 200 tys.</option><option value="300000">do 300 tys.</option></select>
-<label class="visually-hidden" for="locationInput">Miejscowość</label>
 <input id="locationInput" placeholder="Miejscowość: Rydułtowy, Gorzyce..." oninput="onLocationInput()" aria-label="Filtr miejscowości">
-<label class="visually-hidden" for="radiusFilter">Promień</label>
-<select id="radiusFilter" onchange="renderAds()" aria-label="Promień wyszukiwania"><option value="0">+0 km</option><option value="5">+5 km</option><option value="10">+10 km</option><option value="25" selected>+25 km</option><option value="50">+50 km</option><option value="100">+100 km</option><option value="9999">Cała PL</option></select>
+<select id="radiusFilter" onchange="renderAds()" aria-label="Promień"><option value="0">+0 km</option><option value="5">+5 km</option><option value="10">+10 km</option><option value="25" selected>+25 km</option><option value="50">+50 km</option><option value="100">+100 km</option><option value="9999">Cała PL</option></select>
 <button class="btn btn-black" onclick="getMyLocation()" aria-label="Szukaj blisko mnie">📍 Blisko mnie</button>
 <button class="btn btn-white" onclick="clearFilters()" aria-label="Wyczyść filtry">Wyczyść</button>
 </div>
@@ -339,16 +237,10 @@ header{background:#fff;border-bottom:1px solid #e5e5e0;position:sticky;top:0;z-i
 </div>
 <div class="detail-content">
 <button class="close-btn-2" onclick="closeDetail()" aria-label="Zamknij">✕</button>
-<div style="padding-right:40px"><h2 id="detailTitle" style="color:#fff"></h2><p id="detailPrice"></p><p id="detailLoc"></p><p id="detailDamaged" style="font-size:12px;font-weight:800;color:#ffcc00;margin-top:4px;display:none"></p></div>
+<div style="padding-right:40px"><h2 id="detailTitle" style="color:#fff"></h2><p id="detailPrice"></p><p id="detailLoc"></p></div>
 <p id="detailDesc"></p>
 <div id="detailImages" role="list" aria-label="Miniatury zdjęć"></div>
-<div id="ownerActions" style="display:none;margin-top:12px;padding:10px;background:rgba(255,255,255,0.08);border-radius:12px;border:1px solid rgba(255,255,255,0.15)">
-<p style="font-size:11px;font-weight:900;color:#fff;margin-bottom:8px">🔧 TWOJE OGŁOSZENIE</p>
-<div style="display:flex;gap:8px">
-<button class="btn btn-white" onclick="openEditCurrent()" style="flex:1;background:#fff;color:#111">✏️ Edytuj</button>
-<button class="btn btn-black" onclick="deleteCurrent()" style="flex:1;background:#cc0000;color:#fff;border-color:#cc0000">🗑️ Usuń</button>
-</div>
-</div>
+<div id="ownerActions" style="display:none;margin-top:12px;padding:10px;background:rgba(255,255,255,0.08);border-radius:12px"><p style="font-size:11px;font-weight:900;color:#fff;margin-bottom:8px">🔧 TWOJE OGŁOSZENIE</p><div style="display:flex;gap:8px"><button class="btn btn-white" onclick="openEditCurrent()" style="flex:1">✏️ Edytuj</button><button class="btn btn-black" onclick="deleteCurrent()" style="flex:1;background:#cc0000;color:#fff">🗑️ Usuń</button></div></div>
 <div class="msg-box">
 <h3 style="color:#fff;font-size:14px">💬 Zostaw wiadomość</h3>
 <label class="visually-hidden" for="msgText">Treść wiadomości</label>
@@ -384,14 +276,11 @@ header{background:#fff;border-bottom:1px solid #e5e5e0;position:sticky;top:0;z-i
 
 <div id="addModal" onclick="if(event.target.id==='addModal')closeAdd()" role="dialog" aria-modal="true" aria-label="Dodaj ogłoszenie"><div class="add-box"><h2 id="addModalTitle" style="font-size:16px;color:#111">Dodaj ogłoszenie</h2>
 <div class="form-grid">
-<div class="full" style="background:#eef6ff;border:2px solid #0077ff;border-radius:12px;padding:10px"><label for="addPhone" style="color:#0055cc;font-size:13px">📞 Numer telefonu * (będzie widoczny w ogłoszeniu)</label><input id="addPhone" type="tel" placeholder="600 123 456" aria-label="Numer telefonu" style="font-size:16px;font-weight:700;padding:12px;border:2px solid #0077ff"></div>
+<div class="full" style="background:#eef6ff;border:2px solid #0077ff;border-radius:12px;padding:10px"><label for="addPhone" style="color:#0055cc;font-size:13px">📞 Numer telefonu * (widoczny w ogłoszeniu)</label><input id="addPhone" type="tel" placeholder="600 123 456" aria-label="Numer telefonu" style="font-size:16px;font-weight:700;padding:12px;border:2px solid #0077ff"></div>
 <div class="full"><label for="addTitleInput">Tytuł *</label><input id="addTitleInput" placeholder="np. BMW 3 Seria 2.0d" aria-label="Tytuł ogłoszenia"></div>
 <div><label for="addBrand">Marka *</label><select id="addBrand" onchange="updateModelOptions()" aria-label="Marka pojazdu"><option value="">Wybierz *</option><option>Abarth</option><option>Acura</option><option>Alfa Romeo</option><option>Aston Martin</option><option>Audi</option><option>Bentley</option><option>BMW</option><option>Cadillac</option><option>Chevrolet</option><option>Chrysler</option><option>Citroen</option><option>Dacia</option><option>Daewoo</option><option>Dodge</option><option>DS</option><option>Ferrari</option><option>Fiat</option><option>Ford</option><option>Genesis</option><option>Honda</option><option>Hyundai</option><option>Infiniti</option><option>Isuzu</option><option>Jaguar</option><option>Jeep</option><option>Kia</option><option>Lamborghini</option><option>Lancia</option><option>Land Rover</option><option>Lexus</option><option>Maserati</option><option>Mazda</option><option>McLaren</option><option>Mercedes</option><option>Mini</option><option>Mitsubishi</option><option>Nissan</option><option>Opel</option><option>Peugeot</option><option>Porsche</option><option>Renault</option><option>Rolls-Royce</option><option>Seat</option><option>Skoda</option><option>Smart</option><option>Subaru</option><option>Suzuki</option><option>Tesla</option><option>Toyota</option><option>Volkswagen</option><option>Volvo</option><option>Inna</option></select></div>
 <div><label for="addModel">Model *</label><select id="addModel" aria-label="Model pojazdu" onchange="checkCustomModel()"><option value="">Najpierw marka</option></select><input id="addModelCustom" placeholder="Wpisz model jeśli brak na liście" style="display:none;margin-top:6px" aria-label="Model custom"></div>
 <div><label for="addPrice">Cena PLN *</label><input id="addPrice" type="number" placeholder="25000" aria-label="Cena"></div>
-<div><label for="addYear">Rocznik *</label><select id="addYear" aria-label="Rocznik"><option value="">Wybierz</option><option value="2026">2026</option><option value="2025">2025</option><option value="2024">2024</option><option value="2023">2023</option><option value="2022">2022</option><option value="2021">2021</option><option value="2020">2020</option><option value="2019">2019</option><option value="2018">2018</option><option value="2017">2017</option><option value="2016">2016</option><option value="2015">2015</option><option value="2014">2014</option><option value="2013">2013</option><option value="2012">2012</option><option value="2011">2011</option><option value="2010">2010</option><option value="2009">2009</option><option value="2008">2008</option><option value="2007">2007</option><option value="2006">2006</option><option value="2005">2005</option><option value="2004">2004</option><option value="2003">2003</option><option value="2002">2002</option><option value="2001">2001</option><option value="2000">2000</option><option value="1999">1999</option><option value="1998">1998</option><option value="1997">1997</option><option value="1996">1996</option><option value="1995">1995</option><option value="1994">1994</option><option value="1993">1993</option><option value="1992">1992</option><option value="1991">1991</option><option value="1990">1990</option><option value="1989">1989</option><option value="1988">1988</option><option value="1987">1987</option><option value="1986">1986</option><option value="1985">1985</option><option value="1984">1984</option><option value="1983">1983</option><option value="1982">1982</option><option value="1981">1981</option><option value="1980">1980</option><option value="1979">1979</option><option value="1978">1978</option><option value="1977">1977</option><option value="1976">1976</option><option value="1975">1975</option><option value="1974">1974</option><option value="1973">1973</option><option value="1972">1972</option><option value="1971">1971</option><option value="1970">1970</option><option value="1969">1969</option><option value="1968">1968</option><option value="1967">1967</option><option value="1966">1966</option><option value="1965">1965</option><option value="1964">1964</option><option value="1963">1963</option><option value="1962">1962</option><option value="1961">1961</option><option value="1960">1960</option></select></div>
-<div><label for="addMileage">Przebieg km *</label><input id="addMileage" type="number" placeholder="120000" aria-label="Przebieg"></div>
-<div><label for="addDamaged">Stan *</label><select id="addDamaged" aria-label="Czy uszkodzone"><option value="nie">Nieuszkodzone</option><option value="tak">Uszkodzone</option></select></div>
 
 
 <div class="full" style="margin-top:8px;padding:12px;background:#f9f9f6;border-radius:10px;border:1px solid #999">
@@ -448,7 +337,7 @@ var allAds=[], filteredAds=[], displayedAds=[], currentAd=null, userLocationCoor
 var currentImageIndex=0, galleryImages=[], touchStartX=0, currentChannel='wroomer', currentPage=0, pageSize=8;
 var SUPABASE_URL='https://rljqnhfogaqdjeirqqdj.supabase.co';
 var SUPABASE_KEY='sb_publishable_j7CS5xIHzOMBMyvsqVgDmw_GeEek5hX';
-var MODELS={'BMW':['Seria 1', 'Seria 2', 'Seria 3', 'Seria 4', 'Seria 5', 'Seria 6', 'Seria 7', 'Seria 8', 'X1', 'X2', 'X3', 'X4', 'X5', 'X6', 'X7', 'Z4', 'M3', 'M5', 'i3', 'i4', 'iX', 'Inny'],'Audi':['A1', 'A3', 'A4', 'A5', 'A6', 'A7', 'A8', 'Q2', 'Q3', 'Q5', 'Q7', 'Q8', 'TT', 'e-tron', 'Inny'],'Mercedes':['A Klasa', 'B Klasa', 'C Klasa', 'E Klasa', 'S Klasa', 'CLA', 'CLS', 'GLA', 'GLB', 'GLC', 'GLE', 'GLS', 'Vito', 'Sprinter', 'Inny'],'Volkswagen':['Golf', 'Passat', 'Polo', 'Tiguan', 'T-Roc', 'T-Cross', 'Arteon', 'Touran', 'Sharan', 'Caddy', 'Transporter', 'Up!', 'ID.3', 'ID.4', 'Inny'],'Toyota':['Corolla', 'Yaris', 'Auris', 'Avensis', 'RAV4', 'Camry', 'C-HR', 'Hilux', 'Land Cruiser', 'Prius', 'Aygo', 'Inny'],'Ford':['Focus', 'Mondeo', 'Fiesta', 'Kuga', 'Puma', 'Edge', 'Mustang', 'Transit', 'S-Max', 'Galaxy', 'Ranger', 'Inny'],'Opel':['Astra', 'Corsa', 'Insignia', 'Mokka', 'Crossland', 'Grandland', 'Zafira', 'Combo', 'Vivaro', 'Inny'],'Skoda':['Octavia', 'Fabia', 'Superb', 'Kodiaq', 'Karoq', 'Scala', 'Kamiq', 'Rapid', 'Yeti', 'Inny'],'Mitsubishi':['Colt', 'Lancer', 'Outlander', 'ASX', 'Eclipse Cross', 'Pajero', 'Space Star', 'Inny'],'Abarth':['500', '595', '695', 'Inny'],'Acura':['MDX', 'RDX', 'TLX', 'Inny'],'Alfa Romeo':['Giulia', 'Stelvio', 'Giulietta', 'MiTo', '159', 'Brera', 'Inny'],'Aston Martin':['DB11', 'Vantage', 'DBX', 'Inny'],'Bentley':['Continental', 'Bentayga', 'Inny'],'Cadillac':['Escalade', 'XT5', 'CT5', 'Inny'],'Chevrolet':['Cruze', 'Malibu', 'Camaro', 'Corvette', 'Captiva', 'Inny'],'Chrysler':['300C', 'Voyager', 'Pacifica', 'Inny'],'Citroen':['C3', 'C4', 'C5', 'Berlingo', 'C1', 'C3 Aircross', 'C5 Aircross', 'Inny'],'Dacia':['Duster', 'Sandero', 'Logan', 'Dokker', 'Lodgy', 'Inny'],'Daewoo':['Lanos', 'Matiz', 'Nubira', 'Inny'],'Dodge':['Charger', 'Challenger', 'Durango', 'Inny'],'DS':['DS3', 'DS4', 'DS7', 'Inny'],'Ferrari':['488', 'F8', 'Roma', 'Portofino', 'Inny'],'Fiat':['500', 'Panda', 'Tipo', 'Doblo', 'Ducato', 'Bravo', 'Inny'],'Genesis':['G70', 'G80', 'GV70', 'GV80', 'Inny'],'Honda':['Civic', 'Accord', 'CR-V', 'HR-V', 'Jazz', 'Inny'],'Hyundai':['i10', 'i20', 'i30', 'Tucson', 'Santa Fe', 'Kona', 'Elantra', 'Inny'],'Infiniti':['Q50', 'QX50', 'QX60', 'Inny'],'Isuzu':['D-Max', 'Inny'],'Jaguar':['XE', 'XF', 'F-Pace', 'E-Pace', 'Inny'],'Jeep':['Wrangler', 'Cherokee', 'Compass', 'Renegade', 'Grand Cherokee', 'Inny'],'Kia':['Ceed', 'Sportage', 'Sorento', 'Rio', 'Picanto', 'Stonic', 'Niro', 'Inny'],'Lamborghini':['Huracan', 'Aventador', 'Urus', 'Inny'],'Lancia':['Ypsilon', 'Delta', 'Inny'],'Land Rover':['Discovery', 'Range Rover', 'Evoque', 'Defender', 'Inny'],'Lexus':['IS', 'ES', 'RX', 'NX', 'UX', 'LC', 'Inny'],'Maserati':['Ghibli', 'Levante', 'Quattroporte', 'Inny'],'Mazda':['3', '6', 'CX-3', 'CX-5', 'CX-30', 'MX-5', 'Inny'],'McLaren':['720S', '570S', 'Inny'],'Mini':['Cooper', 'Countryman', 'Clubman', 'Inny'],'Nissan':['Qashqai', 'Juke', 'X-Trail', 'Micra', 'Navara', 'Leaf', 'Inny'],'Peugeot':['208', '308', '3008', '5008', '2008', 'Partner', 'Inny'],'Porsche':['911', 'Cayenne', 'Macan', 'Panamera', 'Taycan', 'Inny'],'Renault':['Clio', 'Megane', 'Captur', 'Kadjar', 'Scenic', 'Trafic', 'Master', 'Inny'],'Rolls-Royce':['Ghost', 'Phantom', 'Cullinan', 'Inny'],'Seat':['Ibiza', 'Leon', 'Ateca', 'Arona', 'Tarraco', 'Inny'],'Smart':['Fortwo', 'Forfour', 'Inny'],'Subaru':['Impreza', 'Forester', 'Outback', 'XV', 'Inny'],'Suzuki':['Swift', 'Vitara', 'SX4', 'Jimny', 'Ignis', 'Inny'],'Tesla':['Model 3', 'Model S', 'Model X', 'Model Y', 'Inny'],'Volvo':['S60', 'S90', 'V60', 'XC60', 'XC90', 'XC40', 'Inny'],'Inna':['Inny model']};
+var MODELS={'BMW':['Seria 1', 'Seria 2', 'Seria 3', 'Seria 5', 'Seria 7', 'X1', 'X3', 'X5', 'X6', 'Inny'],'Audi':['A3', 'A4', 'A6', 'Q5', 'Q7', 'Q8', 'Inny'],'Mercedes':['A Klasa', 'C Klasa', 'E Klasa', 'GLC', 'GLE', 'Inny'],'Volkswagen':['Golf', 'Passat', 'Polo', 'Tiguan', 'T-Roc', 'Inny'],'Toyota':['Corolla', 'Yaris', 'RAV4', 'Avensis', 'Inny'],'Ford':['Focus', 'Mondeo', 'Fiesta', 'Kuga', 'Inny'],'Opel':['Astra', 'Corsa', 'Insignia', 'Mokka', 'Inny'],'Skoda':['Octavia', 'Fabia', 'Superb', 'Kodiaq', 'Inny'],'Mitsubishi':['Colt', 'Lancer', 'Outlander', 'ASX', 'Inny'],'Alfa Romeo':['Giulia', 'Stelvio', 'Giulietta', 'MiTo', 'Inny'],'Citroen':['C3', 'C4', 'C5', 'Berlingo', 'Inny'],'Dacia':['Duster', 'Sandero', 'Logan', 'Inny'],'Fiat':['500', 'Panda', 'Tipo', 'Doblo', 'Inny'],'Honda':['Civic', 'Accord', 'CR-V', 'Jazz', 'Inny'],'Hyundai':['i20', 'i30', 'Tucson', 'Santa Fe', 'Inny'],'Jeep':['Wrangler', 'Compass', 'Renegade', 'Inny'],'Kia':['Ceed', 'Sportage', 'Rio', 'Inny'],'Nissan':['Qashqai', 'Juke', 'X-Trail', 'Micra', 'Inny'],'Peugeot':['208', '308', '3008', '5008', 'Inny'],'Renault':['Clio', 'Megane', 'Captur', 'Inny'],'Seat':['Ibiza', 'Leon', 'Ateca', 'Inny'],'Tesla':['Model 3', 'Model S', 'Model X', 'Model Y', 'Inny'],'Volvo':['S60', 'XC60', 'XC90', 'V60', 'Inny'],'Inna':['Inny model'],'Abarth':['Inny'],'Acura':['Inny'],'Aston Martin':['Inny'],'Bentley':['Inny'],'Cadillac':['Inny'],'Chevrolet':['Inny'],'Chrysler':['Inny'],'Daewoo':['Inny'],'Dodge':['Inny'],'DS':['Inny'],'Ferrari':['Inny'],'Genesis':['Inny'],'Infiniti':['Inny'],'Isuzu':['Inny'],'Jaguar':['Inny'],'Lamborghini':['Inny'],'Lancia':['Inny'],'Land Rover':['Inny'],'Lexus':['Inny'],'Maserati':['Inny'],'Mazda':['Inny'],'McLaren':['Inny'],'Mini':['Inny'],'Porsche':['Inny'],'Rolls-Royce':['Inny'],'Smart':['Inny'],'Subaru':['Inny'],'Suzuki':['Inny']};
 var POWIATY={'śląskie':['wodzisławski','raciborski','rybnicki','m. Katowice','m. Rybnik']};
 var MIEJSCOWOSCI={'wodzisławski':['Wodzisław Śląski','Gorzyce','Gorzyczki','Rydułtowy','Pszów','Radlin'],'raciborski':['Racibórz'],'rybnicki':['Rybnik']};
 var KNOWN_COORDS={'gorzyce':{lat:49.962,lng:18.397},'rydułtowy':{lat:50.058,lng:18.405},'wodzisław śląski':{lat:50.022,lng:18.456},'rybnik':{lat:50.097,lng:18.542}};
@@ -490,9 +379,6 @@ function updateSearchModelOptions(){
     mEl.appendChild(o);
   }
 }
-
-function updatePowiatOptions(){ var wojEl=document.getElementById('addWoj'); if(!wojEl) return; var sel=document.getElementById('addPowiat'); if(!sel) return; var list=POWIATY[wojEl.value]||[]; sel.innerHTML='<option value="">Wybierz *</option>'; for(var i=0;i<list.length;i++){ var o=document.createElement('option'); o.value=list[i]; o.text=list[i]; sel.appendChild(o); } if(wojEl.value==='śląskie'){ sel.value='wodzisławski'; updateMiejscowoscOptions(); } }
-
 function checkCustomModel(){
   var mEl=document.getElementById('addModel');
   var cEl=document.getElementById('addModelCustom');
@@ -505,6 +391,7 @@ function checkCustomModel(){
   }
 }
 
+function updatePowiatOptions(){ var wojEl=document.getElementById('addWoj'); if(!wojEl) return; var sel=document.getElementById('addPowiat'); if(!sel) return; var list=POWIATY[wojEl.value]||[]; sel.innerHTML='<option value="">Wybierz *</option>'; for(var i=0;i<list.length;i++){ var o=document.createElement('option'); o.value=list[i]; o.text=list[i]; sel.appendChild(o); } if(wojEl.value==='śląskie'){ sel.value='wodzisławski'; updateMiejscowoscOptions(); } }
 function updateMiejscowoscOptions(){ var powEl=document.getElementById('addPowiat'); if(!powEl) return; var sel=document.getElementById('addMiejscowosc'); if(!sel) return; var list=MIEJSCOWOSCI[powEl.value]||['Gorzyce','Wodzisław Śląski','Rydułtowy','Rybnik']; sel.innerHTML='<option value="">Wybierz *</option>'; for(var i=0;i<list.length;i++){ var o=document.createElement('option'); o.value=list[i]; o.text=list[i]; sel.appendChild(o); } sel.innerHTML+='<option value="__custom">➕ Inna</option>'; sel.value='Gorzyce'; }
 function checkCustomMiejsc(){ var vEl=document.getElementById('addMiejscowosc'); var row=document.getElementById('customMiejscRow'); if(row) row.style.display=vEl&&vEl.value==='__custom'?'block':'none'; }
 function openAdd(){ if(!currentUser){ alert('Zaloguj!'); openAuth(); return; } var m=document.getElementById('addModal'); if(m) m.style.display='flex'; var info=document.getElementById('addInfo'); if(info) info.innerText=''; var searchEl=document.getElementById('addLocationSearch'); if(searchEl) searchEl.value=''; var infoLoc=document.getElementById('addLocationInfo'); if(infoLoc) infoLoc.innerText='💡 Wpisz miejscowość → wybierz z listy → GPS ustawi coords!'; addLocationCoords=null; }
@@ -594,7 +481,134 @@ function getMyLocationForAdd(){
   }).catch(function(){ if(btn) btn.innerText=orig; });
  }, function(err){ var infoEl=document.getElementById('addLocationInfo'); if(infoEl) infoEl.innerText='❌ Błąd GPS: '+err.message; if(btn) btn.innerText=orig; }, {enableHighAccuracy:true, timeout:10000});
 }
-async 
+async async function openDetail(id){ var a=null; for(var i=0;i<allAds.length;i++){ if(String(allAds[i].id)===String(id)){ a=allAds[i]; break; } } if(!a) return; currentAd=a; try{ var res=await fetch(SUPABASE_URL+'/rest/v1/ads?id=eq.'+id+'&select=*', {headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY}}); if(res.ok){ var data=await res.json(); if(data[0]){ a=data[0]; currentAd=a; } } }catch(e){} var imgs=[]; if(a.images&&a.images.length>0) imgs=a.images.slice(); else if(a.image_url) imgs=[a.image_url]; else imgs=['https://via.placeholder.com/800x600?text=Brak+zdjecia']; galleryImages=imgs; currentImageIndex=0; var detailImg=document.getElementById('detailImg'); if(detailImg){ detailImg.src=getOptimizedImageUrl(galleryImages[0], 800); detailImg.alt=(a.title||'Ogłoszenie')+' - zdjęcie 1 z '+galleryImages.length; } var gc=document.getElementById('galleryCounter'); if(gc) gc.innerText='1 / '+galleryImages.length; var thumbs=document.getElementById('detailImages'); if(thumbs){ var th=''; for(var t=0;t<galleryImages.length;t++){ th+='<img src="'+getOptimizedImageUrl(galleryImages[t], 200)+'" class="'+(t===0?'active':'')+'" onclick="showImage('+t+')" loading="lazy" alt="Miniatura '+(t+1)+'" role="listitem">'; } thumbs.innerHTML=th; } var dt=document.getElementById('detailTitle'); if(dt) dt.innerText=a.title||''; var dp=document.getElementById('detailPrice'); if(dp) dp.innerText=a.price? a.price+' PLN':''; var dl=document.getElementById('detailLoc'); if(dl) dl.innerText=(a.location||a.city||''); var dd=document.getElementById('detailDesc'); if(dd) dd.innerText=a.description||''; var dmgEl=document.getElementById('detailDamaged'); if(dmgEl){ if(a.damaged==='tak'){ dmgEl.innerText='⚠️ USZKODZONE'; dmgEl.style.display='block'; } else { dmgEl.style.display='none'; } } var pn=document.getElementById('phoneNumber'); if(pn){ pn.innerText='📞 '+(a.phone||'Brak'); pn.style.display='none'; } var det=document.getElementById('detail'); if(det) det.style.display='flex'; var ownerDiv=document.getElementById('ownerActions'); if(ownerDiv && currentAd && currentUser && currentAd.owner_id===currentUser.id){ ownerDiv.style.display='block'; } else if(ownerDiv){ ownerDiv.style.display='none'; } }
+
+var editingId=null;
+function openEditCurrent(){
+  if(!currentAd || !currentUser) return;
+  if(currentAd.owner_id !== currentUser.id){ alert('Nie jesteś właścicielem'); return; }
+  editingId=currentAd.id;
+  document.getElementById('addTitleInput').value=currentAd.title||'';
+  document.getElementById('addBrand').value=currentAd.brand||'';
+  updateModelOptions();
+  setTimeout(function(){
+    var me=document.getElementById('addModel');
+    if(me) me.value=currentAd.model||'';
+    checkCustomModel();
+  },150);
+  document.getElementById('addPrice').value=currentAd.price||'';
+  var yEl=document.getElementById('addYear'); if(yEl) yEl.value=currentAd.year||'';
+  var miEl=document.getElementById('addMileage'); if(miEl) miEl.value=currentAd.mileage||'';
+  var phEl=document.getElementById('addPhone'); if(phEl) phEl.value=currentAd.phone||'';
+  var deEl=document.getElementById('addDesc'); if(deEl) deEl.value=currentAd.description||'';
+  var daEl=document.getElementById('addDamaged'); if(daEl) daEl.value=currentAd.damaged||'nie';
+  var mt=document.getElementById('addModalTitle'); if(mt) mt.innerText='Edytuj ogłoszenie';
+  var sb=document.getElementById('addSubmitBtn'); if(sb) sb.innerText='💾 Zapisz zmiany';
+  closeDetail();
+  var m=document.getElementById('addModal'); if(m) m.style.display='flex';
+}
+function openAdd(){
+  editingId=null;
+  if(!currentUser){ alert('Zaloguj!'); openAuth(); return; }
+  var mt=document.getElementById('addModalTitle'); if(mt) mt.innerText='Dodaj ogłoszenie';
+  var sb=document.getElementById('addSubmitBtn'); if(sb) sb.innerText='🚀 Dodaj ogłoszenie';
+  ['addTitleInput','addPrice','addModelCustom','addLocationSearch','addDesc'].forEach(function(id){ var el=document.getElementById(id); if(el) el.value=''; });
+  var yEl=document.getElementById('addYear'); if(yEl) yEl.value='';
+  var miEl=document.getElementById('addMileage'); if(miEl) miEl.value='';
+  var phEl=document.getElementById('addPhone'); if(phEl) phEl.value='';
+  var daEl=document.getElementById('addDamaged'); if(daEl) daEl.value='nie';
+  var bEl=document.getElementById('addBrand'); if(bEl) bEl.value='';
+  var mEl=document.getElementById('addModel'); if(mEl) mEl.innerHTML='<option value="">Najpierw marka</option>';
+  if(typeof selectedImagesBase64!=='undefined'){ selectedImagesBase64=[]; if(typeof renderPreview==='function') renderPreview(); }
+  var mod=document.getElementById('addModal'); if(mod) mod.style.display='flex';
+  var info=document.getElementById('addInfo'); if(info) info.innerText='';
+}
+async function deleteCurrent(){
+  if(!currentAd || !currentUser) return;
+  if(currentAd.owner_id !== currentUser.id){ alert('Nie jesteś właścicielem'); return; }
+  if(!confirm('Na pewno usunąć: '+(currentAd.title||'')+'?')) return;
+  try{
+    var res=await fetch(SUPABASE_URL+'/rest/v1/ads?id=eq.'+currentAd.id,{method:'DELETE',headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+authToken}});
+    if(!res.ok){ var txt=await res.text(); throw new Error(txt); }
+    alert('✅ Usunięto');
+    closeDetail();
+    loadAds();
+  }catch(e){ alert('Błąd: '+e.message); }
+}
+
+function saveAuth(access, refresh, user){ localStorage.setItem('sb_token', access); if(refresh) localStorage.setItem('sb_refresh', refresh); localStorage.setItem('sb_user', JSON.stringify(user)); authToken=access; if(refresh) refreshToken=refresh; currentUser=user; updateAuthUI(); }
+async function refreshAuthToken(){ if(!refreshToken){ refreshToken=localStorage.getItem('sb_refresh'); if(!refreshToken) return false; } try{ var res=await fetch(SUPABASE_URL+'/auth/v1/token?grant_type=refresh_token', {method:'POST', headers:{'apikey':SUPABASE_KEY,'Content-Type':'application/json'}, body: JSON.stringify({refresh_token: refreshToken})}); var data=await res.json(); if(res.ok && data.access_token){ saveAuth(data.access_token, data.refresh_token || refreshToken, data.user || currentUser); return true; } }catch(e){} return false; }
+function loadAuth(){ try{ authToken=localStorage.getItem('sb_token'); refreshToken=localStorage.getItem('sb_refresh'); currentUser=JSON.parse(localStorage.getItem('sb_user')||'null'); if(authToken){ try{ var payload=JSON.parse(atob(authToken.split('.')[1])); var exp=payload.exp*1000; if(Date.now() > exp - 60000){ refreshAuthToken(); } }catch(e){} } }catch(e){} updateAuthUI(); }
+function updateAuthUI(){ var authBtn=document.getElementById('authBtn'); var userEmail=document.getElementById('userEmail'); var userWrap=document.getElementById('userEmailWrap'); var logoutBtn=document.getElementById('logoutBtn'); var myBtn=document.getElementById('myBtn'); if(currentUser){ if(authBtn) authBtn.style.display='none'; if(userEmail){ userEmail.innerText='Zalogowany: '+currentUser.email; } if(userWrap) userWrap.style.display='block'; if(logoutBtn) logoutBtn.style.display='block'; if(myBtn) myBtn.style.display='block'; } else { if(authBtn) authBtn.style.display='block'; if(userWrap) userWrap.style.display='none'; if(logoutBtn) logoutBtn.style.display='none'; if(myBtn) myBtn.style.display='none'; } }
+function logout(){ localStorage.removeItem('sb_token'); localStorage.removeItem('sb_refresh'); localStorage.removeItem('sb_user'); currentUser=null; authToken=null; refreshToken=null; updateAuthUI(); location.reload(); }
+function filterMy(){ if(!currentUser){alert('Zaloguj');return} var btn=document.getElementById('myBtn'); if(!btn) return; if(btn.innerText==='Moje'){ btn.innerText='Wszystkie'; loadAds().then(function(){ allAds=allAds.filter(function(a){return a.owner_id===currentUser.id}); currentPage=0; renderAds(); }); } else { btn.innerText='Moje'; loadAds(); } }
+function loadAds(){ var rt=document.getElementById('resultsText'); if(rt) rt.innerText='Ładowanie...'; var url=SUPABASE_URL+'/rest/v1/ads?select=*&order=created_at.desc&limit=20'; return fetch(url,{headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY}}).then(function(res){ if(!res.ok) throw new Error('HTTP '+res.status); return res.json(); }).then(function(data){ for(var i=0;i<data.length;i++) ensureAdCoords(data[i]); allAds=data; currentPage=0; renderAds(); }).catch(function(e){ if(rt) rt.innerText='Błąd: '+e.message; }); }
+function login(){ var emailEl=document.getElementById('loginEmail'); var passEl=document.getElementById('loginPass'); if(!emailEl||!passEl) return; var email=emailEl.value.trim(); var pass=passEl.value; if(!email||!pass){ var li=document.getElementById('loginInfo'); if(li) li.innerText='Wpisz dane!'; return; } var li2=document.getElementById('loginInfo'); if(li2) li2.innerText='Logowanie...'; fetch(SUPABASE_URL+'/auth/v1/token?grant_type=password',{method:'POST',headers:{'apikey':SUPABASE_KEY,'Content-Type':'application/json'},body:JSON.stringify({email:email,password:pass})}).then(function(r){ return r.json().then(function(j){ return {ok:r.ok, json:j}; }); }).then(function(res){ if(!res.ok) throw new Error(res.json.error_description||'Błąd'); saveAuth(res.json.access_token, res.json.refresh_token, res.json.user); closeAuth(); }).catch(function(e){ var li3=document.getElementById('loginInfo'); if(li3) li3.innerText='Błąd: '+e.message; }); }
+function register(){ var chk=document.getElementById('regCheck'); if(!chk||!chk.checked){alert('Zaznacz regulamin');return} var emailEl=document.getElementById('regEmail'); var passEl=document.getElementById('regPass'); if(!emailEl||!passEl) return; var email=emailEl.value.trim(); var pass=passEl.value; if(!email||pass.length<6){ var ri=document.getElementById('regInfo'); if(ri) ri.innerText='Min 6 znaków'; return; } var ri2=document.getElementById('regInfo'); if(ri2) ri2.innerText='Rejestracja...'; fetch(SUPABASE_URL+'/auth/v1/signup',{method:'POST',headers:{'apikey':SUPABASE_KEY,'Content-Type':'application/json'},body:JSON.stringify({email:email,password:pass})}).then(function(r){return r.json().then(function(j){return {ok:r.ok, json:j}})}).then(function(res){ if(!res.ok) throw new Error(res.json.msg||'Błąd'); if(ri2) ri2.innerText='Konto założone!'; setTimeout(function(){ fetch(SUPABASE_URL+'/auth/v1/token?grant_type=password',{method:'POST',headers:{'apikey':SUPABASE_KEY,'Content-Type':'application/json'},body:JSON.stringify({email:email,password:pass})}).then(function(r){return r.json().then(function(j){return {ok:r.ok, json:j}})}).then(function(r2){ if(r2.ok){ saveAuth(r2.json.access_token, r2.json.refresh_token, r2.json.user); closeAuth(); } }); }, 800); }).catch(function(e){ var ri3=document.getElementById('regInfo'); if(ri3) ri3.innerText='Błąd: '+e.message; }); }
+function sendReset(){ var emailEl=document.getElementById('resetEmail'); if(!emailEl) return; var email=emailEl.value.trim(); if(!email){alert('Wpisz e-mail');return} fetch(SUPABASE_URL+'/auth/v1/recover',{method:'POST',headers:{'apikey':SUPABASE_KEY,'Content-Type':'application/json'},body:JSON.stringify({email:email})}).then(function(){ var ri=document.getElementById('resetInfo'); if(ri) ri.innerText='Wysłano link'; }); }
+async function submitAdd(){
+ var titleEl=document.getElementById('addTitleInput'); var brandEl=document.getElementById('addBrand'); var modelEl=document.getElementById('addModel'); var priceEl=document.getElementById('addPrice'); var phoneEl=document.getElementById('addPhone');
+ var wojEl=document.getElementById('addWoj'); var powEl=document.getElementById('addPowiat'); var miejsEl=document.getElementById('addMiejscowosc'); var customEl=document.getElementById('addMiejscCustom');
+ if(!titleEl||!brandEl||!modelEl||!priceEl||!phoneEl){ alert('Błąd formularza'); return; }
+ var title=titleEl.value.trim(); var brand=brandEl.value; var modelRaw=modelEl.value; var customModelEl=document.getElementById('addModelCustom'); var customModel=customModelEl? customModelEl.value.trim():''; var model = (modelRaw==='Inny' || modelRaw==='Inny model') && customModel ? customModel : modelRaw; var priceRaw=priceEl.value.trim(); var phone=phoneEl.value.trim(); var priceClean = priceRaw.replace(/\s/g,'').replace(/\./g,'').replace(/,/g,'').replace(/[^0-9]/g,''); var price = priceClean ? parseInt(priceClean, 10) : 0; if(!price || isNaN(price)){ if(infoEl) infoEl.innerText='Podaj poprawną cenę'; return; }
+ var yearEl=document.getElementById('addYear'); var mileageEl=document.getElementById('addMileage'); var yearVal=yearEl? yearEl.value:''; var mileageVal=mileageEl? mileageEl.value.trim():'';
+ var yearInt = yearVal ? parseInt(yearVal) : null;
+ var mileageInt = mileageVal ? parseInt(mileageVal.replace(/\s/g,'').replace(/\./g,'').replace(/,/g,'')) : null;
+ var woj=wojEl? wojEl.value:''; var pow=powEl? powEl.value:''; var miejs=miejsEl? miejsEl.value:''; if(miejs==='__custom' && customEl) miejs=customEl.value.trim();
+ var infoEl=document.getElementById('addInfo');
+ if(!brand||!model||!miejs){ if(infoEl) infoEl.innerText='Uzupełnij markę, model, miejscowość *'; return; }
+ if(!yearInt){ if(infoEl) infoEl.innerText='Wybierz rocznik *'; return; }
+ if(!mileageInt){ if(infoEl) infoEl.innerText='Podaj przebieg *'; return; }
+ if(!title) title=brand+' '+model;
+ if(!price||!phone){ if(infoEl) infoEl.innerText='Cena i telefon *'; return; }
+ if(!currentUser||!authToken){ if(infoEl) infoEl.innerText='Zaloguj się'; openAuth(); return; }
+ var descEl=document.getElementById('addDesc'); var desc=descEl? descEl.value.trim():'';
+ var linksEl=document.getElementById('addImagesLinks'); var links=linksEl? (linksEl.value||'').split(',').map(function(s){return s.trim()}).filter(Boolean):[];
+ var images=selectedImagesBase64.concat(links).slice(0,10);
+ var submitBtn=document.getElementById('addSubmitBtn'); if(submitBtn){ submitBtn.disabled=true; submitBtn.innerText='Zapisuję...'; }
+ var searchLocationEl=document.getElementById('addLocationSearch');
+ var fullLocation=searchLocationEl && searchLocationEl.value.trim() ? searchLocationEl.value.trim() : (miejs+', pow. '+pow+', woj. '+woj);
+ var coords=addLocationCoords || getCoordsForPlace(miejs) || {lat:null,lng:null};
+ var payload={
+   title: title,
+   price: price,
+   image_url: images[0]||'',
+   images: images,
+   owner_id: currentUser.id,
+   brand: brand,
+   model: model,
+   description: desc,
+   location: fullLocation,
+   city: miejs,
+   lat: coords.lat!=null ? parseFloat(coords.lat) : null,
+   lng: coords.lng!=null ? parseFloat(coords.lng) : null,
+   phone: phone,
+   year: yearInt,
+   mileage: mileageInt,
+   damaged: (document.getElementById('addDamaged')? document.getElementById('addDamaged').value : 'nie')
+ };
+ async function doPost(token){
+   var method=editingId ? 'PATCH' : 'POST';
+   var url=editingId ? SUPABASE_URL+'/rest/v1/ads?id=eq.'+editingId : SUPABASE_URL+'/rest/v1/ads';
+   var r=await fetch(url,{method:method,headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+token,'Content-Type':'application/json','Prefer':'return=representation'},body:JSON.stringify(payload)});
+   var txt=await r.text();
+   return {ok:r.ok, txt:txt, status:r.status};
+ }
+ try{
+   var result=await doPost(authToken);
+   if(!result.ok && (result.txt.indexOf('JWT expired')!==-1 || result.status===401)){
+     if(infoEl) infoEl.innerText='⏳ Token wygasł, odświeżam...';
+     var refreshed=await refreshAuthToken();
+     if(refreshed){ result=await doPost(authToken); } else { throw new Error('JWT expired - zaloguj ponownie'); }
+   }
+   if(!result.ok) throw new Error(result.txt);
+   if(submitBtn){ submitBtn.disabled=false; submitBtn.innerText='Zatwierdź'; } closeAdd(); loadAds();
+   alert('✅ Dodano! GPS: '+(coords.lat? coords.lat.toFixed(4)+', '+coords.lng.toFixed(4):'z miejscowości'));
+ }catch(e){
+   if(submitBtn){ submitBtn.disabled=false; submitBtn.innerText='Zatwierdź'; }
+   if(infoEl){ infoEl.innerText='Błąd: '+e.message.slice(0,500); }
+ }
+}
 loadAuth();
 loadAds();
 </script>
