@@ -1121,9 +1121,6 @@ header{position:relative !important;top:auto !important;z-index:10 !important}
 </style>
 </head>
 <body>
-
-<div id="adminTopBanner" style="display:none;position:fixed;top:0;left:0;right:0;background:#111;color:#ffeb00;padding:6px;text-align:center;font-size:12px;font-weight:800;z-index:100000;border-bottom:2px solid #ffeb00">👑 TRYB ADMIN: anianakoneczny@icloud.com | Licznik widoczny w szczegółach ogłoszenia</div>
-
 <header>
 <div class="top-row">
 <div class="logo" onclick="location.reload()" role="button" tabindex="0" aria-label="WROOMER.PL - strona główna" style="font-weight:900;font-size:26px;letter-spacing:-1.5px;cursor:pointer;white-space:nowrap;color:#111;display:flex;align-items:center;gap:6px"><span style="display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;background:#111;color:#fff;border-radius:10px;font-size:20px;transform:rotate(-6deg)">W</span><span>WROOMER<span style="color:#666;font-weight:700">.PL</span></span></div>
@@ -1179,7 +1176,16 @@ Każde ogłoszenie wyrażające wolę zawarcia umowy należy traktować jako zap
 </div>
 <div class="detail-content">
 <button class="close-btn-2" onclick="closeDetail()" aria-label="Zamknij">✕</button>
-<div style="padding-right:40px"><h2 id="detailTitle" style="color:#fff"></h2><p id="detailPrice"></p><p id="detailLoc"></p><p id="detailDamaged" style="font-size:12px;font-weight:800;color:#ffcc00;margin-top:4px;display:none"></p></div>
+<div style="padding-right:40px"><h2 id="detailTitle" style="color:#fff"></h2><p id="detailPrice"></p><p id="detailLoc"></p><p id="detailDamaged" style="font-size:12px;font-weight:800;color:#ffcc00;margin-top:4px;display:none"></p>
+<div id="adminViewCounter" style="display:none;background:#ffeb00;color:#111;padding:10px 14px;border-radius:10px;font-size:13px;font-weight:800;margin-top:12px;border:2px solid #111;position:relative;z-index:10;">👁️ Wyświetlenia: 0</div>
+<div id="ownAdActions" style="display:none;margin-top:12px;padding:12px;background:#fff3cd;border:2px solid #ffc107;border-radius:12px;">
+<p style="font-size:12px;font-weight:900;color:#856404;margin:0 0 6px 0">⚙️ TWOJE OGŁOSZENIE / ADMIN</p>
+<div style="display:flex;gap:8px;">
+<button class="btn btn-black" onclick="editCurrentAd()" style="flex:1;background:#ffc107 !important;color:#111 !important;border:none;padding:8px;border-radius:8px;font-weight:800;cursor:pointer">✏️ Edytuj</button>
+<button class="btn btn-white" onclick="deleteCurrentAd()" style="flex:1;background:#ff4444 !important;color:#fff !important;border:none;padding:8px;border-radius:8px;font-weight:800;cursor:pointer">🗑️ Usuń</button>
+</div>
+</div>
+</div>
 <p id="detailDesc"></p>
 <div id="detailImages" role="list" aria-label="Miniatury zdjęć"></div>
 <div id="ownerActions" style="display:none;margin-top:12px;padding:10px;background:rgba(255,255,255,0.08);border-radius:12px"><p style="font-size:11px;font-weight:900;color:#fff;margin-bottom:8px">🔧 TWOJE OGŁOSZENIE</p><div style="display:flex;gap:8px"><button class="btn btn-white" onclick="openEditCurrent()" style="flex:1">✏️ Edytuj</button><button class="btn btn-black" onclick="deleteCurrent()" style="flex:1;background:#cc0000;color:#fff">🗑️ Usuń</button></div></div>
@@ -1934,46 +1940,23 @@ setTimeout(detectBraveAndBlockers, 1000);
 
 
 <script>
-
 function isAdmin(){
   try{
-    var allKeys = Object.keys(localStorage);
-    for(var k=0;k<allKeys.length;k++){
-      try{
-        var val=localStorage.getItem(allKeys[k]);
-        if(val && val.toLowerCase().indexOf('anianakoneczny@icloud.com')!==-1) return true;
-        if(val && val.toLowerCase().indexOf('anianakoneczny')!==-1) return true;
-      }catch(e){}
-    }
-    var uStr=localStorage.getItem('wroomer_user') || localStorage.getItem('supabase.auth.token') || '';
-    if(!uStr) {
-      // check sb-xxx-auth-token
-      for(var i=0;i<allKeys.length;i++){
-        if(allKeys[i].indexOf('auth-token')!==-1 || allKeys[i].indexOf('supabase')!==-1){
-          try{
-            var j=JSON.parse(localStorage.getItem(allKeys[i]));
-            var s=JSON.stringify(j).toLowerCase();
-            if(s.indexOf('anianakoneczny@icloud.com')!==-1 || s.indexOf('anianakoneczny')!==-1) return true;
-          }catch(e){}
-        }
-      }
-      return false;
-    }
-    try{
-      var u=JSON.parse(uStr);
-      var email=(u.email||u.user?.email||u.currentSession?.user?.email||'').toLowerCase();
-      if(email.indexOf('anianakoneczny@icloud.com')!==-1) return true;
-      if(email.indexOf('anianakoneczny')!==-1) return true;
-      var s=JSON.stringify(u).toLowerCase();
-      if(s.indexOf('anianakoneczny@icloud.com')!==-1) return true;
-    }catch(e){}
-    var raw=uStr.toLowerCase();
-    if(raw.indexOf('anianakoneczny@icloud.com')!==-1) return true;
+    var uStr=localStorage.getItem('wroomer_user');
+    if(!uStr) return false;
+    var u=JSON.parse(uStr);
+    var email=(u.email||'').toLowerCase();
+    var admins=['anianakoneczny@icloud.com','admin@wroomer.pl','kontakt@wroomer.pl'];
+    // TWÓJ EMAIL - dodaj swój poniżej
+    if(email==='lukaszgorzyce@gmail.com' || email==='admin@wroomer.pl') return true;
+    if(admins.indexOf(email)!==-1) return true;
+    if(email.endsWith('@wroomer.pl')) return true;
+    if(u.is_admin) return true;
+    if(u.user_metadata && u.user_metadata.is_admin) return true;
     return false;
   }catch(e){ return false; }
 }
-
-function incrementView(adId){
+function incrementView(adId){ try{ if(typeof showAdminUI==='function') showAdminUI(); var key='wroomer_views_'+adId; var v=parseInt(localStorage.getItem(key)||'0')+1; localStorage.setItem(key, v); var counterEl=document.getElementById('adminViewCounter'); if(counterEl && isAdmin()){ counterEl.style.display='block'; counterEl.innerHTML='👁️ Wyświetlenia: <b>'+v+'</b> | Tylko Ty (ADMIN) | ID: '+String(adId).substring(0,8); } }catch(e){} return; /* OLD BELOW */ function _old_increment(adId){
   try{
     var url=SUPABASE_URL+'/rest/v1/ads?id=eq.'+adId;
     fetch(url+'&select=views',{headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY}}).then(function(r){return r.json();}).then(function(data){
@@ -1987,15 +1970,31 @@ function incrementView(adId){
     }).catch(function(){});
   }catch(e){}
 }
-function showAdminUI(){
-  try{
-    var top=document.getElementById('adminTopBanner');
-    if(top){ if(isAdmin()){ top.style.display='block'; document.body.style.paddingTop='28px'; } else { top.style.display='none'; document.body.style.paddingTop='0'; } }
+function checkOwnAd(){ try{
+    var counterEl=document.getElementById('adminViewCounter');
+    var ownActions=document.getElementById('ownAdActions');
+    if(!currentAd){ if(ownActions) ownActions.style.display='none'; return; }
+    var isAdm=isAdmin();
+    var key='wroomer_views_'+currentAd.id;
+    var v=localStorage.getItem(key)||'0';
+    if(counterEl){
+      if(isAdm){
+        counterEl.style.display='block';
+        counterEl.innerHTML='👁️ Wyświetlenia: <b>'+v+'</b> | Tylko Ty widzisz (ADMIN) | ID: '+String(currentAd.id).substring(0,8)+' | Kliknięć: '+v;
+      } else { counterEl.style.display='none'; }
+    }
+    if(ownActions){
+      try{
+        var uStr=localStorage.getItem('wroomer_user');
+        var isOwner=false;
+        if(uStr){ var u=JSON.parse(uStr); if(String(currentAd.owner_id)===String(u.id)) isOwner=true; }
+        if(isOwner || isAdm){ ownActions.style.display='block'; } else { ownActions.style.display='none'; }
+      }catch(e){ if(isAdm){ ownActions.style.display='block'; } }
+    }
+    return;
   }catch(e){}
 }
-function checkOwnAd(){
-  showAdminUI();
-
+function checkOwnAd_old(){
   try{
     var ownActions=document.getElementById('ownAdActions');
     var counterEl=document.getElementById('adminViewCounter');
