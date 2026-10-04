@@ -1385,28 +1385,22 @@ function closeAuth(){ var el=document.getElementById('authModal'); if(el) el.sty
 function showTab(n){ var l=document.getElementById('loginTab'); var r=document.getElementById('registerTab'); var rs=document.getElementById('resetTab'); if(l) l.style.display=n==='login'?'block':'none'; if(r) r.style.display=n==='register'?'block':'none'; if(rs) rs.style.display=n==='reset'?'block':'none'; }
 function closeDetail(){ var el=document.getElementById('detail'); if(el) el.style.display='none'; }
 function clearFilters(){
-  var s=document.getElementById('searchInput'); if(s) s.value='';
-  var loc=document.getElementById('locationInput'); if(loc) loc.value='';
-  var rad=document.getElementById('radiusFilter'); if(rad) rad.value='25';
-  var brand=document.getElementById('brandFilter'); if(brand) brand.value='';
-  var model=document.getElementById('modelFilter'); if(model) model.value='';
-  var woj=document.getElementById('wojFilter'); if(woj) woj.value='';
-  var priceFrom=document.getElementById('priceFrom'); if(priceFrom) priceFrom.value='';
-  var priceTo=document.getElementById('priceTo'); if(priceTo) priceTo.value='';
-  var cat=document.getElementById('categoryFilter'); if(cat) cat.value='';
-  var sort=document.getElementById('sortFilter'); if(sort) sort.value='newest';
+  var ids=['searchInput','locationInput','radiusFilter','brandFilter','modelFilter','priceFrom','priceTo','categoryFilter','sortFilter','mileageFilter','yearFromFilter','yearToFilter','wojFilter'];
+  ids.forEach(function(id){ var el=document.getElementById(id); if(el){ el.value=''; if(id==='radiusFilter') el.value='25'; if(id==='sortFilter') el.value='newest'; } });
   try{
     if(typeof currentFilters!=='undefined'){ currentFilters={}; }
     localStorage.removeItem('wroomer_filters');
     localStorage.removeItem('wroomer_location');
     localStorage.removeItem('wroomer_search');
     localStorage.removeItem('lastSearch');
+    localStorage.removeItem('wroomer_brand');
   }catch(e){}
   currentPage=0;
   try{ history.replaceState(null,'',location.pathname); }catch(e){}
   if(typeof loadAds==='function') loadAds(); else if(typeof renderAds==='function') renderAds();
-  try{ var btn=document.querySelector('button[onclick="clearFilters()"]'); if(btn){ var orig=btn.innerText; btn.innerText='✓ Wyczyszczono'; setTimeout(function(){ btn.innerText=orig; }, 1500); } }catch(e){}
+  try{ var btn=document.querySelector('button[onclick*="clearFilters"]'); if(btn){ var orig=btn.innerText; btn.innerText='✓ Wyczyszczono rok+przebieg+marka'; setTimeout(function(){ btn.innerText=orig; }, 1500); } }catch(e){}
 }
+
 function showPhone(){
   var el=document.getElementById('phoneNumber');
   if(el){
