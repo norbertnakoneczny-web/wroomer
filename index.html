@@ -184,12 +184,41 @@ header{background:#fff;border-bottom:1px solid #e5e5e0;position:sticky;top:0;z-i
   #userEmailWrap{max-width:50%;margin:6px 0 0 0 !important}
 }
 
+
+@media(min-width:901px){
+  body{background:#f5f4ef}
+  header{background:#fff;border-bottom:1px solid #e8e6e0;box-shadow:0 2px 20px rgba(0,0,0,0.04);padding:14px 24px !important;position:sticky;top:0;z-index:50}
+  .top-row{max-width:1280px;margin:0 auto;justify-content:flex-start !important;gap:20px}
+  .logo{font-size:28px !important}
+  .logo span:first-child{width:38px !important;height:38px !important;font-size:22px !important;border-radius:11px !important}
+  .top-actions{gap:10px !important}
+  .top-actions .btn{padding:10px 18px !important;font-size:14px !important;border-radius:12px !important;font-weight:700 !important;box-shadow:0 2px 8px rgba(0,0,0,0.08)}
+  .top-actions .btn-yellow{background:#111 !important;color:#fff !important}
+  .top-actions .btn-yellow:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,0.15)}
+  #userEmailWrap{max-width:1280px;margin:8px auto 0 !important;padding:0 2px;font-size:13px !important;color:#666 !important}
+  #userEmailWrap span{color:#111 !important}
+  .search-bar{max-width:1280px !important;margin:16px auto 0 !important;background:#fff;padding:14px 16px;border-radius:16px;border:1px solid #e8e6e0;box-shadow:0 4px 20px rgba(0,0,0,0.06);display:flex !important;gap:10px !important;align-items:center;grid-template-columns:none !important}
+  .search-bar input.search-main{flex:2 !important;grid-column:auto !important;padding:13px 16px !important;font-size:15px !important;border-radius:12px !important;border:1px solid #ddd !important;background:#f9f8f5 !important}
+  .search-bar select{flex:1 !important;width:auto !important;padding:13px 12px !important;font-size:14px !important;border-radius:12px !important;border:1px solid #ddd !important;background:#fff !important;min-width:140px}
+  .search-bar .btn{flex:0 0 auto !important;width:auto !important;padding:13px 18px !important;font-size:14px !important;border-radius:12px !important;white-space:nowrap}
+  #resultsInfo{max-width:1280px;margin:12px auto 0;padding:0 24px;font-size:13px;color:#555}
+  .grid{max-width:1280px;margin:0 auto;grid-template-columns:repeat(auto-fill,minmax(260px,1fr)) !important;gap:18px !important;padding:16px 24px 40px !important}
+  .card{background:#fff;border-radius:16px !important;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.06);border:1px solid #eee;transition:all 0.2s}
+  .card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,0.10);border-color:#ddd}
+  .card .img-wrap{height:190px !important}
+  .card .info{padding:12px 14px !important}
+  .card .title{font-size:14px !important}
+}
+@media(min-width:1200px){
+  .grid{grid-template-columns:repeat(auto-fill,minmax(280px,1fr)) !important}
+}
+
 </style>
 </head>
 <body>
 <header>
 <div class="top-row">
-<div class="logo" onclick="location.reload()" role="button" tabindex="0" aria-label="WROOMER.PL - strona główna" style="font-weight:900;font-size:22px;letter-spacing:-1px;cursor:pointer;white-space:nowrap;color:#111">WROOMER.PL</div>
+<div class="logo" onclick="location.reload()" role="button" tabindex="0" aria-label="WROOMER.PL - strona główna" style="font-weight:900;font-size:26px;letter-spacing:-1.5px;cursor:pointer;white-space:nowrap;color:#111;display:flex;align-items:center;gap:6px"><span style="display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;background:#111;color:#fff;border-radius:10px;font-size:20px;transform:rotate(-6deg)">W</span><span>WROOMER<span style="color:#666;font-weight:700">.PL</span></span></div>
 <div class="top-actions">
 <button class="btn btn-yellow" onclick="openAdd()" aria-label="Dodaj ogłoszenie">+ Dodaj</button>
 <button id="myBtn" class="btn btn-white" style="display:none" onclick="filterMy()" aria-label="Moje ogłoszenia">Moje</button>

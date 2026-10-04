@@ -3,15 +3,22 @@
   "entries": [
     {
       "identifier": "urn:air:wroomer.pl:web:homepage",
-      "displayName": "WROOMER.PL",
+      "displayName": "WROOMER.PL - Ogłoszenia motoryzacyjne",
       "type": "text/html",
       "url": "https://www.wroomer.pl/",
-      "description": "Lokalne",
+      "description": "Lokalne ogłoszenia motoryzacyjne Gorzyce, Rydułtowy, Rybnik, Wodzisław Śląski",
       "capabilities": [
-        "search"
+        "search",
+        "browse"
+      ],
+      "tags": [
+        "motoryzacja",
+        "ogłoszenia",
+        "samochody"
       ],
       "representativeQueries": [
-        "ogłoszenia Gorzyce"
+        "znajdź ogłoszenia samochodowe w Gorzycach",
+        "samochody używane Rydułtowy Rybnik"
       ]
     }
   ]
