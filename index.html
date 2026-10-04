@@ -1,3 +1,4 @@
+<!-- WROOMER.PL OSTATECZNA WERSJA 04.10.2026 11:27 -->
 <!DOCTYPE html>
 <html lang="pl">
 <head>
@@ -348,7 +349,7 @@
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>WROOMER.PL - Ogłoszenia motoryzacyjne Gorzyce, Rydułtowy, Rybnik</title>
+<title>WROOMER.PL - 04.10.2026 11:45 - Ogólnopolska darmowa baza - Fix Brave Chrome</title>
 <meta name="description" content="Ogólnopolska całkowicie darmowa baza ogłoszeń motoryzacyjnych. Żadnych promowań i wyróżnień.">
 <link rel="preconnect" href="https://rljqnhfogaqdjeirqqdj.supabase.co" crossorigin>
 <link rel="ai-catalog" href="/.well-known/ai-catalog.json">
@@ -1598,45 +1599,11 @@ function updateAuthUI(){
     if(userWrap) userWrap.style.display='none';
   }
 }
-
-function isAdmin(){
-  try{
-    var uStr=localStorage.getItem('wroomer_user');
-    if(!uStr) return false;
-    var u=JSON.parse(uStr);
-    var email=(u.email||'').toLowerCase();
-    // ADMIN EMAILS - zmień na swój!
-    var admins=['admin@wroomer.pl','kontakt@wroomer.pl','wroomer.pl@gmail.com','gorzyce@wroomer.pl'];
-    if(admins.indexOf(email)!==-1) return true;
-    if(email.endsWith('@wroomer.pl')) return true;
-    // jeśli w bazie masz is_admin
-    if(u.is_admin) return true;
-    if(u.user_metadata && u.user_metadata.is_admin) return true;
-    return false;
-  }catch(e){ return false; }
-}
-function incrementView(adId){
-  try{
-    var url=SUPABASE_URL+'/rest/v1/ads?id=eq.'+adId;
-    // pobierz aktualne views i zwiększ - używamy rpc lub patch
-    fetch(url+'&select=views',{headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY}}).then(function(r){return r.json();}).then(function(data){
-      var currentViews = (data[0] && data[0].views) ? parseInt(data[0].views) : 0;
-      var newViews = currentViews + 1;
-      fetch(url,{method:'PATCH',headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify({views:newViews})}).catch(function(){});
-      // update UI for admin
-      if(isAdmin()){
-        var counterEl=document.getElementById('adminViewCounter');
-        if(counterEl){ counterEl.style.display='block'; counterEl.innerHTML='👁️ Wyświetlenia: <b>'+newViews+'</b> (tylko admin)'; }
-      }
-    }).catch(function(){});
-  }catch(e){}
-}
-
 function _old_updateAuthUI(){
  var authBtn=document.getElementById('authBtn'); var userEmail=document.getElementById('userEmail'); var userWrap=document.getElementById('userEmailWrap'); var logoutBtn=document.getElementById('logoutBtn'); var myBtn=document.getElementById('myBtn'); if(currentUser){ if(authBtn) authBtn.style.display='none'; if(userEmail){ userEmail.innerText='Zalogowany: '+currentUser.email; } if(userWrap) userWrap.style.display='block'; if(logoutBtn) logoutBtn.style.display='block'; if(myBtn) myBtn.style.display='block'; } else { if(authBtn) authBtn.style.display='block'; if(userWrap) userWrap.style.display='none'; if(logoutBtn) logoutBtn.style.display='none'; if(myBtn) myBtn.style.display='none'; } }
 function logout(){ localStorage.removeItem('sb_token'); localStorage.removeItem('sb_refresh'); localStorage.removeItem('sb_user'); currentUser=null; authToken=null; refreshToken=null; updateAuthUI(); location.reload(); }
 function filterMy(){ if(!currentUser){alert('Zaloguj');return} var btn=document.getElementById('myBtn'); if(!btn) return; if(btn.innerText==='Moje'){ btn.innerText='Wszystkie'; loadAds().then(function(){ allAds=allAds.filter(function(a){return a.owner_id===currentUser.id}); currentPage=0; renderAds(); }); } else { btn.innerText='Moje'; loadAds(); } }
-function loadAds(){ var rt=document.getElementById('resultsText'); if(rt) rt.innerText='Ładowanie...'; var url=SUPABASE_URL+'/rest/v1/ads?select=id,title,price,image_url,location,city,brand,model,year,mileage,views,lat,lng,owner_id,created_at&order=created_at.desc&limit=100'; return fetch(url,{headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY}}).then(function(res){ if(!res.ok) throw new Error('HTTP '+res.status); return res.json(); }).then(function(data){ for(var i=0;i<data.length;i++) ensureAdCoords(data[i]); allAds=data; currentPage=0; renderAds(); }).catch(function(e){ if(rt) rt.innerText='Błąd: '+e.message; }); }
+function loadAds(){ var rt=document.getElementById('resultsText'); if(rt) rt.innerText='Ładowanie...'; var url=SUPABASE_URL+'/rest/v1/ads?select=id,title,price,image_url,location,city,brand,model,year,mileage,lat,lng,owner_id,created_at&order=created_at.desc&limit=100'; return fetch(url,{headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY}}).then(function(res){ if(!res.ok) throw new Error('HTTP '+res.status); return res.json(); }).then(function(data){ for(var i=0;i<data.length;i++) ensureAdCoords(data[i]); allAds=data; currentPage=0; renderAds(); }).catch(function(e){ if(rt) rt.innerText='Błąd: '+e.message; }); }
 function login(){ var emailEl=document.getElementById('loginEmail'); var passEl=document.getElementById('loginPass'); if(!emailEl||!passEl) return; var email=emailEl.value.trim(); var pass=passEl.value; if(!email||!pass){ var li=document.getElementById('loginInfo'); if(li) li.innerText='Wpisz dane!'; return; } var li2=document.getElementById('loginInfo'); if(li2) li2.innerText='Logowanie...'; fetch(SUPABASE_URL+'/auth/v1/token?grant_type=password',{method:'POST',headers:{'apikey':SUPABASE_KEY,'Content-Type':'application/json'},body:JSON.stringify({email:email,password:pass})}).then(function(r){ return r.json().then(function(j){ return {ok:r.ok, json:j}; }); }).then(function(res){ if(!res.ok) throw new Error(res.json.error_description||'Błąd'); saveAuth(res.json.access_token, res.json.refresh_token, res.json.user); closeAuth(); }).catch(function(e){ var li3=document.getElementById('loginInfo'); if(li3) li3.innerText='Błąd: '+e.message; }); }
 function register(){ var chk=document.getElementById('regCheck'); if(!chk||!chk.checked){alert('Zaznacz regulamin');return} var emailEl=document.getElementById('regEmail'); var passEl=document.getElementById('regPass'); if(!emailEl||!passEl) return; var email=emailEl.value.trim(); var pass=passEl.value; if(!email||pass.length<6){ var ri=document.getElementById('regInfo'); if(ri) ri.innerText='Min 6 znaków'; return; } var ri2=document.getElementById('regInfo'); if(ri2) ri2.innerText='Rejestracja...'; fetch(SUPABASE_URL+'/auth/v1/signup',{method:'POST',headers:{'apikey':SUPABASE_KEY,'Content-Type':'application/json'},body:JSON.stringify({email:email,password:pass})}).then(function(r){return r.json().then(function(j){return {ok:r.ok, json:j}})}).then(function(res){ if(!res.ok) throw new Error(res.json.msg||'Błąd'); if(ri2) ri2.innerText='Konto założone!'; setTimeout(function(){ fetch(SUPABASE_URL+'/auth/v1/token?grant_type=password',{method:'POST',headers:{'apikey':SUPABASE_KEY,'Content-Type':'application/json'},body:JSON.stringify({email:email,password:pass})}).then(function(r){return r.json().then(function(j){return {ok:r.ok, json:j}})}).then(function(r2){ if(r2.ok){ saveAuth(r2.json.access_token, r2.json.refresh_token, r2.json.user); closeAuth(); } }); }, 800); }).catch(function(e){ var ri3=document.getElementById('regInfo'); if(ri3) ri3.innerText='Błąd: '+e.message; }); }
 function sendReset(){ var emailEl=document.getElementById('resetEmail'); if(!emailEl) return; var email=emailEl.value.trim(); if(!email){alert('Wpisz e-mail');return} fetch(SUPABASE_URL+'/auth/v1/recover',{method:'POST',headers:{'apikey':SUPABASE_KEY,'Content-Type':'application/json'},body:JSON.stringify({email:email})}).then(function(){ var ri=document.getElementById('resetInfo'); if(ri) ri.innerText='Wysłano link'; }); }
@@ -1866,6 +1833,91 @@ function rejectCookies(){ try{ localStorage.setItem('wroomer_cookies','rejected'
 function openPrivacy(){ var m=document.getElementById('privacyModal'); if(m) m.style.display='flex'; }
 function closePrivacy(){ var m=document.getElementById('privacyModal'); if(m) m.style.display='none'; }
 (function(){ try{ var c=localStorage.getItem('wroomer_cookies'); if(c){ var b=document.getElementById('cookieBanner'); if(b) b.style.display='none'; } }catch(e){} })();
+</script>
+
+<div style="position:fixed;bottom:2px;right:2px;background:#000;color:#ff0;padding:3px 6px;font-size:9px;border-radius:4px;z-index:9999;">vFINAL 04.10.2026 11:45 + BRAVE/CHROME FIX 11:27</div>
+
+<style>
+#shieldBanner{display:none;position:fixed;top:60px;left:50%;transform:translateX(-50%);width:92%;max-width:600px;background:#fff3cd;border:2px solid #ffc107;border-radius:12px;padding:12px 14px;z-index:99999;box-shadow:0 8px 24px rgba(0,0,0,0.3);font-family:inherit}
+#shieldBanner b{color:#856404}
+#shieldBanner .shield-actions{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+#shieldBanner button{padding:8px 12px;border-radius:8px;border:1px solid #ccc;cursor:pointer;font-weight:700;font-size:12px}
+</style>
+<div id="shieldBanner" role="alert">
+  <div style="display:flex;justify-content:space-between;align-items:start;gap:10px">
+    <div>
+      <b id="shieldBannerTitle">🛡️ Wykryto blokowanie!</b>
+      <p id="shieldBannerText" style="font-size:12px;margin:6px 0 0;color:#333;line-height:1.4"></p>
+      <div class="shield-actions">
+        <button onclick="document.getElementById('shieldBanner').style.display='none'" style="background:#111;color:#fff">Rozumiem</button>
+        <button onclick="location.reload()" style="background:#fff;color:#111">Odśwież po wyłączeniu</button>
+      </div>
+    </div>
+    <button onclick="this.parentElement.parentElement.style.display='none'" style="background:none;border:none;font-size:18px;cursor:pointer">✕</button>
+  </div>
+</div>
+<script>
+function detectBraveAndBlockers(){
+  var isBrave = false;
+  try{ isBrave = (navigator.brave && typeof navigator.brave.isBrave==='function') || navigator.userAgent.includes('Brave'); }catch(e){}
+  var isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+  var banner=document.getElementById('shieldBanner');
+  var titleEl=document.getElementById('shieldBannerTitle');
+  var textEl=document.getElementById('shieldBannerText');
+  // Test if Supabase is blocked
+  var supabaseBlocked=false;
+  try{
+    fetch('https://rljqnhfogaqdjeirqqdj.supabase.co/rest/v1/ads?select=id&limit=1',{method:'HEAD',headers:{'apikey':SUPABASE_KEY}}).then(function(r){
+      if(!r.ok && r.status===0) supabaseBlocked=true;
+    }).catch(function(){ supabaseBlocked=true; showIfNeeded(); });
+  }catch(e){ supabaseBlocked=true; }
+
+  function showIfNeeded(){
+    if(!banner) return;
+    if(isBrave){
+      titleEl.innerText='🦁 Brave blokuje dodawanie ogłoszeń!';
+      textEl.innerHTML='Brave Shields zablokował połączenie z bazą.<br><b>Rozwiązanie:</b> Kliknij ikonę LWA 🦁 w pasku adresu → wyłącz przełącznik <b>Shields</b> dla wroomer.pl → odśwież stronę Ctrl+F5.<br><br>Dodasz ogłoszenie za darmo bez blokad.';
+      banner.style.display='block';
+      // also try to auto-fix by using anon
+      try{ localStorage.setItem('wroomer_brave_detected','1'); }catch(e){}
+    } else if(supabaseBlocked && isChrome){
+      // Check adblock
+      var adblockDetected=false;
+      try{
+        var testDiv=document.createElement('div');
+        testDiv.className='adsbox';
+        testDiv.style.display='none';
+        document.body.appendChild(testDiv);
+        setTimeout(function(){ if(testDiv.offsetHeight===0) adblockDetected=true; showChrome(); testDiv.remove(); }, 200);
+      }catch(e){ showChrome(); }
+      function showChrome(){
+        if(adblockDetected || supabaseBlocked){
+          titleEl.innerText='🛡️ Chrome / AdBlock blokuje wroomer.pl';
+          textEl.innerHTML='Twój AdBlock (uBlock, AdGuard) zablokował bazę ogłoszeń.<br><b>Rozwiązanie dla Chrome:</b><br>1. Kliknij ikonę puzzla 🧩 → uBlock/AdGuard → Wyłącz dla wroomer.pl<br>2. Jeśli tryb Incognito → użyj normalnego okna (Incognito blokuje logowanie)<br>3. Odśwież Ctrl+F5<br><br>To 10 sekund, potem dodasz ogłoszenie!';
+          banner.style.display='block';
+        }
+      }
+    }
+  }
+  setTimeout(showIfNeeded, 1500);
+  // Also hook submitAdd errors
+  var origSubmitAdd = window.submitAdd;
+  if(origSubmitAdd){
+    window.submitAdd = function(){
+      try{ return origSubmitAdd.apply(this, arguments); }catch(e){
+        if((e.message||'').includes('Failed to fetch') || (e.message||'').includes('fetch')){
+          if(banner){
+            titleEl.innerText='❌ Nie można dodać - blokada przeglądarki';
+            textEl.innerHTML='Przeglądarka zablokowała wysyłkę.<br><b>Brave:</b> wyłącz lwa 🦁<br><b>Chrome:</b> wyłącz AdBlock dla wroomer.pl + wyjdź z Incognito<br>Potem kliknij Dodaj ponownie.';
+            banner.style.display='block';
+          }
+        }
+        throw e;
+      }
+    };
+  }
+}
+setTimeout(detectBraveAndBlockers, 1000);
 </script>
 
 </body>
