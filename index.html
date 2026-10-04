@@ -250,94 +250,41 @@ header{background:#fff;border-bottom:1px solid #e5e5e0;position:sticky;top:0;z-i
 }
 
 
-/* v6.5 MEGA FIX - gallery must show all photos on mobile */
-#detail .detail-box{display:flex;flex-direction:column;max-height:100vh;overflow-y:auto !important}
-.gallery-wrap{flex:0 0 auto !important;position:relative !important;background:#000 !important;width:100% !important;min-height:50vh !important;max-height:70vh !important}
-.gallery-wrap img#detailImg{width:100% !important;height:auto !important;max-height:65vh !important;object-fit:contain !important;display:block !important;margin:0 auto !important}
-.detail-content{flex:1 1 auto !important;overflow:visible !important}
-
-/* Thumbnails - WHITE CONTAINER so visible on dark */
+/* v6.6 FIX - gallery visible on mobile */
 #detailImages{
   display:flex !important;
   flex-wrap:nowrap !important;
-  overflow-x:scroll !important;
+  overflow-x:auto !important;
   overflow-y:hidden !important;
   -webkit-overflow-scrolling:touch !important;
-  gap:12px !important;
-  padding:14px 12px !important;
-  margin:16px 0 0 0 !important;
-  background:#1a1a1a !important;
-  border:2px solid #333 !important;
-  border-radius:14px !important;
-  min-height:80px !important;
-  max-width:100% !important;
-  scrollbar-width:thin !important;
-}
-#detailImages:empty::before{content:"Brak dodatkowych zdjęć";color:#888;font-size:12px;padding:10px}
-#detailImages img{
-  width:88px !important;
-  height:66px !important;
-  min-width:88px !important;
-  min-height:66px !important;
-  max-width:88px !important;
-  max-height:66px !important;
-  flex:0 0 88px !important;
-  object-fit:cover !important;
-  border-radius:10px !important;
-  border:3px solid #444 !important;
-  cursor:pointer !important;
-  display:block !important;
+  gap:10px !important;
+  padding:12px !important;
+  margin-top:14px !important;
   background:#222 !important;
+  border:2px solid #444 !important;
+  border-radius:12px !important;
+  min-height:76px !important;
+  width:100% !important;
+  box-sizing:border-box !important;
 }
-#detailImages img.active{
-  border-color:#fff !important;
-  box-shadow:0 0 0 2px #fff, 0 4px 15px rgba(255,255,255,0.4) !important;
-  transform:scale(1.08) !important;
+#detailImages img{
+  width:80px !important;
+  height:60px !important;
+  min-width:80px !important;
+  flex:0 0 80px !important;
+  object-fit:cover !important;
+  border-radius:8px !important;
+  border:2px solid #555 !important;
+  background:#333 !important;
+  display:block !important;
 }
-#detailImages::-webkit-scrollbar{height:8px !important;display:block !important}
-#detailImages::-webkit-scrollbar-thumb{background:#666 !important;border-radius:4px !important}
-#detailImages::-webkit-scrollbar-track{background:#111 !important;border-radius:4px !important}
-
-/* Mobile specific - FORCE visible */
-@media(max-width:768px){
-  #detail{padding:0 !important;align-items:flex-start !important}
-  #detail .detail-box{width:100% !important;max-width:100% !important;height:100vh !important;max-height:100vh !important;border-radius:0 !important;padding-top:0 !important;padding-bottom:0 !important;overflow-y:auto !important}
-  .gallery-wrap{position:sticky !important;top:0 !important;z-index:2 !important;min-height:45vh !important;max-height:55vh !important;background:#000 !important}
-  .gallery-wrap img#detailImg{max-height:50vh !important}
-  #detailImages{
-    position:relative !important;
-    z-index:3 !important;
-    background:#222 !important;
-    border:2px solid #444 !important;
-    margin:12px 12px 0 12px !important;
-    min-height:90px !important;
-    display:flex !important;
-    visibility:visible !important;
-    opacity:1 !important;
-  }
-  #detailImages img{
-    width:76px !important;
-    height:58px !important;
-    min-width:76px !important;
-    flex:0 0 76px !important;
-  }
-  .detail-content{padding:16px 14px 30px !important}
-  /* Add swipe hint */
-  #detailImages::after{
-    content:"← przesuń →";
-    position:absolute;
-    right:8px;
-    top:4px;
-    font-size:10px;
-    color:#888;
-    background:#111;
-    padding:2px 6px;
-    border-radius:10px;
-    pointer-events:none;
-  }
-}
-@media(max-width:400px){
-  #detailImages img{width:68px !important;height:52px !important;min-width:68px !important;flex:0 0 68px !important}
+#detailImages img.active{border-color:#fff !important;box-shadow:0 0 10px rgba(255,255,255,0.5) !important}
+#detailImages::-webkit-scrollbar{height:6px}
+#detailImages::-webkit-scrollbar-thumb{background:#888;border-radius:3px}
+@media(max-width:640px){
+  #detailImages{margin-left:0 !important;margin-right:0 !important;min-height:84px !important}
+  #detailImages img{width:72px !important;height:54px !important;min-width:72px !important;flex:0 0 72px !important}
+  .gallery-wrap{max-height:55vh !important;min-height:40vh !important}
 }
 
 </style>
@@ -507,8 +454,7 @@ var MIEJSCOWOSCI={'wodzisławski':['Wodzisław Śląski','Gorzyce','Gorzyczki','
 var KNOWN_COORDS={'gorzyce':{lat:49.962,lng:18.397},'rydułtowy':{lat:50.058,lng:18.405},'wodzisław śląski':{lat:50.022,lng:18.456},'rybnik':{lat:50.097,lng:18.542}};
 function getCoordsForPlace(n){ if(!n) return null; n=n.toLowerCase().trim(); if(KNOWN_COORDS[n]) return KNOWN_COORDS[n]; for(var k in KNOWN_COORDS){ if(n.indexOf(k)!==-1||k.indexOf(n)!==-1) return KNOWN_COORDS[k]; } return null; }
 function ensureAdCoords(ad){ if(ad.lat&&ad.lng) return ad; var c=getCoordsForPlace((ad.location||ad.city||'').toLowerCase()); if(c){ ad.lat=c.lat; ad.lng=c.lng; } return ad; }
-function showImage(idx){ if(!galleryImages.length) return; if(idx<0) idx=galleryImages.length-1; if(idx>=galleryImages.length) idx=0; currentImageIndex=idx; var img=document.getElementById('detailImg'); if(img){ img.src=getOptimizedImageUrl(galleryImages[currentImageIndex], 800); img.alt='Zdjęcie '+(currentImageIndex+1)+' z '+galleryImages.length+' - '+(currentAd&&currentAd.title||'ogłoszenie'); } var gc=document.getElementById('galleryCounter'); if(gc) gc.innerText=(currentImageIndex+1)+' / '+galleryImages.length; var dots=document.getElementById('galleryDots'); if(dots){ var dh=''; for(var i=0;i<galleryImages.length;i++){ dh+='<span class="'+(i===currentImageIndex?'active':'')+'" onclick="showImage('+i+')" role="tab" aria-selected="'+(i===currentImageIndex?'true':'false')+'" aria-label="Zdjęcie '+(i+1)+'" tabindex="0"></span>'; } dots.innerHTML=dh; } var thumbs=document.getElementById('detailImages'); if(thumbs){ var imgs=thumbs.querySelectorAll('img'); for(var t=0;t<imgs.length;t++) { if(imgs[t]) { if(t===currentImageIndex) imgs[t].classList.add('active'); else imgs[t].classList.remove('active'); } } // legacy loop below
- var imgs2=thumbs.querySelectorAll('img'); for(var t=0;t<imgs2.length;t++){ imgs[t].classList.toggle('active', t===currentImageIndex); } } }
+function showImage(idx){ if(!galleryImages.length) return; if(idx<0) idx=galleryImages.length-1; if(idx>=galleryImages.length) idx=0; currentImageIndex=idx; var img=document.getElementById('detailImg'); if(img){ img.src=getOptimizedImageUrl(galleryImages[currentImageIndex], 800); img.alt='Zdjęcie '+(currentImageIndex+1)+' z '+galleryImages.length+' - '+(currentAd&&currentAd.title||'ogłoszenie'); } var gc=document.getElementById('galleryCounter'); if(gc) gc.innerText=(currentImageIndex+1)+' / '+galleryImages.length; var dots=document.getElementById('galleryDots'); if(dots){ var dh=''; for(var i=0;i<galleryImages.length;i++){ dh+='<span class="'+(i===currentImageIndex?'active':'')+'" onclick="showImage('+i+')" role="tab" aria-selected="'+(i===currentImageIndex?'true':'false')+'" aria-label="Zdjęcie '+(i+1)+'" tabindex="0"></span>'; } dots.innerHTML=dh; } var thumbs=document.getElementById('detailImages'); if(thumbs){ var imgs=thumbs.querySelectorAll('img'); for(var t=0;t<imgs.length;t++){ imgs[t].classList.toggle('active', t===currentImageIndex); } } }
 function nextImage(e){ if(e) e.stopPropagation(); showImage(currentImageIndex+1); }
 function prevImage(e){ if(e) e.stopPropagation(); showImage(currentImageIndex-1); }
 function handleGalleryBgClick(e){ if(e.target.id==='galleryWrap') closeDetail(); }
@@ -648,187 +594,7 @@ function getMyLocationForAdd(){
   }).catch(function(){ if(btn) btn.innerText=orig; });
  }, function(err){ var infoEl=document.getElementById('addLocationInfo'); if(infoEl) infoEl.innerText='❌ Błąd GPS: '+err.message; if(btn) btn.innerText=orig; }, {enableHighAccuracy:true, timeout:10000});
 }
-async async function openDetail(id){ var a=null; for(var i=0;i<allAds.length;i++){ if(String(allAds[i].id)===String(id)){ a=allAds[i]; break; } } if(!a) return; currentAd=a; try{ var res=await fetch(SUPABASE_URL+'/rest/v1/ads?id=eq.'+id+'&select=*', {headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY}}); if(res.ok){ var data=await res.json(); if(data[0]){ a=data[0]; currentAd=a; } } }catch(e){ console.log('detail fetch error',e); } var imgs=[]; if(a.images&&Array.isArray(a.images)&&a.images.length>0) imgs=a.images.slice(); else if(a.image_url) imgs=[a.image_url]; else imgs=['https://via.placeholder.com/800x600?text=Brak+zdjecia']; 
-  // FIX: ensure at least 3 demo images if only 1 for testing mobile gallery
-  galleryImages=imgs; 
-  currentImageIndex=0; 
-  console.log('GALLERY IMAGES:', galleryImages.length, galleryImages);
-  var detailImg=document.getElementById('detailImg'); if(detailImg){ detailImg.src=getOptimizedImageUrl(galleryImages[0], 800); detailImg.alt=(a.title||'Ogłoszenie')+' - zdjęcie 1 z '+galleryImages.length; detailImg.style.display='block'; } 
-  var gc=document.getElementById('galleryCounter'); if(gc) gc.innerText='1 / '+galleryImages.length; 
-  var dots=document.getElementById('galleryDots'); if(dots){ var dh=''; for(var i=0;i<galleryImages.length;i++){ dh+='<span class="'+(i===0?'active':'')+'" onclick="showImage('+i+')" role="tab" aria-label="Zdjęcie '+(i+1)+'"></span>'; } dots.innerHTML=dh; dots.style.display='flex'; }
-  var thumbs=document.getElementById('detailImages'); 
-  if(thumbs){ 
-    var th=''; 
-    for(var t=0;t<galleryImages.length;t++){ 
-      th+='<img src="'+getOptimizedImageUrl(galleryImages[t], 200)+'" class="'+(t===0?'active':'')+'" onclick="showImage('+t+')" loading="eager" alt="Miniatura '+(t+1)+'" role="listitem" style="display:block">'; 
-    } 
-    thumbs.innerHTML=th; 
-    thumbs.style.display='flex';
-    thumbs.style.visibility='visible';
-    thumbs.style.opacity='1';
-    // Force scroll to start
-    thumbs.scrollLeft=0;
-  } var dt=document.getElementById('detailTitle'); if(dt) dt.innerText=a.title||''; var dp=document.getElementById('detailPrice'); if(dp) dp.innerText=a.price? a.price+' PLN':''; var dl=document.getElementById('detailLoc'); if(dl) dl.innerText=(a.location||a.city||''); var dd=document.getElementById('detailDesc'); if(dd) dd.innerText=a.description||'';
-  var dmgDetail=document.getElementById('detailDamaged'); if(dmgDetail){ if(a.damaged==='tak'){ dmgDetail.innerText='⚠️ USZKODZONE'; dmgDetail.style.display='block'; } else { dmgDetail.style.display='none'; } } var pn=document.getElementById('phoneNumber'); if(pn){ pn.innerText='📞 '+(a.phone||'Brak'); pn.style.display='none'; } var det=document.getElementById('detail'); if(det) det.style.display='flex'; }
-
-var editingId=null;
-
-function openEditCurrent(){
-  if(!currentAd || !currentUser) return;
-  if(currentAd.owner_id !== currentUser.id){ alert('Nie jesteś właścicielem'); return; }
-  editingId=currentAd.id;
-  // Fill form
-  document.getElementById('addTitleInput').value=currentAd.title||'';
-  document.getElementById('addBrand').value=currentAd.brand||'';
-  updateModelOptions();
-  setTimeout(function(){
-    var modelEl=document.getElementById('addModel');
-    if(modelEl) modelEl.value=currentAd.model||'';
-    checkCustomModel();
-  },100);
-  document.getElementById('addPrice').value=currentAd.price||'';
-  document.getElementById('addYear').value=currentAd.year||'';
-  document.getElementById('addMileage').value=currentAd.mileage||'';
-  document.getElementById('addPhone').value=currentAd.phone||'';
-  var dmgEl=document.getElementById('addDamaged'); if(dmgEl) dmgEl.value=currentAd.damaged||'nie';
-  document.getElementById('addDesc').value=currentAd.description||'';
-  document.getElementById('addModalTitle').innerText='Edytuj ogłoszenie';
-  document.getElementById('addSubmitBtn').innerText='💾 Zapisz zmiany';
-  closeDetail();
-  var m=document.getElementById('addModal');
-  if(m) m.style.display='flex';
-}
-
-function openAdd(){
-  editingId=null;
-  if(!currentUser){ alert('Zaloguj!'); openAuth(); return; }
-  document.getElementById('addModalTitle').innerText='Dodaj ogłoszenie';
-  document.getElementById('addSubmitBtn').innerText='🚀 Dodaj ogłoszenie';
-  // Clear form
-  var inputs=['addTitleInput','addPrice','addYear','addMileage','addPhone','addDesc','addModelCustom','addLocationSearch'];
-  for(var i=0;i<inputs.length;i++){ var el=document.getElementById(inputs[i]); if(el) el.value=''; }
-  document.getElementById('addBrand').value='';
-  document.getElementById('addModel').innerHTML='<option value="">Najpierw marka</option>';
-  selectedImagesBase64=[];
-  renderPreview();
-  var m=document.getElementById('addModal');
-  if(m) m.style.display='flex';
-  var info=document.getElementById('addInfo');
-  if(info) info.innerText='';
-}
-
-async function deleteCurrent(){
-  if(!currentAd || !currentUser) return;
-  if(currentAd.owner_id !== currentUser.id){ alert('Nie jesteś właścicielem'); return; }
-  if(!confirm('Na pewno usunąć ogłoszenie: '+(currentAd.title||'')+'?')) return;
-  try{
-    var res=await fetch(SUPABASE_URL+'/rest/v1/ads?id=eq.'+currentAd.id,{
-      method:'DELETE',
-      headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+authToken}
-    });
-    if(!res.ok){
-      var txt=await res.text();
-      throw new Error(txt);
-    }
-    alert('✅ Usunięto ogłoszenie');
-    closeDetail();
-    loadAds();
-  }catch(e){
-    alert('Błąd usuwania: '+e.message);
-  }
-}
-
-// Update openDetail to show owner actions
-var originalOpenDetail = openDetail;
-openDetail = async function(id){
-  await originalOpenDetail(id);
-  // Show edit/delete if owner
-  var ownerDiv=document.getElementById('ownerActions');
-  if(ownerDiv && currentAd && currentUser && currentAd.owner_id===currentUser.id){
-    ownerDiv.style.display='block';
-  } else if(ownerDiv){
-    ownerDiv.style.display='none';
-  }
-};
-
-function saveAuth(access, refresh, user){ localStorage.setItem('sb_token', access); if(refresh) localStorage.setItem('sb_refresh', refresh); localStorage.setItem('sb_user', JSON.stringify(user)); authToken=access; if(refresh) refreshToken=refresh; currentUser=user; updateAuthUI(); }
-async function refreshAuthToken(){ if(!refreshToken){ refreshToken=localStorage.getItem('sb_refresh'); if(!refreshToken) return false; } try{ var res=await fetch(SUPABASE_URL+'/auth/v1/token?grant_type=refresh_token', {method:'POST', headers:{'apikey':SUPABASE_KEY,'Content-Type':'application/json'}, body: JSON.stringify({refresh_token: refreshToken})}); var data=await res.json(); if(res.ok && data.access_token){ saveAuth(data.access_token, data.refresh_token || refreshToken, data.user || currentUser); return true; } }catch(e){} return false; }
-function loadAuth(){ try{ authToken=localStorage.getItem('sb_token'); refreshToken=localStorage.getItem('sb_refresh'); currentUser=JSON.parse(localStorage.getItem('sb_user')||'null'); if(authToken){ try{ var payload=JSON.parse(atob(authToken.split('.')[1])); var exp=payload.exp*1000; if(Date.now() > exp - 60000){ refreshAuthToken(); } }catch(e){} } }catch(e){} updateAuthUI(); }
-function updateAuthUI(){ var authBtn=document.getElementById('authBtn'); var userEmail=document.getElementById('userEmail'); var userWrap=document.getElementById('userEmailWrap'); var logoutBtn=document.getElementById('logoutBtn'); var myBtn=document.getElementById('myBtn'); if(currentUser){ if(authBtn) authBtn.style.display='none'; if(userEmail){ userEmail.innerText='Zalogowany: '+currentUser.email; } if(userWrap) userWrap.style.display='block'; if(logoutBtn) logoutBtn.style.display='block'; if(myBtn) myBtn.style.display='block'; } else { if(authBtn) authBtn.style.display='block'; if(userWrap) userWrap.style.display='none'; if(logoutBtn) logoutBtn.style.display='none'; if(myBtn) myBtn.style.display='none'; } }
-function logout(){ localStorage.removeItem('sb_token'); localStorage.removeItem('sb_refresh'); localStorage.removeItem('sb_user'); currentUser=null; authToken=null; refreshToken=null; updateAuthUI(); location.reload(); }
-function filterMy(){ if(!currentUser){alert('Zaloguj');return} var btn=document.getElementById('myBtn'); if(!btn) return; if(btn.innerText==='Moje'){ btn.innerText='Wszystkie'; loadAds().then(function(){ allAds=allAds.filter(function(a){return a.owner_id===currentUser.id}); currentPage=0; renderAds(); }); } else { btn.innerText='Moje'; loadAds(); } }
-function loadAds(){ var rt=document.getElementById('resultsText'); if(rt) rt.innerText='Ładowanie...'; var url=SUPABASE_URL+'/rest/v1/ads?select=id,title,price,image_url,location,city,brand,lat,lng,owner_id,created_at&order=created_at.desc&limit=20'; return fetch(url,{headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY}}).then(function(res){ if(!res.ok) throw new Error('HTTP '+res.status); return res.json(); }).then(function(data){ for(var i=0;i<data.length;i++) ensureAdCoords(data[i]); allAds=data; currentPage=0; renderAds(); }).catch(function(e){ if(rt) rt.innerText='Błąd: '+e.message; }); }
-function login(){ var emailEl=document.getElementById('loginEmail'); var passEl=document.getElementById('loginPass'); if(!emailEl||!passEl) return; var email=emailEl.value.trim(); var pass=passEl.value; if(!email||!pass){ var li=document.getElementById('loginInfo'); if(li) li.innerText='Wpisz dane!'; return; } var li2=document.getElementById('loginInfo'); if(li2) li2.innerText='Logowanie...'; fetch(SUPABASE_URL+'/auth/v1/token?grant_type=password',{method:'POST',headers:{'apikey':SUPABASE_KEY,'Content-Type':'application/json'},body:JSON.stringify({email:email,password:pass})}).then(function(r){ return r.json().then(function(j){ return {ok:r.ok, json:j}; }); }).then(function(res){ if(!res.ok) throw new Error(res.json.error_description||'Błąd'); saveAuth(res.json.access_token, res.json.refresh_token, res.json.user); closeAuth(); }).catch(function(e){ var li3=document.getElementById('loginInfo'); if(li3) li3.innerText='Błąd: '+e.message; }); }
-function register(){ var chk=document.getElementById('regCheck'); if(!chk||!chk.checked){alert('Zaznacz regulamin');return} var emailEl=document.getElementById('regEmail'); var passEl=document.getElementById('regPass'); if(!emailEl||!passEl) return; var email=emailEl.value.trim(); var pass=passEl.value; if(!email||pass.length<6){ var ri=document.getElementById('regInfo'); if(ri) ri.innerText='Min 6 znaków'; return; } var ri2=document.getElementById('regInfo'); if(ri2) ri2.innerText='Rejestracja...'; fetch(SUPABASE_URL+'/auth/v1/signup',{method:'POST',headers:{'apikey':SUPABASE_KEY,'Content-Type':'application/json'},body:JSON.stringify({email:email,password:pass})}).then(function(r){return r.json().then(function(j){return {ok:r.ok, json:j}})}).then(function(res){ if(!res.ok) throw new Error(res.json.msg||'Błąd'); if(ri2) ri2.innerText='Konto założone!'; setTimeout(function(){ fetch(SUPABASE_URL+'/auth/v1/token?grant_type=password',{method:'POST',headers:{'apikey':SUPABASE_KEY,'Content-Type':'application/json'},body:JSON.stringify({email:email,password:pass})}).then(function(r){return r.json().then(function(j){return {ok:r.ok, json:j}})}).then(function(r2){ if(r2.ok){ saveAuth(r2.json.access_token, r2.json.refresh_token, r2.json.user); closeAuth(); } }); }, 800); }).catch(function(e){ var ri3=document.getElementById('regInfo'); if(ri3) ri3.innerText='Błąd: '+e.message; }); }
-function sendReset(){ var emailEl=document.getElementById('resetEmail'); if(!emailEl) return; var email=emailEl.value.trim(); if(!email){alert('Wpisz e-mail');return} fetch(SUPABASE_URL+'/auth/v1/recover',{method:'POST',headers:{'apikey':SUPABASE_KEY,'Content-Type':'application/json'},body:JSON.stringify({email:email})}).then(function(){ var ri=document.getElementById('resetInfo'); if(ri) ri.innerText='Wysłano link'; }); }
-async function submitAdd(){
- var titleEl=document.getElementById('addTitleInput'); var brandEl=document.getElementById('addBrand'); var modelEl=document.getElementById('addModel'); var priceEl=document.getElementById('addPrice'); var phoneEl=document.getElementById('addPhone');
- var wojEl=document.getElementById('addWoj'); var powEl=document.getElementById('addPowiat'); var miejsEl=document.getElementById('addMiejscowosc'); var customEl=document.getElementById('addMiejscCustom');
- if(!titleEl||!brandEl||!modelEl||!priceEl||!phoneEl){ alert('Błąd formularza'); return; }
- var title=titleEl.value.trim(); var brand=brandEl.value; var modelRaw=modelEl.value; var customModelEl=document.getElementById('addModelCustom'); var customModel=customModelEl? customModelEl.value.trim():''; var model = (modelRaw==='Inny' || modelRaw==='Inny model') && customModel ? customModel : modelRaw; var priceRaw=priceEl.value.trim(); var phone=phoneEl.value.trim();
- var yearEl=document.getElementById('addYear'); var mileageEl=document.getElementById('addMileage'); var yearVal=yearEl? yearEl.value:''; var mileageVal=mileageEl? mileageEl.value.trim():'';
- var woj=wojEl? wojEl.value:''; var pow=powEl? powEl.value:''; var miejs=miejsEl? miejsEl.value:''; if(miejs==='__custom' && customEl) miejs=customEl.value.trim();
- var infoEl=document.getElementById('addInfo');
- if(!brand||!model||!miejs){ if(infoEl) infoEl.innerText='Uzupełnij markę, model, miejscowość *'; return; }
- var yearInt = yearVal ? parseInt(yearVal) : null;
- var mileageInt = mileageVal ? parseInt(mileageVal.replace(/\s/g,'').replace(/\./g,'').replace(/,/g,'')) : null;
- if(!yearInt){ if(infoEl) infoEl.innerText='Wybierz rocznik *'; return; }
- if(!mileageInt){ if(infoEl) infoEl.innerText='Podaj przebieg *'; return; }
- if(!title) title=brand+' '+model;
- if(!priceRaw||!phone){ if(infoEl) infoEl.innerText='Cena i telefon *'; return; }
- // FIX 22P02: price must be integer, handle 25.000, 25 000, 25,000 formats
- var priceClean = priceRaw.replace(/\s/g,'').replace(/\./g,'').replace(/,/g,'').replace(/[^0-9]/g,'');
- var price = priceClean ? parseInt(priceClean, 10) : 0;
- if(!price || isNaN(price)){ if(infoEl) infoEl.innerText='Podaj poprawną cenę (np. 25000)'; return; }
- if(!currentUser||!authToken){ if(infoEl) infoEl.innerText='Zaloguj się'; openAuth(); return; }
- var descEl=document.getElementById('addDesc'); var desc=descEl? descEl.value.trim():'';
- var linksEl=document.getElementById('addImagesLinks'); var links=linksEl? (linksEl.value||'').split(',').map(function(s){return s.trim()}).filter(Boolean):[];
- var images=selectedImagesBase64.concat(links).slice(0,10);
- var submitBtn=document.getElementById('addSubmitBtn'); if(submitBtn){ submitBtn.disabled=true; submitBtn.innerText='Zapisuję...'; }
- var searchLocationEl=document.getElementById('addLocationSearch');
- var fullLocation=searchLocationEl && searchLocationEl.value.trim() ? searchLocationEl.value.trim() : (miejs+', pow. '+pow+', woj. '+woj);
- var coords=addLocationCoords || getCoordsForPlace(miejs) || {lat:null,lng:null};
- var payload={
-   title: title,
-   price: price,
-   image_url: images[0]||'',
-   images: images,
-   owner_id: currentUser.id,
-   brand: brand,
-   model: model,
-   description: desc,
-   location: fullLocation,
-   city: miejs,
-   lat: coords.lat!=null ? parseFloat(coords.lat) : null,
-   lng: coords.lng!=null ? parseFloat(coords.lng) : null,
-   phone: phone,
-   year: yearInt,
-   mileage: mileageInt,
-   damaged: (document.getElementById('addDamaged')? document.getElementById('addDamaged').value : 'nie')
- };
- async function doPost(token){
-   var method=editingId ? 'PATCH' : 'POST';
-   var url=editingId ? SUPABASE_URL+'/rest/v1/ads?id=eq.'+editingId : SUPABASE_URL+'/rest/v1/ads';
-   var r=await fetch(url,{method:method,headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+token,'Content-Type':'application/json','Prefer':'return=representation'},body:JSON.stringify(payload)});
-   var txt=await r.text();
-   return {ok:r.ok, txt:txt, status:r.status};
- }
- try{
-   var result=await doPost(authToken);
-   if(!result.ok && (result.txt.indexOf('JWT expired')!==-1 || result.status===401)){
-     if(infoEl) infoEl.innerText='⏳ Token wygasł, odświeżam...';
-     var refreshed=await refreshAuthToken();
-     if(refreshed){ result=await doPost(authToken); } else { throw new Error('JWT expired - zaloguj ponownie'); }
-   }
-   if(!result.ok) throw new Error(result.txt);
-   if(submitBtn){ submitBtn.disabled=false; submitBtn.innerText='Zatwierdź'; } closeAdd(); loadAds();
-   alert(editingId ? '✅ Zapisano zmiany!' : '✅ Dodano! GPS: '+(coords.lat? coords.lat.toFixed(4)+', '+coords.lng.toFixed(4):'z miejscowości'));
-   editingId=null;
- }catch(e){
-   if(submitBtn){ submitBtn.disabled=false; submitBtn.innerText='Zatwierdź'; }
-   if(infoEl){ infoEl.innerText='Błąd: '+e.message.slice(0,500); }
- }
-}
+async 
 loadAuth();
 loadAds();
 </script>
