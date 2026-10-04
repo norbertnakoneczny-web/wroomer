@@ -431,7 +431,7 @@ header{position:relative !important;top:auto !important;z-index:10 !important}
 
 
 /* v8.3.1 MOBILE FIX - detail zawsze na 1 plan */
-#detail{position:fixed !important;inset:0 !important;z-index:9999 !important;display:none;align-items:flex-start !important;justify-content:center !important;overflow:auto !important;-webkit-overflow-scrolling:touch !important}
+#detail{position:fixed !important;inset:0 !important;z-index:9999 !important;display:none;align-items:flex-start !important;justify-content:center !important;overflow:auto !important;-webkit-overflow-scrolling:touch !important;touch-action:pan-y !important}
 #detail[style*="display: flex"], #detail[style*="display:flex"]{display:flex !important}
 .detail-box{position:relative;z-index:10000;min-height:100vh}
 @media(max-width:768px){
@@ -983,100 +983,136 @@ async function submitAdd(){
 loadAuth();
 loadAds();
 </script>
+
 <script>
-// v8.3 SWIPE PALCEM PRAWO/LEWO - zmiana ogłoszenia
-var touchStartX = 0;
-var touchStartY = 0;
-var touchEndX = 0;
-var touchEndY = 0;
-var minSwipeDist = 60; // minimalny dystans swipe
+// v8.5 SWIPE FIX - dwa tryby: zdjęcia wewnątrz ogłoszenia vs całe ogłoszenia
+(function(){
+  var adSwipe = {startX:0, startY:0, endX:0, endY:0};
+  var imgSwipe = {startX:0, startY:0, endX:0, endY:0};
+  var minDist = 50;
 
-function handleSwipe(){
-  var diffX = touchEndX - touchStartX;
-  var diffY = touchEndY - touchStartY;
-  // Sprawdź czy to horizontal swipe (nie vertical scroll)
-  if(Math.abs(diffX) < minSwipeDist) return;
-  if(Math.abs(diffX) < Math.abs(diffY)) return; // vertical scroll, ignore
-  
-  var detail = document.getElementById('detail');
-  if(!detail || detail.style.display==='none') return;
-  if(typeof filteredAds==='undefined' || !filteredAds || filteredAds.length<=1) return;
-  if(typeof currentAd==='undefined' || !currentAd) return;
-  
-  var currentIdx = -1;
-  for(var i=0;i<filteredAds.length;i++){
-    if(String(filteredAds[i].id)===String(currentAd.id)){ currentIdx=i; break; }
+  function findAdIndex(){
+    if(typeof filteredAds==='undefined' || !filteredAds || !currentAd) return -1;
+    for(var i=0;i<filteredAds.length;i++){ if(String(filteredAds[i].id)===String(currentAd.id)) return i; }
+    return -1;
   }
-  if(currentIdx===-1) return;
-  
-  var nextIdx = -1;
-  if(diffX < -minSwipeDist){ // swipe left -> next
-    nextIdx = currentIdx+1;
-    if(nextIdx>=filteredAds.length) nextIdx=0; // loop
-  } else if(diffX > minSwipeDist){ // swipe right -> prev
-    nextIdx = currentIdx-1;
-    if(nextIdx<0) nextIdx=filteredAds.length-1; // loop
-  }
-  
-  if(nextIdx!==-1 && nextIdx!==currentIdx){
-    var nextAd = filteredAds[nextIdx];
-    // Animacja
-    var img = document.getElementById('detailImage');
-    if(img){
-      img.style.transition='transform 0.2s';
-      img.style.transform='translateX('+(diffX<0?'-30px':'30px')+')';
-      img.style.opacity='0.5';
+
+  function goNextAd(){
+    var idx = findAdIndex();
+    if(idx===-1) return;
+    var next = idx+1; if(next>=filteredAds.length) next=0;
+    if(typeof openDetail==='function'){ 
+      // animacja slide
+      var box = document.querySelector('.detail-box');
+      if(box){ box.style.transition='transform 0.2s ease'; box.style.transform='translateX(-30px)'; box.style.opacity='0.7'; }
+      setTimeout(function(){ openDetail(filteredAds[next].id); try{if(navigator.vibrate) navigator.vibrate(20);}catch(e){} }, 150);
     }
-    setTimeout(function(){
-      if(typeof openDetail==='function') openDetail(nextAd.id);
-      // Wibracja na telefonie
-      try{ if(navigator.vibrate) navigator.vibrate(30); }catch(e){}
-    }, 150);
   }
-}
+  function goPrevAd(){
+    var idx = findAdIndex();
+    if(idx===-1) return;
+    var prev = idx-1; if(prev<0) prev=filteredAds.length-1;
+    if(typeof openDetail==='function'){
+      var box = document.querySelector('.detail-box');
+      if(box){ box.style.transition='transform 0.2s ease'; box.style.transform='translateX(30px)'; box.style.opacity='0.7'; }
+      setTimeout(function(){ openDetail(filteredAds[prev].id); try{if(navigator.vibrate) navigator.vibrate(20);}catch(e){} }, 150);
+    }
+  }
 
-// Podłącz swipe do detail
-document.addEventListener('DOMContentLoaded', function(){
-  var detail = document.getElementById('detail');
-  if(!detail) return;
-  detail.addEventListener('touchstart', function(e){
-    touchStartX = e.changedTouches[0].screenX;
-    touchStartY = e.changedTouches[0].screenY;
-  }, {passive:true});
-  detail.addEventListener('touchend', function(e){
-    touchEndX = e.changedTouches[0].screenX;
-    touchEndY = e.changedTouches[0].screenY;
-    handleSwipe();
-  }, {passive:true});
-  // Dla testu - również mouse drag na kompie
-  var mouseDownX = 0;
-  detail.addEventListener('mousedown', function(e){ mouseDownX=e.screenX; });
-  detail.addEventListener('mouseup', function(e){
-    touchStartX=mouseDownX;
-    touchEndX=e.screenX;
-    touchStartY=0;
-    touchEndY=0;
-    if(Math.abs(touchEndX-touchStartX)>=minSwipeDist) handleSwipe();
+  function handleAdSwipe(){
+    var dx = adSwipe.endX - adSwipe.startX;
+    var dy = adSwipe.endY - adSwipe.startY;
+    if(Math.abs(dx) < minDist) return;
+    if(Math.abs(dx) < Math.abs(dy)) return; // pionowy scroll - ignoruj
+    if(dx < -minDist) goNextAd(); else if(dx > minDist) goPrevAd();
+  }
+
+  function handleImgSwipe(){
+    var dx = imgSwipe.endX - imgSwipe.startX;
+    var dy = imgSwipe.endY - imgSwipe.startY;
+    if(Math.abs(dx) < minDist) return;
+    if(Math.abs(dx) < Math.abs(dy)) return;
+    if(dx < -minDist){ if(typeof nextImage==='function') nextImage(); }
+    else if(dx > minDist){ if(typeof prevImage==='function') prevImage(); }
+  }
+
+  document.addEventListener('DOMContentLoaded', function(){
+    var detail = document.getElementById('detail');
+    var galleryWrap = document.querySelector('.gallery-wrap') || document.getElementById('galleryWrap');
+    var detailImg = document.getElementById('detailImg') || document.getElementById('detailImage');
+
+    // --- SWIPE ZDJĘĆ wewnątrz ogłoszenia (na galerii) ---
+    var imgZone = galleryWrap || detailImg;
+    if(imgZone){
+      imgZone.addEventListener('touchstart', function(e){
+        imgSwipe.startX = e.changedTouches[0].screenX;
+        imgSwipe.startY = e.changedTouches[0].screenY;
+        e.stopPropagation();
+      }, {passive:true});
+      imgZone.addEventListener('touchend', function(e){
+        imgSwipe.endX = e.changedTouches[0].screenX;
+        imgSwipe.endY = e.changedTouches[0].screenY;
+        handleImgSwipe();
+        e.stopPropagation();
+      }, {passive:true});
+    }
+
+    // --- SWIPE CAŁYCH OGŁOSZEŃ (na treści, poza galerią) ---
+    // Podpinamy do detail-content, żeby nie kolidowało z galerią
+    var contentZones = document.querySelectorAll('.detail-content, #detail');
+    contentZones.forEach(function(zone){
+      zone.addEventListener('touchstart', function(e){
+        // Jeśli dotyk zaczął się w galerii, ignoruj (to obsłuży imgZone)
+        if(e.target.closest && e.target.closest('.gallery-wrap, #galleryWrap, #detailImg')) return;
+        adSwipe.startX = e.changedTouches[0].screenX;
+        adSwipe.startY = e.changedTouches[0].screenY;
+      }, {passive:true});
+      zone.addEventListener('touchend', function(e){
+        if(e.target.closest && e.target.closest('.gallery-wrap, #galleryWrap, #detailImg')) return;
+        adSwipe.endX = e.changedTouches[0].screenX;
+        adSwipe.endY = e.changedTouches[0].screenY;
+        handleAdSwipe();
+      }, {passive:true});
+    });
+
+    // Desktop drag dla całych ogłoszeń (na content)
+    var mouseDownX = 0;
+    var mouseDownTarget = null;
+    detail.addEventListener('mousedown', function(e){
+      if(e.target.closest && e.target.closest('.gallery-wrap, #galleryWrap')) return;
+      mouseDownX = e.screenX;
+      mouseDownTarget = e.target;
+    });
+    detail.addEventListener('mouseup', function(e){
+      if(e.target.closest && e.target.closest('.gallery-wrap, #galleryWrap')) return;
+      var dx = e.screenX - mouseDownX;
+      if(Math.abs(dx) >= minDist){
+        adSwipe.startX = mouseDownX;
+        adSwipe.endX = e.screenX;
+        adSwipe.startY = 0;
+        adSwipe.endY = 0;
+        handleAdSwipe();
+      }
+    });
   });
-});
 
-// Dodaj wskaźnik swipe - strzałki + licznik
-function addSwipeIndicators(){
-  var style = document.createElement('style');
-  style.innerHTML = `
-    #detail{touch-action:pan-y}
-    .swipe-hint{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,0.6);color:#fff;padding:12px 8px;border-radius:20px;font-size:20px;z-index:101;pointer-events:none;opacity:0;transition:opacity 0.3s}
-    .swipe-hint.left{left:10px}
-    .swipe-hint.right{right:10px}
-    .swipe-counter{position:fixed;top:10px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.85);color:#fff;padding:8px 16px;border-radius:20px;font-size:12px;font-weight:700;z-index:101;pointer-events:none}
-    #detail:active .swipe-hint{opacity:0.8}
-    @media(max-width:768px){
-      .swipe-hint{opacity:0.6}
-    }
-  `;
-  document.head.appendChild(style);
-}
-setTimeout(addSwipeIndicators, 500);
+  // Wskaźniki UI
+  setTimeout(function(){
+    var style = document.createElement('style');
+    style.innerHTML = `
+      #detail{position:fixed !important;inset:0 !important;z-index:9999 !important;touch-action:pan-y}
+      .gallery-wrap{touch-action:pan-y}
+      .swipe-hint-ad{position:fixed;top:50%;transform:translateY(-50%);background:rgba(0,0,0,0.6);color:#fff;padding:14px 10px;border-radius:24px;font-size:22px;z-index:10001;pointer-events:none;opacity:0;transition:opacity .3s}
+      .swipe-hint-ad.left{left:12px} .swipe-hint-ad.right{right:12px}
+      .swipe-counter-ad{position:fixed;top:12px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.85);color:#fff;padding:8px 14px;border-radius:20px;font-size:12px;font-weight:700;z-index:10001;pointer-events:none}
+      .detail-content{position:relative}
+      #detail:active .swipe-hint-ad{opacity:0.7}
+      @media(max-width:768px){ .swipe-hint-ad{opacity:0.5} }
+    `;
+    document.head.appendChild(style);
+  }, 500);
+})();
 </script>
+
 </body>
 </html>

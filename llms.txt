@@ -1,17 +1,2 @@
 # WROOMER.PL
-
-> WROOMER.PL to lokalny serwis ogłoszeń motoryzacyjnych - auta, części, kupno i sprzedaż.
-
-## Główne sekcje
-
-- [Strona główna](https://www.wroomer.pl/): Przeglądaj ogłoszenia motoryzacyjne
-- [Szukaj](https://www.wroomer.pl/?search=BMW): Wyszukiwarka aut po marce, modelu, lokalizacji
-
-## Informacje
-
-WROOMER.PL umożliwia dodawanie ogłoszeń, filtrowanie po lokalizacji, marce i modelu.
-Wszystkie ogłoszenia zawierają zdjęcia, cenę, lokalizację i dane kontaktowe.
-
-## API
-
-Dane ogłoszeń dostępne przez Supabase REST API - tylko do odczytu publicznych ogłoszeń.
+> Lokalne ogłoszenia motoryzacyjne

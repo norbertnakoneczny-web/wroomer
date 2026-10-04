@@ -4,13 +4,8 @@
     {
       "identifier": "urn:air:wroomer.pl:web:homepage",
       "displayName": "WROOMER.PL",
-      "description": "Lokalne ogłoszenia motoryzacyjne",
       "type": "text/html",
-      "url": "https://www.wroomer.pl/",
-      "paths": [
-        "/",
-        "/index.html"
-      ]
+      "url": "https://www.wroomer.pl/"
     }
   ]
 }
