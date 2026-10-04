@@ -1,11 +1,1 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://wroomer.pl/</loc><priority>1.0</priority></url>
-  <url><loc>https://wroomer.pl/blog/</loc><priority>0.8</priority></url>
-  <url><loc>https://wroomer.pl/blog/jak-sprzedac-auto-za-darmo.html</loc><priority>0.8</priority></url>
-  <url><loc>https://wroomer.pl/blog/zamiana-samochodow.html</loc><priority>0.8</priority></url>
-  <url><loc>https://wroomer.pl/blog/darmowe-vs-platne.html</loc><priority>0.8</priority></url>
-  <url><loc>https://wroomer.pl/?city=Warszawa</loc><priority>0.7</priority></url>
-  <url><loc>https://wroomer.pl/?city=Kraków</loc><priority>0.7</priority></url>
-  <url><loc>https://wroomer.pl/?brand=BMW</loc><priority>0.7</priority></url>
-</urlset>
+<?xml version="1.0"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>https://wroomer.pl/</loc></url><url><loc>https://wroomer.pl/blog/</loc></url></urlset>
