@@ -1,5 +1,3 @@
 # WROOMER.PL
-> Lokalne ogłoszenia
-
-- [Strona główna](https://www.wroomer.pl/): Lista
-- [Dodaj](https://www.wroomer.pl/): Dodaj
+> Lokalne
+- [Strona](https://www.wroomer.pl/): Lista
