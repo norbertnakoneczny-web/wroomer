@@ -1,0 +1,4 @@
+WROOMER.PL
+04.10.2026 17:51:12
+v10.0 RESTORED MILEAGE WORKING
+Przebieg jak w dzialajacej wersji - pelna liczba + filtr dziala

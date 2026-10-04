@@ -1,0 +1,32 @@
+{
+  "rewrites": [
+    {
+      "source": "/.well-known/:path*",
+      "destination": "/.well-known/:path*"
+    },
+    {
+      "source": "/(ai-catalog.json)",
+      "destination": "/$1"
+    },
+    {
+      "source": "/(ard.json)",
+      "destination": "/$1"
+    },
+    {
+      "source": "/(llms.txt)",
+      "destination": "/$1"
+    },
+    {
+      "source": "/(robots.txt)",
+      "destination": "/$1"
+    },
+    {
+      "source": "/(sitemap.xml)",
+      "destination": "/$1"
+    },
+    {
+      "source": "/((?!.*\\..*).*)",
+      "destination": "/index.html"
+    }
+  ]
+}

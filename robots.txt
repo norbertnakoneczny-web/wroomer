@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+Sitemap: https://www.wroomer.pl/sitemap.xml
+# 04.10.2026 17:51:12 RESTORED MILEAGE WORKING
