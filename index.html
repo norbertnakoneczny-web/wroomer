@@ -185,12 +185,11 @@ header{background:#fff;border-bottom:1px solid #e5e5e0;position:sticky;top:0;z-i
 }
 
 
-/* v6.7 CLEAN - gallery must be visible */
+/* v6.8 gallery visible */
 #detailImages{display:flex !important;gap:10px !important;flex-wrap:nowrap !important;overflow-x:auto !important;overflow-y:hidden !important;-webkit-overflow-scrolling:touch !important;padding:12px !important;margin-top:14px !important;background:#222 !important;border:2px solid #444 !important;border-radius:12px !important;min-height:76px !important;width:100% !important}
 #detailImages img{width:80px !important;height:60px !important;min-width:80px !important;flex:0 0 80px !important;object-fit:cover !important;border-radius:8px !important;border:2px solid #555 !important;background:#333 !important;display:block !important}
-#detailImages img.active{border-color:#fff !important;box-shadow:0 0 10px rgba(255,255,255,0.5) !important}
-@media(max-width:640px){#detailImages{margin:12px 0 0 0 !important} #detailImages img{width:72px !important;height:54px !important;min-width:72px !important;flex:0 0 72px !important}}
-#detailDamaged{display:none}
+#detailImages img.active{border-color:#fff !important}
+@media(max-width:640px){#detailImages img{width:72px !important;height:54px !important;min-width:72px !important;flex:0 0 72px !important}}
 
 </style>
 </head>
@@ -237,7 +236,7 @@ header{background:#fff;border-bottom:1px solid #e5e5e0;position:sticky;top:0;z-i
 </div>
 <div class="detail-content">
 <button class="close-btn-2" onclick="closeDetail()" aria-label="Zamknij">✕</button>
-<div style="padding-right:40px"><h2 id="detailTitle" style="color:#fff"></h2><p id="detailPrice"></p><p id="detailLoc"></p></div>
+<div style="padding-right:40px"><h2 id="detailTitle" style="color:#fff"></h2><p id="detailPrice"></p><p id="detailLoc"></p><p id="detailDamaged" style="font-size:12px;font-weight:800;color:#ffcc00;margin-top:4px;display:none"></p></div>
 <p id="detailDesc"></p>
 <div id="detailImages" role="list" aria-label="Miniatury zdjęć"></div>
 <div id="ownerActions" style="display:none;margin-top:12px;padding:10px;background:rgba(255,255,255,0.08);border-radius:12px"><p style="font-size:11px;font-weight:900;color:#fff;margin-bottom:8px">🔧 TWOJE OGŁOSZENIE</p><div style="display:flex;gap:8px"><button class="btn btn-white" onclick="openEditCurrent()" style="flex:1">✏️ Edytuj</button><button class="btn btn-black" onclick="deleteCurrent()" style="flex:1;background:#cc0000;color:#fff">🗑️ Usuń</button></div></div>
@@ -337,7 +336,7 @@ var allAds=[], filteredAds=[], displayedAds=[], currentAd=null, userLocationCoor
 var currentImageIndex=0, galleryImages=[], touchStartX=0, currentChannel='wroomer', currentPage=0, pageSize=8;
 var SUPABASE_URL='https://rljqnhfogaqdjeirqqdj.supabase.co';
 var SUPABASE_KEY='sb_publishable_j7CS5xIHzOMBMyvsqVgDmw_GeEek5hX';
-var MODELS={'BMW':['Seria 1', 'Seria 2', 'Seria 3', 'Seria 5', 'Seria 7', 'X1', 'X3', 'X5', 'X6', 'Inny'],'Audi':['A3', 'A4', 'A6', 'Q5', 'Q7', 'Q8', 'Inny'],'Mercedes':['A Klasa', 'C Klasa', 'E Klasa', 'GLC', 'GLE', 'Inny'],'Volkswagen':['Golf', 'Passat', 'Polo', 'Tiguan', 'T-Roc', 'Inny'],'Toyota':['Corolla', 'Yaris', 'RAV4', 'Avensis', 'Inny'],'Ford':['Focus', 'Mondeo', 'Fiesta', 'Kuga', 'Inny'],'Opel':['Astra', 'Corsa', 'Insignia', 'Mokka', 'Inny'],'Skoda':['Octavia', 'Fabia', 'Superb', 'Kodiaq', 'Inny'],'Mitsubishi':['Colt', 'Lancer', 'Outlander', 'ASX', 'Inny'],'Alfa Romeo':['Giulia', 'Stelvio', 'Giulietta', 'MiTo', 'Inny'],'Citroen':['C3', 'C4', 'C5', 'Berlingo', 'Inny'],'Dacia':['Duster', 'Sandero', 'Logan', 'Inny'],'Fiat':['500', 'Panda', 'Tipo', 'Doblo', 'Inny'],'Honda':['Civic', 'Accord', 'CR-V', 'Jazz', 'Inny'],'Hyundai':['i20', 'i30', 'Tucson', 'Santa Fe', 'Inny'],'Jeep':['Wrangler', 'Compass', 'Renegade', 'Inny'],'Kia':['Ceed', 'Sportage', 'Rio', 'Inny'],'Nissan':['Qashqai', 'Juke', 'X-Trail', 'Micra', 'Inny'],'Peugeot':['208', '308', '3008', '5008', 'Inny'],'Renault':['Clio', 'Megane', 'Captur', 'Inny'],'Seat':['Ibiza', 'Leon', 'Ateca', 'Inny'],'Tesla':['Model 3', 'Model S', 'Model X', 'Model Y', 'Inny'],'Volvo':['S60', 'XC60', 'XC90', 'V60', 'Inny'],'Inna':['Inny model'],'Abarth':['Inny'],'Acura':['Inny'],'Aston Martin':['Inny'],'Bentley':['Inny'],'Cadillac':['Inny'],'Chevrolet':['Inny'],'Chrysler':['Inny'],'Daewoo':['Inny'],'Dodge':['Inny'],'DS':['Inny'],'Ferrari':['Inny'],'Genesis':['Inny'],'Infiniti':['Inny'],'Isuzu':['Inny'],'Jaguar':['Inny'],'Lamborghini':['Inny'],'Lancia':['Inny'],'Land Rover':['Inny'],'Lexus':['Inny'],'Maserati':['Inny'],'Mazda':['Inny'],'McLaren':['Inny'],'Mini':['Inny'],'Porsche':['Inny'],'Rolls-Royce':['Inny'],'Smart':['Inny'],'Subaru':['Inny'],'Suzuki':['Inny']};
+var MODELS={'BMW':['Seria 1', 'Seria 2', 'Seria 3', 'Seria 5', 'Seria 7', 'X1', 'X3', 'X5', 'X6', 'Inny'],'Audi':['A3', 'A4', 'A6', 'Q5', 'Q7', 'Q8', 'Inny'],'Mercedes':['A Klasa', 'C Klasa', 'E Klasa', 'GLC', 'GLE', 'Inny'],'Volkswagen':['Golf', 'Passat', 'Polo', 'Tiguan', 'T-Roc', 'Inny'],'Toyota':['Corolla', 'Yaris', 'RAV4', 'Avensis', 'Inny'],'Ford':['Focus', 'Mondeo', 'Fiesta', 'Kuga', 'Inny'],'Opel':['Astra', 'Corsa', 'Insignia', 'Mokka', 'Inny'],'Skoda':['Octavia', 'Fabia', 'Superb', 'Kodiaq', 'Inny'],'Mitsubishi':['Colt', 'Lancer', 'Outlander', 'ASX', 'Inny'],'Citroen':['C3', 'C4', 'C5', 'Berlingo', 'Inny'],'Dacia':['Duster', 'Sandero', 'Logan', 'Inny'],'Fiat':['500', 'Panda', 'Tipo', 'Doblo', 'Inny'],'Honda':['Civic', 'Accord', 'CR-V', 'Jazz', 'Inny'],'Hyundai':['i20', 'i30', 'Tucson', 'Santa Fe', 'Inny'],'Jeep':['Wrangler', 'Compass', 'Renegade', 'Inny'],'Kia':['Ceed', 'Sportage', 'Rio', 'Inny'],'Nissan':['Qashqai', 'Juke', 'X-Trail', 'Micra', 'Inny'],'Peugeot':['208', '308', '3008', '5008', 'Inny'],'Renault':['Clio', 'Megane', 'Captur', 'Inny'],'Seat':['Ibiza', 'Leon', 'Ateca', 'Inny'],'Tesla':['Model 3', 'Model S', 'Model X', 'Model Y', 'Inny'],'Volvo':['S60', 'XC60', 'XC90', 'V60', 'Inny'],'Abarth':['Inny'],'Acura':['Inny'],'Alfa Romeo':['Inny'],'Aston Martin':['Inny'],'Bentley':['Inny'],'Cadillac':['Inny'],'Chevrolet':['Inny'],'Chrysler':['Inny'],'Daewoo':['Inny'],'Dodge':['Inny'],'DS':['Inny'],'Ferrari':['Inny'],'Genesis':['Inny'],'Infiniti':['Inny'],'Isuzu':['Inny'],'Jaguar':['Inny'],'Lamborghini':['Inny'],'Lancia':['Inny'],'Land Rover':['Inny'],'Lexus':['Inny'],'Maserati':['Inny'],'Mazda':['Inny'],'McLaren':['Inny'],'Mini':['Inny'],'Porsche':['Inny'],'Rolls-Royce':['Inny'],'Smart':['Inny'],'Subaru':['Inny'],'Suzuki':['Inny'],'Inna':['Inny model']};
 var POWIATY={'śląskie':['wodzisławski','raciborski','rybnicki','m. Katowice','m. Rybnik']};
 var MIEJSCOWOSCI={'wodzisławski':['Wodzisław Śląski','Gorzyce','Gorzyczki','Rydułtowy','Pszów','Radlin'],'raciborski':['Racibórz'],'rybnicki':['Rybnik']};
 var KNOWN_COORDS={'gorzyce':{lat:49.962,lng:18.397},'rydułtowy':{lat:50.058,lng:18.405},'wodzisław śląski':{lat:50.022,lng:18.456},'rybnik':{lat:50.097,lng:18.542}};
@@ -368,7 +367,7 @@ function updateSearchModelOptions(){
   var mEl=document.getElementById('modelFilter');
   if(!bEl||!mEl) return;
   var brand=bEl.value;
-  var list=MODELS[brand]||[];
+  var list=(typeof MODELS!=='undefined' && MODELS[brand])? MODELS[brand] : [];
   var cur=mEl.value;
   mEl.innerHTML='<option value="">Wszystkie modele</option>';
   for(var i=0;i<list.length;i++){
@@ -389,6 +388,58 @@ function checkCustomModel(){
     cEl.style.display='none';
     cEl.value='';
   }
+}
+var editingId=null;
+function openEditCurrent(){
+  if(!currentAd || !currentUser) return;
+  if(currentAd.owner_id !== currentUser.id){ alert('Nie jesteś właścicielem'); return; }
+  editingId=currentAd.id;
+  document.getElementById('addTitleInput').value=currentAd.title||'';
+  document.getElementById('addBrand').value=currentAd.brand||'';
+  if(typeof updateModelOptions==='function') updateModelOptions();
+  setTimeout(function(){
+    var me=document.getElementById('addModel');
+    if(me) me.value=currentAd.model||'';
+    checkCustomModel();
+  },150);
+  var pEl=document.getElementById('addPrice'); if(pEl) pEl.value=currentAd.price||'';
+  var yEl=document.getElementById('addYear'); if(yEl) yEl.value=currentAd.year||'';
+  var miEl=document.getElementById('addMileage'); if(miEl) miEl.value=currentAd.mileage||'';
+  var phEl=document.getElementById('addPhone'); if(phEl) phEl.value=currentAd.phone||'';
+  var deEl=document.getElementById('addDesc'); if(deEl) deEl.value=currentAd.description||'';
+  var daEl=document.getElementById('addDamaged'); if(daEl) daEl.value=currentAd.damaged||'nie';
+  var mt=document.getElementById('addModalTitle'); if(mt) mt.innerText='Edytuj ogłoszenie';
+  var sb=document.getElementById('addSubmitBtn'); if(sb) sb.innerText='💾 Zapisz zmiany';
+  if(typeof closeDetail==='function') closeDetail();
+  var m=document.getElementById('addModal'); if(m) m.style.display='flex';
+}
+function openAdd(){
+  editingId=null;
+  if(typeof currentUser==='undefined' || !currentUser){ alert('Zaloguj!'); if(typeof openAuth==='function') openAuth(); return; }
+  var mt=document.getElementById('addModalTitle'); if(mt) mt.innerText='Dodaj ogłoszenie';
+  var sb=document.getElementById('addSubmitBtn'); if(sb) sb.innerText='🚀 Dodaj ogłoszenie';
+  ['addTitleInput','addPrice','addModelCustom','addLocationSearch','addDesc'].forEach(function(id){ var el=document.getElementById(id); if(el) el.value=''; });
+  var yEl=document.getElementById('addYear'); if(yEl) yEl.value='';
+  var miEl=document.getElementById('addMileage'); if(miEl) miEl.value='';
+  var phEl=document.getElementById('addPhone'); if(phEl) phEl.value='';
+  var daEl=document.getElementById('addDamaged'); if(daEl) daEl.value='nie';
+  var bEl=document.getElementById('addBrand'); if(bEl) bEl.value='';
+  var mEl=document.getElementById('addModel'); if(mEl) mEl.innerHTML='<option value="">Najpierw marka</option>';
+  if(typeof selectedImagesBase64!=='undefined'){ selectedImagesBase64=[]; if(typeof renderPreview==='function') renderPreview(); }
+  var mod=document.getElementById('addModal'); if(mod) mod.style.display='flex';
+  var info=document.getElementById('addInfo'); if(info) info.innerText='';
+}
+async function deleteCurrent(){
+  if(typeof currentAd==='undefined' || !currentAd || typeof currentUser==='undefined' || !currentUser) return;
+  if(currentAd.owner_id !== currentUser.id){ alert('Nie jesteś właścicielem'); return; }
+  if(!confirm('Na pewno usunąć: '+(currentAd.title||'')+'?')) return;
+  try{
+    var res=await fetch(SUPABASE_URL+'/rest/v1/ads?id=eq.'+currentAd.id,{method:'DELETE',headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+authToken}});
+    if(!res.ok){ var txt=await res.text(); throw new Error(txt); }
+    alert('✅ Usunięto');
+    if(typeof closeDetail==='function') closeDetail();
+    if(typeof loadAds==='function') loadAds();
+  }catch(e){ alert('Błąd: '+e.message); }
 }
 
 function updatePowiatOptions(){ var wojEl=document.getElementById('addWoj'); if(!wojEl) return; var sel=document.getElementById('addPowiat'); if(!sel) return; var list=POWIATY[wojEl.value]||[]; sel.innerHTML='<option value="">Wybierz *</option>'; for(var i=0;i<list.length;i++){ var o=document.createElement('option'); o.value=list[i]; o.text=list[i]; sel.appendChild(o); } if(wojEl.value==='śląskie'){ sel.value='wodzisławski'; updateMiejscowoscOptions(); } }
@@ -481,68 +532,14 @@ function getMyLocationForAdd(){
   }).catch(function(){ if(btn) btn.innerText=orig; });
  }, function(err){ var infoEl=document.getElementById('addLocationInfo'); if(infoEl) infoEl.innerText='❌ Błąd GPS: '+err.message; if(btn) btn.innerText=orig; }, {enableHighAccuracy:true, timeout:10000});
 }
-async async function openDetail(id){ var a=null; for(var i=0;i<allAds.length;i++){ if(String(allAds[i].id)===String(id)){ a=allAds[i]; break; } } if(!a) return; currentAd=a; try{ var res=await fetch(SUPABASE_URL+'/rest/v1/ads?id=eq.'+id+'&select=*', {headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY}}); if(res.ok){ var data=await res.json(); if(data[0]){ a=data[0]; currentAd=a; } } }catch(e){} var imgs=[]; if(a.images&&a.images.length>0) imgs=a.images.slice(); else if(a.image_url) imgs=[a.image_url]; else imgs=['https://via.placeholder.com/800x600?text=Brak+zdjecia']; galleryImages=imgs; currentImageIndex=0; var detailImg=document.getElementById('detailImg'); if(detailImg){ detailImg.src=getOptimizedImageUrl(galleryImages[0], 800); detailImg.alt=(a.title||'Ogłoszenie')+' - zdjęcie 1 z '+galleryImages.length; } var gc=document.getElementById('galleryCounter'); if(gc) gc.innerText='1 / '+galleryImages.length; var thumbs=document.getElementById('detailImages'); if(thumbs){ var th=''; for(var t=0;t<galleryImages.length;t++){ th+='<img src="'+getOptimizedImageUrl(galleryImages[t], 200)+'" class="'+(t===0?'active':'')+'" onclick="showImage('+t+')" loading="lazy" alt="Miniatura '+(t+1)+'" role="listitem">'; } thumbs.innerHTML=th; } var dt=document.getElementById('detailTitle'); if(dt) dt.innerText=a.title||''; var dp=document.getElementById('detailPrice'); if(dp) dp.innerText=a.price? a.price+' PLN':''; var dl=document.getElementById('detailLoc'); if(dl) dl.innerText=(a.location||a.city||''); var dd=document.getElementById('detailDesc'); if(dd) dd.innerText=a.description||''; var dmgEl=document.getElementById('detailDamaged'); if(dmgEl){ if(a.damaged==='tak'){ dmgEl.innerText='⚠️ USZKODZONE'; dmgEl.style.display='block'; } else { dmgEl.style.display='none'; } } var pn=document.getElementById('phoneNumber'); if(pn){ pn.innerText='📞 '+(a.phone||'Brak'); pn.style.display='none'; } var det=document.getElementById('detail'); if(det) det.style.display='flex'; var ownerDiv=document.getElementById('ownerActions'); if(ownerDiv && currentAd && currentUser && currentAd.owner_id===currentUser.id){ ownerDiv.style.display='block'; } else if(ownerDiv){ ownerDiv.style.display='none'; } }
-
-var editingId=null;
-function openEditCurrent(){
-  if(!currentAd || !currentUser) return;
-  if(currentAd.owner_id !== currentUser.id){ alert('Nie jesteś właścicielem'); return; }
-  editingId=currentAd.id;
-  document.getElementById('addTitleInput').value=currentAd.title||'';
-  document.getElementById('addBrand').value=currentAd.brand||'';
-  updateModelOptions();
-  setTimeout(function(){
-    var me=document.getElementById('addModel');
-    if(me) me.value=currentAd.model||'';
-    checkCustomModel();
-  },150);
-  document.getElementById('addPrice').value=currentAd.price||'';
-  var yEl=document.getElementById('addYear'); if(yEl) yEl.value=currentAd.year||'';
-  var miEl=document.getElementById('addMileage'); if(miEl) miEl.value=currentAd.mileage||'';
-  var phEl=document.getElementById('addPhone'); if(phEl) phEl.value=currentAd.phone||'';
-  var deEl=document.getElementById('addDesc'); if(deEl) deEl.value=currentAd.description||'';
-  var daEl=document.getElementById('addDamaged'); if(daEl) daEl.value=currentAd.damaged||'nie';
-  var mt=document.getElementById('addModalTitle'); if(mt) mt.innerText='Edytuj ogłoszenie';
-  var sb=document.getElementById('addSubmitBtn'); if(sb) sb.innerText='💾 Zapisz zmiany';
-  closeDetail();
-  var m=document.getElementById('addModal'); if(m) m.style.display='flex';
-}
-function openAdd(){
-  editingId=null;
-  if(!currentUser){ alert('Zaloguj!'); openAuth(); return; }
-  var mt=document.getElementById('addModalTitle'); if(mt) mt.innerText='Dodaj ogłoszenie';
-  var sb=document.getElementById('addSubmitBtn'); if(sb) sb.innerText='🚀 Dodaj ogłoszenie';
-  ['addTitleInput','addPrice','addModelCustom','addLocationSearch','addDesc'].forEach(function(id){ var el=document.getElementById(id); if(el) el.value=''; });
-  var yEl=document.getElementById('addYear'); if(yEl) yEl.value='';
-  var miEl=document.getElementById('addMileage'); if(miEl) miEl.value='';
-  var phEl=document.getElementById('addPhone'); if(phEl) phEl.value='';
-  var daEl=document.getElementById('addDamaged'); if(daEl) daEl.value='nie';
-  var bEl=document.getElementById('addBrand'); if(bEl) bEl.value='';
-  var mEl=document.getElementById('addModel'); if(mEl) mEl.innerHTML='<option value="">Najpierw marka</option>';
-  if(typeof selectedImagesBase64!=='undefined'){ selectedImagesBase64=[]; if(typeof renderPreview==='function') renderPreview(); }
-  var mod=document.getElementById('addModal'); if(mod) mod.style.display='flex';
-  var info=document.getElementById('addInfo'); if(info) info.innerText='';
-}
-async function deleteCurrent(){
-  if(!currentAd || !currentUser) return;
-  if(currentAd.owner_id !== currentUser.id){ alert('Nie jesteś właścicielem'); return; }
-  if(!confirm('Na pewno usunąć: '+(currentAd.title||'')+'?')) return;
-  try{
-    var res=await fetch(SUPABASE_URL+'/rest/v1/ads?id=eq.'+currentAd.id,{method:'DELETE',headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+authToken}});
-    if(!res.ok){ var txt=await res.text(); throw new Error(txt); }
-    alert('✅ Usunięto');
-    closeDetail();
-    loadAds();
-  }catch(e){ alert('Błąd: '+e.message); }
-}
-
+async function openDetail(id){ var a=null; for(var i=0;i<allAds.length;i++){ if(String(allAds[i].id)===String(id)){ a=allAds[i]; break; } } if(!a) return; currentAd=a; try{ var res=await fetch(SUPABASE_URL+'/rest/v1/ads?id=eq.'+id+'&select=*', {headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY}}); if(res.ok){ var data=await res.json(); if(data[0]){ a=data[0]; currentAd=a; } } }catch(e){} var imgs=[]; if(a.images&&a.images.length>0) imgs=a.images.slice(); else if(a.image_url) imgs=[a.image_url]; else imgs=['https://via.placeholder.com/800x600?text=Brak+zdjecia']; galleryImages=imgs; currentImageIndex=0; var detailImg=document.getElementById('detailImg'); if(detailImg){ detailImg.src=getOptimizedImageUrl(galleryImages[0], 800); detailImg.alt=(a.title||'Ogłoszenie')+' - zdjęcie 1 z '+galleryImages.length; } var gc=document.getElementById('galleryCounter'); if(gc) gc.innerText='1 / '+galleryImages.length; var thumbs=document.getElementById('detailImages'); if(thumbs){ var th=''; for(var t=0;t<galleryImages.length;t++){ th+='<img src="'+getOptimizedImageUrl(galleryImages[t], 200)+'" class="'+(t===0?'active':'')+'" onclick="showImage('+t+')" loading="lazy" alt="Miniatura '+(t+1)+'" role="listitem">'; } thumbs.innerHTML=th; } var dt=document.getElementById('detailTitle'); if(dt) dt.innerText=a.title||''; var dp=document.getElementById('detailPrice'); if(dp) dp.innerText=a.price? a.price+' PLN':''; var dl=document.getElementById('detailLoc'); if(dl) dl.innerText=(a.location||a.city||''); var dd=document.getElementById('detailDesc'); if(dd) dd.innerText=a.description||''; var dmgEl=document.getElementById('detailDamaged'); if(dmgEl){ if(a.damaged==='tak'){ dmgEl.innerText='⚠️ USZKODZONE'; dmgEl.style.display='block'; } else { dmgEl.style.display='none'; } } var pn=document.getElementById('phoneNumber'); if(pn){ pn.innerText='📞 '+(a.phone||'Brak'); pn.style.display='none'; } var det=document.getElementById('detail'); if(det) det.style.display='flex'; var ownerDiv=document.getElementById('ownerActions'); if(ownerDiv && currentAd && currentUser && currentAd.owner_id===currentUser.id){ ownerDiv.style.display='block'; } else if(ownerDiv){ ownerDiv.style.display='none'; } }
 function saveAuth(access, refresh, user){ localStorage.setItem('sb_token', access); if(refresh) localStorage.setItem('sb_refresh', refresh); localStorage.setItem('sb_user', JSON.stringify(user)); authToken=access; if(refresh) refreshToken=refresh; currentUser=user; updateAuthUI(); }
 async function refreshAuthToken(){ if(!refreshToken){ refreshToken=localStorage.getItem('sb_refresh'); if(!refreshToken) return false; } try{ var res=await fetch(SUPABASE_URL+'/auth/v1/token?grant_type=refresh_token', {method:'POST', headers:{'apikey':SUPABASE_KEY,'Content-Type':'application/json'}, body: JSON.stringify({refresh_token: refreshToken})}); var data=await res.json(); if(res.ok && data.access_token){ saveAuth(data.access_token, data.refresh_token || refreshToken, data.user || currentUser); return true; } }catch(e){} return false; }
 function loadAuth(){ try{ authToken=localStorage.getItem('sb_token'); refreshToken=localStorage.getItem('sb_refresh'); currentUser=JSON.parse(localStorage.getItem('sb_user')||'null'); if(authToken){ try{ var payload=JSON.parse(atob(authToken.split('.')[1])); var exp=payload.exp*1000; if(Date.now() > exp - 60000){ refreshAuthToken(); } }catch(e){} } }catch(e){} updateAuthUI(); }
 function updateAuthUI(){ var authBtn=document.getElementById('authBtn'); var userEmail=document.getElementById('userEmail'); var userWrap=document.getElementById('userEmailWrap'); var logoutBtn=document.getElementById('logoutBtn'); var myBtn=document.getElementById('myBtn'); if(currentUser){ if(authBtn) authBtn.style.display='none'; if(userEmail){ userEmail.innerText='Zalogowany: '+currentUser.email; } if(userWrap) userWrap.style.display='block'; if(logoutBtn) logoutBtn.style.display='block'; if(myBtn) myBtn.style.display='block'; } else { if(authBtn) authBtn.style.display='block'; if(userWrap) userWrap.style.display='none'; if(logoutBtn) logoutBtn.style.display='none'; if(myBtn) myBtn.style.display='none'; } }
 function logout(){ localStorage.removeItem('sb_token'); localStorage.removeItem('sb_refresh'); localStorage.removeItem('sb_user'); currentUser=null; authToken=null; refreshToken=null; updateAuthUI(); location.reload(); }
 function filterMy(){ if(!currentUser){alert('Zaloguj');return} var btn=document.getElementById('myBtn'); if(!btn) return; if(btn.innerText==='Moje'){ btn.innerText='Wszystkie'; loadAds().then(function(){ allAds=allAds.filter(function(a){return a.owner_id===currentUser.id}); currentPage=0; renderAds(); }); } else { btn.innerText='Moje'; loadAds(); } }
-function loadAds(){ var rt=document.getElementById('resultsText'); if(rt) rt.innerText='Ładowanie...'; var url=SUPABASE_URL+'/rest/v1/ads?select=*&order=created_at.desc&limit=20'; return fetch(url,{headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY}}).then(function(res){ if(!res.ok) throw new Error('HTTP '+res.status); return res.json(); }).then(function(data){ for(var i=0;i<data.length;i++) ensureAdCoords(data[i]); allAds=data; currentPage=0; renderAds(); }).catch(function(e){ if(rt) rt.innerText='Błąd: '+e.message; }); }
+function loadAds(){ var rt=document.getElementById('resultsText'); if(rt) rt.innerText='Ładowanie...'; var url=SUPABASE_URL+'/rest/v1/ads?select=id,title,price,image_url,location,city,brand,lat,lng,owner_id,created_at&order=created_at.desc&limit=20'; return fetch(url,{headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY}}).then(function(res){ if(!res.ok) throw new Error('HTTP '+res.status); return res.json(); }).then(function(data){ for(var i=0;i<data.length;i++) ensureAdCoords(data[i]); allAds=data; currentPage=0; renderAds(); }).catch(function(e){ if(rt) rt.innerText='Błąd: '+e.message; }); }
 function login(){ var emailEl=document.getElementById('loginEmail'); var passEl=document.getElementById('loginPass'); if(!emailEl||!passEl) return; var email=emailEl.value.trim(); var pass=passEl.value; if(!email||!pass){ var li=document.getElementById('loginInfo'); if(li) li.innerText='Wpisz dane!'; return; } var li2=document.getElementById('loginInfo'); if(li2) li2.innerText='Logowanie...'; fetch(SUPABASE_URL+'/auth/v1/token?grant_type=password',{method:'POST',headers:{'apikey':SUPABASE_KEY,'Content-Type':'application/json'},body:JSON.stringify({email:email,password:pass})}).then(function(r){ return r.json().then(function(j){ return {ok:r.ok, json:j}; }); }).then(function(res){ if(!res.ok) throw new Error(res.json.error_description||'Błąd'); saveAuth(res.json.access_token, res.json.refresh_token, res.json.user); closeAuth(); }).catch(function(e){ var li3=document.getElementById('loginInfo'); if(li3) li3.innerText='Błąd: '+e.message; }); }
 function register(){ var chk=document.getElementById('regCheck'); if(!chk||!chk.checked){alert('Zaznacz regulamin');return} var emailEl=document.getElementById('regEmail'); var passEl=document.getElementById('regPass'); if(!emailEl||!passEl) return; var email=emailEl.value.trim(); var pass=passEl.value; if(!email||pass.length<6){ var ri=document.getElementById('regInfo'); if(ri) ri.innerText='Min 6 znaków'; return; } var ri2=document.getElementById('regInfo'); if(ri2) ri2.innerText='Rejestracja...'; fetch(SUPABASE_URL+'/auth/v1/signup',{method:'POST',headers:{'apikey':SUPABASE_KEY,'Content-Type':'application/json'},body:JSON.stringify({email:email,password:pass})}).then(function(r){return r.json().then(function(j){return {ok:r.ok, json:j}})}).then(function(res){ if(!res.ok) throw new Error(res.json.msg||'Błąd'); if(ri2) ri2.innerText='Konto założone!'; setTimeout(function(){ fetch(SUPABASE_URL+'/auth/v1/token?grant_type=password',{method:'POST',headers:{'apikey':SUPABASE_KEY,'Content-Type':'application/json'},body:JSON.stringify({email:email,password:pass})}).then(function(r){return r.json().then(function(j){return {ok:r.ok, json:j}})}).then(function(r2){ if(r2.ok){ saveAuth(r2.json.access_token, r2.json.refresh_token, r2.json.user); closeAuth(); } }); }, 800); }).catch(function(e){ var ri3=document.getElementById('regInfo'); if(ri3) ri3.innerText='Błąd: '+e.message; }); }
 function sendReset(){ var emailEl=document.getElementById('resetEmail'); if(!emailEl) return; var email=emailEl.value.trim(); if(!email){alert('Wpisz e-mail');return} fetch(SUPABASE_URL+'/auth/v1/recover',{method:'POST',headers:{'apikey':SUPABASE_KEY,'Content-Type':'application/json'},body:JSON.stringify({email:email})}).then(function(){ var ri=document.getElementById('resetInfo'); if(ri) ri.innerText='Wysłano link'; }); }
