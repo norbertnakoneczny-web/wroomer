@@ -1203,7 +1203,7 @@ header{position:relative !important;top:auto !important;z-index:10 !important}
 <div class="msg-channels">
 <div class="msg-channel sms" data-channel="sms" onclick="selectChannel('sms')" role="button" tabindex="0" aria-label="Wyślij SMS"><b>💬 SMS</b></div>
 <div class="msg-channel messenger" data-channel="messenger" onclick="selectChannel('messenger')" role="button" tabindex="0" aria-label="Wyślij przez Messenger"><b>💙 Messenger</b></div>
-<div class="msg-channel wa" data-channel="whatsapp" onclick="selectChannel('whatsapp')" role="button" tabindex="0" aria-label="Wyślij przez WhatsApp"><b>🟢 WhatsApp</b></div>
+<div class="msg-channel wa" data-channel="whatsapp" onclick="selectChannel('whatsapp')" role="button" tabindex="0" aria-label="Wyślij przez WhatsApp"><b>🟢 WATSUP</b></div>
 <div class="msg-channel wroomer active" data-channel="wroomer" onclick="selectChannel('wroomer')" role="button" tabindex="0" aria-label="Wiadomość wewnętrzna WROOMER"><b>⭐ WROOMER</b></div>
 </div>
 <div style="display:flex;gap:6px;margin-top:8px">
@@ -1219,7 +1219,7 @@ header{position:relative !important;top:auto !important;z-index:10 !important}
 <button class="btn btn-black" onclick="contactCall()" aria-label="Zadzwoń">📞 Zadzwoń</button>
 <button class="btn btn-white" onclick="showPhone()" aria-label="Pokaż numer telefonu">👁️ Numer</button>
 <button class="btn btn-white" style="background:#f0f0f0" onclick="quickSMS()" aria-label="Wyślij SMS">💬 SMS</button>
-<button class="btn btn-green" onclick="quickWhatsApp()" aria-label="WhatsApp">🟢 WA</button>
+<button class="btn btn-green" onclick="quickWhatsApp()" aria-label="WhatsApp">🟢 WATSUPTSUP</button>
 </div>
 </div>
 </div>
@@ -1832,6 +1832,75 @@ loadAds();
 // Podpis w konsoli
 console.log("%cWROOMER.PL FINAL 04.10.2026 16:22:35 v8.9.1","color:#facc15;font-size:14px;font-weight:bold");
 console.log("Podpisano: 04.10.2026 16:22:35");
+</script>
+
+
+<!-- COOKIE BANNER - RODO -->
+<div id="cookieBanner" style="position:fixed;bottom:0;left:0;right:0;background:#111;color:#f0f0f0;padding:14px 16px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;z-index:999999;border-top:2px solid #facc15;box-shadow:0 -4px 20px rgba(0,0,0,0.5);font-size:13px;line-height:1.4">
+  <div style="flex:1;min-width:200px">
+    🍪 Używamy plików <b>cookie</b> aby zapewnić najlepsze działanie strony. 
+    Kontynuując, zgadzasz się na ich użycie. 
+    <a href="/polityka-prywatnosci" onclick="openPrivacy();return false;" style="color:#facc15;text-decoration:underline">Polityka prywatności</a>
+  </div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap">
+    <button onclick="acceptCookies()" style="background:#facc15;color:#111;border:0;padding:10px 18px;border-radius:8px;font-weight:800;cursor:pointer;min-width:100px">Akceptuję</button>
+    <button onclick="rejectCookies()" style="background:transparent;color:#aaa;border:1px solid #444;padding:10px 16px;border-radius:8px;font-weight:600;cursor:pointer">Odrzuć</button>
+  </div>
+</div>
+
+<div id="privacyModal" style="position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:1000000;display:none;align-items:center;justify-content:center;padding:16px">
+  <div style="background:#1a1a1a;color:#f0f0f0;max-width:600px;width:100%;max-height:80vh;overflow-y:auto;border-radius:16px;padding:20px;border:1px solid #333">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+      <h2 style="color:#fff;font-size:18px">🍪 Polityka Cookies & Prywatności</h2>
+      <button onclick="closePrivacy()" style="background:#333;color:#fff;border:0;width:32px;height:32px;border-radius:50%;cursor:pointer">✕</button>
+    </div>
+    <div style="font-size:13px;line-height:1.6;color:#ccc">
+      <h3 style="color:#facc15;margin:12px 0 6px">1. Pliki Cookie</h3>
+      <p>WROOMER.PL używa plików cookie w celu:</p>
+      <ul style="margin:6px 0 12px 20px">
+        <li>Zapewnienia prawidłowego działania strony</li>
+        <li>Zapamiętania preferencji wyszukiwania (filtry, lokalizacja)</li>
+        <li>Utrzymania sesji logowania</li>
+        <li>Analizy ruchu (anonimowo)</li>
+      </ul>
+      <h3 style="color:#facc15;margin:12px 0 6px">2. Dane osobowe</h3>
+      <p>Przetwarzamy: e-mail, telefon, lokalizację ogłoszeń. Dane nie są sprzedawane podmiotom trzecim. Masz prawo do usunięcia konta i danych.</p>
+      <h3 style="color:#facc15;margin:12px 0 6px">3. Zgoda</h3>
+      <p>Możesz w każdej chwili usunąć cookies w ustawieniach przeglądarki. Odrzucenie może ograniczyć funkcjonalność (np. zapamiętanie filtrów).</p>
+      <p style="margin-top:16px;font-size:11px;color:#888">WROOMER.PL © 2026 | Kontakt: wroomer.pl | RODO compliant</p>
+    </div>
+    <button onclick="closePrivacy();acceptCookies()" style="width:100%;margin-top:16px;background:#facc15;color:#111;border:0;padding:12px;border-radius:10px;font-weight:800;cursor:pointer">Rozumiem, akceptuję</button>
+  </div>
+</div>
+
+<style>
+#cookieBanner.hide{transform:translateY(100%);transition:transform 0.3s ease}
+</style>
+
+<script>
+function acceptCookies(){
+  try{ localStorage.setItem('wroomer_cookies','accepted'); }catch(e){}
+  var b=document.getElementById('cookieBanner'); if(b) b.style.display='none';
+}
+function rejectCookies(){
+  try{ localStorage.setItem('wroomer_cookies','rejected'); localStorage.removeItem('wroomer_filters'); localStorage.removeItem('wroomer_location'); }catch(e){}
+  var b=document.getElementById('cookieBanner'); if(b) b.style.display='none';
+}
+function openPrivacy(){
+  var m=document.getElementById('privacyModal'); if(m) m.style.display='flex';
+}
+function closePrivacy(){
+  var m=document.getElementById('privacyModal'); if(m) m.style.display='none';
+}
+(function(){
+  try{
+    var c=localStorage.getItem('wroomer_cookies');
+    if(c){ var b=document.getElementById('cookieBanner'); if(b) b.style.display='none'; }
+  }catch(e){}
+  // Zamknij privacy po kliknięciu w tło
+  var pm=document.getElementById('privacyModal');
+  if(pm){ pm.addEventListener('click', function(e){ if(e.target.id==='privacyModal') closePrivacy(); }); }
+})();
 </script>
 
 </body>

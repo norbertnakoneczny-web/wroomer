@@ -1,5 +1,5 @@
 WROOMER.PL
-Data: 04.10.2026 16:36:46
-Wersja: v9.1 PHONE+MSG FIX
-- Numer pokazuje się po kliknięciu
-- Ramka wiadomości szara #d0d0d0 z ciemną czcionką
+04.10.2026 16:42:34
+v9.2 WATSUP+COOKIE
+WA->WATSUP
+Cookie banner RODO
