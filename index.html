@@ -1,4 +1,4 @@
-<!-- WROOMER.PL OSTATECZNA WERSJA 04.10.2026 11:27 -->
+
 <!DOCTYPE html>
 <html lang="pl">
 <head>
@@ -349,7 +349,7 @@
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>WROOMER.PL - Ogólnopolska całkowicie darmowa baza ogłoszeń motoryzacyjnych</title>
+<title>WROOMER.PL - Ogólnopolska całkowicie darmowa baza ogłoszeń motoryzacyjnych. Żadnych promowań i wyróżnień.</title>
 <meta name="description" content="Ogólnopolska całkowicie darmowa baza ogłoszeń motoryzacyjnych. Żadnych promowań i wyróżnień.">
 <link rel="preconnect" href="https://rljqnhfogaqdjeirqqdj.supabase.co" crossorigin>
 <link rel="ai-catalog" href="/.well-known/ai-catalog.json">
@@ -1120,8 +1120,7 @@ header{position:relative !important;top:auto !important;z-index:10 !important}
 
 </style>
 </head>
-<body><div id="adminTopBanner" style="display:none;position:fixed;top:0;left:0;right:0;background:#000;color:#ffeb00;padding:8px;text-align:center;font-weight:900;z-index:999999;border-bottom:3px solid #ffeb00;font-size:14px">👑 TRYB ADMIN: anianakoneczny@icloud.com - Licznik aktywny</div>
-
+<body>
 <header>
 <div class="top-row">
 <div class="logo" onclick="location.reload()" role="button" tabindex="0" aria-label="WROOMER.PL - strona główna" style="font-weight:900;font-size:26px;letter-spacing:-1.5px;cursor:pointer;white-space:nowrap;color:#111;display:flex;align-items:center;gap:6px"><span style="display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;background:#111;color:#fff;border-radius:10px;font-size:20px;transform:rotate(-6deg)">W</span><span>WROOMER<span style="color:#666;font-weight:700">.PL</span></span></div>
@@ -1177,10 +1176,7 @@ Każde ogłoszenie wyrażające wolę zawarcia umowy należy traktować jako zap
 </div>
 <div class="detail-content">
 <button class="close-btn-2" onclick="closeDetail()" aria-label="Zamknij">✕</button>
-<div style="padding-right:40px"><h2 id="detailTitle" style="color:#fff"></h2><p id="detailPrice"></p><p id="detailLoc"></p><p id="detailDamaged" style="font-size:12px;font-weight:800;color:#ffcc00;margin-top:4px;display:none"></p>
-<div id="adminViewCounter" style="background:#ffeb00;color:#000;padding:12px;border-radius:12px;font-weight:900;margin-top:12px;border:3px solid #000;font-size:14px;display:block">👁️ Wyświetlenia: <span id="viewCountNum">0</span> | ADMIN: anianakoneczny@icloud.com | ID: <span id="viewCountId">-</span></div>
-<div id="ownAdActions" style="margin-top:10px;padding:10px;background:#fff3cd;border:2px solid #ffc107;border-radius:10px;display:block"><p style="margin:0 0 6px 0;font-weight:900">⚙️ PANEL ADMINA</p><div style="display:flex;gap:8px"><button onclick="editCurrentAd()" style="flex:1;background:#000;color:#ffeb00;padding:10px;border:none;border-radius:8px;font-weight:900;cursor:pointer">✏️ Edytuj</button><button onclick="deleteCurrentAd()" style="flex:1;background:#ff0000;color:#fff;padding:10px;border:none;border-radius:8px;font-weight:900;cursor:pointer">🗑️ Usuń</button></div></div>
-</div>
+<div style="padding-right:40px"><h2 id="detailTitle" style="color:#fff"></h2><p id="detailPrice"></p><p id="detailLoc"></p><p id="detailDamaged" style="font-size:12px;font-weight:800;color:#ffcc00;margin-top:4px;display:none"></p></div>
 <p id="detailDesc"></p>
 <div id="detailImages" role="list" aria-label="Miniatury zdjęć"></div>
 <div id="ownerActions" style="display:none;margin-top:12px;padding:10px;background:rgba(255,255,255,0.08);border-radius:12px"><p style="font-size:11px;font-weight:900;color:#fff;margin-bottom:8px">🔧 TWOJE OGŁOSZENIE</p><div style="display:flex;gap:8px"><button class="btn btn-white" onclick="openEditCurrent()" style="flex:1">✏️ Edytuj</button><button class="btn btn-black" onclick="deleteCurrent()" style="flex:1;background:#cc0000;color:#fff">🗑️ Usuń</button></div></div>
@@ -1554,16 +1550,7 @@ function getMyLocationForAdd(){
   }).catch(function(){ if(btn) btn.innerText=orig; });
  }, function(err){ var infoEl=document.getElementById('addLocationInfo'); if(infoEl) infoEl.innerText='❌ Błąd GPS: '+err.message; if(btn) btn.innerText=orig; }, {enableHighAccuracy:true, timeout:10000});
 }
-async async function openDetail(id){
-  var a=null;
-  for(var i=0;i<allAds.length;i++){ if(String(allAds[i].id)===String(id)){ a=allAds[i]; break; } }
-  if(!a) return;
-  currentAd=a;
-  try{
-    var res=await fetch(SUPABASE_URL+'/rest/v1/ads?id=eq.'+id+'&select=*', {headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY}});
-    if(res.ok){ var d=await res.json(); if(d[0]){ a=d[0]; currentAd=a; } }
-  }catch(e){}
- var imgs=[]; if(a.images&&a.images.length>0) imgs=a.images.slice(); else if(a.image_url) imgs=[a.image_url]; else imgs=['https://via.placeholder.com/800x600?text=Brak+zdjecia']; galleryImages=imgs; currentImageIndex=0; var detailImg=document.getElementById('detailImg'); if(detailImg){ detailImg.src=getOptimizedImageUrl(galleryImages[0], 800); detailImg.alt=(a.title||'Ogłoszenie')+' - zdjęcie 1 z '+galleryImages.length; } var gc=document.getElementById('galleryCounter'); if(gc) gc.innerText='1 / '+galleryImages.length; var thumbs=document.getElementById('detailImages'); if(thumbs){ var th=''; for(var t=0;t<galleryImages.length;t++){ th+='<img src="'+getOptimizedImageUrl(galleryImages[t], 200)+'" class="'+(t===0?'active':'')+'" onclick="showImage('+t+')" loading="lazy" alt="Miniatura '+(t+1)+'" role="listitem">'; } thumbs.innerHTML=th; } var dt=document.getElementById('detailTitle'); if(dt) dt.innerText=a.title||''; var dp=document.getElementById('detailPrice'); if(dp) dp.innerText=a.price? a.price+' PLN':''; var dl=document.getElementById('detailLoc'); if(dl) dl.innerText=(a.location||a.city||''); var dd=document.getElementById('detailDesc'); if(dd) dd.innerText=a.description||''; var dmgEl=document.getElementById('detailDamaged'); if(dmgEl){ if(a.damaged==='tak'){ dmgEl.innerText='⚠️ USZKODZONE'; dmgEl.style.display='block'; } else { dmgEl.style.display='none'; } } var pn=document.getElementById('phoneNumber'); if(pn){ pn.innerText='📞 '+(a.phone||'Brak'); pn.style.display='none'; } var det=document.getElementById('detail'); if(det) det.style.display='flex'; try{ checkOwnAd(); }catch(e){}
+async function openDetail(id){ try{ if(id) incrementView(String(id)); }catch(e){}  var a=null; for(var i=0;i<allAds.length;i++){ if(String(allAds[i].id)===String(id)){ a=allAds[i]; break; } } if(!a) return; currentAd=a; try{ var res=await fetch(SUPABASE_URL+'/rest/v1/ads?id=eq.'+id+'&select=*', {headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY}}); if(res.ok){ var data=await res.json(); if(data[0]){ a=data[0]; currentAd=a; } } }catch(e){} var imgs=[]; if(a.images&&a.images.length>0) imgs=a.images.slice(); else if(a.image_url) imgs=[a.image_url]; else imgs=['https://via.placeholder.com/800x600?text=Brak+zdjecia']; galleryImages=imgs; currentImageIndex=0; var detailImg=document.getElementById('detailImg'); if(detailImg){ detailImg.src=getOptimizedImageUrl(galleryImages[0], 800); detailImg.alt=(a.title||'Ogłoszenie')+' - zdjęcie 1 z '+galleryImages.length; } var gc=document.getElementById('galleryCounter'); if(gc) gc.innerText='1 / '+galleryImages.length; var thumbs=document.getElementById('detailImages'); if(thumbs){ var th=''; for(var t=0;t<galleryImages.length;t++){ th+='<img src="'+getOptimizedImageUrl(galleryImages[t], 200)+'" class="'+(t===0?'active':'')+'" onclick="showImage('+t+')" loading="lazy" alt="Miniatura '+(t+1)+'" role="listitem">'; } thumbs.innerHTML=th; } var dt=document.getElementById('detailTitle'); if(dt) dt.innerText=a.title||''; var dp=document.getElementById('detailPrice'); if(dp) dp.innerText=a.price? a.price+' PLN':''; var dl=document.getElementById('detailLoc'); if(dl) dl.innerText=(a.location||a.city||''); var dd=document.getElementById('detailDesc'); if(dd) dd.innerText=a.description||''; var dmgEl=document.getElementById('detailDamaged'); if(dmgEl){ if(a.damaged==='tak'){ dmgEl.innerText='⚠️ USZKODZONE'; dmgEl.style.display='block'; } else { dmgEl.style.display='none'; } } var pn=document.getElementById('phoneNumber'); if(pn){ pn.innerText='📞 '+(a.phone||'Brak'); pn.style.display='none'; } var det=document.getElementById('detail'); if(det) det.style.display='flex'; try{ checkOwnAd(); }catch(e){}
    // v8.3 swipe counter
    try{
      var counter = document.getElementById('swipeCounter');
@@ -1625,7 +1612,7 @@ function _old_updateAuthUI(){
  var authBtn=document.getElementById('authBtn'); var userEmail=document.getElementById('userEmail'); var userWrap=document.getElementById('userEmailWrap'); var logoutBtn=document.getElementById('logoutBtn'); var myBtn=document.getElementById('myBtn'); if(currentUser){ if(authBtn) authBtn.style.display='none'; if(userEmail){ userEmail.innerText='Zalogowany: '+currentUser.email; } if(userWrap) userWrap.style.display='block'; if(logoutBtn) logoutBtn.style.display='block'; if(myBtn) myBtn.style.display='block'; } else { if(authBtn) authBtn.style.display='block'; if(userWrap) userWrap.style.display='none'; if(logoutBtn) logoutBtn.style.display='none'; if(myBtn) myBtn.style.display='none'; } }
 function logout(){ localStorage.removeItem('sb_token'); localStorage.removeItem('sb_refresh'); localStorage.removeItem('sb_user'); currentUser=null; authToken=null; refreshToken=null; updateAuthUI(); location.reload(); }
 function filterMy(){ if(!currentUser){alert('Zaloguj');return} var btn=document.getElementById('myBtn'); if(!btn) return; if(btn.innerText==='Moje'){ btn.innerText='Wszystkie'; loadAds().then(function(){ allAds=allAds.filter(function(a){return a.owner_id===currentUser.id}); currentPage=0; renderAds(); }); } else { btn.innerText='Moje'; loadAds(); } }
-function loadAds(){ var rt=document.getElementById('resultsText'); if(rt) rt.innerText='Ładowanie...'; var url=SUPABASE_URL+'/rest/v1/ads?select=id,title,price,image_url,location,city,brand,model,year,mileage,views,owner_id,lat,lng,owner_id,created_at&order=created_at.desc&limit=100'; return fetch(url,{headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY}}).then(function(res){ if(!res.ok) throw new Error('HTTP '+res.status); return res.json(); }).then(function(data){ for(var i=0;i<data.length;i++) ensureAdCoords(data[i]); allAds=data; currentPage=0; renderAds(); }).catch(function(e){ if(rt) rt.innerText='Błąd: '+e.message; }); }
+function loadAds(){ var rt=document.getElementById('resultsText'); if(rt) rt.innerText='Ładowanie...'; var url=SUPABASE_URL+'/rest/v1/ads?select=*&order=created_at.desc&limit=100'; return fetch(url,{headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY}}).then(function(res){ if(!res.ok) throw new Error('HTTP '+res.status); return res.json(); }).then(function(data){ for(var i=0;i<data.length;i++) ensureAdCoords(data[i]); allAds=data; currentPage=0; renderAds(); }).catch(function(e){ if(rt) rt.innerText='Błąd: '+e.message; }); }
 function login(){ var emailEl=document.getElementById('loginEmail'); var passEl=document.getElementById('loginPass'); if(!emailEl||!passEl) return; var email=emailEl.value.trim(); var pass=passEl.value; if(!email||!pass){ var li=document.getElementById('loginInfo'); if(li) li.innerText='Wpisz dane!'; return; } var li2=document.getElementById('loginInfo'); if(li2) li2.innerText='Logowanie...'; fetch(SUPABASE_URL+'/auth/v1/token?grant_type=password',{method:'POST',headers:{'apikey':SUPABASE_KEY,'Content-Type':'application/json'},body:JSON.stringify({email:email,password:pass})}).then(function(r){ return r.json().then(function(j){ return {ok:r.ok, json:j}; }); }).then(function(res){ if(!res.ok) throw new Error(res.json.error_description||'Błąd'); saveAuth(res.json.access_token, res.json.refresh_token, res.json.user); closeAuth(); }).catch(function(e){ var li3=document.getElementById('loginInfo'); if(li3) li3.innerText='Błąd: '+e.message; }); }
 function register(){ var chk=document.getElementById('regCheck'); if(!chk||!chk.checked){alert('Zaznacz regulamin');return} var emailEl=document.getElementById('regEmail'); var passEl=document.getElementById('regPass'); if(!emailEl||!passEl) return; var email=emailEl.value.trim(); var pass=passEl.value; if(!email||pass.length<6){ var ri=document.getElementById('regInfo'); if(ri) ri.innerText='Min 6 znaków'; return; } var ri2=document.getElementById('regInfo'); if(ri2) ri2.innerText='Rejestracja...'; fetch(SUPABASE_URL+'/auth/v1/signup',{method:'POST',headers:{'apikey':SUPABASE_KEY,'Content-Type':'application/json'},body:JSON.stringify({email:email,password:pass})}).then(function(r){return r.json().then(function(j){return {ok:r.ok, json:j}})}).then(function(res){ if(!res.ok) throw new Error(res.json.msg||'Błąd'); if(ri2) ri2.innerText='Konto założone!'; setTimeout(function(){ fetch(SUPABASE_URL+'/auth/v1/token?grant_type=password',{method:'POST',headers:{'apikey':SUPABASE_KEY,'Content-Type':'application/json'},body:JSON.stringify({email:email,password:pass})}).then(function(r){return r.json().then(function(j){return {ok:r.ok, json:j}})}).then(function(r2){ if(r2.ok){ saveAuth(r2.json.access_token, r2.json.refresh_token, r2.json.user); closeAuth(); } }); }, 800); }).catch(function(e){ var ri3=document.getElementById('regInfo'); if(ri3) ri3.innerText='Błąd: '+e.message; }); }
 function sendReset(){ var emailEl=document.getElementById('resetEmail'); if(!emailEl) return; var email=emailEl.value.trim(); if(!email){alert('Wpisz e-mail');return} fetch(SUPABASE_URL+'/auth/v1/recover',{method:'POST',headers:{'apikey':SUPABASE_KEY,'Content-Type':'application/json'},body:JSON.stringify({email:email})}).then(function(){ var ri=document.getElementById('resetInfo'); if(ri) ri.innerText='Wysłano link'; }); }
@@ -1768,34 +1755,6 @@ async function submitAdd(){
 }
 loadAuth();
 loadAds();
-
-function incrementView(adId){
-  try{
-    var key='wroomer_views_'+adId;
-    var v=parseInt(localStorage.getItem(key)||'0')+1;
-    localStorage.setItem(key, v);
-    var numEl=document.getElementById('viewCountNum');
-    var idEl=document.getElementById('viewCountId');
-    if(numEl) numEl.innerText=v;
-    if(idEl) idEl.innerText=String(adId).substring(0,8);
-  }catch(e){}
-}
-function checkOwnAd(){
-  try{
-    var banner=document.getElementById('adminTopBanner');
-    var counter=document.getElementById('adminViewCounter');
-    var actions=document.getElementById('ownAdActions');
-    var isAdm=isAdmin();
-    if(banner){ banner.style.display=isAdm?'block':'none'; if(isAdm) document.body.style.paddingTop='36px'; else document.body.style.paddingTop='0'; }
-    if(counter){ counter.style.display=isAdm?'block':'none'; }
-    if(actions){ actions.style.display=isAdm?'block':'none'; }
-    if(isAdm && currentAd){
-      incrementView(currentAd.id);
-    }
-  }catch(e){ console.log('checkOwnAd err',e); }
-}
-setInterval(function(){ try{ checkOwnAd(); }catch(e){} },1000);
-
 </script>
 
 
@@ -1868,34 +1827,6 @@ setInterval(function(){ try{ checkOwnAd(); }catch(e){} },1000);
     }
   }, 800);
 })();
-
-function incrementView(adId){
-  try{
-    var key='wroomer_views_'+adId;
-    var v=parseInt(localStorage.getItem(key)||'0')+1;
-    localStorage.setItem(key, v);
-    var numEl=document.getElementById('viewCountNum');
-    var idEl=document.getElementById('viewCountId');
-    if(numEl) numEl.innerText=v;
-    if(idEl) idEl.innerText=String(adId).substring(0,8);
-  }catch(e){}
-}
-function checkOwnAd(){
-  try{
-    var banner=document.getElementById('adminTopBanner');
-    var counter=document.getElementById('adminViewCounter');
-    var actions=document.getElementById('ownAdActions');
-    var isAdm=isAdmin();
-    if(banner){ banner.style.display=isAdm?'block':'none'; if(isAdm) document.body.style.paddingTop='36px'; else document.body.style.paddingTop='0'; }
-    if(counter){ counter.style.display=isAdm?'block':'none'; }
-    if(actions){ actions.style.display=isAdm?'block':'none'; }
-    if(isAdm && currentAd){
-      incrementView(currentAd.id);
-    }
-  }catch(e){ console.log('checkOwnAd err',e); }
-}
-setInterval(function(){ try{ checkOwnAd(); }catch(e){} },1000);
-
 </script>
 
 
@@ -1911,34 +1842,6 @@ function rejectCookies(){ try{ localStorage.setItem('wroomer_cookies','rejected'
 function openPrivacy(){ var m=document.getElementById('privacyModal'); if(m) m.style.display='flex'; }
 function closePrivacy(){ var m=document.getElementById('privacyModal'); if(m) m.style.display='none'; }
 (function(){ try{ var c=localStorage.getItem('wroomer_cookies'); if(c){ var b=document.getElementById('cookieBanner'); if(b) b.style.display='none'; } }catch(e){} })();
-
-function incrementView(adId){
-  try{
-    var key='wroomer_views_'+adId;
-    var v=parseInt(localStorage.getItem(key)||'0')+1;
-    localStorage.setItem(key, v);
-    var numEl=document.getElementById('viewCountNum');
-    var idEl=document.getElementById('viewCountId');
-    if(numEl) numEl.innerText=v;
-    if(idEl) idEl.innerText=String(adId).substring(0,8);
-  }catch(e){}
-}
-function checkOwnAd(){
-  try{
-    var banner=document.getElementById('adminTopBanner');
-    var counter=document.getElementById('adminViewCounter');
-    var actions=document.getElementById('ownAdActions');
-    var isAdm=isAdmin();
-    if(banner){ banner.style.display=isAdm?'block':'none'; if(isAdm) document.body.style.paddingTop='36px'; else document.body.style.paddingTop='0'; }
-    if(counter){ counter.style.display=isAdm?'block':'none'; }
-    if(actions){ actions.style.display=isAdm?'block':'none'; }
-    if(isAdm && currentAd){
-      incrementView(currentAd.id);
-    }
-  }catch(e){ console.log('checkOwnAd err',e); }
-}
-setInterval(function(){ try{ checkOwnAd(); }catch(e){} },1000);
-
 </script>
 
 
@@ -2024,85 +1927,65 @@ function detectBraveAndBlockers(){
   }
 }
 setTimeout(detectBraveAndBlockers, 1000);
-
-function incrementView(adId){
-  try{
-    var key='wroomer_views_'+adId;
-    var v=parseInt(localStorage.getItem(key)||'0')+1;
-    localStorage.setItem(key, v);
-    var numEl=document.getElementById('viewCountNum');
-    var idEl=document.getElementById('viewCountId');
-    if(numEl) numEl.innerText=v;
-    if(idEl) idEl.innerText=String(adId).substring(0,8);
-  }catch(e){}
-}
-function checkOwnAd(){
-  try{
-    var banner=document.getElementById('adminTopBanner');
-    var counter=document.getElementById('adminViewCounter');
-    var actions=document.getElementById('ownAdActions');
-    var isAdm=isAdmin();
-    if(banner){ banner.style.display=isAdm?'block':'none'; if(isAdm) document.body.style.paddingTop='36px'; else document.body.style.paddingTop='0'; }
-    if(counter){ counter.style.display=isAdm?'block':'none'; }
-    if(actions){ actions.style.display=isAdm?'block':'none'; }
-    if(isAdm && currentAd){
-      incrementView(currentAd.id);
-    }
-  }catch(e){ console.log('checkOwnAd err',e); }
-}
-setInterval(function(){ try{ checkOwnAd(); }catch(e){} },1000);
-
 </script>
 
 
 <script>
-
 function isAdmin(){
   try{
-    var target='anianakoneczny@icloud.com';
-    var target2='anianakoneczny';
-    // check all localStorage
-    for(var i=0;i<localStorage.length;i++){
-      var k=localStorage.key(i);
-      try{
-        var v=localStorage.getItem(k)||'';
-        var low=v.toLowerCase();
-        if(low.indexOf(target)!==-1 || low.indexOf(target2)!==-1) return true;
-      }catch(e){}
-    }
+    var uStr=localStorage.getItem('wroomer_user');
+    if(!uStr) return false;
+    var u=JSON.parse(uStr);
+    var email=(u.email||'').toLowerCase();
+    var admins=['anianakoneczny@icloud.com','admin@wroomer.pl','kontakt@wroomer.pl'];
+    // TWÓJ EMAIL - dodaj swój poniżej
+    if(email==='lukaszgorzyce@gmail.com' || email==='admin@wroomer.pl') return true;
+    if(admins.indexOf(email)!==-1) return true;
+    if(email.endsWith('@wroomer.pl')) return true;
+    if(u.is_admin) return true;
+    if(u.user_metadata && u.user_metadata.is_admin) return true;
     return false;
   }catch(e){ return false; }
 }
-function isAdminDebug(){ try{ return isAdmin(); }catch(e){ return false; } }
-
-
 function incrementView(adId){
   try{
-    var key='wroomer_views_'+adId;
-    var v=parseInt(localStorage.getItem(key)||'0')+1;
-    localStorage.setItem(key, v);
-    var numEl=document.getElementById('viewCountNum');
-    var idEl=document.getElementById('viewCountId');
-    if(numEl) numEl.innerText=v;
-    if(idEl) idEl.innerText=String(adId).substring(0,8);
+    var url=SUPABASE_URL+'/rest/v1/ads?id=eq.'+adId;
+    fetch(url+'&select=views',{headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY}}).then(function(r){return r.json();}).then(function(data){
+      var currentViews = (data[0] && data[0].views) ? parseInt(data[0].views) : 0;
+      var newViews = currentViews + 1;
+      fetch(url,{method:'PATCH',headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify({views:newViews})}).catch(function(){});
+      if(isAdmin()){
+        var counterEl=document.getElementById('adminViewCounter');
+        if(counterEl){ counterEl.style.display='block'; counterEl.innerHTML='👁️ Wyświetlenia: <b>'+newViews+'</b> | Tylko Ty widzisz ten licznik | ID: '+adId.substring(0,8); }
+      }
+    }).catch(function(){});
   }catch(e){}
 }
 function checkOwnAd(){
   try{
-    var banner=document.getElementById('adminTopBanner');
-    var counter=document.getElementById('adminViewCounter');
-    var actions=document.getElementById('ownAdActions');
-    var isAdm=isAdmin();
-    if(banner){ banner.style.display=isAdm?'block':'none'; if(isAdm) document.body.style.paddingTop='36px'; else document.body.style.paddingTop='0'; }
-    if(counter){ counter.style.display=isAdm?'block':'none'; }
-    if(actions){ actions.style.display=isAdm?'block':'none'; }
-    if(isAdm && currentAd){
-      incrementView(currentAd.id);
+    var ownActions=document.getElementById('ownAdActions');
+    var counterEl=document.getElementById('adminViewCounter');
+    if(!currentAd) { if(ownActions) ownActions.style.display='none'; if(counterEl && !isAdmin()) counterEl.style.display='none'; return; }
+    var userStr=localStorage.getItem('wroomer_user');
+    var isOwner=false;
+    if(userStr){
+      var u=JSON.parse(userStr);
+      if(String(currentAd.owner_id)===String(u.id)) isOwner=true;
     }
-  }catch(e){ console.log('checkOwnAd err',e); }
+    if(ownActions){
+      if(isOwner || isAdmin()) ownActions.style.display='block'; else ownActions.style.display='none';
+    }
+    if(counterEl){
+      if(isAdmin()){
+        counterEl.style.display='block';
+        var v=currentAd.views||0;
+        counterEl.innerHTML='👁️ Wyświetlenia: <b>'+v+'</b> | Tylko Ty widzisz ten licznik (admin) | ID: '+(currentAd.id||'').substring(0,8);
+      } else {
+        counterEl.style.display='none';
+      }
+    }
+  }catch(e){}
 }
-setInterval(function(){ try{ checkOwnAd(); }catch(e){} },1000);
-
 </script>
 
 
@@ -2141,34 +2024,6 @@ function deleteCurrentAd(){
     });
   }catch(e){ alert('Błąd: '+e.message); }
 }
-
-function incrementView(adId){
-  try{
-    var key='wroomer_views_'+adId;
-    var v=parseInt(localStorage.getItem(key)||'0')+1;
-    localStorage.setItem(key, v);
-    var numEl=document.getElementById('viewCountNum');
-    var idEl=document.getElementById('viewCountId');
-    if(numEl) numEl.innerText=v;
-    if(idEl) idEl.innerText=String(adId).substring(0,8);
-  }catch(e){}
-}
-function checkOwnAd(){
-  try{
-    var banner=document.getElementById('adminTopBanner');
-    var counter=document.getElementById('adminViewCounter');
-    var actions=document.getElementById('ownAdActions');
-    var isAdm=isAdmin();
-    if(banner){ banner.style.display=isAdm?'block':'none'; if(isAdm) document.body.style.paddingTop='36px'; else document.body.style.paddingTop='0'; }
-    if(counter){ counter.style.display=isAdm?'block':'none'; }
-    if(actions){ actions.style.display=isAdm?'block':'none'; }
-    if(isAdm && currentAd){
-      incrementView(currentAd.id);
-    }
-  }catch(e){ console.log('checkOwnAd err',e); }
-}
-setInterval(function(){ try{ checkOwnAd(); }catch(e){} },1000);
-
 </script>
 
 </body>
