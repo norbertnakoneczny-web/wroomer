@@ -349,7 +349,7 @@
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>WROOMER.PL - 04.10.2026 12:05 - Admin anianakoneczny@gmail.com</title>
+<title>WROOMER.PL - 04.10.2026 12:11 - Admin anianakoneczny@icloud.com</title>
 <meta name="description" content="Ogólnopolska całkowicie darmowa baza ogłoszeń motoryzacyjnych. Żadnych promowań i wyróżnień.">
 <link rel="preconnect" href="https://rljqnhfogaqdjeirqqdj.supabase.co" crossorigin>
 <link rel="ai-catalog" href="/.well-known/ai-catalog.json">
@@ -1937,9 +1937,9 @@ function isAdmin(){
     if(!uStr) return false;
     var u=JSON.parse(uStr);
     var email=(u.email||'').toLowerCase();
-    var admins=['anianakoneczny@gmail.com','admin@wroomer.pl','kontakt@wroomer.pl'];
+    var admins=['anianakoneczny@icloud.com','admin@wroomer.pl','kontakt@wroomer.pl'];
     // TWÓJ EMAIL - dodaj swój poniżej
-    if(email==='anianakoneczny@gmail.com' || email==='admin@wroomer.pl' || email==='kontakt@wroomer.pl') return true;
+    if(email==='lukaszgorzyce@gmail.com' || email==='admin@wroomer.pl') return true;
     if(admins.indexOf(email)!==-1) return true;
     if(email.endsWith('@wroomer.pl')) return true;
     if(u.is_admin) return true;
