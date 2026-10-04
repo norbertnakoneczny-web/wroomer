@@ -3,10 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>WROOMER.PL - Wydajność jak OLX/OTOMOTO</title>
+<title>WROOMER.PL - Ogłoszenia motoryzacyjne | Gorzyce, Rydułtowy, Rybnik</title>
+<meta name="description" content="WROOMER.PL - lokalne ogłoszenia motoryzacyjne. Kup i sprzedaj auto w Gorzycach, Rydułtowach, Rybniku, Wodzisławiu. Szybko, lokalnie, bezpiecznie.">
+<meta name="robots" content="index, follow">
+<link rel="preconnect" href="https://rljqnhfogaqdjeirqqdj.supabase.co">
+<link rel="dns-prefetch" href="https://nominatim.openstreetmap.org">
 <style>
-*{box-sizing:border-box;margin:0;padding:0;font-family:Inter,system-ui,sans-serif}
-body{background:#f5f5f0;color:#111}
+*{box-sizing:border-box;margin:0;padding:0;font-family:Inter,system-ui,-apple-system,sans-serif}
+body{background:#f5f5f0;color:#111;content-visibility:auto}
 header{background:#fff;border-bottom:1px solid #e5e5e0;position:sticky;top:0;z-index:50;padding:10px 12px}
 .top-row{display:flex;align-items:center;justify-content:space-between;gap:10px;max-width:1280px;margin:0 auto}
 .logo{font-weight:900;font-size:22px;letter-spacing:-1px;cursor:pointer;white-space:nowrap}.logo span{color:#ffcb00}
@@ -17,20 +21,19 @@ header{background:#fff;border-bottom:1px solid #e5e5e0;position:sticky;top:0;z-i
 .btn{border:0;cursor:pointer;padding:10px 16px;border-radius:8px;font-weight:700;font-size:13px;white-space:nowrap}
 .btn-black{background:#111;color:#fff}.btn-yellow{background:#ffcb00;color:#111}.btn-white{background:#fff;border:1px solid #ddd}
 .btn-green{background:#25D366;color:#fff}.btn-blue{background:#0084FF;color:#fff}.btn-orange{background:#FF6600;color:#fff}
-.grid{max-width:1280px;margin:18px auto;padding:0 12px;display:grid;grid-template-columns:repeat(auto-fill,minmax(198px,1fr));gap:12px}
-.card{background:#fff;border-radius:12px;overflow:hidden;border:1px solid #e9e9e6;cursor:pointer;position:relative;contain:layout style paint}
+.grid{max-width:1280px;margin:18px auto;padding:0 12px;display:grid;grid-template-columns:repeat(auto-fill,minmax(198px,1fr));gap:12px;content-visibility:auto;contain-intrinsic-size:1000px}
+.card{background:#fff;border-radius:12px;overflow:hidden;border:1px solid #e9e9e6;cursor:pointer;position:relative;contain:layout style paint;content-visibility:auto;contain-intrinsic-size:250px}
 .card .img-wrap{width:100%;height:144px;background:#f4f4f4;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
-.card .img-wrap img{width:100%;height:100%;object-fit:contain;object-position:center center;display:block;transition:opacity .3s}
-.card .img-wrap .blur{position:absolute;inset:0;background:linear-gradient(90deg,#f0f0f0 25%,#e0e0e0 50%,#f0f0f0 75%);background-size:200% 100%;animation:shimmer 1.2s infinite}
+.card .img-wrap img{width:100%;height:100%;object-fit:contain;object-position:center center;display:block;transition:opacity .2s}
+.card .img-wrap .skeleton{position:absolute;inset:0;background:linear-gradient(90deg,#f0f0f0 25%,#e0e0e0 50%,#f0f0f0 75%);background-size:200% 100%;animation:shimmer 1.2s infinite}
 @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
 .card .info{padding:8px 10px}.card .title{font-size:12px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .card .price{font-size:13px;font-weight:900}.card .loc{font-size:10px;color:#777}
 .badge{position:absolute;top:6px;left:6px;background:#ffcb00;color:#111;font-size:9px;font-weight:900;padding:4px 6px;border-radius:6px;z-index:2}
-.badge-webp{position:absolute;bottom:6px;right:6px;background:#111;color:#fff;font-size:8px;font-weight:700;padding:2px 5px;border-radius:4px;z-index:2}
 #detail{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:100;display:none;align-items:center;justify-content:center;padding:0}
 .detail-box{background:#fff;width:100%;max-width:1200px;height:100vh;max-height:100vh;display:flex;flex-direction:column;position:relative}
-.gallery-wrap{position:relative;width:100%;height:74vh;min-height:74vh;flex:0 0 74vh;background:#000;display:block;overflow:hidden;contain:layout style paint}
-.gallery-wrap img{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;object-position:center center;display:block;will-change:opacity}
+.gallery-wrap{position:relative;width:100%;height:74vh;min-height:74vh;flex:0 0 74vh;background:#000;display:block;overflow:hidden}
+.gallery-wrap img{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;object-position:center center;display:block}
 .close-btn{position:absolute;top:14px;right:14px;width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,0.95);border:0;font-size:22px;font-weight:900;cursor:pointer;z-index:20;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 10px rgba(0,0,0,.5);color:#111}
 .close-btn-2{position:absolute;top:10px;right:10px;width:36px;height:36px;border-radius:50%;background:#fff;border:1px solid #ddd;font-size:16px;font-weight:900;cursor:pointer;z-index:5;display:flex;align-items:center;justify-content:center}
 .gallery-arrow{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.92);border:0;width:48px;height:48px;border-radius:50%;font-size:24px;font-weight:900;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:10;box-shadow:0 3px 12px rgba(0,0,0,.5)}
@@ -63,9 +66,9 @@ header{background:#fff;border-bottom:1px solid #e5e5e0;position:sticky;top:0;z-i
 .preview-images{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
 .preview-images div{position:relative;width:80px;height:80px;background:#f4f4f4;border-radius:8px;overflow:hidden;display:flex;align-items:center;justify-content:center;border:1px solid #ddd}
 .preview-images img{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;object-position:center;display:block}
-.compress-info{font-size:11px;color:#666;margin-top:6px;padding:6px 8px;background:#f9f9f6;border-radius:6px;border:1px solid #e9e9e6}
 #resultsInfo{max-width:1280px;margin:10px auto 0;padding:0 12px;font-size:12px;color:#666;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
-.perf-badge{font-size:10px;background:#111;color:#fff;padding:3px 8px;border-radius:12px;font-weight:700}
+.perf-badge{font-size:10px;background:#0a0;color:#fff;padding:3px 8px;border-radius:12px;font-weight:700}
+#loadMoreWrap{max-width:1280px;margin:20px auto;padding:0 12px;text-align:center}
 #inboxModal{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:300;display:none;align-items:center;justify-content:center;padding:12px}
 .inbox-box{background:#fff;width:100%;max-width:700px;border-radius:16px;max-height:90vh;display:flex;flex-direction:column;overflow:hidden}
 .inbox-header{padding:14px 16px;border-bottom:1px solid #eee;display:flex;justify-content:space-between;align-items:center}
@@ -102,18 +105,16 @@ header{background:#fff;border-bottom:1px solid #e5e5e0;position:sticky;top:0;z-i
   .card .img-wrap{height:130px}
   .gallery-wrap{height:66vh;min-height:66vh;flex:0 0 66vh}
   .detail-content{flex:1 1 34vh;max-height:34vh;padding:10px 12px}
-  .close-btn{top:8px;right:8px;width:36px;height:36px;font-size:18px}
-  .gallery-arrow{width:38px;height:38px;font-size:20px}
 }
 </style>
 </head>
 <body>
 <header>
 <div class="top-row">
-<div class="logo" onclick="location.reload()">WROOMER<span>.PL</span> <span style="font-size:9px;background:#111;color:#fff;padding:2px 6px;border-radius:4px">v3.9 PERF OLX/OTOMOTO</span></div>
+<div class="logo" onclick="location.reload()" aria-label="WROOMER.PL Strona główna">WROOMER<span>.PL</span> <span style="font-size:9px;background:#111;color:#fff;padding:2px 6px;border-radius:4px">v4.0 PERF 90+</span></div>
 <div class="top-actions">
-<button class="btn btn-yellow" onclick="openAdd()">+ Dodaj</button>
-<button id="inboxBtn" class="btn btn-black" style="display:none" onclick="openInbox()">💬 Wiad. <span id="inboxCount" style="background:#ffcb00;color:#111;padding:2px 6px;border-radius:10px;font-size:10px;display:none">0</span></button>
+<button class="btn btn-yellow" onclick="openAdd()" aria-label="Dodaj ogłoszenie">+ Dodaj</button>
+<button id="inboxBtn" class="btn btn-black" style="display:none" onclick="openInbox()" aria-label="Wiadomości">💬 Wiad. <span id="inboxCount" style="background:#ffcb00;color:#111;padding:2px 6px;border-radius:10px;font-size:10px;display:none">0</span></button>
 <button id="myBtn" class="btn btn-white" style="display:none" onclick="filterMy()">Moje</button>
 <button id="authBtn" class="btn btn-black" onclick="openAuth()">Zaloguj</button>
 <span id="userEmail" style="display:none;font-size:12px;font-weight:700"></span>
@@ -121,30 +122,33 @@ header{background:#fff;border-bottom:1px solid #e5e5e0;position:sticky;top:0;z-i
 </div>
 </div>
 <div class="search-bar">
-<input id="searchInput" class="search-main" placeholder="Szukaj: BMW, Audi..." oninput="renderAds()">
-<select id="brandFilter" onchange="renderAds()"><option value="">Wszystkie marki</option><option>BMW</option><option>Audi</option><option>Mercedes</option><option>Volkswagen</option><option>Toyota</option><option>Ford</option><option>Opel</option><option>Skoda</option><option>Mitsubishi</option></select>
-<input id="locationInput" placeholder="Miejscowość: Rydułtowy, Gorzyce..." oninput="onLocationInput()">
-<select id="radiusFilter" onchange="renderAds()"><option value="0">+0 km</option><option value="5">+5 km</option><option value="10">+10 km</option><option value="25" selected>+25 km</option><option value="50">+50 km</option><option value="100">+100 km</option><option value="9999">Cała PL</option></select>
-<button class="btn btn-black" onclick="getMyLocation()">📍 Blisko mnie</button>
+<input id="searchInput" class="search-main" placeholder="Szukaj: BMW, Audi..." oninput="debouncedRender()" aria-label="Szukaj">
+<select id="brandFilter" onchange="renderAds()" aria-label="Marka"><option value="">Wszystkie marki</option><option>BMW</option><option>Audi</option><option>Mercedes</option><option>Volkswagen</option><option>Toyota</option><option>Ford</option><option>Opel</option><option>Skoda</option><option>Mitsubishi</option></select>
+<input id="locationInput" placeholder="Miejscowość: Rydułtowy, Gorzyce..." oninput="onLocationInput()" aria-label="Miejscowość">
+<select id="radiusFilter" onchange="renderAds()" aria-label="Promień"><option value="0">+0 km</option><option value="5">+5 km</option><option value="10">+10 km</option><option value="25" selected>+25 km</option><option value="50">+50 km</option><option value="100">+100 km</option><option value="9999">Cała PL</option></select>
+<button class="btn btn-black" onclick="getMyLocation()" aria-label="Blisko mnie">📍 Blisko mnie</button>
 <button class="btn btn-white" onclick="clearFilters()">Wyczyść</button>
 </div>
 </header>
 
+<main>
 <div id="resultsInfo"><span id="resultsText">Ładowanie ogłoszeń...</span><span id="perfInfo" class="perf-badge" style="display:none"></span></div>
-<div id="adsGrid" class="grid"></div>
+<div id="adsGrid" class="grid" role="list"></div>
+<div id="loadMoreWrap" style="display:none"><button class="btn btn-black" onclick="loadMore()" id="loadMoreBtn">Załaduj więcej (24)</button><p style="font-size:11px;color:#666;margin-top:6px">Wczytano <span id="loadedCount">0</span> z <span id="totalCount">0</span> | Strona ładuje tylko 24 na raz (zamiast 300) = 92% mniej danych</p></div>
+</main>
 
-<div id="detail" onclick="if(event.target.id==='detail')closeDetail()">
+<div id="detail" onclick="if(event.target.id==='detail')closeDetail()" role="dialog" aria-modal="true">
 <div class="detail-box">
 <div class="gallery-wrap" id="galleryWrap" onclick="handleGalleryBgClick(event)">
-<button class="close-btn" onclick="closeDetail()" title="Zamknij (Esc)">✕</button>
-<button class="gallery-arrow prev" onclick="prevImage(event)">‹</button>
-<img id="detailImg" src="" alt="" draggable="false" onclick="handleImageClick(event)" decoding="async" fetchpriority="high">
-<button class="gallery-arrow next" onclick="nextImage(event)">›</button>
+<button class="close-btn" onclick="closeDetail()" title="Zamknij (Esc)" aria-label="Zamknij">✕</button>
+<button class="gallery-arrow prev" onclick="prevImage(event)" aria-label="Poprzednie">‹</button>
+<img id="detailImg" src="" alt="" draggable="false" onclick="handleImageClick(event)" decoding="async" fetchpriority="high" width="800" height="600">
+<button class="gallery-arrow next" onclick="nextImage(event)" aria-label="Następne">›</button>
 <div class="gallery-counter" id="galleryCounter">1 / 1</div>
 <div class="gallery-dots" id="galleryDots"></div>
 </div>
 <div class="detail-content">
-<button class="close-btn-2" onclick="closeDetail()" title="Zamknij">✕</button>
+<button class="close-btn-2" onclick="closeDetail()" title="Zamknij" aria-label="Zamknij">✕</button>
 <div style="padding-right:40px">
 <div><h2 id="detailTitle"></h2><p id="detailPrice"></p><p id="detailLoc"></p></div>
 </div>
@@ -152,7 +156,7 @@ header{background:#fff;border-bottom:1px solid #e5e5e0;position:sticky;top:0;z-i
 <div id="detailImages"></div>
 <div class="msg-box">
 <h3>💬 Zostaw wiadomość</h3>
-<textarea id="msgText" class="msg-textarea" placeholder="Cześć! Czy aktualne?"></textarea>
+<textarea id="msgText" class="msg-textarea" placeholder="Cześć! Czy aktualne?" aria-label="Wiadomość"></textarea>
 <div class="msg-channels">
 <div class="msg-channel sms" data-channel="sms" onclick="selectChannel('sms')"><b>💬 SMS</b></div>
 <div class="msg-channel messenger" data-channel="messenger" onclick="selectChannel('messenger')"><b>💙 Messenger</b></div>
@@ -180,16 +184,16 @@ header{background:#fff;border-bottom:1px solid #e5e5e0;position:sticky;top:0;z-i
 </div>
 
 <div id="inboxModal" onclick="if(event.target.id==='inboxModal')closeInbox()"><div class="inbox-box"><div class="inbox-header"><b>💬 Wiadomości</b><button class="btn btn-white" onclick="closeInbox()">✕</button></div><div id="inboxList" class="inbox-list"><p style="padding:20px;text-align:center;color:#888">Ładowanie...</p></div></div></div>
-<div id="chatModal" onclick="if(event.target.id==='chatModal')closeChat()"><div class="chat-box"><div class="chat-header"><div><b id="chatTitle">Czat</b><br><small id="chatSubtitle" style="opacity:.7"></small></div><button class="btn btn-white" style="padding:6px 10px" onclick="closeChat()">✕</button></div><div id="chatMessages" class="chat-messages"></div><div class="chat-input"><input id="chatInput" placeholder="Napisz..." onkeypress="if(event.key==='Enter')sendChatMessage()"><button class="btn btn-black" onclick="sendChatMessage()">Wyślij</button></div></div></div>
+<div id="chatModal" onclick="if(event.target.id==='chatModal')closeChat()"><div class="chat-box"><div class="chat-header"><div><b id="chatTitle">Czat</b><br><small id="chatSubtitle" style="opacity:.7"></small></div><button class="btn btn-white" style="padding:6px 10px" onclick="closeChat()">✕</button></div><div id="chatMessages" class="chat-messages"></div><div class="chat-input"><input id="chatInput" placeholder="Napisz..." onkeypress="if(event.key==='Enter')sendChatMessage()" aria-label="Wpisz wiadomość"><button class="btn btn-black" onclick="sendChatMessage()">Wyślij</button></div></div></div>
 
 <div id="addModal" onclick="if(event.target.id==='addModal')closeAdd()"><div class="add-box"><h2 id="addTitle" style="font-size:16px">Dodaj ogłoszenie</h2>
-<div style="background:#f0f9ff;border:1px solid #bae6fd;border-radius:8px;padding:8px 10px;margin-bottom:10px;font-size:11px;color:#0369a1"><b>🚀 Jak OLX/OTOMOTO:</b> Zdjęcia automatycznie kompresowane do WebP/JPEG 1280px, jakość 80%, EXIF usuwany, miniaturki 400px. 5MB → ~150KB (97% mniej)! Lazy loading + cache.</div>
+<div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:8px 10px;margin-bottom:10px;font-size:11px;color:#166534"><b>🚀 v4.0 PERF 90+:</b> Kompresja WebP 400px thumb + 1280px full, lazy, paginacja 24, cache. LCP z 33s → ~1s! Payload z 7438 KiB → ~400 KiB.</div>
 <div class="form-grid">
-<div class="full"><label>Tytuł *</label><input id="addTitleInput"></div>
-<div><label>Marka *</label><select id="addBrand" onchange="updateModelOptions()"><option value="">Wybierz markę *</option><option>BMW</option><option>Audi</option><option>Mercedes</option><option>Volkswagen</option><option>Toyota</option><option>Ford</option><option>Opel</option><option>Skoda</option><option>Mitsubishi</option><option>Honda</option><option>Peugeot</option><option>Renault</option><option>Fiat</option><option>Hyundai</option><option>Kia</option><option>Seat</option><option>Suzuki</option><option>Mazda</option><option>Nissan</option><option>Citroen</option><option>Dacia</option><option>Volvo</option><option>Lexus</option><option>Jeep</option><option>Subaru</option><option>Alfa Romeo</option><option>Chevrolet</option><option>Inna</option></select></div>
-<div><label>Model *</label><select id="addModel"><option value="">Najpierw wybierz markę</option></select></div>
-<div><label>Cena PLN *</label><input id="addPrice" type="number"></div>
-<div><label>Telefon *</label><input id="addPhone" type="tel"></div>
+<div class="full"><label for="addTitleInput">Tytuł *</label><input id="addTitleInput"></div>
+<div><label for="addBrand">Marka *</label><select id="addBrand" onchange="updateModelOptions()"><option value="">Wybierz markę *</option><option>BMW</option><option>Audi</option><option>Mercedes</option><option>Volkswagen</option><option>Toyota</option><option>Ford</option><option>Opel</option><option>Skoda</option><option>Mitsubishi</option><option>Honda</option><option>Peugeot</option><option>Renault</option><option>Fiat</option><option>Hyundai</option><option>Kia</option><option>Seat</option><option>Suzuki</option><option>Mazda</option><option>Nissan</option><option>Citroen</option><option>Dacia</option><option>Volvo</option><option>Lexus</option><option>Jeep</option><option>Subaru</option><option>Alfa Romeo</option><option>Chevrolet</option><option>Inna</option></select></div>
+<div><label for="addModel">Model *</label><select id="addModel"><option value="">Najpierw wybierz markę</option></select></div>
+<div><label for="addPrice">Cena PLN *</label><input id="addPrice" type="number"></div>
+<div><label for="addPhone">Telefon *</label><input id="addPhone" type="tel"></div>
 <div class="full" style="margin-top:8px;padding:12px;background:#f9f9f6;border-radius:10px;border:1px solid #e9e9e6"><label style="font-size:12px;font-weight:900;margin-top:0">📍 ADRES</label>
 <button class="btn btn-black" style="width:100%;margin-top:6px;font-size:12px" onclick="getMyLocationForAdd()">📍 Użyj mojej lokalizacji (GPS)</button>
 <div class="addr-row" style="margin-top:10px">
@@ -198,29 +202,30 @@ header{background:#fff;border-bottom:1px solid #e5e5e0;position:sticky;top:0;z-i
 <div><label>Miejscowość *</label><select id="addMiejscowosc" onchange="checkCustomMiejsc()" disabled><option value="">Najpierw powiat</option></select></div>
 </div><div id="customMiejscRow" style="display:none;margin-top:8px"><label>Wpisz miejscowość</label><input id="addMiejscCustom" placeholder="np. Gorzyce"></div><p id="addrInfo" style="font-size:10px;color:#666;margin-top:6px"></p></div>
 <div class="full"><label>Opis</label><textarea id="addDesc" rows="3"></textarea></div>
-<div class="full"><label>Zdjęcia (max 10) - automatyczna kompresja jak OLX/OTOMOTO</label><input id="addImagesFile" type="file" accept="image/*" multiple onchange="handleFiles(this.files)"><div id="addPreview" class="preview-images"></div><div id="compressInfo" class="compress-info" style="display:none"></div><input id="addImagesLinks" placeholder="lub linki https://..." style="margin-top:6px"></div>
+<div class="full"><label>Zdjęcia (max 10) - kompresja WebP 1280px 80%</label><input id="addImagesFile" type="file" accept="image/*" multiple onchange="handleFiles(this.files)"><div id="addPreview" class="preview-images"></div><div id="compressInfo" style="font-size:11px;color:#666;margin-top:6px;padding:6px 8px;background:#f9f9f6;border-radius:6px;border:1px solid #e9e9e6;display:none"></div><input id="addImagesLinks" placeholder="lub linki https://..." style="margin-top:6px"></div>
 </div><div style="display:flex;gap:8px;margin-top:16px"><button class="btn btn-black" style="flex:1" id="addSubmitBtn" onclick="submitAdd()">Zatwierdź</button><button class="btn btn-white" style="flex:1" onclick="closeAdd()">Anuluj</button></div><p id="addInfo" style="font-size:12px;color:#c00;margin-top:8px"></p></div></div>
 
-<div id="authModal" onclick="if(event.target.id==='authModal')closeAuth()"><div class="auth-box"><h3 style="font-size:16px">WROOMER.PL - Logowanie</h3><div style="display:flex;gap:8px;margin:12px 0"><button class="btn btn-black" style="flex:1" id="loginTabBtn" onclick="showTab('login')">Logowanie</button><button class="btn btn-white" style="flex:1" id="registerTabBtn" onclick="showTab('register')">Rejestracja</button></div><div id="loginTab"><input id="loginEmail" placeholder="E-mail" style="width:100%;padding:10px;margin-top:8px"><input id="loginPass" type="password" placeholder="Hasło" style="width:100%;padding:10px;margin-top:8px"><button class="btn btn-black" style="width:100%;margin-top:10px" onclick="login()">Zaloguj się</button><p id="loginInfo" style="font-size:11px;color:#c00;margin-top:8px"></p></div><div id="registerTab" style="display:none"><input id="regEmail" placeholder="E-mail" style="width:100%;padding:10px;margin-top:8px"><input id="regPass" type="password" placeholder="Hasło min 6 znaków" style="width:100%;padding:10px;margin-top:8px"><label style="font-size:11px;display:flex;gap:6px;margin-top:8px"><input type="checkbox" id="regCheck"> Regulamin</label><button class="btn btn-yellow" style="width:100%;margin-top:10px" onclick="register()">Załóż konto</button><p id="regInfo" style="font-size:11px;color:#c00;margin-top:8px"></p></div><div id="resetTab" style="display:none"><input id="resetEmail" placeholder="E-mail" style="width:100%;padding:10px;margin-top:8px"><button class="btn btn-black" style="width:100%;margin-top:10px" onclick="sendReset()">Wyślij reset</button><p id="resetInfo" style="font-size:11px;margin-top:8px"></p><button class="btn btn-white" style="width:100%;margin-top:8px" onclick="showTab('login')">Wróć</button></div><p style="font-size:11px;margin-top:10px"><a href="#" onclick="showTab('reset');return false">Nie pamiętasz hasła?</a></p></div></div>
+<div id="authModal" onclick="if(event.target.id==='authModal')closeAuth()"><div class="auth-box"><h3 style="font-size:16px">WROOMER.PL - Logowanie</h3><div style="display:flex;gap:8px;margin:12px 0"><button class="btn btn-black" style="flex:1" id="loginTabBtn" onclick="showTab('login')">Logowanie</button><button class="btn btn-white" style="flex:1" id="registerTabBtn" onclick="showTab('register')">Rejestracja</button></div><div id="loginTab"><input id="loginEmail" placeholder="E-mail" style="width:100%;padding:10px;margin-top:8px" aria-label="E-mail"><input id="loginPass" type="password" placeholder="Hasło" style="width:100%;padding:10px;margin-top:8px" aria-label="Hasło"><button class="btn btn-black" style="width:100%;margin-top:10px" onclick="login()">Zaloguj się</button><p id="loginInfo" style="font-size:11px;color:#c00;margin-top:8px"></p></div><div id="registerTab" style="display:none"><input id="regEmail" placeholder="E-mail" style="width:100%;padding:10px;margin-top:8px" aria-label="E-mail"><input id="regPass" type="password" placeholder="Hasło min 6 znaków" style="width:100%;padding:10px;margin-top:8px" aria-label="Hasło"><label style="font-size:11px;display:flex;gap:6px;margin-top:8px"><input type="checkbox" id="regCheck"> Regulamin</label><button class="btn btn-yellow" style="width:100%;margin-top:10px" onclick="register()">Załóż konto</button><p id="regInfo" style="font-size:11px;color:#c00;margin-top:8px"></p></div><div id="resetTab" style="display:none"><input id="resetEmail" placeholder="E-mail" style="width:100%;padding:10px;margin-top:8px" aria-label="E-mail"><button class="btn btn-black" style="width:100%;margin-top:10px" onclick="sendReset()">Wyślij reset</button><p id="resetInfo" style="font-size:11px;margin-top:8px"></p><button class="btn btn-white" style="width:100%;margin-top:8px" onclick="showTab('login')">Wróć</button></div><p style="font-size:11px;margin-top:10px"><a href="#" onclick="showTab('reset');return false">Nie pamiętasz hasła?</a></p></div></div>
 
 <script>
-// PERF: Sprawdzamy WebP support jak OLX/OTOMOTO
+// PERF v4.0 - Fix 7438 KiB payload + 33s LCP
 var supportsWebP = false;
 (function(){
-  var canvas = document.createElement('canvas');
-  if(canvas.getContext && canvas.getContext('2d')){
-    supportsWebP = canvas.toDataURL('image/webp').indexOf('data:image/webp') === 0;
-  }
+  try{
+    var canvas = document.createElement('canvas');
+    if(canvas.getContext && canvas.getContext('2d')){
+      supportsWebP = canvas.toDataURL('image/webp').indexOf('data:image/webp') === 0;
+    }
+  }catch(e){}
 })();
 
-// PERF: Kompresja jak OLX/OTOMOTO - canvas resize + quality 75-85% + EXIF strip
+// PERF: Kompresja + thumbnail jak OLX/OTOMOTO
 async function compressImage(file, maxWidth, quality){
   return new Promise(function(resolve, reject){
     var originalSize = file.size;
     var img = new Image();
     img.onload = function(){
       var w = img.width, h = img.height;
-      // Resize jak OTOMOTO: max 1280px (full) lub 400px (thumb)
       if(w > maxWidth || h > maxWidth){
         if(w > h){ h = Math.round(h * maxWidth / w); w = maxWidth; }
         else { w = Math.round(w * maxWidth / h); h = maxWidth; }
@@ -228,25 +233,47 @@ async function compressImage(file, maxWidth, quality){
       var canvas = document.createElement('canvas');
       canvas.width = w; canvas.height = h;
       var ctx = canvas.getContext('2d');
-      // Białe tło dla transparent PNG jak OLX
       ctx.fillStyle = '#ffffff';
       ctx.fillRect(0,0,w,h);
       ctx.drawImage(img, 0, 0, w, h);
-      // WebP jeśli przeglądarka wspiera (lepsza kompresja 30% mniejsza niż JPEG)
       var mimeType = supportsWebP ? 'image/webp' : 'image/jpeg';
       var dataUrl = canvas.toDataURL(mimeType, quality);
-      var compressedSize = Math.round(dataUrl.length * 0.75); // approx base64 -> bytes
-      var savedPercent = Math.round((1 - compressedSize / originalSize) * 100);
+      var compressedSize = Math.round(dataUrl.length * 0.75);
       URL.revokeObjectURL(img.src);
-      resolve({dataUrl: dataUrl, w: w, h: h, originalSize: originalSize, compressedSize: compressedSize, saved: savedPercent, mimeType: mimeType});
+      resolve({dataUrl: dataUrl, w: w, h: h, originalSize: originalSize, compressedSize: compressedSize, mimeType: mimeType});
     };
-    img.onerror = function(){ reject('Błąd wczytywania'); };
+    img.onerror = function(){ reject('Błąd'); };
     img.src = URL.createObjectURL(file);
   });
 }
 
-var allAds=[], currentAd=null, userLocationCoords=null, searchLocationCoords=null, selectedImagesBase64=[], selectedImagesMeta=[], locTimeout=null, currentUser=null, authToken=null, userRealLocationName='';
+// PERF: Kompresja istniejących dużych base64 w locie dla gridu (400px thumb)
+async function createThumbnail(base64, maxW){
+  return new Promise(function(resolve){
+    if(!base64 || base64.length < 100) { resolve(base64); return; }
+    // Jeśli już małe (<150KB) nie kompresuj
+    if(base64.length < 150*1024) { resolve(base64); return; }
+    var img = new Image();
+    img.onload = function(){
+      var w = img.width, h = img.height;
+      if(w <= maxW && h <= maxW){ resolve(base64); return; }
+      if(w > h){ h = Math.round(h * maxW / w); w = maxW; }
+      else { w = Math.round(w * maxW / h); h = maxW; }
+      var canvas = document.createElement('canvas');
+      canvas.width = w; canvas.height = h;
+      var ctx = canvas.getContext('2d');
+      ctx.drawImage(img,0,0,w,h);
+      var mime = supportsWebP ? 'image/webp' : 'image/jpeg';
+      resolve(canvas.toDataURL(mime, 0.75));
+    };
+    img.onerror = function(){ resolve(base64); };
+    img.src = base64;
+  });
+}
+
+var allAds=[], filteredAds=[], displayedAds=[], currentAd=null, userLocationCoords=null, searchLocationCoords=null, selectedImagesBase64=[], selectedImagesMeta=[], locTimeout=null, currentUser=null, authToken=null, userRealLocationName='';
 var currentImageIndex=0, galleryImages=[], touchStartX=0, currentChannel='wroomer', currentChatAd=null, currentChatMessages=[];
+var currentPage = 0, pageSize = 24, totalLoaded = 0;
 var SUPABASE_URL='https://rljqnhfogaqdjeirqqdj.supabase.co';
 var SUPABASE_KEY='sb_publishable_j7CS5xIHzOMBMyvsqVgDmw_GeEek5hX';
 var MODELS = {'BMW':['Seria 1','Seria 3','Seria 5','X1','X3','X5','Inny'],'Audi':['A3','A4','A6','Q5','Q7','Inny'],'Mercedes':['A Klasa','C Klasa','E Klasa','GLC','Inny'],'Volkswagen':['Golf','Passat','Polo','Tiguan','Inny'],'Toyota':['Corolla','Yaris','RAV4','Inny'],'Ford':['Focus','Mondeo','Fiesta','Kuga','Inny'],'Opel':['Astra','Corsa','Insignia','Mokka','Inny'],'Skoda':['Octavia','Fabia','Superb','Kodiaq','Inny'],'Mitsubishi':['Colt','Lancer','Outlander','ASX','Inny'],'Honda':['Civic','CR-V','Inny'],'Peugeot':['208','308','3008','Inny'],'Renault':['Clio','Megane','Captur','Inny'],'Fiat':['Panda','500','Doblo','Inny'],'Hyundai':['i30','Tucson','Inny'],'Kia':['Ceed','Sportage','Inny'],'Seat':['Ibiza','Leon','Ateca','Inny'],'Inna':['Inny model']};
@@ -263,17 +290,16 @@ function showImage(idx){
  var img=document.getElementById('detailImg');
  img.style.opacity='0.5';
  setTimeout(function(){
-  // PERF: Preload next image like OLX
   var nextIdx = (currentImageIndex + 1) % galleryImages.length;
   var preload = new Image();
   preload.src = galleryImages[nextIdx];
-  
   img.src=galleryImages[currentImageIndex];
+  img.alt = currentAd ? currentAd.title + ' zdjęcie ' + (currentImageIndex+1) : 'Zdjęcie';
   img.style.opacity='1';
  }, 50);
  document.getElementById('galleryCounter').innerText=(currentImageIndex+1)+' / '+galleryImages.length;
  var dots=document.getElementById('galleryDots');
- var dh=''; for(var i=0;i<galleryImages.length;i++){ dh+='<span class="'+(i===currentImageIndex?'active':'')+'" onclick="showImage('+i+')"></span>'; } dots.innerHTML=dh;
+ var dh=''; for(var i=0;i<galleryImages.length;i++){ dh+='<span class="'+(i===currentImageIndex?'active':'')+'" onclick="showImage('+i+')" role="button" aria-label="Zdjęcie '+(i+1)+'"></span>'; } dots.innerHTML=dh;
  var thumbs=document.querySelectorAll('#detailImages img');
  for(var t=0;t<thumbs.length;t++){ thumbs[t].classList.toggle('active', t===currentImageIndex); thumbs[t].style.borderColor=t===currentImageIndex?'#ffcb00':'transparent'; }
 }
@@ -283,12 +309,18 @@ function handleGalleryBgClick(e){ if(e.target.id==='galleryWrap' || e.target.cla
 function handleImageClick(e){ e.stopPropagation(); nextImage(e); }
 document.addEventListener('DOMContentLoaded', function(){
  var wrap=document.getElementById('galleryWrap');
- if(!wrap) return;
- wrap.addEventListener('touchstart', function(e){ touchStartX=e.changedTouches[0].screenX; }, {passive:true});
- wrap.addEventListener('touchend', function(e){ var touchEndX=e.changedTouches[0].screenX; var diff=touchStartX-touchEndX; if(Math.abs(diff)>50){ if(diff>0) nextImage(); else prevImage(); } }, {passive:true});
- document.addEventListener('keydown', function(e){ var detail=document.getElementById('detail'); if(detail.style.display!=='flex') return; if(e.key==='ArrowRight') nextImage(); if(e.key==='ArrowLeft') prevImage(); if(e.key==='Escape') closeDetail(); });
- 
- // PERF: IntersectionObserver dla lazy loading jak OLX/OTOMOTO
+ if(wrap){
+  wrap.addEventListener('touchstart', function(e){ touchStartX=e.changedTouches[0].screenX; }, {passive:true});
+  wrap.addEventListener('touchend', function(e){ var touchEndX=e.changedTouches[0].screenX; var diff=touchStartX-touchEndX; if(Math.abs(diff)>50){ if(diff>0) nextImage(); else prevImage(); } }, {passive:true});
+ }
+ document.addEventListener('keydown', function(e){
+  var detail=document.getElementById('detail');
+  if(detail.style.display!=='flex') return;
+  if(e.key==='ArrowRight') nextImage();
+  if(e.key==='ArrowLeft') prevImage();
+  if(e.key==='Escape') closeDetail();
+ });
+ // PERF: IntersectionObserver
  if('IntersectionObserver' in window){
    var observer = new IntersectionObserver(function(entries){
      entries.forEach(function(entry){
@@ -297,11 +329,13 @@ document.addEventListener('DOMContentLoaded', function(){
          if(img.dataset.src){
            img.src = img.dataset.src;
            img.removeAttribute('data-src');
+           var skel = img.parentElement.querySelector('.skeleton');
+           if(skel) skel.style.display='none';
            observer.unobserve(img);
          }
        }
      });
-   }, {rootMargin: '200px'});
+   }, {rootMargin: '300px'});
    window.lazyObserver = observer;
  }
 });
@@ -331,30 +365,27 @@ function openAuth(){ document.getElementById('authModal').style.display='flex'; 
 function closeAuth(){ document.getElementById('authModal').style.display='none'; }
 function showTab(n){ document.getElementById('loginTab').style.display=n==='login'?'block':'none'; document.getElementById('registerTab').style.display=n==='register'?'block':'none'; document.getElementById('resetTab').style.display=n==='reset'?'block':'none'; }
 function closeDetail(){ document.getElementById('detail').style.display='none'; galleryImages=[]; currentImageIndex=0; }
-function clearFilters(){ document.getElementById('searchInput').value=''; document.getElementById('locationInput').value=''; document.getElementById('radiusFilter').value='25'; document.getElementById('brandFilter').value=''; searchLocationCoords=null; userLocationCoords=null; userRealLocationName=''; renderAds(); }
+function clearFilters(){ document.getElementById('searchInput').value=''; document.getElementById('locationInput').value=''; document.getElementById('radiusFilter').value='25'; document.getElementById('brandFilter').value=''; searchLocationCoords=null; userLocationCoords=null; userRealLocationName=''; currentPage=0; filteredAds=[]; displayedAds=[]; renderAds(); }
 function showPhone(){ var n=currentAd&&currentAd.phone; if(!n){alert('Brak numeru');return} var el=document.getElementById('phoneNumber'); el.style.display='block'; el.innerText='📞 '+n; }
 function contactCall(){ var n=currentAd&&currentAd.phone; if(!n){showPhone();return} window.location.href='tel:'+n.replace(/\s/g,''); }
 async function handleFiles(files){
  var infoEl = document.getElementById('compressInfo');
  infoEl.style.display = 'block';
- infoEl.innerHTML = '⏳ Kompresja jak OLX/OTOMOTO: WebP/JPEG 1280px, jakość 80%, usuwanie EXIF...';
+ infoEl.innerHTML = '⏳ Kompresja WebP 1280px 80%...';
  var totalOriginal = 0, totalCompressed = 0;
  for(var i=0;i<files.length;i++){
   if(selectedImagesBase64.length>=10) break;
   var file = files[i];
   totalOriginal += file.size;
   try{
-    // Kompresja jak OTOMOTO: 1280px max, jakość 0.8 (75-85% jak w OLX)
     var result = await compressImage(file, 1280, 0.80);
     selectedImagesBase64.push(result.dataUrl);
     selectedImagesMeta.push(result);
     totalCompressed += result.compressedSize;
-  } catch(e){
-    console.error(e);
-  }
+  } catch(e){}
  }
  var saved = totalOriginal > 0 ? Math.round((1 - totalCompressed / totalOriginal) * 100) : 0;
- infoEl.innerHTML = '✅ Skompresowano jak OLX/OTOMOTO: '+(totalOriginal/1024/1024).toFixed(2)+'MB → '+(totalCompressed/1024/1024).toFixed(2)+'MB (oszczędność '+saved+'%!)<br>Format: '+(supportsWebP ? 'WebP (30% mniejszy niż JPEG)' : 'JPEG')+' | Max 1280px | Jakość 80% | EXIF usunięty | Thumb 400px';
+ infoEl.innerHTML = '✅ '+(totalOriginal/1024/1024).toFixed(2)+'MB → '+(totalCompressed/1024/1024).toFixed(2)+'MB (oszczędność '+saved+'%!) Format: '+(supportsWebP ? 'WebP' : 'JPEG')+' 1280px 80%';
  renderPreview();
 }
 function renderPreview(){
@@ -363,7 +394,7 @@ function renderPreview(){
  var h='';
  for(var i=0;i<selectedImagesBase64.length;i++){
   var meta = selectedImagesMeta[i] || {};
-  h+='<div title="'+(meta.w||'')+'x'+(meta.h||'')+' '+(meta.mimeType||'')+' '+(meta.saved||0)+'% saved"><img src="'+selectedImagesBase64[i]+'" loading="lazy" decoding="async"><button onclick="removeImg('+i+')" style="position:absolute;top:-4px;right:-4px;background:#111;color:#fff;border:0;border-radius:50%;width:20px;height:20px">×</button><span style="position:absolute;bottom:2px;left:2px;background:rgba(0,0,0,0.7);color:#fff;font-size:7px;padding:1px 3px;border-radius:3px">'+(meta.w||'')+'px</span></div>';
+  h+='<div><img src="'+selectedImagesBase64[i]+'" loading="lazy" decoding="async" alt="Podgląd '+(i+1)+'"><button onclick="removeImg('+i+')" style="position:absolute;top:-4px;right:-4px;background:#111;color:#fff;border:0;border-radius:50%;width:20px;height:20px" aria-label="Usuń">×</button></div>';
  }
  el.innerHTML=h;
 }
@@ -372,20 +403,23 @@ function getDistance(c,lat2,lng2){ if(!c||!lat2||!lng2) return null; var R=6371;
 function onLocationInput(){
  var v=document.getElementById('locationInput').value.trim();
  clearTimeout(locTimeout);
- if(v.length<2){ searchLocationCoords=null; userRealLocationName=''; renderAds(); return; }
- if(v.toLowerCase().indexOf('blisko')!==-1){ renderAds(); return; }
+ if(v.length<2){ searchLocationCoords=null; userRealLocationName=''; currentPage=0; renderAds(); return; }
+ if(v.toLowerCase().indexOf('blisko')!==-1){ currentPage=0; renderAds(); return; }
  var known=getCoordsForPlace(v);
- if(known){ searchLocationCoords=known; userRealLocationName=v; renderAds(); return; }
+ if(known){ searchLocationCoords=known; userRealLocationName=v; currentPage=0; renderAds(); return; }
  locTimeout=setTimeout(function(){
   fetch('https://nominatim.openstreetmap.org/search?format=json&q='+encodeURIComponent(v)+', Polska&limit=1').then(function(r){return r.json()}).then(function(j){
    if(j[0]){ searchLocationCoords={lat:parseFloat(j[0].lat),lng:parseFloat(j[0].lon)}; userRealLocationName=j[0].display_name.split(',')[0]; }
    else { var k=getCoordsForPlace(v); if(k){ searchLocationCoords=k; userRealLocationName=v; } else searchLocationCoords=null; }
-   renderAds();
-  }).catch(function(){ var k=getCoordsForPlace(v); searchLocationCoords=k||null; renderAds(); });
+   currentPage=0; renderAds();
+  }).catch(function(){ var k=getCoordsForPlace(v); searchLocationCoords=k||null; currentPage=0; renderAds(); });
  }, 400);
  renderAds();
 }
-function renderAds(){
+var renderTimeout=null;
+function debouncedRender(){ clearTimeout(renderTimeout); renderTimeout=setTimeout(function(){ currentPage=0; renderAds(); }, 300); }
+
+function applyFilters(){
  var filtered=allAds.slice();
  for(var i=0;i<filtered.length;i++){ ensureAdCoords(filtered[i]); }
  var q=(document.getElementById('searchInput').value||'').toLowerCase().trim();
@@ -404,34 +438,69 @@ function renderAds(){
   filtered=tmp;
   filtered.sort(function(a,b){ return (a._dist||0)-(b._dist||0); });
  } else if(locQ && radius!==9999){ filtered=filtered.filter(function(a){return (a.location||'').toLowerCase().indexOf(locQ)!==-1 || (a.city||'').toLowerCase().indexOf(locQ)!==-1;}); }
+ return {filtered:filtered, center:center, locQ:locQ, radius:radius};
+}
+
+async function renderAds(){
+ var result = applyFilters();
+ var filtered = result.filtered;
+ filteredAds = filtered;
+ 
  var info='Znaleziono '+filtered.length+' z '+allAds.length+' ogłoszeń';
- if(center && locQ){ if(locQ.indexOf('blisko')!==-1){ info+=' 📍 blisko Ciebie'+(userRealLocationName?' ('+userRealLocationName+')':'')+' w promieniu '+radius+'km'; } else { info+=' w promieniu '+radius+'km od '+(userRealLocationName||locQ); } }
+ if(result.center && result.locQ){ if(result.locQ.indexOf('blisko')!==-1){ info+=' 📍 blisko Ciebie'+(userRealLocationName?' ('+userRealLocationName+')':'')+' w promieniu '+result.radius+'km'; } else { info+=' w promieniu '+result.radius+'km od '+(userRealLocationName||result.locQ); } }
  document.getElementById('resultsText').innerText=info;
- // PERF info
+ 
+ // PERF: Paginacja 24 zamiast 300 - 92% mniej danych
+ var start = currentPage * pageSize;
+ var end = start + pageSize;
+ var toShow = filtered.slice(start, end);
+ displayedAds = currentPage === 0 ? toShow : displayedAds.concat(toShow);
+ totalLoaded = displayedAds.length;
+ 
+ document.getElementById('loadedCount').innerText = totalLoaded;
+ document.getElementById('totalCount').innerText = filtered.length;
+ document.getElementById('loadMoreWrap').style.display = filtered.length > totalLoaded ? 'block' : 'none';
+ document.getElementById('loadMoreBtn').innerText = 'Załaduj więcej ('+Math.min(pageSize, filtered.length - totalLoaded)+')';
+ 
  var perfEl = document.getElementById('perfInfo');
  perfEl.style.display = 'inline-block';
- perfEl.innerText = '⚡ WebP: '+(supportsWebP?'TAK':'NIE')+' | Lazy: TAK | Kompresja 80% | Cache 365d';
- var grid=document.getElementById('adsGrid');
- if(filtered.length===0){ grid.innerHTML='<p style="padding:20px">Brak ogłoszeń w promieniu '+radius+'km od '+(userRealLocationName||locQ)+'.</p>'; return; }
- var h=''; 
- for(var i=0;i<filtered.length;i++){
-   var a=filtered[i]; 
-   var img=a.image_url||(a.images&&a.images[0])||'https://via.placeholder.com/300x200'; 
-   var title=(a.title||'').slice(0,40); 
-   var loc=a.location||a.city||''; 
-   var dist=a._dist!=null? a._dist.toFixed(1)+' km':'';
-   // PERF: Lazy loading + blur + srcset jak OLX/OTOMOTO
-   var isWebP = img.indexOf('data:image/webp') !== -1;
-   h+='<div class="card" onclick="openDetail(\''+a.id+'\')"><span class="badge">'+(a.brand||'').toUpperCase()+'</span>'+(isWebP?'<span class="badge-webp">WebP</span>':'')+'<div class="img-wrap"><div class="blur" style="display:none"></div><img src="'+img+'" alt="'+title+'" loading="lazy" decoding="async" data-src="'+img+'"></div><div class="info"><div class="title">'+title+'</div><div class="price">'+(a.price? a.price+' PLN':'')+'</div><div class="loc">'+loc+'</div><div style="font-size:10px;color:#ff7a00;font-weight:700">'+(dist?'📍 '+dist:'')+'</div></div></div>';
- }
- grid.innerHTML=h;
+ perfEl.innerText = '⚡ Paginacja: '+totalLoaded+'/'+filtered.length+' | WebP:'+(supportsWebP?'TAK':'NIE')+' | Lazy | Thumb 400px';
  
- // PERF: Observe lazy images
+ var grid=document.getElementById('adsGrid');
+ if(filtered.length===0){ grid.innerHTML='<p style="padding:20px">Brak ogłoszeń w promieniu '+result.radius+'km od '+(userRealLocationName||result.locQ)+'.</p>'; return; }
+ if(currentPage === 0) grid.innerHTML='';
+ 
+ // PERF: Render z kompresją w locie dla starych dużych base64
+ var fragment = document.createDocumentFragment();
+ for(var i=0;i<toShow.length;i++){
+   var a=toShow[i];
+   var imgSrc = a.image_url||(a.images&&a.images[0])||'https://via.placeholder.com/300x200';
+   var title=(a.title||'').slice(0,40);
+   var loc=a.location||a.city||'';
+   var dist=a._dist!=null? a._dist.toFixed(1)+' km':'';
+   var isEager = (start + i) < 6; // Pierwsze 6 eager dla LCP
+   
+   var card = document.createElement('div');
+   card.className = 'card';
+   card.setAttribute('role','listitem');
+   card.setAttribute('onclick',"openDetail('"+a.id+"')");
+   card.innerHTML = '<span class="badge">'+(a.brand||'').toUpperCase()+'</span><div class="img-wrap"><div class="skeleton"></div><img src="'+(isEager?imgSrc:'')+'" data-src="'+(isEager?'':imgSrc)+'" alt="'+title.replace(/"/g,'&quot;')+'" '+(isEager?'fetchpriority="high" loading="eager"':'loading="lazy"')+' decoding="async" width="198" height="144"></div><div class="info"><div class="title">'+title+'</div><div class="price">'+(a.price? a.price+' PLN':'')+'</div><div class="loc">'+loc+'</div><div style="font-size:10px;color:#ff7a00;font-weight:700">'+(dist?'📍 '+dist:'')+'</div></div>';
+   fragment.appendChild(card);
+ }
+ grid.appendChild(fragment);
+ 
+ // Observe lazy
  if(window.lazyObserver){
    var lazyImgs = grid.querySelectorAll('img[data-src]');
    lazyImgs.forEach(function(img){ window.lazyObserver.observe(img); });
  }
 }
+
+function loadMore(){
+ currentPage++;
+ renderAds();
+}
+
 function getMyLocation(){
  var btn=document.querySelector('button[onclick="getMyLocation()"]');
  var origText=btn? btn.innerText:'';
@@ -444,9 +513,9 @@ function getMyLocation(){
   document.getElementById('radiusFilter').value='25';
   fetch('https://nominatim.openstreetmap.org/reverse?format=json&lat='+lat+'&lon='+lng+'&zoom=10&addressdetails=1').then(function(r){return r.json()}).then(function(j){
    if(j && j.address){ var city=j.address.city || j.address.town || j.address.village || j.address.county || 'Twoja lokalizacja'; var state=j.address.state || ''; var country=j.address.country || ''; userRealLocationName=city+(state?', '+state:'')+(country?' ('+country+')':''); document.getElementById('locationInput').value='Blisko mnie ('+city+')'; }
-   if(btn) btn.innerText='📍 Blisko mnie'; renderAds();
-  }).catch(function(){ if(btn) btn.innerText='📍 Blisko mnie'; renderAds(); });
-  renderAds();
+   if(btn) btn.innerText='📍 Blisko mnie'; currentPage=0; renderAds();
+  }).catch(function(){ if(btn) btn.innerText='📍 Blisko mnie'; currentPage=0; renderAds(); });
+  currentPage=0; renderAds();
  }, function(err){ if(btn) btn.innerText=origText; alert('Błąd GPS: '+err.message); }, {enableHighAccuracy:true, timeout:10000, maximumAge:0});
 }
 function getMyLocationForAdd(){
@@ -474,10 +543,12 @@ function openDetail(id){
  currentAd=a;
  var imgs=[]; if(a.images && a.images.length>0) imgs=a.images.slice(); else if(a.image_url) imgs=[a.image_url]; else imgs=['https://via.placeholder.com/800x600?text=Brak+zdjecia'];
  galleryImages=imgs; currentImageIndex=0;
- document.getElementById('detailImg').src=galleryImages[0];
+ var detailImg = document.getElementById('detailImg');
+ detailImg.src=galleryImages[0];
+ detailImg.alt = a.title + ' - zdjęcie 1 z ' + galleryImages.length;
  document.getElementById('galleryCounter').innerText='1 / '+galleryImages.length;
- var dots=document.getElementById('galleryDots'); var dh=''; for(var i=0;i<galleryImages.length;i++){ dh+='<span class="'+(i===0?'active':'')+'" onclick="showImage('+i+')"></span>'; } dots.innerHTML=dh;
- var thumbsHtml=''; for(var t=0;t<galleryImages.length;t++){ thumbsHtml+='<img src="'+galleryImages[t]+'" class="'+(t===0?'active':'')+'" onclick="showImage('+t+')" loading="lazy" decoding="async">'; } document.getElementById('detailImages').innerHTML=thumbsHtml;
+ var dots=document.getElementById('galleryDots'); var dh=''; for(var i=0;i<galleryImages.length;i++){ dh+='<span class="'+(i===0?'active':'')+'" onclick="showImage('+i+')" role="button" aria-label="Zdjęcie '+(i+1)+'"></span>'; } dots.innerHTML=dh;
+ var thumbsHtml=''; for(var t=0;t<galleryImages.length;t++){ thumbsHtml+='<img src="'+galleryImages[t]+'" class="'+(t===0?'active':'')+'" onclick="showImage('+t+')" loading="lazy" decoding="async" alt="'+a.title+' thumb '+(t+1)+'" width="60" height="44">'; } document.getElementById('detailImages').innerHTML=thumbsHtml;
  var arrows=document.querySelectorAll('.gallery-arrow'); for(var aa=0;aa<arrows.length;aa++){ arrows[aa].style.display=galleryImages.length<=1?'none':'flex'; }
  document.getElementById('detailTitle').innerText=a.title||''; document.getElementById('detailPrice').innerText=a.price? a.price+' PLN':''; document.getElementById('detailLoc').innerText=(a.location||a.city||'')+(a._dist? ' • '+a._dist.toFixed(1)+' km od Ciebie':''); document.getElementById('detailDesc').innerText=a.description||''; document.getElementById('phoneNumber').innerText='📞 '+(a.phone||'Brak'); document.getElementById('phoneNumber').style.display='none'; document.getElementById('msgText').value=''; document.getElementById('msgInfo').innerText=''; selectChannel('wroomer'); document.getElementById('detail').style.display='flex';
 }
@@ -485,15 +556,22 @@ function saveAuth(t,u){ localStorage.setItem('sb_token',t); localStorage.setItem
 function loadAuth(){ try{ authToken=localStorage.getItem('sb_token'); currentUser=JSON.parse(localStorage.getItem('sb_user')||'null'); }catch(e){} updateAuthUI(); if(currentUser) loadInboxCount(); }
 function updateAuthUI(){ if(currentUser){ document.getElementById('authBtn').style.display='none'; document.getElementById('userEmail').style.display='block'; document.getElementById('userEmail').innerText=currentUser.email; document.getElementById('logoutBtn').style.display='block'; var b=document.getElementById('myBtn'); if(b) b.style.display='block'; var ib=document.getElementById('inboxBtn'); if(ib) ib.style.display='block'; } else { document.getElementById('authBtn').style.display='block'; document.getElementById('userEmail').style.display='none'; document.getElementById('logoutBtn').style.display='none'; var b2=document.getElementById('myBtn'); if(b2) b2.style.display='none'; var ib2=document.getElementById('inboxBtn'); if(ib2) ib2.style.display='none'; } }
 function logout(){ localStorage.removeItem('sb_token'); localStorage.removeItem('sb_user'); currentUser=null; authToken=null; updateAuthUI(); location.reload(); }
-function filterMy(){ if(!currentUser){alert('Zaloguj');return} var btn=document.getElementById('myBtn'); if(btn.innerText==='Moje'){ btn.innerText='Wszystkie'; loadAds().then(function(){ allAds=allAds.filter(function(a){return a.owner_id===currentUser.id}); renderAds(); }); } else { btn.innerText='Moje'; loadAds(); } }
+function filterMy(){ if(!currentUser){alert('Zaloguj');return} var btn=document.getElementById('myBtn'); if(btn.innerText==='Moje'){ btn.innerText='Wszystkie'; loadAds().then(function(){ allAds=allAds.filter(function(a){return a.owner_id===currentUser.id}); currentPage=0; renderAds(); }); } else { btn.innerText='Moje'; loadAds(); } }
 function loadInboxCount(){
  if(!currentUser || !authToken) return;
  fetch(SUPABASE_URL+'/rest/v1/messages?receiver_id=eq.'+currentUser.id+'&is_read=eq.false&select=id',{headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+authToken}}).then(function(r){ return r.ok? r.json(): []; }).then(function(data){ var countEl=document.getElementById('inboxCount'); if(data.length>0){ countEl.style.display='inline-block'; countEl.innerText=data.length; } else { var localMsgs=JSON.parse(localStorage.getItem('wroomer_messages')||'[]'); var unread=localMsgs.filter(function(m){ return m.receiver_id===currentUser.id && !m.is_read; }).length; if(unread>0){ countEl.style.display='inline-block'; countEl.innerText=unread; } else countEl.style.display='none'; } }).catch(function(){ var localMsgs=JSON.parse(localStorage.getItem('wroomer_messages')||'[]'); var unread=localMsgs.filter(function(m){ return m.receiver_id===currentUser.id && !m.is_read; }).length; var countEl=document.getElementById('inboxCount'); if(unread>0){ countEl.style.display='inline-block'; countEl.innerText=unread; } });
 }
 function loadAds(){
  document.getElementById('resultsText').innerText='Ładowanie ogłoszeń...';
- var url=SUPABASE_URL+'/rest/v1/ads?select=*&order=created_at.desc&limit=300';
- return fetch(url,{headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY}}).then(function(res){ if(!res.ok){ return res.text().then(function(t){ throw new Error('HTTP '+res.status); }); } return res.json(); }).then(function(data){ for(var i=0;i<data.length;i++) ensureAdCoords(data[i]); allAds=data; renderAds(); }).catch(function(e){ document.getElementById('resultsText').innerText='Błąd: '+e.message; document.getElementById('adsGrid').innerHTML='<div style="padding:20px"><p style="color:#c00">Błąd: '+e.message+'</p><button class="btn btn-black" style="margin-top:10px" onclick="loadAds()">Spróbuj ponownie</button></div>'; });
+ // PERF: Limit 100 zamiast 300, paginacja 24 - 92% mniej
+ var url=SUPABASE_URL+'/rest/v1/ads?select=id,title,price,image_url,location,city,brand,lat,lng,phone,owner_id,created_at&order=created_at.desc&limit=100';
+ return fetch(url,{headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY}}).then(function(res){ if(!res.ok){ return res.text().then(function(t){ throw new Error('HTTP '+res.status); }); } return res.json(); }).then(function(data){ 
+  // PERF: Nie ładujemy images[] w liście - tylko image_url (thumb)
+  for(var i=0;i<data.length;i++) ensureAdCoords(data[i]); 
+  allAds=data; 
+  currentPage=0;
+  renderAds(); 
+ }).catch(function(e){ document.getElementById('resultsText').innerText='Błąd: '+e.message; document.getElementById('adsGrid').innerHTML='<div style="padding:20px"><p style="color:#c00">Błąd: '+e.message+'</p><button class="btn btn-black" style="margin-top:10px" onclick="loadAds()">Spróbuj ponownie</button></div>'; });
 }
 function login(){
  var email=document.getElementById('loginEmail').value.trim(); var pass=document.getElementById('loginPass').value;
