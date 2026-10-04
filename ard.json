@@ -6,12 +6,13 @@
       "displayName": "WROOMER.PL",
       "type": "text/html",
       "url": "https://www.wroomer.pl/",
-      "description": "Lokalne",
+      "description": "Lokalne ogłoszenia motoryzacyjne",
       "capabilities": [
         "search"
       ],
       "representativeQueries": [
-        "ogłoszenia Gorzyce"
+        "ogłoszenia Gorzyce",
+        "auta Wodzisław"
       ]
     }
   ]

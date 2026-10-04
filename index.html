@@ -289,6 +289,77 @@ header{background:#fff;border-bottom:1px solid #e5e5e0;position:sticky;top:0;z-i
   }
 }
 
+
+/* v7.3 MOBILE GALLERY - SHOW ALL PHOTOS */
+#detailImages{
+  display:flex !important;
+  flex-direction:row !important;
+  flex-wrap:nowrap !important;
+  overflow-x:scroll !important;
+  overflow-y:hidden !important;
+  -webkit-overflow-scrolling:touch !important;
+  gap:10px !important;
+  padding:12px !important;
+  margin:12px 0 !important;
+  background:#222 !important;
+  border:2px solid #555 !important;
+  border-radius:12px !important;
+  min-height:90px !important;
+  width:100% !important;
+  max-width:100vw !important;
+  box-sizing:border-box !important;
+  visibility:visible !important;
+  opacity:1 !important;
+  scroll-snap-type:x mandatory !important;
+}
+#detailImages img{
+  width:90px !important;
+  height:68px !important;
+  min-width:90px !important;
+  max-width:90px !important;
+  flex:0 0 90px !important;
+  flex-shrink:0 !important;
+  object-fit:cover !important;
+  border-radius:8px !important;
+  border:2px solid #666 !important;
+  background:#333 !important;
+  display:block !important;
+  scroll-snap-align:start !important;
+}
+#detailImages img.active{border-color:#fff !important;box-shadow:0 0 12px rgba(255,255,255,0.8) !important}
+#detailImages::-webkit-scrollbar{height:10px !important;display:block !important}
+#detailImages::-webkit-scrollbar-thumb{background:#888 !important;border-radius:5px !important}
+#detailImages::-webkit-scrollbar-track{background:#111 !important}
+@media(max-width:640px){
+  #detailImages{
+    min-height:84px !important;
+    padding:10px !important;
+    gap:8px !important;
+    margin-left:0 !important;
+    margin-right:0 !important;
+    width:calc(100vw - 32px) !important;
+    max-width:calc(100vw - 32px) !important;
+    background:#1a1a1a !important;
+  }
+  #detailImages img{
+    width:76px !important;
+    height:58px !important;
+    min-width:76px !important;
+    max-width:76px !important;
+    flex:0 0 76px !important;
+  }
+  #detailImages::before{
+    content:"👆 przesuń palcem po zdjęciach 👉";
+    position:absolute;
+    top:-18px;
+    left:0;
+    font-size:10px;
+    color:#aaa;
+    width:100%;
+    text-align:center;
+  }
+}
+
 </style>
 </head>
 <body>
