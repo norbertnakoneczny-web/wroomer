@@ -109,6 +109,106 @@
   .detail-box{padding-bottom:env(safe-area-inset-bottom) !important}
 }
 
+
+/* v8.8 PROFESJONALNE FULL SCREEN - ogłoszenie na 100% smartfona */
+#detail{
+  position:fixed !important;
+  top:0 !important; left:0 !important; right:0 !important; bottom:0 !important;
+  inset:0 !important;
+  width:100% !important; width:100vw !important; width:100dvw !important;
+  height:100% !important; height:100vh !important; height:100dvh !important;
+  min-height:100vh !important; min-height:100dvh !important;
+  max-width:none !important; max-height:none !important;
+  margin:0 !important; padding:0 !important;
+  border:none !important; border-radius:0 !important;
+  z-index:99999 !important;
+  background:#000 !important;
+  display:none !important;
+  overflow:hidden !important;
+}
+#detail[style*="flex"]{display:flex !important;flex-direction:column !important}
+
+.detail-box{
+  position:relative !important;
+  width:100% !important; max-width:100% !important; min-width:100% !important;
+  height:100% !important; height:100vh !important; height:100dvh !important;
+  min-height:100% !important; min-height:100vh !important; min-height:100dvh !important;
+  max-height:100vh !important; max-height:100dvh !important;
+  margin:0 !important; padding:0 !important;
+  border:none !important; border-radius:0 !important;
+  background:#0f0f0f !important;
+  display:flex !important; flex-direction:column !important;
+  overflow-y:auto !important; overflow-x:hidden !important;
+  -webkit-overflow-scrolling:touch !important;
+  flex:1 1 auto !important;
+}
+
+/* Galeria - top, full width */
+.gallery-wrap{
+  position:relative !important;
+  width:100vw !important; max-width:100vw !important;
+  height:48vh !important; min-height:48vh !important; max-height:52vh !important;
+  flex:0 0 48vh !important;
+  background:#000 !important;
+  margin:0 !important; padding:0 !important;
+  display:flex !important; align-items:center !important; justify-content:center !important;
+  overflow:hidden !important;
+}
+.gallery-wrap img#detailImg{
+  width:100vw !important; max-width:100vw !important;
+  height:100% !important; max-height:52vh !important;
+  object-fit:contain !important;
+  margin:0 !important;
+}
+
+/* Miniaturki */
+#detailImages{
+  width:100vw !important; max-width:100vw !important;
+  flex:0 0 auto !important;
+  display:flex !important; overflow-x:auto !important;
+  background:#111 !important; margin:0 !important;
+  border-top:1px solid #222 !important; border-bottom:1px solid #222 !important;
+}
+
+/* Treść - reszta ekranu, scroll */
+.detail-content{
+  width:100vw !important; max-width:100vw !important;
+  flex:1 1 auto !important;
+  padding:16px 16px 140px 16px !important;
+  background:#0f0f0f !important;
+  margin:0 !important;
+  box-sizing:border-box !important;
+}
+
+/* Naprawa - usuń wszystkie max-width z rodziców */
+#detail *{max-width:100vw !important; box-sizing:border-box}
+#detail .detail-box *{max-width:100% !important}
+#detail .gallery-wrap, #detail .gallery-wrap *{max-width:100vw !important}
+
+/* Na desktop zostaw jak było - tylko mobile full screen */
+@media(min-width:769px){
+  #detail{
+    background:rgba(8,8,8,0.96) !important;
+    padding:20px !important;
+    align-items:center !important; justify-content:center !important;
+  }
+  .detail-box{
+    width:100% !important; max-width:1100px !important; min-width:auto !important;
+    height:90vh !important; max-height:90vh !important; min-height:90vh !important;
+    border-radius:16px !important; margin:auto !important;
+    overflow:hidden !important;
+  }
+  .gallery-wrap{width:100% !important; max-width:100% !important; height:55vh !important; flex:0 0 55vh !important}
+  .gallery-wrap img#detailImg{width:100% !important; max-width:100% !important}
+  #detailImages{width:100% !important; max-width:100% !important}
+  .detail-content{width:100% !important; max-width:100% !important}
+}
+
+/* iPhone safe area */
+@supports(padding:env(safe-area-inset-top)){
+  #detail{padding-top:env(safe-area-inset-top) !important; padding-bottom:env(safe-area-inset-bottom) !important}
+}
+
 </style>
 
 <meta charset="UTF-8">
@@ -645,6 +745,106 @@ header{position:relative !important;top:auto !important;z-index:10 !important}
 @supports(padding:env(safe-area-inset-top)){
   #detail{padding-top:env(safe-area-inset-top) !important}
   .detail-box{padding-bottom:env(safe-area-inset-bottom) !important}
+}
+
+
+/* v8.8 PROFESJONALNE FULL SCREEN - ogłoszenie na 100% smartfona */
+#detail{
+  position:fixed !important;
+  top:0 !important; left:0 !important; right:0 !important; bottom:0 !important;
+  inset:0 !important;
+  width:100% !important; width:100vw !important; width:100dvw !important;
+  height:100% !important; height:100vh !important; height:100dvh !important;
+  min-height:100vh !important; min-height:100dvh !important;
+  max-width:none !important; max-height:none !important;
+  margin:0 !important; padding:0 !important;
+  border:none !important; border-radius:0 !important;
+  z-index:99999 !important;
+  background:#000 !important;
+  display:none !important;
+  overflow:hidden !important;
+}
+#detail[style*="flex"]{display:flex !important;flex-direction:column !important}
+
+.detail-box{
+  position:relative !important;
+  width:100% !important; max-width:100% !important; min-width:100% !important;
+  height:100% !important; height:100vh !important; height:100dvh !important;
+  min-height:100% !important; min-height:100vh !important; min-height:100dvh !important;
+  max-height:100vh !important; max-height:100dvh !important;
+  margin:0 !important; padding:0 !important;
+  border:none !important; border-radius:0 !important;
+  background:#0f0f0f !important;
+  display:flex !important; flex-direction:column !important;
+  overflow-y:auto !important; overflow-x:hidden !important;
+  -webkit-overflow-scrolling:touch !important;
+  flex:1 1 auto !important;
+}
+
+/* Galeria - top, full width */
+.gallery-wrap{
+  position:relative !important;
+  width:100vw !important; max-width:100vw !important;
+  height:48vh !important; min-height:48vh !important; max-height:52vh !important;
+  flex:0 0 48vh !important;
+  background:#000 !important;
+  margin:0 !important; padding:0 !important;
+  display:flex !important; align-items:center !important; justify-content:center !important;
+  overflow:hidden !important;
+}
+.gallery-wrap img#detailImg{
+  width:100vw !important; max-width:100vw !important;
+  height:100% !important; max-height:52vh !important;
+  object-fit:contain !important;
+  margin:0 !important;
+}
+
+/* Miniaturki */
+#detailImages{
+  width:100vw !important; max-width:100vw !important;
+  flex:0 0 auto !important;
+  display:flex !important; overflow-x:auto !important;
+  background:#111 !important; margin:0 !important;
+  border-top:1px solid #222 !important; border-bottom:1px solid #222 !important;
+}
+
+/* Treść - reszta ekranu, scroll */
+.detail-content{
+  width:100vw !important; max-width:100vw !important;
+  flex:1 1 auto !important;
+  padding:16px 16px 140px 16px !important;
+  background:#0f0f0f !important;
+  margin:0 !important;
+  box-sizing:border-box !important;
+}
+
+/* Naprawa - usuń wszystkie max-width z rodziców */
+#detail *{max-width:100vw !important; box-sizing:border-box}
+#detail .detail-box *{max-width:100% !important}
+#detail .gallery-wrap, #detail .gallery-wrap *{max-width:100vw !important}
+
+/* Na desktop zostaw jak było - tylko mobile full screen */
+@media(min-width:769px){
+  #detail{
+    background:rgba(8,8,8,0.96) !important;
+    padding:20px !important;
+    align-items:center !important; justify-content:center !important;
+  }
+  .detail-box{
+    width:100% !important; max-width:1100px !important; min-width:auto !important;
+    height:90vh !important; max-height:90vh !important; min-height:90vh !important;
+    border-radius:16px !important; margin:auto !important;
+    overflow:hidden !important;
+  }
+  .gallery-wrap{width:100% !important; max-width:100% !important; height:55vh !important; flex:0 0 55vh !important}
+  .gallery-wrap img#detailImg{width:100% !important; max-width:100% !important}
+  #detailImages{width:100% !important; max-width:100% !important}
+  .detail-content{width:100% !important; max-width:100% !important}
+}
+
+/* iPhone safe area */
+@supports(padding:env(safe-area-inset-top)){
+  #detail{padding-top:env(safe-area-inset-top) !important; padding-bottom:env(safe-area-inset-bottom) !important}
 }
 
 </style>
