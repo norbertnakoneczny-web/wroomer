@@ -1,6 +1,12 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
+<link rel="preconnect" href="https://rbrziqtvwpsegyvjsxsu.supabase.co" crossorigin>
+<link rel="dns-prefetch" href="https://rbrziqtvwpsegyvjsxsu.supabase.co">
+<link rel="preconnect" href="https://nominatim.openstreetmap.org">
+<meta name="theme-color" content="#111">
+<style>/* critical CSS inline */#adsGrid{content-visibility:auto;contain-intrinsic-size:0 500px}</style>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>WROOMER.PL - Ogłoszenia motoryzacyjne Gorzyce, Rydułtowy, Rybnik</title>
@@ -22,7 +28,7 @@ header{background:#fff;border-bottom:1px solid #e5e5e0;position:relative;z-index
 .btn-black{background:#111;color:#fff}.btn-yellow{background:#111;color:#fff;border:2px solid #111}.btn-white{background:#fff;border:1px solid #333;color:#111}
 .btn-green{background:#1a7a33;color:#fff}.btn-blue{background:#004499;color:#fff}.btn-orange{background:#b33d00;color:#fff}
 .grid{max-width:1280px;margin:18px auto;padding:0 12px;display:grid;grid-template-columns:repeat(auto-fill,minmax(198px,1fr));gap:12px}
-.card{background:#fff;border-radius:12px;overflow:hidden;border:1px solid #e9e9e6;cursor:pointer;position:relative}
+.card{content-visibility:auto;contain-intrinsic-size:0 400px;background:#fff;border-radius:12px;overflow:hidden;border:1px solid #e9e9e6;cursor:pointer;position:relative}
 .card .img-wrap{width:100%;height:144px;background:#f4f4f4;display:flex;align-items:center;justify-content:center;overflow:hidden}
 .card .img-wrap img{width:100%;height:100%;object-fit:contain;display:block;background:#f4f4f4}
 .card .info{padding:8px 10px}.card .title{font-size:12px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#111}
@@ -126,7 +132,7 @@ header{background:#fff;border-bottom:1px solid #e5e5e0;position:relative;z-index
   .search-bar input.search-main{grid-column:1/-1}
   #resultsInfo{padding:8px 12px;font-size:12px}
   .grid{grid-template-columns:repeat(2,1fr);gap:10px;padding:0 10px 20px}
-  .card{border-radius:14px;overflow:hidden}
+  .card{content-visibility:auto;contain-intrinsic-size:0 400px;border-radius:14px;overflow:hidden}
   .card .img-wrap{height:145px}
 }
 @media(max-width:400px){
@@ -207,7 +213,7 @@ header{background:#fff;border-bottom:1px solid #e5e5e0;position:relative;z-index
   .search-bar .btn{flex:0 0 auto !important;padding:13px 18px !important;border-radius:12px !important}
   #resultsInfo{max-width:1280px;margin:12px auto 0;padding:0 24px;font-size:13px;color:#555}
   .grid{max-width:1280px;margin:0 auto;grid-template-columns:repeat(auto-fill,minmax(260px,1fr)) !important;gap:18px !important;padding:16px 24px 40px !important}
-  .card{background:#fff;border-radius:16px !important;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.06);border:1px solid #eee;transition:all 0.2s}
+  .card{content-visibility:auto;contain-intrinsic-size:0 400px;background:#fff;border-radius:16px !important;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.06);border:1px solid #eee;transition:all 0.2s}
   .card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,0.10);border-color:#ddd}
   .card .img-wrap{height:190px !important}
   .card .info{padding:12px 14px !important}
@@ -769,7 +775,11 @@ function applyFilters(){ var filtered=allAds.slice(); for(var i=0;i<filtered.len
  // brand filter sync
  var bEl=document.getElementById('brandFilter'); if(bEl && bEl.value && !q){ var bv=bEl.value.toLowerCase(); filtered=filtered.filter(function(a){ return ((a.brand||'')+' '+(a.title||'')).toLowerCase().indexOf(bv)!==-1; }); }
  var center=null; if(locQ.indexOf('blisko')!==-1 && userLocationCoords) center=userLocationCoords; else if(searchLocationCoords) center=searchLocationCoords; else if(locQ){ var kc=getCoordsForPlace(locQ); if(kc) center=kc; } if(center && locQ && radius!==9999){ var tmp=[]; for(var j=0;j<filtered.length;j++){ var a=filtered[j]; var d=getDistance(center,a.lat,a.lng); if(d===null){ a._dist=0; tmp.push(a); continue; } if(d<=radius){ a._dist=d; tmp.push(a); } } filtered=tmp; filtered.sort(function(a,b){ return (a._dist||0)-(b._dist||0); }); } return {filtered:filtered, radius:radius}; }
-function renderAds(){ var result=applyFilters(); var filtered=result.filtered; filteredAds=filtered; var info='Znaleziono '+filtered.length+' z '+allAds.length+' ogłoszeń'; var rt=document.getElementById('resultsText'); if(rt) rt.innerText=info; var start=currentPage*pageSize; var toShow=filtered.slice(start, start+pageSize); displayedAds=currentPage===0? toShow : displayedAds.concat(toShow); var lc=document.getElementById('loadedCount'); if(lc) lc.innerText=displayedAds.length; var tc=document.getElementById('totalCount'); if(tc) tc.innerText=filtered.length; var pi=document.getElementById('payloadInfo'); if(pi) pi.innerText=Math.round(JSON.stringify(displayedAds).length/1024)+' KiB'; var lw=document.getElementById('loadMoreWrap'); if(lw) lw.style.display=filtered.length>displayedAds.length? 'block':'none'; var grid=document.getElementById('adsGrid'); if(!grid) return; if(filtered.length===0){ grid.innerHTML='<p style="padding:20px;color:#111">Brak - usuń filtry lub dodaj ogłoszenie</p>'; return; } if(currentPage===0) grid.innerHTML=''; var frag=document.createDocumentFragment(); for(var i=0;i<toShow.length;i++){ var a=toShow[i]; var imgUrl=getOptimizedImageUrl(a.image_url||'', 400); var title=(a.title||'').slice(0,40); var loc=a.location||a.city||''; var card=document.createElement('div'); card.className='card'; card.setAttribute('role','listitem'); card.setAttribute('tabindex','0'); card.setAttribute('aria-label', title+' - '+(a.price||'')+' PLN - '+(loc||'')); card.setAttribute('onclick',"openDetail('"+a.id+"')"); card.addEventListener('keypress', function(e){ if(e.key==='Enter'){ this.click(); }}); card.innerHTML='<div class="img-wrap"><img src="'+imgUrl+'" alt="'+title+'" loading="lazy" width="198" height="144"></div><div class="info"><div class="title">'+title+'</div><div class="price">'+(a.price? a.price+' PLN':'')+'</div><div class="loc">'+loc+'</div></div>'; frag.appendChild(card); } grid.appendChild(frag); }
+function renderAds(){ var result=applyFilters(); var filtered=result.filtered; filteredAds=filtered; var info='Znaleziono '+filtered.length+' z '+allAds.length+' ogłoszeń'; var rt=document.getElementById('resultsText'); if(rt) rt.innerText=info; var start=currentPage*pageSize; var toShow=filtered.slice(start, start+pageSize); displayedAds=currentPage===0? toShow : displayedAds.concat(toShow); var lc=document.getElementById('loadedCount'); if(lc) lc.innerText=displayedAds.length; var tc=document.getElementById('totalCount'); if(tc) tc.innerText=filtered.length; var pi=document.getElementById('payloadInfo'); if(pi) pi.innerText=Math.round(JSON.stringify(displayedAds).length/1024)+' KiB'; var lw=document.getElementById('loadMoreWrap'); if(lw) lw.style.display=filtered.length>displayedAds.length? 'block':'none'; var grid=document.getElementById('adsGrid'); if(!grid) return; if(filtered.length===0){ grid.innerHTML='<p style="padding:20px;color:#111">Brak - usuń filtry lub dodaj ogłoszenie</p>'; return; } if(currentPage===0){ grid.innerHTML=''; if(typeof requestAnimationFrame!=='undefined'){ /* LCP boost */ } } var frag=document.createDocumentFragment(); for(var i=0;i<toShow.length;i++){ var a=toShow[i]; var imgUrl=getOptimizedImageUrl(a.image_url||'', 400); var isLCP = i<2 && currentPage===0; var title=(a.title||'').slice(0,40); var loc=a.location||a.city||''; var card=document.createElement('div');
+       // LCP optimization - first 2 images eager with high priority
+       var loadingAttr = isLCP ? 'eager' : 'lazy';
+       var fetchPrio = isLCP ? 'high' : 'low';; card.className='card'; card.setAttribute('role','listitem'); card.setAttribute('tabindex','0'); card.setAttribute('aria-label', title+' - '+(a.price||'')+' PLN - '+(loc||'')); card.setAttribute('data-lcp', isLCP?'1':'0');
+  card.setAttribute('onclick',"openDetail('"+a.id+"')"); card.addEventListener('keypress', function(e){ if(e.key==='Enter'){ this.click(); }}); card.innerHTML='<div class="img-wrap"><img src="'+imgUrl+'" alt="'+title+'" loading="lazy" width="198" height="144"></div><div class="info"><div class="title">'+title+'</div><div class="price">'+(a.price? a.price+' PLN':'')+'</div><div class="loc">'+loc+'</div></div>'; frag.appendChild(card); } grid.appendChild(frag); }
 function loadMore(){ currentPage++; renderAds(); }
 function getMyLocation(){ var btn=document.querySelector('button[onclick="getMyLocation()"]'); var orig=btn? btn.innerText:''; if(btn) btn.innerText='⏳ GPS...'; if(!navigator.geolocation){ if(btn) btn.innerText=orig; return; } navigator.geolocation.getCurrentPosition(function(p){ userLocationCoords={lat:p.coords.latitude, lng:p.coords.longitude}; searchLocationCoords={lat:p.coords.latitude, lng:p.coords.longitude}; var li=document.getElementById('locationInput'); if(li) li.value='Blisko mnie'; if(btn) btn.innerText='📍 Blisko mnie'; currentPage=0; renderAds(); }, function(){ if(btn) btn.innerText=orig; }, {enableHighAccuracy:true, timeout:10000}); }
 function getMyLocationForAdd(){
