@@ -161,6 +161,29 @@ header{background:#fff;border-bottom:1px solid #e5e5e0;position:sticky;top:0;z-i
   #detail .gallery-wrap{margin-top:8px}
 }
 
+
+/* v5.9 - przyciski przytulone do logo */
+.top-row{display:flex;align-items:center;justify-content:flex-start !important;gap:16px;flex-wrap:wrap}
+.logo{flex:0 0 auto !important;margin-right:8px}
+.top-actions{flex:0 0 auto !important;width:auto !important;display:flex;gap:8px;align-items:center;justify-content:flex-start !important}
+@media(max-width:900px){
+  .top-row{gap:12px}
+  .logo{font-size:20px !important}
+  .top-actions{gap:6px}
+}
+@media(max-width:640px){
+  .top-row{flex-wrap:nowrap;gap:8px;align-items:center}
+  .logo{font-size:18px !important;flex:0 0 auto !important}
+  .top-actions{flex:1 1 auto !important;width:auto !important;justify-content:flex-start !important;gap:5px;flex-wrap:nowrap;overflow-x:auto}
+  .top-actions .btn{flex:0 0 auto;padding:8px 10px;font-size:12px;white-space:nowrap}
+  #userEmailWrap{grid-column:1/-1;margin-top:4px !important}
+}
+@media(min-width:901px){
+  .top-row{max-width:1280px;justify-content:flex-start !important}
+  .search-bar{max-width:50% !important;margin:12px 0 0 0 !important}
+  #userEmailWrap{max-width:50%;margin:6px 0 0 0 !important}
+}
+
 </style>
 </head>
 <body>

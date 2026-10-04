@@ -1,14 +1,6 @@
 # WROOMER.PL
 
-> Lokalne ogłoszenia motoryzacyjne Gorzyce, Rydułtowy, Rybnik.
+> Lokalne ogłoszenia
 
-## Główne
-
-- [Strona główna](https://www.wroomer.pl/): Lista ogłoszeń
-- [Dodaj](https://www.wroomer.pl/): Dodaj z GPS
-
-## Lokalizacje
-
-- [Gorzyce](https://www.wroomer.pl/): Gorzyce
-- [Rydułtowy](https://www.wroomer.pl/): Rydułtowy
-- [Rybnik](https://www.wroomer.pl/): Rybnik
+- [Strona główna](https://www.wroomer.pl/): Lista
+- [Dodaj](https://www.wroomer.pl/): Dodaj
