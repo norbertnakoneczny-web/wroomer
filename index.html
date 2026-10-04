@@ -349,7 +349,7 @@
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>WROOMER.PL - 04.10.2026 11:45 - Ogólnopolska darmowa baza - Fix Brave Chrome</title>
+<title>WROOMER.PL - 04.10.2026 12:05 - Admin anianakoneczny@gmail.com</title>
 <meta name="description" content="Ogólnopolska całkowicie darmowa baza ogłoszeń motoryzacyjnych. Żadnych promowań i wyróżnień.">
 <link rel="preconnect" href="https://rljqnhfogaqdjeirqqdj.supabase.co" crossorigin>
 <link rel="ai-catalog" href="/.well-known/ai-catalog.json">
@@ -1153,6 +1153,15 @@ header{position:relative !important;top:auto !important;z-index:10 !important}
 <div id="resultsInfo"><span id="resultsText">Ładowanie...</span><span id="perfInfo" class="perf-badge" style="display:none"></span></div>
 <div id="adsGrid" class="grid" role="list" aria-label="Lista ogłoszeń"></div>
 <div id="loadMoreWrap" style="display:none"><button class="btn btn-black" onclick="loadMore()" id="loadMoreBtn" aria-label="Załaduj więcej ogłoszeń">Załaduj więcej</button><p style="font-size:11px;color:#333;margin-top:6px;font-weight:600">Wczytano <span id="loadedCount">0</span> z <span id="totalCount">0</span> | Payload <span id="payloadInfo">0 KiB</span></p></div>
+
+<div id="legalDisclaimer" style="margin:20px auto;max-width:900px;padding:14px 16px;background:#f8f9fa;border-left:4px solid #111;border-radius:8px;font-size:11px;line-height:1.5;color:#333;">
+<b style="font-size:12px;color:#111">⚖️ Informacja prawna</b><br>
+Serwis WROOMER.PL pełni wyłącznie funkcję platformy umożliwiającej publikację ogłoszeń motoryzacyjnych. 
+Za treść, rzetelność, prawdziwość oraz zgodność z prawem zamieszczanych ogłoszeń odpowiadają wyłącznie osoby je zamieszczające. 
+Administracja serwisu nie ponosi odpowiedzialności za treść ogłoszeń, skutki transakcji oraz ewentualne roszczenia wynikające z zawartych umów pomiędzy użytkownikami. 
+Każde ogłoszenie wyrażające wolę zawarcia umowy należy traktować jako zaproszenie do negocjacji w rozumieniu art. 71 Kodeksu Cywilnego.
+</div>
+
 </main>
 
 <div id="detail" onclick="if(event.target.id==='detail')closeDetail()" role="dialog" aria-modal="true" aria-label="Szczegóły ogłoszenia">
@@ -1541,7 +1550,7 @@ function getMyLocationForAdd(){
   }).catch(function(){ if(btn) btn.innerText=orig; });
  }, function(err){ var infoEl=document.getElementById('addLocationInfo'); if(infoEl) infoEl.innerText='❌ Błąd GPS: '+err.message; if(btn) btn.innerText=orig; }, {enableHighAccuracy:true, timeout:10000});
 }
-async function openDetail(id){ var a=null; for(var i=0;i<allAds.length;i++){ if(String(allAds[i].id)===String(id)){ a=allAds[i]; break; } } if(!a) return; currentAd=a; try{ var res=await fetch(SUPABASE_URL+'/rest/v1/ads?id=eq.'+id+'&select=*', {headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY}}); if(res.ok){ var data=await res.json(); if(data[0]){ a=data[0]; currentAd=a; } } }catch(e){} var imgs=[]; if(a.images&&a.images.length>0) imgs=a.images.slice(); else if(a.image_url) imgs=[a.image_url]; else imgs=['https://via.placeholder.com/800x600?text=Brak+zdjecia']; galleryImages=imgs; currentImageIndex=0; var detailImg=document.getElementById('detailImg'); if(detailImg){ detailImg.src=getOptimizedImageUrl(galleryImages[0], 800); detailImg.alt=(a.title||'Ogłoszenie')+' - zdjęcie 1 z '+galleryImages.length; } var gc=document.getElementById('galleryCounter'); if(gc) gc.innerText='1 / '+galleryImages.length; var thumbs=document.getElementById('detailImages'); if(thumbs){ var th=''; for(var t=0;t<galleryImages.length;t++){ th+='<img src="'+getOptimizedImageUrl(galleryImages[t], 200)+'" class="'+(t===0?'active':'')+'" onclick="showImage('+t+')" loading="lazy" alt="Miniatura '+(t+1)+'" role="listitem">'; } thumbs.innerHTML=th; } var dt=document.getElementById('detailTitle'); if(dt) dt.innerText=a.title||''; var dp=document.getElementById('detailPrice'); if(dp) dp.innerText=a.price? a.price+' PLN':''; var dl=document.getElementById('detailLoc'); if(dl) dl.innerText=(a.location||a.city||''); var dd=document.getElementById('detailDesc'); if(dd) dd.innerText=a.description||''; var dmgEl=document.getElementById('detailDamaged'); if(dmgEl){ if(a.damaged==='tak'){ dmgEl.innerText='⚠️ USZKODZONE'; dmgEl.style.display='block'; } else { dmgEl.style.display='none'; } } var pn=document.getElementById('phoneNumber'); if(pn){ pn.innerText='📞 '+(a.phone||'Brak'); pn.style.display='none'; } var det=document.getElementById('detail'); if(det) det.style.display='flex';
+async function openDetail(id){ try{ if(id) incrementView(String(id)); }catch(e){}  var a=null; for(var i=0;i<allAds.length;i++){ if(String(allAds[i].id)===String(id)){ a=allAds[i]; break; } } if(!a) return; currentAd=a; try{ var res=await fetch(SUPABASE_URL+'/rest/v1/ads?id=eq.'+id+'&select=*', {headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY}}); if(res.ok){ var data=await res.json(); if(data[0]){ a=data[0]; currentAd=a; } } }catch(e){} var imgs=[]; if(a.images&&a.images.length>0) imgs=a.images.slice(); else if(a.image_url) imgs=[a.image_url]; else imgs=['https://via.placeholder.com/800x600?text=Brak+zdjecia']; galleryImages=imgs; currentImageIndex=0; var detailImg=document.getElementById('detailImg'); if(detailImg){ detailImg.src=getOptimizedImageUrl(galleryImages[0], 800); detailImg.alt=(a.title||'Ogłoszenie')+' - zdjęcie 1 z '+galleryImages.length; } var gc=document.getElementById('galleryCounter'); if(gc) gc.innerText='1 / '+galleryImages.length; var thumbs=document.getElementById('detailImages'); if(thumbs){ var th=''; for(var t=0;t<galleryImages.length;t++){ th+='<img src="'+getOptimizedImageUrl(galleryImages[t], 200)+'" class="'+(t===0?'active':'')+'" onclick="showImage('+t+')" loading="lazy" alt="Miniatura '+(t+1)+'" role="listitem">'; } thumbs.innerHTML=th; } var dt=document.getElementById('detailTitle'); if(dt) dt.innerText=a.title||''; var dp=document.getElementById('detailPrice'); if(dp) dp.innerText=a.price? a.price+' PLN':''; var dl=document.getElementById('detailLoc'); if(dl) dl.innerText=(a.location||a.city||''); var dd=document.getElementById('detailDesc'); if(dd) dd.innerText=a.description||''; var dmgEl=document.getElementById('detailDamaged'); if(dmgEl){ if(a.damaged==='tak'){ dmgEl.innerText='⚠️ USZKODZONE'; dmgEl.style.display='block'; } else { dmgEl.style.display='none'; } } var pn=document.getElementById('phoneNumber'); if(pn){ pn.innerText='📞 '+(a.phone||'Brak'); pn.style.display='none'; } var det=document.getElementById('detail'); if(det) det.style.display='flex'; try{ checkOwnAd(); }catch(e){}
    // v8.3 swipe counter
    try{
      var counter = document.getElementById('swipeCounter');
@@ -1603,7 +1612,7 @@ function _old_updateAuthUI(){
  var authBtn=document.getElementById('authBtn'); var userEmail=document.getElementById('userEmail'); var userWrap=document.getElementById('userEmailWrap'); var logoutBtn=document.getElementById('logoutBtn'); var myBtn=document.getElementById('myBtn'); if(currentUser){ if(authBtn) authBtn.style.display='none'; if(userEmail){ userEmail.innerText='Zalogowany: '+currentUser.email; } if(userWrap) userWrap.style.display='block'; if(logoutBtn) logoutBtn.style.display='block'; if(myBtn) myBtn.style.display='block'; } else { if(authBtn) authBtn.style.display='block'; if(userWrap) userWrap.style.display='none'; if(logoutBtn) logoutBtn.style.display='none'; if(myBtn) myBtn.style.display='none'; } }
 function logout(){ localStorage.removeItem('sb_token'); localStorage.removeItem('sb_refresh'); localStorage.removeItem('sb_user'); currentUser=null; authToken=null; refreshToken=null; updateAuthUI(); location.reload(); }
 function filterMy(){ if(!currentUser){alert('Zaloguj');return} var btn=document.getElementById('myBtn'); if(!btn) return; if(btn.innerText==='Moje'){ btn.innerText='Wszystkie'; loadAds().then(function(){ allAds=allAds.filter(function(a){return a.owner_id===currentUser.id}); currentPage=0; renderAds(); }); } else { btn.innerText='Moje'; loadAds(); } }
-function loadAds(){ var rt=document.getElementById('resultsText'); if(rt) rt.innerText='Ładowanie...'; var url=SUPABASE_URL+'/rest/v1/ads?select=id,title,price,image_url,location,city,brand,model,year,mileage,lat,lng,owner_id,created_at&order=created_at.desc&limit=100'; return fetch(url,{headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY}}).then(function(res){ if(!res.ok) throw new Error('HTTP '+res.status); return res.json(); }).then(function(data){ for(var i=0;i<data.length;i++) ensureAdCoords(data[i]); allAds=data; currentPage=0; renderAds(); }).catch(function(e){ if(rt) rt.innerText='Błąd: '+e.message; }); }
+function loadAds(){ var rt=document.getElementById('resultsText'); if(rt) rt.innerText='Ładowanie...'; var url=SUPABASE_URL+'/rest/v1/ads?select=id,title,price,image_url,location,city,brand,model,year,mileage,views,owner_id,lat,lng,owner_id,created_at&order=created_at.desc&limit=100'; return fetch(url,{headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY}}).then(function(res){ if(!res.ok) throw new Error('HTTP '+res.status); return res.json(); }).then(function(data){ for(var i=0;i<data.length;i++) ensureAdCoords(data[i]); allAds=data; currentPage=0; renderAds(); }).catch(function(e){ if(rt) rt.innerText='Błąd: '+e.message; }); }
 function login(){ var emailEl=document.getElementById('loginEmail'); var passEl=document.getElementById('loginPass'); if(!emailEl||!passEl) return; var email=emailEl.value.trim(); var pass=passEl.value; if(!email||!pass){ var li=document.getElementById('loginInfo'); if(li) li.innerText='Wpisz dane!'; return; } var li2=document.getElementById('loginInfo'); if(li2) li2.innerText='Logowanie...'; fetch(SUPABASE_URL+'/auth/v1/token?grant_type=password',{method:'POST',headers:{'apikey':SUPABASE_KEY,'Content-Type':'application/json'},body:JSON.stringify({email:email,password:pass})}).then(function(r){ return r.json().then(function(j){ return {ok:r.ok, json:j}; }); }).then(function(res){ if(!res.ok) throw new Error(res.json.error_description||'Błąd'); saveAuth(res.json.access_token, res.json.refresh_token, res.json.user); closeAuth(); }).catch(function(e){ var li3=document.getElementById('loginInfo'); if(li3) li3.innerText='Błąd: '+e.message; }); }
 function register(){ var chk=document.getElementById('regCheck'); if(!chk||!chk.checked){alert('Zaznacz regulamin');return} var emailEl=document.getElementById('regEmail'); var passEl=document.getElementById('regPass'); if(!emailEl||!passEl) return; var email=emailEl.value.trim(); var pass=passEl.value; if(!email||pass.length<6){ var ri=document.getElementById('regInfo'); if(ri) ri.innerText='Min 6 znaków'; return; } var ri2=document.getElementById('regInfo'); if(ri2) ri2.innerText='Rejestracja...'; fetch(SUPABASE_URL+'/auth/v1/signup',{method:'POST',headers:{'apikey':SUPABASE_KEY,'Content-Type':'application/json'},body:JSON.stringify({email:email,password:pass})}).then(function(r){return r.json().then(function(j){return {ok:r.ok, json:j}})}).then(function(res){ if(!res.ok) throw new Error(res.json.msg||'Błąd'); if(ri2) ri2.innerText='Konto założone!'; setTimeout(function(){ fetch(SUPABASE_URL+'/auth/v1/token?grant_type=password',{method:'POST',headers:{'apikey':SUPABASE_KEY,'Content-Type':'application/json'},body:JSON.stringify({email:email,password:pass})}).then(function(r){return r.json().then(function(j){return {ok:r.ok, json:j}})}).then(function(r2){ if(r2.ok){ saveAuth(r2.json.access_token, r2.json.refresh_token, r2.json.user); closeAuth(); } }); }, 800); }).catch(function(e){ var ri3=document.getElementById('regInfo'); if(ri3) ri3.innerText='Błąd: '+e.message; }); }
 function sendReset(){ var emailEl=document.getElementById('resetEmail'); if(!emailEl) return; var email=emailEl.value.trim(); if(!email){alert('Wpisz e-mail');return} fetch(SUPABASE_URL+'/auth/v1/recover',{method:'POST',headers:{'apikey':SUPABASE_KEY,'Content-Type':'application/json'},body:JSON.stringify({email:email})}).then(function(){ var ri=document.getElementById('resetInfo'); if(ri) ri.innerText='Wysłano link'; }); }
@@ -1918,6 +1927,103 @@ function detectBraveAndBlockers(){
   }
 }
 setTimeout(detectBraveAndBlockers, 1000);
+</script>
+
+
+<script>
+function isAdmin(){
+  try{
+    var uStr=localStorage.getItem('wroomer_user');
+    if(!uStr) return false;
+    var u=JSON.parse(uStr);
+    var email=(u.email||'').toLowerCase();
+    var admins=['anianakoneczny@gmail.com','admin@wroomer.pl','kontakt@wroomer.pl'];
+    // TWÓJ EMAIL - dodaj swój poniżej
+    if(email==='anianakoneczny@gmail.com' || email==='admin@wroomer.pl' || email==='kontakt@wroomer.pl') return true;
+    if(admins.indexOf(email)!==-1) return true;
+    if(email.endsWith('@wroomer.pl')) return true;
+    if(u.is_admin) return true;
+    if(u.user_metadata && u.user_metadata.is_admin) return true;
+    return false;
+  }catch(e){ return false; }
+}
+function incrementView(adId){
+  try{
+    var url=SUPABASE_URL+'/rest/v1/ads?id=eq.'+adId;
+    fetch(url+'&select=views',{headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY}}).then(function(r){return r.json();}).then(function(data){
+      var currentViews = (data[0] && data[0].views) ? parseInt(data[0].views) : 0;
+      var newViews = currentViews + 1;
+      fetch(url,{method:'PATCH',headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify({views:newViews})}).catch(function(){});
+      if(isAdmin()){
+        var counterEl=document.getElementById('adminViewCounter');
+        if(counterEl){ counterEl.style.display='block'; counterEl.innerHTML='👁️ Wyświetlenia: <b>'+newViews+'</b> | Tylko Ty widzisz ten licznik | ID: '+adId.substring(0,8); }
+      }
+    }).catch(function(){});
+  }catch(e){}
+}
+function checkOwnAd(){
+  try{
+    var ownActions=document.getElementById('ownAdActions');
+    var counterEl=document.getElementById('adminViewCounter');
+    if(!currentAd) { if(ownActions) ownActions.style.display='none'; if(counterEl && !isAdmin()) counterEl.style.display='none'; return; }
+    var userStr=localStorage.getItem('wroomer_user');
+    var isOwner=false;
+    if(userStr){
+      var u=JSON.parse(userStr);
+      if(String(currentAd.owner_id)===String(u.id)) isOwner=true;
+    }
+    if(ownActions){
+      if(isOwner || isAdmin()) ownActions.style.display='block'; else ownActions.style.display='none';
+    }
+    if(counterEl){
+      if(isAdmin()){
+        counterEl.style.display='block';
+        var v=currentAd.views||0;
+        counterEl.innerHTML='👁️ Wyświetlenia: <b>'+v+'</b> | Tylko Ty widzisz ten licznik (admin) | ID: '+(currentAd.id||'').substring(0,8);
+      } else {
+        counterEl.style.display='none';
+      }
+    }
+  }catch(e){}
+}
+</script>
+
+
+<script>
+function editCurrentAd(){
+  if(!currentAd) return;
+  try{
+    var userStr=localStorage.getItem('wroomer_user');
+    if(!userStr){ alert('Zaloguj się'); return; }
+    var u=JSON.parse(userStr);
+    if(String(currentAd.owner_id)!==String(u.id) && !isAdmin()){ alert('To nie Twoje ogłoszenie'); return; }
+  }catch(e){}
+  closeDetail();
+  setTimeout(function(){
+    window.editingId = currentAd.id;
+    var mt=document.getElementById('addModalTitle'); if(mt) mt.innerText='Edytuj ogłoszenie';
+    var titleEl=document.getElementById('addTitleInput'); if(titleEl) titleEl.value=currentAd.title||'';
+    var brandEl=document.getElementById('addBrand'); if(brandEl){ brandEl.value=currentAd.brand||''; if(typeof updateModelOptions==='function') updateModelOptions(); }
+    setTimeout(function(){ var modelEl=document.getElementById('addModel'); if(modelEl) modelEl.value=currentAd.model||''; },150);
+    var priceEl=document.getElementById('addPrice'); if(priceEl) priceEl.value=currentAd.price||'';
+    var yearEl=document.getElementById('addYear'); if(yearEl) yearEl.value=currentAd.year||'';
+    var mileEl=document.getElementById('addMileage'); if(mileEl) mileEl.value=currentAd.mileage||'';
+    var descEl=document.getElementById('addDesc'); 
+    if(descEl){ var d=currentAd.description||''; if(d.indexOf('📝 OPIS SPRZEDAWCY:')!==-1){ descEl.value=d.split('📝 OPIS SPRZEDAWCY:')[1].trim(); } else { descEl.value=d; } }
+    var phoneEl=document.getElementById('addPhone'); if(phoneEl) phoneEl.value=currentAd.phone||'';
+    var addModal=document.getElementById('addModal'); if(addModal) addModal.style.display='flex';
+  },200);
+}
+function deleteCurrentAd(){
+  if(!currentAd) return;
+  if(!confirm('Usunąć ogłoszenie: '+(currentAd.title||'')+' ?')) return;
+  try{
+    var url=SUPABASE_URL+'/rest/v1/ads?id=eq.'+currentAd.id;
+    fetch(url,{method:'DELETE',headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY}}).then(function(r){
+      if(r.ok){ alert('Usunięte'); closeDetail(); if(typeof loadAds==='function') loadAds(); } else { alert('Błąd usuwania'); }
+    });
+  }catch(e){ alert('Błąd: '+e.message); }
+}
 </script>
 
 </body>
