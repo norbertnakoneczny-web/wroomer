@@ -1987,6 +1987,175 @@ setTimeout(detectBraveAndBlockers, 1000);
 }
 /* END FIX */
 
+
+/* ===== WROOMER V6 - MODERN DETAIL LIGHT - 05.10.2026 - UX RESEARCH BASED ===== */
+/* Badania: Baymard, NNGroup, Airbnb - użytkownicy lubią jasne, czyste, dużo białej przestrzeni */
+
+#detail{
+  position:fixed !important;inset:0 !important;z-index:99999 !important;
+  background:rgba(15,15,15,0.55) !important;
+  backdrop-filter:blur(12px) !important;-webkit-backdrop-filter:blur(12px) !important;
+  display:none !important;overflow-y:auto !important;padding:20px !important;
+  align-items:flex-start !important;justify-content:center !important;
+}
+#detail[style*="flex"]{display:flex !important;}
+
+.detail-box{
+  background:#ffffff !important;
+  width:100% !important;max-width:1120px !important;
+  min-height:auto !important;height:auto !important;max-height:none !important;
+  margin:20px auto !important;border-radius:24px !important;
+  overflow:hidden !important;overflow-y:visible !important;
+  box-shadow:0 20px 60px rgba(0,0,0,0.25), 0 8px 20px rgba(0,0,0,0.15) !important;
+  display:grid !important;grid-template-columns:1.15fr 0.85fr !important;
+  grid-template-rows:auto !important;
+  border:1px solid #e8e8e8 !important;
+}
+
+/* GALERIA - lewa strona - biała, czysta */
+.gallery-wrap{
+  position:relative !important;
+  width:100% !important;max-width:100% !important;
+  height:auto !important;min-height:480px !important;max-height:640px !important;
+  background:#f8f8f8 !important;
+  display:flex !important;align-items:center !important;justify-content:center !important;
+  border-right:1px solid #eeeeee !important;
+  border-radius:0 !important;
+  grid-column:1 !important;
+}
+.gallery-wrap img#detailImg{
+  width:100% !important;height:100% !important;max-width:100% !important;max-height:640px !important;
+  object-fit:contain !important;background:#f8f8f8 !important;
+  padding:12px !important;
+}
+.gallery-wrap .nav-btn{
+  background:#ffffff !important;color:#111 !important;
+  border:1px solid #e0e0e0 !important;box-shadow:0 4px 12px rgba(0,0,0,0.1) !important;
+  width:44px !important;height:44px !important;
+}
+.gallery-wrap .nav-btn:hover{background:#111 !important;color:#fff !important;}
+
+.gallery-counter{
+  background:#111 !important;color:#fff !important;
+  padding:6px 14px !important;border-radius:100px !important;
+  font-size:12px !important;font-weight:700 !important;letter-spacing:0.3px !important;
+}
+
+/* MINIATURKI - pod galerią, czysto */
+#detailImages{
+  width:100% !important;max-width:100% !important;
+  display:flex !important;gap:10px !important;padding:14px 16px !important;
+  background:#ffffff !important;border-top:1px solid #f0f0f0 !important;
+  border-right:1px solid #eeeeee !important;
+  overflow-x:auto !important;grid-column:1 !important;
+}
+#detailImages img{
+  width:84px !important;height:64px !important;min-width:84px !important;max-width:84px !important;flex:0 0 84px !important;
+  object-fit:cover !important;border-radius:12px !important;
+  border:2px solid #f0f0f0 !important;background:#f5f5f5 !important;
+  cursor:pointer !important;transition:all 0.2s !important;
+}
+#detailImages img:hover{border-color:#111 !important;transform:translateY(-2px) !important;}
+#detailImages img.active{border-color:#111 !important;box-shadow:0 4px 12px rgba(0,0,0,0.15) !important;}
+
+/* CONTENT - prawa strona - jasny, Airbnb style */
+.detail-content{
+  width:100% !important;max-width:100% !important;
+  padding:28px 28px 28px 28px !important;
+  background:#ffffff !important;
+  display:flex !important;flex-direction:column !important;gap:18px !important;
+  grid-column:2 !important;
+  overflow:visible !important;
+}
+
+#detailTitle{
+  font-size:26px !important;font-weight:800 !important;line-height:1.25 !important;
+  color:#111111 !important;letter-spacing:-0.3px !important;margin:0 !important;
+}
+#detailPrice{
+  display:inline-flex !important;align-items:center !important;
+  background:#ffeb00 !important;color:#111 !important;
+  font-size:26px !important;font-weight:900 !important;
+  padding:10px 18px !important;border-radius:12px !important;
+  letter-spacing:-0.5px !important;width:fit-content !important;
+}
+#detailLoc{
+  display:flex !important;align-items:center !important;gap:6px !important;
+  font-size:14px !important;color:#666 !important;font-weight:500 !important;
+  background:#f6f6f6 !important;padding:8px 12px !important;border-radius:10px !important;
+  width:fit-content !important;
+}
+#detailDesc{
+  font-size:15px !important;line-height:1.65 !important;color:#333 !important;
+  background:#fafafa !important;padding:18px !important;border-radius:16px !important;
+  border:1px solid #f0f0f0 !important;white-space:pre-wrap !important;
+}
+
+/* Specs - kafelki jak w Otomoto 2026 */
+.detail-content .specs-grid, .detail-specs{
+  display:grid !important;grid-template-columns:1fr 1fr !important;gap:10px !important;
+}
+.spec-item{
+  background:#f8f8f8 !important;border:1px solid #efefef !important;
+  padding:12px 14px !important;border-radius:12px !important;
+}
+.spec-item b{font-size:11px !important;color:#888 !important;text-transform:uppercase !important;letter-spacing:0.5px !important;display:block !important;margin-bottom:4px !important;}
+.spec-item span{font-size:15px !important;font-weight:700 !important;color:#111 !important;}
+
+/* Przyciski kontaktu - sticky, duże, jasne */
+.detail-actions{
+  display:flex !important;flex-direction:column !important;gap:10px !important;
+  margin-top:auto !important;padding-top:18px !important;
+  border-top:1px solid #f0f0f0 !important;position:sticky !important;bottom:0 !important;
+  background:#fff !important;
+}
+.detail-actions button, .contact-btn{
+  width:100% !important;padding:16px !important;border-radius:14px !important;
+  font-size:15px !important;font-weight:800 !important;
+  border:none !important;cursor:pointer !important;transition:all 0.2s !important;
+}
+.btn-call{background:#111 !important;color:#ffeb00 !important;}
+.btn-call:hover{background:#000 !important;transform:translateY(-1px) !important;box-shadow:0 6px 20px rgba(0,0,0,0.2) !important;}
+.btn-msg{background:#f2f2f2 !important;color:#111 !important;}
+.btn-msg:hover{background:#e8e8e8 !important;}
+
+/* MOBILE - stack */
+@media(max-width:900px){
+  #detail{padding:0 !important;align-items:flex-start !important;background:#ffffff !important;}
+  .detail-box{
+    grid-template-columns:1fr !important;margin:0 !important;
+    border-radius:0 !important;max-width:100% !important;min-height:100vh !important;
+    box-shadow:none !important;border:none !important;
+  }
+  .gallery-wrap{
+    min-height:52vh !important;max-height:58vh !important;height:56vh !important;
+    border-right:none !important;border-bottom:1px solid #f0f0f0 !important;
+  }
+  .gallery-wrap img#detailImg{max-height:58vh !important;}
+  #detailImages{border-right:none !important;}
+  .detail-content{padding:20px 18px 120px 18px !important;}
+  #detailTitle{font-size:22px !important;}
+  #detailPrice{font-size:22px !important;}
+  .detail-actions{
+    position:fixed !important;bottom:0 !important;left:0 !important;right:0 !important;
+    background:#ffffff !important;padding:14px 16px 20px 16px !important;
+    border-top:1px solid #eeeeee !important;box-shadow:0 -8px 30px rgba(0,0,0,0.08) !important;
+    z-index:5 !important;
+  }
+}
+
+/* Zamknij - jasny */
+#detail .close-btn, .detail-close{
+  position:absolute !important;top:16px !important;right:16px !important;
+  background:#ffffff !important;color:#111 !important;
+  width:40px !important;height:40px !important;border-radius:50% !important;
+  border:1px solid #e8e8e8 !important;box-shadow:0 4px 12px rgba(0,0,0,0.1) !important;
+  display:flex !important;align-items:center !important;justify-content:center !important;
+  font-size:18px !important;z-index:10 !important;cursor:pointer !important;
+}
+#detail .close-btn:hover{background:#111 !important;color:#fff !important;}
+/* END V6 */
+
 </style>
 <section id="seoCities" style="max-width:1200px;margin:50px auto 20px;padding:0 20px">
 <h2 style="font-size:22px;font-weight:900;margin-bottom:16px;color:#111">🚗 Samochody na sprzedaż w Twoim mieście - całkowicie za darmo</h2>
@@ -2031,5 +2200,5 @@ setTimeout(detectBraveAndBlockers, 1000);
 <script>
 try{var _oldClose=window.closeAdd; window.closeAdd=function(){if(_oldClose)_oldClose(); setTimeout(function(){var u='https://wroomer.pl/';var b=document.createElement('div');b.id='viralBox';b.style.cssText='position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#ffeb00;color:#000;padding:18px 22px;border-radius:16px;z-index:99999;max-width:94%;text-align:center;font-weight:900;box-shadow:0 12px 40px rgba(0,0,0,0.6);border:3px solid #000';b.innerHTML='<div>✅ Ogłoszenie dodane!</div><div style="font-size:13px;margin-top:4px">Udostępnij i bądź na GÓRZE 24h GRATIS! 🚀</div><div style="display:flex;gap:8px;margin-top:12px;justify-content:center"><button onclick="window.open(\'https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent('https://wroomer.pl/')+'\',\'_blank\')" style="background:#1877f2;color:#fff;border:none;padding:10px 14px;border-radius:10px;font-weight:900;cursor:pointer">📘 Facebook</button><button onclick="navigator.clipboard.writeText(\'https://wroomer.pl/\');this.innerText=\'✅ Skopiowano!\'" style="background:#000;color:#ffeb00;border:none;padding:10px 14px;border-radius:10px;font-weight:900;cursor:pointer">🔗 Kopiuj</button><button onclick="this.parentElement.parentElement.remove()" style="background:#fff;color:#000;border:2px solid #000;padding:10px 14px;border-radius:10px;font-weight:900;cursor:pointer">X</button></div>';document.body.appendChild(b);setTimeout(function(){var x=document.getElementById('viralBox');if(x)x.remove()},15000)},500)}catch(e){}
 </script>
-</body>
+<script>document.addEventListener('DOMContentLoaded',function(){var gw=document.querySelector('.gallery-wrap');if(gw && !gw.querySelector('.detail-close')){var b=document.createElement('button');b.className='detail-close';b.innerHTML='✕';b.setAttribute('aria-label','Zamknij');b.onclick=function(){if(typeof closeDetail==='function')closeDetail()};gw.appendChild(b);}});</script></body>
 </html>
