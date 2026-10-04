@@ -400,6 +400,40 @@ header{position:relative !important;top:auto !important;z-index:10 !important}
 }
 
 </style>
+<script>
+
+// v7.8 JWT AUTO-REFRESH
+function isJwtExpired(token){
+  if(!token) return true;
+  try{
+    var parts = token.split('.');
+    if(parts.length!==3) return true;
+    var payload = JSON.parse(atob(parts[1].replace(/-/g,'+').replace(/_/g,'/')));
+    if(!payload.exp) return false;
+    return (payload.exp * 1000) < (Date.now() + 60000); // expired or will expire in 1min
+  }catch(e){ return false; }
+}
+async function ensureValidToken(){
+  var t = localStorage.getItem('wroomer_token') || (typeof authToken!=='undefined'?authToken:'');
+  if(!t) return SUPABASE_KEY;
+  if(isJwtExpired(t)){
+    console.log('JWT expired, clearing');
+    try{ localStorage.removeItem('wroomer_token'); localStorage.removeItem('wroomer_user'); }catch(e){}
+    if(typeof authToken!=='undefined') authToken = '';
+    if(typeof currentUser!=='undefined') currentUser = null;
+    // Show login prompt
+    setTimeout(function(){
+      if(confirm('Sesja wygasła (JWT expired). Zaloguj się ponownie aby usunąć/dodać ogłoszenie. Zalogować teraz?')){
+        if(typeof openAuth==='function') openAuth();
+      }
+    }, 100);
+    return SUPABASE_KEY; // fallback to anon for RLS disabled case
+  }
+  return t;
+}
+
+</script>
+<style>
 </head>
 <body>
 <header>
@@ -829,7 +863,8 @@ async function submitAdd(){
  }
 
  try{
-   var result=await doPost(authToken);
+   var validTok = await ensureValidToken();
+   var result=await doPost(validTok);
    if(result.fetchError){
      if(infoEl) infoEl.innerHTML='❌ <b>Failed to fetch</b><br>1. Sprawdź czy w Supabase dodałeś kolumny: year, mileage, damaged, model, phone, images (jsonb)<br>2. Sprawdź RLS: Table Editor -> ads -> RLS policies -> włącz INSERT dla anon/authenticated<br>3. Sprawdź URL: '+SUPABASE_URL+'<br><br>Próbuję wysłać uproszczone ogłoszenie bez nowych pól...';
      // Try minimal payload without new columns

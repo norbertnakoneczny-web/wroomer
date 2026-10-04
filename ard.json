@@ -1,11 +1,1 @@
-{
-  "@context": "https://agenticresourcediscovery.org/context/v1",
-  "entries": [
-    {
-      "identifier": "urn:air:wroomer.pl:web:homepage",
-      "displayName": "WROOMER.PL",
-      "type": "text/html",
-      "url": "https://www.wroomer.pl/"
-    }
-  ]
-}
+{"name": "WROOMER.PL", "url": "https://www.wroomer.pl/"}
