@@ -6,7 +6,7 @@
       "displayName": "WROOMER.PL",
       "type": "text/html",
       "url": "https://www.wroomer.pl/",
-      "description": "Lokalne",
+      "description": "Lokalne ogłoszenia",
       "capabilities": [
         "search"
       ],
