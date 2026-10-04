@@ -1,18 +1,21 @@
 # WROOMER.PL - Dokumentacja dla AI
 
-## Struktura
-- Strona główna: lista ogłoszeń z filtrami
-- Szczegóły: galeria, opis, kontakt
-- Dodawanie: formularz z GPS wyszukiwarką miejscowości
+> Kompletna dokumentacja WROOMER.PL dla systemów AI i agentów
+
+## Strona główna
+
+- [WROOMER.PL](https://www.wroomer.pl/): Lokalny serwis ogłoszeń motoryzacyjnych
+
+## Kategorie
+
+- [Samochody osobowe](https://www.wroomer.pl/): BMW, Audi, Mercedes, VW, Toyota, Ford, Opel, Skoda
+- [Części i akcesoria](https://www.wroomer.pl/): Części motoryzacyjne
+- [Usługi](https://www.wroomer.pl/): Usługi motoryzacyjne
 
 ## Technologie
-- HTML/CSS/JS vanilla
-- Supabase (baza + auth + storage)
-- Vercel hosting
-- Nominatim OpenStreetMap dla geokodowania
+
+- [Stack](https://www.wroomer.pl/): HTML/CSS/JS vanilla, Supabase, Vercel, Nominatim
 
 ## Dostępność
-Strona spełnia WCAG AA: kontrast AAA (czarny #111 na białym #fff, szary #444), etykiety ARIA, nawigacja klawiaturą.
 
-## API
-Supabase REST: /rest/v1/ads
+Strona spełnia WCAG AAA: kontrast 19:1 (#111 na #fff), etykiety ARIA, nawigacja klawiaturą.

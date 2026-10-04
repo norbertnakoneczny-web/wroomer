@@ -1,4 +1,6 @@
 User-agent: *
 Allow: /
 
+Agentmap: https://www.wroomer.pl/.well-known/ard.json
+
 Sitemap: https://www.wroomer.pl/sitemap.xml
