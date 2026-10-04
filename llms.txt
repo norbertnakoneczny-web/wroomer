@@ -1,21 +1,14 @@
 # WROOMER.PL
 
-> Lokalne ogłoszenia motoryzacyjne Gorzyce, Rydułtowy, Rybnik, Wodzisław.
+> Lokalne ogłoszenia motoryzacyjne
 
 ## Główne
 
 - [Strona główna](https://www.wroomer.pl/): Lista ogłoszeń
 - [Dodaj ogłoszenie](https://www.wroomer.pl/): Formularz z GPS
 
-## Marki
-
-- [BMW](https://www.wroomer.pl/): BMW
-- [Audi](https://www.wroomer.pl/): Audi
-- [Mercedes](https://www.wroomer.pl/): Mercedes
-
 ## Lokalizacje
 
 - [Gorzyce](https://www.wroomer.pl/): Gorzyce
 - [Rydułtowy](https://www.wroomer.pl/): Rydułtowy
 - [Rybnik](https://www.wroomer.pl/): Rybnik
-- [Wodzisław](https://www.wroomer.pl/): Wodzisław Śląski
