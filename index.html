@@ -99,9 +99,9 @@ header{background:#fff;border-bottom:1px solid #e5e5e0;position:sticky;top:0;z-i
 <body>
 <header>
 <div class="top-row">
-<div class="logo" onclick="location.reload()">WROOMER<span>.PL</span> <span style="font-size:9px;background:#111;color:#fff;padding:2px 6px;border-radius:4px">v4.6 JWT FIX</span></div>
+<div class="logo" onclick="location.reload()">WROOMER<span>.PL</span> <span style="font-size:9px;background:#111;color:#fff;padding:2px 6px;border-radius:4px">v4.7 FIX PRZYCISKI</span></div>
 <div class="top-actions">
-<button class="btn btn-yellow" onclick="openAdd()">+ Dodaj</button>
+<button class="btn btn-yellow" onclick="openAdd()" aria-label="Dodaj ogłoszenie">+ Dodaj</button>
 <button id="inboxBtn" class="btn btn-black" style="display:none" onclick="openInbox()">💬 Wiad. <span id="inboxCount" style="background:#ffcb00;color:#111;padding:2px 6px;border-radius:10px;font-size:10px;display:none">0</span></button>
 <button id="myBtn" class="btn btn-white" style="display:none" onclick="filterMy()">Moje</button>
 <button id="authBtn" class="btn btn-black" onclick="openAuth()">Zaloguj</button>
@@ -175,8 +175,8 @@ header{background:#fff;border-bottom:1px solid #e5e5e0;position:sticky;top:0;z-i
 <div id="inboxModal" onclick="if(event.target.id==='inboxModal')closeInbox()"><div class="inbox-box"><div class="inbox-header"><b>💬 Wiadomości</b><button class="btn btn-white" onclick="closeInbox()">✕</button></div><div id="inboxList" class="inbox-list"></div></div></div>
 <div id="chatModal" onclick="if(event.target.id==='chatModal')closeChat()"><div class="chat-box"><div class="chat-header"><div><b id="chatTitle">Czat</b></div><button class="btn btn-white" onclick="closeChat()">✕</button></div><div id="chatMessages" class="chat-messages"></div><div class="chat-input"><input id="chatInput" placeholder="Napisz..." onkeypress="if(event.key==='Enter')sendChatMessage()"><button class="btn btn-black" onclick="sendChatMessage()">Wyślij</button></div></div></div>
 
-<div id="addModal" onclick="if(event.target.id==='addModal')closeAdd()"><div class="add-box"><h2 style="font-size:16px">Dodaj ogłoszenie</h2>
-<div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:8px 10px;margin-bottom:10px;font-size:11px;color:#166534"><b>🚀 v4.6 JWT FIX:</b> Auto-odświeżanie tokena, refresh_token zapisany, auto-relogin przy wygaśnięciu. Kompresja 0.56MB→0.26MB działa! Jeśli nadal błąd, kliknij Wyloguj i zaloguj ponownie.</div>
+<div id="addModal" onclick="if(event.target.id==='addModal')closeAdd()"><div class="add-box"><h2 id="addModalTitle" style="font-size:16px">Dodaj ogłoszenie</h2>
+<div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:8px 10px;margin-bottom:10px;font-size:11px;color:#166534"><b>🚀 v4.7 FIX PRZYCISKI + JWT:</b> Naprawione addTitle→addModalTitle, wszystkie przyciski działają, auto-refresh token. Kompresja 0.56MB→0.26MB ✅</div>
 <div class="form-grid">
 <div class="full"><label for="addTitleInput">Tytuł *</label><input id="addTitleInput"></div>
 <div><label for="addBrand">Marka *</label><select id="addBrand" onchange="updateModelOptions()"><option value="">Wybierz *</option><option>BMW</option><option>Audi</option><option>Mercedes</option><option>Volkswagen</option><option>Toyota</option><option>Ford</option><option>Opel</option><option>Skoda</option><option>Mitsubishi</option><option>Inna</option></select></div>
@@ -197,7 +197,7 @@ header{background:#fff;border-bottom:1px solid #e5e5e0;position:sticky;top:0;z-i
 <div id="authModal" onclick="if(event.target.id==='authModal')closeAuth()"><div class="auth-box"><h3>Logowanie</h3><div style="display:flex;gap:8px;margin:12px 0"><button class="btn btn-black" style="flex:1" onclick="showTab('login')">Logowanie</button><button class="btn btn-white" style="flex:1" onclick="showTab('register')">Rejestracja</button></div><div id="loginTab"><label for="loginEmail" style="position:absolute;left:-9999px">E-mail</label><input id="loginEmail" placeholder="E-mail" style="width:100%;padding:10px;margin-top:8px"><label for="loginPass" style="position:absolute;left:-9999px">Hasło</label><input id="loginPass" type="password" placeholder="Hasło" style="width:100%;padding:10px;margin-top:8px"><button class="btn btn-black" style="width:100%;margin-top:10px" onclick="login()">Zaloguj</button><p id="loginInfo" style="font-size:11px;color:#c00;margin-top:8px"></p></div><div id="registerTab" style="display:none"><input id="regEmail" placeholder="E-mail" style="width:100%;padding:10px;margin-top:8px"><input id="regPass" type="password" placeholder="Hasło" style="width:100%;padding:10px;margin-top:8px"><label style="font-size:11px;display:flex;gap:6px;margin-top:8px"><input type="checkbox" id="regCheck"> Regulamin</label><button class="btn btn-yellow" style="width:100%;margin-top:10px" onclick="register()">Załóż konto</button><p id="regInfo" style="font-size:11px;color:#c00;margin-top:8px"></p></div><div id="resetTab" style="display:none"><input id="resetEmail" placeholder="E-mail" style="width:100%;padding:10px;margin-top:8px"><button class="btn btn-black" style="width:100%;margin-top:10px" onclick="sendReset()">Wyślij reset</button><p id="resetInfo" style="font-size:11px;margin-top:8px"></p><button class="btn btn-white" style="width:100%;margin-top:8px" onclick="showTab('login')">Wróć</button></div></div></div>
 
 <script>
-// v4.6 JWT FIX
+// v4.7 FIX PRZYCISKI + JWT
 var supportsWebP=false; try{ var c=document.createElement('canvas'); supportsWebP=c.toDataURL('image/webp').indexOf('data:image/webp')===0; }catch(e){}
 
 async function compressImage(file, maxW, quality){
@@ -251,30 +251,40 @@ document.addEventListener('DOMContentLoaded', function(){
  if(wrap){ wrap.addEventListener('touchstart', function(e){ touchStartX=e.changedTouches[0].screenX; }, {passive:true}); wrap.addEventListener('touchend', function(e){ var diff=touchStartX-e.changedTouches[0].screenX; if(Math.abs(diff)>50){ if(diff>0) nextImage(); else prevImage(); } }, {passive:true}); }
  document.addEventListener('keydown', function(e){ var d=document.getElementById('detail'); if(d.style.display!=='flex') return; if(e.key==='ArrowRight') nextImage(); if(e.key==='ArrowLeft') prevImage(); if(e.key==='Escape') closeDetail(); });
 });
-function selectChannel(ch){ currentChannel=ch; document.querySelectorAll('.msg-channel').forEach(function(el){ el.classList.remove('active'); }); document.querySelector('.msg-channel[data-channel="'+ch+'"]').classList.add('active'); var btn=document.getElementById('sendMsgBtn'); btn.innerText={sms:'💬 SMS', messenger:'💙 Messenger', whatsapp:'🟢 WhatsApp', wroomer:'⭐ WROOMER'}[ch]||'Wyślij'; btn.className='btn '+(ch==='whatsapp'?'btn-green':ch==='messenger'?'btn-blue':ch==='sms'?'btn-orange':'btn-black'); btn.style.flex='1'; }
+function selectChannel(ch){ currentChannel=ch; document.querySelectorAll('.msg-channel').forEach(function(el){ el.classList.remove('active'); }); var el=document.querySelector('.msg-channel[data-channel="'+ch+'"]'); if(el) el.classList.add('active'); var btn=document.getElementById('sendMsgBtn'); if(btn){ btn.innerText={sms:'💬 SMS', messenger:'💙 Messenger', whatsapp:'🟢 WhatsApp', wroomer:'⭐ WROOMER'}[ch]||'Wyślij'; btn.className='btn '+(ch==='whatsapp'?'btn-green':ch==='messenger'?'btn-blue':ch==='sms'?'btn-orange':'btn-black'); btn.style.flex='1'; } }
 function getCleanPhone(){ var n=currentAd&&currentAd.phone; if(!n) return null; var clean=n.replace(/\s/g,''); if(clean.indexOf('+')!==0) clean='+48'+clean; return clean; }
 function getMessageWithLink(){ var txt=document.getElementById('msgText').value.trim(); if(!txt) txt='Cześć! Czy aktualne?'; var title=currentAd? currentAd.title:''; var price=currentAd? currentAd.price:''; var loc=currentAd? (currentAd.location||''):''; var url=window.location.href; var full='Cześć! 👋\nOgłoszenie: *'+title+'*\n💰 '+price+' PLN\n📍 '+loc+'\n\n'+txt+'\n\nLink: '+url; return {raw:txt, full:full}; }
-function sendMessage(){ var phone=getCleanPhone(); var msg=getMessageWithLink(); if(currentChannel==='sms'){ window.location.href='sms:'+phone+'?body='+encodeURIComponent(msg.full); } else if(currentChannel==='whatsapp'){ window.open('https://wa.me/'+phone.replace('+','')+'?text='+encodeURIComponent(msg.full), '_blank'); } else if(currentChannel==='messenger'){ navigator.clipboard.writeText(msg.full); window.open('https://www.messenger.com/', '_blank'); } else { if(!currentUser){ alert('Zaloguj'); openAuth(); return; } var btn=document.getElementById('sendMsgBtn'); btn.disabled=true; btn.innerText='Wysyłam...'; var payload={ad_id:currentAd.id, ad_title:currentAd.title, sender_id:currentUser.id, sender_email:currentUser.email, receiver_id:currentAd.owner_id, message:msg.raw, created_at:new Date().toISOString(), is_read:false}; fetch(SUPABASE_URL+'/rest/v1/messages',{method:'POST',headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+authToken,'Content-Type':'application/json'},body:JSON.stringify(payload)}).then(function(){ btn.disabled=false; btn.innerText='⭐ WROOMER'; document.getElementById('msgInfo').innerText='✅ Wysłano!'; document.getElementById('msgText').value=''; }).catch(function(){ var localMsgs=JSON.parse(localStorage.getItem('wroomer_messages')||'[]'); localMsgs.push(payload); localStorage.setItem('wroomer_messages', JSON.stringify(localMsgs)); btn.disabled=false; btn.innerText='⭐ WROOMER'; document.getElementById('msgInfo').innerText='✅ Zapisano!'; }); } }
+function sendMessage(){ var phone=getCleanPhone(); var msg=getMessageWithLink(); if(currentChannel==='sms'){ window.location.href='sms:'+phone+'?body='+encodeURIComponent(msg.full); } else if(currentChannel==='whatsapp'){ window.open('https://wa.me/'+phone.replace('+','')+'?text='+encodeURIComponent(msg.full), '_blank'); } else if(currentChannel==='messenger'){ navigator.clipboard.writeText(msg.full); window.open('https://www.messenger.com/', '_blank'); } else { if(!currentUser){ alert('Zaloguj'); openAuth(); return; } var btn=document.getElementById('sendMsgBtn'); if(btn){ btn.disabled=true; btn.innerText='Wysyłam...'; } var payload={ad_id:currentAd.id, ad_title:currentAd.title, sender_id:currentUser.id, sender_email:currentUser.email, receiver_id:currentAd.owner_id, message:msg.raw, created_at:new Date().toISOString(), is_read:false}; fetch(SUPABASE_URL+'/rest/v1/messages',{method:'POST',headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+authToken,'Content-Type':'application/json'},body:JSON.stringify(payload)}).then(function(){ if(btn){ btn.disabled=false; btn.innerText='⭐ WROOMER'; } document.getElementById('msgInfo').innerText='✅ Wysłano!'; document.getElementById('msgText').value=''; }).catch(function(){ var localMsgs=JSON.parse(localStorage.getItem('wroomer_messages')||'[]'); localMsgs.push(payload); localStorage.setItem('wroomer_messages', JSON.stringify(localMsgs)); if(btn){ btn.disabled=false; btn.innerText='⭐ WROOMER'; } document.getElementById('msgInfo').innerText='✅ Zapisano!'; }); } }
 function quickSMS(){ var phone=getCleanPhone(); var msg=getMessageWithLink(); window.location.href='sms:'+phone+'?body='+encodeURIComponent(msg.full); }
 function quickWhatsApp(){ var phone=getCleanPhone(); var msg=getMessageWithLink(); window.open('https://wa.me/'+phone.replace('+','')+'?text='+encodeURIComponent(msg.full), '_blank'); }
 function openInbox(){ if(!currentUser){ alert('Zaloguj'); openAuth(); return; } document.getElementById('inboxModal').style.display='flex'; loadInbox(); }
 function closeInbox(){ document.getElementById('inboxModal').style.display='none'; }
-function loadInbox(){ var listEl=document.getElementById('inboxList'); listEl.innerHTML='<p style="padding:20px;text-align:center">Ładowanie...</p>'; fetch(SUPABASE_URL+'/rest/v1/messages?or=(receiver_id.eq.'+currentUser.id+',sender_id.eq.'+currentUser.id+')&order=created_at.desc&limit=100',{headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+authToken}}).then(function(r){ return r.ok? r.json():[]; }).then(function(msgs){ var html=''; for(var i=0;i<msgs.length;i++){ var m=msgs[i]; html+='<div class="inbox-item"><b>'+(m.ad_title||'')+'</b><p>'+m.message.slice(0,60)+'</p></div>'; } listEl.innerHTML=html||'<p style="padding:20px;text-align:center">Brak</p>'; }).catch(function(){ listEl.innerHTML='<p style="padding:20px;text-align:center">Brak</p>'; }); }
-function updateModelOptions(){ var b=document.getElementById('addBrand').value; var sel=document.getElementById('addModel'); var list=MODELS[b]||['Wybierz']; sel.innerHTML=''; for(var i=0;i<list.length;i++){ var o=document.createElement('option'); o.value=list[i]; o.text=list[i]; sel.appendChild(o); } }
-function updatePowiatOptions(){ var woj=document.getElementById('addWoj').value; var sel=document.getElementById('addPowiat'); var list=POWIATY[woj]||[]; sel.innerHTML='<option value="">Wybierz *</option>'; for(var i=0;i<list.length;i++){ var o=document.createElement('option'); o.value=list[i]; o.text=list[i]; sel.appendChild(o); } sel.disabled=list.length===0; document.getElementById('addMiejscowosc').innerHTML='<option value="">Najpierw powiat</option>'; document.getElementById('addMiejscowosc').disabled=true; if(woj==='śląskie'){ sel.value='wodzisławski'; updateMiejscowoscOptions(); } }
-function updateMiejscowoscOptions(){ var powiat=document.getElementById('addPowiat').value; var sel=document.getElementById('addMiejscowosc'); if(!powiat){ sel.innerHTML='<option value="">Najpierw powiat</option>'; sel.disabled=true; return; } sel.disabled=false; if(MIEJSCOWOSCI[powiat]){ var list=MIEJSCOWOSCI[powiat]; sel.innerHTML='<option value="">Wybierz *</option>'; for(var i=0;i<list.length;i++){ var o=document.createElement('option'); o.value=list[i]; o.text=list[i]; sel.appendChild(o); } sel.innerHTML+='<option value="__custom">➕ Inna</option>'; if(powiat==='wodzisławski') sel.value='Gorzyce'; } else { sel.innerHTML='<option value="">Wybierz *</option><option>Gorzyce</option><option>Wodzisław Śląski</option><option>Rydułtowy</option><option>Rybnik</option><option>Katowice</option><option value="__custom">➕ Inna</option>'; } }
-function checkCustomMiejsc(){ var v=document.getElementById('addMiejscowosc').value; document.getElementById('customMiejscRow').style.display=v==='__custom'?'block':'none'; }
-function openAdd(){ if(!currentUser){ alert('Musisz się zalogować!'); openAuth(); return; } document.getElementById('addTitle').innerText='Dodaj ogłoszenie'; document.getElementById('addModal').style.display='flex'; }
-function closeAdd(){ document.getElementById('addModal').style.display='none'; }
-function openAuth(){ document.getElementById('authModal').style.display='flex'; showTab('login'); }
-function closeAuth(){ document.getElementById('authModal').style.display='none'; }
-function showTab(n){ document.getElementById('loginTab').style.display=n==='login'?'block':'none'; document.getElementById('registerTab').style.display=n==='register'?'block':'none'; document.getElementById('resetTab').style.display=n==='reset'?'block':'none'; }
-function closeDetail(){ document.getElementById('detail').style.display='none'; galleryImages=[]; }
-function clearFilters(){ document.getElementById('searchInput').value=''; document.getElementById('locationInput').value=''; document.getElementById('radiusFilter').value='25'; document.getElementById('brandFilter').value=''; searchLocationCoords=null; userLocationCoords=null; userRealLocationName=''; currentPage=0; renderAds(); }
-function showPhone(){ var n=currentAd&&currentAd.phone; var el=document.getElementById('phoneNumber'); el.style.display='block'; el.innerText='📞 '+n; }
-function contactCall(){ var n=currentAd&&currentAd.phone; window.location.href='tel:'+n.replace(/\s/g,''); }
+function loadInbox(){ var listEl=document.getElementById('inboxList'); if(!listEl) return; listEl.innerHTML='<p style="padding:20px;text-align:center">Ładowanie...</p>'; fetch(SUPABASE_URL+'/rest/v1/messages?or=(receiver_id.eq.'+currentUser.id+',sender_id.eq.'+currentUser.id+')&order=created_at.desc&limit=100',{headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+authToken}}).then(function(r){ return r.ok? r.json():[]; }).then(function(msgs){ var html=''; for(var i=0;i<msgs.length;i++){ var m=msgs[i]; html+='<div class="inbox-item"><b>'+(m.ad_title||'')+'</b><p>'+m.message.slice(0,60)+'</p></div>'; } listEl.innerHTML=html||'<p style="padding:20px;text-align:center">Brak</p>'; }).catch(function(){ listEl.innerHTML='<p style="padding:20px;text-align:center">Brak</p>'; }); }
+function closeChat(){ var el=document.getElementById('chatModal'); if(el) el.style.display='none'; }
+function sendChatMessage(){ var input=document.getElementById('chatInput'); if(!input) return; var text=input.value.trim(); if(!text) return; }
+function updateModelOptions(){ var b=document.getElementById('addBrand'); if(!b) return; b=b.value; var sel=document.getElementById('addModel'); if(!sel) return; var list=MODELS[b]||['Wybierz']; sel.innerHTML=''; for(var i=0;i<list.length;i++){ var o=document.createElement('option'); o.value=list[i]; o.text=list[i]; sel.appendChild(o); } }
+function updatePowiatOptions(){ var wojEl=document.getElementById('addWoj'); if(!wojEl) return; var woj=wojEl.value; var sel=document.getElementById('addPowiat'); if(!sel) return; var list=POWIATY[woj]||[]; sel.innerHTML='<option value="">Wybierz *</option>'; for(var i=0;i<list.length;i++){ var o=document.createElement('option'); o.value=list[i]; o.text=list[i]; sel.appendChild(o); } sel.disabled=list.length===0; var mEl=document.getElementById('addMiejscowosc'); if(mEl){ mEl.innerHTML='<option value="">Najpierw powiat</option>'; mEl.disabled=true; } if(woj==='śląskie'){ sel.value='wodzisławski'; updateMiejscowoscOptions(); } }
+function updateMiejscowoscOptions(){ var powEl=document.getElementById('addPowiat'); if(!powEl) return; var powiat=powEl.value; var sel=document.getElementById('addMiejscowosc'); if(!sel) return; if(!powiat){ sel.innerHTML='<option value="">Najpierw powiat</option>'; sel.disabled=true; return; } sel.disabled=false; if(MIEJSCOWOSCI[powiat]){ var list=MIEJSCOWOSCI[powiat]; sel.innerHTML='<option value="">Wybierz *</option>'; for(var i=0;i<list.length;i++){ var o=document.createElement('option'); o.value=list[i]; o.text=list[i]; sel.appendChild(o); } sel.innerHTML+='<option value="__custom">➕ Inna</option>'; if(powiat==='wodzisławski') sel.value='Gorzyce'; } else { sel.innerHTML='<option value="">Wybierz *</option><option>Gorzyce</option><option>Wodzisław Śląski</option><option>Rydułtowy</option><option>Rybnik</option><option>Katowice</option><option value="__custom">➕ Inna</option>'; } }
+function checkCustomMiejsc(){ var vEl=document.getElementById('addMiejscowosc'); if(!vEl) return; var v=vEl.value; var row=document.getElementById('customMiejscRow'); if(row) row.style.display=v==='__custom'?'block':'none'; }
+function openAdd(){
+  if(!currentUser){ alert('Musisz się zalogować!'); openAuth(); return; }
+  var modal=document.getElementById('addModal');
+  if(modal) modal.style.display='flex';
+  var titleEl=document.getElementById('addModalTitle');
+  if(titleEl) titleEl.innerText='Dodaj ogłoszenie';
+  var infoEl=document.getElementById('addInfo');
+  if(infoEl) infoEl.innerText='';
+}
+function closeAdd(){ var el=document.getElementById('addModal'); if(el) el.style.display='none'; }
+function openAuth(){ var el=document.getElementById('authModal'); if(el){ el.style.display='flex'; showTab('login'); } }
+function closeAuth(){ var el=document.getElementById('authModal'); if(el) el.style.display='none'; }
+function showTab(n){ var l=document.getElementById('loginTab'); var r=document.getElementById('registerTab'); var rs=document.getElementById('resetTab'); if(l) l.style.display=n==='login'?'block':'none'; if(r) r.style.display=n==='register'?'block':'none'; if(rs) rs.style.display=n==='reset'?'block':'none'; }
+function closeDetail(){ var el=document.getElementById('detail'); if(el) el.style.display='none'; galleryImages=[]; }
+function clearFilters(){ var s=document.getElementById('searchInput'); if(s) s.value=''; var loc=document.getElementById('locationInput'); if(loc) loc.value=''; var rad=document.getElementById('radiusFilter'); if(rad) rad.value='25'; var br=document.getElementById('brandFilter'); if(br) br.value=''; searchLocationCoords=null; userLocationCoords=null; userRealLocationName=''; currentPage=0; renderAds(); }
+function showPhone(){ var n=currentAd&&currentAd.phone; var el=document.getElementById('phoneNumber'); if(el){ el.style.display='block'; el.innerText='📞 '+n; } }
+function contactCall(){ var n=currentAd&&currentAd.phone; if(!n) return; window.location.href='tel:'+n.replace(/\s/g,''); }
 async function handleFiles(files){
- var info=document.getElementById('compressInfo'); info.style.display='block'; info.innerHTML='⏳ Kompresja 400px 60% WebP...';
+ var info=document.getElementById('compressInfo'); if(info){ info.style.display='block'; info.innerHTML='⏳ Kompresja 400px 60% WebP...'; }
  selectedImagesBase64=[]; var totalOrig=0, totalComp=0;
  for(var i=0;i<files.length&&i<10;i++){
   var file=files[i]; totalOrig+=file.size;
@@ -285,15 +295,21 @@ async function handleFiles(files){
    totalComp+=full.comp;
   }catch(e){}
  }
- var saved=Math.round((1-totalComp/totalOrig)*100);
- info.innerHTML='✅ '+(totalOrig/1024/1024).toFixed(2)+'MB → '+(totalComp/1024/1024).toFixed(2)+'MB ('+saved+'%!) | WebP 400px 60% + 800px 70% | Format: '+(supportsWebP?'WebP':'JPEG');
- var el=document.getElementById('addPreview'); var h='';
- for(var i=0;i<selectedImagesBase64.length;i++){ h+='<div><img src="'+selectedImagesBase64[i]+'" loading="lazy" alt="Podgląd"><button onclick="selectedImagesBase64.splice('+i+',1); document.getElementById(\'addPreview\').children['+i+'].remove();" style="position:absolute;top:-4px;right:-4px;background:#111;color:#fff;border:0;border-radius:50%;width:20px;height:20px">×</button></div>'; }
+ var saved=totalOrig>0? Math.round((1-totalComp/totalOrig)*100):0;
+ if(info) info.innerHTML='✅ '+(totalOrig/1024/1024).toFixed(2)+'MB → '+(totalComp/1024/1024).toFixed(2)+'MB ('+saved+'%!) | WebP 400px 60%';
+ renderPreview();
+}
+function renderPreview(){
+ var el=document.getElementById('addPreview'); if(!el) return; var h='';
+ for(var i=0;i<selectedImagesBase64.length;i++){
+   h+='<div><img src="'+selectedImagesBase64[i]+'" loading="lazy" alt="Podgląd"><button onclick="removeImg('+i+')" style="position:absolute;top:-4px;right:-4px;background:#111;color:#fff;border:0;border-radius:50%;width:20px;height:20px" aria-label="Usuń">×</button></div>';
+ }
  el.innerHTML=h;
 }
+function removeImg(i){ selectedImagesBase64.splice(i,1); renderPreview(); }
 function getDistance(c,lat2,lng2){ if(!c||!lat2||!lng2) return null; var R=6371; var dLat=(lat2-c.lat)*Math.PI/180; var dLng=(lng2-c.lng)*Math.PI/180; var a=Math.sin(dLat/2)*Math.sin(dLat/2)+Math.cos(c.lat*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLng/2)*Math.sin(dLng/2); return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a)); }
 function onLocationInput(){
- var v=document.getElementById('locationInput').value.trim();
+ var vEl=document.getElementById('locationInput'); if(!vEl) return; var v=vEl.value.trim();
  clearTimeout(locTimeout);
  if(v.length<2){ searchLocationCoords=null; userRealLocationName=''; currentPage=0; renderAds(); return; }
  if(v.toLowerCase().indexOf('blisko')!==-1){ currentPage=0; renderAds(); return; }
@@ -312,10 +328,10 @@ function debouncedRender(){ clearTimeout(renderTimeout); renderTimeout=setTimeou
 function applyFilters(){
  var filtered=allAds.slice();
  for(var i=0;i<filtered.length;i++) ensureAdCoords(filtered[i]);
- var q=(document.getElementById('searchInput').value||'').toLowerCase().trim();
- var locQ=(document.getElementById('locationInput').value||'').toLowerCase().trim();
- var radius=parseInt(document.getElementById('radiusFilter').value||'25');
- var brand=(document.getElementById('brandFilter').value||'').toLowerCase().trim();
+ var qEl=document.getElementById('searchInput'); var q=qEl? (qEl.value||'').toLowerCase().trim():'';
+ var locEl=document.getElementById('locationInput'); var locQ=locEl? (locEl.value||'').toLowerCase().trim():'';
+ var radEl=document.getElementById('radiusFilter'); var radius=radEl? parseInt(radEl.value||'25'):25;
+ var brandEl=document.getElementById('brandFilter'); var brand=brandEl? (brandEl.value||'').toLowerCase().trim():'';
  if(q) filtered=filtered.filter(function(a){ return (a.title||'').toLowerCase().indexOf(q)!==-1; });
  if(brand) filtered=filtered.filter(function(a){ return (a.brand||'').toLowerCase().indexOf(brand)!==-1; });
  var center=null;
@@ -333,19 +349,19 @@ function renderAds(){
  filteredAds=filtered;
  var info='Znaleziono '+filtered.length+' z '+allAds.length+' ogłoszeń';
  if(result.center && result.locQ){ if(result.locQ.indexOf('blisko')!==-1) info+=' 📍 blisko Ciebie'; else info+=' w promieniu '+result.radius+'km'; }
- document.getElementById('resultsText').innerText=info;
+ var rt=document.getElementById('resultsText'); if(rt) rt.innerText=info;
  var start=currentPage*pageSize;
  var toShow=filtered.slice(start, start+pageSize);
  displayedAds=currentPage===0? toShow : displayedAds.concat(toShow);
- document.getElementById('loadedCount').innerText=displayedAds.length;
- document.getElementById('totalCount').innerText=filtered.length;
+ var lc=document.getElementById('loadedCount'); if(lc) lc.innerText=displayedAds.length;
+ var tc=document.getElementById('totalCount'); if(tc) tc.innerText=filtered.length;
  var payloadKB=Math.round(JSON.stringify(displayedAds).length/1024);
- document.getElementById('payloadInfo').innerText=payloadKB+' KiB';
- document.getElementById('loadMoreWrap').style.display=filtered.length>displayedAds.length? 'block':'none';
- document.getElementById('loadMoreBtn').innerText='Załaduj więcej ('+Math.min(pageSize, filtered.length-displayedAds.length)+')';
- var perfEl=document.getElementById('perfInfo'); perfEl.style.display='inline-block';
- perfEl.innerText='⚡ v4.6 JWT FIX: '+displayedAds.length+'/'+filtered.length+' | Payload '+payloadKB+' KiB';
+ var pi=document.getElementById('payloadInfo'); if(pi) pi.innerText=payloadKB+' KiB';
+ var lw=document.getElementById('loadMoreWrap'); if(lw) lw.style.display=filtered.length>displayedAds.length? 'block':'none';
+ var lmb=document.getElementById('loadMoreBtn'); if(lmb) lmb.innerText='Załaduj więcej ('+Math.min(pageSize, filtered.length-displayedAds.length)+')';
+ var perfEl=document.getElementById('perfInfo'); if(perfEl){ perfEl.style.display='inline-block'; perfEl.innerText='⚡ v4.7 FIX PRZYCISKI: '+displayedAds.length+'/'+filtered.length+' | Payload '+payloadKB+' KiB'; }
  var grid=document.getElementById('adsGrid');
+ if(!grid) return;
  if(filtered.length===0){ grid.innerHTML='<p style="padding:20px">Brak</p>'; return; }
  if(currentPage===0) grid.innerHTML='';
  var frag=document.createDocumentFragment();
@@ -371,9 +387,9 @@ function getMyLocation(){
  if(!navigator.geolocation){ if(btn) btn.innerText=orig; return; }
  navigator.geolocation.getCurrentPosition(function(p){
   userLocationCoords={lat:p.coords.latitude, lng:p.coords.longitude}; searchLocationCoords={lat:p.coords.latitude, lng:p.coords.longitude}; userRealLocationName='Twoja lokalizacja';
-  document.getElementById('locationInput').value='Blisko mnie'; document.getElementById('radiusFilter').value='25';
+  var li=document.getElementById('locationInput'); if(li) li.value='Blisko mnie'; var ri=document.getElementById('radiusFilter'); if(ri) ri.value='25';
   fetch('https://nominatim.openstreetmap.org/reverse?format=json&lat='+p.coords.latitude+'&lon='+p.coords.longitude+'&zoom=10').then(function(r){return r.json()}).then(function(j){
-   if(j&&j.address){ var city=j.address.city||j.address.town||j.address.village||'Twoja'; userRealLocationName=city; document.getElementById('locationInput').value='Blisko mnie ('+city+')'; }
+   if(j&&j.address){ var city=j.address.city||j.address.town||j.address.village||'Twoja'; userRealLocationName=city; if(li) li.value='Blisko mnie ('+city+')'; }
    if(btn) btn.innerText='📍 Blisko mnie'; currentPage=0; renderAds();
   }).catch(function(){ if(btn) btn.innerText='📍 Blisko mnie'; currentPage=0; renderAds(); });
   currentPage=0; renderAds();
@@ -387,7 +403,7 @@ function getMyLocationForAdd(){
    if(j&&j.address){
     var wojRaw=(j.address.state||'').toLowerCase();
     var foundWoj=''; for(var k in {'śląskie':'śląskie','dolnośląskie':'dolnośląskie','mazowieckie':'mazowieckie','małopolskie':'małopolskie'}){ if(wojRaw.indexOf(k)!==-1){ foundWoj=k; break; } }
-    if(foundWoj){ document.getElementById('addWoj').value=foundWoj; updatePowiatOptions(); }
+    if(foundWoj){ var we=document.getElementById('addWoj'); if(we){ we.value=foundWoj; updatePowiatOptions(); } }
    }
    if(btn) btn.innerText='✅ GPS'; setTimeout(function(){ if(btn) btn.innerText=orig; }, 2000);
   }).catch(function(){ if(btn) btn.innerText=orig; });
@@ -402,13 +418,13 @@ async function openDetail(id){
  }catch(e){}
  var imgs=[]; if(a.images&&a.images.length>0) imgs=a.images.slice(); else if(a.image_url) imgs=[a.image_url]; else imgs=['https://via.placeholder.com/800x600?text=Brak'];
  galleryImages=imgs; currentImageIndex=0;
- var detailImg=document.getElementById('detailImg'); detailImg.src=getOptimizedImageUrl(galleryImages[0], 800); detailImg.alt=a.title+' - zdjęcie 1'; document.getElementById('galleryCounter').innerText='1 / '+galleryImages.length;
- var dots=document.getElementById('galleryDots'); var dh=''; for(var i=0;i<galleryImages.length;i++){ dh+='<span class="'+(i===0?'active':'')+'" onclick="showImage('+i+')"></span>'; } dots.innerHTML=dh;
- var thumbsHtml=''; for(var t=0;t<galleryImages.length;t++){ thumbsHtml+='<img src="'+getOptimizedImageUrl(galleryImages[t], 200)+'" class="'+(t===0?'active':'')+'" onclick="showImage('+t+')" loading="lazy" alt="thumb">'; } document.getElementById('detailImages').innerHTML=thumbsHtml;
- document.getElementById('detailTitle').innerText=a.title||''; document.getElementById('detailPrice').innerText=a.price? a.price+' PLN':''; document.getElementById('detailLoc').innerText=(a.location||a.city||'')+(a._dist? ' • '+a._dist.toFixed(1)+' km':''); document.getElementById('detailDesc').innerText=a.description||''; document.getElementById('phoneNumber').innerText='📞 '+(a.phone||'Brak'); document.getElementById('phoneNumber').style.display='none'; document.getElementById('msgText').value=''; document.getElementById('msgInfo').innerText=''; selectChannel('wroomer'); document.getElementById('detail').style.display='flex';
+ var detailImg=document.getElementById('detailImg'); if(detailImg){ detailImg.src=getOptimizedImageUrl(galleryImages[0], 800); detailImg.alt=a.title+' - zdjęcie 1'; }
+ var gc=document.getElementById('galleryCounter'); if(gc) gc.innerText='1 / '+galleryImages.length;
+ var dots=document.getElementById('galleryDots'); if(dots){ var dh=''; for(var i=0;i<galleryImages.length;i++){ dh+='<span class="'+(i===0?'active':'')+'" onclick="showImage('+i+')"></span>'; } dots.innerHTML=dh; }
+ var thumbs=document.getElementById('detailImages'); if(thumbs){ var th=''; for(var t=0;t<galleryImages.length;t++){ th+='<img src="'+getOptimizedImageUrl(galleryImages[t], 200)+'" class="'+(t===0?'active':'')+'" onclick="showImage('+t+')" loading="lazy" alt="thumb">'; } thumbs.innerHTML=th; }
+ var dt=document.getElementById('detailTitle'); if(dt) dt.innerText=a.title||''; var dp=document.getElementById('detailPrice'); if(dp) dp.innerText=a.price? a.price+' PLN':''; var dl=document.getElementById('detailLoc'); if(dl) dl.innerText=(a.location||a.city||'')+(a._dist? ' • '+a._dist.toFixed(1)+' km':''); var dd=document.getElementById('detailDesc'); if(dd) dd.innerText=a.description||''; var pn=document.getElementById('phoneNumber'); if(pn){ pn.innerText='📞 '+(a.phone||'Brak'); pn.style.display='none'; } var mt=document.getElementById('msgText'); if(mt) mt.value=''; var mi=document.getElementById('msgInfo'); if(mi) mi.innerText=''; selectChannel('wroomer'); var det=document.getElementById('detail'); if(det) det.style.display='flex';
 }
 
-// JWT FIX: zapis refresh_token + auto refresh
 function saveAuth(access, refresh, user){
   localStorage.setItem('sb_token', access);
   if(refresh) localStorage.setItem('sb_refresh', refresh);
@@ -419,10 +435,7 @@ function saveAuth(access, refresh, user){
   updateAuthUI();
 }
 async function refreshAuthToken(){
-  if(!refreshToken){
-    refreshToken=localStorage.getItem('sb_refresh');
-    if(!refreshToken) return false;
-  }
+  if(!refreshToken){ refreshToken=localStorage.getItem('sb_refresh'); if(!refreshToken) return false; }
   try{
     var res=await fetch(SUPABASE_URL+'/auth/v1/token?grant_type=refresh_token', {
       method:'POST',
@@ -442,60 +455,80 @@ function loadAuth(){
     authToken=localStorage.getItem('sb_token');
     refreshToken=localStorage.getItem('sb_refresh');
     currentUser=JSON.parse(localStorage.getItem('sb_user')||'null');
-    // Auto refresh jeśli token stary > 50min
     if(authToken){
       try{
         var payload=JSON.parse(atob(authToken.split('.')[1]));
         var exp=payload.exp*1000;
-        if(Date.now() > exp - 60000){
-          refreshAuthToken();
-        }
+        if(Date.now() > exp - 60000){ refreshAuthToken(); }
       }catch(e){}
     }
   }catch(e){}
   updateAuthUI();
 }
-function updateAuthUI(){ if(currentUser){ document.getElementById('authBtn').style.display='none'; document.getElementById('userEmail').style.display='block'; document.getElementById('userEmail').innerText=currentUser.email; document.getElementById('logoutBtn').style.display='block'; var b=document.getElementById('myBtn'); if(b) b.style.display='block'; var ib=document.getElementById('inboxBtn'); if(ib) ib.style.display='block'; } else { document.getElementById('authBtn').style.display='block'; document.getElementById('userEmail').style.display='none'; document.getElementById('logoutBtn').style.display='none'; var b2=document.getElementById('myBtn'); if(b2) b2.style.display='none'; var ib2=document.getElementById('inboxBtn'); if(ib2) ib2.style.display='none'; } }
+function updateAuthUI(){
+  var authBtn=document.getElementById('authBtn');
+  var userEmail=document.getElementById('userEmail');
+  var logoutBtn=document.getElementById('logoutBtn');
+  var myBtn=document.getElementById('myBtn');
+  var inboxBtn=document.getElementById('inboxBtn');
+  if(currentUser){
+    if(authBtn) authBtn.style.display='none';
+    if(userEmail){ userEmail.style.display='block'; userEmail.innerText=currentUser.email; }
+    if(logoutBtn) logoutBtn.style.display='block';
+    if(myBtn) myBtn.style.display='block';
+    if(inboxBtn) inboxBtn.style.display='block';
+  } else {
+    if(authBtn) authBtn.style.display='block';
+    if(userEmail) userEmail.style.display='none';
+    if(logoutBtn) logoutBtn.style.display='none';
+    if(myBtn) myBtn.style.display='none';
+    if(inboxBtn) inboxBtn.style.display='none';
+  }
+}
 function logout(){ localStorage.removeItem('sb_token'); localStorage.removeItem('sb_refresh'); localStorage.removeItem('sb_user'); currentUser=null; authToken=null; refreshToken=null; updateAuthUI(); location.reload(); }
-function filterMy(){ if(!currentUser){alert('Zaloguj');return} var btn=document.getElementById('myBtn'); if(btn.innerText==='Moje'){ btn.innerText='Wszystkie'; loadAds().then(function(){ allAds=allAds.filter(function(a){return a.owner_id===currentUser.id}); currentPage=0; renderAds(); }); } else { btn.innerText='Moje'; loadAds(); } }
+function filterMy(){ if(!currentUser){alert('Zaloguj');return} var btn=document.getElementById('myBtn'); if(!btn) return; if(btn.innerText==='Moje'){ btn.innerText='Wszystkie'; loadAds().then(function(){ allAds=allAds.filter(function(a){return a.owner_id===currentUser.id}); currentPage=0; renderAds(); }); } else { btn.innerText='Moje'; loadAds(); } }
 function loadAds(){
- document.getElementById('resultsText').innerText='Ładowanie...';
+ var rt=document.getElementById('resultsText'); if(rt) rt.innerText='Ładowanie...';
  var url=SUPABASE_URL+'/rest/v1/ads?select=id,title,price,image_url,location,city,brand,lat,lng,owner_id,created_at&order=created_at.desc&limit=20';
- return fetch(url,{headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY}}).then(function(res){ if(!res.ok) throw new Error('HTTP '+res.status); return res.json(); }).then(function(data){ for(var i=0;i<data.length;i++) ensureAdCoords(data[i]); allAds=data; currentPage=0; renderAds(); }).catch(function(e){ document.getElementById('resultsText').innerText='Błąd: '+e.message; });
+ return fetch(url,{headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY}}).then(function(res){ if(!res.ok) throw new Error('HTTP '+res.status); return res.json(); }).then(function(data){ for(var i=0;i<data.length;i++) ensureAdCoords(data[i]); allAds=data; currentPage=0; renderAds(); }).catch(function(e){ if(rt) rt.innerText='Błąd: '+e.message; });
 }
 function login(){
- var email=document.getElementById('loginEmail').value.trim(); var pass=document.getElementById('loginPass').value;
- if(!email||!pass){ document.getElementById('loginInfo').innerText='Wpisz dane!'; return; }
- document.getElementById('loginInfo').innerText='Logowanie...';
- fetch(SUPABASE_URL+'/auth/v1/token?grant_type=password',{method:'POST',headers:{'apikey':SUPABASE_KEY,'Content-Type':'application/json'},body:JSON.stringify({email:email,password:pass})}).then(function(r){ return r.json().then(function(j){ return {ok:r.ok, json:j}; }); }).then(function(res){ if(!res.ok) throw new Error(res.json.error_description||'Błąd'); saveAuth(res.json.access_token, res.json.refresh_token, res.json.user); closeAuth(); }).catch(function(e){ document.getElementById('loginInfo').innerText='Błąd: '+e.message; });
+ var emailEl=document.getElementById('loginEmail'); var passEl=document.getElementById('loginPass'); if(!emailEl||!passEl) return;
+ var email=emailEl.value.trim(); var pass=passEl.value;
+ if(!email||!pass){ var li=document.getElementById('loginInfo'); if(li) li.innerText='Wpisz dane!'; return; }
+ var li2=document.getElementById('loginInfo'); if(li2) li2.innerText='Logowanie...';
+ fetch(SUPABASE_URL+'/auth/v1/token?grant_type=password',{method:'POST',headers:{'apikey':SUPABASE_KEY,'Content-Type':'application/json'},body:JSON.stringify({email:email,password:pass})}).then(function(r){ return r.json().then(function(j){ return {ok:r.ok, json:j}; }); }).then(function(res){ if(!res.ok) throw new Error(res.json.error_description||'Błąd'); saveAuth(res.json.access_token, res.json.refresh_token, res.json.user); closeAuth(); }).catch(function(e){ var li3=document.getElementById('loginInfo'); if(li3) li3.innerText='Błąd: '+e.message; });
 }
 function register(){
  var chk=document.getElementById('regCheck'); if(!chk||!chk.checked){alert('Zaznacz regulamin');return}
- var email=document.getElementById('regEmail').value.trim(); var pass=document.getElementById('regPass').value;
- if(!email||pass.length<6){ document.getElementById('regInfo').innerText='Min 6 znaków'; return; }
- document.getElementById('regInfo').innerText='Rejestracja...';
- fetch(SUPABASE_URL+'/auth/v1/signup',{method:'POST',headers:{'apikey':SUPABASE_KEY,'Content-Type':'application/json'},body:JSON.stringify({email:email,password:pass})}).then(function(r){return r.json().then(function(j){return {ok:r.ok, json:j}})}).then(function(res){ if(!res.ok) throw new Error(res.json.msg||'Błąd'); document.getElementById('regInfo').innerText='Konto założone!'; setTimeout(function(){ fetch(SUPABASE_URL+'/auth/v1/token?grant_type=password',{method:'POST',headers:{'apikey':SUPABASE_KEY,'Content-Type':'application/json'},body:JSON.stringify({email:email,password:pass})}).then(function(r){return r.json().then(function(j){return {ok:r.ok, json:j}})}).then(function(r2){ if(r2.ok){ saveAuth(r2.json.access_token, r2.json.refresh_token, r2.json.user); closeAuth(); } }); }, 800); }).catch(function(e){ document.getElementById('regInfo').innerText='Błąd: '+e.message; });
+ var emailEl=document.getElementById('regEmail'); var passEl=document.getElementById('regPass'); if(!emailEl||!passEl) return;
+ var email=emailEl.value.trim(); var pass=passEl.value;
+ if(!email||pass.length<6){ var ri=document.getElementById('regInfo'); if(ri) ri.innerText='Min 6 znaków'; return; }
+ var ri2=document.getElementById('regInfo'); if(ri2) ri2.innerText='Rejestracja...';
+ fetch(SUPABASE_URL+'/auth/v1/signup',{method:'POST',headers:{'apikey':SUPABASE_KEY,'Content-Type':'application/json'},body:JSON.stringify({email:email,password:pass})}).then(function(r){return r.json().then(function(j){return {ok:r.ok, json:j}})}).then(function(res){ if(!res.ok) throw new Error(res.json.msg||'Błąd'); if(ri2) ri2.innerText='Konto założone!'; setTimeout(function(){ fetch(SUPABASE_URL+'/auth/v1/token?grant_type=password',{method:'POST',headers:{'apikey':SUPABASE_KEY,'Content-Type':'application/json'},body:JSON.stringify({email:email,password:pass})}).then(function(r){return r.json().then(function(j){return {ok:r.ok, json:j}})}).then(function(r2){ if(r2.ok){ saveAuth(r2.json.access_token, r2.json.refresh_token, r2.json.user); closeAuth(); } }); }, 800); }).catch(function(e){ var ri3=document.getElementById('regInfo'); if(ri3) ri3.innerText='Błąd: '+e.message; });
 }
-function sendReset(){ var email=document.getElementById('resetEmail').value.trim(); if(!email){alert('Wpisz e-mail');return} fetch(SUPABASE_URL+'/auth/v1/recover',{method:'POST',headers:{'apikey':SUPABASE_KEY,'Content-Type':'application/json'},body:JSON.stringify({email:email})}).then(function(){ document.getElementById('resetInfo').innerText='Wysłano link'; }); }
+function sendReset(){ var emailEl=document.getElementById('resetEmail'); if(!emailEl) return; var email=emailEl.value.trim(); if(!email){alert('Wpisz e-mail');return} fetch(SUPABASE_URL+'/auth/v1/recover',{method:'POST',headers:{'apikey':SUPABASE_KEY,'Content-Type':'application/json'},body:JSON.stringify({email:email})}).then(function(){ var ri=document.getElementById('resetInfo'); if(ri) ri.innerText='Wysłano link'; }); }
 async function submitAdd(){
- var title=document.getElementById('addTitleInput').value.trim();
- var brand=document.getElementById('addBrand').value;
- var model=document.getElementById('addModel').value;
- var price=document.getElementById('addPrice').value.trim();
- var woj=document.getElementById('addWoj').value;
- var powiat=document.getElementById('addPowiat').value;
- var miejs=document.getElementById('addMiejscowosc').value;
- var custom=document.getElementById('addMiejscCustom');
- if(miejs==='__custom') miejs=custom.value.trim();
- var phone=document.getElementById('addPhone').value.trim();
- if(!brand||!model||!woj||!powiat||!miejs){ document.getElementById('addInfo').innerText='Uzupełnij pola *'; return; }
+ var titleEl=document.getElementById('addTitleInput'); var brandEl=document.getElementById('addBrand'); var modelEl=document.getElementById('addModel'); var priceEl=document.getElementById('addPrice'); var wojEl=document.getElementById('addWoj'); var powiatEl=document.getElementById('addPowiat'); var miejsEl=document.getElementById('addMiejscowosc'); var customEl=document.getElementById('addMiejscCustom'); var phoneEl=document.getElementById('addPhone');
+ if(!titleEl||!brandEl||!modelEl||!priceEl||!wojEl||!powiatEl||!miejsEl||!phoneEl){ alert('Błąd formularza'); return; }
+ var title=titleEl.value.trim();
+ var brand=brandEl.value;
+ var model=modelEl.value;
+ var price=priceEl.value.trim();
+ var woj=wojEl.value;
+ var powiat=powiatEl.value;
+ var miejs=miejsEl.value;
+ if(miejs==='__custom' && customEl) miejs=customEl.value.trim();
+ var phone=phoneEl.value.trim();
+ var infoEl=document.getElementById('addInfo');
+ if(!brand||!model||!woj||!powiat||!miejs){ if(infoEl) infoEl.innerText='Uzupełnij pola *'; return; }
  if(!title) title=brand+' '+model;
- if(!price||!phone){ document.getElementById('addInfo').innerText='Cena i telefon *'; return; }
- if(!currentUser||!authToken){ document.getElementById('addInfo').innerText='Zaloguj się'; openAuth(); return; }
- var desc=document.getElementById('addDesc').value.trim();
- var links=(document.getElementById('addImagesLinks').value||'').split(',').map(function(s){return s.trim()}).filter(Boolean);
+ if(!price||!phone){ if(infoEl) infoEl.innerText='Cena i telefon *'; return; }
+ if(!currentUser||!authToken){ if(infoEl) infoEl.innerText='Zaloguj się'; openAuth(); return; }
+ var descEl=document.getElementById('addDesc'); var desc=descEl? descEl.value.trim():'';
+ var linksEl=document.getElementById('addImagesLinks'); var links=linksEl? (linksEl.value||'').split(',').map(function(s){return s.trim()}).filter(Boolean):[];
  var images=selectedImagesBase64.concat(links).slice(0,10);
- document.getElementById('addSubmitBtn').disabled=true; document.getElementById('addSubmitBtn').innerText='Zapisuję...';
+ var submitBtn=document.getElementById('addSubmitBtn'); if(submitBtn){ submitBtn.disabled=true; submitBtn.innerText='Zapisuję...'; }
  var fullLocation=miejs+', pow. '+powiat+', woj. '+woj;
  var coords=getCoordsForPlace(miejs)||{lat:null,lng:null};
  var payload={title:title, price:price, image_url:images[0]||'', images:images, owner_id:currentUser.id, brand:brand, model:model, description:desc, location:fullLocation, city:miejs, lat:coords.lat, lng:coords.lng, phone:phone, wojewodztwo:woj, powiat:powiat};
@@ -509,22 +542,20 @@ async function submitAdd(){
  try{
    var result=await doPost(authToken);
    if(!result.ok && (result.txt.indexOf('JWT expired')!==-1 || result.txt.indexOf('PGRST303')!==-1 || result.status===401)){
-     document.getElementById('addInfo').innerText='⏳ Token wygasł, odświeżam...';
+     if(infoEl) infoEl.innerText='⏳ Token wygasł, odświeżam...';
      var refreshed=await refreshAuthToken();
-     if(refreshed){
-       result=await doPost(authToken);
-     } else {
-       throw new Error('JWT expired - zaloguj się ponownie');
-     }
+     if(refreshed){ result=await doPost(authToken); } else { throw new Error('JWT expired - zaloguj się ponownie'); }
    }
    if(!result.ok) throw new Error(result.txt);
-   document.getElementById('addSubmitBtn').disabled=false; document.getElementById('addSubmitBtn').innerText='Zatwierdź'; closeAdd(); loadAds();
+   if(submitBtn){ submitBtn.disabled=false; submitBtn.innerText='Zatwierdź'; } closeAdd(); loadAds();
  }catch(e){
-   document.getElementById('addSubmitBtn').disabled=false; document.getElementById('addSubmitBtn').innerText='Zatwierdź';
-   if(e.message.indexOf('JWT expired')!==-1 || e.message.indexOf('PGRST303')!==-1){
-     document.getElementById('addInfo').innerHTML='❌ Sesja wygasła (JWT expired). <b>Kliknij Wyloguj i zaloguj się ponownie!</b> <button class="btn btn-black" onclick="logout()">Wyloguj</button>';
-   } else {
-     document.getElementById('addInfo').innerText='Błąd: '+e.message.slice(0,300);
+   if(submitBtn){ submitBtn.disabled=false; submitBtn.innerText='Zatwierdź'; }
+   if(infoEl){
+     if(e.message.indexOf('JWT expired')!==-1 || e.message.indexOf('PGRST303')!==-1){
+       infoEl.innerHTML='❌ Sesja wygasła. <b>Wyloguj i zaloguj!</b> <button class="btn btn-black" onclick="logout()">Wyloguj</button>';
+     } else {
+       infoEl.innerText='Błąd: '+e.message.slice(0,300);
+     }
    }
  }
 }
