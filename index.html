@@ -225,6 +225,30 @@ header{background:#fff;border-bottom:1px solid #e5e5e0;position:sticky;top:0;z-i
   .gallery-arrow{width:36px !important;height:36px !important;font-size:20px !important}
 }
 
+
+/* v6.4 PRO - gallery mobile fix */
+#detailImages{display:flex !important;gap:10px !important;flex-wrap:nowrap !important;overflow-x:auto !important;overflow-y:hidden !important;-webkit-overflow-scrolling:touch;padding:10px 2px 12px !important;margin-top:16px !important;background:rgba(255,255,255,0.04);border-radius:12px;border:1px solid rgba(255,255,255,0.08)}
+#detailImages img{width:80px !important;height:60px !important;flex:0 0 80px !important;border-radius:10px !important;border:2px solid rgba(255,255,255,0.15) !important;transition:all 0.2s;cursor:pointer}
+#detailImages img.active{border-color:#fff !important;transform:scale(1.05);box-shadow:0 2px 12px rgba(255,255,255,0.3)}
+#detailImages img:hover{border-color:rgba(255,255,255,0.5) !important}
+#detailImages::-webkit-scrollbar{height:6px}
+#detailImages::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.2);border-radius:3px}
+#detailImages::-webkit-scrollbar-track{background:rgba(255,255,255,0.05)}
+.gallery-wrap{position:relative;background:#0a0a0a !important;min-height:50vh !important;display:flex;align-items:center;justify-content:center}
+.gallery-wrap img{max-width:100% !important;max-height:75vh !important;object-fit:contain !important}
+.gallery-arrow{background:rgba(255,255,255,0.9) !important;width:44px !important;height:44px !important;border-radius:50% !important;display:flex !important;align-items:center;justify-content:center;box-shadow:0 2px 10px rgba(0,0,0,0.3)}
+.gallery-dots{display:flex !important;gap:8px !important;bottom:16px !important}
+.gallery-dots span{width:10px !important;height:10px !important;background:rgba(255,255,255,0.4) !important;cursor:pointer;transition:all 0.2s}
+.gallery-dots span.active{background:#fff !important;transform:scale(1.3)}
+.gallery-counter{background:rgba(0,0,0,0.8) !important;color:#fff !important;padding:6px 12px !important;border-radius:20px !important;font-size:12px !important}
+@media(max-width:640px){
+  .gallery-wrap{min-height:40vh !important}
+  .gallery-wrap img{max-height:55vh !important}
+  #detailImages img{width:68px !important;height:52px !important;flex:0 0 68px !important}
+  .gallery-arrow{width:38px !important;height:38px !important}
+  .detail-content{padding-bottom:30px !important}
+}
+
 </style>
 </head>
 <body>
@@ -280,6 +304,13 @@ header{background:#fff;border-bottom:1px solid #e5e5e0;position:sticky;top:0;z-i
 <div style="padding-right:40px"><h2 id="detailTitle" style="color:#fff"></h2><p id="detailPrice"></p><p id="detailLoc"></p></div>
 <p id="detailDesc"></p>
 <div id="detailImages" role="list" aria-label="Miniatury zdjęć"></div>
+<div id="ownerActions" style="display:none;margin-top:12px;padding:10px;background:rgba(255,255,255,0.08);border-radius:12px;border:1px solid rgba(255,255,255,0.15)">
+<p style="font-size:11px;font-weight:900;color:#fff;margin-bottom:8px">🔧 TWOJE OGŁOSZENIE</p>
+<div style="display:flex;gap:8px">
+<button class="btn btn-white" onclick="openEditCurrent()" style="flex:1;background:#fff;color:#111">✏️ Edytuj</button>
+<button class="btn btn-black" onclick="deleteCurrent()" style="flex:1;background:#cc0000;color:#fff;border-color:#cc0000">🗑️ Usuń</button>
+</div>
+</div>
 <div class="msg-box">
 <h3 style="color:#fff;font-size:14px">💬 Zostaw wiadomość</h3>
 <label class="visually-hidden" for="msgText">Treść wiadomości</label>
@@ -315,13 +346,14 @@ header{background:#fff;border-bottom:1px solid #e5e5e0;position:sticky;top:0;z-i
 
 <div id="addModal" onclick="if(event.target.id==='addModal')closeAdd()" role="dialog" aria-modal="true" aria-label="Dodaj ogłoszenie"><div class="add-box"><h2 id="addModalTitle" style="font-size:16px;color:#111">Dodaj ogłoszenie</h2>
 <div class="form-grid">
+<div class="full" style="background:#eef6ff;border:2px solid #0077ff;border-radius:12px;padding:10px"><label for="addPhone" style="color:#0055cc;font-size:13px">📞 Numer telefonu * (będzie widoczny w ogłoszeniu)</label><input id="addPhone" type="tel" placeholder="600 123 456" aria-label="Numer telefonu" style="font-size:16px;font-weight:700;padding:12px;border:2px solid #0077ff"></div>
 <div class="full"><label for="addTitleInput">Tytuł *</label><input id="addTitleInput" placeholder="np. BMW 3 Seria 2.0d" aria-label="Tytuł ogłoszenia"></div>
 <div><label for="addBrand">Marka *</label><select id="addBrand" onchange="updateModelOptions()" aria-label="Marka pojazdu"><option value="">Wybierz *</option><option>Abarth</option><option>Acura</option><option>Alfa Romeo</option><option>Aston Martin</option><option>Audi</option><option>Bentley</option><option>BMW</option><option>Cadillac</option><option>Chevrolet</option><option>Chrysler</option><option>Citroen</option><option>Dacia</option><option>Daewoo</option><option>Dodge</option><option>DS</option><option>Ferrari</option><option>Fiat</option><option>Ford</option><option>Genesis</option><option>Honda</option><option>Hyundai</option><option>Infiniti</option><option>Isuzu</option><option>Jaguar</option><option>Jeep</option><option>Kia</option><option>Lamborghini</option><option>Lancia</option><option>Land Rover</option><option>Lexus</option><option>Maserati</option><option>Mazda</option><option>McLaren</option><option>Mercedes</option><option>Mini</option><option>Mitsubishi</option><option>Nissan</option><option>Opel</option><option>Peugeot</option><option>Porsche</option><option>Renault</option><option>Rolls-Royce</option><option>Seat</option><option>Skoda</option><option>Smart</option><option>Subaru</option><option>Suzuki</option><option>Tesla</option><option>Toyota</option><option>Volkswagen</option><option>Volvo</option><option>Inna</option></select></div>
 <div><label for="addModel">Model *</label><select id="addModel" aria-label="Model pojazdu" onchange="checkCustomModel()"><option value="">Najpierw marka</option></select><input id="addModelCustom" placeholder="Wpisz model jeśli brak na liście" style="display:none;margin-top:6px" aria-label="Model custom"></div>
 <div><label for="addPrice">Cena PLN *</label><input id="addPrice" type="number" placeholder="25000" aria-label="Cena"></div>
 <div><label for="addYear">Rocznik *</label><select id="addYear" aria-label="Rocznik"><option value="">Wybierz</option><option value="2026">2026</option><option value="2025">2025</option><option value="2024">2024</option><option value="2023">2023</option><option value="2022">2022</option><option value="2021">2021</option><option value="2020">2020</option><option value="2019">2019</option><option value="2018">2018</option><option value="2017">2017</option><option value="2016">2016</option><option value="2015">2015</option><option value="2014">2014</option><option value="2013">2013</option><option value="2012">2012</option><option value="2011">2011</option><option value="2010">2010</option><option value="2009">2009</option><option value="2008">2008</option><option value="2007">2007</option><option value="2006">2006</option><option value="2005">2005</option><option value="2004">2004</option><option value="2003">2003</option><option value="2002">2002</option><option value="2001">2001</option><option value="2000">2000</option><option value="1999">1999</option><option value="1998">1998</option><option value="1997">1997</option><option value="1996">1996</option><option value="1995">1995</option><option value="1994">1994</option><option value="1993">1993</option><option value="1992">1992</option><option value="1991">1991</option><option value="1990">1990</option><option value="1989">1989</option><option value="1988">1988</option><option value="1987">1987</option><option value="1986">1986</option><option value="1985">1985</option><option value="1984">1984</option><option value="1983">1983</option><option value="1982">1982</option><option value="1981">1981</option><option value="1980">1980</option><option value="1979">1979</option><option value="1978">1978</option><option value="1977">1977</option><option value="1976">1976</option><option value="1975">1975</option><option value="1974">1974</option><option value="1973">1973</option><option value="1972">1972</option><option value="1971">1971</option><option value="1970">1970</option><option value="1969">1969</option><option value="1968">1968</option><option value="1967">1967</option><option value="1966">1966</option><option value="1965">1965</option><option value="1964">1964</option><option value="1963">1963</option><option value="1962">1962</option><option value="1961">1961</option><option value="1960">1960</option></select></div>
 <div><label for="addMileage">Przebieg km *</label><input id="addMileage" type="number" placeholder="120000" aria-label="Przebieg"></div>
-<div><label for="addPhone">Telefon *</label><input id="addPhone" type="tel" placeholder="600123456" aria-label="Numer telefonu"></div>
+
 
 <div class="full" style="margin-top:8px;padding:12px;background:#f9f9f6;border-radius:10px;border:1px solid #999">
 <label style="font-size:12px;font-weight:900;color:#111">📍 ADRES - GPS + WYSZUKIWARKA</label>
@@ -524,6 +556,86 @@ function getMyLocationForAdd(){
  }, function(err){ var infoEl=document.getElementById('addLocationInfo'); if(infoEl) infoEl.innerText='❌ Błąd GPS: '+err.message; if(btn) btn.innerText=orig; }, {enableHighAccuracy:true, timeout:10000});
 }
 async function openDetail(id){ var a=null; for(var i=0;i<allAds.length;i++){ if(String(allAds[i].id)===String(id)){ a=allAds[i]; break; } } if(!a) return; currentAd=a; try{ var res=await fetch(SUPABASE_URL+'/rest/v1/ads?id=eq.'+id+'&select=*', {headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY}}); if(res.ok){ var data=await res.json(); if(data[0]){ a=data[0]; currentAd=a; } } }catch(e){} var imgs=[]; if(a.images&&a.images.length>0) imgs=a.images.slice(); else if(a.image_url) imgs=[a.image_url]; else imgs=['https://via.placeholder.com/800x600?text=Brak+zdjecia']; galleryImages=imgs; currentImageIndex=0; var detailImg=document.getElementById('detailImg'); if(detailImg){ detailImg.src=getOptimizedImageUrl(galleryImages[0], 800); detailImg.alt=(a.title||'Ogłoszenie')+' - zdjęcie 1 z '+galleryImages.length; } var gc=document.getElementById('galleryCounter'); if(gc) gc.innerText='1 / '+galleryImages.length; var thumbs=document.getElementById('detailImages'); if(thumbs){ var th=''; for(var t=0;t<galleryImages.length;t++){ th+='<img src="'+getOptimizedImageUrl(galleryImages[t], 200)+'" class="'+(t===0?'active':'')+'" onclick="showImage('+t+')" loading="lazy" alt="Miniatura '+(t+1)+'" role="listitem">'; } thumbs.innerHTML=th; } var dt=document.getElementById('detailTitle'); if(dt) dt.innerText=a.title||''; var dp=document.getElementById('detailPrice'); if(dp) dp.innerText=a.price? a.price+' PLN':''; var dl=document.getElementById('detailLoc'); if(dl) dl.innerText=(a.location||a.city||''); var dd=document.getElementById('detailDesc'); if(dd) dd.innerText=a.description||''; var pn=document.getElementById('phoneNumber'); if(pn){ pn.innerText='📞 '+(a.phone||'Brak'); pn.style.display='none'; } var det=document.getElementById('detail'); if(det) det.style.display='flex'; }
+
+var editingId=null;
+
+function openEditCurrent(){
+  if(!currentAd || !currentUser) return;
+  if(currentAd.owner_id !== currentUser.id){ alert('Nie jesteś właścicielem'); return; }
+  editingId=currentAd.id;
+  // Fill form
+  document.getElementById('addTitleInput').value=currentAd.title||'';
+  document.getElementById('addBrand').value=currentAd.brand||'';
+  updateModelOptions();
+  setTimeout(function(){
+    var modelEl=document.getElementById('addModel');
+    if(modelEl) modelEl.value=currentAd.model||'';
+    checkCustomModel();
+  },100);
+  document.getElementById('addPrice').value=currentAd.price||'';
+  document.getElementById('addYear').value=currentAd.year||'';
+  document.getElementById('addMileage').value=currentAd.mileage||'';
+  document.getElementById('addPhone').value=currentAd.phone||'';
+  document.getElementById('addDesc').value=currentAd.description||'';
+  document.getElementById('addModalTitle').innerText='Edytuj ogłoszenie';
+  document.getElementById('addSubmitBtn').innerText='💾 Zapisz zmiany';
+  closeDetail();
+  var m=document.getElementById('addModal');
+  if(m) m.style.display='flex';
+}
+
+function openAdd(){
+  editingId=null;
+  if(!currentUser){ alert('Zaloguj!'); openAuth(); return; }
+  document.getElementById('addModalTitle').innerText='Dodaj ogłoszenie';
+  document.getElementById('addSubmitBtn').innerText='🚀 Dodaj ogłoszenie';
+  // Clear form
+  var inputs=['addTitleInput','addPrice','addYear','addMileage','addPhone','addDesc','addModelCustom','addLocationSearch'];
+  for(var i=0;i<inputs.length;i++){ var el=document.getElementById(inputs[i]); if(el) el.value=''; }
+  document.getElementById('addBrand').value='';
+  document.getElementById('addModel').innerHTML='<option value="">Najpierw marka</option>';
+  selectedImagesBase64=[];
+  renderPreview();
+  var m=document.getElementById('addModal');
+  if(m) m.style.display='flex';
+  var info=document.getElementById('addInfo');
+  if(info) info.innerText='';
+}
+
+async function deleteCurrent(){
+  if(!currentAd || !currentUser) return;
+  if(currentAd.owner_id !== currentUser.id){ alert('Nie jesteś właścicielem'); return; }
+  if(!confirm('Na pewno usunąć ogłoszenie: '+(currentAd.title||'')+'?')) return;
+  try{
+    var res=await fetch(SUPABASE_URL+'/rest/v1/ads?id=eq.'+currentAd.id,{
+      method:'DELETE',
+      headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+authToken}
+    });
+    if(!res.ok){
+      var txt=await res.text();
+      throw new Error(txt);
+    }
+    alert('✅ Usunięto ogłoszenie');
+    closeDetail();
+    loadAds();
+  }catch(e){
+    alert('Błąd usuwania: '+e.message);
+  }
+}
+
+// Update openDetail to show owner actions
+var originalOpenDetail = openDetail;
+openDetail = async function(id){
+  await originalOpenDetail(id);
+  // Show edit/delete if owner
+  var ownerDiv=document.getElementById('ownerActions');
+  if(ownerDiv && currentAd && currentUser && currentAd.owner_id===currentUser.id){
+    ownerDiv.style.display='block';
+  } else if(ownerDiv){
+    ownerDiv.style.display='none';
+  }
+};
+
 function saveAuth(access, refresh, user){ localStorage.setItem('sb_token', access); if(refresh) localStorage.setItem('sb_refresh', refresh); localStorage.setItem('sb_user', JSON.stringify(user)); authToken=access; if(refresh) refreshToken=refresh; currentUser=user; updateAuthUI(); }
 async function refreshAuthToken(){ if(!refreshToken){ refreshToken=localStorage.getItem('sb_refresh'); if(!refreshToken) return false; } try{ var res=await fetch(SUPABASE_URL+'/auth/v1/token?grant_type=refresh_token', {method:'POST', headers:{'apikey':SUPABASE_KEY,'Content-Type':'application/json'}, body: JSON.stringify({refresh_token: refreshToken})}); var data=await res.json(); if(res.ok && data.access_token){ saveAuth(data.access_token, data.refresh_token || refreshToken, data.user || currentUser); return true; } }catch(e){} return false; }
 function loadAuth(){ try{ authToken=localStorage.getItem('sb_token'); refreshToken=localStorage.getItem('sb_refresh'); currentUser=JSON.parse(localStorage.getItem('sb_user')||'null'); if(authToken){ try{ var payload=JSON.parse(atob(authToken.split('.')[1])); var exp=payload.exp*1000; if(Date.now() > exp - 60000){ refreshAuthToken(); } }catch(e){} } }catch(e){} updateAuthUI(); }
@@ -579,7 +691,9 @@ async function submitAdd(){
    mileage: mileageInt
  };
  async function doPost(token){
-   var r=await fetch(SUPABASE_URL+'/rest/v1/ads',{method:'POST',headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+token,'Content-Type':'application/json','Prefer':'return=representation'},body:JSON.stringify(payload)});
+   var method=editingId ? 'PATCH' : 'POST';
+   var url=editingId ? SUPABASE_URL+'/rest/v1/ads?id=eq.'+editingId : SUPABASE_URL+'/rest/v1/ads';
+   var r=await fetch(url,{method:method,headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+token,'Content-Type':'application/json','Prefer':'return=representation'},body:JSON.stringify(payload)});
    var txt=await r.text();
    return {ok:r.ok, txt:txt, status:r.status};
  }
@@ -592,7 +706,8 @@ async function submitAdd(){
    }
    if(!result.ok) throw new Error(result.txt);
    if(submitBtn){ submitBtn.disabled=false; submitBtn.innerText='Zatwierdź'; } closeAdd(); loadAds();
-   alert('✅ Dodano! GPS: '+(coords.lat? coords.lat.toFixed(4)+', '+coords.lng.toFixed(4):'z miejscowości'));
+   alert(editingId ? '✅ Zapisano zmiany!' : '✅ Dodano! GPS: '+(coords.lat? coords.lat.toFixed(4)+', '+coords.lng.toFixed(4):'z miejscowości'));
+   editingId=null;
  }catch(e){
    if(submitBtn){ submitBtn.disabled=false; submitBtn.innerText='Zatwierdź'; }
    if(infoEl){ infoEl.innerText='Błąd: '+e.message.slice(0,500); }
