@@ -1,4 +1,4 @@
 WROOMER.PL
-04.10.2026 17:42:42
-v9.9 NO MILEAGE FINAL
-Usunieto pole przebiegu calkowicie
+04.10.2026 17:51:12
+v10.0 RESTORED MILEAGE WORKING
+Przebieg jak w dzialajacej wersji - pelna liczba + filtr dziala
