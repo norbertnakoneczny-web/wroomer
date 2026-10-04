@@ -1168,7 +1168,7 @@ header{position:relative !important;top:auto !important;z-index:10 !important}
 <select id="modelFilter" onchange="renderAds()" aria-label="Filtr modelu"><option value="">Wszystkie modele</option></select>
 <select id="yearFromFilter" onchange="renderAds()" aria-label="Rocznik od"><option value="">Rok od</option><option value="1960">1960</option><option value="1961">1961</option><option value="1962">1962</option><option value="1963">1963</option><option value="1964">1964</option><option value="1965">1965</option><option value="1966">1966</option><option value="1967">1967</option><option value="1968">1968</option><option value="1969">1969</option><option value="1970">1970</option><option value="1971">1971</option><option value="1972">1972</option><option value="1973">1973</option><option value="1974">1974</option><option value="1975">1975</option><option value="1976">1976</option><option value="1977">1977</option><option value="1978">1978</option><option value="1979">1979</option><option value="1980">1980</option><option value="1981">1981</option><option value="1982">1982</option><option value="1983">1983</option><option value="1984">1984</option><option value="1985">1985</option><option value="1986">1986</option><option value="1987">1987</option><option value="1988">1988</option><option value="1989">1989</option><option value="1990">1990</option><option value="1991">1991</option><option value="1992">1992</option><option value="1993">1993</option><option value="1994">1994</option><option value="1995">1995</option><option value="1996">1996</option><option value="1997">1997</option><option value="1998">1998</option><option value="1999">1999</option><option value="2000">2000</option><option value="2001">2001</option><option value="2002">2002</option><option value="2003">2003</option><option value="2004">2004</option><option value="2005">2005</option><option value="2006">2006</option><option value="2007">2007</option><option value="2008">2008</option><option value="2009">2009</option><option value="2010">2010</option><option value="2011">2011</option><option value="2012">2012</option><option value="2013">2013</option><option value="2014">2014</option><option value="2015">2015</option><option value="2016">2016</option><option value="2017">2017</option><option value="2018">2018</option><option value="2019">2019</option><option value="2020">2020</option><option value="2021">2021</option><option value="2022">2022</option><option value="2023">2023</option><option value="2024">2024</option><option value="2025">2025</option><option value="2026">2026</option></select>
 <select id="yearToFilter" onchange="renderAds()" aria-label="Rocznik do"><option value="">Rok do</option><option value="1960">1960</option><option value="1961">1961</option><option value="1962">1962</option><option value="1963">1963</option><option value="1964">1964</option><option value="1965">1965</option><option value="1966">1966</option><option value="1967">1967</option><option value="1968">1968</option><option value="1969">1969</option><option value="1970">1970</option><option value="1971">1971</option><option value="1972">1972</option><option value="1973">1973</option><option value="1974">1974</option><option value="1975">1975</option><option value="1976">1976</option><option value="1977">1977</option><option value="1978">1978</option><option value="1979">1979</option><option value="1980">1980</option><option value="1981">1981</option><option value="1982">1982</option><option value="1983">1983</option><option value="1984">1984</option><option value="1985">1985</option><option value="1986">1986</option><option value="1987">1987</option><option value="1988">1988</option><option value="1989">1989</option><option value="1990">1990</option><option value="1991">1991</option><option value="1992">1992</option><option value="1993">1993</option><option value="1994">1994</option><option value="1995">1995</option><option value="1996">1996</option><option value="1997">1997</option><option value="1998">1998</option><option value="1999">1999</option><option value="2000">2000</option><option value="2001">2001</option><option value="2002">2002</option><option value="2003">2003</option><option value="2004">2004</option><option value="2005">2005</option><option value="2006">2006</option><option value="2007">2007</option><option value="2008">2008</option><option value="2009">2009</option><option value="2010">2010</option><option value="2011">2011</option><option value="2012">2012</option><option value="2013">2013</option><option value="2014">2014</option><option value="2015">2015</option><option value="2016">2016</option><option value="2017">2017</option><option value="2018">2018</option><option value="2019">2019</option><option value="2020">2020</option><option value="2021">2021</option><option value="2022">2022</option><option value="2023">2023</option><option value="2024">2024</option><option value="2025">2025</option><option value="2026">2026</option></select>
-<select id="mileageFilter" onchange="renderAds()" aria-label="Przebieg"><option value="">Przebieg</option><option value="50000">do 50 tys.</option><option value="100000">do 100 tys.</option><option value="150000">do 150 tys.</option><option value="200000">do 200 tys.</option><option value="300000">do 300 tys.</option></select>
+<select id="mileageFilter" title="Filtruj do przebiegu w km" onchange="renderAds()" aria-label="Przebieg"><option value="">Przebieg</option><option value="50000">do 50 tys.</option><option value="100000">do 100 tys.</option><option value="150000">do 150 tys.</option><option value="200000">do 200 tys.</option><option value="300000">do 300 tys.</option></select>
 <input id="locationInput" placeholder="Miejscowość: Rydułtowy, Gorzyce..." oninput="onLocationInput()" aria-label="Filtr miejscowości">
 <select id="radiusFilter" onchange="renderAds()" aria-label="Promień"><option value="0">+0 km</option><option value="5">+5 km</option><option value="10">+10 km</option><option value="25" selected>+25 km</option><option value="50">+50 km</option><option value="100">+100 km</option><option value="9999">Cała PL</option></select>
 <button class="btn btn-black" onclick="getMyLocation()" aria-label="Szukaj blisko mnie">📍 Blisko mnie</button>
@@ -1238,7 +1238,7 @@ header{position:relative !important;top:auto !important;z-index:10 !important}
 <div><label for="addModel">Model *</label><select id="addModel" aria-label="Model pojazdu" onchange="checkCustomModel()"><option value="">Najpierw marka</option></select><input id="addModelCustom" placeholder="Wpisz model jeśli brak na liście" style="display:none;margin-top:6px" aria-label="Model custom"></div>
 <div><label for="addPrice">Cena PLN *</label><input id="addPrice" type="number" placeholder="25000" aria-label="Cena"></div>
 <div><label for="addYear">Rocznik *</label><select id="addYear" aria-label="Rocznik"><option value="">Wybierz</option><option value="2026">2026</option><option value="2025">2025</option><option value="2024">2024</option><option value="2023">2023</option><option value="2022">2022</option><option value="2021">2021</option><option value="2020">2020</option><option value="2019">2019</option><option value="2018">2018</option><option value="2017">2017</option><option value="2016">2016</option><option value="2015">2015</option><option value="2014">2014</option><option value="2013">2013</option><option value="2012">2012</option><option value="2011">2011</option><option value="2010">2010</option><option value="2009">2009</option><option value="2008">2008</option><option value="2007">2007</option><option value="2006">2006</option><option value="2005">2005</option><option value="2004">2004</option><option value="2003">2003</option><option value="2002">2002</option><option value="2001">2001</option><option value="2000">2000</option><option value="1999">1999</option><option value="1998">1998</option><option value="1997">1997</option><option value="1996">1996</option><option value="1995">1995</option><option value="1994">1994</option><option value="1993">1993</option><option value="1992">1992</option><option value="1991">1991</option><option value="1990">1990</option><option value="1989">1989</option><option value="1988">1988</option><option value="1987">1987</option><option value="1986">1986</option><option value="1985">1985</option><option value="1984">1984</option><option value="1983">1983</option><option value="1982">1982</option><option value="1981">1981</option><option value="1980">1980</option><option value="1979">1979</option><option value="1978">1978</option><option value="1977">1977</option><option value="1976">1976</option><option value="1975">1975</option><option value="1974">1974</option><option value="1973">1973</option><option value="1972">1972</option><option value="1971">1971</option><option value="1970">1970</option><option value="1969">1969</option><option value="1968">1968</option><option value="1967">1967</option><option value="1966">1966</option><option value="1965">1965</option><option value="1964">1964</option><option value="1963">1963</option><option value="1962">1962</option><option value="1961">1961</option><option value="1960">1960</option></select></div>
-<div><label for="addMileage">Przebieg km *</label><input id="addMileage" type="number" placeholder="120000" aria-label="Przebieg"></div>
+<div><label for="addMileage">Przebieg km *</label><input id="addMileage" data-thousands="true" type="number" placeholder="120000" aria-label="Przebieg"></div>
 <div><label for="addDamaged">Stan *</label><select id="addDamaged" aria-label="Czy uszkodzone"><option value="nie">Nieuszkodzone / Sprawne</option><option value="tak">Uszkodzone</option></select></div>
 
 
@@ -1534,7 +1534,24 @@ function selectAddLocation(display, city, lat, lon){
 function getDistance(c,lat2,lng2){ if(!c||!lat2||!lng2) return null; var R=6371; var dLat=(lat2-c.lat)*Math.PI/180; var dLng=(lng2-c.lng)*Math.PI/180; var a=Math.sin(dLat/2)*Math.sin(dLat/2)+Math.cos(c.lat*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLng/2)*Math.sin(dLng/2); return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a)); }
 function onLocationInput(){ var vEl=document.getElementById('locationInput'); if(!vEl) return; var v=vEl.value.trim(); if(v.length<2){ searchLocationCoords=null; currentPage=0; renderAds(); return; } var known=getCoordsForPlace(v); if(known){ searchLocationCoords=known; currentPage=0; renderAds(); return; } clearTimeout(locTimeout); locTimeout=setTimeout(function(){ fetch('https://nominatim.openstreetmap.org/search?format=json&q='+encodeURIComponent(v)+', Polska&limit=1').then(function(r){return r.json()}).then(function(j){ if(j[0]){ searchLocationCoords={lat:parseFloat(j[0].lat),lng:parseFloat(j[0].lon)}; } currentPage=0; renderAds(); }); }, 400); renderAds(); }
 function debouncedRender(){ clearTimeout(window.renderTimeout); window.renderTimeout=setTimeout(function(){ currentPage=0; renderAds(); }, 300); }
-function applyFilters(){ var filtered=allAds.slice(); for(var i=0;i<filtered.length;i++) ensureAdCoords(filtered[i]); var qEl=document.getElementById('searchInput'); var q=qEl? (qEl.value||'').toLowerCase().trim():''; var locEl=document.getElementById('locationInput'); var locQ=locEl? (locEl.value||'').toLowerCase().trim():''; var radEl=document.getElementById('radiusFilter'); var radius=radEl? parseInt(radEl.value||'25'):25; var yearFromEl=document.getElementById('yearFromFilter'); var yearFrom=yearFromEl? parseInt(yearFromEl.value||'0'):0; var yearToEl=document.getElementById('yearToFilter'); var yearTo=yearToEl? parseInt(yearToEl.value||'9999'):9999; var mileEl=document.getElementById('mileageFilter'); var mileMax=mileEl? parseInt(mileEl.value||'9999999'):9999999; if(q){
+function applyFilters(){ var filtered=allAds.slice(); for(var i=0;i<filtered.length;i++) ensureAdCoords(filtered[i]); var qEl=document.getElementById('searchInput'); var q=qEl? (qEl.value||'').toLowerCase().trim():''; var locEl=document.getElementById('locationInput'); var locQ=locEl? (locEl.value||'').toLowerCase().trim():''; var radEl=document.getElementById('radiusFilter'); var radius=radEl? parseInt(radEl.value||'25'):25; var yearFromEl=document.getElementById('yearFromFilter'); var yearFrom=yearFromEl? parseInt(yearFromEl.value||'0'):0; var yearToEl=document.getElementById('yearToFilter'); var yearTo=yearToEl? parseInt(yearToEl.value||'9999'):9999; var mileEl=document.getElementById('mileageFilter'); var mileMax=mileEl? parseInt(mileEl.value||'9999999'):9999999; 
+ // YEAR & MILEAGE FILTER - NAPRAWIONE
+ if(yearFrom>0 || yearTo<9999){
+   filtered=filtered.filter(function(a){
+     var y=parseInt(a.year||0); if(!y) return true; // jeśli brak rocznika, pokazuj
+     if(yearFrom>0 && y<yearFrom) return false;
+     if(yearTo<9999 && y>yearTo) return false;
+     return true;
+   });
+ }
+ if(mileMax<9999999){
+   filtered=filtered.filter(function(a){
+     var m=parseInt(a.mileage||0); if(!m) return true; // jeśli brak przebiegu, pokazuj
+     if(m>mileMax) return false;
+     return true;
+   });
+ }
+ if(q){
   filtered=filtered.filter(function(a){
     var hay = ((a.title||'')+' '+(a.description||'')+' '+(a.brand||'')+' '+(a.model||'')+' '+(a.location||'')+' '+(a.city||'')+' '+(a.miejscowosc||'')).toLowerCase();
     // also support multi-word search
@@ -1651,7 +1668,7 @@ async function submitAdd(){
  var infoEl=document.getElementById('addInfo');
  if(!brand||!model||!miejs){ if(infoEl) infoEl.innerText='Uzupełnij markę, model, miejscowość *'; return; }
  if(!yearInt){ if(infoEl) infoEl.innerText='Wybierz rocznik *'; return; }
- if(!mileageInt){ if(infoEl) infoEl.innerText='Podaj przebieg *'; return; }
+ if(!mileageInt || mileageInt<1000){ if(infoEl) infoEl.innerText='⛔ Podaj przebieg OBOWIĄZKOWO w tysiącach! Np. 150 = 150 000 km (min 1 tys.)'; var me=document.getElementById('addMileage'); if(me){ me.focus(); me.style.border='2px solid #cc0000'; me.style.background='#ffeeee'; } return; }
  if(!title) title=brand+' '+model;
  if(!price||!phone){ if(infoEl) infoEl.innerText='Cena i telefon *'; return; }
  if(!currentUser||!authToken){ if(infoEl) infoEl.innerText='Zaloguj się'; openAuth(); return; }
@@ -1751,8 +1768,102 @@ async function submitAdd(){
    if(infoEl){ infoEl.innerText='Błąd: '+e.message.slice(0,500); }
  }
 }
+
+// v9.4 MILEAGE W TYSIĄCACH - WYMUSZONE
+(function(){
+  var mileInput = document.getElementById('addMileage');
+  if(mileInput){
+    mileInput.placeholder = 'np. 150 (=150 000 km) - W TYSIĄCACH!';
+    mileInput.type = 'number';
+    mileInput.min = '1';
+    mileInput.max = '9999';
+    mileInput.step = '1';
+    // Label update
+    var label = document.querySelector('label[for="addMileage"]');
+    if(label){ label.innerHTML = '🛣️ Przebieg * (w tys. km) OBOWIĄZKOWO - wpisz 150 = 150 000 km'; label.style.color='#cc0000'; label.style.fontWeight='900'; }
+    mileInput.addEventListener('input', function(){
+      var v = parseInt(this.value||0);
+      var hint = document.getElementById('mileageHint');
+      if(!hint){
+        hint = document.createElement('div');
+        hint.id='mileageHint';
+        hint.style.fontSize='12px'; hint.style.fontWeight='700'; hint.style.marginTop='4px';
+        this.parentNode.appendChild(hint);
+      }
+      if(v>0){
+        if(v<1){ hint.innerHTML='❌ Za mało - minimum 1 tys. km'; hint.style.color='#c00'; }
+        else if(v>0 && v<10){ hint.innerHTML='✅ '+v+' tys. km = '+(v*1000).toLocaleString('pl-PL')+' km'; hint.style.color='#090'; }
+        else if(v>=10 && v<=9999){ hint.innerHTML='✅ '+v+' tys. km = '+(v*1000).toLocaleString('pl-PL')+' km'; hint.style.color='#090'; }
+        else if(v>9999){ hint.innerHTML='❌ Za dużo - max 9999 tys. km'; hint.style.color='#c00'; }
+      } else { hint.innerHTML='⚠️ Wpisz przebieg w tysiącach np. 150'; hint.style.color='#666'; }
+    });
+  }
+  // Patch submitAdd to multiply by 1000
+  var origSubmit = window.submitAdd;
+  // We will override mileage handling inside submitAdd by patching global
+})();
+
+// Funkcja konwertująca tysiące na km
+function getMileageInKm(){
+  var el=document.getElementById('addMileage');
+  if(!el) return 0;
+  var v=parseInt(el.value||0);
+  if(!v || v<=0) return 0;
+  // Jeśli ktoś wpisał 150 -> 150 000
+  // Jeśli ktoś wpisał 150000 -> zostaw (ale ostrzeż)
+  if(v<1000){ return v*1000; } // tysiące
+  else { return v; } // już w km (kompatybilność)
+}
+
 loadAuth();
 loadAds();
+
+// v9.4 MILEAGE W TYSIĄCACH - WYMUSZONE
+(function(){
+  var mileInput = document.getElementById('addMileage');
+  if(mileInput){
+    mileInput.placeholder = 'np. 150 (=150 000 km) - W TYSIĄCACH!';
+    mileInput.type = 'number';
+    mileInput.min = '1';
+    mileInput.max = '9999';
+    mileInput.step = '1';
+    // Label update
+    var label = document.querySelector('label[for="addMileage"]');
+    if(label){ label.innerHTML = '🛣️ Przebieg * (w tys. km) OBOWIĄZKOWO - wpisz 150 = 150 000 km'; label.style.color='#cc0000'; label.style.fontWeight='900'; }
+    mileInput.addEventListener('input', function(){
+      var v = parseInt(this.value||0);
+      var hint = document.getElementById('mileageHint');
+      if(!hint){
+        hint = document.createElement('div');
+        hint.id='mileageHint';
+        hint.style.fontSize='12px'; hint.style.fontWeight='700'; hint.style.marginTop='4px';
+        this.parentNode.appendChild(hint);
+      }
+      if(v>0){
+        if(v<1){ hint.innerHTML='❌ Za mało - minimum 1 tys. km'; hint.style.color='#c00'; }
+        else if(v>0 && v<10){ hint.innerHTML='✅ '+v+' tys. km = '+(v*1000).toLocaleString('pl-PL')+' km'; hint.style.color='#090'; }
+        else if(v>=10 && v<=9999){ hint.innerHTML='✅ '+v+' tys. km = '+(v*1000).toLocaleString('pl-PL')+' km'; hint.style.color='#090'; }
+        else if(v>9999){ hint.innerHTML='❌ Za dużo - max 9999 tys. km'; hint.style.color='#c00'; }
+      } else { hint.innerHTML='⚠️ Wpisz przebieg w tysiącach np. 150'; hint.style.color='#666'; }
+    });
+  }
+  // Patch submitAdd to multiply by 1000
+  var origSubmit = window.submitAdd;
+  // We will override mileage handling inside submitAdd by patching global
+})();
+
+// Funkcja konwertująca tysiące na km
+function getMileageInKm(){
+  var el=document.getElementById('addMileage');
+  if(!el) return 0;
+  var v=parseInt(el.value||0);
+  if(!v || v<=0) return 0;
+  // Jeśli ktoś wpisał 150 -> 150 000
+  // Jeśli ktoś wpisał 150000 -> zostaw (ale ostrzeż)
+  if(v<1000){ return v*1000; } // tysiące
+  else { return v; } // już w km (kompatybilność)
+}
+
 </script>
 
 
