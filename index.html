@@ -1121,6 +1121,9 @@ header{position:relative !important;top:auto !important;z-index:10 !important}
 </style>
 </head>
 <body>
+
+<div id="adminTopBanner" style="display:none;position:fixed;top:0;left:0;right:0;background:#111;color:#ffeb00;padding:6px;text-align:center;font-size:12px;font-weight:800;z-index:100000;border-bottom:2px solid #ffeb00">👑 TRYB ADMIN: anianakoneczny@icloud.com | Licznik widoczny w szczegółach ogłoszenia</div>
+
 <header>
 <div class="top-row">
 <div class="logo" onclick="location.reload()" role="button" tabindex="0" aria-label="WROOMER.PL - strona główna" style="font-weight:900;font-size:26px;letter-spacing:-1.5px;cursor:pointer;white-space:nowrap;color:#111;display:flex;align-items:center;gap:6px"><span style="display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;background:#111;color:#fff;border-radius:10px;font-size:20px;transform:rotate(-6deg)">W</span><span>WROOMER<span style="color:#666;font-weight:700">.PL</span></span></div>
@@ -1931,24 +1934,46 @@ setTimeout(detectBraveAndBlockers, 1000);
 
 
 <script>
+
 function isAdmin(){
   try{
-    var uStr=localStorage.getItem('wroomer_user');
-    if(!uStr) return false;
-    var u=JSON.parse(uStr);
-    var email=(u.email||'').toLowerCase();
-    var admins=['anianakoneczny@icloud.com','admin@wroomer.pl','kontakt@wroomer.pl'];
-    // TWÓJ EMAIL - dodaj swój poniżej
-    if(email==='lukaszgorzyce@gmail.com' || email==='admin@wroomer.pl') return true;
-    if(admins.indexOf(email)!==-1) return true;
-    if(email.endsWith('@wroomer.pl')) return true;
-    if(u.is_admin) return true;
-    if(u.user_metadata && u.user_metadata.is_admin) return true;
+    var allKeys = Object.keys(localStorage);
+    for(var k=0;k<allKeys.length;k++){
+      try{
+        var val=localStorage.getItem(allKeys[k]);
+        if(val && val.toLowerCase().indexOf('anianakoneczny@icloud.com')!==-1) return true;
+        if(val && val.toLowerCase().indexOf('anianakoneczny')!==-1) return true;
+      }catch(e){}
+    }
+    var uStr=localStorage.getItem('wroomer_user') || localStorage.getItem('supabase.auth.token') || '';
+    if(!uStr) {
+      // check sb-xxx-auth-token
+      for(var i=0;i<allKeys.length;i++){
+        if(allKeys[i].indexOf('auth-token')!==-1 || allKeys[i].indexOf('supabase')!==-1){
+          try{
+            var j=JSON.parse(localStorage.getItem(allKeys[i]));
+            var s=JSON.stringify(j).toLowerCase();
+            if(s.indexOf('anianakoneczny@icloud.com')!==-1 || s.indexOf('anianakoneczny')!==-1) return true;
+          }catch(e){}
+        }
+      }
+      return false;
+    }
+    try{
+      var u=JSON.parse(uStr);
+      var email=(u.email||u.user?.email||u.currentSession?.user?.email||'').toLowerCase();
+      if(email.indexOf('anianakoneczny@icloud.com')!==-1) return true;
+      if(email.indexOf('anianakoneczny')!==-1) return true;
+      var s=JSON.stringify(u).toLowerCase();
+      if(s.indexOf('anianakoneczny@icloud.com')!==-1) return true;
+    }catch(e){}
+    var raw=uStr.toLowerCase();
+    if(raw.indexOf('anianakoneczny@icloud.com')!==-1) return true;
     return false;
   }catch(e){ return false; }
 }
-function doIncrement(adId){ try{
 
+function incrementView(adId){
   try{
     var url=SUPABASE_URL+'/rest/v1/ads?id=eq.'+adId;
     fetch(url+'&select=views',{headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY}}).then(function(r){return r.json();}).then(function(data){
@@ -1962,9 +1987,15 @@ function doIncrement(adId){ try{
     }).catch(function(){});
   }catch(e){}
 }
-}catch(e){} }
-function incrementView(adId){ try{ var key='wroomer_views_'+adId; var v=parseInt(localStorage.getItem(key)||'0')+1; localStorage.setItem(key, v); if(isAdmin()){ var counterEl=document.getElementById('adminViewCounter'); if(counterEl){ counterEl.style.display='block'; counterEl.innerHTML='👁️ Wyświetlenia (lokalne): <b>'+v+'</b> | Tylko Ty | ID: '+adId.substring(0,8); } } }catch(e){} }
+function showAdminUI(){
+  try{
+    var top=document.getElementById('adminTopBanner');
+    if(top){ if(isAdmin()){ top.style.display='block'; document.body.style.paddingTop='28px'; } else { top.style.display='none'; document.body.style.paddingTop='0'; } }
+  }catch(e){}
+}
 function checkOwnAd(){
+  showAdminUI();
+
   try{
     var ownActions=document.getElementById('ownAdActions');
     var counterEl=document.getElementById('adminViewCounter');
