@@ -1238,7 +1238,7 @@ header{position:relative !important;top:auto !important;z-index:10 !important}
 <div><label for="addModel">Model *</label><select id="addModel" aria-label="Model pojazdu" onchange="checkCustomModel()"><option value="">Najpierw marka</option></select><input id="addModelCustom" placeholder="Wpisz model jeśli brak na liście" style="display:none;margin-top:6px" aria-label="Model custom"></div>
 <div><label for="addPrice">Cena PLN *</label><input id="addPrice" type="number" placeholder="25000" aria-label="Cena"></div>
 <div><label for="addYear">Rocznik *</label><select id="addYear" aria-label="Rocznik"><option value="">Wybierz</option><option value="2026">2026</option><option value="2025">2025</option><option value="2024">2024</option><option value="2023">2023</option><option value="2022">2022</option><option value="2021">2021</option><option value="2020">2020</option><option value="2019">2019</option><option value="2018">2018</option><option value="2017">2017</option><option value="2016">2016</option><option value="2015">2015</option><option value="2014">2014</option><option value="2013">2013</option><option value="2012">2012</option><option value="2011">2011</option><option value="2010">2010</option><option value="2009">2009</option><option value="2008">2008</option><option value="2007">2007</option><option value="2006">2006</option><option value="2005">2005</option><option value="2004">2004</option><option value="2003">2003</option><option value="2002">2002</option><option value="2001">2001</option><option value="2000">2000</option><option value="1999">1999</option><option value="1998">1998</option><option value="1997">1997</option><option value="1996">1996</option><option value="1995">1995</option><option value="1994">1994</option><option value="1993">1993</option><option value="1992">1992</option><option value="1991">1991</option><option value="1990">1990</option><option value="1989">1989</option><option value="1988">1988</option><option value="1987">1987</option><option value="1986">1986</option><option value="1985">1985</option><option value="1984">1984</option><option value="1983">1983</option><option value="1982">1982</option><option value="1981">1981</option><option value="1980">1980</option><option value="1979">1979</option><option value="1978">1978</option><option value="1977">1977</option><option value="1976">1976</option><option value="1975">1975</option><option value="1974">1974</option><option value="1973">1973</option><option value="1972">1972</option><option value="1971">1971</option><option value="1970">1970</option><option value="1969">1969</option><option value="1968">1968</option><option value="1967">1967</option><option value="1966">1966</option><option value="1965">1965</option><option value="1964">1964</option><option value="1963">1963</option><option value="1962">1962</option><option value="1961">1961</option><option value="1960">1960</option></select></div>
-<div><label for="addMileage">Przebieg km *</label><input id="addMileage" data-thousands="true" type="number" placeholder="120000" aria-label="Przebieg"></div>
+<div><label for="addMileage">Przebieg (km) * OBOWIĄZKOWO - WPISZ DOKŁADNIE</label><input id="addMileage" type="number" min="0" max="1000000" step="1" placeholder="np. 120000 - WPISZ DOKLADNIE" aria-label="Przebieg w km - obowiązkowo" style="font-size:16px;font-weight:700;border:2px solid #cc0000"></div>
 <div><label for="addDamaged">Stan *</label><select id="addDamaged" aria-label="Czy uszkodzone"><option value="nie">Nieuszkodzone / Sprawne</option><option value="tak">Uszkodzone</option></select></div>
 
 
@@ -1668,7 +1668,7 @@ async function submitAdd(){
  var infoEl=document.getElementById('addInfo');
  if(!brand||!model||!miejs){ if(infoEl) infoEl.innerText='Uzupełnij markę, model, miejscowość *'; return; }
  if(!yearInt){ if(infoEl) infoEl.innerText='Wybierz rocznik *'; return; }
- if(!mileageInt || mileageInt<1000){ if(infoEl) infoEl.innerText='⛔ Podaj przebieg OBOWIĄZKOWO w tysiącach! Np. 150 = 150 000 km (min 1 tys.)'; var me=document.getElementById('addMileage'); if(me){ me.focus(); me.style.border='2px solid #cc0000'; me.style.background='#ffeeee'; } return; }
+ if(!mileageInt || mileageInt<1000){ if(infoEl) infoEl.innerText='⛔ Podaj przebieg OBOWIĄZKOWO w tysiącach! Np. 150 = 150 000 km (min 500 km)'; var me=document.getElementById('addMileage'); if(me){ me.focus(); me.style.border='2px solid #cc0000'; me.style.background='#ffeeee'; } return; }
  if(!title) title=brand+' '+model;
  if(!price||!phone){ if(infoEl) infoEl.innerText='Cena i telefon *'; return; }
  if(!currentUser||!authToken){ if(infoEl) infoEl.innerText='Zaloguj się'; openAuth(); return; }
@@ -1769,18 +1769,18 @@ async function submitAdd(){
  }
 }
 
-// v9.4 MILEAGE W TYSIĄCACH - WYMUSZONE
+// v9.4 MILEAGE W CAŁOŚCI - WYMUSZONE
 (function(){
   var mileInput = document.getElementById('addMileage');
   if(mileInput){
-    mileInput.placeholder = 'np. 150 (=150 000 km) - W TYSIĄCACH!';
+    mileInput.placeholder = 'np. 150 (=150 000 km) - W CAŁOŚCI!';
     mileInput.type = 'number';
     mileInput.min = '1';
     mileInput.max = '9999';
     mileInput.step = '1';
     // Label update
     var label = document.querySelector('label[for="addMileage"]');
-    if(label){ label.innerHTML = '🛣️ Przebieg * (w tys. km) OBOWIĄZKOWO - wpisz 150 = 150 000 km'; label.style.color='#cc0000'; label.style.fontWeight='900'; }
+    if(label){ label.innerHTML = '🛣️ Przebieg (km) * OBOWIĄZKOWO - wpisz 150 = 150 000 km'; label.style.color='#cc0000'; label.style.fontWeight='900'; }
     mileInput.addEventListener('input', function(){
       var v = parseInt(this.value||0);
       var hint = document.getElementById('mileageHint');
@@ -1818,18 +1818,18 @@ function getMileageInKm(){
 loadAuth();
 loadAds();
 
-// v9.4 MILEAGE W TYSIĄCACH - WYMUSZONE
+// v9.4 MILEAGE W CAŁOŚCI - WYMUSZONE
 (function(){
   var mileInput = document.getElementById('addMileage');
   if(mileInput){
-    mileInput.placeholder = 'np. 150 (=150 000 km) - W TYSIĄCACH!';
+    mileInput.placeholder = 'np. 150 (=150 000 km) - W CAŁOŚCI!';
     mileInput.type = 'number';
     mileInput.min = '1';
     mileInput.max = '9999';
     mileInput.step = '1';
     // Label update
     var label = document.querySelector('label[for="addMileage"]');
-    if(label){ label.innerHTML = '🛣️ Przebieg * (w tys. km) OBOWIĄZKOWO - wpisz 150 = 150 000 km'; label.style.color='#cc0000'; label.style.fontWeight='900'; }
+    if(label){ label.innerHTML = '🛣️ Przebieg (km) * OBOWIĄZKOWO - wpisz 150 = 150 000 km'; label.style.color='#cc0000'; label.style.fontWeight='900'; }
     mileInput.addEventListener('input', function(){
       var v = parseInt(this.value||0);
       var hint = document.getElementById('mileageHint');
@@ -2012,6 +2012,27 @@ function closePrivacy(){
   // Zamknij privacy po kliknięciu w tło
   var pm=document.getElementById('privacyModal');
   if(pm){ pm.addEventListener('click', function(e){ if(e.target.id==='privacyModal') closePrivacy(); }); }
+})();
+</script>
+
+
+<script>
+// OVERRIDE v9.5 - przebieg w całości dokładnie
+function getMileageInKm(){
+  var el=document.getElementById('addMileage');
+  if(!el) return 0;
+  var raw = (el.value||'').toString().replace(/\s/g,'').replace(/\./g,'');
+  var v = parseInt(raw);
+  if(isNaN(v)) return 0;
+  return v;
+}
+(function(){
+  var mi=document.getElementById('addMileage');
+  if(mi){
+    mi.placeholder='np. 120000 - WPISZ DOKŁADNIE W CAŁOŚCI!';
+    var lbl=document.querySelector('label[for="addMileage"]');
+    if(lbl){ lbl.innerHTML='🛣️ Przebieg (km) * OBOWIĄZKOWO - wpisz DOKŁADNIE np. 120000'; lbl.style.color='#cc0000'; lbl.style.fontWeight='900'; }
+  }
 })();
 </script>
 
