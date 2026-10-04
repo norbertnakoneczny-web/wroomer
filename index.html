@@ -370,6 +370,35 @@ header{position:relative !important;top:auto !important;z-index:10 !important}
   .search-bar{position:relative !important;top:auto !important}
 }
 
+
+/* v7.5 MOBILE EDIT/DELETE - zawsze widoczne */
+#ownerActions{display:none}
+#ownerActions[style*="block"]{display:block !important}
+@media(max-width:640px){
+  #ownerActions{
+    display:none;
+    position:relative !important;
+    bottom:auto !important;
+    left:auto !important;
+    right:auto !important;
+    margin:16px 0 0 0 !important;
+    padding:12px !important;
+    background:#fff !important;
+    border:2px solid #111 !important;
+    border-radius:14px !important;
+    box-shadow:0 4px 12px rgba(0,0,0,0.15) !important;
+    z-index:20 !important;
+  }
+  #ownerActions[style*="block"]{
+    display:block !important;
+    visibility:visible !important;
+    opacity:1 !important;
+  }
+  #ownerActions p{color:#111 !important;font-size:12px !important}
+  #ownerActions .btn{padding:12px !important;font-size:14px !important;font-weight:800 !important}
+  #detail .detail-box{padding-bottom:120px !important}
+}
+
 </style>
 </head>
 <body>
@@ -714,7 +743,7 @@ function getMyLocationForAdd(){
   }).catch(function(){ if(btn) btn.innerText=orig; });
  }, function(err){ var infoEl=document.getElementById('addLocationInfo'); if(infoEl) infoEl.innerText='❌ Błąd GPS: '+err.message; if(btn) btn.innerText=orig; }, {enableHighAccuracy:true, timeout:10000});
 }
-async function openDetail(id){ var a=null; for(var i=0;i<allAds.length;i++){ if(String(allAds[i].id)===String(id)){ a=allAds[i]; break; } } if(!a) return; currentAd=a; try{ var res=await fetch(SUPABASE_URL+'/rest/v1/ads?id=eq.'+id+'&select=*', {headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY}}); if(res.ok){ var data=await res.json(); if(data[0]){ a=data[0]; currentAd=a; } } }catch(e){} var imgs=[]; if(a.images&&a.images.length>0) imgs=a.images.slice(); else if(a.image_url) imgs=[a.image_url]; else imgs=['https://via.placeholder.com/800x600?text=Brak+zdjecia']; galleryImages=imgs; currentImageIndex=0; var detailImg=document.getElementById('detailImg'); if(detailImg){ detailImg.src=getOptimizedImageUrl(galleryImages[0], 800); detailImg.alt=(a.title||'Ogłoszenie')+' - zdjęcie 1 z '+galleryImages.length; } var gc=document.getElementById('galleryCounter'); if(gc) gc.innerText='1 / '+galleryImages.length; var thumbs=document.getElementById('detailImages'); if(thumbs){ var th=''; for(var t=0;t<galleryImages.length;t++){ th+='<img src="'+getOptimizedImageUrl(galleryImages[t], 200)+'" class="'+(t===0?'active':'')+'" onclick="showImage('+t+')" loading="lazy" alt="Miniatura '+(t+1)+'" role="listitem">'; } thumbs.innerHTML=th; } var dt=document.getElementById('detailTitle'); if(dt) dt.innerText=a.title||''; var dp=document.getElementById('detailPrice'); if(dp) dp.innerText=a.price? a.price+' PLN':''; var dl=document.getElementById('detailLoc'); if(dl) dl.innerText=(a.location||a.city||''); var dd=document.getElementById('detailDesc'); if(dd) dd.innerText=a.description||''; var dmgEl=document.getElementById('detailDamaged'); if(dmgEl){ if(a.damaged==='tak'){ dmgEl.innerText='⚠️ USZKODZONE'; dmgEl.style.display='block'; } else { dmgEl.style.display='none'; } } var pn=document.getElementById('phoneNumber'); if(pn){ pn.innerText='📞 '+(a.phone||'Brak'); pn.style.display='none'; } var det=document.getElementById('detail'); if(det) det.style.display='flex'; var ownerDiv=document.getElementById('ownerActions'); if(ownerDiv && currentAd && currentUser && currentAd.owner_id===currentUser.id){ ownerDiv.style.display='block'; } else if(ownerDiv){ ownerDiv.style.display='none'; } }
+async function openDetail(id){ var a=null; for(var i=0;i<allAds.length;i++){ if(String(allAds[i].id)===String(id)){ a=allAds[i]; break; } } if(!a) return; currentAd=a; try{ var res=await fetch(SUPABASE_URL+'/rest/v1/ads?id=eq.'+id+'&select=*', {headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY}}); if(res.ok){ var data=await res.json(); if(data[0]){ a=data[0]; currentAd=a; } } }catch(e){} var imgs=[]; if(a.images&&a.images.length>0) imgs=a.images.slice(); else if(a.image_url) imgs=[a.image_url]; else imgs=['https://via.placeholder.com/800x600?text=Brak+zdjecia']; galleryImages=imgs; currentImageIndex=0; var detailImg=document.getElementById('detailImg'); if(detailImg){ detailImg.src=getOptimizedImageUrl(galleryImages[0], 800); detailImg.alt=(a.title||'Ogłoszenie')+' - zdjęcie 1 z '+galleryImages.length; } var gc=document.getElementById('galleryCounter'); if(gc) gc.innerText='1 / '+galleryImages.length; var thumbs=document.getElementById('detailImages'); if(thumbs){ var th=''; for(var t=0;t<galleryImages.length;t++){ th+='<img src="'+getOptimizedImageUrl(galleryImages[t], 200)+'" class="'+(t===0?'active':'')+'" onclick="showImage('+t+')" loading="lazy" alt="Miniatura '+(t+1)+'" role="listitem">'; } thumbs.innerHTML=th; } var dt=document.getElementById('detailTitle'); if(dt) dt.innerText=a.title||''; var dp=document.getElementById('detailPrice'); if(dp) dp.innerText=a.price? a.price+' PLN':''; var dl=document.getElementById('detailLoc'); if(dl) dl.innerText=(a.location||a.city||''); var dd=document.getElementById('detailDesc'); if(dd) dd.innerText=a.description||''; var dmgEl=document.getElementById('detailDamaged'); if(dmgEl){ if(a.damaged==='tak'){ dmgEl.innerText='⚠️ USZKODZONE'; dmgEl.style.display='block'; } else { dmgEl.style.display='none'; } } var pn=document.getElementById('phoneNumber'); if(pn){ pn.innerText='📞 '+(a.phone||'Brak'); pn.style.display='none'; } var det=document.getElementById('detail'); if(det) det.style.display='flex'; var ownerDiv=document.getElementById('ownerActions'); if(ownerDiv && currentAd && currentUser && String(currentAd.owner_id)===String(currentUser.id)){ ownerDiv.style.display='block'; ownerDiv.style.visibility='visible'; ownerDiv.style.opacity='1'; console.log('Owner actions shown'); setTimeout(function(){ ownerDiv.scrollIntoView({behavior:'smooth', block:'nearest'}); }, 300); } else if(ownerDiv){ ownerDiv.style.display='none'; } }
 function saveAuth(access, refresh, user){ localStorage.setItem('sb_token', access); if(refresh) localStorage.setItem('sb_refresh', refresh); localStorage.setItem('sb_user', JSON.stringify(user)); authToken=access; if(refresh) refreshToken=refresh; currentUser=user; updateAuthUI(); }
 async function refreshAuthToken(){ if(!refreshToken){ refreshToken=localStorage.getItem('sb_refresh'); if(!refreshToken) return false; } try{ var res=await fetch(SUPABASE_URL+'/auth/v1/token?grant_type=refresh_token', {method:'POST', headers:{'apikey':SUPABASE_KEY,'Content-Type':'application/json'}, body: JSON.stringify({refresh_token: refreshToken})}); var data=await res.json(); if(res.ok && data.access_token){ saveAuth(data.access_token, data.refresh_token || refreshToken, data.user || currentUser); return true; } }catch(e){} return false; }
 function loadAuth(){ try{ authToken=localStorage.getItem('sb_token'); refreshToken=localStorage.getItem('sb_refresh'); currentUser=JSON.parse(localStorage.getItem('sb_user')||'null'); if(authToken){ try{ var payload=JSON.parse(atob(authToken.split('.')[1])); var exp=payload.exp*1000; if(Date.now() > exp - 60000){ refreshAuthToken(); } }catch(e){} } }catch(e){} updateAuthUI(); }
