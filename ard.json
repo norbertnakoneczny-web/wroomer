@@ -6,7 +6,7 @@
       "displayName": "WROOMER.PL - Ogłoszenia motoryzacyjne",
       "type": "text/html",
       "url": "https://www.wroomer.pl/",
-      "description": "Lokalne ogłoszenia motoryzacyjne Gorzyce, Rydułtowy, Rybnik, Wodzisław - samochody, części",
+      "description": "Lokalne ogłoszenia motoryzacyjne Gorzyce, Rydułtowy, Rybnik, Wodzisław",
       "capabilities": [
         "search",
         "browse",
@@ -15,36 +15,12 @@
       "tags": [
         "motoryzacja",
         "ogłoszenia",
-        "samochody",
-        "śląskie",
-        "gorzyce"
+        "samochody"
       ],
       "representativeQueries": [
         "znajdź ogłoszenia samochodowe w Gorzycach",
         "samochody używane Rydułtowy Rybnik",
         "ogłoszenia motoryzacyjne Wodzisław Śląski"
-      ]
-    },
-    {
-      "identifier": "urn:air:wroomer.pl:api:ads",
-      "displayName": "WROOMER.PL API - Ogłoszenia",
-      "type": "application/openapi+json",
-      "url": "https://www.wroomer.pl/api/docs",
-      "description": "API do wyszukiwania ogłoszeń motoryzacyjnych - filtry marki, lokalizacji, GPS",
-      "capabilities": [
-        "search",
-        "filter",
-        "geocode"
-      ],
-      "tags": [
-        "api",
-        "ogłoszenia",
-        "motoryzacja"
-      ],
-      "representativeQueries": [
-        "szukaj ogłoszeń BMW w promieniu 25km od Gorzyc",
-        "API ogłoszeń motoryzacyjnych śląskie",
-        "pobierz ogłoszenia z filtrem marki i lokalizacji"
       ]
     }
   ]
