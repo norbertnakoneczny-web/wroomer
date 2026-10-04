@@ -1,30 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://wroomer.pl/</loc><priority>1.0</priority><changefreq>hourly</changefreq></url>
-  <url><loc>https://wroomer.pl/?type=sprzedam</loc><priority>0.9</priority></url>
-  <url><loc>https://wroomer.pl/?type=kupie</loc><priority>0.9</priority></url>
-  <url><loc>https://wroomer.pl/?type=zamiana</loc><priority>0.9</priority></url>
-  <!-- Miasta -->
   <url><loc>https://wroomer.pl/?city=Warszawa</loc><priority>0.8</priority></url>
   <url><loc>https://wroomer.pl/?city=Kraków</loc><priority>0.8</priority></url>
   <url><loc>https://wroomer.pl/?city=Wrocław</loc><priority>0.8</priority></url>
   <url><loc>https://wroomer.pl/?city=Gdańsk</loc><priority>0.8</priority></url>
   <url><loc>https://wroomer.pl/?city=Katowice</loc><priority>0.8</priority></url>
   <url><loc>https://wroomer.pl/?city=Rybnik</loc><priority>0.8</priority></url>
-  <url><loc>https://wroomer.pl/?city=Poznań</loc><priority>0.8</priority></url>
-  <url><loc>https://wroomer.pl/?city=Łódź</loc><priority>0.8</priority></url>
-  <url><loc>https://wroomer.pl/?city=Szczecin</loc><priority>0.7</priority></url>
-  <url><loc>https://wroomer.pl/?city=Lublin</loc><priority>0.7</priority></url>
-  <!-- Marki -->
   <url><loc>https://wroomer.pl/?brand=BMW</loc><priority>0.8</priority></url>
   <url><loc>https://wroomer.pl/?brand=Audi</loc><priority>0.8</priority></url>
   <url><loc>https://wroomer.pl/?brand=Mercedes</loc><priority>0.8</priority></url>
-  <url><loc>https://wroomer.pl/?brand=Volkswagen</loc><priority>0.8</priority></url>
-  <url><loc>https://wroomer.pl/?brand=Opel</loc><priority>0.8</priority></url>
-  <url><loc>https://wroomer.pl/?brand=Toyota</loc><priority>0.8</priority></url>
-  <url><loc>https://wroomer.pl/?brand=Ford</loc><priority>0.8</priority></url>
-  <url><loc>https://wroomer.pl/?brand=Skoda</loc><priority>0.8</priority></url>
-  <url><loc>https://wroomer.pl/?brand=Peugeot</loc><priority>0.7</priority></url>
-  <url><loc>https://wroomer.pl/?brand=Renault</loc><priority>0.7</priority></url>
-  <url><loc>https://wroomer.pl/blog/</loc><priority>0.6</priority></url>
 </urlset>
