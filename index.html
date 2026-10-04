@@ -6,40 +6,15 @@
 <link rel="preconnect" href="https://nominatim.openstreetmap.org">
 <meta name="theme-color" content="#111">
 <style>/* critical CSS inline */#adsGrid{content-visibility:auto;contain-intrinsic-size:0 500px}
-/* v8.6 RESPONSIVE MOBILE PERFECT - ogłoszenie idealnie dopasowane do smartfona */
-* {box-sizing:border-box; -webkit-tap-highlight-color:transparent}
-html, body {overflow-x:hidden; max-width:100vw}
+/* v8.7 DETAIL ONLY - strona główna zostaje jak była super! Tylko ogłoszenie rozciągnięte na smartfonie */
 
-/* HEADER - responsywny */
-.top-row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 16px;flex-wrap:wrap}
-@media(max-width:768px){
-  .top-row{padding:10px 12px;gap:8px}
-  .logo{font-size:22px !important}
-  .top-actions{gap:6px !important;flex-wrap:wrap;justify-content:flex-end}
-  .top-actions .btn{padding:7px 10px !important;font-size:12px !important;min-height:36px}
-  #guestActions{gap:6px !important}
-  .search-bar{display:flex;flex-wrap:wrap;gap:6px !important;padding:10px 12px !important}
-  .search-bar input, .search-bar select{flex:1 1 calc(50% - 6px);min-width:120px;font-size:14px !important;padding:10px !important}
-  .search-bar .search-main{flex:1 1 100% !important}
-}
-
-/* GRID - responsywny */
-#adsGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;padding:12px}
-@media(max-width:768px){
-  #adsGrid{grid-template-columns:repeat(2,1fr) !important;gap:8px !important;padding:8px !important}
-  .card{border-radius:12px !important;overflow:hidden}
-  .card img{aspect-ratio:4/3;object-fit:cover;width:100%}
-}
-@media(max-width:480px){
-  #adsGrid{grid-template-columns:1fr !important;gap:10px !important}
-}
-
-/* DETAIL - IDEALNIE DOPASOWANE DO SMARTFONA */
+/* DETAIL - 100% ekranu smartfona */
 #detail{
   position:fixed !important;inset:0 !important;z-index:9999 !important;
   background:rgba(8,8,8,0.98) !important;
-  display:none;overflow:hidden !important;
+  display:none !important;
   width:100vw !important;height:100dvh !important;height:100vh !important;
+  overflow:hidden !important;
   align-items:stretch !important;justify-content:flex-start !important;
 }
 #detail[style*="flex"]{display:flex !important}
@@ -55,33 +30,39 @@ html, body {overflow-x:hidden; max-width:100vw}
   border-radius:0 !important;
 }
 
-/* GALLERY - perfekcyjnie na telefon */
+/* GALLERY - rozciągnięta idealnie */
 .gallery-wrap{
   position:relative !important;
   width:100% !important;flex:0 0 auto;
-  min-height:42vh !important;max-height:52vh !important;
+  min-height:45vh !important;max-height:55vh !important;
   background:#000 !important;
   display:flex !important;align-items:center !important;justify-content:center !important;
   overflow:hidden !important;
+  touch-action:pan-y !important;
 }
 .gallery-wrap img#detailImg{
   width:100% !important;height:100% !important;
-  max-width:100% !important;max-height:52vh !important;
+  max-width:100% !important;max-height:55vh !important;
   object-fit:contain !important;object-position:center !important;
   display:block !important;
 }
+
+/* Przyciski nawigacji zdjęć - większe na telefon */
 .gallery-wrap .nav-btn{
   position:absolute !important;top:50% !important;transform:translateY(-50%) !important;
-  background:rgba(0,0,0,0.6) !important;color:#fff !important;
+  background:rgba(0,0,0,0.65) !important;color:#fff !important;
   border:none !important;border-radius:50% !important;
-  width:36px !important;height:36px !important;
+  width:42px !important;height:42px !important;
   display:flex !important;align-items:center !important;justify-content:center !important;
-  font-size:18px !important;z-index:2 !important;
+  font-size:22px !important;z-index:3 !important;cursor:pointer !important;
 }
-.gallery-wrap .nav-btn.prev{left:8px !important}
-.gallery-wrap .nav-btn.next{right:8px !important}
+.gallery-wrap .nav-btn.prev{left:10px !important}
+.gallery-wrap .nav-btn.next{right:10px !important}
+@media(max-width:768px){
+  .gallery-wrap .nav-btn{width:38px !important;height:38px !important;font-size:20px !important}
+}
 
-/* THUMBS - scroll poziomy na telefon */
+/* THUMBS */
 #detailImages{
   display:flex !important;flex-direction:row !important;flex-wrap:nowrap !important;
   overflow-x:auto !important;overflow-y:hidden !important;
@@ -93,48 +74,36 @@ html, body {overflow-x:hidden; max-width:100vw}
 #detailImages img{
   width:64px !important;height:48px !important;flex:0 0 64px !important;
   object-fit:cover !important;border-radius:8px !important;
-  border:2px solid transparent !important;cursor:pointer !important;
+  border:2px solid transparent !important;
 }
 #detailImages img.active{border-color:#facc15 !important}
 
-/* CONTENT - responsywne */
+/* CONTENT - scroll poniżej */
 .detail-content{
   flex:1 1 auto !important;
   width:100% !important;max-width:100% !important;
   padding:16px 16px 120px 16px !important;
   background:#0f0f0f !important;
   color:#f0f0f0 !important;
-  overflow:visible !important;
 }
-#detailTitle{font-size:20px !important;line-height:1.2 !important;font-weight:800 !important;margin:0 0 8px 0 !important;color:#fff !important;word-break:break-word}
-#detailPrice{font-size:22px !important;font-weight:900 !important;color:#facc15 !important;margin:0 0 6px 0 !important}
-#detailLoc{font-size:13px !important;color:#aaa !important;display:flex !important;align-items:center !important;gap:6px !important}
-#detailDesc{font-size:14px !important;line-height:1.5 !important;color:#d0d0d0 !important;margin-top:12px !important;white-space:pre-wrap !important;word-break:break-word}
+#detailTitle{font-size:20px !important;line-height:1.2 !important;font-weight:800 !important;color:#fff !important;word-break:break-word}
+#detailPrice{font-size:22px !important;font-weight:900 !important;color:#facc15 !important}
+#detailLoc{font-size:13px !important;color:#aaa !important}
+#detailDesc{font-size:14px !important;line-height:1.5 !important;color:#d0d0d0 !important;white-space:pre-wrap !important;word-break:break-word}
 
-.contact-grid{display:grid !important;grid-template-columns:1fr 1fr !important;gap:8px !important;margin-top:16px !important}
-.contact-grid .btn{padding:12px !important;font-size:13px !important;font-weight:700 !important;min-height:44px !important;border-radius:10px !important}
-#ownerActions{margin-top:16px !important;padding:12px !important;background:#1a1a1a !important;border-radius:12px !important;border:1px solid #333 !important}
-#ownerActions .btn{width:100% !important;margin-top:8px !important;min-height:44px !important}
-
-/* SWIPE indicators - dopasowane */
-.swipe-counter-ad{top:env(safe-area-inset-top, 12px) !important;top:12px !important;font-size:11px !important;padding:6px 12px !important}
-.swipe-hint-ad{width:40px !important;height:40px !important;padding:0 !important;display:flex !important;align-items:center !important;justify-content:center !important}
+/* Swipe licznik zdjęć */
+.gallery-counter{
+  position:absolute !important;bottom:10px !important;left:50% !important;transform:translateX(-50%) !important;
+  background:rgba(0,0,0,0.75) !important;color:#fff !important;
+  padding:6px 12px !important;border-radius:20px !important;font-size:12px !important;font-weight:700 !important;
+  z-index:4 !important;pointer-events:none !important;
+}
 
 @media(max-width:768px){
-  .gallery-wrap{min-height:38vh !important;max-height:48vh !important}
-  .gallery-wrap img#detailImg{max-height:48vh !important}
-  .detail-content{padding:14px 14px 140px 14px !important}
-  #detailTitle{font-size:18px !important}
-  #detailPrice{font-size:20px !important}
+  .gallery-wrap{min-height:42vh !important;max-height:52vh !important}
+  .gallery-wrap img#detailImg{max-height:52vh !important}
+  .detail-content{padding:14px 14px 130px 14px !important}
 }
-
-@media(max-width:480px){
-  .gallery-wrap{min-height:36vh !important;max-height:44vh !important}
-  .detail-content{padding:12px 12px 140px 12px !important}
-  .contact-grid{grid-template-columns:1fr !important}
-}
-
-/* Fix iPhone notch */
 @supports(padding:env(safe-area-inset-top)){
   #detail{padding-top:env(safe-area-inset-top) !important}
   .detail-box{padding-bottom:env(safe-area-inset-bottom) !important}
@@ -575,40 +544,15 @@ header{position:relative !important;top:auto !important;z-index:10 !important}
 }
 
 
-/* v8.6 RESPONSIVE MOBILE PERFECT - ogłoszenie idealnie dopasowane do smartfona */
-* {box-sizing:border-box; -webkit-tap-highlight-color:transparent}
-html, body {overflow-x:hidden; max-width:100vw}
+/* v8.7 DETAIL ONLY - strona główna zostaje jak była super! Tylko ogłoszenie rozciągnięte na smartfonie */
 
-/* HEADER - responsywny */
-.top-row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 16px;flex-wrap:wrap}
-@media(max-width:768px){
-  .top-row{padding:10px 12px;gap:8px}
-  .logo{font-size:22px !important}
-  .top-actions{gap:6px !important;flex-wrap:wrap;justify-content:flex-end}
-  .top-actions .btn{padding:7px 10px !important;font-size:12px !important;min-height:36px}
-  #guestActions{gap:6px !important}
-  .search-bar{display:flex;flex-wrap:wrap;gap:6px !important;padding:10px 12px !important}
-  .search-bar input, .search-bar select{flex:1 1 calc(50% - 6px);min-width:120px;font-size:14px !important;padding:10px !important}
-  .search-bar .search-main{flex:1 1 100% !important}
-}
-
-/* GRID - responsywny */
-#adsGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;padding:12px}
-@media(max-width:768px){
-  #adsGrid{grid-template-columns:repeat(2,1fr) !important;gap:8px !important;padding:8px !important}
-  .card{border-radius:12px !important;overflow:hidden}
-  .card img{aspect-ratio:4/3;object-fit:cover;width:100%}
-}
-@media(max-width:480px){
-  #adsGrid{grid-template-columns:1fr !important;gap:10px !important}
-}
-
-/* DETAIL - IDEALNIE DOPASOWANE DO SMARTFONA */
+/* DETAIL - 100% ekranu smartfona */
 #detail{
   position:fixed !important;inset:0 !important;z-index:9999 !important;
   background:rgba(8,8,8,0.98) !important;
-  display:none;overflow:hidden !important;
+  display:none !important;
   width:100vw !important;height:100dvh !important;height:100vh !important;
+  overflow:hidden !important;
   align-items:stretch !important;justify-content:flex-start !important;
 }
 #detail[style*="flex"]{display:flex !important}
@@ -624,33 +568,39 @@ html, body {overflow-x:hidden; max-width:100vw}
   border-radius:0 !important;
 }
 
-/* GALLERY - perfekcyjnie na telefon */
+/* GALLERY - rozciągnięta idealnie */
 .gallery-wrap{
   position:relative !important;
   width:100% !important;flex:0 0 auto;
-  min-height:42vh !important;max-height:52vh !important;
+  min-height:45vh !important;max-height:55vh !important;
   background:#000 !important;
   display:flex !important;align-items:center !important;justify-content:center !important;
   overflow:hidden !important;
+  touch-action:pan-y !important;
 }
 .gallery-wrap img#detailImg{
   width:100% !important;height:100% !important;
-  max-width:100% !important;max-height:52vh !important;
+  max-width:100% !important;max-height:55vh !important;
   object-fit:contain !important;object-position:center !important;
   display:block !important;
 }
+
+/* Przyciski nawigacji zdjęć - większe na telefon */
 .gallery-wrap .nav-btn{
   position:absolute !important;top:50% !important;transform:translateY(-50%) !important;
-  background:rgba(0,0,0,0.6) !important;color:#fff !important;
+  background:rgba(0,0,0,0.65) !important;color:#fff !important;
   border:none !important;border-radius:50% !important;
-  width:36px !important;height:36px !important;
+  width:42px !important;height:42px !important;
   display:flex !important;align-items:center !important;justify-content:center !important;
-  font-size:18px !important;z-index:2 !important;
+  font-size:22px !important;z-index:3 !important;cursor:pointer !important;
 }
-.gallery-wrap .nav-btn.prev{left:8px !important}
-.gallery-wrap .nav-btn.next{right:8px !important}
+.gallery-wrap .nav-btn.prev{left:10px !important}
+.gallery-wrap .nav-btn.next{right:10px !important}
+@media(max-width:768px){
+  .gallery-wrap .nav-btn{width:38px !important;height:38px !important;font-size:20px !important}
+}
 
-/* THUMBS - scroll poziomy na telefon */
+/* THUMBS */
 #detailImages{
   display:flex !important;flex-direction:row !important;flex-wrap:nowrap !important;
   overflow-x:auto !important;overflow-y:hidden !important;
@@ -662,48 +612,36 @@ html, body {overflow-x:hidden; max-width:100vw}
 #detailImages img{
   width:64px !important;height:48px !important;flex:0 0 64px !important;
   object-fit:cover !important;border-radius:8px !important;
-  border:2px solid transparent !important;cursor:pointer !important;
+  border:2px solid transparent !important;
 }
 #detailImages img.active{border-color:#facc15 !important}
 
-/* CONTENT - responsywne */
+/* CONTENT - scroll poniżej */
 .detail-content{
   flex:1 1 auto !important;
   width:100% !important;max-width:100% !important;
   padding:16px 16px 120px 16px !important;
   background:#0f0f0f !important;
   color:#f0f0f0 !important;
-  overflow:visible !important;
 }
-#detailTitle{font-size:20px !important;line-height:1.2 !important;font-weight:800 !important;margin:0 0 8px 0 !important;color:#fff !important;word-break:break-word}
-#detailPrice{font-size:22px !important;font-weight:900 !important;color:#facc15 !important;margin:0 0 6px 0 !important}
-#detailLoc{font-size:13px !important;color:#aaa !important;display:flex !important;align-items:center !important;gap:6px !important}
-#detailDesc{font-size:14px !important;line-height:1.5 !important;color:#d0d0d0 !important;margin-top:12px !important;white-space:pre-wrap !important;word-break:break-word}
+#detailTitle{font-size:20px !important;line-height:1.2 !important;font-weight:800 !important;color:#fff !important;word-break:break-word}
+#detailPrice{font-size:22px !important;font-weight:900 !important;color:#facc15 !important}
+#detailLoc{font-size:13px !important;color:#aaa !important}
+#detailDesc{font-size:14px !important;line-height:1.5 !important;color:#d0d0d0 !important;white-space:pre-wrap !important;word-break:break-word}
 
-.contact-grid{display:grid !important;grid-template-columns:1fr 1fr !important;gap:8px !important;margin-top:16px !important}
-.contact-grid .btn{padding:12px !important;font-size:13px !important;font-weight:700 !important;min-height:44px !important;border-radius:10px !important}
-#ownerActions{margin-top:16px !important;padding:12px !important;background:#1a1a1a !important;border-radius:12px !important;border:1px solid #333 !important}
-#ownerActions .btn{width:100% !important;margin-top:8px !important;min-height:44px !important}
-
-/* SWIPE indicators - dopasowane */
-.swipe-counter-ad{top:env(safe-area-inset-top, 12px) !important;top:12px !important;font-size:11px !important;padding:6px 12px !important}
-.swipe-hint-ad{width:40px !important;height:40px !important;padding:0 !important;display:flex !important;align-items:center !important;justify-content:center !important}
+/* Swipe licznik zdjęć */
+.gallery-counter{
+  position:absolute !important;bottom:10px !important;left:50% !important;transform:translateX(-50%) !important;
+  background:rgba(0,0,0,0.75) !important;color:#fff !important;
+  padding:6px 12px !important;border-radius:20px !important;font-size:12px !important;font-weight:700 !important;
+  z-index:4 !important;pointer-events:none !important;
+}
 
 @media(max-width:768px){
-  .gallery-wrap{min-height:38vh !important;max-height:48vh !important}
-  .gallery-wrap img#detailImg{max-height:48vh !important}
-  .detail-content{padding:14px 14px 140px 14px !important}
-  #detailTitle{font-size:18px !important}
-  #detailPrice{font-size:20px !important}
+  .gallery-wrap{min-height:42vh !important;max-height:52vh !important}
+  .gallery-wrap img#detailImg{max-height:52vh !important}
+  .detail-content{padding:14px 14px 130px 14px !important}
 }
-
-@media(max-width:480px){
-  .gallery-wrap{min-height:36vh !important;max-height:44vh !important}
-  .detail-content{padding:12px 12px 140px 12px !important}
-  .contact-grid{grid-template-columns:1fr !important}
-}
-
-/* Fix iPhone notch */
 @supports(padding:env(safe-area-inset-top)){
   #detail{padding-top:env(safe-area-inset-top) !important}
   .detail-box{padding-bottom:env(safe-area-inset-bottom) !important}
@@ -1254,133 +1192,75 @@ loadAuth();
 loadAds();
 </script>
 
+
 <script>
-// v8.5 SWIPE FIX - dwa tryby: zdjęcia wewnątrz ogłoszenia vs całe ogłoszenia
+// v8.7 SWIPE TYLKO ZDJĘCIA - strona główna super zostaje, ogłoszenie rozciągnięte, swipe lewo/prawo = zmiana zdjęć w ogłoszeniu
 (function(){
-  var adSwipe = {startX:0, startY:0, endX:0, endY:0};
   var imgSwipe = {startX:0, startY:0, endX:0, endY:0};
-  var minDist = 50;
-
-  function findAdIndex(){
-    if(typeof filteredAds==='undefined' || !filteredAds || !currentAd) return -1;
-    for(var i=0;i<filteredAds.length;i++){ if(String(filteredAds[i].id)===String(currentAd.id)) return i; }
-    return -1;
-  }
-
-  function goNextAd(){
-    var idx = findAdIndex();
-    if(idx===-1) return;
-    var next = idx+1; if(next>=filteredAds.length) next=0;
-    if(typeof openDetail==='function'){ 
-      // animacja slide
-      var box = document.querySelector('.detail-box');
-      if(box){ box.style.transition='transform 0.2s ease'; box.style.transform='translateX(-30px)'; box.style.opacity='0.7'; }
-      setTimeout(function(){ openDetail(filteredAds[next].id); try{if(navigator.vibrate) navigator.vibrate(20);}catch(e){} }, 150);
-    }
-  }
-  function goPrevAd(){
-    var idx = findAdIndex();
-    if(idx===-1) return;
-    var prev = idx-1; if(prev<0) prev=filteredAds.length-1;
-    if(typeof openDetail==='function'){
-      var box = document.querySelector('.detail-box');
-      if(box){ box.style.transition='transform 0.2s ease'; box.style.transform='translateX(30px)'; box.style.opacity='0.7'; }
-      setTimeout(function(){ openDetail(filteredAds[prev].id); try{if(navigator.vibrate) navigator.vibrate(20);}catch(e){} }, 150);
-    }
-  }
-
-  function handleAdSwipe(){
-    var dx = adSwipe.endX - adSwipe.startX;
-    var dy = adSwipe.endY - adSwipe.startY;
-    if(Math.abs(dx) < minDist) return;
-    if(Math.abs(dx) < Math.abs(dy)) return; // pionowy scroll - ignoruj
-    if(dx < -minDist) goNextAd(); else if(dx > minDist) goPrevAd();
-  }
+  var minDist = 45;
 
   function handleImgSwipe(){
     var dx = imgSwipe.endX - imgSwipe.startX;
     var dy = imgSwipe.endY - imgSwipe.startY;
     if(Math.abs(dx) < minDist) return;
-    if(Math.abs(dx) < Math.abs(dy)) return;
+    if(Math.abs(dx) < Math.abs(dy)) return; // pionowy scroll ignoruj
     if(dx < -minDist){ if(typeof nextImage==='function') nextImage(); }
     else if(dx > minDist){ if(typeof prevImage==='function') prevImage(); }
   }
 
   document.addEventListener('DOMContentLoaded', function(){
-    var detail = document.getElementById('detail');
     var galleryWrap = document.querySelector('.gallery-wrap') || document.getElementById('galleryWrap');
     var detailImg = document.getElementById('detailImg') || document.getElementById('detailImage');
-
-    // --- SWIPE ZDJĘĆ wewnątrz ogłoszenia (na galerii) ---
     var imgZone = galleryWrap || detailImg;
-    if(imgZone){
-      imgZone.addEventListener('touchstart', function(e){
-        imgSwipe.startX = e.changedTouches[0].screenX;
-        imgSwipe.startY = e.changedTouches[0].screenY;
-        e.stopPropagation();
-      }, {passive:true});
-      imgZone.addEventListener('touchend', function(e){
-        imgSwipe.endX = e.changedTouches[0].screenX;
-        imgSwipe.endY = e.changedTouches[0].screenY;
+    if(!imgZone) return;
+
+    // Touch
+    imgZone.addEventListener('touchstart', function(e){
+      imgSwipe.startX = e.changedTouches[0].screenX;
+      imgSwipe.startY = e.changedTouches[0].screenY;
+    }, {passive:true});
+    imgZone.addEventListener('touchend', function(e){
+      imgSwipe.endX = e.changedTouches[0].screenX;
+      imgSwipe.endY = e.changedTouches[0].screenY;
+      handleImgSwipe();
+    }, {passive:true});
+
+    // Mouse drag dla testu na kompie
+    var mdX = 0;
+    imgZone.addEventListener('mousedown', function(e){ mdX=e.screenX; });
+    imgZone.addEventListener('mouseup', function(e){
+      var dx = e.screenX - mdX;
+      if(Math.abs(dx)>=minDist){
+        imgSwipe.startX=mdX; imgSwipe.endX=e.screenX; imgSwipe.startY=0; imgSwipe.endY=0;
         handleImgSwipe();
-        e.stopPropagation();
-      }, {passive:true});
-    }
-
-    // --- SWIPE CAŁYCH OGŁOSZEŃ (na treści, poza galerią) ---
-    // Podpinamy do detail-content, żeby nie kolidowało z galerią
-    var contentZones = document.querySelectorAll('.detail-content, #detail');
-    contentZones.forEach(function(zone){
-      zone.addEventListener('touchstart', function(e){
-        // Jeśli dotyk zaczął się w galerii, ignoruj (to obsłuży imgZone)
-        if(e.target.closest && e.target.closest('.gallery-wrap, #galleryWrap, #detailImg')) return;
-        adSwipe.startX = e.changedTouches[0].screenX;
-        adSwipe.startY = e.changedTouches[0].screenY;
-      }, {passive:true});
-      zone.addEventListener('touchend', function(e){
-        if(e.target.closest && e.target.closest('.gallery-wrap, #galleryWrap, #detailImg')) return;
-        adSwipe.endX = e.changedTouches[0].screenX;
-        adSwipe.endY = e.changedTouches[0].screenY;
-        handleAdSwipe();
-      }, {passive:true});
-    });
-
-    // Desktop drag dla całych ogłoszeń (na content)
-    var mouseDownX = 0;
-    var mouseDownTarget = null;
-    detail.addEventListener('mousedown', function(e){
-      if(e.target.closest && e.target.closest('.gallery-wrap, #galleryWrap')) return;
-      mouseDownX = e.screenX;
-      mouseDownTarget = e.target;
-    });
-    detail.addEventListener('mouseup', function(e){
-      if(e.target.closest && e.target.closest('.gallery-wrap, #galleryWrap')) return;
-      var dx = e.screenX - mouseDownX;
-      if(Math.abs(dx) >= minDist){
-        adSwipe.startX = mouseDownX;
-        adSwipe.endX = e.screenX;
-        adSwipe.startY = 0;
-        adSwipe.endY = 0;
-        handleAdSwipe();
       }
     });
   });
 
-  // Wskaźniki UI
+  // Licznik zdjęć
   setTimeout(function(){
-    var style = document.createElement('style');
-    style.innerHTML = `
-      #detail{position:fixed !important;inset:0 !important;z-index:9999 !important;touch-action:pan-y}
-      .gallery-wrap{touch-action:pan-y}
-      .swipe-hint-ad{position:fixed;top:50%;transform:translateY(-50%);background:rgba(0,0,0,0.6);color:#fff;padding:14px 10px;border-radius:24px;font-size:22px;z-index:10001;pointer-events:none;opacity:0;transition:opacity .3s}
-      .swipe-hint-ad.left{left:12px} .swipe-hint-ad.right{right:12px}
-      .swipe-counter-ad{position:fixed;top:12px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.85);color:#fff;padding:8px 14px;border-radius:20px;font-size:12px;font-weight:700;z-index:10001;pointer-events:none}
-      .detail-content{position:relative}
-      #detail:active .swipe-hint-ad{opacity:0.7}
-      @media(max-width:768px){ .swipe-hint-ad{opacity:0.5} }
-    `;
-    document.head.appendChild(style);
-  }, 500);
+    var detail = document.getElementById('detail');
+    if(!detail) return;
+    var wrap = document.querySelector('.gallery-wrap');
+    if(!wrap) return;
+    var counter = document.createElement('div');
+    counter.className='gallery-counter';
+    counter.id='galleryCounter';
+    wrap.appendChild(counter);
+    // aktualizuj licznik przy zmianie zdjęcia
+    var origShow = window.showImage;
+    if(typeof origShow==='function'){
+      window.showImage = function(idx){
+        origShow(idx);
+        try{
+          var c=document.getElementById('galleryCounter');
+          if(c && typeof galleryImages!=='undefined' && typeof currentImageIndex!=='undefined'){
+            c.innerText=(currentImageIndex+1)+' / '+galleryImages.length;
+          }
+        }catch(e){}
+      };
+    }
+  }, 800);
 })();
 </script>
 
