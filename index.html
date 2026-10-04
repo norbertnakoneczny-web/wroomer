@@ -99,7 +99,7 @@ header{background:#fff;border-bottom:1px solid #e5e5e0;position:sticky;top:0;z-i
 <body>
 <header>
 <div class="top-row">
-<div class="logo" onclick="location.reload()">WROOMER<span>.PL</span> <span style="font-size:9px;background:#111;color:#fff;padding:2px 6px;border-radius:4px">v4.7 FIX PRZYCISKI</span></div>
+<div class="logo" onclick="location.reload()">WROOMER<span>.PL</span> <span style="font-size:9px;background:#111;color:#fff;padding:2px 6px;border-radius:4px">v4.8 FIX PGRST204</span></div>
 <div class="top-actions">
 <button class="btn btn-yellow" onclick="openAdd()" aria-label="Dodaj ogłoszenie">+ Dodaj</button>
 <button id="inboxBtn" class="btn btn-black" style="display:none" onclick="openInbox()">💬 Wiad. <span id="inboxCount" style="background:#ffcb00;color:#111;padding:2px 6px;border-radius:10px;font-size:10px;display:none">0</span></button>
@@ -176,7 +176,7 @@ header{background:#fff;border-bottom:1px solid #e5e5e0;position:sticky;top:0;z-i
 <div id="chatModal" onclick="if(event.target.id==='chatModal')closeChat()"><div class="chat-box"><div class="chat-header"><div><b id="chatTitle">Czat</b></div><button class="btn btn-white" onclick="closeChat()">✕</button></div><div id="chatMessages" class="chat-messages"></div><div class="chat-input"><input id="chatInput" placeholder="Napisz..." onkeypress="if(event.key==='Enter')sendChatMessage()"><button class="btn btn-black" onclick="sendChatMessage()">Wyślij</button></div></div></div>
 
 <div id="addModal" onclick="if(event.target.id==='addModal')closeAdd()"><div class="add-box"><h2 id="addModalTitle" style="font-size:16px">Dodaj ogłoszenie</h2>
-<div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:8px 10px;margin-bottom:10px;font-size:11px;color:#166534"><b>🚀 v4.7 FIX PRZYCISKI + JWT:</b> Naprawione addTitle→addModalTitle, wszystkie przyciski działają, auto-refresh token. Kompresja 0.56MB→0.26MB ✅</div>
+<div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:8px 10px;margin-bottom:10px;font-size:11px;color:#166534"><b>🚀 v4.8 FIX PGRST204:</b> Usunięto kolumny powiat/wojewodztwo których nie ma w bazie. Teraz payload tylko: title, price, image_url, images, brand, model, description, location, city, lat, lng, phone, owner_id. Kompresja 0.56MB→0.26MB ✅</div>
 <div class="form-grid">
 <div class="full"><label for="addTitleInput">Tytuł *</label><input id="addTitleInput"></div>
 <div><label for="addBrand">Marka *</label><select id="addBrand" onchange="updateModelOptions()"><option value="">Wybierz *</option><option>BMW</option><option>Audi</option><option>Mercedes</option><option>Volkswagen</option><option>Toyota</option><option>Ford</option><option>Opel</option><option>Skoda</option><option>Mitsubishi</option><option>Inna</option></select></div>
@@ -197,7 +197,7 @@ header{background:#fff;border-bottom:1px solid #e5e5e0;position:sticky;top:0;z-i
 <div id="authModal" onclick="if(event.target.id==='authModal')closeAuth()"><div class="auth-box"><h3>Logowanie</h3><div style="display:flex;gap:8px;margin:12px 0"><button class="btn btn-black" style="flex:1" onclick="showTab('login')">Logowanie</button><button class="btn btn-white" style="flex:1" onclick="showTab('register')">Rejestracja</button></div><div id="loginTab"><label for="loginEmail" style="position:absolute;left:-9999px">E-mail</label><input id="loginEmail" placeholder="E-mail" style="width:100%;padding:10px;margin-top:8px"><label for="loginPass" style="position:absolute;left:-9999px">Hasło</label><input id="loginPass" type="password" placeholder="Hasło" style="width:100%;padding:10px;margin-top:8px"><button class="btn btn-black" style="width:100%;margin-top:10px" onclick="login()">Zaloguj</button><p id="loginInfo" style="font-size:11px;color:#c00;margin-top:8px"></p></div><div id="registerTab" style="display:none"><input id="regEmail" placeholder="E-mail" style="width:100%;padding:10px;margin-top:8px"><input id="regPass" type="password" placeholder="Hasło" style="width:100%;padding:10px;margin-top:8px"><label style="font-size:11px;display:flex;gap:6px;margin-top:8px"><input type="checkbox" id="regCheck"> Regulamin</label><button class="btn btn-yellow" style="width:100%;margin-top:10px" onclick="register()">Załóż konto</button><p id="regInfo" style="font-size:11px;color:#c00;margin-top:8px"></p></div><div id="resetTab" style="display:none"><input id="resetEmail" placeholder="E-mail" style="width:100%;padding:10px;margin-top:8px"><button class="btn btn-black" style="width:100%;margin-top:10px" onclick="sendReset()">Wyślij reset</button><p id="resetInfo" style="font-size:11px;margin-top:8px"></p><button class="btn btn-white" style="width:100%;margin-top:8px" onclick="showTab('login')">Wróć</button></div></div></div>
 
 <script>
-// v4.7 FIX PRZYCISKI + JWT
+// v4.8 FIX PGRST204 - brak kolumn powiat/wojewodztwo
 var supportsWebP=false; try{ var c=document.createElement('canvas'); supportsWebP=c.toDataURL('image/webp').indexOf('data:image/webp')===0; }catch(e){}
 
 async function compressImage(file, maxW, quality){
@@ -241,7 +241,7 @@ var MIEJSCOWOSCI={'wodzisławski':['Wodzisław Śląski','Gorzyce','Gorzyczki','
 var KNOWN_COORDS={'gorzyce':{lat:49.962,lng:18.397},'rydułtowy':{lat:50.058,lng:18.405},'wodzisław śląski':{lat:50.022,lng:18.456},'rybnik':{lat:50.097,lng:18.542},'racibórz':{lat:50.091,lng:18.219},'katowice':{lat:50.264,lng:19.023}};
 function getCoordsForPlace(n){ if(!n) return null; n=n.toLowerCase().trim(); if(KNOWN_COORDS[n]) return KNOWN_COORDS[n]; for(var k in KNOWN_COORDS){ if(n.indexOf(k)!==-1||k.indexOf(n)!==-1) return KNOWN_COORDS[k]; } return null; }
 function ensureAdCoords(ad){ if(ad.lat&&ad.lng) return ad; var loc=(ad.location||ad.city||'').toLowerCase(); var c=getCoordsForPlace(loc); if(c){ ad.lat=c.lat; ad.lng=c.lng; } return ad; }
-function showImage(idx){ if(!galleryImages.length) return; if(idx<0) idx=galleryImages.length-1; if(idx>=galleryImages.length) idx=0; currentImageIndex=idx; var img=document.getElementById('detailImg'); img.style.opacity='0.5'; setTimeout(function(){ var nextIdx=(currentImageIndex+1)%galleryImages.length; var preload=new Image(); preload.src=getOptimizedImageUrl(galleryImages[nextIdx], 800); img.src=getOptimizedImageUrl(galleryImages[currentImageIndex], 800); img.alt=currentAd? currentAd.title+' '+(currentImageIndex+1):'Zdjęcie'; img.style.opacity='1'; }, 50); document.getElementById('galleryCounter').innerText=(currentImageIndex+1)+' / '+galleryImages.length; var dots=document.getElementById('galleryDots'); var dh=''; for(var i=0;i<galleryImages.length;i++){ dh+='<span class="'+(i===currentImageIndex?'active':'')+'" onclick="showImage('+i+')"></span>'; } dots.innerHTML=dh; var thumbs=document.querySelectorAll('#detailImages img'); for(var t=0;t<thumbs.length;t++){ thumbs[t].classList.toggle('active', t===currentImageIndex); } }
+function showImage(idx){ if(!galleryImages.length) return; if(idx<0) idx=galleryImages.length-1; if(idx>=galleryImages.length) idx=0; currentImageIndex=idx; var img=document.getElementById('detailImg'); if(img){ img.style.opacity='0.5'; setTimeout(function(){ var nextIdx=(currentImageIndex+1)%galleryImages.length; var preload=new Image(); preload.src=getOptimizedImageUrl(galleryImages[nextIdx], 800); img.src=getOptimizedImageUrl(galleryImages[currentImageIndex], 800); img.alt=currentAd? currentAd.title+' '+(currentImageIndex+1):'Zdjęcie'; img.style.opacity='1'; }, 50); } var gc=document.getElementById('galleryCounter'); if(gc) gc.innerText=(currentImageIndex+1)+' / '+galleryImages.length; var dots=document.getElementById('galleryDots'); if(dots){ var dh=''; for(var i=0;i<galleryImages.length;i++){ dh+='<span class="'+(i===currentImageIndex?'active':'')+'" onclick="showImage('+i+')"></span>'; } dots.innerHTML=dh; } var thumbs=document.querySelectorAll('#detailImages img'); for(var t=0;t<thumbs.length;t++){ thumbs[t].classList.toggle('active', t===currentImageIndex); } }
 function nextImage(e){ if(e) e.stopPropagation(); showImage(currentImageIndex+1); }
 function prevImage(e){ if(e) e.stopPropagation(); showImage(currentImageIndex-1); }
 function handleGalleryBgClick(e){ if(e.target.id==='galleryWrap'||e.target.classList.contains('gallery-wrap')) closeDetail(); }
@@ -249,20 +249,20 @@ function handleImageClick(e){ e.stopPropagation(); nextImage(e); }
 document.addEventListener('DOMContentLoaded', function(){
  var wrap=document.getElementById('galleryWrap');
  if(wrap){ wrap.addEventListener('touchstart', function(e){ touchStartX=e.changedTouches[0].screenX; }, {passive:true}); wrap.addEventListener('touchend', function(e){ var diff=touchStartX-e.changedTouches[0].screenX; if(Math.abs(diff)>50){ if(diff>0) nextImage(); else prevImage(); } }, {passive:true}); }
- document.addEventListener('keydown', function(e){ var d=document.getElementById('detail'); if(d.style.display!=='flex') return; if(e.key==='ArrowRight') nextImage(); if(e.key==='ArrowLeft') prevImage(); if(e.key==='Escape') closeDetail(); });
+ document.addEventListener('keydown', function(e){ var d=document.getElementById('detail'); if(!d||d.style.display!=='flex') return; if(e.key==='ArrowRight') nextImage(); if(e.key==='ArrowLeft') prevImage(); if(e.key==='Escape') closeDetail(); });
 });
 function selectChannel(ch){ currentChannel=ch; document.querySelectorAll('.msg-channel').forEach(function(el){ el.classList.remove('active'); }); var el=document.querySelector('.msg-channel[data-channel="'+ch+'"]'); if(el) el.classList.add('active'); var btn=document.getElementById('sendMsgBtn'); if(btn){ btn.innerText={sms:'💬 SMS', messenger:'💙 Messenger', whatsapp:'🟢 WhatsApp', wroomer:'⭐ WROOMER'}[ch]||'Wyślij'; btn.className='btn '+(ch==='whatsapp'?'btn-green':ch==='messenger'?'btn-blue':ch==='sms'?'btn-orange':'btn-black'); btn.style.flex='1'; } }
 function getCleanPhone(){ var n=currentAd&&currentAd.phone; if(!n) return null; var clean=n.replace(/\s/g,''); if(clean.indexOf('+')!==0) clean='+48'+clean; return clean; }
-function getMessageWithLink(){ var txt=document.getElementById('msgText').value.trim(); if(!txt) txt='Cześć! Czy aktualne?'; var title=currentAd? currentAd.title:''; var price=currentAd? currentAd.price:''; var loc=currentAd? (currentAd.location||''):''; var url=window.location.href; var full='Cześć! 👋\nOgłoszenie: *'+title+'*\n💰 '+price+' PLN\n📍 '+loc+'\n\n'+txt+'\n\nLink: '+url; return {raw:txt, full:full}; }
-function sendMessage(){ var phone=getCleanPhone(); var msg=getMessageWithLink(); if(currentChannel==='sms'){ window.location.href='sms:'+phone+'?body='+encodeURIComponent(msg.full); } else if(currentChannel==='whatsapp'){ window.open('https://wa.me/'+phone.replace('+','')+'?text='+encodeURIComponent(msg.full), '_blank'); } else if(currentChannel==='messenger'){ navigator.clipboard.writeText(msg.full); window.open('https://www.messenger.com/', '_blank'); } else { if(!currentUser){ alert('Zaloguj'); openAuth(); return; } var btn=document.getElementById('sendMsgBtn'); if(btn){ btn.disabled=true; btn.innerText='Wysyłam...'; } var payload={ad_id:currentAd.id, ad_title:currentAd.title, sender_id:currentUser.id, sender_email:currentUser.email, receiver_id:currentAd.owner_id, message:msg.raw, created_at:new Date().toISOString(), is_read:false}; fetch(SUPABASE_URL+'/rest/v1/messages',{method:'POST',headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+authToken,'Content-Type':'application/json'},body:JSON.stringify(payload)}).then(function(){ if(btn){ btn.disabled=false; btn.innerText='⭐ WROOMER'; } document.getElementById('msgInfo').innerText='✅ Wysłano!'; document.getElementById('msgText').value=''; }).catch(function(){ var localMsgs=JSON.parse(localStorage.getItem('wroomer_messages')||'[]'); localMsgs.push(payload); localStorage.setItem('wroomer_messages', JSON.stringify(localMsgs)); if(btn){ btn.disabled=false; btn.innerText='⭐ WROOMER'; } document.getElementById('msgInfo').innerText='✅ Zapisano!'; }); } }
+function getMessageWithLink(){ var txtEl=document.getElementById('msgText'); var txt=txtEl? txtEl.value.trim():''; if(!txt) txt='Cześć! Czy aktualne?'; var title=currentAd? currentAd.title:''; var price=currentAd? currentAd.price:''; var loc=currentAd? (currentAd.location||''):''; var url=window.location.href; var full='Cześć! 👋\nOgłoszenie: *'+title+'*\n💰 '+price+' PLN\n📍 '+loc+'\n\n'+txt+'\n\nLink: '+url; return {raw:txt, full:full}; }
+function sendMessage(){ var phone=getCleanPhone(); var msg=getMessageWithLink(); if(currentChannel==='sms'){ window.location.href='sms:'+phone+'?body='+encodeURIComponent(msg.full); } else if(currentChannel==='whatsapp'){ window.open('https://wa.me/'+phone.replace('+','')+'?text='+encodeURIComponent(msg.full), '_blank'); } else if(currentChannel==='messenger'){ navigator.clipboard.writeText(msg.full); window.open('https://www.messenger.com/', '_blank'); } else { if(!currentUser){ alert('Zaloguj'); openAuth(); return; } var btn=document.getElementById('sendMsgBtn'); if(btn){ btn.disabled=true; btn.innerText='Wysyłam...'; } var payload={ad_id:currentAd.id, ad_title:currentAd.title, sender_id:currentUser.id, sender_email:currentUser.email, receiver_id:currentAd.owner_id, message:msg.raw, created_at:new Date().toISOString(), is_read:false}; fetch(SUPABASE_URL+'/rest/v1/messages',{method:'POST',headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+authToken,'Content-Type':'application/json'},body:JSON.stringify(payload)}).then(function(){ if(btn){ btn.disabled=false; btn.innerText='⭐ WROOMER'; } var mi=document.getElementById('msgInfo'); if(mi) mi.innerText='✅ Wysłano!'; var mt=document.getElementById('msgText'); if(mt) mt.value=''; }).catch(function(){ var localMsgs=JSON.parse(localStorage.getItem('wroomer_messages')||'[]'); localMsgs.push(payload); localStorage.setItem('wroomer_messages', JSON.stringify(localMsgs)); if(btn){ btn.disabled=false; btn.innerText='⭐ WROOMER'; } var mi2=document.getElementById('msgInfo'); if(mi2) mi2.innerText='✅ Zapisano!'; }); } }
 function quickSMS(){ var phone=getCleanPhone(); var msg=getMessageWithLink(); window.location.href='sms:'+phone+'?body='+encodeURIComponent(msg.full); }
 function quickWhatsApp(){ var phone=getCleanPhone(); var msg=getMessageWithLink(); window.open('https://wa.me/'+phone.replace('+','')+'?text='+encodeURIComponent(msg.full), '_blank'); }
-function openInbox(){ if(!currentUser){ alert('Zaloguj'); openAuth(); return; } document.getElementById('inboxModal').style.display='flex'; loadInbox(); }
-function closeInbox(){ document.getElementById('inboxModal').style.display='none'; }
+function openInbox(){ if(!currentUser){ alert('Zaloguj'); openAuth(); return; } var el=document.getElementById('inboxModal'); if(el){ el.style.display='flex'; loadInbox(); } }
+function closeInbox(){ var el=document.getElementById('inboxModal'); if(el) el.style.display='none'; }
 function loadInbox(){ var listEl=document.getElementById('inboxList'); if(!listEl) return; listEl.innerHTML='<p style="padding:20px;text-align:center">Ładowanie...</p>'; fetch(SUPABASE_URL+'/rest/v1/messages?or=(receiver_id.eq.'+currentUser.id+',sender_id.eq.'+currentUser.id+')&order=created_at.desc&limit=100',{headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+authToken}}).then(function(r){ return r.ok? r.json():[]; }).then(function(msgs){ var html=''; for(var i=0;i<msgs.length;i++){ var m=msgs[i]; html+='<div class="inbox-item"><b>'+(m.ad_title||'')+'</b><p>'+m.message.slice(0,60)+'</p></div>'; } listEl.innerHTML=html||'<p style="padding:20px;text-align:center">Brak</p>'; }).catch(function(){ listEl.innerHTML='<p style="padding:20px;text-align:center">Brak</p>'; }); }
 function closeChat(){ var el=document.getElementById('chatModal'); if(el) el.style.display='none'; }
 function sendChatMessage(){ var input=document.getElementById('chatInput'); if(!input) return; var text=input.value.trim(); if(!text) return; }
-function updateModelOptions(){ var b=document.getElementById('addBrand'); if(!b) return; b=b.value; var sel=document.getElementById('addModel'); if(!sel) return; var list=MODELS[b]||['Wybierz']; sel.innerHTML=''; for(var i=0;i<list.length;i++){ var o=document.createElement('option'); o.value=list[i]; o.text=list[i]; sel.appendChild(o); } }
+function updateModelOptions(){ var bEl=document.getElementById('addBrand'); if(!bEl) return; var b=bEl.value; var sel=document.getElementById('addModel'); if(!sel) return; var list=MODELS[b]||['Wybierz']; sel.innerHTML=''; for(var i=0;i<list.length;i++){ var o=document.createElement('option'); o.value=list[i]; o.text=list[i]; sel.appendChild(o); } }
 function updatePowiatOptions(){ var wojEl=document.getElementById('addWoj'); if(!wojEl) return; var woj=wojEl.value; var sel=document.getElementById('addPowiat'); if(!sel) return; var list=POWIATY[woj]||[]; sel.innerHTML='<option value="">Wybierz *</option>'; for(var i=0;i<list.length;i++){ var o=document.createElement('option'); o.value=list[i]; o.text=list[i]; sel.appendChild(o); } sel.disabled=list.length===0; var mEl=document.getElementById('addMiejscowosc'); if(mEl){ mEl.innerHTML='<option value="">Najpierw powiat</option>'; mEl.disabled=true; } if(woj==='śląskie'){ sel.value='wodzisławski'; updateMiejscowoscOptions(); } }
 function updateMiejscowoscOptions(){ var powEl=document.getElementById('addPowiat'); if(!powEl) return; var powiat=powEl.value; var sel=document.getElementById('addMiejscowosc'); if(!sel) return; if(!powiat){ sel.innerHTML='<option value="">Najpierw powiat</option>'; sel.disabled=true; return; } sel.disabled=false; if(MIEJSCOWOSCI[powiat]){ var list=MIEJSCOWOSCI[powiat]; sel.innerHTML='<option value="">Wybierz *</option>'; for(var i=0;i<list.length;i++){ var o=document.createElement('option'); o.value=list[i]; o.text=list[i]; sel.appendChild(o); } sel.innerHTML+='<option value="__custom">➕ Inna</option>'; if(powiat==='wodzisławski') sel.value='Gorzyce'; } else { sel.innerHTML='<option value="">Wybierz *</option><option>Gorzyce</option><option>Wodzisław Śląski</option><option>Rydułtowy</option><option>Rybnik</option><option>Katowice</option><option value="__custom">➕ Inna</option>'; } }
 function checkCustomMiejsc(){ var vEl=document.getElementById('addMiejscowosc'); if(!vEl) return; var v=vEl.value; var row=document.getElementById('customMiejscRow'); if(row) row.style.display=v==='__custom'?'block':'none'; }
@@ -289,7 +289,6 @@ async function handleFiles(files){
  for(var i=0;i<files.length&&i<10;i++){
   var file=files[i]; totalOrig+=file.size;
   try{
-   var thumb=await compressImage(file, 400, 0.60);
    var full=await compressImage(file, 800, 0.70);
    selectedImagesBase64.push(full.dataUrl);
    totalComp+=full.comp;
@@ -359,7 +358,7 @@ function renderAds(){
  var pi=document.getElementById('payloadInfo'); if(pi) pi.innerText=payloadKB+' KiB';
  var lw=document.getElementById('loadMoreWrap'); if(lw) lw.style.display=filtered.length>displayedAds.length? 'block':'none';
  var lmb=document.getElementById('loadMoreBtn'); if(lmb) lmb.innerText='Załaduj więcej ('+Math.min(pageSize, filtered.length-displayedAds.length)+')';
- var perfEl=document.getElementById('perfInfo'); if(perfEl){ perfEl.style.display='inline-block'; perfEl.innerText='⚡ v4.7 FIX PRZYCISKI: '+displayedAds.length+'/'+filtered.length+' | Payload '+payloadKB+' KiB'; }
+ var perfEl=document.getElementById('perfInfo'); if(perfEl){ perfEl.style.display='inline-block'; perfEl.innerText='⚡ v4.8 FIX PGRST204: '+displayedAds.length+'/'+filtered.length+' | Payload '+payloadKB+' KiB'; }
  var grid=document.getElementById('adsGrid');
  if(!grid) return;
  if(filtered.length===0){ grid.innerHTML='<p style="padding:20px">Brak</p>'; return; }
@@ -531,7 +530,22 @@ async function submitAdd(){
  var submitBtn=document.getElementById('addSubmitBtn'); if(submitBtn){ submitBtn.disabled=true; submitBtn.innerText='Zapisuję...'; }
  var fullLocation=miejs+', pow. '+powiat+', woj. '+woj;
  var coords=getCoordsForPlace(miejs)||{lat:null,lng:null};
- var payload={title:title, price:price, image_url:images[0]||'', images:images, owner_id:currentUser.id, brand:brand, model:model, description:desc, location:fullLocation, city:miejs, lat:coords.lat, lng:coords.lng, phone:phone, wojewodztwo:woj, powiat:powiat};
+ // FIX PGRST204: tylko kolumny które istnieją w tabeli ads! Usunięto powiat, wojewodztwo
+ var payload={
+   title:title,
+   price:price,
+   image_url:images[0]||'',
+   images:images,
+   owner_id:currentUser.id,
+   brand:brand,
+   model:model,
+   description:desc,
+   location:fullLocation,
+   city:miejs,
+   lat:coords.lat,
+   lng:coords.lng,
+   phone:phone
+ };
  
  async function doPost(token){
    var r=await fetch(SUPABASE_URL+'/rest/v1/ads',{method:'POST',headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+token,'Content-Type':'application/json','Prefer':'return=representation'},body:JSON.stringify(payload)});
@@ -554,7 +568,7 @@ async function submitAdd(){
      if(e.message.indexOf('JWT expired')!==-1 || e.message.indexOf('PGRST303')!==-1){
        infoEl.innerHTML='❌ Sesja wygasła. <b>Wyloguj i zaloguj!</b> <button class="btn btn-black" onclick="logout()">Wyloguj</button>';
      } else {
-       infoEl.innerText='Błąd: '+e.message.slice(0,300);
+       infoEl.innerText='Błąd: '+e.message.slice(0,400);
      }
    }
  }
