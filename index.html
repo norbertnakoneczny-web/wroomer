@@ -1622,7 +1622,32 @@ async function submitAdd(){
  if(!title) title=brand+' '+model;
  if(!price||!phone){ if(infoEl) infoEl.innerText='Cena i telefon *'; return; }
  if(!currentUser||!authToken){ if(infoEl) infoEl.innerText='Zaloguj się'; openAuth(); return; }
- var descEl=document.getElementById('addDesc'); var desc=descEl? descEl.value.trim():'';
+ var descEl=document.getElementById('addDesc'); var userDesc=descEl? descEl.value.trim():'';
+ var damagedEl=document.getElementById('addDamaged'); var damagedVal=damagedEl? damagedEl.value : 'nie';
+ // BUDUJEMY OPIS Z WSZYSTKICH DANYCH FORMULARZA
+ var fullDescParts=[];
+ fullDescParts.push('📋 DANE POJAZDU:');
+ fullDescParts.push('Marka: '+(brand||'-'));
+ fullDescParts.push('Model: '+(model||'-'));
+ fullDescParts.push('Rocznik: '+(yearInt||'-'));
+ fullDescParts.push('Przebieg: '+(mileageInt? (mileageInt.toLocaleString('pl-PL')+' km') : '-'));
+ fullDescParts.push('Stan: '+(damagedVal==='nie'?'Nieuszkodzone / Sprawne':'Uszkodzone'));
+ fullDescParts.push('Cena: '+(price? price.toLocaleString('pl-PL')+' PLN' : '-'));
+ fullDescParts.push('');
+ fullDescParts.push('📍 LOKALIZACJA:');
+ fullDescParts.push(fullLocation||'-');
+ if(miejs) fullDescParts.push('Miejscowość: '+miejs);
+ if(pow) fullDescParts.push('Powiat: '+pow);
+ if(woj) fullDescParts.push('Województwo: '+woj);
+ fullDescParts.push('');
+ fullDescParts.push('📞 KONTAKT: '+phone);
+ fullDescParts.push('');
+ if(userDesc){
+   fullDescParts.push('📝 OPIS SPRZEDAWCY:');
+   fullDescParts.push(userDesc);
+ }
+ var desc=fullDescParts.join('\n');
+
  var linksEl=document.getElementById('addImagesLinks'); var links=linksEl? (linksEl.value||'').split(',').map(function(s){return s.trim()}).filter(Boolean):[];
  var images=selectedImagesBase64.concat(links).slice(0,10);
  var submitBtn=document.getElementById('addSubmitBtn'); if(submitBtn){ submitBtn.disabled=true; submitBtn.innerText='Zapisuję...'; }
