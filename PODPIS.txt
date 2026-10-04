@@ -1,4 +1,4 @@
 WROOMER.PL
-04.10.2026 17:06:45
-v9.5 FULL MILEAGE
-120 = 120 km - dokladnie w calosci
+04.10.2026 17:42:42
+v9.9 NO MILEAGE FINAL
+Usunieto pole przebiegu calkowicie
