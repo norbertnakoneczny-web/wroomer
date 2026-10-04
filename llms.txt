@@ -1,33 +1,21 @@
 # WROOMER.PL
 
-> WROOMER.PL - lokalne ogłoszenia motoryzacyjne Gorzyce, Rydułtowy, Rybnik, Wodzisław Śląski, Racibórz, Radlin, Pszów, Godów.
-
-WROOMER.PL to lokalny serwis ogłoszeniowy motoryzacyjny dla regionu Śląska: Gorzyce, Rydułtowy, Rybnik, Wodzisław Śląski, Racibórz, Radlin, Pszów, Godów.
+> Lokalne ogłoszenia motoryzacyjne Gorzyce, Rydułtowy, Rybnik, Wodzisław.
 
 ## Główne
 
-- [Strona główna](https://www.wroomer.pl/): Lista ogłoszeń motoryzacyjnych z filtrami marki, miejscowości, promienia
-- [Wszystkie ogłoszenia](https://www.wroomer.pl/): Przeglądaj wszystkie samochody, części i usługi w regionie
-- [Dodaj ogłoszenie](https://www.wroomer.pl/): Formularz dodawania z GPS wyszukiwarką miejscowości
+- [Strona główna](https://www.wroomer.pl/): Lista ogłoszeń
+- [Dodaj ogłoszenie](https://www.wroomer.pl/): Formularz z GPS
 
 ## Marki
 
-- [BMW](https://www.wroomer.pl/): Ogłoszenia BMW - Seria 1, 3, 5, X1, X3, X5
-- [Audi](https://www.wroomer.pl/): Ogłoszenia Audi - A3, A4, A6, Q5, Q7
-- [Mercedes](https://www.wroomer.pl/): Mercedes A Klasa, C Klasa, E Klasa, GLC
-- [Volkswagen](https://www.wroomer.pl/): VW Golf, Passat, Polo, Tiguan
-- [Toyota](https://www.wroomer.pl/): Toyota Corolla, Yaris, RAV4
-- [Ford](https://www.wroomer.pl/): Ford Focus, Mondeo, Fiesta, Kuga
+- [BMW](https://www.wroomer.pl/): BMW
+- [Audi](https://www.wroomer.pl/): Audi
+- [Mercedes](https://www.wroomer.pl/): Mercedes
 
 ## Lokalizacje
 
-- [Gorzyce](https://www.wroomer.pl/): Ogłoszenia Gorzyce, gmina Gorzyce, powiat wodzisławski
-- [Rydułtowy](https://www.wroomer.pl/): Ogłoszenia Rydułtowy
-- [Rybnik](https://www.wroomer.pl/): Ogłoszenia Rybnik
-- [Wodzisław Śląski](https://www.wroomer.pl/): Ogłoszenia Wodzisław Śląski
-- [Racibórz](https://www.wroomer.pl/): Ogłoszenia Racibórz
-
-## Funkcje
-
-- [Wyszukiwarka GPS](https://www.wroomer.pl/): Wyszukiwarka miejscowości z geokodowaniem Nominatim
-- [Kontakt](https://www.wroomer.pl/): Telefon, SMS, WhatsApp, Messenger, czat WROOMER
+- [Gorzyce](https://www.wroomer.pl/): Gorzyce
+- [Rydułtowy](https://www.wroomer.pl/): Rydułtowy
+- [Rybnik](https://www.wroomer.pl/): Rybnik
+- [Wodzisław](https://www.wroomer.pl/): Wodzisław Śląski
