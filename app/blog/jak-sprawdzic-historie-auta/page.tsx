@@ -1,0 +1,1 @@
+export default function Page(){return (<div style={maxWidth:800,margin:'40px auto',padding:'0 20px',fontFamily:'system-ui'}><h1>Jak sprawdzić historię auta</h1><p>Sprawdź VIN, historię serwisową i wypadkowość przed zakupem. Na wroomer.pl każde auto ma zweryfikowaną historię.</p><a href='/'>← Wróć na wroomer.pl</a></div>)}
