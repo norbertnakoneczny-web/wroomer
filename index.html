@@ -560,7 +560,7 @@ async function handleFiles(files){
  selectedImagesBase64=[]; var totalOrig=0, totalComp=0;
  for(var i=0;i<files.length&&i<10;i++){
   var file=files[i]; totalOrig+=file.size;
-  try{ var full=await compressImage(file, 800, 0.70); selectedImagesBase64.push(full.dataUrl); totalComp+=full.comp; }catch(e){}
+  try{ var full=await compressImage(file, 600, 0.50); selectedImagesBase64.push(full.dataUrl); totalComp+=full.comp; }catch(e){}
  }
  var saved=totalOrig>0? Math.round((1-totalComp/totalOrig)*100):0;
  if(info) info.innerHTML='✅ '+(totalOrig/1024/1024).toFixed(2)+'MB → '+(totalComp/1024/1024).toFixed(2)+'MB ('+saved+'%!) | WebP 400px 60%';
@@ -683,17 +683,56 @@ async function submitAdd(){
    phone: phone,
    year: yearInt,
    mileage: mileageInt,
-   damaged: (document.getElementById('addDamaged')? document.getElementById('addDamaged').value : 'nie')
+   damaged: (document.getElementById('addDamaged')? document.getElementById('addDamaged').value : 'nie'),
+   images: images.slice(0,5),
+   location: fullLocation,
+   city: miejs
  };
+ if(JSON.stringify(payload).length > 500000){ payload.images = [payload.image_url]; }
  async function doPost(token){
    var method=editingId ? 'PATCH' : 'POST';
    var url=editingId ? SUPABASE_URL+'/rest/v1/ads?id=eq.'+editingId : SUPABASE_URL+'/rest/v1/ads';
-   var r=await fetch(url,{method:method,headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+token,'Content-Type':'application/json','Prefer':'return=representation'},body:JSON.stringify(payload)});
-   var txt=await r.text();
-   return {ok:r.ok, txt:txt, status:r.status};
+   try{
+     var r=await fetch(url,{method:method,headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+token,'Content-Type':'application/json','Prefer':'return=representation'},body:JSON.stringify(payload)});
+     var txt=await r.text();
+     return {ok:r.ok, txt:txt, status:r.status};
+   }catch(e){
+     return {ok:false, txt:'FAILED TO FETCH: '+e.message+' - Sprawdź RLS i kolumny w Supabase! URL:'+SUPABASE_URL, status:0, fetchError:true};
+   }
  }
+ function getMinimalPayload(full){
+   return {
+     title: full.title,
+     price: full.price,
+     image_url: full.image_url,
+     images: full.images,
+     owner_id: full.owner_id,
+     brand: full.brand,
+     model: full.model,
+     description: full.description,
+     location: full.location,
+     city: full.city,
+     lat: full.lat,
+     lng: full.lng,
+     phone: full.phone
+   };
+ }
+
  try{
    var result=await doPost(authToken);
+   if(result.fetchError){
+     if(infoEl) infoEl.innerHTML='❌ <b>Failed to fetch</b><br>1. Sprawdź czy w Supabase dodałeś kolumny: year, mileage, damaged, model, phone, images (jsonb)<br>2. Sprawdź RLS: Table Editor -> ads -> RLS policies -> włącz INSERT dla anon/authenticated<br>3. Sprawdź URL: '+SUPABASE_URL+'<br><br>Próbuję wysłać uproszczone ogłoszenie bez nowych pól...';
+     // Try minimal payload without new columns
+     var minimalPayload = getMinimalPayload(payload);
+     payload = minimalPayload;
+     result=await doPost(authToken);
+     if(!result.ok && !result.fetchError){
+       throw new Error('Nadal błąd po uproszczeniu: '+result.txt+'\n\nROZWIĄZANIE: W Supabase SQL Editor wykonaj:\nALTER TABLE ads ADD COLUMN IF NOT EXISTS year INT; ALTER TABLE ads ADD COLUMN IF NOT EXISTS mileage INT; ALTER TABLE ads ADD COLUMN IF NOT EXISTS damaged TEXT; ALTER TABLE ads ADD COLUMN IF NOT EXISTS model TEXT; ALTER TABLE ads ADD COLUMN IF NOT EXISTS phone TEXT; ALTER TABLE ads ADD COLUMN IF NOT EXISTS images JSONB;');
+     }
+     if(result.fetchError){
+       throw new Error(result.txt+'\n\nSPRAWDŹ: Supabase -> Authentication -> Policies -> ads -> czy masz policy: ENABLE INSERT FOR anon, authenticated');
+     }
+   }
    if(!result.ok && (result.txt.indexOf('JWT expired')!==-1 || result.status===401)){
      if(infoEl) infoEl.innerText='⏳ Token wygasł, odświeżam...';
      var refreshed=await refreshAuthToken();
