@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 Sitemap: https://www.wroomer.pl/sitemap.xml
-# Build: 04.10.2026 16:42:34 COOKIE+WATSUP
+# 04.10.2026 16:50:16

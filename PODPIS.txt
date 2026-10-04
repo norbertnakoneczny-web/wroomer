@@ -1,5 +1,4 @@
 WROOMER.PL
-04.10.2026 16:42:34
-v9.2 WATSUP+COOKIE
-WA->WATSUP
-Cookie banner RODO
+04.10.2026 16:50:16
+v9.3 UNIFORM BUTTONS
+Zadzwon na takim samym tle co SMS/Numer
