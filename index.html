@@ -782,7 +782,21 @@ function getMyLocationForAdd(){
   }).catch(function(){ if(btn) btn.innerText=orig; });
  }, function(err){ var infoEl=document.getElementById('addLocationInfo'); if(infoEl) infoEl.innerText='❌ Błąd GPS: '+err.message; if(btn) btn.innerText=orig; }, {enableHighAccuracy:true, timeout:10000});
 }
-async function openDetail(id){ var a=null; for(var i=0;i<allAds.length;i++){ if(String(allAds[i].id)===String(id)){ a=allAds[i]; break; } } if(!a) return; currentAd=a; try{ var res=await fetch(SUPABASE_URL+'/rest/v1/ads?id=eq.'+id+'&select=*', {headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY}}); if(res.ok){ var data=await res.json(); if(data[0]){ a=data[0]; currentAd=a; } } }catch(e){} var imgs=[]; if(a.images&&a.images.length>0) imgs=a.images.slice(); else if(a.image_url) imgs=[a.image_url]; else imgs=['https://via.placeholder.com/800x600?text=Brak+zdjecia']; galleryImages=imgs; currentImageIndex=0; var detailImg=document.getElementById('detailImg'); if(detailImg){ detailImg.src=getOptimizedImageUrl(galleryImages[0], 800); detailImg.alt=(a.title||'Ogłoszenie')+' - zdjęcie 1 z '+galleryImages.length; } var gc=document.getElementById('galleryCounter'); if(gc) gc.innerText='1 / '+galleryImages.length; var thumbs=document.getElementById('detailImages'); if(thumbs){ var th=''; for(var t=0;t<galleryImages.length;t++){ th+='<img src="'+getOptimizedImageUrl(galleryImages[t], 200)+'" class="'+(t===0?'active':'')+'" onclick="showImage('+t+')" loading="lazy" alt="Miniatura '+(t+1)+'" role="listitem">'; } thumbs.innerHTML=th; } var dt=document.getElementById('detailTitle'); if(dt) dt.innerText=a.title||''; var dp=document.getElementById('detailPrice'); if(dp) dp.innerText=a.price? a.price+' PLN':''; var dl=document.getElementById('detailLoc'); if(dl) dl.innerText=(a.location||a.city||''); var dd=document.getElementById('detailDesc'); if(dd) dd.innerText=a.description||''; var dmgEl=document.getElementById('detailDamaged'); if(dmgEl){ if(a.damaged==='tak'){ dmgEl.innerText='⚠️ USZKODZONE'; dmgEl.style.display='block'; } else { dmgEl.style.display='none'; } } var pn=document.getElementById('phoneNumber'); if(pn){ pn.innerText='📞 '+(a.phone||'Brak'); pn.style.display='none'; } var det=document.getElementById('detail'); if(det) det.style.display='flex'; var ownerDiv=document.getElementById('ownerActions'); 
+async function openDetail(id){ var a=null; for(var i=0;i<allAds.length;i++){ if(String(allAds[i].id)===String(id)){ a=allAds[i]; break; } } if(!a) return; currentAd=a; try{ var res=await fetch(SUPABASE_URL+'/rest/v1/ads?id=eq.'+id+'&select=*', {headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY}}); if(res.ok){ var data=await res.json(); if(data[0]){ a=data[0]; currentAd=a; } } }catch(e){} var imgs=[]; if(a.images&&a.images.length>0) imgs=a.images.slice(); else if(a.image_url) imgs=[a.image_url]; else imgs=['https://via.placeholder.com/800x600?text=Brak+zdjecia']; galleryImages=imgs; currentImageIndex=0; var detailImg=document.getElementById('detailImg'); if(detailImg){ detailImg.src=getOptimizedImageUrl(galleryImages[0], 800); detailImg.alt=(a.title||'Ogłoszenie')+' - zdjęcie 1 z '+galleryImages.length; } var gc=document.getElementById('galleryCounter'); if(gc) gc.innerText='1 / '+galleryImages.length; var thumbs=document.getElementById('detailImages'); if(thumbs){ var th=''; for(var t=0;t<galleryImages.length;t++){ th+='<img src="'+getOptimizedImageUrl(galleryImages[t], 200)+'" class="'+(t===0?'active':'')+'" onclick="showImage('+t+')" loading="lazy" alt="Miniatura '+(t+1)+'" role="listitem">'; } thumbs.innerHTML=th; } var dt=document.getElementById('detailTitle'); if(dt) dt.innerText=a.title||''; var dp=document.getElementById('detailPrice'); if(dp) dp.innerText=a.price? a.price+' PLN':''; var dl=document.getElementById('detailLoc'); if(dl) dl.innerText=(a.location||a.city||''); var dd=document.getElementById('detailDesc'); if(dd) dd.innerText=a.description||''; var dmgEl=document.getElementById('detailDamaged'); if(dmgEl){ if(a.damaged==='tak'){ dmgEl.innerText='⚠️ USZKODZONE'; dmgEl.style.display='block'; } else { dmgEl.style.display='none'; } } var pn=document.getElementById('phoneNumber'); if(pn){ pn.innerText='📞 '+(a.phone||'Brak'); pn.style.display='none'; } var det=document.getElementById('detail'); if(det) det.style.display='flex';
+   // v8.3 swipe counter
+   try{
+     var counter = document.getElementById('swipeCounter');
+     if(!counter){
+       counter = document.createElement('div');
+       counter.id='swipeCounter';
+       counter.className='swipe-counter';
+       det.appendChild(counter);
+       var hintL=document.createElement('div'); hintL.className='swipe-hint left'; hintL.innerHTML='‹'; det.appendChild(hintL);
+       var hintR=document.createElement('div'); hintR.className='swipe-hint right'; hintR.innerHTML='›'; det.appendChild(hintR);
+     }
+     var idx=-1; for(var _i=0;_i<(filteredAds||[]).length;_i++){ if(String(filteredAds[_i].id)===String(currentAd.id)){ idx=_i; break; } }
+     if(counter && idx!==-1) counter.innerText=(idx+1)+' / '+(filteredAds.length)+' • przesuń palcem ↔';
+   }catch(e){} var ownerDiv=document.getElementById('ownerActions'); 
  if(ownerDiv && currentAd){ 
    var userId = null;
    try{ var uStr = localStorage.getItem('wroomer_user'); if(uStr){ var u=JSON.parse(uStr); userId = u.id || u.user_id; } }catch(e){}
@@ -948,6 +962,101 @@ async function submitAdd(){
 }
 loadAuth();
 loadAds();
+</script>
+<script>
+// v8.3 SWIPE PALCEM PRAWO/LEWO - zmiana ogłoszenia
+var touchStartX = 0;
+var touchStartY = 0;
+var touchEndX = 0;
+var touchEndY = 0;
+var minSwipeDist = 60; // minimalny dystans swipe
+
+function handleSwipe(){
+  var diffX = touchEndX - touchStartX;
+  var diffY = touchEndY - touchStartY;
+  // Sprawdź czy to horizontal swipe (nie vertical scroll)
+  if(Math.abs(diffX) < minSwipeDist) return;
+  if(Math.abs(diffX) < Math.abs(diffY)) return; // vertical scroll, ignore
+  
+  var detail = document.getElementById('detail');
+  if(!detail || detail.style.display==='none') return;
+  if(typeof filteredAds==='undefined' || !filteredAds || filteredAds.length<=1) return;
+  if(typeof currentAd==='undefined' || !currentAd) return;
+  
+  var currentIdx = -1;
+  for(var i=0;i<filteredAds.length;i++){
+    if(String(filteredAds[i].id)===String(currentAd.id)){ currentIdx=i; break; }
+  }
+  if(currentIdx===-1) return;
+  
+  var nextIdx = -1;
+  if(diffX < -minSwipeDist){ // swipe left -> next
+    nextIdx = currentIdx+1;
+    if(nextIdx>=filteredAds.length) nextIdx=0; // loop
+  } else if(diffX > minSwipeDist){ // swipe right -> prev
+    nextIdx = currentIdx-1;
+    if(nextIdx<0) nextIdx=filteredAds.length-1; // loop
+  }
+  
+  if(nextIdx!==-1 && nextIdx!==currentIdx){
+    var nextAd = filteredAds[nextIdx];
+    // Animacja
+    var img = document.getElementById('detailImage');
+    if(img){
+      img.style.transition='transform 0.2s';
+      img.style.transform='translateX('+(diffX<0?'-30px':'30px')+')';
+      img.style.opacity='0.5';
+    }
+    setTimeout(function(){
+      if(typeof openDetail==='function') openDetail(nextAd.id);
+      // Wibracja na telefonie
+      try{ if(navigator.vibrate) navigator.vibrate(30); }catch(e){}
+    }, 150);
+  }
+}
+
+// Podłącz swipe do detail
+document.addEventListener('DOMContentLoaded', function(){
+  var detail = document.getElementById('detail');
+  if(!detail) return;
+  detail.addEventListener('touchstart', function(e){
+    touchStartX = e.changedTouches[0].screenX;
+    touchStartY = e.changedTouches[0].screenY;
+  }, {passive:true});
+  detail.addEventListener('touchend', function(e){
+    touchEndX = e.changedTouches[0].screenX;
+    touchEndY = e.changedTouches[0].screenY;
+    handleSwipe();
+  }, {passive:true});
+  // Dla testu - również mouse drag na kompie
+  var mouseDownX = 0;
+  detail.addEventListener('mousedown', function(e){ mouseDownX=e.screenX; });
+  detail.addEventListener('mouseup', function(e){
+    touchStartX=mouseDownX;
+    touchEndX=e.screenX;
+    touchStartY=0;
+    touchEndY=0;
+    if(Math.abs(touchEndX-touchStartX)>=minSwipeDist) handleSwipe();
+  });
+});
+
+// Dodaj wskaźnik swipe - strzałki + licznik
+function addSwipeIndicators(){
+  var style = document.createElement('style');
+  style.innerHTML = `
+    #detail{position:relative;touch-action:pan-y}
+    .swipe-hint{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,0.6);color:#fff;padding:12px 8px;border-radius:20px;font-size:20px;z-index:10;pointer-events:none;opacity:0;transition:opacity 0.3s}
+    .swipe-hint.left{left:10px}
+    .swipe-hint.right{right:10px}
+    .swipe-counter{position:absolute;top:10px;right:50%;transform:translateX(50%);background:rgba(0,0,0,0.7);color:#fff;padding:6px 12px;border-radius:20px;font-size:12px;font-weight:700;z-index:10}
+    #detail:active .swipe-hint{opacity:0.8}
+    @media(max-width:768px){
+      .swipe-hint{opacity:0.6}
+    }
+  `;
+  document.head.appendChild(style);
+}
+setTimeout(addSwipeIndicators, 500);
 </script>
 </body>
 </html>
