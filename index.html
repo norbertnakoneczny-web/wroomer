@@ -1,217 +1,183 @@
 <!DOCTYPE html>
 <html lang="pl">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>WROOMER.PL - GPS + edycja zdjęć</title>
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>WROOMER.PL - OTOMOTO FULL</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
-<style>@import url('https://fonts.googleapis.com/css2?family=Inter:wght@600;800;900&display=swap');*{font-family:'Inter',sans-serif}</style>
+<style>@import url('https://fonts.googleapis.com/css2?family=Inter:wght@600;800;900&display=swap');*{font-family:'Inter',sans-serif}select{appearance:auto}</style>
 </head>
 <body class="bg-[#f7f7f8] min-h-screen">
-<header class="bg-white border-b sticky top-0 z-50"><div class="max-w-[1440px] mx-auto px-4 py-3 flex justify-between items-center">
+<header class="bg-white border-b sticky top-0 z-40"><div class="max-w-[1440px] mx-auto px-4 py-3 flex justify-between items-center">
 <div class="text-2xl font-black tracking-tighter">WROOMER.PL</div>
 <div class="flex gap-2 items-center"><span id="userBadge" class="hidden text-xs bg-black text-white px-3 py-1.5 rounded-full"></span><button onclick="openAdd()" class="bg-black text-white px-6 py-2.5 rounded-xl font-bold">Dodaj</button><button id="authBtn" class="border px-5 py-2.5 rounded-xl">Zaloguj</button></div></div>
 <div class="bg-white border-b px-4 py-3"><div class="max-w-[1440px] mx-auto flex flex-wrap gap-2 items-center">
-<input id="searchQ" placeholder="Szukaj np. BMW, Audi..." class="border-2 rounded-xl px-4 py-2.5 flex-1 min-w-[200px] outline-none focus:border-black">
-<input id="searchLoc" placeholder="Lokalizacja np. Gorzyce" class="border-2 rounded-xl px-4 py-2.5 w-[180px] outline-none focus:border-black">
-<button onclick="getSearchGPS()" class="border-2 rounded-xl px-3 py-2.5 text-sm" title="Szukaj blisko mnie">📍 GPS</button>
-<select id="radius" class="border-2 rounded-xl px-3 py-2.5"><option value="0">Wszędzie</option><option value="10">10 km</option><option value="25">25 km</option><option value="50" selected>50 km</option><option value="100">100 km</option></select>
+<input id="f_q" placeholder="Szukaj BMW, Audi..." class="border-2 rounded-xl px-4 py-2.5 flex-1 min-w-[150px] outline-none focus:border-black">
+<select id="f_brand" class="border-2 rounded-xl px-3 py-2.5"><option value="">Marka</option></select>
+<select id="f_model" class="border-2 rounded-xl px-3 py-2.5"><option value="">Model</option></select>
+<input id="f_yearFrom" type="number" placeholder="Rok od" class="border-2 rounded-xl px-3 py-2.5 w-[90px]">
+<input id="f_yearTo" type="number" placeholder="do" class="border-2 rounded-xl px-3 py-2.5 w-[90px]">
+<input id="f_priceFrom" type="number" placeholder="Cena od" class="border-2 rounded-xl px-3 py-2.5 w-[100px]">
+<input id="f_priceTo" type="number" placeholder="do" class="border-2 rounded-xl px-3 py-2.5 w-[100px]">
+<select id="f_fuel" class="border-2 rounded-xl px-3 py-2.5"><option value="">Paliwo</option><option>Benzyna</option><option>Diesel</option><option>LPG</option><option>Hybryda</option><option>Elektryczny</option></select>
+<input id="f_city" placeholder="Miasto" class="border-2 rounded-xl px-3 py-2.5 w-[130px]">
+<select id="f_radius" class="border-2 rounded-xl px-3 py-2.5"><option value="0">Wszędzie</option><option value="25">25km</option><option value="50" selected>50km</option><option value="100">100km</option></select>
 <button onclick="doSearch()" class="bg-black text-white px-6 py-2.5 rounded-xl font-bold">Szukaj</button>
-<button onclick="clearSearch()" class="text-sm text-zinc-500">Wyczyść</button>
-<div id="searchStatus" class="text-xs text-zinc-500 w-full mt-1"></div>
-</div></div>
+</div><div id="searchStatus" class="max-w-[1440px] mx-auto text-xs text-zinc-500 mt-2"></div></div>
 </header>
 <main class="max-w-[1440px] mx-auto px-4 py-6"><div id="listings" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5"></div></main>
 
-<!-- ADD/EDIT MODAL Z GPS I EDYCJĄ ZDJĘĆ -->
-<div id="addModal" class="hidden fixed inset-0 bg-black/70 z-[60] flex items-center justify-center p-2 sm:p-4"><div class="bg-white rounded-[20px] p-5 w-full max-w-2xl max-h-[95vh] overflow-y-auto">
-<div class="flex justify-between items-center mb-4"><h2 class="text-xl font-black" id="modalTitle">Dodaj ogłoszenie</h2><button onclick="closeAdd()" class="w-8 h-8 rounded-full bg-zinc-100">✕</button></div>
-<input id="title" placeholder="Tytuł" class="w-full border-2 rounded-xl px-4 py-3 mb-3 outline-none focus:border-black font-bold">
+<!-- ADD/EDIT OTOMOTO FORM -->
+<div id="addModal" class="hidden fixed inset-0 bg-black/70 z-[60] flex items-center justify-center p-2"><div class="bg-white rounded-[20px] w-full max-w-3xl max-h-[95vh] overflow-y-auto">
+<div class="sticky top-0 bg-white p-5 border-b flex justify-between items-center rounded-t-[20px]"><h2 class="text-xl font-black" id="modalTitle">Dodaj ogłoszenie - jak OTOMOTO</h2><button onclick="closeAdd()" class="w-8 h-8 rounded-full bg-zinc-100">✕</button></div>
+<div class="p-5">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
+<select id="brand" class="border-2 rounded-xl px-4 py-3 outline-none focus:border-black font-bold"><option value="">Marka *</option></select>
+<select id="model" class="border-2 rounded-xl px-4 py-3 outline-none focus:border-black"><option value="">Model *</option><option>Inny</option></select>
+</div>
+<input id="title" placeholder="Tytuł ogłoszenia (auto generuje się z marki/modelu)" class="w-full border-2 rounded-xl px-4 py-3 mb-3 outline-none focus:border-black">
+<div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-3">
+<input id="year" type="number" placeholder="Rok * np. 2018" class="border-2 rounded-xl px-4 py-3 outline-none focus:border-black">
+<input id="mileage" type="number" placeholder="Przebieg km" class="border-2 rounded-xl px-4 py-3 outline-none focus:border-black">
+<input id="engine_capacity" type="number" placeholder="Poj. cm3 np. 1998" class="border-2 rounded-xl px-4 py-3 outline-none focus:border-black">
+<input id="power" type="number" placeholder="Moc KM np. 190" class="border-2 rounded-xl px-4 py-3 outline-none focus:border-black">
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-3">
+<select id="fuel_type" class="border-2 rounded-xl px-4 py-3"><option value="">Paliwo</option><option>Benzyna</option><option>Diesel</option><option>Benzyna+LPG</option><option>Hybryda</option><option>Elektryczny</option></select>
+<select id="transmission" class="border-2 rounded-xl px-4 py-3"><option value="">Skrzynia</option><option>Manualna</option><option>Automatyczna</option></select>
+<select id="body_type" class="border-2 rounded-xl px-4 py-3"><option value="">Nadwozie</option><option>Sedan</option><option>Kombi</option><option>Hatchback</option><option>SUV</option><option>Coupe</option><option>Kabriolet</option><option>Van</option></select>
+<select id="color" class="border-2 rounded-xl px-4 py-3"><option value="">Kolor</option><option>Czarny</option><option>Biały</option><option>Srebrny</option><option>Szary</option><option>Czerwony</option><option>Niebieski</option><option>Zielony</option><option>Inny</option></select>
+</div>
 <div class="grid grid-cols-2 gap-3 mb-3">
-<input id="price" type="number" placeholder="Cena PLN" class="border-2 rounded-xl px-4 py-3 outline-none focus:border-black font-bold">
-<input id="loc" placeholder="Miasto np. Gorzyce" class="border-2 rounded-xl px-4 py-3 outline-none focus:border-black">
+<input id="price" type="number" placeholder="Cena PLN *" class="border-2 rounded-xl px-4 py-3 outline-none focus:border-black font-black">
+<input id="loc" placeholder="Miasto * np. Gorzyce" class="border-2 rounded-xl px-4 py-3 outline-none focus:border-black">
 </div>
-<textarea id="desc" placeholder="Opis" class="w-full border-2 rounded-xl px-4 py-3 mb-3 h-24 outline-none focus:border-black"></textarea>
+<textarea id="desc" placeholder="Opis, wyposażenie, historia serwisowa..." class="w-full border-2 rounded-xl px-4 py-3 mb-3 h-24 outline-none focus:border-black"></textarea>
 
-<!-- GPS LOKALIZACJA -->
+<!-- GPS -->
 <div class="bg-blue-50 border border-blue-200 rounded-xl p-3 mb-4">
-<div class="font-bold text-sm mb-2">📍 Dokładna lokalizacja GPS (jak OLX)</div>
-<div class="flex gap-2 mb-2">
-<button onclick="getGPS()" class="bg-blue-600 text-white px-4 py-2.5 rounded-xl text-sm font-bold">📍 Pobierz moją lokalizację GPS</button>
-<button onclick="clearGPS()" class="border bg-white px-3 py-2.5 rounded-xl text-sm">Wyczyść</button>
-</div>
-<div id="gpsStatus" class="text-xs text-zinc-600">Kliknij aby pobrać dokładne współrzędne. Będzie można wyszukiwać w okolicy.</div>
-<div id="gpsPreview" class="hidden mt-2 text-xs bg-white rounded-lg p-2 border">
-<div>📌 <span id="gpsAddr"></span></div><div class="text-zinc-500">lat: <span id="gpsLat"></span> lng: <span id="gpsLng"></span></div>
-<a id="gpsMapLink" target="_blank" class="text-blue-600 underline">Zobacz na mapie Google</a>
-</div>
+<div class="font-bold text-sm mb-2">📍 Dokładna lokalizacja GPS</div>
+<div class="flex gap-2 mb-2"><button onclick="getGPS()" class="bg-blue-600 text-white px-4 py-2.5 rounded-xl text-sm font-bold">📍 Pobierz GPS</button><button onclick="clearGPS()" class="border bg-white px-3 py-2.5 rounded-xl text-sm">Wyczyść</button></div>
+<div id="gpsStatus" class="text-xs text-zinc-600">Zalecane - ogłoszenie będzie wyszukiwane w okolicy</div>
+<div id="gpsPreview" class="hidden mt-2 text-xs bg-white rounded-lg p-2 border"><div id="gpsAddr"></div><div class="text-zinc-500"><span id="gpsLat"></span> <span id="gpsLng"></span></div></div>
 </div>
 
-<!-- ZDJĘCIA - ISTNIEJĄCE + NOWE -->
+<!-- ZDJĘCIA -->
 <div class="mb-4">
-<div class="font-bold mb-2 text-sm flex justify-between"><span>Zdjęcia • max 10</span><span class="text-xs font-normal text-zinc-500" id="photoCount">0</span></div>
-<div id="existingPhotos" class="hidden mb-3"><div class="text-xs font-bold mb-1">Zdjęcia już dodane (zostaną jeśli nie usuniesz):</div><div id="existingGrid" class="grid grid-cols-3 sm:grid-cols-5 gap-2"></div></div>
-<div id="dropZone" class="border-2 border-dashed border-zinc-300 rounded-2xl p-6 text-center bg-zinc-50 hover:bg-white hover:border-black transition cursor-pointer">
-<input type="file" id="imgFiles" accept="image/*" multiple class="hidden">
-<div>📸<br><b>Dodaj nowe zdjęcia</b><br><span class="text-xs text-zinc-500">Kompresja auto ~200KB</span></div>
-</div>
+<div class="font-bold mb-2 text-sm flex justify-between"><span>Zdjęcia • max 10 • kompresja auto</span><span id="photoCount" class="font-normal">0/10</span></div>
+<div id="existingPhotos" class="hidden mb-3"><div class="text-xs font-bold mb-1 text-green-700">Zdjęcia zapisane (zostaną):</div><div id="existingGrid" class="grid grid-cols-3 sm:grid-cols-5 gap-2"></div></div>
+<div id="dropZone" class="border-2 border-dashed border-zinc-300 rounded-2xl p-6 text-center bg-zinc-50 hover:bg-white cursor-pointer"><input type="file" id="imgFiles" accept="image/*" multiple class="hidden"><div><b>📸 Dodaj zdjęcia</b><br><span class="text-xs">Przeciągnij lub kliknij • ~200KB/szt</span></div></div>
 <div id="previewGrid" class="grid grid-cols-3 sm:grid-cols-5 gap-2 mt-3"></div>
-<div id="compressInfo" class="text-xs text-zinc-500 mt-2"></div>
 </div>
 
 <button id="saveBtn" class="w-full bg-black text-white py-4 rounded-xl font-black">Zapisz ogłoszenie</button>
-<div id="saveStatus" class="text-center text-sm mt-2"></div>
+<div id="saveStatus" class="text-center text-sm mt-2 text-red-600 font-bold"></div>
+</div>
 </div></div>
 
-<!-- DETAIL Z MAPĄ -->
-<div id="detailModal" class="hidden fixed inset-0 bg-black z-[70] flex flex-col"><div class="flex justify-between items-center p-4 text-white"><div class="font-bold" id="detailTitle"></div><button onclick="closeDetail()" class="w-10 h-10 rounded-full bg-white/20">✕</button></div>
-<div class="flex-1 flex flex-col lg:flex-row overflow-hidden"><div class="flex-1 bg-black flex items-center justify-center relative"><img id="detailMain" class="max-w-full max-h-[60vh] lg:max-h-[80vh] object-contain"><button onclick="prevImg()" class="absolute left-2 bg-white/20 text-white w-10 h-10 rounded-full">‹</button><button onclick="nextImg()" class="absolute right-2 bg-white/20 text-white w-10 h-10 rounded-full">›</button><div id="detailCounter" class="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/70 text-white px-3 py-1 rounded-full text-sm">1 / 1</div></div><div class="bg-white lg:w-[380px] p-5 overflow-y-auto"><div id="detailInfo"></div><div id="detailMap" class="mt-4 hidden"></div><div id="detailActions" class="mt-4"></div></div></div><div id="detailThumbs" class="bg-black p-2 flex gap-2 overflow-x-auto"></div></div>
+<!-- DETAIL -->
+<div id="detailModal" class="hidden fixed inset-0 bg-black z-[70] flex flex-col"><div class="flex justify-between items-center p-4 text-white"><div class="font-bold" id="detailTitle"></div><button onclick="closeDetail()" class="w-10 h-10 rounded-full bg-white/20">✕</button></div><div class="flex-1 flex flex-col lg:flex-row overflow-hidden"><div class="flex-1 bg-black flex items-center justify-center relative"><img id="detailMain" class="max-w-full max-h-[60vh] lg:max-h-[80vh] object-contain"><button onclick="prevImg()" class="absolute left-2 bg-white/20 text-white w-10 h-10 rounded-full">‹</button><button onclick="nextImg()" class="absolute right-2 bg-white/20 text-white w-10 h-10 rounded-full">›</button><div id="detailCounter" class="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/70 text-white px-3 py-1 rounded-full text-sm"></div></div><div class="bg-white lg:w-[400px] p-5 overflow-y-auto"><div id="detailInfo"></div><div id="detailActions" class="mt-4"></div></div></div><div id="detailThumbs" class="bg-black p-2 flex gap-2 overflow-x-auto"></div></div>
 
-<div id="authModal" class="hidden fixed inset-0 bg-black/60 z-[80] flex items-center justify-center p-4"><div class="bg-white rounded-[20px] p-6 w-full max-w-sm"><h2 class="text-xl font-black mb-4">Zaloguj / Zarejestruj</h2><input id="email" type="email" placeholder="email" class="w-full border rounded-xl px-4 py-3 mb-3"><input id="pass" type="password" placeholder="hasło" class="w-full border rounded-xl px-4 py-3 mb-3"><button id="loginBtn" class="w-full bg-black text-white py-3 rounded-xl font-bold">Zaloguj / Zarejestruj</button><button onclick="document.getElementById('authModal').classList.add('hidden')" class="w-full mt-3 text-sm">Zamknij</button></div></div>
+<div id="authModal" class="hidden fixed inset-0 bg-black/60 z-[80] flex items-center justify-center p-4"><div class="bg-white rounded-[20px] p-6 w-full max-w-sm"><h2 class="text-xl font-black mb-4">Zaloguj</h2><input id="email" type="email" placeholder="email" class="w-full border rounded-xl px-4 py-3 mb-3"><input id="pass" type="password" placeholder="hasło" class="w-full border rounded-xl px-4 py-3 mb-3"><button id="loginBtn" class="w-full bg-black text-white py-3 rounded-xl font-bold">Zaloguj / Zarejestruj</button><button onclick="document.getElementById('authModal').classList.add('hidden')" class="w-full mt-3 text-sm">Zamknij</button></div></div>
 
 <script>
 const SUPABASE_URL='https://bdpydgsfowtuvjnkyeeg.supabase.co';
 const ANON_KEY='sb_publishable_S1qH_mBZaX7-bzmfJ0IVGA_6hxGbJWd';
 const supa = supabase.createClient(SUPABASE_URL, ANON_KEY);
-let filesCompressed=[], editingId=null, currentUser=null, detailImgs=[], detailIdx=0, existingImgs=[], toDeleteImgIds=[], currentGPS={lat:null,lng:null,addr:null,city:null}, searchGPS={lat:null,lng:null};
+const BRANDS=["Abarth","Acura","Alfa Romeo","Audi","Bentley","BMW","BYD","Cadillac","Chevrolet","Citroen","Cupra","Dacia","Dodge","Fiat","Ford","Honda","Hyundai","Jaguar","Jeep","Kia","Lexus","Mazda","Mercedes-Benz","Mini","Mitsubishi","Nissan","Opel","Peugeot","Porsche","Renault","Seat","Skoda","Tesla","Toyota","Volkswagen","Volvo"];
+const MODELS={"BMW":["1","2","3","4","5","X1","X3","X5","M3","M4"],"Audi":["A3","A4","A6","Q3","Q5","Q7","A5","A7"],"Volkswagen":["Golf","Passat","Tiguan","Polo","Arteon"],"Toyota":["Corolla","Camry","RAV4","Yaris","Avensis"]};
+let filesCompressed=[], editingId=null, currentUser=null, detailImgs=[], detailIdx=0, existingImgs=[], toDeleteImgIds=[], currentGPS={lat:null,lng:null,addr:null,city:null}, allListings=[];
 
-async function refreshUser(){
- const {data:{user}} = await supa.auth.getUser(); currentUser=user;
- const badge=document.getElementById('userBadge'), btn=document.getElementById('authBtn');
- if(user){badge.textContent=user.email; badge.classList.remove('hidden'); btn.textContent='Wyloguj'; btn.onclick=async()=>{await supa.auth.signOut(); location.reload();};}
- else{badge.classList.add('hidden'); btn.textContent='Zaloguj'; btn.onclick=()=>document.getElementById('authModal').classList.remove('hidden');}
+function initBrands(){
+ const b=document.getElementById('brand'), fb=document.getElementById('f_brand');
+ BRANDS.forEach(br=>{b.innerHTML+=`<option>${br}</option>`; fb.innerHTML+=`<option>${br}</option>`;});
+ b.onchange=()=>{const m=document.getElementById('model'); m.innerHTML='<option value="">Model *</option>'; (MODELS[b.value]||[]).forEach(md=>m.innerHTML+=`<option>${md}</option>`); m.innerHTML+='<option>Inny</option>'; if(!MODELS[b.value]) m.innerHTML+='<option>Wpisz ręcznie w tytule</option>'; updateTitle();};
+ document.getElementById('brand').addEventListener('input', updateTitle);
+ document.getElementById('model').addEventListener('input', updateTitle);
+ document.getElementById('year').addEventListener('input', updateTitle);
 }
+function updateTitle(){
+ const br=document.getElementById('brand').value, mo=document.getElementById('model').value, yr=document.getElementById('year').value;
+ if(br||mo){document.getElementById('title').value=`${br} ${mo} ${yr}`.trim();}
+}
+initBrands();
+
+async function refreshUser(){const {data:{user}}=await supa.auth.getUser(); currentUser=user; const badge=document.getElementById('userBadge'), btn=document.getElementById('authBtn'); if(user){badge.textContent=user.email; badge.classList.remove('hidden'); btn.textContent='Wyloguj'; btn.onclick=async()=>{await supa.auth.signOut(); location.reload();};}else{badge.classList.add('hidden'); btn.textContent='Zaloguj'; btn.onclick=()=>document.getElementById('authModal').classList.remove('hidden');}}
 refreshUser(); supa.auth.onAuthStateChange(()=>{refreshUser(); load();});
 
-function openAdd(){if(!currentUser){document.getElementById('authModal').classList.remove('hidden'); alert('Zaloguj się'); return;} editingId=null; resetForm(); document.getElementById('modalTitle').textContent='Dodaj ogłoszenie'; document.getElementById('addModal').classList.remove('hidden');}
+function openAdd(){if(!currentUser){document.getElementById('authModal').classList.remove('hidden'); alert('Zaloguj się'); return;} editingId=null; resetForm(); document.getElementById('addModal').classList.remove('hidden');}
 function closeAdd(){document.getElementById('addModal').classList.add('hidden'); editingId=null;}
 function closeDetail(){document.getElementById('detailModal').classList.add('hidden');}
-function resetForm(){document.getElementById('title').value=''; document.getElementById('desc').value=''; document.getElementById('price').value=''; document.getElementById('loc').value='Gorzyce'; filesCompressed=[]; existingImgs=[]; toDeleteImgIds=[]; currentGPS={lat:null,lng:null,addr:null,city:null}; document.getElementById('gpsStatus').textContent='Kliknij aby pobrać dokładne współrzędne.'; document.getElementById('gpsPreview').classList.add('hidden'); document.getElementById('existingPhotos').classList.add('hidden'); renderPreviews(); renderExisting();}
+function resetForm(){['title','price','loc','desc','year','mileage','engine_capacity','power'].forEach(id=>document.getElementById(id).value=''); ['fuel_type','transmission','body_type','color','brand','model'].forEach(id=>document.getElementById(id).value=''); filesCompressed=[]; existingImgs=[]; toDeleteImgIds=[]; currentGPS={lat:null,lng:null,addr:null,city:null}; document.getElementById('gpsPreview').classList.add('hidden'); document.getElementById('existingPhotos').classList.add('hidden'); renderPreviews(); renderExisting();}
 
-// GPS POBIERANIE
-async function getGPS(){
- const status=document.getElementById('gpsStatus');
- if(!navigator.geolocation){status.textContent='Przeglądarka nie wspiera GPS'; return;}
- status.textContent='📡 Pobieram GPS...';
- navigator.geolocation.getCurrentPosition(async pos=>{
-  const lat=pos.coords.latitude, lng=pos.coords.longitude;
-  currentGPS.lat=lat; currentGPS.lng=lng;
-  status.textContent=`✅ GPS pobrany! Dokładność ${Math.round(pos.coords.accuracy)}m`;
-  document.getElementById('gpsLat').textContent=lat.toFixed(6); document.getElementById('gpsLng').textContent=lng.toFixed(6);
-  document.getElementById('gpsMapLink').href=`https://www.google.com/maps?q=${lat},${lng}`;
-  document.getElementById('gpsPreview').classList.remove('hidden');
-  // Reverse geocode via OSM
-  try{
-   const r=await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=14&addressdetails=1`);
-   const j=await r.json();
-   const addr=j.display_name; const city=j.address?.city||j.address?.town||j.address?.village||j.address?.county||'';
-   currentGPS.addr=addr; currentGPS.city=city;
-   document.getElementById('gpsAddr').textContent=addr;
-   if(city && !document.getElementById('loc').value) document.getElementById('loc').value=city;
-  }catch(e){document.getElementById('gpsAddr').textContent='GPS pobrany, adres nieznany';}
- }, err=>{status.textContent='Błąd GPS: '+err.message+' - wpisz lokalizację ręcznie';});
-}
-function clearGPS(){currentGPS={lat:null,lng:null,addr:null,city:null}; document.getElementById('gpsPreview').classList.add('hidden'); document.getElementById('gpsStatus').textContent='GPS wyczyszczony';}
-function getSearchGPS(){
- const status=document.getElementById('searchStatus');
- if(!navigator.geolocation){status.textContent='Brak GPS'; return;}
- status.textContent='Pobieram Twoją lokalizację do wyszukiwania...';
- navigator.geolocation.getCurrentPosition(pos=>{
-  searchGPS.lat=pos.coords.latitude; searchGPS.lng=pos.coords.longitude;
-  status.textContent=`📍 Szukam w okolicy ${searchGPS.lat.toFixed(3)}, ${searchGPS.lng.toFixed(3)} • ustaw promień i kliknij Szukaj`;
- }, err=>{status.textContent='Błąd GPS: '+err.message;});
-}
+async function getGPS(){const st=document.getElementById('gpsStatus'); if(!navigator.geolocation){st.textContent='Brak GPS';return;} st.textContent='📡 Pobieram...'; navigator.geolocation.getCurrentPosition(async pos=>{const lat=pos.coords.latitude,lng=pos.coords.longitude; currentGPS.lat=lat; currentGPS.lng=lng; st.textContent=`✅ GPS ${Math.round(pos.coords.accuracy)}m`; document.getElementById('gpsLat').textContent=lat.toFixed(6); document.getElementById('gpsLng').textContent=lng.toFixed(6); document.getElementById('gpsPreview').classList.remove('hidden'); try{const r=await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`); const j=await r.json(); currentGPS.addr=j.display_name; currentGPS.city=j.address?.city||j.address?.town||j.address?.village||''; document.getElementById('gpsAddr').textContent=j.display_name; if(currentGPS.city) document.getElementById('loc').value=currentGPS.city;}catch(e){}}, err=>{st.textContent='Błąd: '+err.message});}
+function clearGPS(){currentGPS={lat:null,lng:null,addr:null,city:null}; document.getElementById('gpsPreview').classList.add('hidden');}
 
-// KOMPRESJA
-async function compressImage(file){
- return new Promise(res=>{
-  const img=new Image(); const url=URL.createObjectURL(file);
-  img.onload=()=>{const maxW=1280,maxH=960;let w=img.width,h=img.height;if(w>maxW||h>maxH){const r=Math.min(maxW/w,maxH/h);w*=r;h*=r;}const c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);c.toBlob(b=>{const nf=new File([b], file.name.replace(/\.[^/.]+$/,'')+'.jpg',{type:'image/jpeg'});res({file:nf, previewUrl:URL.createObjectURL(b), orig:file.size, comp:b.size});},'image/jpeg',0.72);}; img.src=url;
- });
-}
+async function compressImage(file){return new Promise(res=>{const img=new Image(); const url=URL.createObjectURL(file); img.onload=()=>{let w=img.width,h=img.height; const maxW=1280,maxH=960; if(w>maxW||h>maxH){const r=Math.min(maxW/w,maxH/h); w*=r; h*=r;} const c=document.createElement('canvas'); c.width=w; c.height=h; c.getContext('2d').drawImage(img,0,0,w,h); c.toBlob(b=>{const nf=new File([b], file.name.replace(/\.[^/.]+$/,'')+'.jpg',{type:'image/jpeg'}); res({file:nf, previewUrl:URL.createObjectURL(b)});},'image/jpeg',0.72);}; img.src=url;});}
 const dropZone=document.getElementById('dropZone'), input=document.getElementById('imgFiles');
-dropZone.onclick=()=>input.click(); dropZone.ondragover=e=>{e.preventDefault(); dropZone.classList.add('border-black')}; dropZone.ondragleave=()=>dropZone.classList.remove('border-black'); dropZone.ondrop=async e=>{e.preventDefault(); dropZone.classList.remove('border-black'); await handleFiles(e.dataTransfer.files);}; input.onchange=async e=>{await handleFiles(e.target.files);};
-async function handleFiles(list){for(let f of list){if(filesCompressed.length+existingImgs.length>=10){alert('Max 10 zdjęć');break;}if(!f.type.startsWith('image/'))continue;const c=await compressImage(f);filesCompressed.push(c);}renderPreviews(); updatePhotoCount();}
-function renderPreviews(){const g=document.getElementById('previewGrid');g.innerHTML='';filesCompressed.forEach((c,i)=>{g.innerHTML+=`<div class="relative"><img src="${c.previewUrl}" class="w-full h-24 object-cover rounded-xl border"><button onclick="filesCompressed.splice(${i},1);renderPreviews();updatePhotoCount()" class="absolute -top-2 -right-2 w-6 h-6 bg-black text-white rounded-full text-xs">✕</button><div class="absolute bottom-0 left-0 right-0 bg-black/60 text-white text-[10px] px-1 rounded-b-xl">NOWE</div></div>`;});}
-function renderExisting(){const wrap=document.getElementById('existingPhotos'), grid=document.getElementById('existingGrid'); if(!existingImgs.length){wrap.classList.add('hidden');return;}wrap.classList.remove('hidden');grid.innerHTML='';existingImgs.forEach((im,i)=>{if(toDeleteImgIds.includes(im.id)) return; grid.innerHTML+=`<div class="relative"><img src="${im.image_url}" class="w-full h-24 object-cover rounded-xl border-2 border-green-400"><button onclick="deleteExisting(${i})" class="absolute -top-2 -right-2 w-6 h-6 bg-red-600 text-white rounded-full text-xs">✕</button><div class="absolute bottom-0 left-0 right-0 bg-green-600/80 text-white text-[10px] px-1 rounded-b-xl">ZAPISANE</div></div>`;}); updatePhotoCount();}
-function deleteExisting(idx){const im=existingImgs[idx]; if(confirm('Usunąć to zdjęcie?')){toDeleteImgIds.push(im.id); renderExisting();}}
-function updatePhotoCount(){const total=existingImgs.filter(im=>!toDeleteImgIds.includes(im.id)).length + filesCompressed.length; document.getElementById('photoCount').textContent=`${total}/10 zdjęć`;}
+dropZone.onclick=()=>input.click(); input.onchange=async e=>{for(let f of e.target.files){if(filesCompressed.length+existingImgs.filter(im=>!toDeleteImgIds.includes(im.id)).length>=10)break; const c=await compressImage(f); filesCompressed.push(c);} renderPreviews();};
+function renderPreviews(){const g=document.getElementById('previewGrid'); g.innerHTML=''; filesCompressed.forEach((c,i)=>{g.innerHTML+=`<div class="relative"><img src="${c.previewUrl}" class="w-full h-24 object-cover rounded-xl border"><button onclick="filesCompressed.splice(${i},1);renderPreviews()" class="absolute -top-2 -right-2 w-6 h-6 bg-black text-white rounded-full text-xs">✕</button><div class="absolute bottom-0 left-0 right-0 bg-black/60 text-white text-[10px] px-1 rounded-b-xl">NOWE</div></div>`;}); updateCount();}
+function renderExisting(){const wrap=document.getElementById('existingPhotos'), grid=document.getElementById('existingGrid'); if(!existingImgs.length){wrap.classList.add('hidden'); return;} const visible=existingImgs.filter(im=>!toDeleteImgIds.includes(im.id)); if(!visible.length){wrap.classList.add('hidden'); return;} wrap.classList.remove('hidden'); grid.innerHTML=''; visible.forEach(im=>{grid.innerHTML+=`<div class="relative"><img src="${im.image_url}" class="w-full h-24 object-cover rounded-xl border-2 border-green-400"><button onclick="toDeleteImgIds.push('${im.id}');renderExisting();updateCount()" class="absolute -top-2 -right-2 w-6 h-6 bg-red-600 text-white rounded-full text-xs">✕</button><div class="absolute bottom-0 left-0 right-0 bg-green-600/80 text-white text-[10px] px-1 rounded-b-xl">ZAPISANE</div></div>`;});}
+function updateCount(){const total=existingImgs.filter(im=>!toDeleteImgIds.includes(im.id)).length+filesCompressed.length; document.getElementById('photoCount').textContent=`${total}/10`;}
 
-// HAVERSINE dla wyszukiwania po GPS
-function distKm(lat1,lon1,lat2,lon2){if(!lat1||!lat2) return Infinity; const R=6371; const dLat=(lat2-lat1)*Math.PI/180; const dLon=(lon2-lon1)*Math.PI/180; const a=Math.sin(dLat/2)**2 + Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)**2; return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));}
-
-let allListings=[];
-async function load(){
- const {data} = await supa.from('listings').select('*, listing_images(id,image_url)').order('created_at',{ascending:false});
- allListings=data||[]; applyFilters();
-}
+// FILTERS
+function distKm(lat1,lon1,lat2,lon2){if(!lat1||!lat2)return Infinity; const R=6371; const dLat=(lat2-lat1)*Math.PI/180; const dLon=(lon2-lon1)*Math.PI/180; const a=Math.sin(dLat/2)**2+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)**2; return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));}
+let searchGPS={lat:null,lng:null};
+async function load(){const {data}=await supa.from('listings').select('*, listing_images(id,image_url)').order('created_at',{ascending:false}); allListings=data||[]; applyFilters();}
 function applyFilters(){
- const q=document.getElementById('searchQ').value.toLowerCase(); const locQ=document.getElementById('searchLoc').value.toLowerCase(); const rad=Number(document.getElementById('radius').value);
+ const q=(document.getElementById('f_q').value||'').toLowerCase(), brand=document.getElementById('f_brand').value, model=document.getElementById('f_model').value, fuel=document.getElementById('f_fuel').value, city=(document.getElementById('f_city').value||'').toLowerCase(), yFrom=Number(document.getElementById('f_yearFrom').value||0), yTo=Number(document.getElementById('f_yearTo').value||9999), pFrom=Number(document.getElementById('f_priceFrom').value||0), pTo=Number(document.getElementById('f_priceTo').value||9e9), rad=Number(document.getElementById('f_radius').value);
  let filtered=allListings.filter(l=>{
-  if(q && !l.title.toLowerCase().includes(q) && !(l.description||'').toLowerCase().includes(q)) return false;
-  if(locQ && !(l.location||'').toLowerCase().includes(locQ) && !(l.city||'').toLowerCase().includes(locQ)) return false;
-  if(rad>0 && searchGPS.lat && l.lat && l.lng){const d=distKm(searchGPS.lat,searchGPS.lng,l.lat,l.lng); if(d>rad) return false;}
+  if(q && !(`${l.title} ${l.brand||''} ${l.model||''} ${l.description||''}`.toLowerCase().includes(q))) return false;
+  if(brand && l.brand!==brand) return false;
+  if(model && l.model!==model) return false;
+  if(fuel && l.fuel_type!==fuel) return false;
+  if(city && !(l.city||'').toLowerCase().includes(city) && !(l.location||'').toLowerCase().includes(city)) return false;
+  if(l.year && (l.year<yFrom || l.year>yTo)) return false;
+  if(l.price && (l.price<pFrom || l.price>pTo)) return false;
+  if(rad>0 && searchGPS.lat && l.lat && l.lng){if(distKm(searchGPS.lat,searchGPS.lng,l.lat,l.lng)>rad) return false;}
   return true;
  });
- // sort by distance if GPS search
- if(searchGPS.lat){filtered=filtered.sort((a,b)=>distKm(searchGPS.lat,searchGPS.lng,a.lat||0,a.lng||0)-distKm(searchGPS.lat,searchGPS.lng,b.lat||0,b.lng||0));}
  renderList(filtered);
 }
-function doSearch(){applyFilters(); const rad=document.getElementById('radius').value; document.getElementById('searchStatus').textContent=rad>0 && searchGPS.lat?`Szukam w promieniu ${rad}km od Twojej lokalizacji`:`Znaleziono ${document.querySelectorAll('#listings > div').length} ogłoszeń`;}
-function clearSearch(){document.getElementById('searchQ').value=''; document.getElementById('searchLoc').value=''; document.getElementById('radius').value='0'; searchGPS={lat:null,lng:null}; document.getElementById('searchStatus').textContent=''; applyFilters();}
+function doSearch(){applyFilters();}
 function renderList(data){
- const grid=document.getElementById('listings'); if(!data.length){grid.innerHTML='<div class="col-span-full text-center py-20">Brak ogłoszeń w tym obszarze</div>';return;}
+ const grid=document.getElementById('listings');
+ if(!data.length){grid.innerHTML='<div class="col-span-full text-center py-20">Brak ogłoszeń dla tych filtrów</div>'; return;}
  grid.innerHTML=data.map(l=>{
-  const imgs=l.listing_images?.map(x=>x.image_url)||[]; const main=imgs[0]||`https://picsum.photos/seed/${l.id}/400/300`; const isOwner=currentUser && l.user_id===currentUser.id; let distTxt=''; if(searchGPS.lat && l.lat){const d=distKm(searchGPS.lat,searchGPS.lng,l.lat,l.lng); distTxt=`• ${d.toFixed(1)}km`;}
+  const imgs=l.listing_images?.map(x=>x.image_url)||[]; const main=imgs[0]||`https://picsum.photos/seed/${l.id}/400/300`; const isOwner=currentUser && l.user_id===currentUser.id;
   return `<div class="bg-white rounded-[18px] border overflow-hidden hover:shadow-xl transition group relative">
-   <div onclick='openDetailById("${l.id}")' class="h-52 bg-zinc-100 relative overflow-hidden cursor-pointer"><img src="${main}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500"><div class="absolute top-2 left-2 bg-black/70 text-white text-xs px-2 py-1 rounded-full">📷 ${imgs.length||1}</div>${l.lat?'<div class="absolute top-2 right-2 bg-blue-600 text-white text-[10px] px-2 py-1 rounded-full">📍 GPS</div>':''}${isOwner?'<div class="absolute bottom-2 right-2 bg-green-600 text-white text-[10px] px-2 py-1 rounded-full">TWOJE</div>':''}</div>
-   <div class="p-4"><div class="font-black text-[15px] line-clamp-2">${l.title}</div><div class="font-black text-[18px] mt-1">${Number(l.price).toLocaleString('pl-PL')} zł</div><div class="text-[13px] text-zinc-500 mt-1">${l.location||l.city||''} ${distTxt}</div>
-   ${isOwner?`<div class="mt-3 flex gap-2"><button onclick="editListing('${l.id}')" class="flex-1 bg-zinc-900 text-white text-xs py-2 rounded-lg font-bold">Edytuj</button><button onclick="deleteListing('${l.id}')" class="flex-1 border text-xs py-2 rounded-lg font-bold text-red-600">Usuń</button></div>`:''}
+   <div onclick='openDetailById("${l.id}")' class="h-52 bg-zinc-100 relative overflow-hidden cursor-pointer"><img src="${main}" class="w-full h-full object-cover group-hover:scale-105 transition"><div class="absolute top-2 left-2 bg-black/70 text-white text-xs px-2 py-1 rounded-full">📷 ${imgs.length||1}</div>${l.lat?'<div class="absolute top-2 right-2 bg-blue-600 text-white text-[10px] px-2 py-1 rounded-full">📍 GPS</div>':''}</div>
+   <div class="p-4"><div class="font-black text-[14px] line-clamp-2">${l.brand||''} ${l.model||''} ${l.year||''} • ${l.title}</div><div class="text-xs text-zinc-500 mt-1">${l.mileage?Number(l.mileage).toLocaleString()+' km • ':''}${l.fuel_type||''} ${l.transmission? '• '+l.transmission:''}</div><div class="font-black text-[18px] mt-2">${Number(l.price).toLocaleString('pl-PL')} zł</div><div class="text-[12px] text-zinc-500">${l.city||l.location||''}</div>
+   ${isOwner?`<div class="mt-2 flex gap-2"><button onclick="editListing('${l.id}')" class="flex-1 bg-zinc-900 text-white text-xs py-2 rounded-lg font-bold">Edytuj</button><button onclick="deleteListing('${l.id}')" class="flex-1 border text-xs py-2 rounded-lg text-red-600">Usuń</button></div>`:''}
    </div></div>`;
  }).join(''); window._cache=data;
 }
-load();
-function openDetailById(id){const l=(window._cache||allListings).find(x=>x.id===id); openDetail(l);}
-function openDetail(l){detailImgs=l.listing_images?.map(x=>x.image_url)||[]; detailIdx=0; document.getElementById('detailTitle').textContent=l.title; const isOwner=currentUser && l.user_id===currentUser.id; document.getElementById('detailInfo').innerHTML=`<div class="text-3xl font-black">${Number(l.price).toLocaleString('pl-PL')} zł</div><div class="text-sm text-zinc-500 mt-1">${l.location||''} ${l.city||''}</div>${l.lat?`<div class="text-xs mt-1">📍 ${l.full_address||l.lat.toFixed(5)+', '+l.lng.toFixed(5)}<br><a href="https://www.google.com/maps?q=${l.lat},${l.lng}" target="_blank" class="text-blue-600 underline">Otwórz w Google Maps</a></div>`:''}<div class="mt-4 font-bold">Opis</div><div class="text-sm mt-1 whitespace-pre-wrap">${l.description||''}</div>`; document.getElementById('detailActions').innerHTML=isOwner?`<div class="flex gap-2 mt-4"><button onclick="editListing('${l.id}');closeDetail()" class="flex-1 bg-black text-white py-3 rounded-xl font-bold">Edytuj (zdjęcia zostają)</button><button onclick="deleteListing('${l.id}')" class="flex-1 border border-red-200 text-red-600 py-3 rounded-xl font-bold">Usuń</button></div>`:`<button class="w-full bg-black text-white py-3 rounded-xl font-bold mt-4">Kontakt</button>`; document.getElementById('detailModal').classList.remove('hidden'); showDetailImg(); const thumbs=document.getElementById('detailThumbs'); thumbs.innerHTML=detailImgs.map((u,i)=>`<img src="${u}" onclick="detailIdx=${i};showDetailImg()" class="w-20 h-20 object-cover rounded-xl border-2 ${i==detailIdx?'border-white':'border-transparent'} cursor-pointer">`).join('');}
-function showDetailImg(){if(!detailImgs.length)return;document.getElementById('detailMain').src=detailImgs[detailIdx]; document.getElementById('detailCounter').textContent=(detailIdx+1)+' / '+detailImgs.length;}
-function nextImg(){detailIdx=(detailIdx+1)%detailImgs.length; showDetailImg();}
-function prevImg(){detailIdx=(detailIdx-1+detailImgs.length)%detailImgs.length; showDetailImg();}
+function openDetailById(id){const l=(window._cache||allListings).find(x=>x.id===id); if(l) openDetail(l);}
+function openDetail(l){detailImgs=l.listing_images?.map(x=>x.image_url)||[]; detailIdx=0; document.getElementById('detailTitle').textContent=`${l.brand||''} ${l.model||''}`; document.getElementById('detailInfo').innerHTML=`<div class="text-3xl font-black">${Number(l.price).toLocaleString()} zł</div><div class="mt-3 grid grid-cols-2 gap-2 text-sm"><div>Marka: <b>${l.brand||'-'}</b></div><div>Model: <b>${l.model||'-'}</b></div><div>Rok: <b>${l.year||'-'}</b></div><div>Przebieg: <b>${l.mileage?Number(l.mileage).toLocaleString()+' km':'-'}</b></div><div>Paliwo: <b>${l.fuel_type||'-'}</b></div><div>Skrzynia: <b>${l.transmission||'-'}</b></div><div>Nadwozie: <b>${l.body_type||'-'}</b></div><div>Moc: <b>${l.power||'-'} KM</b></div><div>Poj: <b>${l.engine_capacity||'-'} cm3</b></div><div>Kolor: <b>${l.color||'-'}</b></div></div><div class="mt-4 text-xs text-zinc-500">📍 ${l.full_address||l.city||l.location||''}</div><div class="mt-3 text-sm whitespace-pre-wrap">${l.description||''}</div>`; document.getElementById('detailActions').innerHTML=(currentUser && l.user_id===currentUser.id)?`<div class="flex gap-2"><button onclick="editListing('${l.id}');closeDetail()" class="flex-1 bg-black text-white py-3 rounded-xl font-bold">Edytuj</button><button onclick="deleteListing('${l.id}')" class="flex-1 border text-red-600 py-3 rounded-xl">Usuń</button></div>`:`<button class="w-full bg-black text-white py-3 rounded-xl font-bold mt-4">Kontakt</button>`; document.getElementById('detailModal').classList.remove('hidden'); showDetailImg(); const thumbs=document.getElementById('detailThumbs'); thumbs.innerHTML=detailImgs.map((u,i)=>`<img src="${u}" onclick="detailIdx=${i};showDetailImg()" class="w-20 h-20 object-cover rounded-xl border-2 ${i==detailIdx?'border-white':'border-transparent'} cursor-pointer">`).join('');}
+function showDetailImg(){if(!detailImgs.length)return; document.getElementById('detailMain').src=detailImgs[detailIdx]; document.getElementById('detailCounter').textContent=(detailIdx+1)+' / '+detailImgs.length;}
+function nextImg(){detailIdx=(detailIdx+1)%detailImgs.length; showDetailImg();} function prevImg(){detailIdx=(detailIdx-1+detailImgs.length)%detailImgs.length; showDetailImg();}
 
-async function editListing(id){
- if(!currentUser){alert('Zaloguj');return;}
- const l=allListings.find(x=>x.id===id); if(!l||l.user_id!==currentUser.id){alert('Nie Twoje');return;}
- editingId=id; resetForm();
- document.getElementById('modalTitle').textContent='Edytuj ogłoszenie • zdjęcia zostają';
- document.getElementById('title').value=l.title; document.getElementById('desc').value=l.description||''; document.getElementById('price').value=l.price; document.getElementById('loc').value=l.location||l.city||'Gorzyce';
- if(l.lat){currentGPS={lat:l.lat,lng:l.lng,addr:l.full_address||'',city:l.city||''}; document.getElementById('gpsLat').textContent=l.lat; document.getElementById('gpsLng').textContent=l.lng; document.getElementById('gpsAddr').textContent=l.full_address||''; document.getElementById('gpsPreview').classList.remove('hidden'); document.getElementById('gpsStatus').textContent='✅ GPS załadowany z ogłoszenia';}
- existingImgs=l.listing_images||[]; toDeleteImgIds=[]; filesCompressed=[]; renderExisting(); renderPreviews(); updatePhotoCount();
- document.getElementById('addModal').classList.remove('hidden');
-}
-async function deleteListing(id){if(!currentUser)return; if(!confirm('Usunąć?'))return; const {error}=await supa.from('listings').delete().eq('id',id); if(error)alert(error.message);else{closeDetail(); load();}}
+async function editListing(id){if(!currentUser){alert('Zaloguj');return;} const l=allListings.find(x=>x.id===id); if(!l||l.user_id!==currentUser.id){alert('Nie Twoje');return;} editingId=id; resetForm(); document.getElementById('brand').value=l.brand||''; document.getElementById('model').innerHTML=`<option>${l.model||''}</option><option>Inny</option>`; document.getElementById('model').value=l.model||''; document.getElementById('title').value=l.title; document.getElementById('year').value=l.year||''; document.getElementById('mileage').value=l.mileage||''; document.getElementById('engine_capacity').value=l.engine_capacity||''; document.getElementById('power').value=l.power||''; document.getElementById('fuel_type').value=l.fuel_type||''; document.getElementById('transmission').value=l.transmission||''; document.getElementById('body_type').value=l.body_type||''; document.getElementById('color').value=l.color||''; document.getElementById('price').value=l.price; document.getElementById('loc').value=l.location||l.city||''; document.getElementById('desc').value=l.description||''; if(l.lat){currentGPS={lat:l.lat,lng:l.lng,addr:l.full_address||'',city:l.city||''}; document.getElementById('gpsLat').textContent=l.lat; document.getElementById('gpsLng').textContent=l.lng; document.getElementById('gpsAddr').textContent=l.full_address||''; document.getElementById('gpsPreview').classList.remove('hidden');} existingImgs=l.listing_images||[]; renderExisting(); document.getElementById('addModal').classList.remove('hidden');}
+async function deleteListing(id){if(!confirm('Usunąć?'))return; const {error}=await supa.from('listings').delete().eq('id',id); if(error)alert(error.message); else{closeDetail(); load();}}
 
 document.getElementById('saveBtn').onclick=async()=>{
  if(!currentUser){alert('Zaloguj');return;}
- const t=document.getElementById('title').value, d=document.getElementById('desc').value, p=document.getElementById('price').value, lc=document.getElementById('loc').value;
- const status=document.getElementById('saveStatus'); if(!t||!p){alert('Tytuł i cena');return;}
+ const payload={title:document.getElementById('title').value, brand:document.getElementById('brand').value, model:document.getElementById('model').value, year:Number(document.getElementById('year').value)||null, mileage:Number(document.getElementById('mileage').value)||null, engine_capacity:Number(document.getElementById('engine_capacity').value)||null, power:Number(document.getElementById('power').value)||null, fuel_type:document.getElementById('fuel_type').value||null, transmission:document.getElementById('transmission').value||null, body_type:document.getElementById('body_type').value||null, color:document.getElementById('color').value||null, price:Number(document.getElementById('price').value)||0, location:document.getElementById('loc').value, city:currentGPS.city||document.getElementById('loc').value, lat:currentGPS.lat, lng:currentGPS.lng, full_address:currentGPS.addr||document.getElementById('loc').value, description:document.getElementById('desc').value};
+ const status=document.getElementById('saveStatus');
+ if(!payload.brand||!payload.model||!payload.price){status.textContent='Błąd: Marka, Model i Cena wymagane!'; return;}
  status.textContent=editingId?'Aktualizuję...':'Zapisuję...'; document.getElementById('saveBtn').disabled=true;
  try{
   let listingId=editingId;
-  const payload={title:t, description:d, price:Number(p), location:lc, city:currentGPS.city||lc, lat:currentGPS.lat, lng:currentGPS.lng, full_address:currentGPS.addr||lc};
   if(editingId){
    const {error}=await supa.from('listings').update(payload).eq('id',editingId); if(error)throw error;
-   // usuń zaznaczone zdjęcia
    for(let delId of toDeleteImgIds){await supa.from('listing_images').delete().eq('id',delId);}
   } else {
    payload.user_id=currentUser.id; payload.user_email=currentUser.email; payload.category='Samochody';
    const {data:listing, error}=await supa.from('listings').insert(payload).select().single(); if(error)throw error; listingId=listing.id;
   }
-  if(filesCompressed.length){
-   status.textContent=`Wysyłam ${filesCompressed.length} nowych zdjęć...`;
-   for(let i=0;i<filesCompressed.length;i++){const fc=filesCompressed[i]; const name=Date.now()+'_'+i+'_'+fc.file.name; const {error:upErr}=await supa.storage.from('listing-images').upload(name, fc.file); if(upErr)throw upErr; const {data:urlData}=supa.storage.from('listing-images').getPublicUrl(name); await supa.from('listing_images').insert({listing_id:listingId, image_url:urlData.publicUrl});}
-  }
+  for(let fc of filesCompressed){const name=Date.now()+'_'+Math.random().toString(36).slice(2)+'.jpg'; const {error:upErr}=await supa.storage.from('listing-images').upload(name, fc.file); if(upErr)throw upErr; const {data:urlData}=supa.storage.from('listing-images').getPublicUrl(name); await supa.from('listing_images').insert({listing_id:listingId, image_url:urlData.publicUrl});}
   status.textContent='✅ Gotowe!'; setTimeout(()=>{closeAdd(); load(); status.textContent=''; document.getElementById('saveBtn').disabled=false;}, 800);
  }catch(e){status.textContent='Błąd: '+e.message; document.getElementById('saveBtn').disabled=false;}
 };
-document.getElementById('loginBtn').onclick=async()=>{const e=document.getElementById('email').value,pw=document.getElementById('pass').value;const {error}=await supa.auth.signInWithPassword({email:e,password:pw}); if(error){const {error:er2}=await supa.auth.signUp({email:e,password:pw}); if(er2)alert(er2.message); else alert('Konto utworzone');} else{document.getElementById('authModal').classList.add('hidden'); refreshUser(); load();}};
-document.getElementById('searchQ').addEventListener('input', applyFilters);
-document.getElementById('searchLoc').addEventListener('input', applyFilters);
+document.getElementById('loginBtn').onclick=async()=>{const e=document.getElementById('email').value,pw=document.getElementById('pass').value;const {error}=await supa.auth.signInWithPassword({email:e,password:pw}); if(error){const {error:er2}=await supa.auth.signUp({email:e,password:pw}); if(er2)alert(er2.message); else alert('Konto utworzone, sprawdź email');} else{document.getElementById('authModal').classList.add('hidden'); refreshUser(); load();}};
+load();
 </script>
 </body></html>
