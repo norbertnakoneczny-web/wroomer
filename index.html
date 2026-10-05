@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="pl">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>WROOMER.PL</title>
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>WROOMER.PL - FIX BLANK</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <style>@import url('https://fonts.googleapis.com/css2?family=Inter:wght@600;800;900&display=swap');*{font-family:'Inter',sans-serif}</style>
@@ -9,84 +9,86 @@
 <header class="bg-white border-b sticky top-0 z-40">
 <div class="max-w-[1440px] mx-auto px-4 py-3 flex justify-between items-center">
 <div class="text-2xl font-black">WROOMER.PL</div>
-<div class="flex gap-2 items-center"><span id="userBadge" class="hidden text-xs bg-black text-white px-3 py-1 rounded-full"></span><button onclick="openAdd()" class="bg-black text-white px-5 py-2.5 rounded-xl font-bold">+ Dodaj</button><button id="authBtn" onclick="document.getElementById('authModal').classList.remove('hidden')" class="border px-4 py-2.5 rounded-xl text-sm">Zaloguj</button></div>
+<div class="flex gap-2 items-center"><span id="userBadge" class="hidden text-xs bg-black text-white px-3 py-1 rounded-full"></span><button onclick="openAdd()" class="bg-black text-white px-5 py-2.5 rounded-xl font-bold">+ Dodaj</button><button id="authBtn" onclick="openAuth()" class="border px-4 py-2.5 rounded-xl text-sm">Zaloguj</button></div>
 </div>
 </header>
 <main class="max-w-[1440px] mx-auto px-4 py-6">
-<div id="msg" class="hidden bg-yellow-100 border border-yellow-300 p-3 rounded-xl mb-4 text-sm"></div>
+<div id="msg" class="bg-white border-2 rounded-xl p-4 mb-4 text-sm"></div>
 <div id="listings" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"></div>
+<div id="debugLog" class="mt-6 bg-black text-green-400 p-3 rounded-xl text-xs font-mono whitespace-pre-wrap"></div>
 </main>
 
-<!-- MODAL -->
+<!-- MODAL ADD -->
 <div id="addModal" class="hidden fixed inset-0 bg-black/60 z-50 flex items-start justify-center p-2 overflow-y-auto">
 <div class="bg-white rounded-2xl w-full max-w-2xl my-4 p-5">
 <div class="flex justify-between items-center mb-4"><h2 id="modalTitle" class="font-black text-xl">Dodaj ogłoszenie</h2><button onclick="closeAdd()" class="bg-zinc-100 w-8 h-8 rounded-full">✕</button></div>
 
 <div class="grid grid-cols-2 gap-2 mb-2">
-<select id="brand" class="border-2 rounded-xl px-3 py-3 font-bold"><option value="">Marka *</option><option>Audi</option><option>BMW</option><option>Mercedes-Benz</option><option>Volkswagen</option><option>Toyota</option><option>Opel</option><option>Ford</option><option>Skoda</option><option>Renault</option><option>Peugeot</option><option>Hyundai</option><option>Kia</option><option>Honda</option><option>Fiat</option><option>Seat</option><option>Citroen</option><option>Nissan</option><option>Mazda</option><option>Volvo</option><option>Inna</option></select>
+<select id="brand" class="border-2 rounded-xl px-3 py-3 font-bold"><option value="">Marka *</option><option>Audi</option><option>BMW</option><option>Mercedes-Benz</option><option>Volkswagen</option><option>Toyota</option><option>Opel</option><option>Ford</option><option>Skoda</option><option>Renault</option><option>Peugeot</option><option>Hyundai</option><option>Kia</option><option>Inna</option></select>
 <input id="model" placeholder="Model * np. A4" class="border-2 rounded-xl px-3 py-3">
 </div>
 <div class="grid grid-cols-3 gap-2 mb-2">
 <input id="year" type="number" placeholder="Rok" class="border-2 rounded-xl px-3 py-3">
-<input id="mileage" type="number" placeholder="Przebieg km" class="border-2 rounded-xl px-3 py-3">
+<input id="mileage" type="number" placeholder="Przebieg" class="border-2 rounded-xl px-3 py-3">
 <input id="price" type="number" placeholder="Cena PLN *" class="border-2 rounded-xl px-3 py-3 font-black">
 </div>
-<div class="grid grid-cols-3 gap-2 mb-2">
-<select id="fuel_type" class="border-2 rounded-xl px-3 py-3 text-sm"><option value="">Paliwo</option><option>Benzyna</option><option>Diesel</option><option>LPG</option><option>Hybryda</option><option>Elektryczny</option></select>
-<select id="transmission" class="border-2 rounded-xl px-3 py-3 text-sm"><option value="">Skrzynia</option><option>Manualna</option><option>Automatyczna</option></select>
-<select id="body_type" class="border-2 rounded-xl px-3 py-3 text-sm"><option value="">Nadwozie</option><option>Sedan</option><option>Kombi</option><option>Hatchback</option><option>SUV</option><option>Coupe</option></select>
-</div>
-<input id="title" placeholder="Tytuł np. Audi A4 2018 s-line" class="w-full border-2 rounded-xl px-3 py-3 mb-2 font-bold">
-<input id="loc" placeholder="Miasto np. Gorzyce" value="Gorzyce" class="w-full border-2 rounded-xl px-3 py-3 mb-2">
+<input id="title" placeholder="Tytuł np. Audi A4 2018" class="w-full border-2 rounded-xl px-3 py-3 mb-2 font-bold">
+<input id="loc" placeholder="Miasto" value="Gorzyce" class="w-full border-2 rounded-xl px-3 py-3 mb-2">
 <textarea id="desc" placeholder="Opis..." class="w-full border-2 rounded-xl px-3 py-3 mb-3 h-20"></textarea>
 
 <div class="bg-blue-50 border border-blue-200 rounded-xl p-3 mb-3">
-<div class="flex gap-2"><button type="button" onclick="getGPS()" class="bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-bold">📍 Pobierz GPS</button><button type="button" onclick="clearGPS()" class="border bg-white px-3 py-2 rounded-xl text-sm">Wyczyść</button></div>
-<div id="gpsStatus" class="text-xs mt-2 text-zinc-600">GPS opcjonalny, pomaga w wyszukiwaniu w okolicy</div>
-<div id="gpsPreview" class="hidden mt-2 text-xs bg-white p-2 rounded border"><span id="gpsAddr"></span><br><span id="gpsLat"></span> <span id="gpsLng"></span></div>
+<div class="flex gap-2"><button type="button" onclick="getGPS()" class="bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-bold">📍 Pobierz GPS</button></div>
+<div id="gpsStatus" class="text-xs mt-2">GPS opcjonalny</div>
+<div id="gpsPreview" class="hidden mt-2 text-xs bg-white p-2 rounded border"><span id="gpsAddr"></span></div>
 </div>
 
 <div class="mb-3">
-<div class="text-sm font-bold mb-2">Zdjęcia max 10 <span id="photoCount" class="font-normal">0/10</span></div>
-<div id="existingBox" class="hidden mb-2"><div class="text-xs font-bold text-green-700">Zapisane zdjęcia (zostaną):</div><div id="existingGrid" class="grid grid-cols-5 gap-2 mt-1"></div></div>
-<label class="border-2 border-dashed rounded-xl p-4 block text-center cursor-pointer bg-zinc-50"><input type="file" id="imgFiles" multiple accept="image/*" class="hidden"><b>📸 Dodaj zdjęcia</b><br><span class="text-xs">kompresja auto</span></label>
+<div class="text-sm font-bold mb-2">Zdjęcia max 10 <span id="photoCount">0/10</span></div>
+<div id="existingBox" class="hidden mb-2"><div class="text-xs font-bold text-green-700">Zapisane (zostaną):</div><div id="existingGrid" class="grid grid-cols-5 gap-2 mt-1"></div></div>
+<label class="border-2 border-dashed rounded-xl p-4 block text-center cursor-pointer bg-zinc-50"><input type="file" id="imgFiles" multiple accept="image/*" class="hidden"><b>📸 Dodaj zdjęcia</b></label>
 <div id="previewGrid" class="grid grid-cols-5 gap-2 mt-2"></div>
 </div>
 
 <button id="saveBtn" type="button" onclick="saveListing()" class="w-full bg-black text-white py-4 rounded-xl font-black text-lg">💾 ZAPISZ OGŁOSZENIE</button>
 <div id="saveStatus" class="text-center text-sm mt-2 font-bold"></div>
-<div id="debug" class="text-xs mt-2 text-zinc-500 break-all"></div>
 </div>
 </div>
 
-<div id="authModal" class="hidden fixed inset-0 bg-black/60 z-[60] flex items-center justify-center p-4"><div class="bg-white rounded-2xl p-6 w-full max-w-sm"><input id="email" type="email" placeholder="email" class="w-full border rounded-xl px-4 py-3 mb-2"><input id="pass" type="password" placeholder="hasło" class="w-full border rounded-xl px-4 py-3 mb-3"><button onclick="doLogin()" class="w-full bg-black text-white py-3 rounded-xl font-bold">Zaloguj / Zarejestruj</button><button onclick="document.getElementById('authModal').classList.add('hidden')" class="w-full mt-2 text-sm">Zamknij</button><div id="authStatus" class="text-xs text-center mt-2"></div></div></div>
+<div id="authModal" class="hidden fixed inset-0 bg-black/60 z-[60] flex items-center justify-center p-4"><div class="bg-white rounded-2xl p-6 w-full max-w-sm"><h2 class="font-black mb-3">Zaloguj</h2><input id="email" type="email" placeholder="email" class="w-full border rounded-xl px-4 py-3 mb-2"><input id="pass" type="password" placeholder="hasło" class="w-full border rounded-xl px-4 py-3 mb-3"><button onclick="doLogin()" class="w-full bg-black text-white py-3 rounded-xl font-bold">Zaloguj / Zarejestruj</button><button onclick="document.getElementById('authModal').classList.add('hidden')" class="w-full mt-2 text-sm">Zamknij</button><div id="authStatus" class="text-xs text-center mt-2"></div></div></div>
 
 <script>
 const SUPABASE_URL='https://bdpydgsfowtuvjnkyeeg.supabase.co';
 const ANON_KEY='sb_publishable_S1qH_mBZaX7-bzmfJ0IVGA_6hxGbJWd';
 const supa = supabase.createClient(SUPABASE_URL, ANON_KEY);
-
 let currentUser=null, editingId=null, files=[], existingImgs=[], toDelete=[], currentGPS={lat:null,lng:null,addr:null,city:null}, allData=[];
 
-async function refreshUser(){
- const {data:{user}} = await supa.auth.getUser();
- currentUser=user;
- const b=document.getElementById('userBadge'), ab=document.getElementById('authBtn');
- if(user){b.textContent=user.email; b.classList.remove('hidden'); ab.textContent='Wyloguj'; ab.onclick=async()=>{await supa.auth.signOut(); location.reload();};}
- else{b.classList.add('hidden'); ab.textContent='Zaloguj'; ab.onclick=()=>document.getElementById('authModal').classList.remove('hidden');}
-}
-refreshUser();
-supa.auth.onAuthStateChange(()=>refreshUser());
+function log(msg){const el=document.getElementById('debugLog'); el.textContent+=new Date().toLocaleTimeString()+' '+msg+'\n'; console.log(msg);}
 
+async function refreshUser(){
+ try{
+  const {data:{user}} = await supa.auth.getUser();
+  currentUser=user;
+  const b=document.getElementById('userBadge'), ab=document.getElementById('authBtn');
+  if(user){b.textContent=user.email; b.classList.remove('hidden'); ab.textContent='Wyloguj'; ab.onclick=async()=>{await supa.auth.signOut(); location.reload();};}
+  else{b.classList.add('hidden'); ab.textContent='Zaloguj'; ab.onclick=()=>openAuth();}
+  log('User: '+(user?user.email:'niezalogowany'));
+ }catch(e){log('refreshUser error: '+e.message);}
+}
+function openAuth(){document.getElementById('authModal').classList.remove('hidden');}
 function openAdd(){
- if(!currentUser){document.getElementById('authModal').classList.remove('hidden'); return;}
+ if(!currentUser){openAuth(); return;}
  editingId=null; clearForm(); document.getElementById('modalTitle').textContent='Dodaj ogłoszenie'; document.getElementById('addModal').classList.remove('hidden');
 }
 function closeAdd(){document.getElementById('addModal').classList.add('hidden'); editingId=null;}
 function clearForm(){
- ['brand','model','year','mileage','price','fuel_type','transmission','body_type','title','loc','desc'].forEach(id=>{const el=document.getElementById(id); if(el) el.value=id==='loc'?'Gorzyce':'';});
+ ['brand','model','year','mileage','price','title','loc','desc'].forEach(id=>{const el=document.getElementById(id); if(el) el.value=id==='loc'?'Gorzyce':'';});
  files=[]; existingImgs=[]; toDelete=[]; currentGPS={lat:null,lng:null,addr:null,city:null};
- document.getElementById('previewGrid').innerHTML=''; document.getElementById('existingGrid').innerHTML=''; document.getElementById('existingBox').classList.add('hidden'); document.getElementById('gpsPreview').classList.add('hidden'); document.getElementById('saveStatus').textContent=''; document.getElementById('debug').textContent=''; updateCount();
+ const pg=document.getElementById('previewGrid'); if(pg) pg.innerHTML='';
+ const eg=document.getElementById('existingGrid'); if(eg) eg.innerHTML='';
+ document.getElementById('existingBox').classList.add('hidden');
+ document.getElementById('gpsPreview').classList.add('hidden');
+ document.getElementById('saveStatus').textContent='';
+ updateCount();
 }
 
 function getGPS(){
@@ -95,23 +97,17 @@ function getGPS(){
  st.textContent='Pobieram GPS...';
  navigator.geolocation.getCurrentPosition(async p=>{
   currentGPS.lat=p.coords.latitude; currentGPS.lng=p.coords.longitude;
-  st.textContent='GPS OK dokładność '+Math.round(p.coords.accuracy)+'m';
-  document.getElementById('gpsLat').textContent=currentGPS.lat.toFixed(6);
-  document.getElementById('gpsLng').textContent=currentGPS.lng.toFixed(6);
+  st.textContent='GPS OK '+currentGPS.lat.toFixed(5)+','+currentGPS.lng.toFixed(5);
   document.getElementById('gpsPreview').classList.remove('hidden');
-  try{
-   const r=await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${currentGPS.lat}&lon=${currentGPS.lng}`);
-   const j=await r.json(); currentGPS.addr=j.display_name; currentGPS.city=j.address?.city||j.address?.town||j.address?.village||''; document.getElementById('gpsAddr').textContent=j.display_name; if(currentGPS.city) document.getElementById('loc').value=currentGPS.city;
-  }catch(e){}
+  document.getElementById('gpsAddr').textContent=currentGPS.lat+','+currentGPS.lng;
+  try{const r=await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${currentGPS.lat}&lon=${currentGPS.lng}`); const j=await r.json(); currentGPS.addr=j.display_name; currentGPS.city=j.address?.city||j.address?.town||j.address?.village||''; document.getElementById('gpsAddr').textContent=j.display_name;}catch(e){}
  }, e=>{st.textContent='Błąd GPS: '+e.message;});
 }
-function clearGPS(){currentGPS={lat:null,lng:null,addr:null,city:null}; document.getElementById('gpsPreview').classList.add('hidden');}
 
 document.getElementById('imgFiles').addEventListener('change', async e=>{
  for(let f of e.target.files){
   if(files.length+existingImgs.filter(im=>!toDelete.includes(im.id)).length>=10){alert('Max 10'); break;}
-  const compressed=await compress(f);
-  files.push(compressed);
+  const c=await compress(f); files.push(c);
  }
  renderNew(); e.target.value='';
 });
@@ -140,128 +136,122 @@ function renderExisting(){
 function updateCount(){const total=files.length+existingImgs.filter(im=>!toDelete.includes(im.id)).length; document.getElementById('photoCount').textContent=total+'/10';}
 
 async function load(){
- const {data, error} = await supa.from('listings').select('*, listing_images(id,image_url)').order('created_at',{ascending:false});
- if(error){document.getElementById('msg').textContent='Błąd bazy: '+error.message+' - uruchom SQL z poprzedniego ZIP'; document.getElementById('msg').classList.remove('hidden'); return;}
- allData=data||[];
+ log('Ładuję ogłoszenia...');
+ const msgEl=document.getElementById('msg');
+ try{
+  // Najpierw proste zapytanie bez join - zawsze działa
+  const {data, error} = await supa.from('listings').select('*').order('created_at',{ascending:false}).limit(100);
+  if(error) throw error;
+  log('Pobrano '+data.length+' ogłoszeń (proste)');
+  
+  // Teraz spróbuj z zdjęciami
+  let withImages=data;
+  try{
+   const {data:d2, error:e2}=await supa.from('listings').select('*, listing_images(id,image_url)').order('created_at',{ascending:false}).limit(100);
+   if(!e2 && d2){withImages=d2; log('Pobrano ze zdjęciami: '+d2.length);}
+  }catch(e){log('Join ze zdjęciami nie działa: '+e.message+' - używam prostego');}
+  
+  allData=withImages;
+  renderListings(allData);
+  msgEl.textContent='✅ Załadowano '+allData.length+' ogłoszeń | User: '+(currentUser?currentUser.email:'niezalogowany')+' | Jeśli 0 ogłoszeń to baza pusta - dodaj pierwsze!';
+  msgEl.className='bg-green-50 border border-green-200 rounded-xl p-3 mb-4 text-sm';
+ } catch(e){
+  log('BŁĄD LOAD: '+e.message);
+  const msgEl=document.getElementById('msg');
+  msgEl.textContent='❌ Błąd ładowania: '+e.message+' | Sprawdź czy tabela listings istnieje i RLS public read';
+  msgEl.className='bg-red-50 border border-red-200 rounded-xl p-3 mb-4 text-sm';
+  document.getElementById('listings').innerHTML=`<div class="col-span-full text-center py-10 bg-white rounded-xl border p-6"><div class="font-bold">Błąd bazy</div><div class="text-sm mt-2">${e.message}</div><div class="text-xs mt-2">Uruchom SQL z ZIPa: NOTIFY pgrst, 'reload schema' oraz polityki RLS</div></div>`;
+ }
+}
+
+function renderListings(data){
  const grid=document.getElementById('listings');
- grid.innerHTML=allData.map(l=>{
-  const img=l.listing_images?.[0]?.image_url||`https://picsum.photos/seed/${l.id}/300/200`;
+ if(!data || data.length===0){
+  grid.innerHTML='<div class="col-span-full text-center py-20 bg-white rounded-2xl border"><div class="text-4xl mb-2">📭</div><div class="font-bold">Brak ogłoszeń</div><div class="text-sm text-zinc-500 mt-1">Dodaj pierwsze ogłoszenie przyciskiem + Dodaj</div></div>';
+  return;
+ }
+ grid.innerHTML=data.map(l=>{
+  const img=l.listing_images?.[0]?.image_url||`https://picsum.photos/seed/${l.id}/400/300`;
   const isOwner=currentUser && l.user_id===currentUser.id;
-  return `<div class="bg-white rounded-xl border overflow-hidden"><div class="h-40 bg-zinc-100"><img src="${img}" class="w-full h-full object-cover"></div><div class="p-3"><div class="font-bold text-sm line-clamp-2">${l.brand||''} ${l.model||''} ${l.title||''}</div><div class="font-black mt-1">${Number(l.price||0).toLocaleString()} zł</div><div class="text-xs text-zinc-500">${l.location||''} ${l.year||''} ${l.mileage?Number(l.mileage).toLocaleString()+'km':''}</div>${isOwner?`<div class="mt-2 flex gap-1"><button onclick="editListing('${l.id}')" class="flex-1 bg-black text-white text-xs py-2 rounded-lg">Edytuj</button><button onclick="deleteListing('${l.id}')" class="flex-1 border text-xs py-2 rounded-lg text-red-600">Usuń</button></div>`:''}</div></div>`;
+  return `<div class="bg-white rounded-xl border overflow-hidden hover:shadow-lg transition"><div class="h-44 bg-zinc-100"><img src="${img}" class="w-full h-full object-cover"></div><div class="p-3"><div class="font-bold text-sm line-clamp-2">${(l.brand||'')+' '+(l.model||'')+' '+(l.title||'Brak tytułu')}</div><div class="font-black mt-1 text-lg">${Number(l.price||0).toLocaleString('pl-PL')} zł</div><div class="text-xs text-zinc-500 mt-1">${l.location||l.city||''} ${l.year||''} ${l.mileage?Number(l.mileage).toLocaleString()+'km':''} ${l.lat?'📍':''}</div>${isOwner?`<div class="mt-2 flex gap-2"><button onclick="editListing('${l.id}')" class="flex-1 bg-black text-white text-xs py-2 rounded-lg font-bold">Edytuj</button><button onclick="deleteListing('${l.id}')" class="flex-1 border text-xs py-2 rounded-lg text-red-600">Usuń</button></div>`:''}</div></div>`;
  }).join('');
 }
-load();
 
 async function editListing(id){
  const l=allData.find(x=>x.id===id);
  if(!l){alert('Nie znaleziono'); return;}
- if(l.user_id!==currentUser?.id){alert('To nie Twoje ogłoszenie'); return;}
- clearForm();
- editingId=id;
- document.getElementById('modalTitle').textContent='Edytuj ogłoszenie';
- document.getElementById('brand').value=l.brand||'';
- document.getElementById('model').value=l.model||'';
- document.getElementById('year').value=l.year||'';
- document.getElementById('mileage').value=l.mileage||'';
- document.getElementById('price').value=l.price||'';
- document.getElementById('fuel_type').value=l.fuel_type||'';
- document.getElementById('transmission').value=l.transmission||'';
- document.getElementById('body_type').value=l.body_type||'';
- document.getElementById('title').value=l.title||'';
- document.getElementById('loc').value=l.location||'';
- document.getElementById('desc').value=l.description||'';
- if(l.lat){currentGPS={lat:l.lat,lng:l.lng,addr:l.full_address||'',city:l.city||''}; document.getElementById('gpsLat').textContent=l.lat; document.getElementById('gpsLng').textContent=l.lng; document.getElementById('gpsAddr').textContent=l.full_address||''; document.getElementById('gpsPreview').classList.remove('hidden');}
+ if(currentUser && l.user_id && l.user_id!==currentUser.id){alert('To nie Twoje'); return;}
+ clearForm(); editingId=id;
+ document.getElementById('brand').value=l.brand||''; document.getElementById('model').value=l.model||''; document.getElementById('year').value=l.year||''; document.getElementById('mileage').value=l.mileage||''; document.getElementById('price').value=l.price||''; document.getElementById('title').value=l.title||''; document.getElementById('loc').value=l.location||''; document.getElementById('desc').value=l.description||'';
+ if(l.lat){currentGPS={lat:l.lat,lng:l.lng,addr:l.full_address||'',city:l.city||''}; document.getElementById('gpsPreview').classList.remove('hidden'); document.getElementById('gpsAddr').textContent=l.full_address||l.lat+','+l.lng;}
  existingImgs=l.listing_images||[]; renderExisting(); updateCount();
- document.getElementById('addModal').classList.remove('hidden');
+ document.getElementById('modalTitle').textContent='Edytuj ogłoszenie'; document.getElementById('addModal').classList.remove('hidden');
+ log('Edycja '+id);
 }
-async function deleteListing(id){
- if(!confirm('Usunąć?'))return;
- const {error}=await supa.from('listings').delete().eq('id',id);
- if(error) alert(error.message); else load();
-}
+async function deleteListing(id){if(!confirm('Usunąć?'))return; const {error}=await supa.from('listings').delete().eq('id',id); if(error) alert(error.message); else load();}
 
 async function saveListing(){
- console.log('saveListing klik', editingId);
- const status=document.getElementById('saveStatus'), debug=document.getElementById('debug');
- const btn=document.getElementById('saveBtn');
- if(!currentUser){alert('Zaloguj się'); return;}
+ log('Kliknięto ZAPISZ, editingId='+editingId);
+ const status=document.getElementById('saveStatus'), btn=document.getElementById('saveBtn');
+ if(!currentUser){alert('Zaloguj'); return;}
  const title=document.getElementById('title').value.trim()|| (document.getElementById('brand').value+' '+document.getElementById('model').value).trim();
  const price=Number(document.getElementById('price').value);
- if(!title||!price){status.textContent='Tytuł i cena wymagane!'; return;}
+ if(!title){status.textContent='Podaj tytuł lub markę i model!'; return;}
+ if(!price){status.textContent='Podaj cenę!'; return;}
 
- // Minimal payload - zawsze działa
  let payload={
-  title: title,
-  price: price,
+  title: title, price: price,
   location: document.getElementById('loc').value||'Gorzyce',
   description: document.getElementById('desc').value||'',
   brand: document.getElementById('brand').value||null,
   model: document.getElementById('model').value||null,
   year: document.getElementById('year').value?Number(document.getElementById('year').value):null,
   mileage: document.getElementById('mileage').value?Number(document.getElementById('mileage').value):null,
-  fuel_type: document.getElementById('fuel_type').value||null,
-  transmission: document.getElementById('transmission').value||null,
-  body_type: document.getElementById('body_type').value||null,
-  lat: currentGPS.lat,
-  lng: currentGPS.lng,
-  full_address: currentGPS.addr||null,
-  city: currentGPS.city||document.getElementById('loc').value||null
+  lat: currentGPS.lat, lng: currentGPS.lng, full_address: currentGPS.addr||null, city: currentGPS.city||document.getElementById('loc').value||null
  };
 
- status.textContent=editingId?'⏳ Aktualizuję...':'⏳ Zapisuję...';
- btn.disabled=true;
- debug.textContent='Wysyłam: '+JSON.stringify(payload).slice(0,300);
+ // usuń null żeby nie nadpisywać pustymi
+ Object.keys(payload).forEach(k=>{if(payload[k]===null || payload[k]==='') delete payload[k];});
+
+ status.textContent=editingId?'⏳ Aktualizuję...':'⏳ Zapisuję...'; btn.disabled=true; log('Payload: '+JSON.stringify(payload));
 
  try{
   let listingId=editingId;
   if(editingId){
-   // UPDATE - usuń user_id żeby nie nadpisać
-   const upd={...payload};
-   delete upd.city; // city może nie istnieć - spróbuj bez
-   let {data, error}=await supa.from('listings').update(upd).eq('id',editingId).select().single();
-   if(error && error.message.includes('city')){ // retry bez city
-    delete upd.city; const r=await supa.from('listings').update(upd).eq('id',editingId).select().single(); if(r.error) throw r.error; data=r.data;
-   } else if(error && error.message.includes('column')){
-    // usuń problematyczną kolumnę i retry
+   let attempt={...payload};
+   for(let i=0;i<5;i++){
+    const {data, error}=await supa.from('listings').update(attempt).eq('id',editingId).select().single();
+    if(!error){listingId=data.id; log('Update OK'); break;}
     const m=error.message.match(/'([^']+)' column/);
-    if(m){ delete upd[m[1]]; const r=await supa.from('listings').update(upd).eq('id',editingId).select().single(); if(r.error) throw r.error; data=r.data; }
-    else throw error;
-   } else if(error) throw error;
-   listingId=data.id;
-   // usuń zaznaczone zdjęcia
+    if(m){log('Brak kolumny '+m[1]+' usuwam i retry'); delete attempt[m[1]]; continue;}
+    throw error;
+   }
    for(let delId of toDelete){await supa.from('listing_images').delete().eq('id',delId);}
   } else {
-   // INSERT
-   let ins={...payload, user_id:currentUser.id, user_email:currentUser.email, category:'Samochody'};
-   let {data, error}=await supa.from('listings').insert(ins).select().single();
-   if(error){
-    console.warn('Insert error, retry bez problematycznych kolumn', error.message);
+   let attempt={...payload, user_id:currentUser.id, user_email:currentUser.email};
+   for(let i=0;i<5;i++){
+    const {data, error}=await supa.from('listings').insert(attempt).select().single();
+    if(!error){listingId=data.id; log('Insert OK id='+listingId); break;}
     const m=error.message.match(/'([^']+)' column/);
-    if(m){ delete ins[m[1]]; const r=await supa.from('listings').insert(ins).select().single(); if(r.error) throw r.error; data=r.data; }
-    else throw error;
+    if(m){log('Brak kolumny '+m[1]+' usuwam i retry'); delete attempt[m[1]]; continue;}
+    throw error;
    }
-   listingId=data.id;
   }
-
   if(files.length){
-   status.textContent=`Wysyłam ${files.length} zdjęć...`;
+   status.textContent='Wysyłam '+files.length+' zdjęć...';
    for(let f of files){
     const name=Date.now()+'_'+Math.random().toString(36).slice(2)+'.jpg';
     const {error:upErr}=await supa.storage.from('listing-images').upload(name, f.file);
     if(upErr) throw upErr;
     const {data:urlData}=supa.storage.from('listing-images').getPublicUrl(name);
     await supa.from('listing_images').insert({listing_id:listingId, image_url:urlData.publicUrl});
+    log('Zdjęcie wysłane '+name);
    }
   }
-
-  status.textContent='✅ Zapisano! Odświeżam...';
-  setTimeout(()=>{closeAdd(); load(); btn.disabled=false; status.textContent='';}, 800);
+  status.textContent='✅ Zapisano!'; log('Gotowe!');
+  setTimeout(()=>{closeAdd(); load(); btn.disabled=false;}, 800);
  } catch(e){
-  console.error(e);
-  status.textContent='❌ Błąd: '+e.message;
-  debug.textContent=e.message+' | Uruchom SQL_ULTIMATE_FIX.sql w Supabase i sprawdź RLS policies';
-  btn.disabled=false;
-  alert('Błąd zapisu: '+e.message+'\n\nOtwórz F12 > Console i sprawdź. Najczęściej: brak kolumny w bazie - uruchom SQL z ZIPa.');
+  log('BŁĄD ZAPISU: '+e.message); status.textContent='❌ '+e.message; btn.disabled=false; alert('Błąd: '+e.message);
  }
 }
 
@@ -272,7 +262,9 @@ async function doLogin(){
  if(error){
   const {error:er2}=await supa.auth.signUp({email:e, password:p});
   if(er2) st.textContent='Błąd: '+er2.message; else st.textContent='Konto utworzone, zaloguj się';
- } else {document.getElementById('authModal').classList.add('hidden'); refreshUser(); load();}
+ } else {document.getElementById('authModal').classList.add('hidden'); await refreshUser(); load();}
 }
+
+(async()=>{await refreshUser(); await load();})();
 </script>
 </body></html>
