@@ -1,0 +1,1 @@
+export default function Page(){return (<div style={maxWidth:800,margin:'40px auto',padding:'0 20px',fontFamily:'system-ui'}><h1>Ile wart jest mój samochód</h1><p>Wycena auta online w 15 minut. Podaj markę, model, rocznik i przebieg - a my podamy realną wartość rynkową.</p><a href='/'>← Wróć na wroomer.pl</a></div>)}
