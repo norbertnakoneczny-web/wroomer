@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WROOMER.PL - Ogłoszenia motoryzacyjne</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+.auth-tab-active{border-bottom:2px solid black;font-weight:700}
+</style>
+</head>
+<body class="bg-[#f5f5f5] font-sans">
+<header class="bg-white border-b sticky top-0 z-20">
+<div class="max-w-[1400px] mx-auto flex items-center justify-between p-3 px-4">
+<div class="font-black text-xl">WROOMER.PL</div>
+<div class="flex gap-2">
+<button id="addBtn" class="bg-black text-white px-4 py-2 text-sm font-bold">Dodaj ogłoszenie</button>
+<button id="authBtn" class="border px-4 py-2 text-sm">Zaloguj</button>
+</div>
+</div>
+</header>
+
+<main class="max-w-[1400px] mx-auto p-4">
+<div id="grid" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4"></div>
+</main>
+
+<!-- AUTH MODAL -->
+<div id="authModal" class="fixed inset-0 bg-black/60 hidden z-50 flex items-center justify-center p-4">
+<div class="bg-white w-full max-w-[420px] rounded-xl p-6 relative">
+<button onclick="closeAuthModal()" class="absolute top-3 right-4 text-xl">×</button>
+<h2 id="authTitle" class="text-xl font-bold mb-4">Logowanie</h2>
+
+<div class="flex gap-6 border-b mb-4 text-sm">
+<button id="tabLogin" onclick="switchTab('login')" class="pb-2 auth-tab-active">Logowanie</button>
+<button id="tabRegister" onclick="switchTab('register')" class="pb-2">Rejestracja</button>
+<button id="tabReset" onclick="switchTab('reset')" class="pb-2">Reset</button>
+</div>
+
+<!-- LOGIN -->
+<div id="loginTab" class="auth-tab-content">
+<input id="loginEmail" type="email" placeholder="E-mail" class="w-full border p-3 mb-2 rounded">
+<input id="loginPass" type="password" placeholder="Hasło" class="w-full border p-3 mb-3 rounded">
+<div id="loginError" class="hidden bg-red-50 text-red-700 text-[13px] p-3 mb-3 rounded border border-red-200"></div>
+<button onclick="doLogin()" class="w-full bg-black text-white p-3 font-bold rounded">Zaloguj</button>
+</div>
+
+<!-- REGISTER -->
+<div id="registerTab" class="auth-tab-content hidden">
+<input id="regEmail" type="email" placeholder="E-mail" class="w-full border p-3 mb-2 rounded">
+<input id="regPass" type="password" placeholder="Hasło (min. 6 znaków)" class="w-full border p-3 mb-2 rounded">
+<label class="flex gap-2 text-[12px] mb-3"><input type="checkbox" id="regRules">Akceptuję regulamin WROOMER.PL</label>
+<div id="regError" class="hidden bg-red-50 text-red-700 text-[13px] p-3 mb-3 rounded border border-red-200"></div>
+<button onclick="doRegister()" class="w-full bg-black text-white p-3 font-bold rounded">Załóż konto</button>
+<p class="text-[11px] text-gray-500 mt-3">ℹ️ Rejestracja bez potwierdzania e-mail — po kliknięciu Załóż konto jesteś od razu zalogowany (tryb testowy).</p>
+</div>
+
+<!-- RESET REQUEST -->
+<div id="resetTab" class="auth-tab-content hidden">
+<p class="text-[13px] text-gray-600 mb-3">Podaj e-mail, wyślemy link do resetu hasła z tytułem <b>WROOMER reset hasła</b>.</p>
+<input id="resetEmail" type="email" placeholder="Twój e-mail" class="w-full border p-3 mb-3 rounded">
+<div id="resetInfo" class="hidden text-[13px] p-3 mb-3 rounded"></div>
+<button onclick="doReset()" class="w-full bg-black text-white p-3 font-bold rounded">Wyślij link resetujący</button>
+</div>
+
+<!-- NEW PASSWORD - PO KLIKNIĘCIU Z MAILA -->
+<div id="newPasswordTab" class="auth-tab-content hidden">
+<h3 class="font-bold mb-2">Ustaw nowe hasło</h3>
+<p class="text-[13px] text-gray-600 mb-3">Wpisz nowe hasło dla konta <span id="recoveryEmail" class="font-bold"></span></p>
+<input id="newPasswordInput" type="password" placeholder="Nowe hasło (min. 6 znaków)" class="w-full border p-3 mb-3 rounded">
+<div id="newPassError" class="hidden bg-red-50 text-red-700 text-[13px] p-3 mb-3 rounded"></div>
+<button onclick="setNewPassword()" class="w-full bg-black text-white p-3 font-bold rounded">Zapisz nowe hasło</button>
+</div>
+
+<div class="mt-6 border-t pt-3 text-[11px] text-gray-500">
+ℹ️ Po rejestracji <b>musisz potwierdzić e-mail</b> jeśli włączysz Confirm email w Supabase. W trybie testowym logowanie jest od razu.
+</div>
+
+</div>
+</div>
+
+<script>
+// KONFIG - PODMIEN NA SWOJE JESLI INNE
+const SUPABASE_URL = "https://bdpydgsfowtuvjnkyeeg.supabase.co";
+const SUPABASE_ANON = "sb_publishable_S1qH_mBZaX7-bzmfJ0IVGA_6hxGbJWd";
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+
+function openAuthModal(){document.getElementById('authModal').classList.remove('hidden')}
+function closeAuthModal(){document.getElementById('authModal').classList.add('hidden'); window.location.hash='';}
+function switchTab(t){
+ document.querySelectorAll('.auth-tab-content').forEach(e=>e.style.display='none');
+ document.getElementById(t+'Tab').style.display='block';
+ document.querySelectorAll('[id^=tab]').forEach(b=>b.classList.remove('auth-tab-active'));
+ document.getElementById('tab'+t.charAt(0).toUpperCase()+t.slice(1)).classList.add('auth-tab-active');
+ document.getElementById('authTitle').innerText = t==='login'?'Logowanie': t==='register'?'Rejestracja': t==='reset'?'Reset hasła':'Ustaw nowe hasło';
+}
+
+document.getElementById('authBtn').onclick = ()=>{openAuthModal(); switchTab('login');};
+document.getElementById('addBtn').onclick = ()=>{alert('Dodaj ogłoszenie - tylko dla zalogowanych (sprawdź czy widzisz Wyloguj)');};
+
+// === FIX NA RESET HASLA - KLUCZOWE ===
+supabase.auth.onAuthStateChange(async (event, session) => {
+  console.log('Auth event:', event, session);
+  if (event === 'PASSWORD_RECOVERY') {
+    openAuthModal();
+    document.querySelectorAll('.auth-tab-content').forEach(t=>t.style.display='none');
+    document.getElementById('newPasswordTab').style.display='block';
+    document.getElementById('authTitle').innerText = 'Ustaw nowe hasło';
+    const email = session?.user?.email || '';
+    document.getElementById('recoveryEmail').innerText = email;
+    return;
+  }
+  if (event === 'SIGNED_IN' && session) {
+    // jesli to recovery, nie zamykaj
+    if (window.location.hash.includes('type=recovery')) return;
+    initUser(session.user);
+    closeAuthModal();
+  }
+  if (event === 'SIGNED_OUT'){
+    document.getElementById('authBtn').innerText='Zaloguj';
+  }
+});
+
+async function initUser(user){
+ document.getElementById('authBtn').innerText='Wyloguj ('+user.email+')';
+ document.getElementById('authBtn').onclick = async ()=>{await supabase.auth.signOut(); location.reload();};
+ renderGrid(user);
+}
+
+function showError(id, html){
+ const el=document.getElementById(id);
+ el.innerHTML=html;
+ el.classList.remove('hidden');
+}
+
+async function doLogin(){
+ const email=document.getElementById('loginEmail').value.trim();
+ const password=document.getElementById('loginPass').value;
+ document.getElementById('loginError').classList.add('hidden');
+ const {data, error} = await supabase.auth.signInWithPassword({email, password});
+ if(error){
+   // POLSKIE KOMUNIKATY
+   if(error.message.includes('Email not confirmed')){
+     showError('loginError', `<b>Musisz potwierdzić adres e-mail.</b><br>Sprawdź skrzynkę <b>${email}</b> (także SPAM) i kliknij link potwierdzający.<br>Po potwierdzeniu zaloguj się ponownie.`);
+   } else if(error.message.includes('Invalid login credentials')){
+     showError('loginError', `<b>Nieprawidłowy e-mail lub hasło.</b><br>• Jeśli nie masz konta — przejdź do zakładki <b>Rejestracja</b> i załóż konto.<br>• Jeśli zakładałeś konto — sprawdź email i <b>potwierdź adres</b> (link w mailu).<br>• Sprawdź czy CAPS LOCK jest wyłączony.`);
+   } else {
+     showError('loginError', `Błąd logowania: ${error.message}`);
+   }
+ }
+}
+
+async function doRegister(){
+ const email=document.getElementById('regEmail').value.trim();
+ const password=document.getElementById('regPass').value;
+ const rules=document.getElementById('regRules').checked;
+ document.getElementById('regError').classList.add('hidden');
+ if(!rules) return showError('regError','Zaznacz regulamin.');
+ if(password.length<6) return showError('regError','Hasło min. 6 znaków.');
+ const {data, error} = await supabase.auth.signUp({email, password});
+ if(error){
+   showError('regError', error.message);
+ } else {
+   // tryb bez potwierdzania - zaloguj od razu
+   const {data:loginData} = await supabase.auth.signInWithPassword({email, password});
+   if(loginData?.user){
+     alert('Konto utworzone! Jesteś zalogowany.');
+     initUser(loginData.user);
+     closeAuthModal();
+   } else {
+     alert(`Konto utworzone! Wysłaliśmy wiadomość na ${email}. Jeśli masz włączone Confirm email, potwierdź maila.`);
+     switchTab('login');
+   }
+ }
+}
+
+async function doReset(){
+ const email=document.getElementById('resetEmail').value.trim();
+ const info=document.getElementById('resetInfo');
+ info.classList.remove('hidden');
+ info.className='text-[13px] p-3 mb-3 rounded bg-blue-50 text-blue-800 border border-blue-200';
+ info.innerText='Wysyłanie...';
+ const {error} = await supabase.auth.resetPasswordForEmail(email, {redirectTo: window.location.origin});
+ if(error){
+   info.className='text-[13px] p-3 mb-3 rounded bg-red-50 text-red-700 border border-red-200';
+   info.innerText='Błąd: '+error.message;
+ } else {
+   info.className='text-[13px] p-3 mb-3 rounded bg-green-50 text-green-800 border border-green-200';
+   info.innerHTML=`Link wysłany na <b>${email}</b><br>Tytuł maila: <b>WROOMER reset hasła</b><br>Sprawdź także SPAM.`;
+ }
+}
+
+async function setNewPassword(){
+ const newPass=document.getElementById('newPasswordInput').value;
+ document.getElementById('newPassError').classList.add('hidden');
+ if(newPass.length<6) return showError('newPassError','Hasło min. 6 znaków.');
+ const {error} = await supabase.auth.updateUser({password:newPass});
+ if(error){
+   showError('newPassError','Błąd: '+error.message);
+ } else {
+   alert('Hasło zmienione! Możesz się zalogować nowym hasłem.');
+   window.location.hash='';
+   location.reload();
+ }
+}
+
+function renderGrid(user){
+ const grid=document.getElementById('grid');
+ grid.innerHTML='';
+ for(let i=1;i<=8;i++){
+   grid.innerHTML+=`<div class="bg-white rounded-xl p-3 border">
+   <div class="bg-gray-200 h-[140px] rounded mb-2"></div>
+   <div class="font-bold text-sm">Przykładowe ogłoszenie ${i}</div>
+   <div class="text-[12px] text-gray-500">${user? 'MOJE • EDYTUJ' : 'Zaloguj się aby edytować'}</div>
+   </div>`;
+ }
+}
+renderGrid(null);
+(async()=>{
+ const {data} = await supabase.auth.getSession();
+ if(data?.session?.user) initUser(data.session.user);
+})();
+</script>
+
+<div class="fixed bottom-2 left-2 text-[10px] bg-black text-white px-2 py-1 rounded">WROOMER reset hasła • PASSWORD_RECOVERY fix • bez potwierdzania maila (test)</div>
+</body>
+</html>
