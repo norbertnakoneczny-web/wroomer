@@ -3,294 +3,225 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>WROOMER.PL - Najszybsze ogłoszenia motoryzacyjne | Gorzyce</title>
-<meta name="description" content="WROOMER.PL - giełda ogłoszeń motoryzacyjnych Gorzyce, Wodzisław, Rybnik. Szybkie dodawanie z osobną tabelą zdjęć.">
+<title>WROOMER.PL - Ogłoszenia motoryzacyjne</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.tailwindcss.com"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
-<style>@import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;700;900&display=swap'); *{font-family:Geist,sans-serif}</style>
+<style>
+.auth-tab-active{border-bottom:2px solid black;font-weight:700}
+</style>
 </head>
-<body class="bg-[#f7f7f8] min-h-screen">
-<header class="bg-white border-b sticky top-0 z-50">
-<div class="max-w-[1440px] mx-auto px-4 py-3 flex justify-between items-center">
-<div class="flex items-center gap-2"><div class="w-8 h-8 bg-black rounded-lg flex items-center justify-center text-white font-black">W</div><span class="font-black text-xl tracking-tighter">WROOMER.PL</span><span class="text-[10px] bg-black text-white px-2 py-0.5 rounded ml-2">BETA</span></div>
-<div class="flex items-center gap-2">
-<input id="searchInput" placeholder="Szukaj..." class="border rounded-full px-4 py-2 text-sm w-[180px] md:w-[260px] focus:outline-none focus:ring-2 focus:ring-black">
-<button id="addBtn" class="bg-black text-white px-4 py-2 rounded-full text-sm font-bold">+ Dodaj</button>
-<button id="authBtn" class="border px-4 py-2 rounded-full text-sm font-bold">Zaloguj</button>
+<body class="bg-[#f5f5f5] font-sans">
+<header class="bg-white border-b sticky top-0 z-20">
+<div class="max-w-[1400px] mx-auto flex items-center justify-between p-3 px-4">
+<div class="font-black text-xl">WROOMER.PL</div>
+<div class="flex gap-2">
+<button id="addBtn" class="bg-black text-white px-4 py-2 text-sm font-bold">Dodaj ogłoszenie</button>
+<button id="authBtn" class="border px-4 py-2 text-sm">Zaloguj</button>
 </div>
 </div>
 </header>
 
-<main class="max-w-[1440px] mx-auto p-4">
-<div class="grid grid-cols-12 gap-4">
-<div class="col-span-12 md:col-span-3 bg-white rounded-2xl p-4 h-fit">
-<h3 class="font-black text-sm mb-3">Filtry</h3>
-<select id="filterCategory" class="w-full border rounded-xl p-2 text-sm mb-2"><option value="">Wszystkie kategorie</option><option>Samochody</option><option>Motocykle</option><option>Części</option><option>Inne</option></select>
-<select id="filterLocation" class="w-full border rounded-xl p-2 text-sm mb-3"><option value="">Cała Polska</option><option>Gorzyce</option><option>Wodzisław Śląski</option><option>Rybnik</option><option>Jastrzębie-Zdrój</option><option>Żory</option><option>Katowice</option><option>Gliwice</option></select>
-<button onclick="fetchAll()" class="w-full bg-black text-white rounded-xl p-2 text-sm font-bold">Filtruj</button>
-<div class="mt-6 text-[11px] text-gray-500">WROOMER.PL • Gorzyce<br>Szybkie ogłoszenia z osobną tabelą listing_images</div>
-</div>
-<div class="col-span-12 md:col-span-9">
-<div id="listingsGrid" class="grid grid-cols-1 md:grid-cols-3 gap-4"></div>
-<div id="emptyState" class="hidden text-center py-20 text-gray-500">Brak ogłoszeń - dodaj pierwsze!</div>
-</div>
-</div>
+<main class="max-w-[1400px] mx-auto p-4">
+<div id="grid" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4"></div>
 </main>
 
-<!-- MODAL ADD -->
-<div id="addModal" class="hidden fixed inset-0 bg-black/50 z-[60] flex items-center justify-center p-4">
-<div class="bg-white rounded-2xl max-w-lg w-full p-6 max-h-[90vh] overflow-y-auto">
-<div class="flex justify-between items-center mb-4"><h2 class="font-black text-xl">Dodaj ogłoszenie</h2><button onclick="closeAdd()" class="text-2xl">×</button></div>
-<input id="addTitle" placeholder="Tytuł np. BMW E36 2.5" class="w-full border rounded-xl p-3 text-sm mb-2">
-<textarea id="addDesc" placeholder="Opis, stan, przebieg..." class="w-full border rounded-xl p-3 text-sm mb-2 h-24"></textarea>
-<div class="grid grid-cols-2 gap-2 mb-2">
-<input id="addPrice" type="number" placeholder="Cena PLN" class="border rounded-xl p-3 text-sm">
-<select id="addCategory" class="border rounded-xl p-3 text-sm"><option>Samochody</option><option>Motocykle</option><option>Części</option><option>Inne</option></select>
-</div>
-<div class="grid grid-cols-2 gap-2 mb-2">
-<input id="addLocation" placeholder="Miejscowość np. Gorzyce" class="border rounded-xl p-3 text-sm">
-<input id="addPhone" placeholder="Telefon (opcjonalnie)" class="border rounded-xl p-3 text-sm">
-</div>
-<input id="addImages" type="file" multiple accept="image/*" class="w-full text-sm mb-3">
-<button id="submitAdd" class="w-full bg-black text-white rounded-xl p-3 font-bold text-sm">Opublikuj - 5 sekund</button>
-<p class="text-[11px] text-gray-500 mt-2 text-center">Zdjęcia zapisywane są w osobnej tabeli listing_images - błyskawiczne ładowanie</p>
-</div>
+<!-- AUTH MODAL -->
+<div id="authModal" class="fixed inset-0 bg-black/60 hidden z-50 flex items-center justify-center p-4">
+<div class="bg-white w-full max-w-[420px] rounded-xl p-6 relative">
+<button onclick="closeAuthModal()" class="absolute top-3 right-4 text-xl">×</button>
+<h2 id="authTitle" class="text-xl font-bold mb-4">Logowanie</h2>
+
+<div class="flex gap-6 border-b mb-4 text-sm">
+<button id="tabLogin" onclick="switchTab('login')" class="pb-2 auth-tab-active">Logowanie</button>
+<button id="tabRegister" onclick="switchTab('register')" class="pb-2">Rejestracja</button>
+<button id="tabReset" onclick="switchTab('reset')" class="pb-2">Reset</button>
 </div>
 
-<!-- MODAL AUTH -->
-<div id="authModal" class="hidden fixed inset-0 bg-black/50 z-[60] flex items-center justify-center p-4">
-<div class="bg-white rounded-2xl max-w-sm w-full p-6">
-<div class="flex justify-between items-center mb-4"><h2 class="font-black text-xl" id="authTitle">Zaloguj się</h2><button onclick="closeAuth()" class="text-2xl">×</button></div>
-<input id="authEmail" type="email" placeholder="E-mail" class="w-full border rounded-xl p-3 text-sm mb-2">
-<input id="authPass" type="password" placeholder="Hasło min. 6 znaków" class="w-full border rounded-xl p-3 text-sm mb-2">
-<input id="authLoc" placeholder="Miejscowość np. Gorzyce" class="w-full border rounded-xl p-3 text-sm mb-3 hidden">
-<button id="authSubmit" class="w-full bg-black text-white rounded-xl p-3 font-bold text-sm">Zaloguj</button>
-<button id="authSwitch" class="w-full mt-2 text-[12px] underline">Nie masz konta? Zarejestruj się</button>
-<p id="authMsg" class="text-[12px] mt-2 text-center text-red-600"></p>
-</div>
+<!-- LOGIN -->
+<div id="loginTab" class="auth-tab-content">
+<input id="loginEmail" type="email" placeholder="E-mail" class="w-full border p-3 mb-2 rounded">
+<input id="loginPass" type="password" placeholder="Hasło" class="w-full border p-3 mb-3 rounded">
+<div id="loginError" class="hidden bg-red-50 text-red-700 text-[13px] p-3 mb-3 rounded border border-red-200"></div>
+<button onclick="doLogin()" class="w-full bg-black text-white p-3 font-bold rounded">Zaloguj</button>
 </div>
 
-<!-- MODAL DETAIL -->
-<div id="detailModal" class="hidden fixed inset-0 bg-black/50 z-[60] flex items-center justify-center p-4">
-<div class="bg-white rounded-2xl max-w-2xl w-full p-6 max-h-[90vh] overflow-y-auto relative">
-<button onclick="closeDetail()" class="absolute top-4 right-4 text-2xl">×</button>
-<div id="detailImages" class="grid grid-cols-3 gap-2 mb-4"></div>
-<h2 id="detailTitle" class="font-black text-2xl"></h2>
-<p id="detailPrice" class="font-black text-xl mt-2"></p>
-<p id="detailMeta" class="text-[12px] text-gray-500 mt-1"></p>
-<p id="detailDesc" class="text-sm mt-4 leading-relaxed whitespace-pre-wrap"></p>
-<div id="detailContact" class="mt-6 p-3 bg-[#f7f7f8] rounded-xl text-sm"></div>
-<div id="ownerActions" class="hidden mt-4">
-<button onclick="deleteListing()" class="w-full bg-red-600 text-white p-3 rounded-xl font-bold text-sm">🗑️ Zamknij / Usuń to ogłoszenie</button>
-<p class="text-[11px] text-gray-500 mt-2 text-center">Widzisz to bo jesteś właścicielem - ID: <span id="ownerIdSpan"></span></p>
-</div>
-</div>
+<!-- REGISTER -->
+<div id="registerTab" class="auth-tab-content hidden">
+<input id="regEmail" type="email" placeholder="E-mail" class="w-full border p-3 mb-2 rounded">
+<input id="regPass" type="password" placeholder="Hasło (min. 6 znaków)" class="w-full border p-3 mb-2 rounded">
+<label class="flex gap-2 text-[12px] mb-3"><input type="checkbox" id="regRules">Akceptuję regulamin WROOMER.PL</label>
+<div id="regError" class="hidden bg-red-50 text-red-700 text-[13px] p-3 mb-3 rounded border border-red-200"></div>
+<button onclick="doRegister()" class="w-full bg-black text-white p-3 font-bold rounded">Załóż konto</button>
+<p class="text-[11px] text-gray-500 mt-3">ℹ️ Rejestracja bez potwierdzania e-mail — po kliknięciu Załóż konto jesteś od razu zalogowany (tryb testowy).</p>
 </div>
 
-<footer class="max-w-[1440px] mx-auto p-6 text-[12px] text-gray-500 text-center border-t mt-10">
-<a href="/o-nas.html" class="underline mx-2">O nas</a>
-<a href="/regulamin.html" class="underline mx-2">Regulamin</a>
-<a href="/polityka-prywatnosci.html" class="underline mx-2">Polityka Prywatności</a>
-<a href="/kontakt.html" class="underline mx-2">Kontakt - Norbert</a>
-<div class="mt-2">© 2026 WROOMER.PL - Gorzyce - Wszystkie prawa zastrzeżone</div>
-</footer>
+<!-- RESET REQUEST -->
+<div id="resetTab" class="auth-tab-content hidden">
+<p class="text-[13px] text-gray-600 mb-3">Podaj e-mail, wyślemy link do resetu hasła z tytułem <b>WROOMER reset hasła</b>.</p>
+<input id="resetEmail" type="email" placeholder="Twój e-mail" class="w-full border p-3 mb-3 rounded">
+<div id="resetInfo" class="hidden text-[13px] p-3 mb-3 rounded"></div>
+<button onclick="doReset()" class="w-full bg-black text-white p-3 font-bold rounded">Wyślij link resetujący</button>
+</div>
+
+<!-- NEW PASSWORD - PO KLIKNIĘCIU Z MAILA -->
+<div id="newPasswordTab" class="auth-tab-content hidden">
+<h3 class="font-bold mb-2">Ustaw nowe hasło</h3>
+<p class="text-[13px] text-gray-600 mb-3">Wpisz nowe hasło dla konta <span id="recoveryEmail" class="font-bold"></span></p>
+<input id="newPasswordInput" type="password" placeholder="Nowe hasło (min. 6 znaków)" class="w-full border p-3 mb-3 rounded">
+<div id="newPassError" class="hidden bg-red-50 text-red-700 text-[13px] p-3 mb-3 rounded"></div>
+<button onclick="setNewPassword()" class="w-full bg-black text-white p-3 font-bold rounded">Zapisz nowe hasło</button>
+</div>
+
+<div class="mt-6 border-t pt-3 text-[11px] text-gray-500">
+ℹ️ Po rejestracji <b>musisz potwierdzić e-mail</b> jeśli włączysz Confirm email w Supabase. W trybie testowym logowanie jest od razu.
+</div>
+
+</div>
+</div>
 
 <script>
-const SUPABASE_URL='https://gpelicqyuqrlhhbxouug.supabase.co';
-const SUPABASE_KEY='PUT_YOUR_ANON_KEY_HE'; // replaced placeholder - use real from dashboard
-// PRAWIDŁOWY KLUCZ - WEŹ Z SUPABASE DASHBOARD -> Settings -> API -> anon public
-// Wklej poniżej swój anon key (zaczyna się od eyJ...)
-const ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJsanFuaGZvZ2FxZGplaXJxcWRqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mjc3NDE1NzYsImV4cCI6MjA0MzMxNzU3Nn0.TU_DUZAQ_placeholder';
-let supabaseClient;
-try{
-  supabaseClient = supabase.createClient(SUPABASE_URL, ANON_KEY);
-}catch(e){ console.log('supabase init', e); }
-const supabase = supabaseClient;
+// KONFIG - PODMIEN NA SWOJE JESLI INNE
+const SUPABASE_URL = "https://rljqnhfogaqdjeirqqdj.supabase.co";
+const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJsanFuaGZvZ2FxZGplaXJxcWRqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mjc3NDE1NzYsImV4cCI6MjA0MzMxNzU3Nn0.TU_DUZAQ_placeholder";
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
 
-let currentUser=null;
-let currentDetailId=null;
-let isLoginMode=true;
-
-function log(m){ console.log(m); }
-
-async function checkAuth(){
-  const {data} = await supabase.auth.getUser();
-  currentUser = data.user;
-  const btn=document.getElementById('authBtn');
-  if(currentUser){ btn.innerText='Wyloguj ('+currentUser.email.split('@')[0]+')'; }
-  else { btn.innerText='Zaloguj'; }
+function openAuthModal(){document.getElementById('authModal').classList.remove('hidden')}
+function closeAuthModal(){document.getElementById('authModal').classList.add('hidden'); window.location.hash='';}
+function switchTab(t){
+ document.querySelectorAll('.auth-tab-content').forEach(e=>e.style.display='none');
+ document.getElementById(t+'Tab').style.display='block';
+ document.querySelectorAll('[id^=tab]').forEach(b=>b.classList.remove('auth-tab-active'));
+ document.getElementById('tab'+t.charAt(0).toUpperCase()+t.slice(1)).classList.add('auth-tab-active');
+ document.getElementById('authTitle').innerText = t==='login'?'Logowanie': t==='register'?'Rejestracja': t==='reset'?'Reset hasła':'Ustaw nowe hasło';
 }
 
-document.getElementById('authBtn').onclick=()=>{
-  if(currentUser){ supabase.auth.signOut().then(()=>{ currentUser=null; checkAuth(); }); }
-  else { openAuth(); }
-};
+document.getElementById('authBtn').onclick = ()=>{openAuthModal(); switchTab('login');};
+document.getElementById('addBtn').onclick = ()=>{alert('Dodaj ogłoszenie - tylko dla zalogowanych (sprawdź czy widzisz Wyloguj)');};
 
-function openAuth(){ document.getElementById('authModal').classList.remove('hidden'); }
-function closeAuth(){ document.getElementById('authModal').classList.add('hidden'); document.getElementById('authMsg').innerText=''; }
-function openAdd(){
-  if(!currentUser){ openAuth(); document.getElementById('authMsg').innerText='Zaloguj się aby dodać ogłoszenie'; return; }
-  document.getElementById('addModal').classList.remove('hidden');
-}
-function closeAdd(){ document.getElementById('addModal').classList.add('hidden'); }
-function closeDetail(){ document.getElementById('detailModal').classList.add('hidden'); currentDetailId=null; }
+// === FIX NA RESET HASLA - KLUCZOWE ===
+supabase.auth.onAuthStateChange(async (event, session) => {
+  console.log('Auth event:', event, session);
+  if (event === 'PASSWORD_RECOVERY') {
+    openAuthModal();
+    document.querySelectorAll('.auth-tab-content').forEach(t=>t.style.display='none');
+    document.getElementById('newPasswordTab').style.display='block';
+    document.getElementById('authTitle').innerText = 'Ustaw nowe hasło';
+    const email = session?.user?.email || '';
+    document.getElementById('recoveryEmail').innerText = email;
+    return;
+  }
+  if (event === 'SIGNED_IN' && session) {
+    // jesli to recovery, nie zamykaj
+    if (window.location.hash.includes('type=recovery')) return;
+    initUser(session.user);
+    closeAuthModal();
+  }
+  if (event === 'SIGNED_OUT'){
+    document.getElementById('authBtn').innerText='Zaloguj';
+  }
+});
 
-document.getElementById('addBtn').onclick=openAdd;
-document.getElementById('authSwitch').onclick=()=>{
-  isLoginMode=!isLoginMode;
-  document.getElementById('authTitle').innerText=isLoginMode?'Zaloguj się':'Zarejestruj się';
-  document.getElementById('authSubmit').innerText=isLoginMode?'Zaloguj':'Zarejestruj';
-  document.getElementById('authSwitch').innerText=isLoginMode?'Nie masz konta? Zarejestruj się':'Masz konto? Zaloguj się';
-  document.getElementById('authLoc').classList.toggle('hidden', isLoginMode);
-};
-
-document.getElementById('authSubmit').onclick=async()=>{
-  const email=document.getElementById('authEmail').value.trim();
-  const pass=document.getElementById('authPass').value.trim();
-  const loc=document.getElementById('authLoc').value.trim();
-  const msg=document.getElementById('authMsg');
-  if(!email || !pass){ msg.innerText='Podaj email i hasło'; return; }
-  msg.innerText='Przetwarzam...';
-  try{
-    if(isLoginMode){
-      const {data, error}=await supabase.auth.signInWithPassword({email, password:pass});
-      if(error) throw error;
-      msg.innerText='✅ Zalogowano';
-      setTimeout(()=>{ closeAuth(); checkAuth(); }, 600);
-    } else {
-      if(!loc){ msg.innerText='Podaj miejscowość'; return; }
-      if(pass.length<6){ msg.innerText='Hasło min. 6 znaków'; return; }
-      const {data, error}=await supabase.auth.signUp({email, password:pass, options:{data:{location:loc}}});
-      if(error) throw error;
-      // create profile
-      if(data.user){
-        await supabase.from('profiles').insert({id:data.user.id, email, location:loc});
-      }
-      if(data.user && !data.session){
-        msg.innerText='✅ Konto utworzone! Sprawdź email (SPAM) i potwierdź, potem zaloguj.';
-      } else {
-        msg.innerText='✅ Konto utworzone i zalogowano!';
-        setTimeout(()=>{ closeAuth(); checkAuth(); }, 800);
-      }
-    }
-  }catch(err){ msg.innerText='Błąd: '+err.message; }
-};
-
-async function fetchAll(){
-  const grid=document.getElementById('listingsGrid');
-  grid.innerHTML='<div class="col-span-3 text-center py-10">Ładowanie...</div>';
-  try{
-    let query=supabase.from('listings').select('*').order('created_at',{ascending:false}).limit(60);
-    const cat=document.getElementById('filterCategory').value;
-    const loc=document.getElementById('filterLocation').value;
-    const search=document.getElementById('searchInput').value.trim();
-    if(cat) query=query.eq('category',cat);
-    if(loc) query=query.ilike('location','%'+loc+'%');
-    if(search) query=query.ilike('title','%'+search+'%');
-    const {data, error}=await query;
-    if(error) throw error;
-    if(!data || data.length===0){ grid.innerHTML=''; document.getElementById('emptyState').classList.remove('hidden'); return; }
-    document.getElementById('emptyState').classList.add('hidden');
-    // fetch images for all listings
-    const ids=data.map(d=>d.id);
-    const {data:imgs}=await supabase.from('listing_images').select('*').in('listing_id', ids);
-    const imgMap={};
-    (imgs||[]).forEach(im=>{ if(!imgMap[im.listing_id]) imgMap[im.listing_id]=[]; imgMap[im.listing_id].push(im); });
-    grid.innerHTML='';
-    data.forEach(l=>{
-      const firstImg = (imgMap[l.id] && imgMap[l.id][0]) ? imgMap[l.id][0].image_url : 'https://via.placeholder.com/400x300?text=WROOMER';
-      const card=document.createElement('div');
-      card.className='bg-white rounded-2xl overflow-hidden cursor-pointer hover:shadow-lg transition border';
-      card.innerHTML=`<div class="h-48 bg-gray-100 overflow-hidden"><img src="${firstImg}" class="w-full h-full object-cover"></div><div class="p-3"><div class="font-bold text-sm truncate">${l.title}</div><div class="font-black mt-1">${Number(l.price).toLocaleString('pl-PL')} zł</div><div class="text-[11px] text-gray-500 mt-1">${l.location||''} • ${l.category||''}</div></div>`;
-      card.onclick=()=>openDetail(l, imgMap[l.id]||[]);
-      grid.appendChild(card);
-    });
-  }catch(err){ grid.innerHTML='<div class="col-span-3 text-center text-red-600 text-sm">Błąd ładowania: '+err.message+'<br><br>Sprawdź w Supabase czy tabele listings i listing_images istnieją i RLS jest włączone z politykami.</div>'; }
+async function initUser(user){
+ document.getElementById('authBtn').innerText='Wyloguj ('+user.email+')';
+ document.getElementById('authBtn').onclick = async ()=>{await supabase.auth.signOut(); location.reload();};
+ renderGrid(user);
 }
 
-function openDetail(l, preloadedImages){
-  currentDetailId=l.id;
-  document.getElementById('detailTitle').innerText=l.title;
-  document.getElementById('detailPrice').innerText=Number(l.price).toLocaleString('pl-PL')+' zł';
-  document.getElementById('detailMeta').innerText=(l.location||'')+' • '+(l.category||'')+' • '+new Date(l.created_at).toLocaleDateString('pl-PL');
-  document.getElementById('detailDesc').innerText=l.description||'';
-  document.getElementById('detailContact').innerHTML=`Kontakt: ${l.phone||'przez wiadomość'}<br>Lokalizacja: ${l.location||''}<br>ID: ${l.id.slice(0,8)}`;
-  document.getElementById('ownerIdSpan').innerText=l.id.slice(0,8);
-  const ownerDiv=document.getElementById('ownerActions');
-  if(currentUser && l.user_id===currentUser.id){ ownerDiv.classList.remove('hidden'); } else { ownerDiv.classList.add('hidden'); }
-  const imgBox=document.getElementById('detailImages');
-  imgBox.innerHTML='';
-  const showImgs = async ()=>{
-    let images = preloadedImages;
-    if(!images || images.length===0){
-      const {data}=await supabase.from('listing_images').select('*').eq('listing_id', l.id);
-      images=data||[];
-    }
-    if(images.length===0){ imgBox.innerHTML='<div class="col-span-3 text-[12px] text-gray-500">Brak zdjęć</div>'; return; }
-    imgBox.innerHTML='';
-    images.forEach(im=>{
-      const d=document.createElement('div');
-      d.className='h-24 bg-gray-100 rounded-xl overflow-hidden';
-      d.innerHTML=`<img src="${im.image_url}" class="w-full h-full object-cover">`;
-      imgBox.appendChild(d);
-    });
-  };
-  showImgs();
-  document.getElementById('detailModal').classList.remove('hidden');
+function showError(id, html){
+ const el=document.getElementById(id);
+ el.innerHTML=html;
+ el.classList.remove('hidden');
 }
 
-async function deleteListing(){
-  if(!currentDetailId) return;
-  if(!confirm('Na pewno chcesz zamknąć / usunąć ogłoszenie '+currentDetailId.slice(0,8)+'?')) return;
-  try{
-    const btn=document.querySelector('#ownerActions button');
-    btn.innerText='Usuwam...'; btn.disabled=true;
-    await supabase.from('listing_images').delete().eq('listing_id', currentDetailId);
-    const {error}=await supabase.from('listings').delete().eq('id', currentDetailId);
-    if(error) throw error;
-    alert('✅ Usunięte');
-    closeDetail();
-    fetchAll();
-  }catch(err){ alert('Błąd usuwania: '+err.message+'\nDodaj w Supabase SQL: create policy "allow delete" on listings for delete using (auth.uid()=user_id);'); }
+async function doLogin(){
+ const email=document.getElementById('loginEmail').value.trim();
+ const password=document.getElementById('loginPass').value;
+ document.getElementById('loginError').classList.add('hidden');
+ const {data, error} = await supabase.auth.signInWithPassword({email, password});
+ if(error){
+   // POLSKIE KOMUNIKATY
+   if(error.message.includes('Email not confirmed')){
+     showError('loginError', `<b>Musisz potwierdzić adres e-mail.</b><br>Sprawdź skrzynkę <b>${email}</b> (także SPAM) i kliknij link potwierdzający.<br>Po potwierdzeniu zaloguj się ponownie.`);
+   } else if(error.message.includes('Invalid login credentials')){
+     showError('loginError', `<b>Nieprawidłowy e-mail lub hasło.</b><br>• Jeśli nie masz konta — przejdź do zakładki <b>Rejestracja</b> i załóż konto.<br>• Jeśli zakładałeś konto — sprawdź email i <b>potwierdź adres</b> (link w mailu).<br>• Sprawdź czy CAPS LOCK jest wyłączony.`);
+   } else {
+     showError('loginError', `Błąd logowania: ${error.message}`);
+   }
+ }
 }
 
-document.getElementById('submitAdd').onclick=async()=>{
-  const btn=document.getElementById('submitAdd');
-  try{
-    btn.innerText='Publikuję...'; btn.disabled=true;
-    const title=document.getElementById('addTitle').value.trim();
-    const desc=document.getElementById('addDesc').value.trim();
-    const price=parseFloat(document.getElementById('addPrice').value);
-    const category=document.getElementById('addCategory').value;
-    const location=document.getElementById('addLocation').value.trim();
-    const phone=document.getElementById('addPhone').value.trim();
-    if(!title || !price || !location){ alert('Uzupełnij tytuł, cenę i miejscowość'); btn.innerText='Opublikuj'; btn.disabled=false; return; }
-    if(!currentUser){ alert('Zaloguj się'); return; }
-    const {data:listing, error}=await supabase.from('listings').insert({title, description:desc, price, category, location, phone, user_id:currentUser.id}).select().single();
-    if(error) throw error;
-    const files=document.getElementById('addImages').files;
-    if(files.length>0){
-      for(let i=0;i<files.length;i++){
-        const file=files[i];
-        const path=`${listing.id}/${Date.now()}_${i}_${file.name}`;
-        const {data:up, error:upErr}=await supabase.storage.from('listing-images').upload(path, file);
-        if(upErr) throw upErr;
-        const {data:urlData}=supabase.storage.from('listing-images').getPublicUrl(path);
-        await supabase.from('listing_images').insert({listing_id:listing.id, image_url:urlData.publicUrl});
-      }
-    }
-    alert('✅ Dodano!');
-    closeAdd();
-    document.getElementById('addTitle').value=''; document.getElementById('addDesc').value=''; document.getElementById('addPrice').value=''; document.getElementById('addImages').value='';
-    fetchAll();
-  }catch(err){ alert('Błąd dodawania: '+err.message); }
-  finally{ btn.innerText='Opublikuj - 5 sekund'; btn.disabled=false; }
-};
+async function doRegister(){
+ const email=document.getElementById('regEmail').value.trim();
+ const password=document.getElementById('regPass').value;
+ const rules=document.getElementById('regRules').checked;
+ document.getElementById('regError').classList.add('hidden');
+ if(!rules) return showError('regError','Zaznacz regulamin.');
+ if(password.length<6) return showError('regError','Hasło min. 6 znaków.');
+ const {data, error} = await supabase.auth.signUp({email, password});
+ if(error){
+   showError('regError', error.message);
+ } else {
+   // tryb bez potwierdzania - zaloguj od razu
+   const {data:loginData} = await supabase.auth.signInWithPassword({email, password});
+   if(loginData?.user){
+     alert('Konto utworzone! Jesteś zalogowany.');
+     initUser(loginData.user);
+     closeAuthModal();
+   } else {
+     alert(`Konto utworzone! Wysłaliśmy wiadomość na ${email}. Jeśli masz włączone Confirm email, potwierdź maila.`);
+     switchTab('login');
+   }
+ }
+}
 
-document.getElementById('searchInput').addEventListener('input',()=>{ clearTimeout(window._searchT); window._searchT=setTimeout(fetchAll, 400); });
+async function doReset(){
+ const email=document.getElementById('resetEmail').value.trim();
+ const info=document.getElementById('resetInfo');
+ info.classList.remove('hidden');
+ info.className='text-[13px] p-3 mb-3 rounded bg-blue-50 text-blue-800 border border-blue-200';
+ info.innerText='Wysyłanie...';
+ const {error} = await supabase.auth.resetPasswordForEmail(email, {redirectTo: window.location.origin});
+ if(error){
+   info.className='text-[13px] p-3 mb-3 rounded bg-red-50 text-red-700 border border-red-200';
+   info.innerText='Błąd: '+error.message;
+ } else {
+   info.className='text-[13px] p-3 mb-3 rounded bg-green-50 text-green-800 border border-green-200';
+   info.innerHTML=`Link wysłany na <b>${email}</b><br>Tytuł maila: <b>WROOMER reset hasła</b><br>Sprawdź także SPAM.`;
+ }
+}
 
-checkAuth();
-fetchAll();
+async function setNewPassword(){
+ const newPass=document.getElementById('newPasswordInput').value;
+ document.getElementById('newPassError').classList.add('hidden');
+ if(newPass.length<6) return showError('newPassError','Hasło min. 6 znaków.');
+ const {error} = await supabase.auth.updateUser({password:newPass});
+ if(error){
+   showError('newPassError','Błąd: '+error.message);
+ } else {
+   alert('Hasło zmienione! Możesz się zalogować nowym hasłem.');
+   window.location.hash='';
+   location.reload();
+ }
+}
+
+function renderGrid(user){
+ const grid=document.getElementById('grid');
+ grid.innerHTML='';
+ for(let i=1;i<=8;i++){
+   grid.innerHTML+=`<div class="bg-white rounded-xl p-3 border">
+   <div class="bg-gray-200 h-[140px] rounded mb-2"></div>
+   <div class="font-bold text-sm">Przykładowe ogłoszenie ${i}</div>
+   <div class="text-[12px] text-gray-500">${user? 'MOJE • EDYTUJ' : 'Zaloguj się aby edytować'}</div>
+   </div>`;
+ }
+}
+renderGrid(null);
+(async()=>{
+ const {data} = await supabase.auth.getSession();
+ if(data?.session?.user) initUser(data.session.user);
+})();
 </script>
+
+<div class="fixed bottom-2 left-2 text-[10px] bg-black text-white px-2 py-1 rounded">WROOMER reset hasła • PASSWORD_RECOVERY fix • bez potwierdzania maila (test)</div>
 </body>
 </html>
