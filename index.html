@@ -2,31 +2,9 @@
 <html lang="pl">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>WROOMER.PL - Ogłoszenia motoryzacyjne</title>
-<meta name="description" content="WROOMER.PL - Ogłoszenia motoryzacyjne Gorzyce, Wodzisław, Śląsk.">
-
-<!-- GOOGLE SEARCH CONSOLE - WERYFIKACJA -->
-<!-- 1. METODA META TAG (zastap ponizej swoim kodem z GSC) -->
-<meta name="google-site-verification" content="REPLACE_WITH_YOUR_GSC_CODE">
-
-<!-- 2. METODA PLIK HTML - wgraj plik googleXXXXXXXX.html do roota (jest w ZIPie) -->
-
-<!-- SEO OTOMOTO STYLE -->
-<link rel="canonical" href="https://www.wroomer.pl/">
-<meta name="robots" content="index, follow, max-image-preview:large">
-<meta property="og:site_name" content="WROOMER.PL">
-<meta name="theme-color" content="#000000">
-<script type="application/ld+json">
-{
-  "@context":"https://schema.org",
-  "@type":"Organization",
-  "name":"WROOMER.PL",
-  "url":"https://www.wroomer.pl/",
-  "logo":"https://www.wroomer.pl/logo.png",
-  "sameAs":[]
-}
-</script>
-
+<title>WROOMER.PL - Ogłoszenia motoryzacyjne Warszawa, Kraków, Wrocław, Katowice, Gdańsk | wroomer wromer vroomer</title>
+<meta name="description" content="WROOMER.PL - Ogłoszenia motoryzacyjne Warszawa Kraków Wrocław Katowice Gdańsk Poznań Gorzyce Wodzisław Śląsk. Alternatywa OTOMOTO OLX. Wpisz wroomer wromer vroomer.">
+<meta name="google-site-verification" content="TWOJ_KOD_GSC">
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1234567890123456" crossorigin="anonymous"></script>
@@ -42,6 +20,28 @@
 <main class="max-w-[1440px] mx-auto px-4 py-6">
 <div id="msg" class="bg-white border-2 rounded-xl p-4 mb-4 text-sm"></div>
 <div id="listings" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"></div>
+
+<!-- SEO MIASTA - POZYCJONOWANIE WROOMER -->
+<div class="max-w-[1440px] mx-auto px-4 py-10 mt-10 border-t bg-white">
+<h2 class="font-black text-xl mb-4">Ogłoszenia motoryzacyjne w dużych miastach - WROOMER.PL</h2>
+<p class="text-sm text-zinc-600 mb-6">WROOMER.PL to polski portal ogłoszeniowy wzorem OTOMOTO i OLX. Znajdź samochód w Twoim mieście. Wpisz w Google: <b>wroomer, wromer, vroomer, wroomer.pl, ogłoszenia motoryzacyjne</b> - jesteśmy w indeksie Google!</p>
+<div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 text-sm" id="cityGrid"></div>
+<div class="mt-8 p-4 bg-zinc-50 rounded-xl text-xs text-zinc-500">
+<h3 class="font-bold text-sm text-black mb-2">Dlaczego WROOMER.PL?</h3>
+<p>WROOMER.PL - alternatywa dla OTOMOTO, OLX, Gratka. Szybkie ogłoszenia z GPS, kontakt telefon/SMS/WhatsApp, wiadomość przez portal jak OLX. 
+Literówki: wroomer, wromer, wrommer, vroomer, broomer - wszystkie prowadzą do nas. Pozycjonowanie: ogłoszenia motoryzacyjne, samochody używane, auta na sprzedaż, komis, części.
+</p>
+<div class="mt-3 flex flex-wrap gap-2">
+<span class="bg-black text-white px-3 py-1 rounded-full text-xs">wroomer.pl</span>
+<span class="bg-zinc-200 px-3 py-1 rounded-full text-xs">wromer</span>
+<span class="bg-zinc-200 px-3 py-1 rounded-full text-xs">vroomer.pl</span>
+<span class="bg-zinc-200 px-3 py-1 rounded-full text-xs">ogłoszenia motoryzacyjne</span>
+<span class="bg-zinc-200 px-3 py-1 rounded-full text-xs">samochody Gorzyce</span>
+<span class="bg-zinc-200 px-3 py-1 rounded-full text-xs">auta Wodzisław</span>
+</div>
+</div>
+</div>
+
 <div id="debugLog" class="mt-6 bg-black text-green-400 p-3 rounded-xl text-xs font-mono whitespace-pre-wrap max-h-40 overflow-auto"></div>
 <div class="mt-6 ad-box"><div class="text-[10px] text-zinc-400">REKLAMA GOOGLE</div><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-1234567890123456" data-ad-slot="1234567890" data-ad-format="auto" data-full-width-responsive="true"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({});</script></div>
 </main>
@@ -368,5 +368,53 @@ async function doLogin(){
 }
 (async function(){await refreshUser(); await load();})();
 </script>
+
+<script>
+const CITIES = [["Warszawa", "mazowieckie"], ["Kraków", "małopolskie"], ["Wrocław", "dolnośląskie"], ["Gdańsk", "pomorskie"], ["Katowice", "śląskie"], ["Poznań", "wielkopolskie"], ["Łódź", "łódzkie"], ["Szczecin", "zachodniopomorskie"], ["Lublin", "lubelskie"], ["Bydgoszcz", "kujawsko-pomorskie"], ["Białystok", "podlaskie"], ["Rzeszów", "podkarpackie"], ["Gdynia", "pomorskie"], ["Częstochowa", "śląskie"], ["Radom", "mazowieckie"], ["Sosnowiec", "śląskie"], ["Toruń", "kujawsko-pomorskie"], ["Kielce", "świętokrzyskie"], ["Gliwice", "śląskie"], ["Zabrze", "śląskie"], ["Olsztyn", "warmińsko-mazurskie"], ["Bielsko-Biała", "śląskie"], ["Bytom", "śląskie"], ["Zielona Góra", "lubuskie"], ["Rybnik", "śląskie"], ["Ruda Śląska", "śląskie"], ["Opole", "opolskie"], ["Tychy", "śląskie"], ["Gorzów Wielkopolski", "lubuskie"], ["Dąbrowa Górnicza", "śląskie"], ["Elbląg", "warmińsko-mazurskie"], ["Płock", "mazowieckie"], ["Wodzisław Śląski", "śląskie"], ["Gorzyce", "śląskie"], ["Jastrzębie-Zdrój", "śląskie"], ["Żory", "śląskie"]];
+
+function renderCitySEO(){
+ const grid=document.getElementById('cityGrid');
+ if(!grid) return;
+ grid.innerHTML='';
+ CITIES.forEach(c=>{
+  const city=c[0];
+  const a=document.createElement('a');
+  a.href='#city-'+encodeURIComponent(city);
+  a.className='hover:underline hover:text-black text-zinc-600';
+  a.textContent='Ogłoszenia '+city;
+  a.onclick=(e)=>{e.preventDefault(); filterByCity(city);};
+  grid.appendChild(a);
+ });
+}
+
+function filterByCity(city){
+ document.getElementById('loc').value=city; // for add form hint
+ // filter listings
+ const filtered=allData.filter(l=>{
+  const txt=((l.city||'')+' '+(l.location||'')+' '+(l.full_address||'')).toLowerCase();
+  return txt.includes(city.toLowerCase());
+ });
+ const msg=document.getElementById('msg');
+ if(filtered.length===0){
+  msg.textContent='Brak ogłoszeń w '+city+' - bądź pierwszy! Dodaj ogłoszenie z lokalizacją '+city;
+  msg.className='bg-yellow-50 border border-yellow-200 rounded-xl p-3 mb-4 text-sm';
+  renderListings([]);
+  // Show SEO placeholder
+  const grid=document.getElementById('listings');
+  grid.innerHTML='<div class="col-span-full bg-white rounded-2xl border p-8 text-center"><div class="text-4xl mb-3">🚗</div><div class="font-black text-xl">Ogłoszenia motoryzacyjne '+city+'</div><div class="text-sm text-zinc-500 mt-2">Aktualnie brak ogłoszeń w '+city+'. Dodaj pierwsze ogłoszenie z GPS w '+city+' i pojawisz się w Google na frazę "ogłoszenia '+city+'"!</div><button onclick="openAdd()" class="mt-4 bg-black text-white px-6 py-3 rounded-xl font-bold">+ Dodaj ogłoszenie w '+city+'</button><div class="mt-6 text-xs text-zinc-400">WROOMER.PL pozycjonuje: wroomer, wromer, ogłoszenia '+city+', samochody '+city+', auta '+city+'</div></div>';
+ } else {
+  msg.textContent='✅ Znaleziono '+filtered.length+' ogłoszeń w '+city+' | WROOMER.PL - ogłoszenia motoryzacyjne '+city;
+  msg.className='bg-green-50 border border-green-200 rounded-xl p-3 mb-4 text-sm';
+  renderListings(filtered);
+  // Update SEO title
+  document.title='Ogłoszenia motoryzacyjne '+city+' - WROOMER.PL | '+filtered.length+' aut';
+ }
+ history.replaceState(null,'','#miasto-'+encodeURIComponent(city));
+ log('Filter city: '+city+' -> '+filtered.length);
+}
+
+document.addEventListener('DOMContentLoaded', renderCitySEO);
+</script>
+
 </body>
 </html>
