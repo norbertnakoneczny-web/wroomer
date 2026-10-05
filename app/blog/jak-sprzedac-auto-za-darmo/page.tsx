@@ -1,1 +1,0 @@
-export default function Page(){return (<div style={maxWidth:800,margin:'40px auto',padding:'0 20px',fontFamily:'system-ui'}><h1>Jak sprzedać auto za darmo</h1><p>Na wroomer.pl sprzedasz auto całkowicie za darmo. Bez prowizji, bez ukrytych opłat. Wypełniasz formularz, dostajesz wycenę w 15 minut i gotówkę od ręki.</p><a href='/'>← Wróć na wroomer.pl</a></div>)}
