@@ -2,355 +2,209 @@
 <html lang="pl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>WROOMER.PL - Ogłoszenia motoryzacyjne</title>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<style>
-
-*{box-sizing:border-box;margin:0;padding:0;font-family:Inter,system-ui,sans-serif}
-body{background:#f5f5f0;color:#111;-webkit-tap-highlight-color:transparent}
-header{background:#fff;border-bottom:1px solid #e5e5e0;position:sticky;top:0;z-index:50;padding:10px 12px;display:flex;align-items:center;justify-content:space-between}
-.logo{font-weight:900;font-size:20px;letter-spacing:-1px}
-.logo span{color:#ffcb00}
-.btn{border:0;cursor:pointer;padding:9px 14px;border-radius:10px;font-weight:700;font-size:13px}
-.btn-black{background:#111;color:#fff}
-.btn-yellow{background:#ffcb00;color:#111}
-.grid{max-width:1280px;margin:12px auto;padding:0 8px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
-@media(min-width:480px){.grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;padding:0 12px}}
-@media(min-width:768px){.grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
-@media(min-width:1024px){.grid{grid-template-columns:repeat(5,minmax(0,1fr))}}
-.card{background:#fff;border-radius:14px;overflow:hidden;border:1px solid #e9e9e6;cursor:pointer;position:relative;display:flex;flex-direction:column}
-.card img{width:100%;height:112px;object-fit:cover;background:#eee}
-@media(min-width:768px){.card img{height:140px}}
-.card .info{padding:8px 9px}
-.card .title{font-size:11px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.2}
-.card .price{font-size:13px;font-weight:900;margin-top:3px}
-.badge{position:absolute;top:6px;left:6px;background:#ffcb00;color:#111;font-size:9px;font-weight:900;padding:4px 6px;border-radius:7px;z-index:2}
-#detail{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:100;display:none;align-items:center;justify-content:center;padding:0}
-.detail-box{background:#fff;width:100%;max-width:980px;border-radius:0;overflow:hidden;max-height:100vh;display:flex;flex-direction:column}
-@media(min-width:768px){#detail{padding:12px} .detail-box{border-radius:16px;max-height:92vh}}
-.detail-img{width:100%;height:58vh;object-fit:cover;background:#eee}
-@media(min-width:768px){.detail-img{height:520px}}
-.detail-content{padding:14px;overflow:auto}
-#authModal{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:200;display:none;align-items:center;justify-content:center;padding:12px}
-.auth-box{background:#fff;width:100%;max-width:400px;border-radius:16px;padding:18px}
-.tabs{display:flex;gap:6px;margin:12px 0}
-.tab{flex:1;padding:10px;border:1px solid #ddd;border-radius:10px;background:#fff;cursor:pointer;font-weight:700;font-size:13px}
-.tab.active{background:#111;color:#fff;border-color:#111}
-input{width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;margin-top:8px;font-size:14px}
-.log{position:fixed;left:8px;bottom:8px;background:#111;color:#ff0;font-size:10px;padding:6px 8px;border-radius:8px;max-width:280px;max-height:120px;overflow:auto;z-index:300;opacity:.9}
-
-</style>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>WROOMER.PL - Samochody na sprzedaż | Ogłoszenia motoryzacyjne Polska</title>
+<meta name="description" content="WROOMER.PL - setki ogłoszeń samochodów na sprzedaż z całej Polski. Warszawa, Kraków, Wrocław, Gdańsk. BMW, Audi, Mercedes, VW, Toyota. Sprawdź!">
+<link rel="canonical" href="https://wroomer.pl/">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://images.unsplash.com">
 </head>
-<body>
-<header>
-<div class="logo">WROOMER<span>.PL</span></div>
-<div style="display:flex;gap:8px;align-items:center">
-<button class="btn btn-yellow" onclick="openAdd()">+ Dodaj</button>
-<button id="myBtn" class="btn" style="display:none;border:1px solid #ddd" onclick="filterMy()">Moje</button>
-<button id="authBtn" class="btn btn-black" onclick="openAuth()">Zaloguj / Rejestracja</button>
-<span id="userEmail" style="display:none;font-size:12px;font-weight:700"></span>
-<button id="logoutBtn" class="btn" style="display:none;border:1px solid #ddd" onclick="logout()">Wyloguj</button>
-</div>
+<body class="bg-white text-zinc-900 antialiased selection:bg-blue-600 selection:text-white">
+<header class="sticky top-0 z-40 bg-black text-white border-b border-zinc-800">
+  <div class="mx-auto max-w-[1280px] px-4 md:px-6 h-[64px] flex items-center justify-between">
+    <div class="flex items-center gap-2">
+      <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center font-black text-[13px]">W</div>
+      <span class="font-black text-[20px] tracking-tighter">WROOMER<span class="text-blue-500">.PL</span></span>
+      <span class="hidden md:inline ml-3 text-[11px] font-medium tracking-widest uppercase text-zinc-400 border-l border-zinc-700 pl-3">Samochody • Polska</span>
+    </div>
+    <nav class="hidden lg:flex items-center gap-6 text-[13px] font-medium text-zinc-300">
+      <span class="text-white border-b-2 border-blue-600 pb-1">Ogłoszenia</span>
+      <a href="#miasta" class="hover:text-white">Miasta</a>
+      <a href="#marki" class="hover:text-white">Marki</a>
+      <a href="/admin.html" class="px-3 py-1.5 rounded-full bg-zinc-800 hover:bg-zinc-700 text-white">Panel admina</a>
+    </nav>
+    <div class="flex items-center gap-2">
+      <a href="/admin.html" class="lg:hidden px-3 py-1.5 rounded-full bg-zinc-800 text-[12px] font-bold">Admin</a>
+    </div>
+  </div>
 </header>
 
-<div id="adsGrid" class="grid"></div>
-<div id="log" class="log">Log: start...</div>
-
-
-<div id="extra" style="max-width:1280px;margin:24px auto 0;padding:0 8px">
-  <!-- MIASTA - mobile 2 columns -->
-  <div style="margin-top:20px;background:#fff;border:1px solid #e9e9e6;border-radius:14px;padding:12px">
-    <div style="font-weight:900;font-size:14px">🚗 Samochody w Twoim mieście</div>
-    <div style="font-size:11px;color:#777;margin-top:2px">Stuknij aby filtrować (na telefonie)</div>
-    <div id="cityChips" style="margin-top:10px;display:grid;grid-template-columns:repeat(2,1fr);gap:6px"></div>
+<!-- HERO + SEARCH -->
+<div class="mx-auto max-w-[1280px] px-4 md:px-6 pt-8">
+  <div class="rounded-[24px] bg-[#f5f5f5] border border-zinc-200 p-6 md:p-8 flex flex-col md:flex-row gap-6 items-start md:items-center justify-between">
+    <div>
+      <h1 class="text-[28px] md:text-[36px] font-black tracking-tighter leading-[0.9]">Samochody na sprzedaż<br><span class="text-blue-600">w całej Polsce</span></h1>
+      <p class="mt-3 text-[13px] text-zinc-600 max-w-[520px] leading-relaxed">Setki sprawdzonych ogłoszeń. Filtruj po mieście, marce i paliwie. Bezpośredni kontakt ze sprzedawcą.</p>
+      <div class="mt-4 flex gap-2 text-[11px]"><span class="px-2.5 py-1 rounded-full bg-black text-white font-bold">12 ogłoszeń</span><span class="px-2.5 py-1 rounded-full bg-white border border-zinc-200">16 miast</span><span class="px-2.5 py-1 rounded-full bg-white border border-zinc-200">16 marek</span></div>
+    </div>
+    <div class="w-full md:w-[380px] flex flex-col gap-2">
+      <div class="relative"><input id="q" placeholder="Szukaj np. BMW 3 Warszawa..." class="w-full h-[44px] rounded-full bg-white border border-zinc-200 pl-4 pr-4 text-[13px] outline-none focus:border-blue-600"></div>
+      <div class="flex gap-2"><select id="fuel" class="h-[40px] flex-1 rounded-full bg-white border border-zinc-200 px-3 text-[12px]"><option value="">Paliwo - wszystkie</option><option>Diesel</option><option>Benzyna</option><option>Hybryda</option></select><select id="sort" class="h-[40px] flex-1 rounded-full bg-white border border-zinc-200 px-3 text-[12px]"><option value="newest">Najnowsze</option><option value="price-asc">Cena rosnąco</option><option value="price-desc">Cena malejąco</option></select></div>
+      <button id="clear" class="h-[36px] rounded-full bg-black text-white text-[12px] font-bold">Wyczyść filtry</button>
+    </div>
   </div>
+</div>
 
-  <div style="margin-top:12px;background:#fff;border:1px solid #e9e9e6;border-radius:14px;padding:12px">
-    <div style="font-weight:900;font-size:14px">🏷️ Popularne marki</div>
-    <div id="brandChips" style="margin-top:10px;display:grid;grid-template-columns:repeat(3,1fr);gap:6px"></div>
+<!-- GRID OGLOSZEN -->
+<div class="mx-auto max-w-[1280px] px-4 md:px-6 mt-8">
+  <div id="grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+</div>
+
+<!-- MIASTA -->
+<section id="miasta" class="mx-auto max-w-[1280px] px-4 md:px-6 mt-16">
+  <div class="flex items-baseline justify-between"><h2 class="text-[20px] font-black tracking-tight">🚗 Samochody na sprzedaż w Twoim mieście</h2><span class="text-[11px] text-zinc-500">kliknij aby filtrować</span></div>
+  <div id="cities" class="mt-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2"></div>
+</section>
+
+<!-- MARKI -->
+<section id="marki" class="mx-auto max-w-[1280px] px-4 md:px-6 mt-12">
+  <div class="flex items-baseline justify-between"><h2 class="text-[20px] font-black tracking-tight">🏷️ Popularne marki</h2><span class="text-[11px] text-zinc-500">filtruj po marce</span></div>
+  <div id="brands" class="mt-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8 gap-2"></div>
+</section>
+
+<!-- DLACZEGO MY -->
+<section class="mx-auto max-w-[1280px] px-4 md:px-6 mt-16">
+  <h2 class="text-[20px] font-black tracking-tight">💡 Dlaczego WROOMER.PL?</h2>
+  <div class="mt-4 grid grid-cols-1 md:grid-cols-4 gap-3">
+    <div class="rounded-[16px] bg-[#f5f5f5] border border-zinc-200 p-5"><div class="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-[14px]">✓</div><div class="mt-3 font-bold text-[14px]">Bezpiecznie</div><p class="mt-1 text-[12px] text-zinc-600 leading-relaxed">Weryfikujemy ogłoszenia. Chronimy kupujących przed oszustwami i powielonymi ogłoszeniami.</p></div>
+    <div class="rounded-[16px] bg-[#f5f5f5] border border-zinc-200 p-5"><div class="w-8 h-8 rounded-full bg-black text-white flex items-center justify-center font-bold text-[14px]">⚡</div><div class="mt-3 font-bold text-[14px]">Szybko</div><p class="mt-1 text-[12px] text-zinc-600 leading-relaxed">Bez rejestracji, bez zbędnych formularzy. Dzwonisz i umawiasz się na jazdę próbną.</p></div>
+    <div class="rounded-[16px] bg-[#f5f5f5] border border-zinc-200 p-5"><div class="w-8 h-8 rounded-full bg-zinc-900 text-white flex items-center justify-center font-bold text-[12px]">0zł</div><div class="mt-3 font-bold text-[14px]">Za darmo</div><p class="mt-1 text-[12px] text-zinc-600 leading-relaxed">Dodawanie ogłoszeń prywatnych jest darmowe. Bez prowizji dla WROOMER.PL.</p></div>
+    <div class="rounded-[16px] bg-[#f5f5f5] border border-zinc-200 p-5"><div class="w-8 h-8 rounded-full bg-white border border-zinc-200 flex items-center justify-center font-bold text-[14px]">📍</div><div class="mt-3 font-bold text-[14px]">Lokalnie</div><p class="mt-1 text-[12px] text-zinc-600 leading-relaxed">Filtruj po Twoim mieście: Gorzyce, Wodzisław, Racibórz, Rybnik i cała Polska.</p></div>
   </div>
+</section>
 
-  <div style="margin-top:12px;display:grid;grid-template-columns:repeat(2,1fr);gap:8px">
-    <div style="background:#111;color:#fff;border-radius:14px;padding:12px"><div style="font-weight:900;font-size:12px">💡 Dlaczego WROOMER?</div><div style="font-size:11px;color:#bbb;margin-top:4px;line-height:1.4">Szybko, za darmo, lokalnie. Bez pośredników. Kontakt direct.</div></div>
-    <div style="background:#ffcb00;color:#111;border-radius:14px;padding:12px"><div style="font-weight:900;font-size:12px">📱 Z myślą o telefonie</div><div style="font-size:11px;margin-top:4px;line-height:1.4">2 ogłoszenia w rzędzie, duże zdjęcia, szybkie ładowanie na LTE.</div></div>
+<!-- INFO PRAWNA -->
+<section class="mx-auto max-w-[1280px] px-4 md:px-6 mt-16 mb-12">
+  <div class="rounded-[20px] bg-[#0a0a0a] text-white p-6 md:p-8 border border-zinc-800">
+    <h2 class="text-[18px] font-black tracking-tight">⚖️ Informacja prawna</h2>
+    <div class="mt-4 grid md:grid-cols-3 gap-6 text-[12px] leading-relaxed text-zinc-400">
+      <div><div class="font-bold text-white text-[12px] tracking-widest uppercase mb-2">Regulamin</div>Serwis WROOMER.PL jest platformą ogłoszeniową. Nie jesteśmy stroną transakcji. Przed zakupem sprawdź pojazd na żywo, dokumenty i historię VIN. <br><a href="#" class="text-blue-400 hover:underline">Czytaj regulamin →</a></div>
+      <div><div class="font-bold text-white text-[12px] tracking-widest uppercase mb-2">RODO / Prywatność</div>Dbamy o Twoje dane. Nie sprzedajemy danych osobowych. Cookies tylko do statystyk. Kontakt: kontakt@wroomer.pl<br><a href="#" class="text-blue-400 hover:underline">Polityka prywatności →</a></div>
+      <div><div class="font-bold text-white text-[12px] tracking-widest uppercase mb-2">Panel admina</div>Dla właściciela: zarządzaj ogłoszeniami, miastami i markami. Dostęp zabezpieczony hasłem.<br><a href="/admin.html" class="inline-flex mt-2 px-3 py-1.5 rounded-full bg-white text-black font-bold text-[11px]">Wejdź do /admin.html →</a><div class="mt-3 text-[10px] text-zinc-600">© 2026 WROOMER.PL • Wszystkie prawa zastrzeżone</div></div>
+    </div>
   </div>
+</section>
 
-  <div style="margin-top:12px;background:#fff;border:1px solid #e9e9e6;border-radius:14px;padding:12px;font-size:11px;color:#666;line-height:1.5">
-    <span style="font-weight:900;color:#111">⚖️ Informacja prawna</span> • WROOMER.PL to platforma ogłoszeniowa. Nie jesteśmy stroną transakcji. Sprawdź pojazd na żywo i historię VIN. Kontakt: kontakt@wroomer.pl<br>
-    <span style="font-size:10px;color:#999">© 2026 WROOMER.PL • Regulamin • Prywatność • RODO</span>
+<!-- SZARY MODAL SZCZEGÓŁY -->
+<div id="modal" class="fixed inset-0 z-[100] hidden">
+  <div id="modalBg" class="absolute inset-0 bg-black/60 backdrop-blur-[6px]"></div>
+  <div class="relative mx-auto max-w-[980px] mt-[2vh] md:mt-[4vh] mb-[2vh] max-h-[96vh] overflow-auto rounded-[20px] bg-white border border-zinc-200 shadow-[0_24px_80px_rgba(0,0,0,0.4)]">
+    <div id="modalContent"></div>
   </div>
 </div>
 
 <script>
-// Mobile chips logic - uses same ads array from Supabase
-function renderChips(){
-  const CITIES=["Warszawa","Kraków","Wrocław","Gdańsk","Poznań","Katowice","Łódź","Szczecin","Lublin","Białystok","Rzeszów","Gdynia","Bydgoszcz","Gorzyce"];
-  const BRANDS=["BMW","Audi","Mercedes","Volkswagen","Toyota","Skoda","Ford","Opel","Renault","Peugeot","Kia","Hyundai","Volvo","Seat"];
-  const cityDiv=document.getElementById('cityChips');
-  const brandDiv=document.getElementById('brandChips');
-  if(cityDiv){
-    cityDiv.innerHTML=CITIES.map(c=>`<button onclick="filterByCity('${c}')" style="text-align:left;padding:8px 10px;border-radius:10px;border:1px solid #eee;background:#f7f7f5;font-size:11px;font-weight:700">${c}</button>`).join('') + `<button onclick="filterByCity('')" style="text-align:left;padding:8px 10px;border-radius:10px;border:1px dashed #ccc;background:#fff;font-size:11px">Wszystkie</button>`;
-  }
-  if(brandDiv){
-    brandDiv.innerHTML=BRANDS.map(b=>`<button onclick="filterByBrand('${b}')" style="text-align:left;padding:8px 10px;border-radius:10px;border:1px solid #eee;background:#fff;font-size:11px;font-weight:700">${b}</button>`).join('');
-  }
+const CITIES=["Warszawa","Kraków","Wrocław","Gdańsk","Poznań","Katowice","Łódź","Szczecin","Lublin","Białystok","Rzeszów","Gdynia","Bydgoszcz","Toruń","Gliwice","Gorzyce"];
+const BRANDS=["BMW","Audi","Mercedes","Volkswagen","Toyota","Skoda","Ford","Opel","Renault","Peugeot","Kia","Hyundai","Volvo","Seat","Honda","Fiat"];
+const ADS=[
+{id:"1",brand:"BMW",model:"Seria 3 320d",year:2019,price:84900,mileage:98000,fuel:"Diesel",city:"Warszawa",power:"190 KM",gearbox:"Automat",image:"https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800&q=80",featured:true},
+{id:"2",brand:"Audi",model:"A4 Avant",year:2020,price:92900,mileage:76000,fuel:"Diesel",city:"Kraków",power:"150 KM",gearbox:"Automat",image:"https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=800&q=80"},
+{id:"3",brand:"Mercedes",model:"C 220d",year:2018,price:79900,mileage:112000,fuel:"Diesel",city:"Wrocław",power:"194 KM",gearbox:"Automat",image:"https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=800&q=80"},
+{id:"4",brand:"Volkswagen",model:"Passat 2.0 TDI",year:2021,price:87900,mileage:45000,fuel:"Diesel",city:"Gdańsk",power:"150 KM",gearbox:"Manual",image:"https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800&q=80"},
+{id:"5",brand:"Toyota",model:"Corolla 1.8 Hybrid",year:2022,price:95500,mileage:32000,fuel:"Hybryda",city:"Poznań",power:"122 KM",gearbox:"Automat",image:"https://images.unsplash.com/photo-1623869675781-80b17c7ff32c?w=800&q=80"},
+{id:"6",brand:"Skoda",model:"Octavia 1.5 TSI",year:2021,price:78900,mileage:58000,fuel:"Benzyna",city:"Katowice",power:"150 KM",gearbox:"Manual",image:"https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800&q=80"},
+{id:"7",brand:"Ford",model:"Focus ST-Line",year:2020,price:68900,mileage:67000,fuel:"Benzyna",city:"Łódź",power:"125 KM",gearbox:"Manual",image:"https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?w=800&q=80"},
+{id:"8",brand:"Volvo",model:"XC60 D4 AWD",year:2019,price:112900,mileage:89000,fuel:"Diesel",city:"Szczecin",power:"190 KM",gearbox:"Automat",image:"https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?w=800&q=80",featured:true},
+{id:"9",brand:"Kia",model:"Sportage 1.6 T-GDI",year:2023,price:124900,mileage:12000,fuel:"Benzyna",city:"Lublin",power:"150 KM",gearbox:"Automat",image:"https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=800&q=80"},
+{id:"10",brand:"Hyundai",model:"Tucson Hybrid",year:2022,price:119900,mileage:28000,fuel:"Hybryda",city:"Białystok",power:"230 KM",gearbox:"Automat",image:"https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=800&q=80"},
+{id:"11",brand:"Seat",model:"Leon FR 2.0 TDI",year:2020,price:73900,mileage:91000,fuel:"Diesel",city:"Rzeszów",power:"150 KM",gearbox:"Manual",image:"https://images.unsplash.com/photo-1503736334956-4c8ff8e9299d?w=800&q=80"},
+{id:"12",brand:"Opel",model:"Astra 1.2 Turbo",year:2021,price:65900,mileage:49000,fuel:"Benzyna",city:"Gdynia",power:"130 KM",gearbox:"Manual",image:"https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=800&q=80"},
+];
+
+let selCity=null, selBrand=null;
+const grid=document.getElementById('grid'), q=document.getElementById('q'), fuel=document.getElementById('fuel'), sort=document.getElementById('sort'), modal=document.getElementById('modal'), modalContent=document.getElementById('modalContent');
+
+function renderCities(){
+  const c=document.getElementById('cities');
+  c.innerHTML=CITIES.map(city=>{
+    const count=ADS.filter(a=>a.city===city).length;
+    const active=selCity===city?'bg-black text-white border-black':'bg-[#f5f5f5] border-zinc-200 hover:bg-white';
+    return `<button data-city="${city}" class="cityBtn text-left rounded-[12px] border px-3 py-3 ${active} transition"><div class="font-bold text-[13px] flex items-center justify-between">${city}<span class="text-[11px] opacity-60">${count||0}</span></div><div class="text-[11px] mt-0.5 opacity-70">Samochody →</div></button>`;
+  }).join('');
 }
-let cityFilter='', brandFilter='';
-function filterByCity(c){cityFilter=c; renderAdsFiltered();}
-function filterByBrand(b){brandFilter=b; renderAdsFiltered();}
-function renderAdsFiltered(){
-  const grid=document.getElementById('adsGrid');
-  let list=ads;
-  if(cityFilter) list=list.filter(a=>(a.city||a.title||'').toLowerCase().includes(cityFilter.toLowerCase()));
-  if(brandFilter) list=list.filter(a=>(a.brand||a.title||'').toLowerCase().includes(brandFilter.toLowerCase()));
-  if(myFilter) list=list.filter(a=>a.owner_id===window.currentUserId);
-  grid.innerHTML='';
-  list.forEach(ad=>{
-    const img=(ad.images && ad.images[0]) || ad.image_url || 'https://via.placeholder.com/300x200';
-    const isMine = ad.owner_id && ad.owner_id===window.currentUserId;
-    grid.innerHTML+=`<div class="card" onclick="openDetail('${ad.id}')">${isMine?'<div class="badge">MOJE</div>':''}<img src="${img}" loading="lazy"><div class="info"><div class="title">${(ad.title||ad.brand+' '+ad.model||'').substring(0,34)}</div><div class="price">${ad.price||''} zł</div></div></div>`;
+function renderBrands(){
+  const b=document.getElementById('brands');
+  b.innerHTML=BRANDS.map(br=>{
+    const count=ADS.filter(a=>a.brand===br).length;
+    const active=selBrand===br?'bg-black text-white border-black':'bg-white border-zinc-200 hover:bg-[#f5f5f5]';
+    return `<button data-brand="${br}" class="brandBtn text-left rounded-[12px] border px-3 py-3 ${active} transition"><div class="font-bold text-[13px]">${br}</div><div class="text-[11px] mt-0.5 opacity-60">${count||'0'} ogłoszeń</div></button>`;
+  }).join('');
+}
+function filtered(){
+  let list=ADS.filter(ad=>{
+    const qq=q.value.toLowerCase();
+    const matchesQ=!qq||(`${ad.brand} ${ad.model} ${ad.city}`.toLowerCase().includes(qq));
+    const matchesCity=!selCity||ad.city===selCity;
+    const matchesBrand=!selBrand||ad.brand===selBrand;
+    const matchesFuel=!fuel.value||ad.fuel===fuel.value;
+    return matchesQ&&matchesCity&&matchesBrand&&matchesFuel;
   });
+  if(sort.value==='price-asc') list=[...list].sort((a,b)=>a.price-b.price);
+  if(sort.value==='price-desc') list=[...list].sort((a,b)=>b.price-a.price);
+  if(sort.value==='newest') list=[...list].sort((a,b)=>b.year-a.year);
+  return list;
 }
-// Override original renderAds to keep chips + filters
-const _origRenderAds = window.renderAds;
-window.renderAds = function(){ renderChips(); renderAdsFiltered(); }
+function renderGrid(){
+  const list=filtered();
+  grid.innerHTML=list.map(ad=>`
+    <div data-id="${ad.id}" class="adCard group rounded-[16px] border border-zinc-200 bg-white overflow-hidden hover:border-zinc-300 hover:shadow-[0_8px_24px_rgba(0,0,0,0.06)] transition cursor-pointer">
+      <div class="relative h-[200px] overflow-hidden bg-[#f5f5f5]"><img src="${ad.image}" class="w-full h-full object-cover group-hover:scale-[1.03] transition duration-500"><div class="absolute top-3 left-3 flex gap-1.5"><span class="px-2.5 py-1 rounded-full bg-black text-white text-[10px] font-bold tracking-widest uppercase">${ad.city}</span>${ad.featured?'<span class="px-2.5 py-1 rounded-full bg-blue-600 text-white text-[10px] font-bold">POLECANE</span>':''}</div><div class="absolute bottom-3 left-3 px-2.5 py-1 rounded-full bg-white/90 backdrop-blur border border-zinc-200 text-[11px] font-bold">${ad.year} • ${ad.mileage.toLocaleString()} km</div></div>
+      <div class="p-4"><div class="font-bold text-[15px] leading-tight truncate">${ad.brand} ${ad.model}</div><div class="mt-1 flex items-center gap-2 text-[11px] text-zinc-500"><span>${ad.fuel}</span><span>•</span><span>${ad.gearbox}</span><span>•</span><span>${ad.power}</span></div><div class="mt-3 flex items-baseline justify-between"><div class="font-black text-[18px]">${ad.price.toLocaleString()} zł</div><div class="text-[11px] text-zinc-500">brutto • do neg.</div></div></div>
+    </div>
+  `).join('')||'<div class="col-span-full py-12 text-center text-[13px] text-zinc-500">Brak wyników dla tych filtrów</div>';
+  document.querySelectorAll('.adCard').forEach(el=>el.addEventListener('click',()=>openAd(el.dataset.id)));
+  renderCities(); renderBrands();
+  // bind city/brand buttons
+  document.querySelectorAll('.cityBtn').forEach(b=>b.addEventListener('click',()=>{ selCity=selCity===b.dataset.city?null:b.dataset.city; renderGrid(); document.getElementById('miasta').scrollIntoView({behavior:'smooth'}); }));
+  document.querySelectorAll('.brandBtn').forEach(b=>b.addEventListener('click',()=>{ selBrand=selBrand===b.dataset.brand?null:b.dataset.brand; renderGrid(); }));
+}
+
+function openAd(id){
+  const ad=ADS.find(a=>a.id===id); if(!ad) return;
+  modalContent.innerHTML=`
+    <div class="sticky top-0 bg-black text-white px-6 h-[56px] flex items-center justify-between rounded-t-[20px]">
+      <div class="font-bold text-[14px] tracking-tight">${ad.brand} ${ad.model} • ${ad.city}</div>
+      <button id="closeModal" class="w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center">✕</button>
+    </div>
+    <div class="grid md:grid-cols-[1.4fr_0.9fr] gap-0">
+      <div class="p-4 md:p-6">
+        <div class="rounded-[16px] overflow-hidden bg-[#e5e7eb] border border-zinc-200"><img src="${ad.image}" class="w-full h-[340px] object-cover"></div>
+        <div class="mt-4 rounded-[16px] bg-[#f5f5f5] border border-zinc-200 p-4">
+          <div class="text-[11px] font-bold tracking-widest uppercase text-zinc-500">Opis pojazdu</div>
+          <p class="mt-2 text-[13px] leading-relaxed text-zinc-700">Zadbany ${ad.brand} ${ad.model} z ${ad.year} roku, ${ad.power}, ${ad.fuel}, skrzynia ${ad.gearbox}. Przebieg ${ad.mileage.toLocaleString()} km, miasto ${ad.city}. Serwisowany, bez wkładu finansowego. Możliwość sprawdzenia na stacji diagnostycznej. Faktura VAT, gwarancja.</p>
+          <div class="mt-3 flex flex-wrap gap-1.5"><span class="px-2.5 py-1 rounded-full bg-white border border-zinc-200 text-[11px]">Bezwypadkowy</span><span class="px-2.5 py-1 rounded-full bg-white border border-zinc-200 text-[11px]">Serwis ASO</span><span class="px-2.5 py-1 rounded-full bg-white border border-zinc-200 text-[11px]">Garażowany</span></div>
+        </div>
+      </div>
+      <div class="bg-[#f5f5f5] md:bg-[#f5f5f5] border-t md:border-t-0 md:border-l border-zinc-200 p-4 md:p-5 space-y-4">
+        <div class="rounded-[16px] bg-white border border-zinc-200 p-4">
+          <div class="text-[11px] font-bold tracking-widest uppercase text-zinc-500">Cena</div>
+          <div class="mt-1 font-black text-[26px] tracking-tight">${ad.price.toLocaleString()} zł</div>
+          <div class="mt-1 text-[11px] text-zinc-500">do negocjacji • brutto • faktura VAT</div>
+          <div class="mt-5 grid grid-cols-2 gap-2">
+            <div class="rounded-[12px] bg-[#f5f5f5] border border-zinc-200 p-3"><div class="text-[11px] text-zinc-500">Rocznik</div><div class="font-bold text-[13px] mt-1">${ad.year}</div></div>
+            <div class="rounded-[12px] bg-[#f5f5f5] border border-zinc-200 p-3"><div class="text-[11px] text-zinc-500">Przebieg</div><div class="font-bold text-[13px] mt-1">${ad.mileage.toLocaleString()} km</div></div>
+            <div class="rounded-[12px] bg-[#f5f5f5] border border-zinc-200 p-3"><div class="text-[11px] text-zinc-500">Paliwo</div><div class="font-bold text-[13px] mt-1">${ad.fuel}</div></div>
+            <div class="rounded-[12px] bg-[#f5f5f5] border border-zinc-200 p-3"><div class="text-[11px] text-zinc-500">Miasto</div><div class="font-bold text-[13px] mt-1">${ad.city}</div></div>
+          </div>
+          <button class="mt-5 w-full h-11 rounded-full bg-blue-600 text-white font-bold text-[13px] hover:bg-blue-700">📞 Zadzwoń: 500 123 456</button>
+          <button class="mt-2 w-full h-11 rounded-full bg-black text-white font-bold text-[13px]">✉️ Napisz wiadomość</button>
+          <div class="mt-3 text-[11px] text-center text-zinc-500">Bezpieczna transakcja • WROOMER.PL chroni kupujących</div>
+        </div>
+        <div class="rounded-[16px] bg-[#e5e7eb] border border-zinc-300 p-4">
+          <div class="text-[11px] font-bold tracking-widest uppercase">Lokalizacja</div>
+          <div class="mt-2 h-[120px] rounded-[12px] bg-white border border-zinc-200 flex items-center justify-center">📍 ${ad.city} - dokładny adres po kontakcie</div>
+        </div>
+      </div>
+    </div>
+  `;
+  modal.classList.remove('hidden'); document.body.style.overflow='hidden';
+  document.getElementById('closeModal').onclick=()=>{modal.classList.add('hidden'); document.body.style.overflow='';};
+}
+document.getElementById('modalBg').onclick=()=>{modal.classList.add('hidden'); document.body.style.overflow='';};
+q.addEventListener('input',renderGrid); fuel.addEventListener('change',renderGrid); sort.addEventListener('change',renderGrid);
+document.getElementById('clear').onclick=()=>{selCity=null; selBrand=null; q.value=''; fuel.value=''; sort.value='newest'; renderGrid();};
+
+renderCities(); renderBrands(); renderGrid();
 </script>
-
-<!-- DETAIL -->
-<div id="detail" onclick="if(event.target.id==='detail')closeDetail()">
-<div class="detail-box">
-<img id="detailImg" class="detail-img">
-<div class="detail-content">
-<h2 id="detailTitle"></h2>
-<p id="detailPrice" style="font-weight:900;margin:8px 0"></p>
-<p id="detailDesc" style="font-size:13px;color:#555"></p>
-<div style="margin-top:12px;display:flex;gap:8px">
-<button id="editBtn" class="btn btn-yellow" style="display:none" onclick="openEdit()">Edytuj</button>
-<button id="deleteBtn" class="btn" style="display:none;border:1px solid #ddd" onclick="deleteAd()">Usuń</button>
-<button class="btn btn-black" onclick="closeDetail()">Zamknij</button>
-</div>
-</div>
-</div>
-</div>
-
-<!-- AUTH MODAL -->
-<div id="authModal" onclick="if(event.target.id==='authModal')closeAuth()">
-<div class="auth-box">
-<h3 id="authTitle">WROOMER.PL</h3>
-<div class="tabs" id="authTabs">
-<button class="tab active" id="loginTabBtn" onclick="showTab('login')">Logowanie</button>
-<button class="tab" id="registerTabBtn" onclick="showTab('register')">Rejestracja</button>
-</div>
-
-<div id="loginTab" class="auth-tab-content">
-<input id="loginEmail" placeholder="Adres e-mail">
-<input id="loginPass" type="password" placeholder="Hasło">
-<button class="btn btn-black" style="width:100%;margin-top:10px" onclick="login()">Zaloguj się</button>
-<p style="margin-top:8px;font-size:12px"><a href="#" onclick="showTab('reset');return false">Nie pamiętasz hasła?</a></p>
-<p id="loginInfo" style="font-size:11px;color:#c00;margin-top:8px"></p>
-</div>
-
-<div id="registerTab" class="auth-tab-content" style="display:none">
-<input id="regEmail" placeholder="Adres e-mail">
-<input id="regPass" type="password" placeholder="Hasło (min. 6 znaków)">
-<label style="font-size:11px;display:flex;gap:6px;margin-top:8px"><input type="checkbox" id="regCheck" style="width:auto"> Akceptuję regulamin WROOMER.PL</label>
-<button class="btn btn-yellow" style="width:100%;margin-top:10px" onclick="register()">Załóż konto</button>
-<p style="font-size:11px;color:#666;margin-top:8px">Rejestracja bez potwierdzania e-mail - po kliknięciu jesteś od razu zalogowany (tryb testowy).</p>
-</div>
-
-<div id="resetTab" class="auth-tab-content" style="display:none">
-<p style="font-size:13px">Podaj e-mail, wyślemy link do resetu hasła.</p>
-<input id="resetEmail" placeholder="Adres e-mail">
-<button class="btn btn-black" style="width:100%;margin-top:10px" onclick="sendReset()">Wyślij link resetujący</button>
-<p id="resetInfo" style="font-size:11px;margin-top:8px"></p>
-</div>
-
-<div id="newPasswordTab" class="auth-tab-content" style="display:none">
-<h3 style="margin-bottom:6px">Ustaw nowe hasło</h3>
-<p style="font-size:12px;color:#666">Wpisz nowe hasło dla konta <span id="recoveryEmail" style="font-weight:700"></span></p>
-<input id="newPasswordInput" type="password" placeholder="Nowe hasło (min. 6 znaków)">
-<button class="btn btn-black" style="width:100%;margin-top:12px" onclick="setNewPassword()">Zapisz nowe hasło</button>
-<p style="font-size:11px;color:#666;margin-top:8px">Po zapisaniu zostaniesz zalogowany nowym hasłem.</p>
-</div>
-
-</div>
-</div>
-
-<script>
-const SUPABASE_URL = 'https://rljqnhfogaqdjeirqqdj.supabase.co';
-const SUPABASE_ANON_KEY = 'sb_publishable_j7CS5xIHzOMBMyvsqVgDmw_GeEek5hX';
-const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-let ads=[], currentAd=null, myFilter=false;
-
-function log(m){document.getElementById('log').innerHTML+='<br>'+m; console.log(m)}
-
-async function loadAds(){
- log('Ładuję ogłoszenia...');
- const {data, error} = await supabaseClient.from('ads').select('*').order('created_at',{ascending:false}).limit(100);
- if(error){log('❌ Błąd ładowania: '+error.message); return}
- ads=data||[];
- renderAds();
- log('✅ Załadowano '+ads.length);
-}
-function renderAds(){
- const grid=document.getElementById('adsGrid');
- let list=myFilter ? ads.filter(a=>a.owner_id===window.currentUserId) : ads;
- grid.innerHTML='';
- list.forEach(ad=>{
-  const img=(ad.images && ad.images[0]) || ad.image_url || 'https://via.placeholder.com/200';
-  const isMine = ad.owner_id && ad.owner_id===window.currentUserId;
-  grid.innerHTML+=`<div class="card" onclick="openDetail('${ad.id}')">${isMine?'<div class="badge">MOJE • EDYTUJ</div>':''}<img src="${img}"><div class="info"><div class="title">${ad.title||ad.brand+' '+ad.model}</div><div class="price">${ad.price||''} zł</div></div></div>`;
- });
-}
-
-function openDetail(id){
- const ad=ads.find(a=>a.id==id); if(!ad)return; currentAd=ad;
- document.getElementById('detailImg').src=(ad.images&&ad.images[0])||ad.image_url||'';
- document.getElementById('detailTitle').innerText=ad.title||ad.brand+' '+ad.model;
- document.getElementById('detailPrice').innerText=(ad.price||'')+' zł';
- document.getElementById('detailDesc').innerText=ad.description||'';
- const mine=ad.owner_id===window.currentUserId;
- document.getElementById('editBtn').style.display=mine?'block':'none';
- document.getElementById('deleteBtn').style.display=mine?'block':'none';
- document.getElementById('detail').style.display='flex';
-}
-function closeDetail(){document.getElementById('detail').style.display='none'}
-
-function openAuth(){document.getElementById('authModal').style.display='flex'; showTab('login')}
-function closeAuth(){document.getElementById('authModal').style.display='none'}
-function showTab(name){
- document.querySelectorAll('.auth-tab-content').forEach(d=>d.style.display='none');
- document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
- if(name==='login'){document.getElementById('loginTab').style.display='block';document.getElementById('loginTabBtn').classList.add('active');document.getElementById('authTitle').innerText='Logowanie'}
- if(name==='register'){document.getElementById('registerTab').style.display='block';document.getElementById('registerTabBtn').classList.add('active');document.getElementById('authTitle').innerText='Rejestracja'}
- if(name==='reset'){document.getElementById('resetTab').style.display='block';document.getElementById('authTitle').innerText='Reset hasła'}
- if(name==='newPassword'){document.getElementById('newPasswordTab').style.display='block';document.getElementById('authTabs').style.display='none';document.getElementById('authTitle').innerText='WROOMER reset hasła'}
-}
-function showTabOnlyNewPassword(email){
- document.getElementById('authModal').style.display='flex';
- document.querySelectorAll('.auth-tab-content').forEach(d=>d.style.display='none');
- document.getElementById('authTabs').style.display='none';
- document.getElementById('newPasswordTab').style.display='block';
- document.getElementById('authTitle').innerText='WROOMER reset hasła';
- document.getElementById('recoveryEmail').innerText=email||'';
-}
-
-async function login(){
- const email=document.getElementById('loginEmail').value.trim();
- const pass=document.getElementById('loginPass').value;
- const {data, error}=await supabaseClient.auth.signInWithPassword({email,password:pass});
- if(error){
-  let msg='Nieprawidłowy e-mail lub hasło. Jeśli nie masz konta - przejdź do zakładki Rejestracja.';
-  if(error.message.includes('Email not confirmed')) msg='Musisz potwierdzić adres e-mail. Sprawdź skrzynkę '+email+' (także SPAM).';
-  document.getElementById('loginInfo').innerText=msg;
-  log('❌ Login błąd: '+error.message);
- } else {
-  log('✅ Zalogowano '+email); closeAuth(); checkUser();
- }
-}
-async function register(){
- if(!document.getElementById('regCheck').checked){alert('Zaznacz regulamin');return}
- const email=document.getElementById('regEmail').value.trim();
- const pass=document.getElementById('regPass').value;
- if(pass.length<6){alert('Hasło min. 6 znaków');return}
- const {data, error}=await supabaseClient.auth.signUp({email,password:pass});
- if(error){alert('Błąd: '+error.message); return}
- // tryb bez potwierdzania - od razu login
- const {data:loginData}=await supabaseClient.auth.signInWithPassword({email,password:pass});
- log('✅ Konto utworzone '+email); closeAuth(); checkUser();
-}
-async function sendReset(){
- const email=document.getElementById('resetEmail').value.trim();
- if(!email){alert('Wpisz e-mail');return}
- const {error}=await supabaseClient.auth.resetPasswordForEmail(email,{redirectTo: window.location.origin});
- if(error){document.getElementById('resetInfo').innerText='Błąd: '+error.message}
- else {document.getElementById('resetInfo').innerText='Wysłaliśmy wiadomość na '+email+'. Temat: WROOMER reset hasła. Sprawdź skrzynkę i kliknij link, aby ustawić nowe hasło.'; log('✅ Reset wysłany na '+email)}
-}
-async function setNewPassword(){
- const newPass=document.getElementById('newPasswordInput').value;
- if(newPass.length<6){alert('Hasło musi mieć min. 6 znaków');return}
- const {data, error}=await supabaseClient.auth.updateUser({password:newPass});
- if(error){alert('Błąd: '+error.message); log('❌ updateUser: '+error.message)}
- else {alert('Hasło zmienione! Zalogowano nowym hasłem.'); log('✅ Hasło zmienione'); window.location.hash=''; closeAuth(); checkUser();}
-}
-async function checkUser(){
- const {data:{user}}=await supabaseClient.auth.getUser();
- if(user){
-  window.currentUserId=user.id;
-  document.getElementById('authBtn').style.display='none';
-  document.getElementById('userEmail').style.display='block';
-  document.getElementById('userEmail').innerText=user.email;
-  document.getElementById('logoutBtn').style.display='block';
-  document.getElementById('myBtn').style.display='block';
-  log('Zalogowany jako '+user.email);
-  renderAds();
- } else {
-  window.currentUserId=null;
-  document.getElementById('authBtn').style.display='block';
-  document.getElementById('userEmail').style.display='none';
-  document.getElementById('logoutBtn').style.display='none';
-  document.getElementById('myBtn').style.display='none';
- }
-}
-async function logout(){await supabaseClient.auth.signOut(); location.reload()}
-
-function filterMy(){myFilter=!myFilter; document.getElementById('myBtn').innerText=myFilter?'Wszystkie':'Moje'; renderAds()}
-
-// ADD
-function openAdd(){
- const t=prompt('Tytuł ogłoszenia:'); if(!t)return;
- const p=prompt('Cena:'); const imgUrl=prompt('Link do zdjęcia (opcjonalnie) lub zostaw puste:');
- addAd({title:t, price:p, image_url:imgUrl});
-}
-async function addAd(obj){
- const {data:{user}}=await supabaseClient.auth.getUser();
- if(!user){alert('Zaloguj się aby dodać'); openAuth(); return}
- const toInsert={title:obj.title, price:obj.price, image_url:obj.image_url, images: obj.image_url?[obj.image_url]:[], owner_id:user.id, brand:obj.title, model:'', description:obj.title};
- const {data, error}=await supabaseClient.from('ads').insert(toInsert).select();
- if(error){log('❌ Insert błąd: '+error.message); alert('Błąd zapisu: '+error.message)} else {log('✅ Zapisano ID='+data[0].id); loadAds()}
-}
-async function deleteAd(){
- if(!currentAd)return; if(!confirm('Usunąć?'))return;
- const {error}=await supabaseClient.from('ads').delete().eq('id',currentAd.id);
- if(error)alert(error.message); else {closeDetail(); loadAds();}
-}
-function openEdit(){
- const t=prompt('Nowy tytuł:', currentAd.title); if(!t)return;
- supabaseClient.from('ads').update({title:t}).eq('id',currentAd.id).then(()=>{closeDetail(); loadAds()});
-}
-
-// CRITICAL: PASSWORD_RECOVERY handling
-supabaseClient.auth.onAuthStateChange(async (event, session)=>{
- console.log('Auth event:',event);
- if(event==='PASSWORD_RECOVERY'){
-  const email=session?.user?.email||'';
-  log('🔑 PASSWORD_RECOVERY - pokaż ustaw nowe hasło');
-  showTabOnlyNewPassword(email);
- }
- if(event==='SIGNED_IN'){
-  // jeśli to recovery, nie zamykaj automatycznie - czekaj na nowe hasło
-  if(window.location.hash.includes('type=recovery') || window.location.search.includes('type=recovery')) return;
-  checkUser();
- }
-});
-
-loadAds(); checkUser();
-</script>
-
-<!-- MOBILE BOTTOM BAR - 90% smartphone -->
-<div id="bottomNav" style="position:fixed;bottom:0;left:0;right:0;z-index:60;background:#fff;border-top:1px solid #e5e5e0;display:flex;justify-content:space-around;padding:6px 0 8px;padding-bottom:calc(8px + env(safe-area-inset-bottom));">
-  <button onclick="window.scrollTo({top:0,behavior:'smooth'})" style="display:flex;flex-direction:column;align-items:center;gap:2px;border:0;background:transparent"><span style="font-size:18px">🏠</span><span style="font-size:9px;font-weight:800">GŁÓWNA</span></button>
-  <button onclick="document.getElementById('cityChips')?.scrollIntoView({behavior:'smooth'})" style="display:flex;flex-direction:column;align-items:center;gap:2px;border:0;background:transparent"><span style="font-size:18px">📍</span><span style="font-size:9px;font-weight:800">MIASTA</span></button>
-  <button onclick="openAdd()" style="display:flex;flex-direction:column;align-items:center;gap:2px;border:0;background:transparent"><span style="background:#ffcb00;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900">+</span><span style="font-size:9px;font-weight:800">DODAJ</span></button>
-  <button onclick="document.getElementById('brandChips')?.scrollIntoView({behavior:'smooth'})" style="display:flex;flex-direction:column;align-items:center;gap:2px;border:0;background:transparent"><span style="font-size:18px">🏷️</span><span style="font-size:9px;font-weight:800">MARKI</span></button>
-  <button onclick="openAuth()" style="display:flex;flex-direction:column;align-items:center;gap:2px;border:0;background:transparent"><span style="font-size:18px">👤</span><span style="font-size:9px;font-weight:800">KONTO</span></button>
-</div>
-<style>
-@media(min-width:768px){#bottomNav{display:none}}
-body{padding-bottom:78px}
-@media(min-width:768px){body{padding-bottom:0}}
-</style>
-
 </body>
 </html>
