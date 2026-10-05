@@ -155,28 +155,54 @@ function openDetail(l){detailImgs=l.listing_images?.map(x=>x.image_url)||[]; det
 function showDetailImg(){if(!detailImgs.length)return; document.getElementById('detailMain').src=detailImgs[detailIdx]; document.getElementById('detailCounter').textContent=(detailIdx+1)+' / '+detailImgs.length;}
 function nextImg(){detailIdx=(detailIdx+1)%detailImgs.length; showDetailImg();} function prevImg(){detailIdx=(detailIdx-1+detailImgs.length)%detailImgs.length; showDetailImg();}
 
-async function editListing(id){if(!currentUser){alert('Zaloguj');return;} const l=allListings.find(x=>x.id===id); if(!l||l.user_id!==currentUser.id){alert('Nie Twoje');return;} editingId=id; resetForm(); document.getElementById('brand').value=l.brand||''; document.getElementById('model').innerHTML=`<option>${l.model||''}</option><option>Inny</option>`; document.getElementById('model').value=l.model||''; document.getElementById('title').value=l.title; document.getElementById('year').value=l.year||''; document.getElementById('mileage').value=l.mileage||''; document.getElementById('engine_capacity').value=l.engine_capacity||''; document.getElementById('power').value=l.power||''; document.getElementById('fuel_type').value=l.fuel_type||''; document.getElementById('transmission').value=l.transmission||''; document.getElementById('body_type').value=l.body_type||''; document.getElementById('color').value=l.color||''; document.getElementById('price').value=l.price; document.getElementById('loc').value=l.location||l.city||''; document.getElementById('desc').value=l.description||''; if(l.lat){currentGPS={lat:l.lat,lng:l.lng,addr:l.full_address||'',city:l.city||''}; document.getElementById('gpsLat').textContent=l.lat; document.getElementById('gpsLng').textContent=l.lng; document.getElementById('gpsAddr').textContent=l.full_address||''; document.getElementById('gpsPreview').classList.remove('hidden');} existingImgs=l.listing_images||[]; renderExisting(); document.getElementById('addModal').classList.remove('hidden');}
-async function deleteListing(id){if(!confirm('Usunąć?'))return; const {error}=await supa.from('listings').delete().eq('id',id); if(error)alert(error.message); else{closeDetail(); load();}}
 
-document.getElementById('saveBtn').onclick=async()=>{
+async function editListing(id){
  if(!currentUser){alert('Zaloguj');return;}
- const payload={title:document.getElementById('title').value, brand:document.getElementById('brand').value, model:document.getElementById('model').value, year:Number(document.getElementById('year').value)||null, mileage:Number(document.getElementById('mileage').value)||null, engine_capacity:Number(document.getElementById('engine_capacity').value)||null, power:Number(document.getElementById('power').value)||null, fuel_type:document.getElementById('fuel_type').value||null, transmission:document.getElementById('transmission').value||null, body_type:document.getElementById('body_type').value||null, color:document.getElementById('color').value||null, price:Number(document.getElementById('price').value)||0, location:document.getElementById('loc').value, city:currentGPS.city||document.getElementById('loc').value, lat:currentGPS.lat, lng:currentGPS.lng, full_address:currentGPS.addr||document.getElementById('loc').value, description:document.getElementById('desc').value};
- const status=document.getElementById('saveStatus');
- if(!payload.brand||!payload.model||!payload.price){status.textContent='Błąd: Marka, Model i Cena wymagane!'; return;}
- status.textContent=editingId?'Aktualizuję...':'Zapisuję...'; document.getElementById('saveBtn').disabled=true;
- try{
-  let listingId=editingId;
-  if(editingId){
-   const {error}=await supa.from('listings').update(payload).eq('id',editingId); if(error)throw error;
-   for(let delId of toDeleteImgIds){await supa.from('listing_images').delete().eq('id',delId);}
-  } else {
-   payload.user_id=currentUser.id; payload.user_email=currentUser.email; payload.category='Samochody';
-   const {data:listing, error}=await supa.from('listings').insert(payload).select().single(); if(error)throw error; listingId=listing.id;
-  }
-  for(let fc of filesCompressed){const name=Date.now()+'_'+Math.random().toString(36).slice(2)+'.jpg'; const {error:upErr}=await supa.storage.from('listing-images').upload(name, fc.file); if(upErr)throw upErr; const {data:urlData}=supa.storage.from('listing-images').getPublicUrl(name); await supa.from('listing_images').insert({listing_id:listingId, image_url:urlData.publicUrl});}
-  status.textContent='✅ Gotowe!'; setTimeout(()=>{closeAdd(); load(); status.textContent=''; document.getElementById('saveBtn').disabled=false;}, 800);
- }catch(e){status.textContent='Błąd: '+e.message; document.getElementById('saveBtn').disabled=false;}
-};
+ const l=allListings.find(x=>x.id===id);
+ if(!l||l.user_id!==currentUser.id){alert('To nie Twoje ogłoszenie!');return;}
+ console.log('Edytuję', l);
+ // Najpierw wyczyść bez ruszania editingId
+ filesCompressed=[]; existingImgs=[]; toDeleteImgIds=[]; currentGPS={lat:null,lng:null,addr:null,city:null};
+ document.getElementById('previewGrid').innerHTML='';
+ document.getElementById('existingGrid').innerHTML='';
+ document.getElementById('existingPhotos').classList.add('hidden');
+ document.getElementById('gpsPreview').classList.add('hidden');
+ 
+ editingId=id;
+ document.getElementById('modalTitle').textContent='Edytuj ogłoszenie • ID: '+id.slice(0,8);
+ document.getElementById('brand').value=l.brand||'';
+ // modele
+ const mSel=document.getElementById('model');
+ mSel.innerHTML=`<option value="">Model *</option><option>${l.model||''}</option><option>Inny</option>`;
+ mSel.value=l.model||'';
+ document.getElementById('title').value=l.title||'';
+ document.getElementById('year').value=l.year||'';
+ document.getElementById('mileage').value=l.mileage||'';
+ document.getElementById('engine_capacity').value=l.engine_capacity||'';
+ document.getElementById('power').value=l.power||'';
+ document.getElementById('fuel_type').value=l.fuel_type||'';
+ document.getElementById('transmission').value=l.transmission||'';
+ document.getElementById('body_type').value=l.body_type||'';
+ document.getElementById('color').value=l.color||'';
+ document.getElementById('price').value=l.price||'';
+ document.getElementById('loc').value=l.location||l.city||'';
+ document.getElementById('desc').value=l.description||'';
+
+ if(l.lat && l.lng){
+  currentGPS={lat:l.lat,lng:l.lng,addr:l.full_address||'',city:l.city||''};
+  document.getElementById('gpsLat').textContent=l.lat;
+  document.getElementById('gpsLng').textContent=l.lng;
+  document.getElementById('gpsAddr').textContent=l.full_address||l.lat+','+l.lng;
+  document.getElementById('gpsPreview').classList.remove('hidden');
+  document.getElementById('gpsStatus').textContent='✅ GPS załadowany z ogłoszenia';
+ }
+ existingImgs=l.listing_images||[];
+ toDeleteImgIds=[];
+ renderExisting();
+ updateCount();
+ document.getElementById('addModal').classList.remove('hidden');
+}
+;
 document.getElementById('loginBtn').onclick=async()=>{const e=document.getElementById('email').value,pw=document.getElementById('pass').value;const {error}=await supa.auth.signInWithPassword({email:e,password:pw}); if(error){const {error:er2}=await supa.auth.signUp({email:e,password:pw}); if(er2)alert(er2.message); else alert('Konto utworzone, sprawdź email');} else{document.getElementById('authModal').classList.add('hidden'); refreshUser(); load();}};
 load();
 </script>
