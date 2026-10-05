@@ -173,7 +173,7 @@ function renderListings(data){
  grid.innerHTML=data.map(l=>{
   const img=l.listing_images?.[0]?.image_url||`https://picsum.photos/seed/${l.id}/400/300`;
   const isOwner=currentUser && l.user_id===currentUser.id;
-  return `<div class="bg-white rounded-xl border overflow-hidden hover:shadow-lg transition"><div class="h-44 bg-zinc-100"><img src="${img}" class="w-full h-full object-cover"></div><div class="p-3"><div class="font-bold text-sm line-clamp-2">${(l.brand||'')+' '+(l.model||'')+' '+(l.title||'Brak tytułu')}</div><div class="font-black mt-1 text-lg">${Number(l.price||0).toLocaleString('pl-PL')} zł</div><div class="text-xs text-zinc-500 mt-1">${l.location||l.city||''} ${l.year||''} ${l.mileage?Number(l.mileage).toLocaleString()+'km':''} ${l.lat?'📍':''}</div>${isOwner?`<div class="mt-2 flex gap-2"><button onclick="editListing('${l.id}')" class="flex-1 bg-black text-white text-xs py-2 rounded-lg font-bold">Edytuj</button><button onclick="deleteListing('${l.id}')" class="flex-1 border text-xs py-2 rounded-lg text-red-600">Usuń</button></div>`:''}</div></div>`;
+  return `<div class="bg-white rounded-xl border overflow-hidden hover:shadow-xl transition group"><div onclick="openDetailById('${l.id}')" class="h-44 bg-zinc-100 relative cursor-pointer overflow-hidden"><img src="${img}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300"><div class="absolute top-2 left-2 bg-black/70 text-white text-xs px-2 py-1 rounded-full">📷 ${l.listing_images?.length||1}</div>${l.lat?'<div class="absolute top-2 right-2 bg-blue-600 text-white text-[10px] px-2 py-1 rounded-full">📍 GPS</div>':''}<div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition flex items-center justify-center opacity-0 group-hover:opacity-100"><span class="bg-white/90 text-black text-xs px-3 py-1.5 rounded-full font-bold">🔍 Powiększ</span></div></div><div class="p-3"><div onclick="openDetailById('${l.id}')" class="font-bold text-sm line-clamp-2 cursor-pointer hover:underline">${(l.brand||'')+' '+(l.model||'')+' '+(l.title||'Brak tytułu')}</div><div class="font-black mt-1 text-lg">${Number(l.price||0).toLocaleString('pl-PL')} zł</div><div class="text-xs text-zinc-500 mt-1">${l.location||l.city||''} ${l.year||''} ${l.mileage?Number(l.mileage).toLocaleString()+'km':''}</div>${isOwner?`<div class="mt-2 flex gap-2"><button onclick="editListing('${l.id}')" class="flex-1 bg-black text-white text-xs py-2 rounded-lg font-bold">Edytuj</button><button onclick="deleteListing('${l.id}')" class="flex-1 border text-xs py-2 rounded-lg text-red-600">Usuń</button></div>`:`<button onclick="openDetailById('${l.id}')" class="mt-2 w-full border text-xs py-2 rounded-lg hover:bg-zinc-50">Zobacz ogłoszenie</button>`}</div></div>`;
  }).join('');
 }
 
@@ -274,6 +274,77 @@ async function saveListing(){
  }
 }
 
+
+let detailImgs=[], detailIdx=0, currentDetail=null;
+
+function openDetailById(id){
+ const l=allData.find(x=>x.id===id);
+ if(l) openDetail(l);
+}
+function openDetail(l){
+ currentDetail=l;
+ detailImgs=l.listing_images?.map(x=>x.image_url)||[];
+ if(detailImgs.length===0 && l.image_url) detailImgs=[l.image_url];
+ if(detailImgs.length===0) detailImgs=[`https://picsum.photos/seed/${l.id}/800/600`];
+ detailIdx=0;
+ document.getElementById('detailTitle').textContent=(l.brand||'')+' '+(l.model||'')+' '+(l.title||'');
+ document.getElementById('detailInfo').innerHTML=`
+  <div class="text-3xl font-black">${Number(l.price||0).toLocaleString('pl-PL')} zł</div>
+  <div class="mt-4 space-y-2 text-sm">
+   <div class="grid grid-cols-2 gap-2 bg-zinc-50 p-3 rounded-xl">
+    <div>Marka: <b>${l.brand||'-'}</b></div><div>Model: <b>${l.model||'-'}</b></div>
+    <div>Rok: <b>${l.year||'-'}</b></div><div>Przebieg: <b>${l.mileage?Number(l.mileage).toLocaleString()+' km':'-'}</b></div>
+    <div>Paliwo: <b>${l.fuel_type||'-'}</b></div><div>Skrzynia: <b>${l.transmission||'-'}</b></div>
+    <div>Nadwozie: <b>${l.body_type||'-'}</b></div><div>Moc: <b>${l.power||'-'}</b></div>
+   </div>
+   <div class="text-xs text-zinc-500 mt-3">📍 ${l.full_address||l.city||l.location||'Gorzyce'}</div>
+   ${l.lat?`<div class="mt-2"><a href="https://maps.google.com/?q=${l.lat},${l.lng}" target="_blank" class="text-blue-600 text-sm underline">📍 Zobacz na mapie ${l.lat.toFixed(5)},${l.lng.toFixed(5)}</a></div>`:''}
+   <div class="mt-4"><div class="font-bold text-sm mb-1">Opis:</div><div class="text-sm whitespace-pre-wrap bg-zinc-50 p-3 rounded-xl">${l.description||'Brak opisu'}</div></div>
+   <div class="mt-3 text-xs text-zinc-400">ID: ${l.id.slice(0,8)} • ${new Date(l.created_at).toLocaleDateString('pl-PL')}</div>
+  </div>
+ `;
+ const isOwner=currentUser && l.user_id===currentUser.id;
+ document.getElementById('detailActions').innerHTML=isOwner?
+  `<div class="flex gap-2 mt-4"><button onclick="editListing('${l.id}');closeDetail()" class="flex-1 bg-black text-white py-3 rounded-xl font-bold">✏️ Edytuj</button><button onclick="deleteListing('${l.id}');closeDetail()" class="flex-1 border border-red-200 text-red-600 py-3 rounded-xl font-bold">🗑️ Usuń</button></div><button onclick="closeDetail()" class="w-full mt-2 border py-3 rounded-xl">Zamknij</button>`:
+  `<button class="w-full bg-black text-white py-3 rounded-xl font-bold mt-4">📞 Kontakt ze sprzedającym</button><button onclick="closeDetail()" class="w-full mt-2 border py-3 rounded-xl">Zamknij</button>`;
+ 
+ document.getElementById('detailModal').classList.remove('hidden');
+ showDetailImg();
+ log('Otwarto ogłoszenie '+l.id);
+}
+function closeDetail(){document.getElementById('detailModal').classList.add('hidden'); currentDetail=null;}
+function showDetailImg(){
+ if(!detailImgs.length) return;
+ const img=document.getElementById('detailMain');
+ img.src=detailImgs[detailIdx];
+ img.classList.remove('zoomed');
+ document.getElementById('detailCounter').textContent=(detailIdx+1)+' / '+detailImgs.length;
+ const thumbs=document.getElementById('detailThumbs');
+ thumbs.innerHTML=detailImgs.map((u,i)=>`<img src="${u}" onclick="detailIdx=${i};showDetailImg()" class="w-20 h-20 object-cover rounded-xl border-2 ${i===detailIdx?'border-white':'border-transparent'} cursor-pointer hover:border-white/50">`).join('');
+ document.getElementById('zoomHint').classList.remove('hidden');
+ setTimeout(()=>document.getElementById('zoomHint').classList.add('hidden'),3000);
+}
+function nextImg(){detailIdx=(detailIdx+1)%detailImgs.length; showDetailImg();}
+function prevImg(){detailIdx=(detailIdx-1+detailImgs.length)%detailImgs.length; showDetailImg();}
+function zoomImage(){
+ const main=document.getElementById('detailMain');
+ if(main.classList.contains('zoomed')){main.classList.remove('zoomed');}
+ else {
+  // open fullscreen zoom
+  document.getElementById('zoomImg').src=detailImgs[detailIdx];
+  document.getElementById('zoomModal').classList.remove('hidden');
+ }
+}
+function closeZoom(){document.getElementById('zoomModal').classList.add('hidden'); document.getElementById('detailMain').classList.remove('zoomed');}
+
+// Keyboard navigation
+document.addEventListener('keydown', e=>{
+ if(document.getElementById('detailModal').classList.contains('hidden')) return;
+ if(e.key==='ArrowRight') nextImg();
+ if(e.key==='ArrowLeft') prevImg();
+ if(e.key==='Escape') {if(!document.getElementById('zoomModal').classList.contains('hidden')) closeZoom(); else closeDetail();}
+});
+
 async function doLogin(){
  const e=document.getElementById('email').value, p=document.getElementById('pass').value;
  const st=document.getElementById('authStatus'); st.textContent='Logowanie...';
@@ -286,4 +357,30 @@ async function doLogin(){
 
 (async()=>{await refreshUser(); await load();})();
 </script>
+
+<!-- DETAIL MODAL - POWIĘKSZANIE OGŁOSZENIA -->
+<div id="detailModal" class="hidden fixed inset-0 bg-black z-[100] flex flex-col">
+<div class="flex justify-between items-center p-4 text-white bg-black/80"><div id="detailTitle" class="font-black text-lg"></div><button onclick="closeDetail()" class="w-10 h-10 rounded-full bg-white/20 text-white text-xl">✕</button></div>
+<div class="flex-1 flex flex-col lg:flex-row overflow-hidden">
+<div class="flex-1 bg-black flex items-center justify-center relative p-2">
+<img id="detailMain" class="max-w-full max-h-[65vh] lg:max-h-[85vh] object-contain cursor-zoom-in" onclick="zoomImage()">
+<button onclick="prevImg()" class="absolute left-3 bg-white/20 hover:bg-white/40 text-white w-12 h-12 rounded-full text-2xl">‹</button>
+<button onclick="nextImg()" class="absolute right-3 bg-white/20 hover:bg-white/40 text-white w-12 h-12 rounded-full text-2xl">›</button>
+<div id="detailCounter" class="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/70 text-white px-4 py-1.5 rounded-full text-sm font-bold"></div>
+<div id="zoomHint" class="absolute top-4 left-1/2 -translate-x-1/2 bg-white/90 text-black px-3 py-1 rounded-full text-xs hidden">Kliknij zdjęcie aby powiększyć</div>
+</div>
+<div class="bg-white lg:w-[420px] p-5 overflow-y-auto">
+<div id="detailInfo"></div>
+<div id="detailActions" class="mt-4"></div>
+</div>
+</div>
+<div id="detailThumbs" class="bg-black p-3 flex gap-2 overflow-x-auto"></div>
+</div>
+<div id="zoomModal" class="hidden fixed inset-0 bg-black z-[110] flex items-center justify-center p-4" onclick="closeZoom()"><img id="zoomImg" class="max-w-full max-h-full object-contain"><button class="absolute top-4 right-4 bg-white/20 text-white w-10 h-10 rounded-full">✕</button></div>
+
+<style>
+#detailMain{transition:transform 0.2s}
+#detailMain.zoomed{transform:scale(2); cursor:zoom-out}
+</style>
+
 </body></html>
