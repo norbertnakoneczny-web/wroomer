@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WROOMER.PL</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-[#f7f7f8]">
+<div id="keyBanner" class="bg-red-600 text-white p-4 text-center sticky top-0 z-[100]">
+<div class="max-w-[800px] mx-auto">
+<div class="font-bold">⚠️ Brak klucza Supabase - dlatego nic nie działa</div>
+<div class="text-sm mt-2">Wejdź na supabase.com → Project Settings → API → skopiuj ANON PUBLIC → wklej tutaj:</div>
+<div class="flex gap-2 mt-3 justify-center">
+<input id="anonInput" placeholder="wklej tu ANON KEY eyJ..." class="w-[500px] max-w-[70vw] text-black px-3 py-2 rounded-lg text-sm">
+<button onclick="saveKey()" class="bg-black text-white px-5 py-2 rounded-lg font-bold">Zapisz i odśwież</button>
+</div>
+<div class="text-[11px] mt-2 opacity-80">Na Macu: Cmd+C w Supabase, Cmd+V tutaj</div>
+</div>
+</div>
+
+<header class="bg-white border-b sticky top-0 z-30">
+<div class="max-w-[1440px] mx-auto flex items-center justify-between px-4 py-3">
+<div class="font-black text-[22px]">WROOMER.PL</div>
+<div class="flex gap-2"><button id="blogBtn" class="border px-3 py-2 rounded-lg text-sm">Blog</button><button id="addBtn" class="bg-black text-white px-4 py-2.5 rounded-xl font-bold">+ Dodaj</button><button id="authBtn" class="border px-3 py-2.5 rounded-xl">Zaloguj</button></div>
+</div>
+</header>
+
+<div class="max-w-[1440px] mx-auto p-4">
+<div id="debug" class="bg-white border rounded-xl p-3 mb-4 text-[12px] font-mono"></div>
+<div id="grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"></div>
+<div id="empty" class="hidden text-center py-20"><p class="font-bold">Brak danych - sprawdź debug powyżej</p></div>
+</div>
+
+<script>
+const SUPABASE_URL = "https://rljqnhfogaqdjeirqqdj.supabase.co";
+let anon = localStorage.getItem('wroomer_anon');
+const banner = document.getElementById('keyBanner');
+const debugEl = document.getElementById('debug');
+
+function saveKey(){
+  const v = document.getElementById('anonInput').value.trim();
+  if(v.length<20){alert('Klucz za krótki'); return;}
+  localStorage.setItem('wroomer_anon', v);
+  location.reload();
+}
+
+if(!anon || anon.includes('REPLACE')){
+  banner.classList.remove('hidden');
+  debugEl.innerHTML = '❌ BRAK ANON KEY - wklej klucz powyżej. Aktualnie localStorage pusty.';
+} else {
+  banner.classList.add('hidden');
+}
+
+let supabase = null;
+if(anon){
+  try{
+    supabase = window.supabase.createClient(SUPABASE_URL, anon);
+    debugEl.innerHTML = `🔑 Klucz: ${anon.slice(0,30)}...<br>🌐 URL: ${SUPABASE_URL}<br>⏳ Łączę z Supabase...`;
+  }catch(e){ debugEl.innerHTML = 'Błąd klienta: '+e.message; }
+}
+
+async function test(){
+  if(!supabase){ debugEl.innerHTML += '<br>❌ Brak klienta Supabase'; return; }
+  try{
+    debugEl.innerHTML += '<br>📡 Pobieram settings...';
+    const {data:settings, error:e1} = await supabase.from('settings').select('*').limit(1);
+    if(e1) debugEl.innerHTML += `<br>⚠️ settings error: ${e1.message} (uruchom README.sql!)`;
+    else debugEl.innerHTML += `<br>✅ settings OK: ${settings?.length||0} rekordów`;
+
+    debugEl.innerHTML += '<br>📡 Pobieram listings...';
+    const {data:listings, error:e2} = await supabase.from('listings').select('*, listing_images(*)').order('created_at',{ascending:false});
+    if(e2) throw e2;
+    debugEl.innerHTML += `<br>✅ listings OK: ${listings.length} ogłoszeń`;
+    
+    if(listings.length===0){
+      debugEl.innerHTML += '<br>ℹ️ Baza pusta - wyświetlam demo';
+      render([
+        {id:1,title:'BMW E46 320d TEST - baza działa!', price:12900, location:'Gorzyce', description:'Jeśli widzisz to, baza działa. Zdjęcia osobno w listing_images.', listing_images:[{image_url:'https://images.unsplash.com/photo-1555215695-3004980ad54e?w=600'}], created_at:new Date()},
+        {id:2,title:'VW Golf 4 1.9 TDI - demo', price:8900, location:'Wodzisław', description:'Demo', listing_images:[{image_url:'https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=600'}], created_at:new Date()}
+      ]);
+    } else {
+      render(listings);
+    }
+  }catch(err){
+    debugEl.innerHTML += `<br>❌ BŁĄD: ${err.message}<br>Sprawdź: 1) czy uruchomiłeś README.sql w SQL Editor 2) czy ANON KEY dobry 3) czy RLS policies są`;
+    console.error(err);
+    render([]);
+  }
+}
+
+function render(list){
+  const grid=document.getElementById('grid');
+  grid.innerHTML='';
+  if(list.length===0){document.getElementById('empty').classList.remove('hidden'); return;}
+  list.forEach(l=>{
+    const img=l.listing_images?.[0]?.image_url||'https://via.placeholder.com/400';
+    const div=document.createElement('div');
+    div.className='bg-white border rounded-2xl overflow-hidden';
+    div.innerHTML=`<img src="${img}" class="w-full h-[160px] object-cover"><div class="p-3"><div class="font-bold text-sm">${l.title}</div><div class="font-black">${l.price} PLN</div><div class="text-[11px] text-gray-500">${l.listing_images?.length||0} zdjęć w osobnej tabeli</div></div>`;
+    grid.appendChild(div);
+  });
+}
+
+test();
+
+document.getElementById('anonInput')?.addEventListener('keydown', e=>{ if(e.key==='Enter') saveKey(); });
+</script>
+</body>
+</html>
