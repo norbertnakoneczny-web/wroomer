@@ -1,0 +1,16 @@
+WROOMER.PL - GOTOWIEC ZIP - 5 PAŹ 2026
+
+1. Rozpakuj ZIP - masz luzem 5 plików: index.html, admin.html, vercel.json, sitemap.xml, robots.txt + INSTRUKCJA.txt
+2. Wejdź na GitHub -> Twoje repo wroomer.pl -> Add file -> Upload files
+3. Wrzuć te 5 plików (przeciągnij) - ZAZNACZ overwrite / Replace existing files
+4. Commit -> Vercel sam zrobi deploy 🟢 Ready
+5. NIC nie zmieniaj w vercel.json - już naprawiony, dlatego robots.txt pokazuje 73B Pobrano ✅
+
+Co jest w środku:
+- index.html: pełna strona z sekcjami: Miasta (16), Marki (16), Dlaczego WROOMER, Info prawna + panel admina, szary modal szczegółów na #f5f5f5 / #e5e7eb
+- admin.html: panel admina (demo)
+- vercel.json: poprawiony z rewrites dla sitemap i robots
+- sitemap.xml: 4 URL-e
+- robots.txt: Allow + Sitemap
+
+Po wgraniu: Google Search Console -> Mapy witryn -> za 1-2h będzie 🟢 Sukces.

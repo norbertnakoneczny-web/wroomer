@@ -1,17 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://wroomer.pl/</loc>
-    <lastmod>2026-10-05</lastmod>
-    <priority>1.0</priority>
-  </url>
-  <url>
-    <loc>https://wroomer.pl/blog/jak-sprzedac-auto-za-darmo.html</loc>
-  </url>
-  <url>
-    <loc>https://wroomer.pl/blog/jak-sprawdzic-historie-auta.html</loc>
-  </url>
-  <url>
-    <loc>https://wroomer.pl/blog/ile-wart-jest-moj-samochod.html</loc>
-  </url>
+  <url><loc>https://wroomer.pl/</loc><changefreq>daily</changefreq><priority>1.0</priority></url>
+  <url><loc>https://wroomer.pl/#miasta</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://wroomer.pl/#marki</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://wroomer.pl/admin.html</loc><changefreq>monthly</changefreq><priority>0.3</priority></url>
 </urlset>
