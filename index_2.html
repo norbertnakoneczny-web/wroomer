@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WROOMER.PL</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
+<style>*{font-family:Inter,sans-serif}</style>
+<script type="importmap">
+{"imports":{"@supabase/supabase-js":"https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/+esm"}}
+</script>
+</head>
+<body class="bg-[#f7f7f8] text-black">
+<header class="bg-white border-b sticky top-0 z-30">
+<div class="max-w-[1440px] mx-auto flex items-center justify-between px-4 py-3 gap-2">
+<div class="font-black text-[22px] tracking-tight">WROOMER.PL</div>
+<div class="flex items-center gap-2">
+<button onclick="alert('Blog wkrótce!')" class="text-sm border px-3 py-2 rounded-lg hidden md:block">Blog</button>
+<button onclick="handleAddClick()" class="bg-black text-white px-4 py-2.5 text-sm font-black rounded-xl">+ Dodaj</button>
+<button onclick="handleAuthClick()" id="authBtn" class="border px-3 py-2.5 text-sm rounded-xl bg-white font-bold">Zaloguj</button>
+</div>
+</div>
+</header>
+
+<div class="max-w-[1440px] mx-auto p-4">
+<!-- production -->
+<div id="skeleton" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+<div class="h-[220px] bg-white border rounded-2xl animate-pulse"></div>
+<div class="h-[220px] bg-white border rounded-2xl animate-pulse"></div>
+<div class="h-[220px] bg-white border rounded-2xl animate-pulse"></div>
+<div class="h-[220px] bg-white border rounded-2xl animate-pulse"></div>
+</div>
+<div id="grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 hidden"></div>
+<div id="emptyState" class="hidden text-center py-20">
+<p class="font-bold text-lg">Baza pusta - dodaj pierwsze ogłoszenie</p>
+<button onclick="handleAddClick()" class="mt-4 bg-black text-white px-6 py-3 rounded-xl font-bold">+ Dodaj ogłoszenie</button>
+</div>
+</div>
+
+<!-- DETAIL -->
+<div id="detailModal" class="fixed inset-0 bg-black/70 hidden z-40 overflow-y-auto">
+<div class="min-h-full flex items-start md:items-center justify-center p-0 md:p-6">
+<div class="bg-white w-full max-w-[980px] md:rounded-2xl overflow-hidden">
+<div class="flex justify-between items-center p-4 border-b"><button onclick="closeDetail()" class="border px-3 py-1.5 rounded-lg text-sm">← Wróć</button><div class="font-bold">WROOMER</div></div>
+<div class="grid md:grid-cols-2">
+<div class="relative bg-black"><img id="detailMainImg" class="w-full h-[320px] md:h-[480px] object-contain"><div id="detailThumbs" class="flex gap-2 p-2 overflow-x-auto bg-black"></div></div>
+<div class="p-5"><h1 id="detailTitle" class="font-extrabold text-[22px]"></h1><div id="detailPrice" class="text-[26px] font-black mt-2"></div><div id="detailMeta" class="text-[13px] text-gray-500 mt-2"></div><div id="detailDesc" class="text-[14px] mt-4 whitespace-pre-wrap"></div><div id="detailContact" class="mt-6 p-3 bg-[#f7f7f8] rounded-xl text-sm"></div></div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- ADD -->
+<div id="addModal" class="fixed inset-0 bg-black/60 hidden z-50 overflow-y-auto">
+<div class="min-h-full flex items-center justify-center p-3">
+<div class="bg-white w-full max-w-[560px] rounded-2xl p-5">
+<div class="flex justify-between items-center mb-4"><h2 class="font-bold text-lg">Dodaj ogłoszenie</h2><button onclick="closeAdd()" class="text-xl">×</button></div>
+<input id="addTitle" placeholder="Tytuł np. BMW E46 2.0d 2004" class="w-full border p-3 rounded-xl mb-2 text-sm">
+<input id="addPrice" type="number" placeholder="Cena PLN np. 12900" class="w-full border p-3 rounded-xl mb-2 text-sm">
+<textarea id="addDesc" placeholder="Opis, stan, co wymienione..." rows="4" class="w-full border p-3 rounded-xl mb-2 text-sm"></textarea>
+<input id="addLocation" value="Gorzyce" placeholder="Lokalizacja" class="w-full border p-3 rounded-xl mb-3 text-sm">
+<label class="block text-[13px] font-bold mb-1">Zdjęcia (max 10) - osobna tabela = szybkie!</label>
+<input id="addImages" type="file" accept="image/*" multiple class="w-full text-sm mb-3">
+<div id="addPreview" class="flex gap-2 flex-wrap mb-3"></div>
+<div id="addError" class="hidden bg-red-50 border border-red-200 text-red-700 text-[13px] p-3 rounded-xl mb-3"></div>
+<button onclick="submitListing()" id="submitBtn" class="w-full bg-black text-white p-3.5 rounded-xl font-bold">Opublikuj</button>
+</div>
+</div>
+</div>
+
+<!-- AUTH -->
+<div id="authModal" class="fixed inset-0 bg-black/60 hidden z-[70] flex items-center justify-center p-4">
+<div class="bg-white w-full max-w-[420px] rounded-2xl p-6 relative">
+<button onclick="closeAuth()" class="absolute top-3 right-4 text-xl">×</button>
+<h2 class="text-xl font-black mb-4">Logowanie</h2>
+<div id="loginBox">
+<input id="loginEmail" type="email" placeholder="E-mail" class="w-full border p-3 mb-2 rounded-xl text-sm">
+<input id="loginPass" type="password" placeholder="Hasło" class="w-full border p-3 mb-3 rounded-xl text-sm">
+<div id="loginError" class="hidden bg-red-50 text-red-700 text-[13px] p-3 mb-3 rounded-xl border"></div>
+<button onclick="doLogin()" id="loginBtn" class="w-full bg-black text-white p-3 rounded-xl font-bold">Zaloguj</button>
+<p class="text-[12px] mt-3 text-center"><button onclick="showRegister()" class="underline">Nie masz konta? Załóż</button></p>
+</div>
+<div id="registerBox" class="hidden">
+<input id="regEmail" type="email" placeholder="E-mail" class="w-full border p-3 mb-2 rounded-xl text-sm">
+<input id="regPass" type="password" placeholder="Hasło min 6 znaków" class="w-full border p-3 mb-2 rounded-xl text-sm">
+<div id="regError" class="hidden bg-red-50 text-red-700 text-[13px] p-3 mb-3 rounded-xl border"></div>
+<button onclick="doRegister()" class="w-full bg-black text-white p-3 rounded-xl font-bold">Załóż konto</button>
+<p class="text-[12px] mt-3 text-center"><button onclick="showLogin()" class="underline">Masz konto? Zaloguj</button></p>
+</div>
+</div>
+</div>
+
+<script type="module">
+import { createClient } from '@supabase/supabase-js';
+
+const SUPABASE_URL = "https://rljqnhfogaqdjeirqqdj.supabase.co";
+const SUPABASE_ANON = "sb_publishable_j7CS5xIHzOMBMyvsqVgDmw_GeEek5hX";
+
+let supabase;
+let currentUser=null;
+let listingsCache=[];
+
+function log(msg){ console.log(msg); }
+
+window.closeAdd=()=>document.getElementById('addModal').classList.add('hidden');
+window.closeDetail=()=>document.getElementById('detailModal').classList.add('hidden');
+window.closeAuth=()=>document.getElementById('authModal').classList.add('hidden');
+window.showRegister=()=>{document.getElementById('loginBox').classList.add('hidden');document.getElementById('registerBox').classList.remove('hidden');}
+window.showLogin=()=>{document.getElementById('registerBox').classList.add('hidden');document.getElementById('loginBox').classList.remove('hidden');}
+
+window.handleAuthClick=async()=>{
+  if(currentUser){
+    await supabase.auth.signOut();
+    location.reload();
+  } else {
+    document.getElementById('authModal').classList.remove('hidden');
+    showLogin();
+  }
+};
+
+window.handleAddClick=()=>{
+  if(!currentUser){
+    document.getElementById('authModal').classList.remove('hidden');
+    showLogin();
+    alert('Zaloguj się aby dodać ogłoszenie');
+    return;
+  }
+  document.getElementById('addModal').classList.remove('hidden');
+};
+
+window.doLogin=async()=>{
+  const email=document.getElementById('loginEmail').value;
+  const pass=document.getElementById('loginPass').value;
+  document.getElementById('loginBtn').innerText='Loguję...';
+  const {data,error}=await supabase.auth.signInWithPassword({email,password:pass});
+  if(error){document.getElementById('loginError').innerText=error.message; document.getElementById('loginError').classList.remove('hidden'); document.getElementById('loginBtn').innerText='Zaloguj'; return;}
+  currentUser=data.user; closeAuth(); updateAuthUI(); fetchAll();
+};
+
+window.doRegister=async()=>{
+  const email=document.getElementById('regEmail').value;
+  const pass=document.getElementById('regPass').value;
+  const {data,error}=await supabase.auth.signUp({email,password:pass});
+  if(error){document.getElementById('regError').innerText=error.message; document.getElementById('regError').classList.remove('hidden'); return;}
+  // auto login
+  const {data:loginData, error:loginErr} = await supabase.auth.signInWithPassword({email,password:pass});
+  if(!loginErr){currentUser=loginData.user; closeAuth(); updateAuthUI(); fetchAll();}
+  else alert('Konto założone! Sprawdź maila i zaloguj się.');
+};
+
+function updateAuthUI(){
+  const btn=document.getElementById('authBtn');
+  if(currentUser){btn.innerText='Wyloguj ('+currentUser.email.split('@')[0]+')';}
+  else btn.innerText='Zaloguj';
+}
+
+async function init(){
+  try{
+    document.getElementById('debug').innerHTML=`🔑 Klucz: ${SUPABASE_ANON.slice(0,25)}...<br>🌐 URL: ${SUPABASE_URL}<br>⏳ Inicjalizacja klienta...`;
+    supabase = createClient(SUPABASE_URL, SUPABASE_ANON);
+    log('✅ Klient Supabase OK (v2.45.4 - nowy klucz publishable)');
+
+    const {data:sessionData}=await supabase.auth.getSession();
+    if(sessionData?.session?.user){currentUser=sessionData.session.user; updateAuthUI(); log('✅ Zalogowany: '+currentUser.email);}
+    else log('ℹ️ Niezalogowany - zaloguj się aby dodać');
+
+    supabase.auth.onAuthStateChange((e,session)=>{
+      if(session?.user){currentUser=session.user; updateAuthUI();}
+    });
+
+    await fetchAll();
+  }catch(err){
+    log('❌ BŁĄD INIT: '+err.message);
+  }
+}
+
+async function fetchAll(){
+  try{
+    log('📡 Pobieram listings...');
+    const {data,error}=await supabase.from('listings').select('*, listing_images(*)').order('created_at',{ascending:false});
+    if(error) throw error;
+    listingsCache=data;
+    log(`✅ listings OK: ${data.length} ogłoszeń`);
+    document.getElementById('skeleton').classList.add('hidden');
+    document.getElementById('grid').classList.remove('hidden');
+    if(data.length===0){
+      renderDemo();
+    } else {
+      render(data);
+    }
+  }catch(err){
+    log(`❌ BŁĄD BAZY: ${err.message}<br>→ Uruchom README.sql w Supabase SQL Editor<br>→ Sprawdź czy bucket 'ogloszenia' jest publiczny`);
+    document.getElementById('skeleton').classList.add('hidden');
+    document.getElementById('grid').classList.remove('hidden');
+    renderDemo(err.message);
+  }
+}
+
+function renderDemo(errMsg=''){
+  render([
+    {id:1,title:'BMW E46 320d 150KM - BAZA DZIAŁA! (demo)', price:12900, location:'Gorzyce', description: (errMsg? 'Błąd bazy: '+errMsg+'\n\n':'')+'Jeśli widzisz to demo, strona działa! Kliknij + Dodaj aby dodać prawdziwe ogłoszenie. Zdjęcia są w osobnej tabeli listing_images = szybkie ładowanie.', listing_images:[{image_url:'https://images.unsplash.com/photo-1555215695-3004980ad54e?w=600'}], created_at:new Date(), user_email:'demo@wroomer.pl'},
+    {id:2,title:'VW Golf 4 1.9 TDI 101KM - demo', price:8900, location:'Wodzisław Śl.', description:'Demo. Dodaj swoje ogłoszenie!', listing_images:[{image_url:'https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=600'}], created_at:new Date(), user_email:'demo@wroomer.pl'}
+  ]);
+}
+
+function render(list){
+  const grid=document.getElementById('grid');
+  grid.innerHTML='';
+  if(list.length===0){document.getElementById('emptyState').classList.remove('hidden'); return;} else document.getElementById('emptyState').classList.add('hidden');
+  list.forEach(l=>{
+    const img=l.listing_images?.[0]?.image_url||l.image_url||'https://via.placeholder.com/400x300?text=WROOMER';
+    const card=document.createElement('div');
+    card.className='bg-white border rounded-2xl overflow-hidden cursor-pointer hover:shadow-xl transition';
+    card.innerHTML=`<div class="relative"><img src="${img}" loading="lazy" class="w-full h-[170px] md:h-[200px] object-cover"><div class="absolute top-2 left-2 bg-black/80 text-white text-[10px] px-2 py-0.5 rounded-full">${l.listing_images?.length||1} zdjęć • osobna tabela</div></div><div class="p-3"><div class="font-bold text-[13px] line-clamp-2 leading-tight min-h-[36px]">${l.title}</div><div class="font-black text-[17px] mt-1">${Number(l.price).toLocaleString('pl-PL')} PLN</div><div class="text-[11px] text-gray-500 mt-1">${l.location||''} • ${new Date(l.created_at).toLocaleDateString('pl-PL')}</div></div>`;
+    card.onclick=()=>openDetail(l);
+    grid.appendChild(card);
+  });
+}
+
+
+let currentDetailId=null;
+let currentDetailListing=null;
+window.deleteListing=async()=>{
+  if(!currentDetailId) return;
+  if(!confirm('Zamknąć / usunąć ogłoszenie ID '+currentDetailId+'?')) return;
+  try{
+    const btn=document.querySelector('#ownerActions button');
+    if(btn){btn.innerText='Usuwam...'; btn.disabled=true;}
+    await supabase.from('listing_images').delete().eq('listing_id',currentDetailId);
+    const {error}=await supabase.from('listings').delete().eq('id',currentDetailId);
+    if(error) throw error;
+    alert('✅ Ogłoszenie usunięte'); closeDetail(); fetchAll();
+  }catch(err){alert('Błąd: '+err.message);}
+};
+
+window.openDetail=(l)=>{
+ currentDetailId=l.id; currentDetailListing=l;
+
+  const imgs = l.listing_images?.map(i=>i.image_url) || [l.image_url].filter(Boolean);
+  document.getElementById('detailTitle').innerText=l.title;
+  document.getElementById('detailPrice').innerText=Number(l.price).toLocaleString('pl-PL')+' PLN';
+  document.getElementById('detailMeta').innerText=`${l.location||''} • ${new Date(l.created_at).toLocaleDateString()} • ID ${l.id} • ${imgs.length} zdjęć`;
+  document.getElementById('detailDesc').innerText=l.description||'';
+  document.getElementById('detailContact').innerHTML=`Kontakt: <b>${l.user_email||'zalogowany'}</b>`;
+  document.getElementById('detailMainImg').src=imgs[0]||'';
+  const thumbs=document.getElementById('detailThumbs'); thumbs.innerHTML='';
+  imgs.forEach((src,i)=>{
+    const t=document.createElement('img'); t.src=src; t.className='w-[56px] h-[56px] object-cover rounded-lg border-2 cursor-pointer '+(i===0?'border-white':'border-transparent');
+    t.onclick=()=>{document.getElementById('detailMainImg').src=src;}; thumbs.appendChild(t);
+  });
+  const ownerDiv=document.getElementById('ownerActions'); if(currentUser && l.user_id===currentUser.id){ownerDiv.classList.remove('hidden');}else{ownerDiv.classList.add('hidden');} document.getElementById('detailModal').classList.remove('hidden');
+};
+
+window.submitListing=async()=>{
+  const title=document.getElementById('addTitle').value.trim();
+  const price=parseInt(document.getElementById('addPrice').value);
+  const desc=document.getElementById('addDesc').value;
+  const loc=document.getElementById('addLocation').value;
+  const files=[...document.getElementById('addImages').files];
+  const errEl=document.getElementById('addError');
+  if(!title||!price){errEl.innerText='Tytuł i cena wymagane'; errEl.classList.remove('hidden'); return;}
+  document.getElementById('submitBtn').innerText='Zapisuję...'; document.getElementById('submitBtn').disabled=true;
+  try{
+    const {data:listing, error:insErr}=await supabase.from('listings').insert({title, price, description:desc, location:loc, user_id:currentUser.id, user_email:currentUser.email}).select().single();
+    if(insErr) throw insErr;
+    for(let i=0;i<files.length;i++){
+      const file=files[i];
+      const path=`${listing.id}/${Date.now()}_${i}_${file.name.replace(/[^a-zA-Z0-9._-]/g,'_')}`;
+      const {error:upErr}=await supabase.storage.from('ogloszenia').upload(path,file);
+      if(upErr) throw upErr;
+      const {data:pub}=supabase.storage.from('ogloszenia').getPublicUrl(path);
+      await supabase.from('listing_images').insert({listing_id:listing.id, image_url:pub.publicUrl, position:i});
+    }
+    alert('✅ Opublikowano! (zdjęcia w osobnej tabeli - szybkie ładowanie)');
+    closeAdd(); fetchAll();
+  }catch(err){
+    errEl.innerText='Błąd: '+err.message;
+    errEl.classList.remove('hidden');
+  }finally{document.getElementById('submitBtn').innerText='Opublikuj'; document.getElementById('submitBtn').disabled=false;}
+};
+
+document.getElementById('addImages')?.addEventListener('change', e=>{
+  const preview=document.getElementById('addPreview'); preview.innerHTML='';
+  [...e.target.files].forEach(f=>{
+    const url=URL.createObjectURL(f);
+    const img=document.createElement('img'); img.src=url; img.className='w-[60px] h-[60px] object-cover rounded-lg border'; preview.appendChild(img);
+  });
+});
+
+init();
+</script>
+
+<footer class="max-w-[1440px] mx-auto p-6 text-[12px] text-gray-500 text-center border-t mt-10">
+<a href="/o-nas.html" class="underline mx-2">O nas</a>
+<a href="/regulamin.html" class="underline mx-2">Regulamin</a>
+<a href="/polityka-prywatnosci.html" class="underline mx-2">Polityka Prywatności</a>
+<a href="/kontakt.html" class="underline mx-2">Kontakt</a>
+<div class="mt-2">© 2026 WROOMER.PL - Gorzyce</div>
+</footer>
+</body>
+</html>
