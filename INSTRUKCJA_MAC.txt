@@ -1,0 +1,15 @@
+
+WROOMER - INSTRUKCJA MAC - ZERO EDYTOWANIA PLIKU
+
+1. POBRANE -> rozpakuj wroomer_mac.zip (klik 2x)
+2. Wejdz na vercel.com -> Twoj projekt -> przeciagnij index.html z Findera (drag & drop)
+3. Otworz swoja strone WROOMER.PL -> wyskoczy okienko "Wklej tu swoj ANON KEY"
+4. Wejdz na supabase.com -> Project Settings -> API -> skopiuj anon public (Cmd+C)
+5. Wklej w okienko na stronie (Cmd+V) -> OK
+6. Gotowe! Strona zapamieta klucz, nie musisz nic edytowac w TextEdit.
+
+Jesli chcesz zmienic klucz pozniej: na dole strony w sidebarze jest przycisk "Wklej nowy ANON KEY"
+
+SQL: tak jak wczesniej - SQL Editor -> wklej README.sql -> RUN
+
+To wszystko - dziala na Macu bez TextEdit.
