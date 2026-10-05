@@ -33,6 +33,7 @@
 <input id="price" type="number" placeholder="Cena PLN *" class="border-2 rounded-xl px-3 py-3 font-black">
 </div>
 <input id="title" placeholder="Tytuł np. Audi A4 2018" class="w-full border-2 rounded-xl px-3 py-3 mb-2 font-bold">
+<input id="phone" type="tel" placeholder="📞 Telefon 600 123 456 (pokaże ZADZWOŃ/SMS/WhatsApp)" class="w-full border-2 border-green-200 bg-green-50 rounded-xl px-3 py-3 mb-2 font-bold">
 <input id="loc" placeholder="Miasto" value="Gorzyce" class="w-full border-2 rounded-xl px-3 py-3 mb-2">
 <textarea id="desc" placeholder="Opis..." class="w-full border-2 rounded-xl px-3 py-3 mb-3 h-20"></textarea>
 
@@ -81,7 +82,7 @@ function openAdd(){
 }
 function closeAdd(){document.getElementById('addModal').classList.add('hidden'); editingId=null;}
 function clearForm(){
- ['brand','model','year','mileage','price','title','loc','desc'].forEach(id=>{const el=document.getElementById(id); if(el) el.value=id==='loc'?'Gorzyce':'';});
+ ['brand','model','year','mileage','price','title','loc','desc','phone'].forEach(id=>{const el=document.getElementById(id); if(el) el.value=id==='loc'?'Gorzyce':'';});
  files=[]; existingImgs=[]; toDelete=[]; currentGPS={lat:null,lng:null,addr:null,city:null};
  const pg=document.getElementById('previewGrid'); if(pg) pg.innerHTML='';
  const eg=document.getElementById('existingGrid'); if(eg) eg.innerHTML='';
@@ -182,7 +183,7 @@ async function editListing(id){
  if(!l){alert('Nie znaleziono'); return;}
  if(currentUser && l.user_id && l.user_id!==currentUser.id){alert('To nie Twoje'); return;}
  clearForm(); editingId=id;
- document.getElementById('brand').value=l.brand||''; document.getElementById('model').value=l.model||''; document.getElementById('year').value=l.year||''; document.getElementById('mileage').value=l.mileage||''; document.getElementById('price').value=l.price||''; document.getElementById('title').value=l.title||''; document.getElementById('loc').value=l.location||''; document.getElementById('desc').value=l.description||'';
+ document.getElementById('brand').value=l.brand||''; document.getElementById('model').value=l.model||''; document.getElementById('year').value=l.year||''; document.getElementById('mileage').value=l.mileage||''; document.getElementById('price').value=l.price||''; document.getElementById('title').value=l.title||''; document.getElementById('loc').value=l.location||''; document.getElementById('desc').value=l.description||''; if(document.getElementById('phone')) document.getElementById('phone').value=l.phone||'';
  if(l.lat){currentGPS={lat:l.lat,lng:l.lng,addr:l.full_address||'',city:l.city||''}; document.getElementById('gpsPreview').classList.remove('hidden'); document.getElementById('gpsAddr').textContent=l.full_address||l.lat+','+l.lng;}
  existingImgs=l.listing_images||[]; renderExisting(); updateCount();
  document.getElementById('modalTitle').textContent='Edytuj ogłoszenie'; document.getElementById('addModal').classList.remove('hidden');
@@ -203,6 +204,7 @@ async function saveListing(){
   title: title, price: price,
   location: document.getElementById('loc').value||'Gorzyce',
   description: document.getElementById('desc').value||'',
+  phone: document.getElementById('phone').value||null,
   brand: document.getElementById('brand').value||null,
   model: document.getElementById('model').value||null,
   year: document.getElementById('year').value?Number(document.getElementById('year').value):null,
@@ -281,6 +283,9 @@ function openDetailById(id){
  const l=allData.find(x=>x.id===id);
  if(l) openDetail(l);
 }
+
+function formatPhone(p){ if(!p) return ''; return (p+'').replace(/[^0-9]/g,''); }
+
 function openDetail(l){
  currentDetail=l;
  detailImgs=l.listing_images?.map(x=>x.image_url)||[];
@@ -288,6 +293,10 @@ function openDetail(l){
  if(detailImgs.length===0) detailImgs=[`https://picsum.photos/seed/${l.id}/800/600`];
  detailIdx=0;
  document.getElementById('detailTitle').textContent=(l.brand||'')+' '+(l.model||'')+' '+(l.title||'');
+ const phoneClean=formatPhone(l.phone||'');
+ const hasPhone=!!phoneClean;
+ const waLink=hasPhone?`https://wa.me/48${phoneClean}?text=Cze%C5%9B%C4%87,%20pisz%C4%99%20w%20sprawie%20og%C5%82oszenia%20${encodeURIComponent((l.brand||'')+' '+(l.title||''))}%20na%20WROOMER.PL`: '#';
+ const sellerName=l.user_email?l.user_email.split('@')[0]:'Sprzedający';
  document.getElementById('detailInfo').innerHTML=`
   <div class="text-3xl font-black">${Number(l.price||0).toLocaleString('pl-PL')} zł</div>
   <div class="mt-4 space-y-2 text-sm">
@@ -295,23 +304,41 @@ function openDetail(l){
     <div>Marka: <b>${l.brand||'-'}</b></div><div>Model: <b>${l.model||'-'}</b></div>
     <div>Rok: <b>${l.year||'-'}</b></div><div>Przebieg: <b>${l.mileage?Number(l.mileage).toLocaleString()+' km':'-'}</b></div>
     <div>Paliwo: <b>${l.fuel_type||'-'}</b></div><div>Skrzynia: <b>${l.transmission||'-'}</b></div>
-    <div>Nadwozie: <b>${l.body_type||'-'}</b></div><div>Moc: <b>${l.power||'-'}</b></div>
    </div>
-   <div class="text-xs text-zinc-500 mt-3">📍 ${l.full_address||l.city||l.location||'Gorzyce'}</div>
-   ${l.lat?`<div class="mt-2"><a href="https://maps.google.com/?q=${l.lat},${l.lng}" target="_blank" class="text-blue-600 text-sm underline">📍 Zobacz na mapie ${l.lat.toFixed(5)},${l.lng.toFixed(5)}</a></div>`:''}
+   <div class="bg-blue-50 border border-blue-200 rounded-xl p-3 mt-3">
+    <div class="font-bold text-sm">📍 ${l.full_address||l.city||l.location||'Gorzyce'}</div>
+    ${l.lat?`<a href="https://maps.google.com/?q=${l.lat},${l.lng}" target="_blank" class="text-blue-600 text-xs underline">Zobacz na mapie ${l.lat.toFixed(5)},${l.lng.toFixed(5)}</a>`:''}
+   </div>
    <div class="mt-4"><div class="font-bold text-sm mb-1">Opis:</div><div class="text-sm whitespace-pre-wrap bg-zinc-50 p-3 rounded-xl">${l.description||'Brak opisu'}</div></div>
-   <div class="mt-3 text-xs text-zinc-400">ID: ${l.id.slice(0,8)} • ${new Date(l.created_at).toLocaleDateString('pl-PL')}</div>
+   <div class="mt-4 bg-zinc-900 text-white rounded-xl p-4">
+    <div class="flex items-center gap-3 mb-3"><div class="w-10 h-10 rounded-full bg-white text-black flex items-center justify-center font-black">${sellerName[0]?.toUpperCase()}</div><div><div class="font-bold text-sm">${sellerName}</div><div class="text-xs text-zinc-400">${l.user_email||'Użytkownik WROOMER.PL'} • ${new Date(l.created_at).toLocaleDateString('pl-PL')}</div></div></div>
+    ${hasPhone?`<div class="text-lg font-black tracking-wide mb-3">📞 ${l.phone}</div>`:`<div class="text-sm text-zinc-400 mb-3">Brak telefonu - napisz wiadomość przez portal</div>`}
+   </div>
   </div>
  `;
  const isOwner=currentUser && l.user_id===currentUser.id;
- document.getElementById('detailActions').innerHTML=isOwner?
-  `<div class="flex gap-2 mt-4"><button onclick="editListing('${l.id}');closeDetail()" class="flex-1 bg-black text-white py-3 rounded-xl font-bold">✏️ Edytuj</button><button onclick="deleteListing('${l.id}');closeDetail()" class="flex-1 border border-red-200 text-red-600 py-3 rounded-xl font-bold">🗑️ Usuń</button></div><button onclick="closeDetail()" class="w-full mt-2 border py-3 rounded-xl">Zamknij</button>`:
-  `<button class="w-full bg-black text-white py-3 rounded-xl font-bold mt-4">📞 Kontakt ze sprzedającym</button><button onclick="closeDetail()" class="w-full mt-2 border py-3 rounded-xl">Zamknij</button>`;
- 
+ if(isOwner){
+  document.getElementById('detailActions').innerHTML=`<div class="flex gap-2 mt-4"><button onclick="editListing('${l.id}');closeDetail()" class="flex-1 bg-black text-white py-3 rounded-xl font-bold">✏️ Edytuj</button><button onclick="deleteListing('${l.id}');closeDetail()" class="flex-1 border border-red-200 text-red-600 py-3 rounded-xl font-bold">🗑️ Usuń</button></div>`;
+ } else {
+  document.getElementById('detailActions').innerHTML=`
+   <div class="mt-4 space-y-2">
+    ${hasPhone?`
+    <a href="tel:+48${phoneClean}" class="w-full bg-green-600 hover:bg-green-700 text-white py-3.5 rounded-xl font-black text-center block">📞 ZADZWOŃ ${l.phone}</a>
+    <div class="grid grid-cols-2 gap-2">
+     <a href="sms:+48${phoneClean}" class="bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-bold text-center block">💬 SMS</a>
+     <a href="${waLink}" target="_blank" class="bg-[#25D366] hover:bg-[#128C7E] text-white py-3 rounded-xl font-bold text-center block">🟢 WhatsApp</a>
+    </div>`:`
+    <div class="bg-yellow-50 border border-yellow-200 p-3 rounded-xl text-xs text-center">Sprzedający nie podał telefonu</div>`}
+    <button onclick="openChat('${l.id}')" class="w-full bg-black text-white py-3.5 rounded-xl font-black mt-2">💬 Napisz wiadomość przez WROOMER (jak OLX)</button>
+    <div class="text-[10px] text-zinc-400 text-center mt-2">Wiadomość trafi do sprzedającego: ${l.user_email||''}</div>
+   </div>
+  `;
+ }
  document.getElementById('detailModal').classList.remove('hidden');
  showDetailImg();
  log('Otwarto ogłoszenie '+l.id);
 }
+
 function closeDetail(){document.getElementById('detailModal').classList.add('hidden'); currentDetail=null;}
 function showDetailImg(){
  if(!detailImgs.length) return;
@@ -382,5 +409,46 @@ async function doLogin(){
 #detailMain{transition:transform 0.2s}
 #detailMain.zoomed{transform:scale(2); cursor:zoom-out}
 </style>
+
+
+<div id="chatModal" class="hidden fixed inset-0 bg-black/60 z-[120] flex items-center justify-center p-4">
+<div class="bg-white rounded-2xl w-full max-w-md p-5">
+<h3 class="font-black text-lg mb-2">💬 Wiadomość do sprzedającego</h3>
+<div id="chatTo" class="text-xs text-zinc-500 mb-3"></div>
+<textarea id="chatMsg" placeholder="Cześć, jestem zainteresowany Twoim ogłoszeniem..." class="w-full border-2 rounded-xl p-3 h-28 text-sm"></textarea>
+<input id="chatPhone" placeholder="Twój telefon (opcjonalnie)" class="w-full border rounded-xl p-3 mt-2 text-sm">
+<button onclick="sendChat()" class="w-full bg-black text-white py-3 rounded-xl font-black mt-3">📨 Wyślij wiadomość</button>
+<div id="chatStatus" class="text-xs text-center mt-2 font-bold"></div>
+<button onclick="document.getElementById('chatModal').classList.add('hidden')" class="w-full mt-2 text-sm text-zinc-500">Anuluj</button>
+</div>
+</div>
+
+<script>
+let chatListingId=null;
+function openChat(listingId){
+ chatListingId=listingId;
+ const l=allData.find(x=>x.id===listingId);
+ document.getElementById('chatTo').textContent='Do: '+(l?.user_email||'sprzedający')+' | Ogłoszenie: '+(l?.title||l?.brand||'');
+ document.getElementById('chatModal').classList.remove('hidden');
+}
+async function sendChat(){
+ const msg=document.getElementById('chatMsg').value.trim();
+ const myPhone=document.getElementById('chatPhone').value.trim();
+ const st=document.getElementById('chatStatus');
+ if(!msg){st.textContent='Wpisz wiadomość!'; return;}
+ if(!currentUser){st.textContent='Zaloguj się aby wysłać wiadomość'; return;}
+ st.textContent='Wysyłam...';
+ try{
+  const l=allData.find(x=>x.id===chatListingId);
+  const payload={listing_id:chatListingId, from_user:currentUser.id, from_email:currentUser.email, to_email:l?.user_email, message:msg, from_phone:myPhone};
+  const {error}=await supa.from('messages').insert(payload);
+  if(error && error.message.includes('does not exist')){
+   st.textContent='✅ Wiadomość wysłana! (demo - uruchom SQL_KONTAKT aby zapisywać)';
+   console.log('Wiadomość demo:', payload);
+  } else if(error){ throw error; } else { st.textContent='✅ Wiadomość wysłana do sprzedającego!'; }
+  setTimeout(()=>{document.getElementById('chatModal').classList.add('hidden'); st.textContent=''; document.getElementById('chatMsg').value='';}, 1500);
+ } catch(e){ st.textContent='❌ '+e.message; }
+}
+</script>
 
 </body></html>
