@@ -1,3 +1,9 @@
 User-agent: *
 Allow: /
+
+# Sitemaps
 Sitemap: https://www.wroomer.pl/sitemap.xml
+
+# Disallow admin
+Disallow: /admin/
+Disallow: /auth/
