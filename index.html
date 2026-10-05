@@ -1,227 +1,93 @@
 <!DOCTYPE html>
 <html lang="pl">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>WROOMER.PL - Ogłoszenia motoryzacyjne</title>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>WROOMER.PL</title>
 <script src="https://cdn.tailwindcss.com"></script>
-<style>
-.auth-tab-active{border-bottom:2px solid black;font-weight:700}
-</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 </head>
-<body class="bg-[#f5f5f5] font-sans">
-<header class="bg-white border-b sticky top-0 z-20">
-<div class="max-w-[1400px] mx-auto flex items-center justify-between p-3 px-4">
-<div class="font-black text-xl">WROOMER.PL</div>
-<div class="flex gap-2">
-<button id="addBtn" class="bg-black text-white px-4 py-2 text-sm font-bold">Dodaj ogłoszenie</button>
-<button id="authBtn" class="border px-4 py-2 text-sm">Zaloguj</button>
-</div>
-</div>
-</header>
+<body class="bg-[#f7f7f8] min-h-screen">
+<header class="bg-white border-b sticky top-0 z-50"><div class="max-w-[1440px] mx-auto px-4 py-3 flex justify-between items-center">
+<span class="font-black text-xl tracking-tighter">WROOMER.PL</span>
+<div class="flex gap-2"><button id="addBtn" class="bg-black text-white px-4 py-2 rounded text-sm font-bold">Dodaj ogłoszenie</button><button id="authBtn" class="border px-4 py-2 rounded text-sm">Zaloguj</button></div>
+</div></header>
+<main class="max-w-[1440px] mx-auto p-4"><div id="status" class="text-[12px] text-gray-500 mb-2"></div><div id="listingsGrid" class="grid grid-cols-1 md:grid-cols-3 gap-4"></div><div id="emptyState" class="hidden text-center py-20 text-gray-500">Brak ogłoszeń - zaloguj się i dodaj pierwsze!<br><button onclick="document.getElementById('addBtn').click()" class="mt-4 bg-black text-white px-4 py-2 rounded">+ Dodaj</button></div></div></main>
 
-<main class="max-w-[1400px] mx-auto p-4">
-<div id="grid" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4"></div>
-</main>
+<div id="addModal" class="hidden fixed inset-0 bg-black/50 z-[60] flex items-center justify-center p-4"><div class="bg-white rounded-2xl max-w-lg w-full p-6"><div class="flex justify-between mb-4"><h2 class="font-black">Dodaj</h2><button onclick="closeAdd()" class="text-2xl">×</button></div>
+<input id="addTitle" placeholder="Tytuł" class="w-full border rounded-xl p-3 text-sm mb-2">
+<textarea id="addDesc" placeholder="Opis" class="w-full border rounded-xl p-3 text-sm mb-2 h-24"></textarea>
+<div class="grid grid-cols-2 gap-2 mb-2"><input id="addPrice" type="number" placeholder="Cena" class="border rounded-xl p-3 text-sm"><input id="addLocation" placeholder="Miejscowość" class="border rounded-xl p-3 text-sm"></div>
+<input id="addImages" type="file" multiple accept="image/*" class="w-full text-sm mb-3">
+<button id="submitAdd" class="w-full bg-black text-white rounded-xl p-3 font-bold text-sm">Opublikuj</button>
+</div></div>
 
-<!-- AUTH MODAL -->
-<div id="authModal" class="fixed inset-0 bg-black/60 hidden z-50 flex items-center justify-center p-4">
-<div class="bg-white w-full max-w-[420px] rounded-xl p-6 relative">
-<button onclick="closeAuthModal()" class="absolute top-3 right-4 text-xl">×</button>
-<h2 id="authTitle" class="text-xl font-bold mb-4">Logowanie</h2>
+<div id="authModal" class="hidden fixed inset-0 bg-black/50 z-[60] flex items-center justify-center p-4"><div class="bg-white rounded-2xl max-w-sm w-full p-6"><h2 class="font-black mb-4" id="authTitle">Zaloguj</h2><input id="authEmail" placeholder="Email" class="w-full border rounded-xl p-3 text-sm mb-2"><input id="authPass" type="password" placeholder="Hasło" class="w-full border rounded-xl p-3 text-sm mb-2"><input id="authLoc" placeholder="Miejscowość" class="w-full border rounded-xl p-3 text-sm mb-3 hidden"><button id="authSubmit" class="w-full bg-black text-white rounded-xl p-3 font-bold text-sm">Zaloguj</button><button id="authSwitch" class="w-full mt-2 text-[12px] underline">Nie masz konta? Zarejestruj</button><p id="authMsg" class="text-[12px] mt-2 text-center text-red-600"></p><button onclick="closeAuth()" class="w-full mt-2 text-[12px]">Zamknij</button></div></div>
 
-<div class="flex gap-6 border-b mb-4 text-sm">
-<button id="tabLogin" onclick="switchTab('login')" class="pb-2 auth-tab-active">Logowanie</button>
-<button id="tabRegister" onclick="switchTab('register')" class="pb-2">Rejestracja</button>
-<button id="tabReset" onclick="switchTab('reset')" class="pb-2">Reset</button>
-</div>
-
-<!-- LOGIN -->
-<div id="loginTab" class="auth-tab-content">
-<input id="loginEmail" type="email" placeholder="E-mail" class="w-full border p-3 mb-2 rounded">
-<input id="loginPass" type="password" placeholder="Hasło" class="w-full border p-3 mb-3 rounded">
-<div id="loginError" class="hidden bg-red-50 text-red-700 text-[13px] p-3 mb-3 rounded border border-red-200"></div>
-<button onclick="doLogin()" class="w-full bg-black text-white p-3 font-bold rounded">Zaloguj</button>
-</div>
-
-<!-- REGISTER -->
-<div id="registerTab" class="auth-tab-content hidden">
-<input id="regEmail" type="email" placeholder="E-mail" class="w-full border p-3 mb-2 rounded">
-<input id="regPass" type="password" placeholder="Hasło (min. 6 znaków)" class="w-full border p-3 mb-2 rounded">
-<label class="flex gap-2 text-[12px] mb-3"><input type="checkbox" id="regRules">Akceptuję regulamin WROOMER.PL</label>
-<div id="regError" class="hidden bg-red-50 text-red-700 text-[13px] p-3 mb-3 rounded border border-red-200"></div>
-<button onclick="doRegister()" class="w-full bg-black text-white p-3 font-bold rounded">Załóż konto</button>
-<p class="text-[11px] text-gray-500 mt-3">ℹ️ Rejestracja bez potwierdzania e-mail — po kliknięciu Załóż konto jesteś od razu zalogowany (tryb testowy).</p>
-</div>
-
-<!-- RESET REQUEST -->
-<div id="resetTab" class="auth-tab-content hidden">
-<p class="text-[13px] text-gray-600 mb-3">Podaj e-mail, wyślemy link do resetu hasła z tytułem <b>WROOMER reset hasła</b>.</p>
-<input id="resetEmail" type="email" placeholder="Twój e-mail" class="w-full border p-3 mb-3 rounded">
-<div id="resetInfo" class="hidden text-[13px] p-3 mb-3 rounded"></div>
-<button onclick="doReset()" class="w-full bg-black text-white p-3 font-bold rounded">Wyślij link resetujący</button>
-</div>
-
-<!-- NEW PASSWORD - PO KLIKNIĘCIU Z MAILA -->
-<div id="newPasswordTab" class="auth-tab-content hidden">
-<h3 class="font-bold mb-2">Ustaw nowe hasło</h3>
-<p class="text-[13px] text-gray-600 mb-3">Wpisz nowe hasło dla konta <span id="recoveryEmail" class="font-bold"></span></p>
-<input id="newPasswordInput" type="password" placeholder="Nowe hasło (min. 6 znaków)" class="w-full border p-3 mb-3 rounded">
-<div id="newPassError" class="hidden bg-red-50 text-red-700 text-[13px] p-3 mb-3 rounded"></div>
-<button onclick="setNewPassword()" class="w-full bg-black text-white p-3 font-bold rounded">Zapisz nowe hasło</button>
-</div>
-
-<div class="mt-6 border-t pt-3 text-[11px] text-gray-500">
-ℹ️ Po rejestracji <b>musisz potwierdzić e-mail</b> jeśli włączysz Confirm email w Supabase. W trybie testowym logowanie jest od razu.
-</div>
-
-</div>
-</div>
+<div id="detailModal" class="hidden fixed inset-0 bg-black/50 z-[60] flex items-center justify-center p-4"><div class="bg-white rounded-2xl max-w-xl w-full p-6 relative"><button onclick="closeDetail()" class="absolute top-4 right-4 text-2xl">×</button><h2 id="detailTitle" class="font-black text-xl"></h2><p id="detailPrice" class="font-black mt-2"></p><p id="detailMeta" class="text-[12px] text-gray-500"></p><p id="detailDesc" class="text-sm mt-4"></p><div id="ownerActions" class="hidden mt-4"><button onclick="deleteListing()" class="w-full bg-red-600 text-white p-2 rounded">🗑️ Usuń</button></div></div></div>
 
 <script>
-// KONFIG - PODMIEN NA SWOJE JESLI INNE
-const SUPABASE_URL = "https://rljqnhfogaqdjeirqqdj.supabase.co";
-const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJsanFuaGZvZ2FxZGplaXJxcWRqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mjc3NDE1NzYsImV4cCI6MjA0MzMxNzU3Nn0.TU_DUZAQ_placeholder";
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+const SUPABASE_URL='https://bdpydgsfowtuvjnkyeeg.supabase.co';
+const ANON_KEY='sb_publishable_S1qH_mBZaX7-bzmfJ0IVGA_6hxGbJWd';
+const supabase = window.supabase.createClient(SUPABASE_URL, ANON_KEY);
+let currentUser=null, currentDetailId=null, isLoginMode=true;
 
-function openAuthModal(){document.getElementById('authModal').classList.remove('hidden')}
-function closeAuthModal(){document.getElementById('authModal').classList.add('hidden'); window.location.hash='';}
-function switchTab(t){
- document.querySelectorAll('.auth-tab-content').forEach(e=>e.style.display='none');
- document.getElementById(t+'Tab').style.display='block';
- document.querySelectorAll('[id^=tab]').forEach(b=>b.classList.remove('auth-tab-active'));
- document.getElementById('tab'+t.charAt(0).toUpperCase()+t.slice(1)).classList.add('auth-tab-active');
- document.getElementById('authTitle').innerText = t==='login'?'Logowanie': t==='register'?'Rejestracja': t==='reset'?'Reset hasła':'Ustaw nowe hasło';
+async function checkAuth(){const {data}=await supabase.auth.getUser(); currentUser=data.user; document.getElementById('authBtn').innerText=currentUser ? 'Wyloguj ('+currentUser.email.split('@')[0]+')' : 'Zaloguj';}
+document.getElementById('authBtn').onclick=()=>{ if(currentUser){supabase.auth.signOut().then(()=>{currentUser=null; checkAuth();});} else openAuth();};
+function openAuth(){document.getElementById('authModal').classList.remove('hidden');}
+function closeAuth(){document.getElementById('authModal').classList.add('hidden');}
+function openAdd(){ if(!currentUser){ openAuth(); document.getElementById('authMsg').innerText='Zaloguj się'; return;} document.getElementById('addModal').classList.remove('hidden');}
+function closeAdd(){document.getElementById('addModal').classList.add('hidden');}
+function closeDetail(){document.getElementById('detailModal').classList.add('hidden');}
+document.getElementById('addBtn').onclick=openAdd;
+document.getElementById('authSwitch').onclick=()=>{isLoginMode=!isLoginMode; document.getElementById('authTitle').innerText=isLoginMode?'Zaloguj':'Zarejestruj'; document.getElementById('authSubmit').innerText=isLoginMode?'Zaloguj':'Zarejestruj'; document.getElementById('authSwitch').innerText=isLoginMode?'Nie masz konta? Zarejestruj':'Masz konto? Zaloguj'; document.getElementById('authLoc').classList.toggle('hidden', isLoginMode);};
+document.getElementById('authSubmit').onclick=async()=>{const email=document.getElementById('authEmail').value.trim(); const pass=document.getElementById('authPass').value.trim(); const loc=document.getElementById('authLoc').value.trim(); const msg=document.getElementById('authMsg'); if(!email||!pass){msg.innerText='Podaj email i hasło'; return;} msg.innerText='...'; try{ if(isLoginMode){const {error}=await supabase.auth.signInWithPassword({email,password:pass}); if(error) throw error; msg.innerText='Zalogowano'; setTimeout(()=>{closeAuth(); checkAuth();},500);} else { if(!loc){msg.innerText='Podaj miejscowość'; return;} const {data,error}=await supabase.auth.signUp({email,password:pass,options:{data:{location:loc}}}); if(error) throw error; msg.innerText=data.session?'Utworzono i zalogowano':'Sprawdź email'; if(data.session) setTimeout(()=>{closeAuth(); checkAuth();},500);} } catch(e){msg.innerText=e.message;} };
+
+async function fetchAll(){
+  const grid=document.getElementById('listingsGrid'); const status=document.getElementById('status');
+  grid.innerHTML='<div class="col-span-3 text-center py-10">Ładowanie...</div>';
+  try{
+    const {data, error} = await supabase.from('listings').select('*').order('created_at',{ascending:false}).limit(50);
+    if(error) throw error;
+    status.innerText='Znaleziono: '+(data?.length||0)+' ogłoszeń | kolumny: '+(data[0]?Object.keys(data[0]).join(', '):'brak');
+    if(!data || data.length===0){ grid.innerHTML=''; document.getElementById('emptyState').classList.remove('hidden'); return; }
+    document.getElementById('emptyState').classList.add('hidden');
+    grid.innerHTML='';
+    // try images but don't fail if table missing
+    let imgMap={};
+    try{ const ids=data.map(d=>d.id); const {data:imgs} = await supabase.from('listing_images').select('*').in('listing_id', ids); (imgs||[]).forEach(im=>{ if(!imgMap[im.listing_id]) imgMap[im.listing_id]=[]; imgMap[im.listing_id].push(im); }); } catch(e){ console.log('no images table', e.message); }
+    data.forEach(l=>{
+      const firstImg = (imgMap[l.id] && imgMap[l.id][0]) ? imgMap[l.id][0].image_url : 'https://via.placeholder.com/400x300?text=WROOMER';
+      const card=document.createElement('div'); card.className='bg-white rounded-2xl overflow-hidden border cursor-pointer';
+      card.innerHTML=`<div class="h-48 bg-gray-100"><img src="${firstImg}" class="w-full h-full object-cover"></div><div class="p-3"><div class="font-bold text-sm truncate">${l.title||'Bez tytułu'}</div><div class="font-black mt-1">${l.price?Number(l.price).toLocaleString('pl-PL')+' zł':'Zapytaj'}</div><div class="text-[11px] text-gray-500">${l.location||''}</div></div>`;
+      card.onclick=()=>{ currentDetailId=l.id; document.getElementById('detailTitle').innerText=l.title; document.getElementById('detailPrice').innerText=(l.price||'')+' zł'; document.getElementById('detailMeta').innerText=l.location||''; document.getElementById('detailDesc').innerText=l.description||''; document.getElementById('ownerActions').classList.toggle('hidden', !(currentUser && l.user_id===currentUser.id)); document.getElementById('detailModal').classList.remove('hidden'); };
+      grid.appendChild(card);
+    });
+  } catch(err){ grid.innerHTML='<div class="col-span-3 text-red-600 text-sm p-4 bg-white rounded">Błąd: '+err.message+'<br><br>Uruchom w Supabase SQL:<br>ALTER TABLE listings ADD COLUMN IF NOT EXISTS category text;<br>oraz polityki RLS</div>'; }
 }
 
-document.getElementById('authBtn').onclick = ()=>{openAuthModal(); switchTab('login');};
-document.getElementById('addBtn').onclick = ()=>{alert('Dodaj ogłoszenie - tylko dla zalogowanych (sprawdź czy widzisz Wyloguj)');};
-
-// === FIX NA RESET HASLA - KLUCZOWE ===
-supabase.auth.onAuthStateChange(async (event, session) => {
-  console.log('Auth event:', event, session);
-  if (event === 'PASSWORD_RECOVERY') {
-    openAuthModal();
-    document.querySelectorAll('.auth-tab-content').forEach(t=>t.style.display='none');
-    document.getElementById('newPasswordTab').style.display='block';
-    document.getElementById('authTitle').innerText = 'Ustaw nowe hasło';
-    const email = session?.user?.email || '';
-    document.getElementById('recoveryEmail').innerText = email;
-    return;
-  }
-  if (event === 'SIGNED_IN' && session) {
-    // jesli to recovery, nie zamykaj
-    if (window.location.hash.includes('type=recovery')) return;
-    initUser(session.user);
-    closeAuthModal();
-  }
-  if (event === 'SIGNED_OUT'){
-    document.getElementById('authBtn').innerText='Zaloguj';
-  }
-});
-
-async function initUser(user){
- document.getElementById('authBtn').innerText='Wyloguj ('+user.email+')';
- document.getElementById('authBtn').onclick = async ()=>{await supabase.auth.signOut(); location.reload();};
- renderGrid(user);
+async function deleteListing(){
+  if(!currentDetailId) return; if(!confirm('Usunąć?')) return;
+  try{ await supabase.from('listing_images').delete().eq('listing_id', currentDetailId); } catch(e){}
+  const {error} = await supabase.from('listings').delete().eq('id', currentDetailId);
+  if(error){ alert(error.message); return; } closeDetail(); fetchAll();
 }
 
-function showError(id, html){
- const el=document.getElementById(id);
- el.innerHTML=html;
- el.classList.remove('hidden');
-}
+document.getElementById('submitAdd').onclick=async()=>{
+  const btn=document.getElementById('submitAdd'); btn.innerText='Publikuję...'; btn.disabled=true;
+  try{
+    const title=document.getElementById('addTitle').value.trim(); const desc=document.getElementById('addDesc').value.trim(); const price=parseFloat(document.getElementById('addPrice').value); const location=document.getElementById('addLocation').value.trim();
+    if(!title||!location){ alert('Tytuł i miejscowość'); return; }
+    if(!currentUser){ alert('Zaloguj'); return; }
+    const payload={title, description:desc, price:isNaN(price)?null:price, location, user_id:currentUser.id, user_email:currentUser.email};
+    // try with category if column exists
+    try{ payload.category='Samochody'; } catch(e){}
+    const {data:listing, error} = await supabase.from('listings').insert(payload).select().single();
+    if(error) throw error;
+    const files=document.getElementById('addImages').files;
+    if(files.length>0){ for(let i=0;i<files.length;i++){ const file=files[i]; const path=`${listing.id}/${Date.now()}_${i}_${file.name}`; try{ const {error:upErr} = await supabase.storage.from('listing-images').upload(path, file); if(upErr) throw upErr; const {data:urlData} = supabase.storage.from('listing-images').getPublicUrl(path); try{ await supabase.from('listing_images').insert({listing_id:listing.id, image_url:urlData.publicUrl}); } catch(e){} } catch(e){ console.log('img fail', e); } } }
+    alert('Dodano!'); closeAdd(); fetchAll();
+  } catch(err){ alert('Błąd: '+err.message); } finally { btn.innerText='Opublikuj'; btn.disabled=false; }
+};
 
-async function doLogin(){
- const email=document.getElementById('loginEmail').value.trim();
- const password=document.getElementById('loginPass').value;
- document.getElementById('loginError').classList.add('hidden');
- const {data, error} = await supabase.auth.signInWithPassword({email, password});
- if(error){
-   // POLSKIE KOMUNIKATY
-   if(error.message.includes('Email not confirmed')){
-     showError('loginError', `<b>Musisz potwierdzić adres e-mail.</b><br>Sprawdź skrzynkę <b>${email}</b> (także SPAM) i kliknij link potwierdzający.<br>Po potwierdzeniu zaloguj się ponownie.`);
-   } else if(error.message.includes('Invalid login credentials')){
-     showError('loginError', `<b>Nieprawidłowy e-mail lub hasło.</b><br>• Jeśli nie masz konta — przejdź do zakładki <b>Rejestracja</b> i załóż konto.<br>• Jeśli zakładałeś konto — sprawdź email i <b>potwierdź adres</b> (link w mailu).<br>• Sprawdź czy CAPS LOCK jest wyłączony.`);
-   } else {
-     showError('loginError', `Błąd logowania: ${error.message}`);
-   }
- }
-}
-
-async function doRegister(){
- const email=document.getElementById('regEmail').value.trim();
- const password=document.getElementById('regPass').value;
- const rules=document.getElementById('regRules').checked;
- document.getElementById('regError').classList.add('hidden');
- if(!rules) return showError('regError','Zaznacz regulamin.');
- if(password.length<6) return showError('regError','Hasło min. 6 znaków.');
- const {data, error} = await supabase.auth.signUp({email, password});
- if(error){
-   showError('regError', error.message);
- } else {
-   // tryb bez potwierdzania - zaloguj od razu
-   const {data:loginData} = await supabase.auth.signInWithPassword({email, password});
-   if(loginData?.user){
-     alert('Konto utworzone! Jesteś zalogowany.');
-     initUser(loginData.user);
-     closeAuthModal();
-   } else {
-     alert(`Konto utworzone! Wysłaliśmy wiadomość na ${email}. Jeśli masz włączone Confirm email, potwierdź maila.`);
-     switchTab('login');
-   }
- }
-}
-
-async function doReset(){
- const email=document.getElementById('resetEmail').value.trim();
- const info=document.getElementById('resetInfo');
- info.classList.remove('hidden');
- info.className='text-[13px] p-3 mb-3 rounded bg-blue-50 text-blue-800 border border-blue-200';
- info.innerText='Wysyłanie...';
- const {error} = await supabase.auth.resetPasswordForEmail(email, {redirectTo: window.location.origin});
- if(error){
-   info.className='text-[13px] p-3 mb-3 rounded bg-red-50 text-red-700 border border-red-200';
-   info.innerText='Błąd: '+error.message;
- } else {
-   info.className='text-[13px] p-3 mb-3 rounded bg-green-50 text-green-800 border border-green-200';
-   info.innerHTML=`Link wysłany na <b>${email}</b><br>Tytuł maila: <b>WROOMER reset hasła</b><br>Sprawdź także SPAM.`;
- }
-}
-
-async function setNewPassword(){
- const newPass=document.getElementById('newPasswordInput').value;
- document.getElementById('newPassError').classList.add('hidden');
- if(newPass.length<6) return showError('newPassError','Hasło min. 6 znaków.');
- const {error} = await supabase.auth.updateUser({password:newPass});
- if(error){
-   showError('newPassError','Błąd: '+error.message);
- } else {
-   alert('Hasło zmienione! Możesz się zalogować nowym hasłem.');
-   window.location.hash='';
-   location.reload();
- }
-}
-
-function renderGrid(user){
- const grid=document.getElementById('grid');
- grid.innerHTML='';
- for(let i=1;i<=8;i++){
-   grid.innerHTML+=`<div class="bg-white rounded-xl p-3 border">
-   <div class="bg-gray-200 h-[140px] rounded mb-2"></div>
-   <div class="font-bold text-sm">Przykładowe ogłoszenie ${i}</div>
-   <div class="text-[12px] text-gray-500">${user? 'MOJE • EDYTUJ' : 'Zaloguj się aby edytować'}</div>
-   </div>`;
- }
-}
-renderGrid(null);
-(async()=>{
- const {data} = await supabase.auth.getSession();
- if(data?.session?.user) initUser(data.session.user);
-})();
+checkAuth(); fetchAll();
 </script>
-
-<div class="fixed bottom-2 left-2 text-[10px] bg-black text-white px-2 py-1 rounded">WROOMER reset hasła • PASSWORD_RECOVERY fix • bez potwierdzania maila (test)</div>
 </body>
 </html>
