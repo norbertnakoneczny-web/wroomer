@@ -4,6 +4,79 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <style>@import url('https://fonts.googleapis.com/css2?family=Inter:wght@600;800;900&display=swap');*{font-family:'Inter',sans-serif}</style>
+
+<!-- SEO + Google Search Console + OTOMOTO style -->
+<meta name="description" content="WROOMER.PL - Ogłoszenia motoryzacyjne Gorzyce, Wodzisław, Śląsk. Sprzedaj i kup samochód, części, ogłoszenia lokalne z GPS.">
+<meta name="keywords" content="ogłoszenia motoryzacyjne, samochody Gorzyce, WROOMER, OTOMOTO, OLX motoryzacja, auto Śląsk">
+<meta name="author" content="WROOMER.PL">
+<link rel="canonical" href="https://www.wroomer.pl/">
+
+<!-- Google Search Console verification - PODMIEŃ NA SWÓJ KOD Z GSC -->
+<meta name="google-site-verification" content="TWOJ_KOD_WERYFIKACJI_Z_SEARCH_CONSOLE">
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.wroomer.pl/">
+<meta property="og:title" content="WROOMER.PL - Ogłoszenia motoryzacyjne">
+<meta property="og:description" content="Sprzedaj i kup samochód w Gorzycach i okolicach. Ogłoszenia z GPS, kontakt telefon/WhatsApp/SMS.">
+<meta property="og:image" content="https://www.wroomer.pl/og-image.jpg">
+
+<!-- Schema.org dla Google -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "WROOMER.PL",
+  "url": "https://www.wroomer.pl/",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://www.wroomer.pl/?q={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>
+
+
+<!-- Google AdSense - WROOMER.PL -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1234567890123456" crossorigin="anonymous"></script>
+<meta name="google-adsense-account" content="ca-pub-1234567890123456">
+<style>
+.ad-slot{background:#fff; border:1px dashed #ddd; border-radius:12px; display:flex; align-items:center; justify-content:center; min-height:120px; position:relative}
+.ad-slot::before{content:'Reklama'; position:absolute; top:4px; left:8px; font-size:9px; color:#999; letter-spacing:1px}
+</style>
+
+<!-- SEO + Google Search Console + OTOMOTO style -->
+<meta name="description" content="WROOMER.PL - Ogłoszenia motoryzacyjne Gorzyce, Wodzisław, Śląsk. Sprzedaj i kup samochód, części, ogłoszenia lokalne z GPS.">
+<meta name="keywords" content="ogłoszenia motoryzacyjne, samochody Gorzyce, WROOMER, OTOMOTO, OLX motoryzacja, auto Śląsk">
+<meta name="author" content="WROOMER.PL">
+<link rel="canonical" href="https://www.wroomer.pl/">
+
+<!-- Google Search Console verification - PODMIEŃ NA SWÓJ KOD Z GSC -->
+<meta name="google-site-verification" content="TWOJ_KOD_WERYFIKACJI_Z_SEARCH_CONSOLE">
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.wroomer.pl/">
+<meta property="og:title" content="WROOMER.PL - Ogłoszenia motoryzacyjne">
+<meta property="og:description" content="Sprzedaj i kup samochód w Gorzycach i okolicach. Ogłoszenia z GPS, kontakt telefon/WhatsApp/SMS.">
+<meta property="og:image" content="https://www.wroomer.pl/og-image.jpg">
+
+<!-- Schema.org dla Google -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "WROOMER.PL",
+  "url": "https://www.wroomer.pl/",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://www.wroomer.pl/?q={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>
+
+
 </head>
 <body class="bg-[#f7f7f8] min-h-screen">
 <header class="bg-white border-b sticky top-0 z-40">
@@ -165,18 +238,32 @@ async function load(){
  }
 }
 
+
 function renderListings(data){
  const grid=document.getElementById('listings');
  if(!data || data.length===0){
-  grid.innerHTML='<div class="col-span-full text-center py-20 bg-white rounded-2xl border"><div class="text-4xl mb-2">📭</div><div class="font-bold">Brak ogłoszeń</div><div class="text-sm text-zinc-500 mt-1">Dodaj pierwsze ogłoszenie przyciskiem + Dodaj</div></div>';
+  grid.innerHTML='<div class="col-span-full text-center py-20 bg-white rounded-2xl border"><div class="text-4xl mb-2">📭</div><div class="font-bold">Brak ogłoszeń</div><div class="text-sm text-zinc-500 mt-1">Dodaj pierwsze ogłoszenie przyciskiem + Dodaj</div><div class="mt-6 ad-slot"><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-1234567890123456" data-ad-slot="1234567890" data-ad-format="auto" data-full-width-responsive="true"></ins><script>(adsbygoogle = window.adsbygoogle || []).push({});</script></div></div>';
   return;
  }
- grid.innerHTML=data.map(l=>{
+ let out='';
+ data.forEach((l,idx)=>{
+  if(idx>0 && idx%4===0){
+   out+=`<div class="bg-white rounded-xl border overflow-hidden ad-slot flex flex-col items-center justify-center p-4 min-h-[280px]">
+     <div class="text-[10px] text-zinc-400 tracking-widest mb-2">REKLAMA</div>
+     <ins class="adsbygoogle" style="display:block; width:100%; min-height:200px" data-ad-client="ca-pub-1234567890123456" data-ad-slot="1234567890" data-ad-format="auto" data-full-width-responsive="true"></ins>
+     <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+     <div class="text-xs text-zinc-400 mt-2">Miejsce na Google AdSense - po zatwierdzeniu tu pojawi się reklama</div>
+    </div>`;
+  }
   const img=l.listing_images?.[0]?.image_url||`https://picsum.photos/seed/${l.id}/400/300`;
   const isOwner=currentUser && l.user_id===currentUser.id;
-  return `<div class="bg-white rounded-xl border overflow-hidden hover:shadow-xl transition group"><div onclick="openDetailById('${l.id}')" class="h-44 bg-zinc-100 relative cursor-pointer overflow-hidden"><img src="${img}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300"><div class="absolute top-2 left-2 bg-black/70 text-white text-xs px-2 py-1 rounded-full">📷 ${l.listing_images?.length||1}</div>${l.lat?'<div class="absolute top-2 right-2 bg-blue-600 text-white text-[10px] px-2 py-1 rounded-full">📍 GPS</div>':''}<div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition flex items-center justify-center opacity-0 group-hover:opacity-100"><span class="bg-white/90 text-black text-xs px-3 py-1.5 rounded-full font-bold">🔍 Powiększ</span></div></div><div class="p-3"><div onclick="openDetailById('${l.id}')" class="font-bold text-sm line-clamp-2 cursor-pointer hover:underline">${(l.brand||'')+' '+(l.model||'')+' '+(l.title||'Brak tytułu')}</div><div class="font-black mt-1 text-lg">${Number(l.price||0).toLocaleString('pl-PL')} zł</div><div class="text-xs text-zinc-500 mt-1">${l.location||l.city||''} ${l.year||''} ${l.mileage?Number(l.mileage).toLocaleString()+'km':''}</div>${isOwner?`<div class="mt-2 flex gap-2"><button onclick="editListing('${l.id}')" class="flex-1 bg-black text-white text-xs py-2 rounded-lg font-bold">Edytuj</button><button onclick="deleteListing('${l.id}')" class="flex-1 border text-xs py-2 rounded-lg text-red-600">Usuń</button></div>`:`<button onclick="openDetailById('${l.id}')" class="mt-2 w-full border text-xs py-2 rounded-lg hover:bg-zinc-50">Zobacz ogłoszenie</button>`}</div></div>`;
- }).join('');
+  out+=`<div class="bg-white rounded-xl border overflow-hidden hover:shadow-xl transition group"><div onclick="openDetailById('${l.id}')" class="h-44 bg-zinc-100 relative cursor-pointer overflow-hidden"><img src="${img}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300"><div class="absolute top-2 left-2 bg-black/70 text-white text-xs px-2 py-1 rounded-full">📷 ${l.listing_images?.length||1}</div>${l.lat?'<div class="absolute top-2 right-2 bg-blue-600 text-white text-[10px] px-2 py-1 rounded-full">📍 GPS</div>':''}<div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition flex items-center justify-center opacity-0 group-hover:opacity-100"><span class="bg-white/90 text-black text-xs px-3 py-1.5 rounded-full font-bold">🔍 Powiększ</span></div></div><div class="p-3"><div onclick="openDetailById('${l.id}')" class="font-bold text-sm line-clamp-2 cursor-pointer hover:underline">${(l.brand||'')+' '+(l.model||'')+' '+(l.title||'Brak tytułu')}</div><div class="font-black mt-1 text-lg">${Number(l.price||0).toLocaleString('pl-PL')} zł</div><div class="text-xs text-zinc-500 mt-1">${l.location||l.city||''} ${l.year||''} ${l.mileage?Number(l.mileage).toLocaleString()+'km':''}</div>${isOwner?`<div class="mt-2 flex gap-2"><button onclick="editListing('${l.id}')" class="flex-1 bg-black text-white text-xs py-2 rounded-lg font-bold">Edytuj</button><button onclick="deleteListing('${l.id}')" class="flex-1 border text-xs py-2 rounded-lg text-red-600">Usuń</button></div>`:`<button onclick="openDetailById('${l.id}')" class="mt-2 w-full border text-xs py-2 rounded-lg hover:bg-zinc-50">Zobacz ogłoszenie</button>`}</div></div>`;
+ });
+ // Bottom ad
+ out+=`<div class="col-span-full bg-white rounded-xl border p-4 ad-slot min-h-[120px] mt-2"><div class="text-[10px] text-zinc-400 tracking-widest">REKLAMA</div><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-1234567890123456" data-ad-slot="1234567890" data-ad-format="horizontal" data-full-width-responsive="true"></ins><script>(adsbygoogle = window.adsbygoogle || []).push({});</script></div>`;
+ grid.innerHTML=out;
 }
+
 
 async function editListing(id){
  const l=allData.find(x=>x.id===id);
@@ -334,6 +421,13 @@ function openDetail(l){
    </div>
   `;
  }
+ document.getElementById('detailInfo').innerHTML+=`
+   <div class="mt-4 ad-slot min-h-[200px] p-3 flex flex-col items-center justify-center">
+    <div class="text-[10px] text-zinc-400 tracking-widest mb-2">REKLAMA</div>
+    <ins class="adsbygoogle" style="display:block; width:100%" data-ad-client="ca-pub-1234567890123456" data-ad-slot="1234567890" data-ad-format="auto" data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+   </div>
+  `;
  document.getElementById('detailModal').classList.remove('hidden');
  showDetailImg();
  log('Otwarto ogłoszenie '+l.id);
@@ -409,6 +503,79 @@ async function doLogin(){
 #detailMain{transition:transform 0.2s}
 #detailMain.zoomed{transform:scale(2); cursor:zoom-out}
 </style>
+
+<!-- SEO + Google Search Console + OTOMOTO style -->
+<meta name="description" content="WROOMER.PL - Ogłoszenia motoryzacyjne Gorzyce, Wodzisław, Śląsk. Sprzedaj i kup samochód, części, ogłoszenia lokalne z GPS.">
+<meta name="keywords" content="ogłoszenia motoryzacyjne, samochody Gorzyce, WROOMER, OTOMOTO, OLX motoryzacja, auto Śląsk">
+<meta name="author" content="WROOMER.PL">
+<link rel="canonical" href="https://www.wroomer.pl/">
+
+<!-- Google Search Console verification - PODMIEŃ NA SWÓJ KOD Z GSC -->
+<meta name="google-site-verification" content="TWOJ_KOD_WERYFIKACJI_Z_SEARCH_CONSOLE">
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.wroomer.pl/">
+<meta property="og:title" content="WROOMER.PL - Ogłoszenia motoryzacyjne">
+<meta property="og:description" content="Sprzedaj i kup samochód w Gorzycach i okolicach. Ogłoszenia z GPS, kontakt telefon/WhatsApp/SMS.">
+<meta property="og:image" content="https://www.wroomer.pl/og-image.jpg">
+
+<!-- Schema.org dla Google -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "WROOMER.PL",
+  "url": "https://www.wroomer.pl/",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://www.wroomer.pl/?q={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>
+
+
+<!-- Google AdSense - WROOMER.PL -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1234567890123456" crossorigin="anonymous"></script>
+<meta name="google-adsense-account" content="ca-pub-1234567890123456">
+<style>
+.ad-slot{background:#fff; border:1px dashed #ddd; border-radius:12px; display:flex; align-items:center; justify-content:center; min-height:120px; position:relative}
+.ad-slot::before{content:'Reklama'; position:absolute; top:4px; left:8px; font-size:9px; color:#999; letter-spacing:1px}
+</style>
+
+<!-- SEO + Google Search Console + OTOMOTO style -->
+<meta name="description" content="WROOMER.PL - Ogłoszenia motoryzacyjne Gorzyce, Wodzisław, Śląsk. Sprzedaj i kup samochód, części, ogłoszenia lokalne z GPS.">
+<meta name="keywords" content="ogłoszenia motoryzacyjne, samochody Gorzyce, WROOMER, OTOMOTO, OLX motoryzacja, auto Śląsk">
+<meta name="author" content="WROOMER.PL">
+<link rel="canonical" href="https://www.wroomer.pl/">
+
+<!-- Google Search Console verification - PODMIEŃ NA SWÓJ KOD Z GSC -->
+<meta name="google-site-verification" content="TWOJ_KOD_WERYFIKACJI_Z_SEARCH_CONSOLE">
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.wroomer.pl/">
+<meta property="og:title" content="WROOMER.PL - Ogłoszenia motoryzacyjne">
+<meta property="og:description" content="Sprzedaj i kup samochód w Gorzycach i okolicach. Ogłoszenia z GPS, kontakt telefon/WhatsApp/SMS.">
+<meta property="og:image" content="https://www.wroomer.pl/og-image.jpg">
+
+<!-- Schema.org dla Google -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "WROOMER.PL",
+  "url": "https://www.wroomer.pl/",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://www.wroomer.pl/?q={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>
+
+
 
 
 <div id="chatModal" class="hidden fixed inset-0 bg-black/60 z-[120] flex items-center justify-center p-4">
