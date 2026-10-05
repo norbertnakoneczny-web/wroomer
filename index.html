@@ -2,320 +2,115 @@
 <html lang="pl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>WROOMER.PL</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.tailwindcss.com"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-<style>
-*{font-family:Inter,sans-serif}
-.line-clamp-2{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.scrollbar-hide::-webkit-scrollbar{display:none}
-</style>
 </head>
-<body class="bg-[#f7f7f8] text-black">
-<!-- HEADER -->
+<body class="bg-[#f7f7f8]">
+<div id="keyBanner" class="bg-red-600 text-white p-4 text-center sticky top-0 z-[100]">
+<div class="max-w-[800px] mx-auto">
+<div class="font-bold">⚠️ Brak klucza Supabase - dlatego nic nie działa</div>
+<div class="text-sm mt-2">Wejdź na supabase.com → Project Settings → API → skopiuj ANON PUBLIC → wklej tutaj:</div>
+<div class="flex gap-2 mt-3 justify-center">
+<input id="anonInput" placeholder="wklej tu ANON KEY eyJ..." class="w-[500px] max-w-[70vw] text-black px-3 py-2 rounded-lg text-sm">
+<button onclick="saveKey()" class="bg-black text-white px-5 py-2 rounded-lg font-bold">Zapisz i odśwież</button>
+</div>
+<div class="text-[11px] mt-2 opacity-80">Na Macu: Cmd+C w Supabase, Cmd+V tutaj</div>
+</div>
+</div>
+
 <header class="bg-white border-b sticky top-0 z-30">
-<div class="max-w-[1440px] mx-auto flex items-center justify-between px-4 py-3 gap-2">
-<div class="flex items-center gap-3">
-<div class="font-black text-[22px] tracking-tight">WROOMER.PL</div>
-<div id="settingsBadge" class="hidden text-[10px] bg-black text-white px-2 py-0.5 rounded-full">LIVE z Supabase</div>
-</div>
-<div class="flex items-center gap-2">
-<button id="blogBtn" class="text-sm border px-3 py-2 rounded-lg hidden md:block">Blog</button>
-<button id="addBtn" class="bg-black text-white px-4 py-2.5 text-sm font-bold rounded-xl active:scale-95 transition">+ Dodaj</button>
-<button id="authBtn" class="border px-3 py-2.5 text-sm rounded-xl bg-white">Zaloguj</button>
-</div>
-</div>
-<!-- mobile search -->
-<div class="px-4 pb-3 md:hidden">
-<input id="searchMobile" placeholder="Szukaj np. BMW E46" class="w-full bg-[#efeff1] rounded-xl px-4 py-3 text-sm outline-none">
+<div class="max-w-[1440px] mx-auto flex items-center justify-between px-4 py-3">
+<div class="font-black text-[22px]">WROOMER.PL</div>
+<div class="flex gap-2"><button id="blogBtn" class="border px-3 py-2 rounded-lg text-sm">Blog</button><button id="addBtn" class="bg-black text-white px-4 py-2.5 rounded-xl font-bold">+ Dodaj</button><button id="authBtn" class="border px-3 py-2.5 rounded-xl">Zaloguj</button></div>
 </div>
 </header>
 
-<div class="max-w-[1440px] mx-auto grid grid-cols-12 gap-0 md:gap-6 p-0 md:p-4">
-<!-- SIDEBAR BLOG DESKTOP -->
-<aside class="hidden lg:block col-span-3">
-<div class="bg-white rounded-2xl p-4 border sticky top-[80px]">
-<h3 class="font-bold mb-3">Blog WROOMER</h3>
-<div id="blogListDesktop" class="space-y-3"></div>
-</div>
-<div id="settingsBox" class="mt-4 bg-white rounded-2xl p-4 border text-[12px]"></div>
-<div class="mt-4 bg-white rounded-2xl p-4 border text-[12px]">
-<b>Mac: zmiana klucza Supabase</b><br>
-<button onclick="const k=prompt('Wklej nowy ANON KEY:'); if(k){localStorage.setItem('wroomer_anon',k); location.reload();}" class="mt-2 border px-3 py-1.5 rounded-lg text-[11px]">Wklej nowy ANON KEY</button>
-<button onclick="localStorage.removeItem('wroomer_anon'); location.reload();" class="mt-2 border px-3 py-1.5 rounded-lg text-[11px] ml-1">Reset</button>
-<div class="text-[10px] text-gray-400 mt-2 break-all">Aktualny: <span id="currentKey"></span></div>
-</div>
-<script>setTimeout(()=>{const el=document.getElementById('currentKey'); if(el) el.innerText=(SUPABASE_ANON||'').slice(0,20)+'...';},500);</script>
-</aside>
-
-<!-- MAIN -->
-<main class="col-span-12 lg:col-span-9">
-<!-- filters desktop -->
-<div class="hidden md:flex gap-2 mb-4">
-<input id="searchDesktop" placeholder="Szukaj ogłoszeń..." class="flex-1 bg-white border rounded-xl px-4 py-3 text-sm outline-none">
-<select id="sortSelect" class="bg-white border rounded-xl px-3 py-3 text-sm"><option value="new">Najnowsze</option><option value="price_asc">Cena rosnąco</option><option value="price_desc">Cena malejąco</option></select>
-</div>
-
-<!-- SKELETON LOADER -->
-<div id="skeleton" class="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4 p-3 md:p-0">
-<div class="h-[220px] bg-white border rounded-2xl animate-pulse"></div>
-<div class="h-[220px] bg-white border rounded-2xl animate-pulse"></div>
-<div class="h-[220px] bg-white border rounded-2xl animate-pulse"></div>
-<div class="h-[220px] bg-white border rounded-2xl animate-pulse"></div>
-</div>
-
-<!-- GRID -->
-<div id="grid" class="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4 p-3 md:p-0"></div>
-
-<!-- EMPTY -->
-<div id="emptyState" class="hidden text-center py-20">
-<p class="font-bold text-lg">Brak ogłoszeń w bazie</p>
-<p class="text-sm text-gray-500 mt-1">Dodaj pierwsze ogłoszenie - zdjęcia zapiszą się osobno w tabeli listing_images + Storage</p>
-<button onclick="document.getElementById('addBtn').click()" class="mt-4 bg-black text-white px-6 py-3 rounded-xl font-bold">Dodaj ogłoszenie</button>
-</div>
-</main>
-</div>
-
-<!-- DETAIL MODAL -->
-<div id="detailModal" class="fixed inset-0 bg-black/70 hidden z-40 overflow-y-auto">
-<div class="min-h-full flex items-start md:items-center justify-center p-0 md:p-6">
-<div class="bg-white w-full max-w-[980px] md:rounded-2xl overflow-hidden">
-<div class="flex justify-between items-center p-4 border-b"><button onclick="closeDetail()" class="border px-3 py-1.5 rounded-lg text-sm">← Wróć</button><div class="font-bold">WROOMER</div></div>
-<div class="grid md:grid-cols-2">
-<div class="relative bg-black">
-<img id="detailMainImg" src="" class="w-full h-[320px] md:h-[480px] object-contain">
-<div id="detailThumbs" class="flex gap-2 p-2 overflow-x-auto scrollbar-hide bg-black"></div>
-<button id="detailPrev" class="absolute left-2 top-[150px] bg-white/90 rounded-full w-9 h-9">‹</button>
-<button id="detailNext" class="absolute right-2 top-[150px] bg-white/90 rounded-full w-9 h-9">›</button>
-</div>
-<div class="p-5">
-<h1 id="detailTitle" class="font-extrabold text-[22px] leading-tight"></h1>
-<div id="detailPrice" class="text-[26px] font-black mt-2"></div>
-<div id="detailMeta" class="text-[13px] text-gray-500 mt-2"></div>
-<div id="detailDesc" class="text-[14px] mt-4 leading-relaxed whitespace-pre-wrap"></div>
-<div id="detailContact" class="mt-6 p-3 bg-[#f7f7f8] rounded-xl text-sm"></div>
-</div>
-</div>
-</div>
-</div>
-</div>
-
-<!-- BLOG MODAL - FIX CZYTAJ ARTYKUL -->
-<div id="blogModal" class="fixed inset-0 bg-white hidden z-[60] overflow-y-auto">
-<div class="max-w-[720px] mx-auto p-4 md:p-8">
-<button onclick="document.getElementById('blogModal').classList.add('hidden')" class="border px-4 py-2 rounded-xl text-sm mb-6">← Wróć do ogłoszeń</button>
-<h1 id="blogTitle" class="font-black text-[28px] leading-tight"></h1>
-<div id="blogDate" class="text-[12px] text-gray-500 mt-2"></div>
-<img id="blogImg" class="w-full h-[260px] object-cover rounded-2xl mt-5">
-<div id="blogContent" class="prose prose-sm mt-6 text-[15px] leading-relaxed"></div>
-</div>
-</div>
-
-<!-- ADD MODAL -->
-<div id="addModal" class="fixed inset-0 bg-black/60 hidden z-50 overflow-y-auto">
-<div class="min-h-full flex items-center justify-center p-3">
-<div class="bg-white w-full max-w-[560px] rounded-2xl p-5">
-<div class="flex justify-between items-center mb-4"><h2 class="font-bold text-lg">Dodaj ogłoszenie</h2><button onclick="closeAdd()" class="text-xl">×</button></div>
-<input id="addTitle" placeholder="Tytuł np. BMW E46 2.0d" class="w-full border p-3 rounded-xl mb-2 text-sm">
-<input id="addPrice" type="number" placeholder="Cena PLN" class="w-full border p-3 rounded-xl mb-2 text-sm">
-<textarea id="addDesc" placeholder="Opis..." rows="4" class="w-full border p-3 rounded-xl mb-2 text-sm"></textarea>
-<input id="addLocation" placeholder="Lokalizacja np. Gorzyce" class="w-full border p-3 rounded-xl mb-3 text-sm">
-<label class="block text-[13px] font-bold mb-1">Zdjęcia (zapisują się osobno w listing_images + Storage - max 10)</label>
-<input id="addImages" type="file" accept="image/*" multiple class="w-full text-sm mb-3">
-<div id="addPreview" class="flex gap-2 flex-wrap mb-3"></div>
-<div id="addError" class="hidden bg-red-50 border border-red-200 text-red-700 text-[13px] p-3 rounded-xl mb-3"></div>
-<button onclick="submitListing()" id="submitBtn" class="w-full bg-black text-white p-3.5 rounded-xl font-bold">Opublikuj (zapis do Supabase)</button>
-<p class="text-[11px] text-gray-500 mt-2">Zdjęcia → bucket <code>ogloszenia</code> + tabela <code>listing_images</code> (osobno od ogłoszeń). Ogłoszenia → tabela <code>listings</code>.</p>
-</div>
-</div>
-</div>
-
-<!-- AUTH MODAL (z fixem reset) -->
-<div id="authModal" class="fixed inset-0 bg-black/60 hidden z-[70] flex items-center justify-center p-4">
-<div class="bg-white w-full max-w-[420px] rounded-2xl p-6 relative">
-<button onclick="closeAuthModal()" class="absolute top-3 right-4 text-xl">×</button>
-<h2 id="authTitle" class="text-xl font-bold mb-4">Logowanie</h2>
-<div class="flex gap-6 border-b mb-4 text-sm">
-<button id="tabLogin" onclick="switchTab('login')" class="pb-2 border-b-2 border-black font-bold">Logowanie</button>
-<button id="tabRegister" onclick="switchTab('register')" class="pb-2">Rejestracja</button>
-<button id="tabReset" onclick="switchTab('reset')" class="pb-2">Reset</button>
-</div>
-<div id="loginTab"><input id="loginEmail" type="email" placeholder="E-mail" class="w-full border p-3 mb-2 rounded-xl"><input id="loginPass" type="password" placeholder="Hasło" class="w-full border p-3 mb-3 rounded-xl"><div id="loginError" class="hidden bg-red-50 text-red-700 text-[13px] p-3 mb-3 rounded-xl border"></div><button onclick="doLogin()" class="w-full bg-black text-white p-3 rounded-xl font-bold">Zaloguj</button></div>
-<div id="registerTab" class="hidden"><input id="regEmail" type="email" placeholder="E-mail" class="w-full border p-3 mb-2 rounded-xl"><input id="regPass" type="password" placeholder="Hasło" class="w-full border p-3 mb-2 rounded-xl"><label class="flex gap-2 text-[12px] mb-3"><input type="checkbox" id="regRules">Regulamin</label><div id="regError" class="hidden bg-red-50 text-red-700 text-[13px] p-3 mb-3 rounded-xl border"></div><button onclick="doRegister()" class="w-full bg-black text-white p-3 rounded-xl font-bold">Załóż konto</button></div>
-<div id="resetTab" class="hidden"><input id="resetEmail" type="email" placeholder="E-mail" class="w-full border p-3 mb-3 rounded-xl"><div id="resetInfo" class="hidden text-[13px] p-3 mb-3 rounded-xl border"></div><button onclick="doReset()" class="w-full bg-black text-white p-3 rounded-xl font-bold">Wyślij WROOMER reset hasła</button></div>
-<div id="newPasswordTab" class="hidden"><p class="text-[13px] mb-3">Nowe hasło dla <span id="recoveryEmail" class="font-bold"></span></p><input id="newPasswordInput" type="password" placeholder="Nowe hasło" class="w-full border p-3 mb-3 rounded-xl"><button onclick="setNewPassword()" class="w-full bg-black text-white p-3 rounded-xl font-bold">Zapisz</button></div>
-</div>
+<div class="max-w-[1440px] mx-auto p-4">
+<div id="debug" class="bg-white border rounded-xl p-3 mb-4 text-[12px] font-mono"></div>
+<div id="grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"></div>
+<div id="empty" class="hidden text-center py-20"><p class="font-bold">Brak danych - sprawdź debug powyżej</p></div>
 </div>
 
 <script>
-// ========= SUPABASE CONFIG =========
 const SUPABASE_URL = "https://rljqnhfogaqdjeirqqdj.supabase.co";
-const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJsanFuaGZvZ2FxZGplaXJxcWRqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mjc3NDQwMTcsImV4cCI6MjA0MzMyMDAxN30.TU_DUZAQ_placeholder_REPLACE_WITH_YOUR_ANON";
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
-let currentUser=null;
-let listingsCache=[];
-let currentImgIdx=0;
-let currentDetailImages=[];
+let anon = localStorage.getItem('wroomer_anon');
+const banner = document.getElementById('keyBanner');
+const debugEl = document.getElementById('debug');
 
-// AUTH
-function openAuthModal(){document.getElementById('authModal').classList.remove('hidden')}
-function closeAuthModal(){document.getElementById('authModal').classList.add('hidden'); window.location.hash='';}
-function switchTab(t){['login','register','reset','newPassword'].forEach(x=>document.getElementById(x+'Tab').classList.add('hidden')); document.getElementById(t+'Tab').classList.remove('hidden'); document.getElementById('authTitle').innerText=t==='newPassword'?'Ustaw nowe hasło':t==='login'?'Logowanie':t==='register'?'Rejestracja':'Reset hasła';}
+function saveKey(){
+  const v = document.getElementById('anonInput').value.trim();
+  if(v.length<20){alert('Klucz za krótki'); return;}
+  localStorage.setItem('wroomer_anon', v);
+  location.reload();
+}
 
-document.getElementById('authBtn').onclick = ()=>{openAuthModal(); switchTab('login');};
-supabase.auth.onAuthStateChange((event, session)=>{
-  if(event==='PASSWORD_RECOVERY'){openAuthModal(); switchTab('newPassword'); document.getElementById('recoveryEmail').innerText=session?.user?.email||''; return;}
-  if(event==='SIGNED_IN' && session){ if(window.location.hash.includes('type=recovery')) return; currentUser=session.user; document.getElementById('authBtn').innerText='Wyloguj'; document.getElementById('authBtn').onclick=async()=>{await supabase.auth.signOut(); location.reload();}; closeAuthModal(); fetchAll();}
-  if(event==='SIGNED_OUT'){currentUser=null; document.getElementById('authBtn').innerText='Zaloguj';}
-});
-async function doLogin(){const email=loginEmail.value, pass=loginPass.value; const {error}=await supabase.auth.signInWithPassword({email,password}); if(error){loginError.innerText=error.message.includes('Invalid')?'Nieprawidłowy e-mail lub hasło. Sprawdź czy masz konto w zakładce Rejestracja.':error.message; loginError.classList.remove('hidden');}}
-async function doRegister(){const email=regEmail.value, pass=regPass.value; if(!regRules.checked) return regError.innerText='Zaznacz regulamin',regError.classList.remove('hidden'); const {error}=await supabase.auth.signUp({email,password:pass}); if(error){regError.innerText=error.message; regError.classList.remove('hidden');} else {const {data}=await supabase.auth.signInWithPassword({email,password:pass}); if(data?.user){currentUser=data.user; closeAuthModal();} else alert('Sprawdź maila jeśli masz włączone Confirm email');}}
-async function doReset(){const email=resetEmail.value; const {error}=await supabase.auth.resetPasswordForEmail(email,{redirectTo:location.origin}); const el=resetInfo; el.classList.remove('hidden'); el.innerText= error? 'Błąd: '+error.message : `Wysłano! Tytuł: WROOMER reset hasła na ${email}`;}
-async function setNewPassword(){const p=newPasswordInput.value; if(p.length<6) return alert('min 6'); const {error}=await supabase.auth.updateUser({password:p}); if(error) alert(error.message); else {alert('Hasło zmienione'); location.hash=''; location.reload();}}
+if(!anon || anon.includes('REPLACE')){
+  banner.classList.remove('hidden');
+  debugEl.innerHTML = '❌ BRAK ANON KEY - wklej klucz powyżej. Aktualnie localStorage pusty.';
+} else {
+  banner.classList.add('hidden');
+}
 
-// ========= FETCH SETTINGS + LISTINGS Z SUPABASE =========
-async function fetchAll(){
-  skeleton.classList.remove('hidden');
-  grid.innerHTML='';
-  // 1. SETTINGS
+let supabase = null;
+if(anon){
   try{
-    const {data:settings} = await supabase.from('settings').select('*').limit(1).single();
-    if(settings){
-      document.title = settings.site_title || 'WROOMER.PL';
-      settingsBadge.classList.remove('hidden');
-      settingsBadge.innerText = 'LIVE: '+ (settings.site_title||'');
-      settingsBox.innerHTML = `<b>Ustawienia z bazy:</b><br>site_title: ${settings.site_title}<br>contact_email: ${settings.contact_email||'-'}<br><span class="text-[10px] text-gray-500">Tabela settings działa ✅</span>`;
+    supabase = window.supabase.createClient(SUPABASE_URL, anon);
+    debugEl.innerHTML = `🔑 Klucz: ${anon.slice(0,30)}...<br>🌐 URL: ${SUPABASE_URL}<br>⏳ Łączę z Supabase...`;
+  }catch(e){ debugEl.innerHTML = 'Błąd klienta: '+e.message; }
+}
+
+async function test(){
+  if(!supabase){ debugEl.innerHTML += '<br>❌ Brak klienta Supabase'; return; }
+  try{
+    debugEl.innerHTML += '<br>📡 Pobieram settings...';
+    const {data:settings, error:e1} = await supabase.from('settings').select('*').limit(1);
+    if(e1) debugEl.innerHTML += `<br>⚠️ settings error: ${e1.message} (uruchom README.sql!)`;
+    else debugEl.innerHTML += `<br>✅ settings OK: ${settings?.length||0} rekordów`;
+
+    debugEl.innerHTML += '<br>📡 Pobieram listings...';
+    const {data:listings, error:e2} = await supabase.from('listings').select('*, listing_images(*)').order('created_at',{ascending:false});
+    if(e2) throw e2;
+    debugEl.innerHTML += `<br>✅ listings OK: ${listings.length} ogłoszeń`;
+    
+    if(listings.length===0){
+      debugEl.innerHTML += '<br>ℹ️ Baza pusta - wyświetlam demo';
+      render([
+        {id:1,title:'BMW E46 320d TEST - baza działa!', price:12900, location:'Gorzyce', description:'Jeśli widzisz to, baza działa. Zdjęcia osobno w listing_images.', listing_images:[{image_url:'https://images.unsplash.com/photo-1555215695-3004980ad54e?w=600'}], created_at:new Date()},
+        {id:2,title:'VW Golf 4 1.9 TDI - demo', price:8900, location:'Wodzisław', description:'Demo', listing_images:[{image_url:'https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=600'}], created_at:new Date()}
+      ]);
+    } else {
+      render(listings);
     }
-  }catch(e){ settingsBox.innerHTML = `<span class="text-red-500">Tabela settings nie istnieje - utwórz ją (patrz README)</span>`; }
-
-  // 2. LISTINGS + IMAGES osobno
-  try{
-    const {data:listings, error} = await supabase.from('listings').select('*, listing_images(*)').order('created_at',{ascending:false});
-    if(error) throw error;
-    listingsCache = listings||[];
-    if(listingsCache.length===0){ skeleton.classList.add('hidden'); emptyState.classList.remove('hidden'); return; }
-    renderListings(listingsCache);
-  }catch(e){
-    console.log('fallback mock', e);
-    // fallback mock jesli tabele nie istnieją
-    listingsCache = [
-      {id:1, title:'BMW E46 320d 2004 - zadbany', price:12900, location:'Gorzyce', description:'Stan bdb, zdjęcia z bazy listing_images', listing_images:[{image_url:'https://images.unsplash.com/photo-1555215695-3004980ad54e?w=600'}]},
-      {id:2, title:'VW Golf 4 1.9 TDI', price:8900, location:'Wodzisław', description:'Diesel, ekonomiczny', listing_images:[{image_url:'https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=600'}]}
-    ];
-    renderListings(listingsCache);
-  }finally{ skeleton.classList.add('hidden'); }
-  fetchBlogs();
-}
-
-function renderListings(list){
-  const q = (searchMobile.value || searchDesktop.value || '').toLowerCase();
-  let filtered = list.filter(l=>!q || l.title.toLowerCase().includes(q));
-  const sort = sortSelect.value;
-  if(sort==='price_asc') filtered.sort((a,b)=>a.price-b.price);
-  if(sort==='price_desc') filtered.sort((a,b)=>b.price-a.price);
-  grid.innerHTML='';
-  filtered.forEach(l=>{
-    const img = l.listing_images?.[0]?.image_url || l.image_url || 'https://via.placeholder.com/400';
-    const card = document.createElement('div');
-    card.className='bg-white border rounded-2xl overflow-hidden cursor-pointer active:scale-[0.98] transition group';
-    card.innerHTML=`<div class="relative"><img loading="lazy" src="${img}" class="w-full h-[170px] object-cover group-hover:scale-105 transition duration-500"><div class="absolute top-2 left-2 bg-black text-white text-[11px] px-2 py-1 rounded-full">${l.location||''}</div><div class="absolute bottom-2 right-2 bg-white text-black text-[11px] px-2 py-1 rounded-full font-bold">${l.listing_images?.length||1} zdjęć</div></div><div class="p-3"><div class="font-bold text-[14px] line-clamp-2 leading-tight">${l.title}</div><div class="font-black text-[16px] mt-1">${Number(l.price).toLocaleString('pl-PL')} PLN</div><div class="text-[11px] text-gray-500 mt-1">${new Date(l.created_at||Date.now()).toLocaleDateString('pl-PL')} • zapis osobno w DB</div></div>`;
-    card.onclick=()=>openDetail(l);
-    grid.appendChild(card);
-  });
-  if(filtered.length===0) emptyState.classList.remove('hidden'); else emptyState.classList.add('hidden');
-}
-
-// DETAIL
-function openDetail(l){
-  currentDetailImages = l.listing_images?.map(i=>i.image_url) || [l.image_url];
-  currentImgIdx=0;
-  detailTitle.innerText=l.title;
-  detailPrice.innerText=Number(l.price).toLocaleString('pl-PL')+' PLN';
-  detailMeta.innerText=`${l.location||''} • ${new Date(l.created_at||Date.now()).toLocaleDateString()} • ID ${l.id} • zdjęcia w osobnej tabeli listing_images (${currentDetailImages.length})`;
-  detailDesc.innerText=l.description||'';
-  detailContact.innerHTML=`Kontakt: ${l.user_email||'zaloguj się'}<br><span class="text-[11px] text-gray-500">Ogłoszenie pobrane z tabeli listings, zdjęcia z listing_images</span>`;
-  showDetailImg();
-  detailThumbs.innerHTML='';
-  currentDetailImages.forEach((src, idx)=>{
-    const t=document.createElement('img'); t.src=src; t.className='w-[56px] h-[56px] object-cover rounded-lg border-2 cursor-pointer '+(idx===0?'border-white':'border-transparent'); t.onclick=()=>{currentImgIdx=idx; showDetailImg();}; detailThumbs.appendChild(t);
-  });
-  detailModal.classList.remove('hidden');
-}
-function showDetailImg(){detailMainImg.src=currentDetailImages[currentImgIdx]||''; [...detailThumbs.children].forEach((el,i)=>el.className='w-[56px] h-[56px] object-cover rounded-lg border-2 cursor-pointer '+(i===currentImgIdx?'border-white':'border-transparent'));}
-function closeDetail(){detailModal.classList.add('hidden');}
-detailPrev.onclick=()=>{currentImgIdx=(currentImgIdx-1+currentDetailImages.length)%currentDetailImages.length; showDetailImg();}
-detailNext.onclick=()=>{currentImgIdx=(currentImgIdx+1)%currentDetailImages.length; showDetailImg();}
-
-// BLOG - FIX PRZYCISKU CZYTAJ ARTYKUL
-async function fetchBlogs(){
-  let blogs=[];
-  try{ const {data}=await supabase.from('blogs').select('*').order('created_at',{ascending:false}); blogs=data||[]; }catch{ blogs=[
-    {id:1,title:'Jak przygotować auto do sprzedaży?', excerpt:'5 trików które podniosą cenę o 15%', image_url:'https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?w=600', content:'<p>Umyj dokładnie, posprzątaj wnętrze, zrób zdjęcia w dzień, opisz historię serwisową, dodaj min 8 zdjęć z osobnej tabeli listing_images. To podnosi CTR o 40% na mobile.</p>', created_at:new Date()},
-    {id:2,title:'Czy warto kupić diesla w 2026?', excerpt:'Analiza kosztów', image_url:'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=600', content:'<p>Diesel nadal opłacalny powyżej 20k km rocznie. Sprawdź tabelę settings w Supabase - tam możesz zmienić SEO bloga.</p>', created_at:new Date()}
-  ];}
-  blogListDesktop.innerHTML='';
-  blogs.forEach(b=>{
-    const el=document.createElement('div');
-    el.className='border rounded-xl overflow-hidden cursor-pointer hover:shadow transition';
-    el.innerHTML=`<img src="${b.image_url}" class="w-full h-[100px] object-cover"><div class="p-3"><div class="font-bold text-[13px]">${b.title}</div><div class="text-[11px] text-gray-500 mt-1">${b.excerpt||''}</div><button class="mt-2 text-[12px] font-bold underline">Czytaj artykuł →</button></div>`;
-    el.onclick=()=>openBlog(b);
-    blogListDesktop.appendChild(el);
-  });
-  blogBtn.onclick=()=>{ if(blogs[0]) openBlog(blogs[0]); };
-}
-function openBlog(b){
-  blogTitle.innerText=b.title;
-  blogDate.innerText=new Date(b.created_at).toLocaleDateString('pl-PL');
-  blogImg.src=b.image_url||'';
-  blogContent.innerHTML=b.content||b.excerpt||'';
-  blogModal.classList.remove('hidden');
-}
-
-// ADD - ZAPIS OSOBNO ZDJECIA + OGLOSZENIE
-function closeAdd(){addModal.classList.add('hidden');}
-addBtn.onclick=()=>{ if(!currentUser){ openAuthModal(); switchTab('login'); alert('Zaloguj się aby dodać'); return;} addModal.classList.remove('hidden');}
-addImages.onchange=(e)=>{
-  addPreview.innerHTML='';
-  [...e.target.files].forEach(f=>{
-    const url=URL.createObjectURL(f);
-    const img=document.createElement('img'); img.src=url; img.className='w-[64px] h-[64px] object-cover rounded-lg border'; addPreview.appendChild(img);
-  });
-};
-async function submitListing(){
-  const title=addTitle.value.trim(), price=parseInt(addPrice.value), desc=addDesc.value, loc=addLocation.value, files=[...addImages.files];
-  if(!title||!price) return addError.innerText='Tytuł i cena wymagane',addError.classList.remove('hidden');
-  submitBtn.innerText='Zapisuję...'; submitBtn.disabled=true;
-  try{
-    // 1. INSERT listings
-    const {data:listing, error:err1} = await supabase.from('listings').insert({title, price, description:desc, location:loc, user_id:currentUser.id, user_email:currentUser.email}).select().single();
-    if(err1) throw err1;
-    // 2. UPLOAD ZDJECIA OSOBNO -> storage bucket ogloszenia + tabela listing_images
-    for(let i=0;i<files.length;i++){
-      const file=files[i];
-      const path=`${listing.id}/${Date.now()}_${i}_${file.name}`;
-      const {error:upErr} = await supabase.storage.from('ogloszenia').upload(path, file);
-      if(upErr) throw upErr;
-      const {data:pub} = supabase.storage.from('ogloszenia').getPublicUrl(path);
-      await supabase.from('listing_images').insert({listing_id:listing.id, image_url:pub.publicUrl, position:i});
-    }
-    alert('Opublikowano! Zdjęcia zapisane osobno w listing_images + storage.');
-    closeAdd(); fetchAll();
   }catch(err){
-    addError.innerText='Błąd zapisu: '+err.message+' - sprawdź czy utworzyłeś tabele (patrz README.sql)';
-    addError.classList.remove('hidden');
+    debugEl.innerHTML += `<br>❌ BŁĄD: ${err.message}<br>Sprawdź: 1) czy uruchomiłeś README.sql w SQL Editor 2) czy ANON KEY dobry 3) czy RLS policies są`;
     console.error(err);
-  }finally{submitBtn.innerText='Opublikuj (zapis do Supabase)'; submitBtn.disabled=false;}
+    render([]);
+  }
 }
 
-// search listeners - responsywne
-searchMobile?.addEventListener('input',()=>renderListings(listingsCache));
-searchDesktop?.addEventListener('input',()=>renderListings(listingsCache));
-sortSelect?.addEventListener('change',()=>renderListings(listingsCache));
+function render(list){
+  const grid=document.getElementById('grid');
+  grid.innerHTML='';
+  if(list.length===0){document.getElementById('empty').classList.remove('hidden'); return;}
+  list.forEach(l=>{
+    const img=l.listing_images?.[0]?.image_url||'https://via.placeholder.com/400';
+    const div=document.createElement('div');
+    div.className='bg-white border rounded-2xl overflow-hidden';
+    div.innerHTML=`<img src="${img}" class="w-full h-[160px] object-cover"><div class="p-3"><div class="font-bold text-sm">${l.title}</div><div class="font-black">${l.price} PLN</div><div class="text-[11px] text-gray-500">${l.listing_images?.length||0} zdjęć w osobnej tabeli</div></div>`;
+    grid.appendChild(div);
+  });
+}
 
-// INIT
-(async()=>{ const {data}=await supabase.auth.getSession(); if(data?.session?.user){currentUser=data.session.user; document.getElementById('authBtn').innerText='Wyloguj'; document.getElementById('authBtn').onclick=async()=>{await supabase.auth.signOut(); location.reload();};} fetchAll(); })();
+test();
+
+document.getElementById('anonInput')?.addEventListener('keydown', e=>{ if(e.key==='Enter') saveKey(); });
+</script>
+
+<script>
+// extra: if supabase key invalid show help
+console.log('WROOMER FINAL FIX loaded');
 </script>
 </body>
 </html>
