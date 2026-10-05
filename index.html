@@ -1,68 +1,82 @@
 <!DOCTYPE html>
 <html lang="pl"><head><meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#000000">
-<title>WROOMER.PL - Auta na sprzedaż</title>
-<link rel="preconnect" href="https://images.unsplash.com">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>WROOMER.PL - Auta</title>
 <script src="https://cdn.tailwindcss.com"></script>
-<style>
-*{font-family:Inter,system-ui,sans-serif;-webkit-tap-highlight-color:transparent}
-body{overscroll-behavior:none}
-.card{transform:translateZ(0)}
-.card:active{scale:.97}
-img{content-visibility:auto}
-.grid2{grid-template-columns:repeat(2,minmax(0,1fr))}
-@media(min-width:768px){.grid2{grid-template-columns:repeat(3,minmax(0,1fr))}}
-@media(min-width:1024px){.grid2{grid-template-columns:repeat(4,minmax(0,1fr))}}
-</style></head>
-<body class="bg-[#f5f5f0] antialiased">
-<header class="sticky top-0 z-50 bg-black/95 backdrop-blur text-white h-[54px] flex items-center justify-between px-3 safe-top">
-<div class="flex items-center gap-2"><div class="w-8 h-8 bg-white text-black rounded-full flex items-center justify-center font-black text-[13px]">W</div><b class="text-[14px] tracking-tight">WROOMER.PL</b></div>
-<div class="text-[10px] bg-white text-black px-3 py-1 rounded-full font-black">16 AUT • TURBO</div>
+<style>*{font-family:Inter,system-ui,sans-serif} .card:active{scale:.97} #modal{backdrop-filter:blur(12px)}</style></head>
+<body class="bg-[#f5f5f0]">
+<header class="sticky top-0 z-40 bg-black text-white h-[54px] flex items-center justify-between px-3">
+<div class="font-black text-[14px]">WROOMER.PL</div><div class="text-[10px] bg-white text-black px-3 py-1 rounded-full font-black">16 AUT</div>
 </header>
 
-<main class="max-w-[1280px] mx-auto pb-6">
-<div class="m-2 bg-white rounded-[22px] p-4 border shadow-sm">
-<h1 class="font-black text-[22px] leading-[.9]">Auta na sprzedaż<br><span class="text-blue-600">w całej Polsce</span></h1>
-<input id="q" placeholder="🔍 Szukaj np. BMW..." class="mt-3 w-full h-[48px] rounded-full bg-zinc-100 border-0 px-5 text-[14px] outline-none focus:ring-2 focus:ring-black">
-<div class="mt-2 flex gap-2"><button class="flex-1 h-[40px] rounded-full bg-black text-white text-[11px] font-black" onclick="q.value='';render()">Wyczyść</button><button class="flex-1 h-[40px] rounded-full bg-zinc-100 text-[11px] font-black">Filtry • 16</button></div>
-</div>
-
-<div id="grid" class="mx-2 mt-2 grid grid2 gap-2"></div>
-
-<div class="mx-2 mt-8 bg-black text-white rounded-[22px] p-4 grid grid-cols-2 gap-4">
-<div><div class="text-[8px] text-zinc-500 font-bold tracking-widest">REGULAMIN</div><p class="text-[10px] text-zinc-400 mt-1">Platforma ogłoszeniowa. Sprawdź VIN na żywo.</p></div>
-<div><div class="text-[8px] text-zinc-500 font-bold tracking-widest">KONTAKT</div><p class="text-[10px] text-zinc-400 mt-1">kontakt@wroomer.pl<br>©2026 WROOMER.PL</p></div>
-</div>
+<main class="max-w-[1280px] mx-auto">
+<div class="m-2 bg-white rounded-[20px] p-4 border"><input id="q" placeholder="🔍 Szukaj..." class="w-full h-[46px] rounded-full bg-zinc-100 px-5 text-[14px] outline-none"></div>
+<div id="grid" class="mx-2 mt-2 grid grid-cols-2 md:grid-cols-4 gap-2"></div>
 </main>
+
+<!-- MODAL -->
+<div id="modal" class="fixed inset-0 z-[100] hidden bg-black/60 flex items-end md:items-center justify-center p-2">
+<div class="bg-white w-full max-w-[480px] rounded-t-[24px] md:rounded-[24px] overflow-hidden max-h-[90vh] overflow-y-auto">
+<div class="relative"><img id="mImg" class="w-full h-[240px] object-cover"><button onclick="closeM()" class="absolute top-3 right-3 w-8 h-8 bg-black text-white rounded-full text-[14px]">✕</button>
+<div id="mCity" class="absolute bottom-3 left-3 bg-black text-white text-[10px] px-3 py-1 rounded-full font-black"></div></div>
+<div class="p-5">
+<h2 id="mTitle" class="font-black text-[18px] leading-tight"></h2>
+<p id="mMeta" class="text-[11px] text-zinc-500 mt-1"></p>
+<div class="mt-4 flex justify-between items-center"><div id="mPrice" class="font-black text-[22px]"></div><div class="text-[10px] text-zinc-400">brutto - do negocjacji</div></div>
+<div class="mt-5 grid grid-cols-2 gap-2">
+<a id="mTel" href="tel:+48123456789" class="h-[48px] bg-black text-white rounded-full flex items-center justify-center gap-2 font-black text-[13px]">📞 Zadzwoń</a>
+<a id="mSms" href="sms:+48123456789" class="h-[48px] bg-zinc-100 text-black rounded-full flex items-center justify-center gap-2 font-black text-[13px]">💬 Napisz</a>
+</div>
+<button class="mt-2 w-full h-[44px] rounded-full border font-bold text-[12px]">🔗 Udostępnij ogłoszenie</button>
+<p class="mt-4 text-[10px] text-zinc-400 leading-snug">Ogłoszenie prywatne. Sprawdź pojazd na żywo, dokumenty i VIN przed zakupem. WROOMER.PL nie pośredniczy w transakcji.</p>
+</div>
+</div>
+</div>
 
 <script>
 const D=[
-["LUBLIN","Kia Sportage 1.6 T-GDI","124 900","2023•12k","B","https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=400&q=70"],
-["POZNAŃ","Toyota Corolla Hybrid","95 500","2022•32k","H","https://images.unsplash.com/photo-1623869675781-80b17a2d1d6b?w=400&q=70"],
-["BIAŁYSTOK","Hyundai Tucson","119 900","2022•28k","H","https://images.unsplash.com/photo-1619767886558-efdc693e71b1?w=400&q=70"],
-["GDAŃSK","VW Passat 2.0 TDI","87 900","2021•45k","D","https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=400&q=70"],
-["KATOWICE","Skoda Octavia 1.5","78 900","2021•58k","B","https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=400&q=70"],
-["GDYNIA","Opel Astra 1.2T","65 900","2021•49k","B","https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=400&q=70"],
-["KRAKÓW","Audi A4 Avant","92 900","2020•76k","D","https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=400&q=70"],
-["ŁÓDŹ","Ford Focus ST-Line","68 900","2020•67k","B","https://images.unsplash.com/photo-1550358864-518f20239e8f?w=400&q=70"],
-["RZESZÓW","Seat Leon FR","73 900","2020•91k","D","https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=400&q=70"],
-["WARSZAWA","BMW 320d ★","84 900","2019•98k","D","https://images.unsplash.com/photo-1555215695-3004980ad54e?w=400&q=70"],
-["SZCZECIN","Volvo XC60 D4","112 900","2019•89k","D","https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?w=400&q=70"],
-["WROCŁAW","Mercedes C220d","79 900","2018•112k","D","https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=400&q=70"],
-["TORUŃ","BMW X5 3.0d","189 900","2021•55k","D","https://images.unsplash.com/photo-1556189250-72ba954cfc2b?w=400&q=70"],
-["GLIWICE","Audi Q5 2.0 TDI","145 900","2022•38k","D","https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=400&q=70"],
-["BYDGOSZCZ","Toyota RAV4 Hybrid","139 900","2023•18k","H","https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=400&q=70"],
-["GORZYCE","Mercedes GLC 4Matic","168 900","2022•42k","D","https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=400&q=70"]
+["LUBLIN","Kia Sportage 1.6 T-GDI","124 900","2023 • 12 000 km • Benzyna • Automat • 150 KM","https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=600&q=70"],
+["POZNAŃ","Toyota Corolla Hybrid","95 500","2022 • 32 000 km • Hybryda • 122 KM","https://images.unsplash.com/photo-1623869675781-80b17a2d1d6b?w=600&q=70"],
+["BIAŁYSTOK","Hyundai Tucson Hybrid","119 900","2022 • 28 000 km • Hybryda • 230 KM","https://images.unsplash.com/photo-1619767886558-efdc693e71b1?w=600&q=70"],
+["GDAŃSK","VW Passat 2.0 TDI","87 900","2021 • 45 000 km • Diesel • Manual","https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=600&q=70"],
+["KATOWICE","Skoda Octavia 1.5 TSI","78 900","2021 • 58 000 km • Benzyna","https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=600&q=70"],
+["GDYNIA","Opel Astra 1.2 Turbo","65 900","2021 • 49 000 km • Benzyna","https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=600&q=70"],
+["KRAKÓW","Audi A4 Avant","92 900","2020 • 76 000 km • Diesel • Automat","https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=600&q=70"],
+["ŁÓDŹ","Ford Focus ST-Line","68 900","2020 • 67 000 km • Benzyna","https://images.unsplash.com/photo-1550358864-518f20239e8f?w=600&q=70"],
+["RZESZÓW","Seat Leon FR 2.0 TDI","73 900","2020 • 91 000 km • Diesel","https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=600&q=70"],
+["WARSZAWA","BMW 320d 190 KM","84 900","2019 • 98 000 km • Diesel • Automat ★ POLECANE","https://images.unsplash.com/photo-1555215695-3004980ad54e?w=600&q=70"],
+["SZCZECIN","Volvo XC60 D4 AWD","112 900","2019 • 89 000 km • Diesel • POLECANE","https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?w=600&q=70"],
+["WROCŁAW","Mercedes C 220d","79 900","2018 • 112 000 km • Diesel • 194 KM","https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=600&q=70"],
+["TORUŃ","BMW X5 3.0d xDrive","189 900","2021 • 55 000 km • 286 KM","https://images.unsplash.com/photo-1556189250-72ba954cfc2b?w=600&q=70"],
+["GLIWICE","Audi Q5 2.0 TDI quattro","145 900","2022 • 38 000 km • 204 KM","https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=600&q=70"],
+["BYDGOSZCZ","Toyota RAV4 Hybrid","139 900","2023 • 18 000 km • 222 KM","https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=600&q=70"],
+["GORZYCE","Mercedes GLC 220d 4Matic","168 900","2022 • 42 000 km • 194 KM • Gorzyce","https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=600&q=70"]
 ];
 function render(){
 const q=document.getElementById('q').value.toLowerCase();
 let h='';
-D.filter(d=>(d[1]+d[0]).toLowerCase().includes(q)).forEach(d=>{
-h+=`<div class="card bg-white rounded-[16px] overflow-hidden border shadow-[0_1px_3px_rgba(0,0,0,.06)]"><div class="relative"><div class="absolute top-1.5 left-1.5 bg-black text-white text-[7px] font-black px-2 py-1 rounded-full z-10">${d[0]}</div><img src="${d[5]}" loading="lazy" decoding="async" class="w-full h-[118px] md:h-[160px] object-cover" alt="${d[1]}"><div class="absolute bottom-1 left-1 bg-white/90 backdrop-blur text-[8px] font-bold px-2 py-0.5 rounded-full">${d[3]}</div></div><div class="p-2"><div class="font-bold text-[11px] leading-tight truncate">${d[1]}</div><div class="flex justify-between items-end mt-1"><div class="font-black text-[12px]">${d[2]} zł</div><div class="text-[8px] text-zinc-400">${d[4]}</div></div></div></div>`;
+D.forEach((d,i)=>{
+if(!(d[1]+d[0]).toLowerCase().includes(q)) return;
+h+=`<div onclick="openM(${i})" class="card bg-white rounded-[16px] overflow-hidden border cursor-pointer active:scale-[.97]"><div class="relative"><div class="absolute top-1.5 left-1.5 bg-black text-white text-[7px] font-black px-2 py-1 rounded-full">${d[0]}</div><img src="${d[4]}" loading="lazy" class="w-full h-[118px] md:h-[160px] object-cover"><div class="absolute bottom-1 left-1 bg-white/90 text-[8px] font-bold px-2 py-0.5 rounded-full">${d[3].split('•')[0]}</div></div><div class="p-2"><div class="font-bold text-[11px] truncate">${d[1]}</div><div class="font-black text-[12px] mt-1">${d[2]} zł</div></div></div>`;
 });
 document.getElementById('grid').innerHTML=h;
 }
-render(); document.getElementById('q').addEventListener('input',render);
+function openM(i){
+const d=D[i];
+document.getElementById('mImg').src=d[4];
+document.getElementById('mCity').textContent=d[0];
+document.getElementById('mTitle').textContent=d[1];
+document.getElementById('mMeta').textContent=d[3];
+document.getElementById('mPrice').textContent=d[2]+' zł';
+document.getElementById('modal').classList.remove('hidden');
+document.body.style.overflow='hidden';
+}
+function closeM(){
+document.getElementById('modal').classList.add('hidden');
+document.body.style.overflow='';
+}
+render();
+document.getElementById('q').addEventListener('input',render);
+document.getElementById('modal').addEventListener('click',e=>{if(e.target.id==='modal') closeM()});
 </script>
 </body></html>
