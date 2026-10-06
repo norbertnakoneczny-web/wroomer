@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>WROOMER.PL - Ogłoszenia motoryzacyjne Warszawa, Kraków, Wrocław, Katowice, Gdańsk | wroomer.pl</title>
-<meta name="description" content="WROOMER.PL - Ogłoszenia motoryzacyjne Warszawa Kraków Wrocław Katowice Gdańsk Poznań Gorzyce Wodzisław Śląsk. Portal ogłoszeniowy. Wpisz wroomer.pl.">
+<meta name="description" content="WROOMER.PL - Ogłoszenia motoryzacyjne Warszawa Kraków Wrocław Katowice Gdańsk Poznań Gorzyce Wodzisław Śląsk. Portal ogłoszeniowy. Wyszukaj wroomer.pl - portal ogłoszeń motoryzacyjnych.
 <meta name="google-site-verification" content="TWOJ_KOD_GSC">
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
@@ -16,7 +16,7 @@
 <header class="bg-white border-b sticky top-0 z-40">
 <div class="max-w-[1440px] mx-auto px-4 py-3 flex justify-between items-center">
 <div class="text-2xl font-black">WROOMER.PL</div>
-<div class="flex gap-1.5 sm:gap-2 items-center"><span id="userBadge" class="hidden text-[10px] sm:text-xs bg-black text-white px-2 sm:px-3 py-1 rounded-full max-w-[100px] truncate"></span><button onclick="openAdd()" class="bg-black text-white px-3 sm:px-5 py-1.5 sm:py-2.5 rounded-lg sm:rounded-xl font-bold text-xs sm:text-sm">+ Dodaj</button><button id="authBtn" onclick="openAuth()" class="border px-2.5 sm:px-4 py-1.5 sm:py-2.5 rounded-lg sm:rounded-xl text-xs sm:text-sm">Zaloguj</button></div>
+<div class="flex gap-2 items-center"><span id="userBadge" class="hidden text-xs bg-black text-white px-3 py-1 rounded-full"></span><button onclick="openAdd()" class="bg-black text-white px-5 py-2.5 rounded-xl font-bold">+ Dodaj</button><button id="authBtn" onclick="openAuth()" class="border px-4 py-2.5 rounded-xl text-sm">Zaloguj</button></div>
 </div>
 </header>
 <main class="max-w-[1440px] mx-auto px-4 py-6">
@@ -24,12 +24,11 @@
 <div id="listings" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-3 sm:gap-4"></div> <!-- SEO MIASTA - POZYCJONOWANIE WROOMER -->
 <div class="max-w-[1440px] mx-auto px-4 py-10 mt-10 border-t bg-white">
 <h2 class="font-black text-xl mb-4">Ogłoszenia motoryzacyjne w dużych miastach - WROOMER.PL</h2>
-<p class="text-sm text-zinc-600 mb-6">WROOMER.PL to polski portal ogłoszeniowy ogłoszeń motoryzacyjnych. Znajdź samochód w Twoim mieście. Wpisz w Google: <b>wroomer.pl, ogłoszenia motoryzacyjne</b> - jesteśmy w indeksie Google!</p>
+<p class="text-sm text-zinc-600 mb-6">WROOMER.PL to portal ogłoszeń motoryzacyjnych ogłoszeń motoryzacyjnych. Znajdź samochód w Twoim mieście. Wyszukaj wroomer.pl - portal ogłoszeń motoryzacyjnych.
 <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 text-sm" id="cityGrid"></div>
 <div class="mt-8 p-4 bg-zinc-50 rounded-xl text-xs text-zinc-500">
 <h3 class="font-bold text-sm text-black mb-2">Dlaczego WROOMER.PL?</h3>
-<p>WROOMER.PL - portal ogłoszeniowy. Szybkie ogłoszenia z GPS, kontakt telefon/SMS/WhatsApp, wiadomość przez portal . Portal:.pl - wszystkie prowadzą do nas. Pozycjonowanie: ogłoszenia motoryzacyjne, samochody używane, auta na sprzedaż, komis, części.
-</p>
+<p>WROOMER.PL - portal ogłoszeń motoryzacyjnych. Szybkie ogłoszenia z GPS, kontakt telefon/SMS/WhatsApp, wiadomość przez portal . </p>
 <div class="mt-3 flex flex-wrap gap-2">
 <span class="bg-black text-white px-3 py-1 rounded-full text-xs">wroomer.pl</span>
 <span class="bg-zinc-200 px-3 py-1 rounded-full text-xs">wromer</span>
@@ -142,20 +141,7 @@ function renderExisting(){ const box=document.getElementById('existingBox'), gri
 function updateCount(){const total=files.length+existingImgs.filter(im=>toDelete.indexOf(im.id)===-1).length; document.getElementById('photoCount').textContent=total+'/10';}
 async function load(){ log('Laduje ogloszenia...'); try{ const res = await supa.from('listings').select('*').order('created_at',{ascending:false}).limit(100); if(res.error) throw res.error; let withImages=res.data; try{ const r2=await supa.from('listings').select('*, listing_images(id,image_url)').order('created_at',{ascending:false}).limit(100); if(!r2.error && r2.data) withImages=r2.data; }catch(e){} allData=withImages; renderListings(allData); document.getElementById('msg').textContent='Zaladowano '+allData.length+' ogloszen | User: '+(currentUser?currentUser.email:'niezalogowany'); document.getElementById('msg').className='bg-green-50 border border-green-200 rounded-xl p-3 mb-4 text-sm'; } catch(e){ log('BLAD LOAD: '+e.message); document.getElementById('msg').textContent='Blad: '+e.message; document.getElementById('msg').className='bg-red-50 border border-red-200 rounded-xl p-3 mb-4 text-sm'; }
 }
-function renderListings(data){ const grid=document.getElementById('listings'); if(!data || data.length===0){ grid.innerHTML='<div class="col-span-full text-center py-20 bg-white rounded-2xl border"><div class="text-4xl mb-2">Brak</div><div class="font-bold">Brak ogloszen</div></div>'; return; } grid.innerHTML=''; data.forEach((l, idx)=>{ if(idx>0 && idx%4===0){ const ad=document.createElement('div'); ad.className='bg-white rounded-xl border p-4 ad-box min-h-[280px]'; ad.innerHTML='<div class="text-[10px] text-zinc-400">REKLAMA</div><ins class="adsbygoogle" style="display:block;width:100%;min-height:200px" data-ad-client="ca-pub-1234567890123456" data-ad-slot="1234567890" data-ad-format="auto" data-full-width-responsive="true"></ins><div class="text-xs text-zinc-400 mt-2">AdSense</div>'; grid.appendChild(ad); try{(adsbygoogle=window.adsbygoogle||[]).push({});}catch(e){} } const card=document.createElement('div'); card.className='bg-white rounded-xl border overflow-hidden hover:shadow-xl transition group'; const img=(l.listing_images && l.listing_images[0] && l.listing_images[0].image_url) ? l.listing_images[0].image_url : 'https://picsum.photos/seed/'+l.id+'/400/300'; const count=l.listing_images?l.listing_images.length:1; const titleText=(l.brand||'')+' '+(l.model||'')+' '+(l.title||''); const priceText=Number(l.price||0).toLocaleString('pl-PL')+' zl'; const locText=(l.location||l.city||'')+' '+(l.year||'')+' '+(l.mileage?Number(l.mileage).toLocaleString()+'km':''); const isOwner=currentUser && l.user_id===currentUser.id;   card.innerHTML='<div class="h-28 sm:h-44 bg-zinc-100 relative overflow-hidden"><img src="'+img+'" class="w-full h-full object-cover"><div class="absolute top-1.5 left-1.5 bg-black/70 text-white text-[10px] sm:text-xs px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full">'+count+' foto</div></div><div class="p-2 sm:p-3"><div class="font-bold text-[12px] sm:text-sm leading-tight line-clamp-2">'+titleText+'</div><div class="font-black mt-1 text-[14px] sm:text-lg">'+priceText+'</div><div class="text-[10px] sm:text-xs text-zinc-500 mt-0.5 sm:mt-1 truncate">'+locText+'</div></div>';
-  card.onclick=function(){openDetailById(l.id);};
-  card.style.cursor='pointer';
-  if(isOwner){
-   const btnDiv=document.createElement('div');
-   btnDiv.className='px-2 pb-2 flex gap-1.5';
-   btnDiv.innerHTML='<button class="flex-1 bg-black text-white text-[11px] py-1.5 rounded-lg font-bold">Edytuj</button><button class="flex-1 border text-[11px] py-1.5 rounded-lg text-red-600 bg-white">Usuń</button>';
-   // stop propagation to not open detail when editing
-   btnDiv.querySelectorAll('button')[0].onclick=function(e){e.stopPropagation(); editListing(l.id);};
-   btnDiv.querySelectorAll('button')[1].onclick=function(e){e.stopPropagation(); deleteListing(l.id);};
-   card.appendChild(btnDiv);
-  }
-  grid.appendChild(card);
- });
+function renderListings(data){ const grid=document.getElementById('listings'); if(!data || data.length===0){ grid.innerHTML='<div class="col-span-full text-center py-20 bg-white rounded-2xl border"><div class="text-4xl mb-2">Brak</div><div class="font-bold">Brak ogloszen</div></div>'; return; } grid.innerHTML=''; data.forEach((l, idx)=>{ if(idx>0 && idx%4===0){ const ad=document.createElement('div'); ad.className='bg-white rounded-xl border p-4 ad-box min-h-[280px]'; ad.innerHTML='<div class="text-[10px] text-zinc-400">REKLAMA</div><ins class="adsbygoogle" style="display:block;width:100%;min-height:200px" data-ad-client="ca-pub-1234567890123456" data-ad-slot="1234567890" data-ad-format="auto" data-full-width-responsive="true"></ins><div class="text-xs text-zinc-400 mt-2">AdSense</div>'; grid.appendChild(ad); try{(adsbygoogle=window.adsbygoogle||[]).push({});}catch(e){} } const card=document.createElement('div'); card.className='bg-white rounded-xl border overflow-hidden hover:shadow-xl transition group'; const img=(l.listing_images && l.listing_images[0] && l.listing_images[0].image_url) ? l.listing_images[0].image_url : 'https://picsum.photos/seed/'+l.id+'/400/300'; const count=l.listing_images?l.listing_images.length:1; const titleText=(l.brand||'')+' '+(l.model||'')+' '+(l.title||''); const priceText=Number(l.price||0).toLocaleString('pl-PL')+' zl'; const locText=(l.location||l.city||'')+' '+(l.year||'')+' '+(l.mileage?Number(l.mileage).toLocaleString()+'km':''); const isOwner=currentUser && l.user_id===currentUser.id; card.innerHTML='<div class="h-28 sm:h-44 bg-zinc-100 relative cursor-pointer overflow-hidden"><img src="'+img+'" class="w-full h-full object-cover"><div class="absolute top-1.5 left-1.5 bg-black/70 text-white text-[10px] sm:text-xs px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full">'+count+' foto</div></div><div class="p-2 sm:p-3"><div class="font-bold text-[12px] sm:text-sm leading-tight line-clamp-2">'+titleText+'</div><div class="font-black mt-1 text-[14px] sm:text-lg">'+priceText+'</div><div class="text-[10px] sm:text-xs text-zinc-500 mt-0.5 sm:mt-1 truncate">'+locText+'</div></div>'; card.querySelector('div').onclick=function(){openDetailById(l.id);}; const btnDiv=document.createElement('div'); btnDiv.className='px-3 pb-3'; if(isOwner){ btnDiv.innerHTML='<div class="flex gap-2"><button class="flex-1 bg-black text-white text-xs py-2 rounded-lg font-bold">Edytuj</button><button class="flex-1 border text-xs py-2 rounded-lg text-red-600">Usun</button></div>'; btnDiv.querySelectorAll('button')[0].onclick=function(){editListing(l.id);}; btnDiv.querySelectorAll('button')[1].onclick=function(){deleteListing(l.id);}; } else { btnDiv.innerHTML='<button class="w-full border text-xs py-2 rounded-lg">Zobacz ogloszenie</button>'; btnDiv.querySelector('button').onclick=function(){openDetailById(l.id);}; } card.appendChild(btnDiv); grid.appendChild(card); });
 }
 async function editListing(id){ const l=allData.find(function(x){return x.id===id;}); if(!l){alert('Nie znaleziono'); return;} clearForm(); editingId=id; document.getElementById('brand').value=l.brand||''; document.getElementById('model').value=l.model||''; document.getElementById('year').value=l.year||''; document.getElementById('mileage').value=l.mileage||''; document.getElementById('price').value=l.price||''; document.getElementById('title').value=l.title||''; document.getElementById('loc').value=l.location||''; document.getElementById('desc').value=l.description||''; const ph=document.getElementById('phone'); if(ph) ph.value=l.phone||''; if(l.lat){currentGPS={lat:l.lat,lng:l.lng,addr:l.full_address||'',city:l.city||''}; document.getElementById('gpsPreview').classList.remove('hidden'); document.getElementById('gpsAddr').textContent=l.full_address||l.lat+','+l.lng;} existingImgs=l.listing_images||[]; renderExisting(); updateCount(); document.getElementById('modalTitle').textContent='Edytuj ogloszenie'; document.getElementById('addModal').classList.remove('hidden');
 }
@@ -178,7 +164,7 @@ async function sendChat(){ const msg=document.getElementById('chatMsg').value.tr
 } (async function(){await refreshUser(); await load();})();
 </script> <script>
 const CITIES = [["Warszawa", "mazowieckie"], ["Kraków", "małopolskie"], ["Wrocław", "dolnośląskie"], ["Gdańsk", "pomorskie"], ["Katowice", "śląskie"], ["Poznań", "wielkopolskie"], ["Łódź", "łódzkie"], ["Szczecin", "zachodniopomorskie"], ["Lublin", "lubelskie"], ["Bydgoszcz", "kujawsko-pomorskie"], ["Białystok", "podlaskie"], ["Rzeszów", "podkarpackie"], ["Gdynia", "pomorskie"], ["Częstochowa", "śląskie"], ["Radom", "mazowieckie"], ["Sosnowiec", "śląskie"], ["Toruń", "kujawsko-pomorskie"], ["Kielce", "świętokrzyskie"], ["Gliwice", "śląskie"], ["Zabrze", "śląskie"], ["Olsztyn", "warmińsko-mazurskie"], ["Bielsko-Biała", "śląskie"], ["Bytom", "śląskie"], ["Zielona Góra", "lubuskie"], ["Rybnik", "śląskie"], ["Ruda Śląska", "śląskie"], ["Opole", "opolskie"], ["Tychy", "śląskie"], ["Gorzów Wielkopolski", "lubuskie"], ["Dąbrowa Górnicza", "śląskie"], ["Elbląg", "warmińsko-mazurskie"], ["Płock", "mazowieckie"], ["Wodzisław Śląski", "śląskie"], ["Gorzyce", "śląskie"], ["Jastrzębie-Zdrój", "śląskie"], ["Żory", "śląskie"]]; function renderCitySEO(){ const grid=document.getElementById('cityGrid'); if(!grid) return; grid.innerHTML=''; CITIES.forEach(c=>{ const city=c[0]; const a=document.createElement('a'); a.href='#city-'+encodeURIComponent(city); a.className='hover:underline hover:text-black text-zinc-600'; a.textContent='Ogłoszenia '+city; a.onclick=(e)=>{e.preventDefault(); filterByCity(city);}; grid.appendChild(a); });
-} function filterByCity(city){ document.getElementById('loc').value=city; // for add form hint // filter listings const filtered=allData.filter(l=>{ const txt=((l.city||'')+' '+(l.location||'')+' '+(l.full_address||'')).toLowerCase(); return txt.includes(city.toLowerCase()); }); const msg=document.getElementById('msg'); if(filtered.length===0){ msg.textContent='Brak ogłoszeń w '+city+' - bądź pierwszy! Dodaj ogłoszenie z lokalizacją '+city; msg.className='bg-yellow-50 border border-yellow-200 rounded-xl p-3 mb-4 text-sm'; renderListings([]); // Show SEO placeholder const grid=document.getElementById('listings'); grid.innerHTML='<div class="col-span-full bg-white rounded-2xl border p-8 text-center"><div class="text-4xl mb-3">🚗</div><div class="font-black text-xl">Ogłoszenia motoryzacyjne '+city+'</div><div class="text-sm text-zinc-500 mt-2">Aktualnie brak ogłoszeń w '+city+'. Dodaj pierwsze ogłoszenie z GPS w '+city+' i pojawisz się w Google na frazę "ogłoszenia '+city+'"!</div><button onclick="openAdd()" class="mt-4 bg-black text-white px-6 py-3 rounded-xl font-bold">+ Dodaj ogłoszenie w '+city+'</button><div class="mt-6 text-xs text-zinc-400">WROOMER.PL: ogłoszenia '+city+', samochody '+city+', auta '+city+'</div></div>'; } else { msg.textContent='✅ Znaleziono '+filtered.length+' ogłoszeń w '+city+' | WROOMER.PL - ogłoszenia motoryzacyjne '+city; msg.className='bg-green-50 border border-green-200 rounded-xl p-3 mb-4 text-sm'; renderListings(filtered); // Update SEO title document.title='Ogłoszenia motoryzacyjne '+city+' - WROOMER.PL | '+filtered.length+' aut'; } history.replaceState(null,'','#miasto-'+encodeURIComponent(city)); log('Filter city: '+city+' -> '+filtered.length);
+} function filterByCity(city){ document.getElementById('loc').value=city; // for add form hint // filter listings const filtered=allData.filter(l=>{ const txt=((l.city||'')+' '+(l.location||'')+' '+(l.full_address||'')).toLowerCase(); return txt.includes(city.toLowerCase()); }); const msg=document.getElementById('msg'); if(filtered.length===0){ msg.textContent='Brak ogłoszeń w '+city+' - bądź pierwszy! Dodaj ogłoszenie z lokalizacją '+city; msg.className='bg-yellow-50 border border-yellow-200 rounded-xl p-3 mb-4 text-sm'; renderListings([]); // Show SEO placeholder const grid=document.getElementById('listings'); grid.innerHTML='<div class="col-span-full bg-white rounded-2xl border p-8 text-center"><div class="text-4xl mb-3">🚗</div><div class="font-black text-xl">Ogłoszenia motoryzacyjne '+city+'</div><div class="text-sm text-zinc-500 mt-2">Aktualnie brak ogłoszeń w '+city+'. Dodaj pierwsze ogłoszenie z GPS w '+city+' i pojawisz się w Google na frazę "ogłoszenia '+city+'"!</div><button onclick="openAdd()" class="mt-4 bg-black text-white px-6 py-3 rounded-xl font-bold">+ Dodaj ogłoszenie w '+city+'</button><div class="mt-6 text-xs text-zinc-400">WROOMER.PL: wroomer, wromer, ogłoszenia '+city+', samochody '+city+', auta '+city+'</div></div>'; } else { msg.textContent='✅ Znaleziono '+filtered.length+' ogłoszeń w '+city+' | WROOMER.PL - ogłoszenia motoryzacyjne '+city; msg.className='bg-green-50 border border-green-200 rounded-xl p-3 mb-4 text-sm'; renderListings(filtered); // Update SEO title document.title='Ogłoszenia motoryzacyjne '+city+' - WROOMER.PL | '+filtered.length+' aut'; } history.replaceState(null,'','#miasto-'+encodeURIComponent(city)); log('Filter city: '+city+' -> '+filtered.length);
 } document.addEventListener('DOMContentLoaded', renderCitySEO);
 </script> <!-- COOKIE BANNER RODO - WYMAGANE DLA ADSENSE I GSC -->
 <div id="cookieBanner" style="display:none; position:fixed; bottom:0; left:0; right:0; background:#111; color:#fff; z-index:9999; padding:16px; font-family:Inter,sans-serif;">
@@ -216,50 +202,5 @@ function saveCookieSettings(){ const an=document.getElementById('cookieAnalytics
 }
 function enableAds(){ try{ (adsbygoogle=window.adsbygoogle||[]).push({}); }catch(e){} } (function(){ const consent=getCookie('wroomer_cookies'); if(!consent){ setTimeout(()=>{ document.getElementById('cookieBanner').style.display='block'; }, 800); } else { if(getCookie('wroomer_ads')==='1') enableAds(); }
 })();
-</script> 
-<style>
-@media (max-width: 640px){
- #listings{grid-template-columns:repeat(2, minmax(0,1fr)); gap:8px}
- .ad-box{display:none} /* hide ads on mobile grid for neatness, keep bottom ad */
- header .text-2xl{font-size:1.1rem}
- #detailMain{touch-action:pan-y}
-}
-</style>
-
-<script>
-// SWIPE PALCEM NA SMARTFONIE - zdjęcia w szczegółach
-(function(){
- let startX=0, startY=0, endX=0;
- const mainImg = () => document.getElementById('detailMain');
- function initSwipe(){
-  const el = document.getElementById('detailModal');
-  if(!el) return;
-  el.addEventListener('touchstart', function(e){
-   if(e.touches.length===1){
-    startX=e.touches[0].clientX;
-    startY=e.touches[0].clientY;
-   }
-  }, {passive:true});
-  el.addEventListener('touchend', function(e){
-   endX=e.changedTouches[0].clientX;
-   const diffX = endX - startX;
-   const diffY = e.changedTouches[0].clientY - startY;
-   // only horizontal swipe, ignore vertical
-   if(Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 50){
-    if(diffX < 0){ nextImg(); } else { prevImg(); }
-   }
-  }, {passive:true});
- }
- document.addEventListener('DOMContentLoaded', initSwipe);
- // also init after modal opens
- const origOpen = window.showDetailImg;
- window.showDetailImg = function(){
-  origOpen();
-  // ensure swipe listeners attached
-  setTimeout(initSwipe, 100);
- };
-})();
-</script>
-
-</body>
+</script> </body>
 </html>
