@@ -2,58 +2,105 @@
 <html lang="pl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
 <title>WROOMER.PL - Auta z Twojej okolicy</title>
+<meta name="description" content="WROOMER.PL - auta z Twojej okolicy Gorzyce">
+<link rel="preconnect" href="https://bdpydgsfowtuvjnkyeeg.supabase.co" crossorigin>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:system-ui,sans-serif;background:#f6f7f8;color:#111}
-.h{position:sticky;top:0;z-index:10;background:#fff;border-bottom:1px solid #e5e7eb;padding:0 12px;height:56px;display:flex;align-items:center;justify-content:space-between}
-.logo{display:flex;align-items:center;gap:8px}
-.li{width:32px;height:32px;background:#000;color:#fff;border-radius:8px;display:grid;place-items:center;font-weight:800}
-.pg{max-width:1200px;margin:0 auto;padding:12px}
-.gd{display:grid;grid-template-columns:1fr;gap:12px}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f8f9fa;color:#111827;line-height:1.4;-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%}
+button{font-family:inherit;cursor:pointer}
+.h{position:sticky;top:0;z-index:40;background:#fff;border-bottom:1px solid #e5e7eb;height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 16px}
+@media(min-width:768px){.h{height:64px;padding:0 24px}}
+.logo{display:flex;align-items:center;gap:10px}
+.li{width:36px;height:36px;background:#000;color:#fff;border-radius:10px;display:grid;place-items:center;font-weight:800}
+.lt{font-weight:800;font-size:18px;letter-spacing:-.02em}
+.pg{max-width:1400px;margin:0 auto;padding:16px;display:flex;gap:16px;flex-direction:column}
+@media(min-width:1024px){.pg{flex-direction:row;gap:20px;padding:20px 24px}}
+.main{flex:1;min-width:0}
+.gd{display:grid;grid-template-columns:1fr;gap:14px}
 @media(min-width:600px){.gd{grid-template-columns:1fr 1fr}}
-@media(min-width:900px){.gd{grid-template-columns:1fr 1fr 1fr}}
-.cd{background:#fff;border:1px solid #e5e7eb;border-radius:12px;overflow:hidden;cursor:pointer}
-.cw{height:200px;background:#f3f4f6;position:relative}
+@media(min-width:1280px){.gd{grid-template-columns:1fr 1fr 1fr}}
+.cd{background:#fff;border:1px solid #e5e7eb;border-radius:16px;overflow:hidden;cursor:pointer;transition:transform .15s, box-shadow .15s}
+.cd:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.08)}
+.cd:active{transform:scale(.98)}
+.cw{position:relative;height:220px;background:#f3f4f6;overflow:hidden}
 .cw img{width:100%;height:100%;object-fit:cover}
-.cb{padding:10px 12px}
-.pr{font-weight:800;font-size:18px}
-.b{padding:0 16px;height:40px;border-radius:999px;border:1px solid #e5e7eb;background:#fff;font-weight:600;cursor:pointer}
+.ct{position:absolute;top:10px;right:10px;background:rgba(0,0,0,.75);color:#fff;font-size:11px;padding:4px 8px;border-radius:999px;font-weight:600}
+.cb{padding:12px 14px}
+.cti{font-weight:700;font-size:15px;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:40px}
+.pr{font-weight:800;font-size:18px;margin-top:6px}
+.lc{font-size:12px;color:#6b7280;margin-top:2px}
+.b{height:40px;padding:0 18px;border-radius:999px;border:1px solid #e5e7eb;background:#fff;font-weight:600;font-size:14px}
 .bb{background:#000;color:#fff;border-color:#000}
-.md{position:fixed;inset:0;z-index:50;display:none;background:rgba(0,0,0,.5)}
+.bb:hover{background:#1f1f1f}
+.md{position:fixed;inset:0;z-index:50;display:none}
 .md.o{display:block}
-.mc{background:#fff;max-width:600px;margin:20px auto;border-radius:12px;overflow:hidden;max-height:90vh;overflow:auto}
-.mh{padding:12px;border-bottom:1px solid #e5e7eb;display:flex;justify-content:space-between}
-#dbg{position:fixed;bottom:10px;left:10px;right:10px;background:#000;color:#0f0;font-family:monospace;font-size:11px;padding:8px;border-radius:8px;max-height:150px;overflow:auto;z-index:100;display:none}
+.mbg{position:absolute;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(4px)}
+.mb{position:absolute;inset:0;overflow:auto;padding:12px;display:flex;justify-content:center;align-items:flex-start}
+@media(min-width:768px){.mb{padding:24px}}
+.mc{background:#fff;border-radius:16px;max-width:720px;width:100%;margin-top:20px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.2)}
+.mh{padding:16px 20px;border-bottom:1px solid #e5e7eb;display:flex;justify-content:space-between;align-items:center}
+.cl{width:32px;height:32px;border-radius:999px;border:none;background:#f3f4f6;font-size:16px}
+.dw{position:relative;background:#000;aspect-ratio:16/10;overflow:hidden}
+.dt{display:flex;height:100%;transition:transform .3s cubic-bezier(.25,.8,.25,1);will-change:transform}
+.dt>div{flex:0 0 100%;height:100%;display:grid;place-items:center}
+.dt img{width:100%;height:100%;object-fit:contain}
+.nav{position:absolute;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:999px;background:rgba(0,0,0,.6);color:#fff;border:none;font-size:22px;display:grid;place-items:center;backdrop-filter:blur(8px)}
+.nav:hover{background:rgba(0,0,0,.8)}
+.nav.prev{left:12px}.nav.next{right:12px}
+.dots{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);display:flex;gap:6px}
+.dot{width:8px;height:8px;border-radius:999px;background:rgba(255,255,255,.5);transition:all .2s}
+.dot.on{background:#fff;width:20px}
+.fm{padding:20px;display:flex;flex-direction:column;gap:14px;max-height:80vh;overflow:auto}
+.f{margin-bottom:2px}
+.lb{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#6b7280;margin-bottom:6px}
+.f input,.f textarea,.f select{width:100%;height:42px;padding:0 12px;border:1px solid #e5e7eb;border-radius:10px;font-size:14px;background:#fff}
+.f textarea{height:auto;padding:10px 12px;resize:vertical}
+.fr{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:640px){.fr{grid-template-columns:1fr}}
+.dp{border:2px dashed #e5e7eb;border-radius:12px;padding:24px;text-align:center;background:#fafafa}
+.dp:hover{border-color:#000;background:#fff}
+.pv{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+@media(min-width:640px){.pv{grid-template-columns:repeat(5,1fr)}}
+.pi{position:relative;border-radius:10px;overflow:hidden;height:80px;background:#f3f4f6;border:1px solid #e5e7eb}
+.pi img{width:100%;height:100%;object-fit:cover}
+.pi button{position:absolute;top:4px;right:4px;width:24px;height:24px;border-radius:999px;background:rgba(0,0,0,.7);color:#fff;border:none;font-size:14px;display:grid;place-items:center}
+.skel{background:linear-gradient(90deg,#f3f4f6 25%,#e5e7eb 37%,#f3f4f6 63%);background-size:400% 100%;animation:sh 1.2s infinite}
+@keyframes sh{0%{background-position:100% 0}100%{background-position:-100% 0}}
+.skc{height:280px;border-radius:16px}
 </style>
 </head>
 <body>
-<header class="h"><div class="logo"><div class="li">W</div><div><div style="font-weight:800">WROOMER.PL</div><div style="font-size:10px;color:#6b7280">Auta z okolicy</div></div></div><div style="display:flex;gap:8px"><button id="ab" class="b bb">+ Dodaj</button><button onclick="localStorage.clear();location.reload()" class="b">🔄 Reset cache</button></div></header>
+<header class="h">
+<div class="logo"><div class="li">W</div><div><div class="lt">WROOMER<span style="color:#ef4444">.PL</span></div><div style="font-size:11px;color:#6b7280;margin-top:-2px">Auta z Twojej okolicy</div></div></div>
+<div style="display:flex;gap:8px"><button id="ab" class="b bb">+ Dodaj ogłoszenie</button></div>
+</header>
 <div class="pg">
-<div id="status" style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px;margin-bottom:12px;font-size:13px">⏳ Ładowanie...</div>
+<main class="main">
 <div id="gd" class="gd"></div>
+<div id="ld" class="gd" style="display:none"><div class="skel skc"></div><div class="skel skc"></div><div class="skel skc"></div><div class="skel skc"></div><div class="skel skc"></div><div class="skel skc"></div></div>
+<div id="empty" style="display:none;padding:40px;text-align:center;background:#fff;border:1px solid #e5e7eb;border-radius:16px"><div style="font-size:18px;font-weight:700">Brak ogłoszeń</div><div style="font-size:14px;color:#6b7280;margin-top:6px">Dodaj pierwsze ogłoszenie!</div></div>
+</main>
 </div>
-<div id="dm" class="md"><div class="mc"><div class="mh"><div style="font-weight:700">Szczegóły</div><button id="cd" style="border:none;background:#f3f4f6;width:30px;height:30px;border-radius:999px">✕</button></div><div id="dc" style="padding:14px"></div></div></div>
-<div id="am" class="md"><div class="mc"><div class="mh"><div style="font-weight:700">Dodaj ogłoszenie</div><button id="ca" style="border:none;background:#f3f4f6;width:30px;height:30px;border-radius:999px">✕</button></div>
-<form id="af" style="padding:14px;display:flex;flex-direction:column;gap:10px">
-<input id="mk" placeholder="Marka (np. Skoda)" required style="height:40px;padding:0 12px;border:1px solid #e5e7eb;border-radius:10px">
-<input id="md2" placeholder="Model (np. Octavia)" required style="height:40px;padding:0 12px;border:1px solid #e5e7eb;border-radius:10px">
-<input id="pr" type="number" placeholder="Cena" required style="height:40px;padding:0 12px;border:1px solid #e5e7eb;border-radius:10px">
-<input id="lc" placeholder="Lokalizacja" value="Gorzyce" required style="height:40px;padding:0 12px;border:1px solid #e5e7eb;border-radius:10px">
-<textarea id="ds" placeholder="Opis" rows="2" style="padding:10px;border:1px solid #e5e7eb;border-radius:10px"></textarea>
-<div><div style="font-size:12px;font-weight:600;margin-bottom:6px">Zdjęcia max 10</div><input id="fi" type="file" multiple accept="image/*"><div id="pv" style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:8px"></div></div>
-<button type="submit" id="sb" class="b bb" style="height:46px">💾 Zapisz</button>
-</form></div></div>
-<div id="dbg"></div>
+
+<div id="dm" class="md"><div id="dbg" class="mbg"></div><div class="mb"><div class="mc"><div class="mh"><div style="font-weight:700">Szczegóły ogłoszenia</div><button id="cd" class="cl">✕</button></div><div id="dc"></div></div></div></div>
+
+<div id="am" class="md"><div id="abg" class="mbg"></div><div class="mb"><div class="mc" style="max-width:640px"><div class="mh"><div style="font-weight:700">Dodaj ogłoszenie</div><button id="ca" class="cl">✕</button></div>
+<form id="af" class="fm">
+<div class="fr"><div class="f"><div class="lb">Marka *</div><input id="mk" required placeholder="np. Skoda"></div><div class="f"><div class="lb">Model *</div><input id="md2" required placeholder="np. Octavia"></div></div>
+<div class="fr"><div class="f"><div class="lb">Cena *</div><input id="pr" type="number" inputmode="numeric" required placeholder="np. 45000"></div><div class="f"><div class="lb">Lokalizacja *</div><input id="lc" required value="Gorzyce"></div></div>
+<div class="f"><div class="lb">Opis</div><textarea id="ds" rows="3" placeholder="Opis auta..."></textarea></div>
+<div class="f"><div class="lb">Zdjęcia (max 10) - każde osobno</div><div id="dz" class="dp">📸 Kliknij aby dodać zdjęcia<br><span style="font-size:12px;color:#6b7280">WebP 800px - szybkie i ostre</span></div><input id="fi" type="file" multiple accept="image/*" style="display:none"><div id="pv" class="pv" style="margin-top:10px"></div><div id="ci" style="font-size:11px;color:#6b7280;margin-top:6px"></div></div>
+<button type="submit" id="sb" class="b bb" style="height:46px;width:100%">💾 Zapisz ogłoszenie</button>
+</form></div></div></div>
+
 <script>
-const U='https://bdpydgsfowtuvjnkyeeg.supabase.co';
-const K='sb_publishable_S1qH_mBZaX7-bzmfJ0IVGA_6hxGbJWd';
-let supa=null;
-let ls=[];
+const U='https://bdpydgsfowtuvjnkyeeg.supabase.co', K='sb_publishable_S1qH_mBZaX7-bzmfJ0IVGA_6hxGbJWd';
+let supa=null, ls=[], ai=[];
 const $=s=>document.getElementById(s);
-function log(m){console.log(m);const d=$('dbg');d.style.display='block';d.innerHTML+=m+'<br>';}
-function setStatus(m){$('status').innerHTML=m; log(m);}
 
 async function comp(file, maxW=800){
  return new Promise(res=>{
@@ -67,9 +114,8 @@ async function comp(file, maxW=800){
     const c=document.createElement('canvas');c.width=w;c.height=h;
     c.getContext('2d').drawImage(im,0,0,w,h);
     c.toBlob(b=>{
-     const url=URL.createObjectURL(b);
-     res({blob:b, data:c.toDataURL('image/webp',0.6), url:url});
-    },'image/webp',0.6);
+     res({blob:b, data:c.toDataURL('image/webp',0.7), url:URL.createObjectURL(b)});
+    },'image/webp',0.7);
    };
    im.src=e.target.result;
   };
@@ -79,128 +125,152 @@ async function comp(file, maxW=800){
 function d2b(d){const a=d.split(',');const m=a[0].match(/:(.*?);/)[1];const bs=atob(a[1]);let n=bs.length;const u=new Uint8Array(n);while(n--)u[n]=bs.charCodeAt(n);return new Blob([u],{type:m});}
 
 function rn(){
- const g=$('gd');
- if(ls.length===0){g.innerHTML='<div style="grid-column:1/-1;padding:40px;text-align:center;background:#fff;border-radius:12px">Brak ogłoszeń - dodaj pierwsze!<br><br>Jeśli widzisz ten komunikat a w Supabase są dane, otwórz F12 Console</div>';return;}
+ const g=$('gd'), e=$('empty');
+ if(ls.length===0){g.style.display='none';e.style.display='block';return;}
+ e.style.display='none';g.style.display='grid';
  g.innerHTML='';
  ls.forEach(l=>{
   const d=document.createElement('div');d.className='cd';
-  const img=l.im&&l.im[0]?l.im[0]:'https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=400&h=300&fit=crop';
-  d.innerHTML=`<div class="cw"><img src="${img}" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=400'"><div style="position:absolute;top:6px;right:6px;background:rgba(0,0,0,.7);color:#fff;font-size:10px;padding:2px 6px;border-radius:999px">${l.im?l.im.length:0}</div></div><div class="cb"><div style="font-weight:700">${l.md}</div><div style="font-size:12px;color:#6b7280">${l.lc} • ${l.pr.toLocaleString()} zł</div></div>`;
+  const img=l.im&&l.im[0]?l.im[0]:'https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=600&h=400&fit=crop&auto=format&q=70';
+  const cnt=l.im?l.im.length:0;
+  d.innerHTML=`<div class="cw"><img src="${img}" alt="${l.md}" loading="lazy" decoding="async" onerror="this.src='https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=600'">${cnt>1?`<div class="ct">${cnt} zdjęć</div>`:''}</div><div class="cb"><div class="cti">${l.md}</div><div class="pr">${(l.pr||0).toLocaleString()} zł</div><div class="lc">📍 ${l.lc}</div></div>`;
   d.onclick=()=>od(l);
   g.appendChild(d);
  });
 }
 
 async function od(l){
- const m=$('dm'),c=$('dc');
- let ims=l.im&&l.im.length?l.im:['https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800'];
- c.innerHTML=`<div style="background:#000;height:300px;display:flex;overflow:auto">${ims.map(s=>`<img src="${s}" style="height:300px;flex-shrink:0">`).join('')}</div><div style="padding:14px"><h2 style="font-weight:800;font-size:20px">${l.md}</h2><div style="font-weight:800;font-size:22px;margin-top:8px">${l.pr.toLocaleString()} zł</div><div>📍 ${l.lc}</div><div style="margin-top:10px;white-space:pre-wrap">${l.ds}</div></div>`;
+ const m=$('dm'), c=$('dc');
+ let ims=l.im&&l.im.length?l.im:['https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800&h=600&fit=crop&auto=format&q=80'];
+ // Każde zdjęcie osobno - swipe, nie połączone
+ c.innerHTML=`
+ <div class="dw">
+  <div id="dt" class="dt" style="width:${ims.length*100}%">
+   ${ims.map(s=>`<div><img src="${s}" alt="${l.md}" loading="eager" decoding="async"></div>`).join('')}
+  </div>
+  ${ims.length>1?`<button id="dp" class="nav prev">‹</button><button id="dn" class="nav next">›</button><div class="dots" id="dots">${ims.map((_,i)=>`<div class="dot ${i===0?'on':''}"></div>`).join('')}</div>`:''}
+ </div>
+ <div style="padding:18px">
+  <h2 style="font-weight:800;font-size:22px;line-height:1.2">${l.md}</h2>
+  <div style="font-weight:800;font-size:24px;margin-top:10px">${(l.pr||0).toLocaleString()} zł</div>
+  <div style="font-size:14px;color:#6b7280;margin-top:4px">📍 ${l.lc}</div>
+  ${l.ds?`<div style="margin-top:14px;font-size:14px;line-height:1.5;white-space:pre-wrap;background:#f8f9fa;padding:12px;border-radius:10px">${l.ds}</div>`:''}
+  <div style="margin-top:12px;font-size:12px;color:#6b7280">${ims.length} zdjęć • Przesuwaj palcem lub strzałkami</div>
+ </div>`;
  m.classList.add('o');
- // Dociągnij wszystkie zdjęcia
+ let cur=0;
+ const tr=$('dt'), dots=$('dots');
+ const upd=()=>{
+  if(tr) tr.style.transform=`translateX(-${cur*100/ims.length}%)`;
+  if(dots){Array.from(dots.children).forEach((d,i)=>d.classList.toggle('on',i===cur));}
+ };
+ $('dp')?.addEventListener('click',()=>{cur=(cur-1+ims.length)%ims.length;upd();});
+ $('dn')?.addEventListener('click',()=>{cur=(cur+1)%ims.length;upd();});
+ // Swipe
+ let sx=0;
+ const box=c.querySelector('.dw');
+ box.addEventListener('touchstart',e=>{sx=e.touches[0].clientX;},{passive:true});
+ box.addEventListener('touchend',e=>{
+  const dx=e.changedTouches[0].clientX-sx;
+  if(Math.abs(dx)>50){if(dx<0) cur=(cur+1)%ims.length; else cur=(cur-1+ims.length)%ims.length; upd();}
+ });
+ // Dociągnij wszystkie zdjęcia dla tego ogłoszenia (osobne, nie połączone)
  try{
   if(supa){
    const {data:all}=await supa.from('listing_images').select('image_url').eq('listing_id',l.id).limit(10);
    if(all&&all.length>ims.length){
-    ims=all.map(r=>r.image_url).filter(u=>u&&u.startsWith('http'));
-    c.innerHTML=`<div style="background:#000;height:300px;display:flex;overflow:auto">${ims.map(s=>`<img src="${s}" style="height:300px;flex-shrink:0">`).join('')}</div><div style="padding:14px"><h2 style="font-weight:800;font-size:20px">${l.md}</h2><div style="font-weight:800;font-size:22px;margin-top:8px">${l.pr.toLocaleString()} zł</div><div>📍 ${l.lc}</div><div style="margin-top:10px;white-space:pre-wrap">${l.ds}</div><div style="margin-top:8px;font-size:11px;color:#6b7280">${ims.length} zdjęć</div></div>`;
+    ims=all.map(r=>r.image_url).filter(u=>u&&u.startsWith('https://'));
+    const dt=$('dt');
+    if(dt){
+     dt.style.width=ims.length*100+'%';
+     dt.innerHTML=ims.map(s=>`<div><img src="${s}" alt="${l.md}" loading="lazy"></div>`).join('');
+     const dotsEl=$('dots');
+     if(dotsEl){dotsEl.innerHTML=ims.map((_,i)=>`<div class="dot ${i===0?'on':''}"></div>`).join('');}
+    }
+    cur=0;upd();
    }
   }
- }catch(e){log('Detail images error: '+e.message);}
+ }catch{}
 }
 
 $('ab').onclick=()=>$('am').classList.add('o');
 $('ca').onclick=()=>{$('am').classList.remove('o');};
+$('abg').onclick=()=>{$('am').classList.remove('o');};
 $('cd').onclick=()=>$('dm').classList.remove('o');
-$('dm').onclick=(e)=>{if(e.target.id==='dm')$('dm').classList.remove('o');};
-$('am').onclick=(e)=>{if(e.target.id==='am')$('am').classList.remove('o');};
+$('dbg').onclick=()=>$('dm').classList.remove('o');
 
-let ai=[];
+let previewEls=[];
+function rp(){
+ const p=$('pv');p.innerHTML='';
+ ai.forEach((o,i)=>{
+  const d=document.createElement('div');d.className='pi';
+  d.innerHTML=`<img src="${o.data}" alt=""><button type="button">✕</button>`;
+  d.querySelector('button').onclick=()=>{ai.splice(i,1);rp();};
+  p.appendChild(d);
+ });
+ $('ci').textContent=ai.length?`Wybrano ${ai.length} zdjęć - każde będzie osobno, ostre 800px WebP`:'';
+}
+
+$('dz').onclick=()=>$('fi').click();
 $('fi').onchange=async e=>{
- const fs=Array.from(e.target.files).slice(0,10);
+ const fs=Array.from(e.target.files).slice(0,10-ai.length);
+ $('ci').textContent=`Kompresuję ${fs.length} zdjęć...`;
  for(const f of fs){const c=await comp(f,800);ai.push(c);}
- const p=$('pv');p.innerHTML='';ai.forEach(o=>{const im=document.createElement('img');im.src=o.data;im.style.width='100%';im.style.height='60px';im.style.objectFit='cover';im.style.borderRadius='6px';p.appendChild(im);});
+ rp();
 };
 
 $('af').onsubmit=async e=>{
  e.preventDefault();
- const b=$('sb');b.disabled=true;b.textContent='Zapisuję...';
+ const b=$('sb');if(ai.length===0){alert('Dodaj min 1 zdjęcie');return;}
+ b.disabled=true;b.textContent='⏳ Zapisuję...';
  try{
-  const pl={title:($('mk').value.trim()+' '+$('md2').value.trim()).slice(0,100),description:$('ds').value.slice(0,500),price:parseInt($('pr').value)||0,location:$('lc').value.trim()};
-  log('Insert: '+JSON.stringify(pl));
-  if(!supa) throw new Error('Supabase nie gotowe');
+  const pl={title:($('mk').value.trim()+' '+$('md2').value.trim()).slice(0,120),description:($('ds').value||'').slice(0,800),price:parseInt($('pr').value)||0,location:$('lc').value.trim().slice(0,50)};
+  if(!supa) throw new Error('Baza nie gotowa');
   const {data,error}=await supa.from('listings').insert(pl).select().single();
   if(error) throw error;
-  log('Listing saved: '+data.id);
   for(let i=0;i<ai.length;i++){
    const o=ai[i];
    try{
     const fn=data.id+'/'+Date.now()+'_'+i+'.webp';
     const bl=o.blob||d2b(o.data);
-    log('Upload '+fn+' '+(bl.size/1024).toFixed(0)+'KB to listing-images');
     const up=await supa.storage.from('listing-images').upload(fn, bl, {contentType:'image/webp', upsert:true});
-    if(up.error){log('Storage error: '+up.error.message+' - zapisuję jako base64'); await supa.from('listing_images').insert({listing_id:data.id,image_url:o.data});}
-    else{
-     const {data:pub}=supa.storage.from('listing-images').getPublicUrl(fn);
-     log('URL: '+pub.publicUrl);
-     await supa.from('listing_images').insert({listing_id:data.id,image_url:pub.publicUrl});
-    }
-   }catch(err){log('Img error: '+err.message); try{await supa.from('listing_images').insert({listing_id:data.id,image_url:o.data});}catch{}}
+    let url;
+    if(up.error){url=o.data;}
+    else{const {data:pub}=supa.storage.from('listing-images').getPublicUrl(fn);url=pub.publicUrl;}
+    await supa.from('listing_images').insert({listing_id:data.id,image_url:url});
+   }catch{}
   }
   alert('✅ Dodano!');
-  $('am').classList.remove('o'); ai=[]; $('pv').innerHTML=''; $('af').reset();
+  $('am').classList.remove('o');ai=[];$('pv').innerHTML='';$('af').reset();$('ci').textContent='';
   await load();
- }catch(err){log('ERROR: '+err.message); alert('Błąd: '+err.message+'\n\nOtwórz F12 Console');}
- finally{b.disabled=false;b.textContent='💾 Zapisz';}
+ }catch(err){alert('Błąd: '+err.message);}
+ finally{b.disabled=false;b.textContent='💾 Zapisz ogłoszenie';}
 };
 
 async function load(){
- setStatus('⏳ Łączę z Supabase...');
+ const g=$('gd'), l=$('ld');
+ g.style.display='none';l.style.display='grid';
  try{
-  if(!supa){
-   if(!window.supabase){setStatus('⏳ Ładuję bibliotekę Supabase...'); await new Promise(r=>setTimeout(r,500));}
-   if(window.supabase){supa=window.supabase.createClient(U,K); log('Supabase client ready');}
-   else throw new Error('window.supabase not loaded');
-  }
-  setStatus('⏳ Pobieram ogłoszenia z bdpydgsfowtuvjnkyeeg...');
+  if(!supa){if(window.supabase) supa=window.supabase.createClient(U,K); else {await new Promise(r=>setTimeout(r,300)); if(window.supabase) supa=window.supabase.createClient(U,K);}}
+  if(!supa) throw new Error('Supabase error');
   const {data,error}=await supa.from('listings').select('id,title,description,price,location,created_at').order('created_at',{ascending:false}).limit(30);
   if(error) throw error;
-  log('Listings: '+data.length);
-  setStatus('⏳ Pobieram zdjęcia (tylko https, ignoruję base64)...');
   let imap={};
   try{
-   const {data:ims, error:imgErr}=await supa.from('listing_images').select('listing_id,image_url').limit(200);
-   if(imgErr) log('Images error: '+imgErr.message);
-   else{
-    log('Raw images from DB: '+ims.length);
-    let httpsCount=0, base64Count=0;
-    ims.forEach(r=>{
-     if(!r.image_url) return;
-     if(r.image_url.startsWith('https://')) httpsCount++;
-     else if(r.image_url.startsWith('data:')) base64Count++;
-     const lid=r.listing_id; if(!lid) return;
-     if(!imap[lid]) imap[lid]=[];
-     // Dla szybkości: tylko https, max 1 na grid
-     if(r.image_url.startsWith('https://') && imap[lid].length<3) imap[lid].push(r.image_url);
-    });
-    log('HTTPS images: '+httpsCount+' (szybkie), Base64: '+base64Count+' (WOLNE - usuń SQL!)');
-    if(base64Count>0) setStatus('⚠️ Masz '+base64Count+' wolnych zdjęć base64 w bazie! Uruchom w Supabase SQL: DELETE FROM listing_images WHERE image_url LIKE \'data:%\' - będzie 10x szybciej! Pobieram '+httpsCount+' szybkich...');
-   }
-  }catch(e){log('Images fetch failed: '+e.message);}
+   const {data:ims}=await supa.from('listing_images').select('listing_id,image_url').ilike('image_url','https://%').limit(100);
+   if(ims) ims.forEach(r=>{const lid=r.listing_id;if(!lid)return;if(!imap[lid]) imap[lid]=[];if(imap[lid].length<1 && r.image_url.startsWith('https://')) imap[lid].push(r.image_url);});
+  }catch{}
   ls=data.map(r=>({id:r.id, md:r.title||'Bez tytułu', pr:r.price||0, lc:r.location||'Gorzyce', ds:r.description||'', im:imap[r.id]||[]}));
-  log('Final: '+ls.length+' listings');
-  setStatus('✅ Załadowano '+ls.length+' ogłoszeń, '+Object.keys(imap).length+' ze zdjęciami CDN - gotowe! (base64 ignorowane dla szybkości)');
   rn();
- }catch(e){
-  log('FATAL ERROR: '+e.message);
-  setStatus('❌ Błąd: '+e.message+'<br><br>Otwórz F12 Console i wyślij screena<br>Sprawdź czy w Supabase tabela listings ma RLS disabled i czy klucz jest poprawny');
- }
+ }catch(e){$('gd').innerHTML='<div style="padding:20px;background:#fff;border-radius:12px">Błąd: '+e.message+'</div>';}
+ finally{l.style.display='none';$('gd').style.display='grid';}
 }
 
 function init(){
  const s=document.createElement('script');
  s.src='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js';
- s.onload=()=>{log('Supabase JS loaded'); supa=window.supabase.createClient(U,K); load();};
- s.onerror=()=>{setStatus('❌ Nie udało się załadować Supabase JS z CDN - sprawdź internet');};
+ s.async=true;
+ s.onload=()=>{supa=window.supabase.createClient(U,K);load();};
  document.head.appendChild(s);
 }
 init();
