@@ -1,5 +1,23 @@
 <!DOCTYPE html>
-<html lang="pl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><title>WROOMER.PL</title><script src="https://cdn.tailwindcss.com"></script><style>*{font-family:Inter,sans-serif} .swipe-track{transition:transform .3s}</style></head>
+<html lang="pl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><title>WROOMER.PL</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+// KONFIGURACJA SUPABASE - WPISZ TUTAJ SWOJE DANE Z SUPABASE
+// 1. Wejdź na https://supabase.com -> New Project
+// 2. Settings -> API -> skopiuj URL i anon key
+const SUPABASE_URL = localStorage.getItem('wroomer_supabase_url') || ''; // np. https://xyz.supabase.co
+const SUPABASE_ANON_KEY = localStorage.getItem('wroomer_supabase_key') || ''; // anon public key
+let supabaseClient = null;
+if(SUPABASE_URL && SUPABASE_ANON_KEY){
+  try{
+    supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    console.log('Supabase connected:', SUPABASE_URL);
+  }catch(e){ console.error('Supabase init error', e); }
+}
+function isSupabaseEnabled(){ return !!supabaseClient; }
+</script>
+<script src="https://cdn.tailwindcss.com"></script><style>*{font-family:Inter,sans-serif} .swipe-track{transition:transform .3s}</style></head>
 <body class="bg-[#f8f9fa] text-gray-900 overflow-x-hidden">
 <header class="sticky top-0 z-40 bg-white border-b"><div class="max-w-[1600px] mx-auto px-4 h-[64px] flex items-center justify-between"><div class="flex items-center gap-3"><div class="w-9 h-9 bg-black rounded-lg text-white flex items-center justify-center font-extrabold">W</div><div><div class="font-extrabold">WROOMER.PL<span class="text-red-500">.PL</span></div><div class="text-[11px] text-gray-500">Auta z Twojej okolicy</div></div></div><div class="hidden md:flex flex-1 max-w-[520px] mx-6"><input id="searchInput" placeholder="Szukaj..." class="w-full h-[42px] px-4 rounded-full border text-[14px]"></div><div class="flex items-center gap-4"><button id="accountBtn" class="text-[14px]">Moje konto</button><button id="addBtn" class="h-[40px] px-5 bg-black text-white rounded-full text-[14px]">+ Dodaj</button></div></div><div class="md:hidden px-4 pb-3 bg-white border-b"><input id="searchInputMobile" placeholder="Szukaj..." class="w-full h-[44px] px-4 rounded-full border text-[16px]"></div></header>
 <div class="max-w-[1600px] mx-auto px-4 py-5 flex flex-col lg:flex-row gap-6">
@@ -8,10 +26,35 @@
 <div class="border-t pt-4 mb-4"><label class="text-[11px] font-bold uppercase">Marka</label><select id="filterMarka" class="mt-2 w-full h-[40px] px-3 rounded-lg border text-[14px]"><option value="">Wszystkie</option><option>Abarth</option><option>Acura</option><option>Alfa Romeo</option><option>Alpine</option><option>Aston Martin</option><option>Audi</option><option>Bentley</option><option>BMW</option><option>BYD</option><option>Cadillac</option><option>Chevrolet</option><option>Chrysler</option><option>Citroen</option><option>Cupra</option><option>Dacia</option><option>Daewoo</option><option>Dodge</option><option>DS Automobiles</option><option>Ferrari</option><option>Fiat</option><option>Ford</option><option>Genesis</option><option>Honda</option><option>Hyundai</option><option>Infiniti</option><option>Jaguar</option><option>Jeep</option><option>Kia</option><option>Lamborghini</option><option>Lancia</option><option>Land Rover</option><option>Lexus</option><option>Maserati</option><option>Mazda</option><option>McLaren</option><option>Mercedes-Benz</option><option>MG</option><option>Mini</option><option>Mitsubishi</option><option>Nissan</option><option>Opel</option><option>Peugeot</option><option>Polestar</option><option>Porsche</option><option>Renault</option><option>Rolls-Royce</option><option>Saab</option><option>Seat</option><option>Skoda</option><option>Smart</option><option>SsangYong</option><option>Subaru</option><option>Suzuki</option><option>Tesla</option><option>Toyota</option><option>Volkswagen</option><option>Volvo</option><option>Inna</option></select></div>
 <div class="grid grid-cols-2 gap-3 mb-4"><div><label class="text-[11px] font-bold uppercase">Cena od</label><input id="filterCenaOd" type="number" class="mt-2 w-full h-[40px] px-3 rounded-lg border text-[14px]"></div><div><label class="text-[11px] font-bold uppercase">Cena do</label><input id="filterCenaDo" type="number" class="mt-2 w-full h-[40px] px-3 rounded-lg border text-[14px]"></div></div>
 <div class="grid grid-cols-2 gap-3 mb-4"><div><label class="text-[11px] font-bold uppercase">Przebieg od</label><input id="filterPrzebiegOd" type="number" placeholder="0" class="mt-2 w-full h-[40px] px-3 rounded-lg border text-[14px]"></div><div><label class="text-[11px] font-bold uppercase">Przebieg do</label><input id="filterPrzebiegDo" type="number" placeholder="100000" class="mt-2 w-full h-[40px] px-3 rounded-lg border text-[14px]"></div></div>
-<div class="grid grid-cols-2 gap-3 mb-4"><div><label class="text-[11px] font-bold uppercase">Rocznik od</label><select id="filterRocznikOd" class="mt-2 w-full h-[36px] px-2 rounded-lg border text-[13px]"><option value="">Dowolny</option><option>2024</option><option>2023</option></select></div><div><label class="text-[11px] font-bold uppercase">Rocznik do</label><select id="filterRocznikDo" class="mt-2 w-full h-[36px] px-2 rounded-lg border text-[13px]"><option value="">Dowolny</option><option>2026</option><option>2025</option></select></div></div>
+<div class="grid grid-cols-2 gap-3 mb-4"><div><label class="text-[11px] font-bold uppercase">Rocznik od</label><select id="filterRocznikOd" class="mt-2 w-full h-[36px] px-2 rounded-lg border text-[13px]"><option value="">Dowolny</option><option>2026</option><option>2025</option><option>2024</option><option>2023</option><option>2022</option><option>2021</option><option>2020</option><option>2019</option><option>2018</option><option>2017</option><option>2016</option><option>2015</option><option>2014</option><option>2013</option><option>2012</option><option>2011</option><option>2010</option><option>2009</option><option>2008</option><option>2007</option><option>2006</option><option>2005</option><option>2004</option><option>2003</option><option>2002</option><option>2001</option><option>2000</option><option>1999</option><option>1998</option><option>1997</option><option>1996</option><option>1995</option><option>1994</option><option>1993</option><option>1992</option><option>1991</option><option>1990</option><option>1989</option><option>1988</option><option>1987</option><option>1986</option><option>1985</option><option>1984</option><option>1983</option><option>1982</option><option>1981</option><option>1980</option></select></div><div><label class="text-[11px] font-bold uppercase">Rocznik do</label><select id="filterRocznikDo" class="mt-2 w-full h-[36px] px-2 rounded-lg border text-[13px]"><option value="">Dowolny</option><option>2026</option><option>2025</option><option>2024</option><option>2023</option><option>2022</option><option>2021</option><option>2020</option><option>2019</option><option>2018</option><option>2017</option><option>2016</option><option>2015</option><option>2014</option><option>2013</option><option>2012</option><option>2011</option><option>2010</option><option>2009</option><option>2008</option><option>2007</option><option>2006</option><option>2005</option><option>2004</option><option>2003</option><option>2002</option><option>2001</option><option>2000</option><option>1999</option><option>1998</option><option>1997</option><option>1996</option><option>1995</option><option>1994</option><option>1993</option><option>1992</option><option>1991</option><option>1990</option><option>1989</option><option>1988</option><option>1987</option><option>1986</option><option>1985</option><option>1984</option><option>1983</option><option>1982</option><option>1981</option><option>1980</option></select></div></div>
 <div class="mb-4"><label class="text-[11px] font-bold uppercase">Paliwo</label><select id="filterPaliwo" class="mt-2 w-full h-[40px] px-3 rounded-lg border text-[14px]"><option value="">Wszystkie</option><option>Benzyna</option><option>Diesel</option><option>Hybryda</option><option>Elektryczny</option></select></div>
 <div class="mb-4"><label class="text-[11px] font-bold uppercase">Skrzynia</label><select id="filterSkrzynia" class="mt-2 w-full h-[40px] px-3 rounded-lg border text-[14px]"><option value="">Wszystkie</option><option>Automatyczna</option><option>Manualna</option></select></div>
-<div class="bg-gray-50 rounded-xl p-3 border"><div class="text-[13px] font-bold">Lokalizacja: Gorzyce</div><div class="text-[11px] text-gray-500 mt-1">Swipe palcem po zdjęciach. Zdjęcia kompresowane.</div><button id="clearStorageBtn" class="mt-3 text-[11px] text-red-600 underline">Wyczyść pamięć (gdy quota exceeded)</button></div>
+<div class="bg-gray-50 rounded-xl p-3 border"><div class="text-[13px] font-bold">Lokalizacja: Gorzyce</div><div class="text-[11px] text-gray-500 mt-1">TRYB: Zapis TYLKO w Supabase (bez limitu). Local wyłączony.</div><button id="clearStorageBtn" class="mt-3 text-[11px] text-red-600 underline">Wyczyść konfigurację Supabase</button></div>
+
+<div id="supabaseSetup" class="mb-4 p-3 rounded-xl border-2 border-dashed border-orange-300 bg-orange-50">
+<div class="text-[12px] font-bold">💾 Baza danych: <span id="dbStatus">Local (przeglądarka) - limit 5MB</span></div>
+<div class="text-[11px] text-gray-600 mt-1">Local zapisuje tylko u Ciebie. Supabase zapisuje dla wszystkich, bez limitu, zdjęcia w chmurze.</div>
+<button id="setupSupabaseBtn" class="mt-2 h-8 px-3 bg-black text-white rounded-full text-[11px] font-bold">⚙️ Podłącz Supabase</button>
+<button id="testSupabaseBtn" class="mt-2 ml-2 h-8 px-3 border rounded-full text-[11px]">Test połączenia</button>
+</div>
+<div id="supabaseConfigModal" class="fixed inset-0 z-[90] hidden"><div class="absolute inset-0 bg-black/60" id="supabaseBackdrop"></div><div class="relative mx-auto max-w-[500px] mt-20 bg-white rounded-[20px] p-6 mx-4"><h3 class="font-bold text-[16px]">Podłącz Supabase (darmowe)</h3><p class="text-[12px] text-gray-600 mt-2">1. Załóż projekt na supabase.com<br>2. SQL Editor -> wklej kod z dołu<br>3. Settings -> API -> skopiuj URL i anon key</p><div class="mt-4 space-y-3"><input id="sbUrl" placeholder="https://xyz.supabase.co" class="w-full h-[44px] px-3 rounded-xl border text-[14px]"><input id="sbKey" placeholder="anon key (eyJ...)" class="w-full h-[44px] px-3 rounded-xl border text-[14px]"><button id="saveSupabase" class="w-full h-[44px] bg-black text-white rounded-full font-bold">Zapisz i połącz</button></div><div class="mt-4 p-3 bg-gray-100 rounded-xl text-[11px] font-mono"><div class="font-bold">SQL do wklejenia w Supabase SQL Editor:</div><pre class="whitespace-pre-wrap mt-2">create table listings (
+  id bigint primary key,
+  marka text, model text, rok int, przebieg int,
+  paliwo text, skrzynia text, nadwozie text,
+  cena int, lok text, opis text,
+  images jsonb, kontakt jsonb,
+  owner_email text, created_at timestamp default now()
+);
+alter table listings enable row level security;
+create policy "public read" on listings for select using (true);
+create policy "public insert" on listings for insert with check (true);
+create policy "public update" on listings for update using (true);
+create policy "public delete" on listings for delete using (true);
+-- Storage dla zdjęć:
+-- Storage -> New bucket -> wroomer-images -> public
+-- Policy: allow public read/insert
+</pre></div><button id="closeSupabaseModal" class="mt-3 w-full h-10 border rounded-full text-[13px]">Anuluj</button></div></div>
+
 <div class="lg:hidden mt-4"><button id="closeFiltersMobile" class="w-full h-[44px] bg-black text-white rounded-full">Pokaż wyniki</button></div>
 </div></aside>
 <main class="flex-1"><div class="flex items-baseline gap-2 mb-1"><h1 class="text-[22px] font-extrabold"><span id="countCars">8</span> aut w pobliżu Gorzyc</h1><button id="mobileFilterBtn" class="lg:hidden ml-auto h-9 px-4 rounded-full border bg-white text-[13px]">Filtry</button></div><p class="text-[13px] text-gray-600 mb-4">Promień <span id="radiusText2">50 km</span> • Swipe palcem</p><div id="carsGrid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5"></div></main>
@@ -24,7 +67,7 @@
 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 <div><label class="text-[11px] font-bold uppercase">Marka *</label><select id="fMarka" required class="mt-1 w-full h-[48px] px-3 rounded-xl border text-[16px]"><option value="">Wybierz</option><option>Abarth</option><option>Acura</option><option>Alfa Romeo</option><option>Alpine</option><option>Aston Martin</option><option>Audi</option><option>Bentley</option><option>BMW</option><option>BYD</option><option>Cadillac</option><option>Chevrolet</option><option>Chrysler</option><option>Citroen</option><option>Cupra</option><option>Dacia</option><option>Daewoo</option><option>Dodge</option><option>DS Automobiles</option><option>Ferrari</option><option>Fiat</option><option>Ford</option><option>Genesis</option><option>Honda</option><option>Hyundai</option><option>Infiniti</option><option>Jaguar</option><option>Jeep</option><option>Kia</option><option>Lamborghini</option><option>Lancia</option><option>Land Rover</option><option>Lexus</option><option>Maserati</option><option>Mazda</option><option>McLaren</option><option>Mercedes-Benz</option><option>MG</option><option>Mini</option><option>Mitsubishi</option><option>Nissan</option><option>Opel</option><option>Peugeot</option><option>Polestar</option><option>Porsche</option><option>Renault</option><option>Rolls-Royce</option><option>Saab</option><option>Seat</option><option>Skoda</option><option>Smart</option><option>SsangYong</option><option>Subaru</option><option>Suzuki</option><option>Tesla</option><option>Toyota</option><option>Volkswagen</option><option>Volvo</option><option>Inna</option></select></div>
 <div><label class="text-[11px] font-bold uppercase">Model *</label><input id="fModel" required placeholder="np. Seria 3" class="mt-1 w-full h-[48px] px-3 rounded-xl border text-[16px]"></div>
-<div><label class="text-[11px] font-bold uppercase">Rok *</label><select id="fRok" required class="mt-1 w-full h-[48px] px-3 rounded-xl border text-[16px]"><option value="">Wybierz</option><option>2026</option><option>2025</option><option>2024</option><option>2023</option><option>2022</option><option>2021</option><option>2020</option><option>2019</option></select></div>
+<div><label class="text-[11px] font-bold uppercase">Rok *</label><select id="fRok" required class="mt-1 w-full h-[48px] px-3 rounded-xl border text-[16px]"><option value="">Wybierz</option><option>2026</option><option>2025</option><option>2024</option><option>2023</option><option>2022</option><option>2021</option><option>2020</option><option>2019</option><option>2018</option><option>2017</option><option>2016</option><option>2015</option><option>2014</option><option>2013</option><option>2012</option><option>2011</option><option>2010</option><option>2009</option><option>2008</option><option>2007</option><option>2006</option><option>2005</option><option>2004</option><option>2003</option><option>2002</option><option>2001</option><option>2000</option><option>1999</option><option>1998</option><option>1997</option><option>1996</option><option>1995</option><option>1994</option><option>1993</option><option>1992</option><option>1991</option><option>1990</option><option>1989</option><option>1988</option><option>1987</option><option>1986</option><option>1985</option><option>1984</option><option>1983</option><option>1982</option><option>1981</option><option>1980</option></select></div>
 <div><label class="text-[11px] font-bold uppercase">Przebieg km *</label><input id="fPrzebieg" required type="number" class="mt-1 w-full h-[48px] px-3 rounded-xl border text-[16px]"></div>
 <div><label class="text-[11px] font-bold uppercase">Cena PLN *</label><input id="fCena" required type="number" class="mt-1 w-full h-[48px] px-3 rounded-xl border text-[16px]"></div>
 <div><label class="text-[11px] font-bold uppercase">Lokalizacja *</label><input id="fLok" required placeholder="Gorzyce" class="mt-1 w-full h-[48px] px-3 rounded-xl border text-[16px]"></div>
@@ -45,9 +88,76 @@
 
 <script>
 const demoImages=[["https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800","https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=800"],["https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=800","https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=800"],["https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800","https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800"],["https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=800","https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800"],["https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800","https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800"],["https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800","https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800"],["https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800","https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800"],["https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=800","https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800"]];
-let listings=JSON.parse(localStorage.getItem('wroomer_listings')||'null');
-if(!listings){
-listings=[
+let listings=[];
+let isSupabaseMode = false;
+
+let listings=[];
+let isSupabaseMode = false;
+
+async function loadListings(){
+  const dbStatusEl = document.getElementById('dbStatus');
+  if(!isSupabaseEnabled()){
+    isSupabaseMode = false;
+    listings = [];
+    if(dbStatusEl) dbStatusEl.textContent = '❌ Supabase nie podłączony - MUSISZ PODŁĄCZYĆ';
+    if(dbStatusEl) dbStatusEl.className = 'text-red-600 font-bold';
+    document.getElementById('carsGrid').innerHTML = '<div class="col-span-3 text-center py-20"><div class="text-[20px] font-bold">Baza Supabase nie podłączona</div><div class="text-[14px] text-gray-600 mt-2">Ta wersja zapisuje TYLKO w Supabase (bez limitu, widoczne dla wszystkich).<br>Kliknij ⚙️ Podłącz Supabase w filtrach i wpisz URL + anon key.</div><button onclick="document.getElementById('setupSupabaseBtn').click()" class="mt-4 h-11 px-6 bg-black text-white rounded-full font-bold">⚙️ Podłącz Supabase teraz</button></div>';
+    document.getElementById('countCars').textContent = '0';
+    return;
+  }
+  try{
+    isSupabaseMode = true;
+    if(dbStatusEl) { dbStatusEl.textContent = 'Supabase (chmura) - Zapis TYLKO tutaj ✓'; dbStatusEl.className='text-green-600 font-bold'; }
+    const { data, error } = await supabaseClient.from('listings').select('*').order('id', {ascending:false}).limit(100);
+    if(error) throw error;
+    if(data && data.length>0){
+      listings = data.map(r=>({
+        id: r.id,
+        marka: r.marka,
+        model: r.model,
+        rok: r.rok,
+        przebieg: r.przebieg,
+        paliwo: r.paliwo,
+        skrzynia: r.skrzynia,
+        nadwozie: r.nadwozie||'Sedan',
+        cena: r.cena,
+        lok: r.lok,
+        dist: Math.floor(Math.random()*20)+1,
+        time: r.created_at ? new Date(r.created_at).toLocaleDateString('pl-PL') : 'teraz',
+        typ: 'P',
+        owner: 'Prywatny',
+        wyr: false,
+        kontakt: r.kontakt,
+        images: r.images,
+        ownerEmail: r.owner_email,
+        opis: r.opis,
+        vin: r.vin||'',
+        uszkodzony: r.uszkodzony||false
+      }));
+      console.log('Loaded from Supabase:', listings.length);
+    } else {
+      listings = [];
+      console.log('Supabase empty - no listings yet');
+    }
+  }catch(err){
+    console.error('Supabase load error', err);
+    if(dbStatusEl) { dbStatusEl.textContent = 'Błąd Supabase: '+err.message; dbStatusEl.className='text-red-600 font-bold'; }
+    listings = [];
+    document.getElementById('carsGrid').innerHTML = '<div class="col-span-3 text-center py-10 text-red-600">Błąd ładowania z Supabase: '+err.message+'<br>Sprawdź czy tabela listings istnieje i RLS policy.</div>';
+  }
+  render();
+}
+
+function getDemoListings(){
+  // Demo only for initial display if Supabase empty, but NOT saved to localStorage - only example, will not be in DB until you add
+  return [
+{id:1,marka:"BMW",model:"Seria 3 320d xDrive M Sport",rok:2019,przebieg:89000,paliwo:"Diesel",skrzynia:"Automatyczna",nadwozie:"Sedan",cena:89900,lok:"Gorzyce",dist:2,time:"dzisiaj 09:14",typ:"P",owner:"Prywatny",wyr:true,kontakt:{tel:"500 123 456",pref:"Telefon",telCheck:true,sms:true,wapp:true,wroomer:true},images:demoImages[0],ownerEmail:"demo@wroomer.pl",opis:"Przykładowe ogłoszenie - podłącz Supabase aby dodać własne"},
+  ];
+}
+
+
+function getDemoListings(){
+  return [
 {id:1,marka:"BMW",model:"Seria 3 320d xDrive M Sport",rok:2019,przebieg:89000,paliwo:"Diesel",skrzynia:"Automatyczna",nadwozie:"Sedan",cena:89900,lok:"Gorzyce",dist:2,time:"dzisiaj 09:14",typ:"P",owner:"Prywatny",wyr:true,kontakt:{tel:"500 123 456",pref:"Telefon",telCheck:true,sms:true,wapp:true,wroomer:true},images:demoImages[0],ownerEmail:"demo@wroomer.pl",opis:"Zadbany"},
 {id:2,marka:"Audi",model:"A4 Avant 40 TFSI S-line",rok:2021,przebieg:62000,paliwo:"Benzyna",skrzynia:"Automatyczna",nadwozie:"Kombi",cena:115000,lok:"Wodzisław Śl...",dist:8,time:"dzisiaj 08:20",typ:"F",owner:"Firma",wyr:true,kontakt:{tel:"500 123 457",pref:"WhatsApp",telCheck:true,sms:true,wapp:true,wroomer:true},images:demoImages[1],ownerEmail:"demo@wroomer.pl",opis:"S-line"},
 {id:3,marka:"Skoda",model:"Octavia 1.5 TSI Style",rok:2020,przebieg:78000,paliwo:"Benzyna",skrzynia:"Manualna",nadwozie:"Liftback",cena:74900,lok:"Rybnik",dist:14,time:"wczoraj 19:40",typ:"P",owner:"Prywatny",wyr:false,kontakt:{tel:"500 123 458",pref:"Telefon",telCheck:true,sms:true,wapp:false,wroomer:true},images:demoImages[2],ownerEmail:"demo@wroomer.pl",opis:"Style"},
@@ -56,24 +166,60 @@ listings=[
 {id:6,marka:"Volkswagen",model:"Golf VIII 1.5 eTSI Life",rok:2021,przebieg:55000,paliwo:"Benzyna",skrzynia:"Automatyczna",nadwozie:"Hatchback",cena:82900,lok:"Racibórz",dist:28,time:"2 dni temu",typ:"P",owner:"Prywatny",wyr:false,kontakt:{tel:"500 123 461",pref:"SMS",telCheck:true,sms:true,wapp:false,wroomer:true},images:demoImages[5],ownerEmail:"demo@wroomer.pl",opis:"Life"},
 {id:7,marka:"Kia",model:"Sportage 1.6 T-GDI GT Line",rok:2022,przebieg:38000,paliwo:"Benzyna",skrzynia:"Automatyczna",nadwozie:"SUV",cena:105500,lok:"Gorzyce",dist:3,time:"dzisiaj 07:30",typ:"P",owner:"Prywatny",wyr:false,kontakt:{tel:"500 123 462",pref:"Telefon",telCheck:true,sms:true,wapp:true,wroomer:true},images:demoImages[6],ownerEmail:"demo@wroomer.pl",opis:"GT Line"},
 {id:8,marka:"Hyundai",model:"Tucson 1.6 T-GDI Hybrid",rok:2023,przebieg:21000,paliwo:"Hybryda",skrzynia:"Automatyczna",nadwozie:"SUV",cena:119900,lok:"Pszów",dist:6,time:"dzisiaj 10:02",typ:"F",owner:"Firma",wyr:false,kontakt:{tel:"500 123 463",pref:"Przez WROOMER",telCheck:true,sms:true,wapp:true,wroomer:true},images:demoImages[7],ownerEmail:"demo@wroomer.pl",opis:"Hybrid"}
-];
-localStorage.setItem('wroomer_listings', JSON.stringify(listings));
+  ];
 }
+
 let favs=JSON.parse(localStorage.getItem('wroomer_favs')||'[]');
 let currentUser=JSON.parse(localStorage.getItem('wroomer_current')||'null');
 let editingId=null, addImages=[], currentDist=50;
-function save(){
+async function save(){
+  // favs still local
+  try{ localStorage.setItem('wroomer_favs', JSON.stringify(favs)); }catch(e){}
+  // listings ONLY in Supabase - no localStorage
+  return true;
+}
+
+async function saveToSupabase(listing){
+  if(!isSupabaseEnabled()) return false;
   try{
-    localStorage.setItem('wroomer_listings', JSON.stringify(listings));
-    localStorage.setItem('wroomer_favs', JSON.stringify(favs));
+    const payload = {
+      id: listing.id,
+      marka: listing.marka,
+      model: listing.model,
+      rok: listing.rok,
+      przebieg: listing.przebieg,
+      paliwo: listing.paliwo,
+      skrzynia: listing.skrzynia,
+      nadwozie: listing.nadwozie,
+      cena: listing.cena,
+      lok: listing.lok,
+      opis: listing.opis,
+      images: listing.images,
+      kontakt: listing.kontakt,
+      owner_email: listing.ownerEmail,
+      vin: listing.vin||'',
+      uszkodzony: listing.uszkodzony||false
+    };
+    const { error } = await supabaseClient.from('listings').upsert(payload);
+    if(error) throw error;
+    console.log('Saved to Supabase', listing.id);
     return true;
-  }catch(e){
-    if(e.name==='QuotaExceededError' || (e.message && e.message.toLowerCase().includes('quota'))){
-      alert('Błąd: pamięć pełna (quota exceeded).\n\nMasz za dużo zdjęć lub ogłoszeń.\nRozwiązania:\n1. Dodaj max 3 zdjęcia zamiast 10 (teraz kompresja 90% mniejsza)\n2. Usuń stare ogłoszenia\n3. Kliknij Wyczyść pamięć w filtrach\n\nPoprzednie ogłoszenia demo nie mają dużych zdjęć base64, więc po wyczyszczeniu będzie OK.');
-      return false;
-    } else throw e;
+  }catch(err){
+    console.error('Supabase save error', err);
+    alert('Błąd zapisu do Supabase: '+err.message+'\nSprawdź czy tabela istnieje i RLS policy.');
+    return false;
   }
 }
+
+async function deleteFromSupabase(id){
+  if(!isSupabaseEnabled()) return true;
+  try{
+    const { error } = await supabaseClient.from('listings').delete().eq('id', id);
+    if(error) throw error;
+    return true;
+  }catch(err){ console.error(err); return false; }
+}
+
 function isFav(id){return favs.includes(id);}
 function createCard(l){
 const fav=isFav(l.id);
@@ -140,7 +286,16 @@ document.getElementById('detailContent').innerHTML='<h2 class="text-[22px] font-
 document.getElementById('detailModal').classList.remove('hidden');
 if(document.getElementById('editBtn')){
 document.getElementById('editBtn').onclick=()=>{document.getElementById('detailModal').classList.add('hidden'); openAdd(true, l);};
-document.getElementById('delBtn').onclick=()=>{if(confirm('Usunąć?')){listings=listings.filter(x=>x.id!==l.id); if(!save()) return; render(); document.getElementById('detailModal').classList.add('hidden');}};
+document.getElementById('delBtn').onclick=async ()=>{
+  if(!confirm('Usunąć ogłoszenie z Supabase?')) return;
+  const ok = await deleteFromSupabase(l.id);
+  if(!ok){ alert('Błąd usuwania z Supabase'); return; }
+  listings=listings.filter(x=>x.id!==l.id);
+  await save();
+  render();
+  document.getElementById('detailModal').classList.add('hidden');
+  alert('Usunięto z Supabase');
+};
 }
 }
 function updateDetail(){const t=document.getElementById('detailTrack'); t.style.transform='translateX(-'+detailIdx*100+'%)'; document.getElementById('detailCounter').textContent=(detailIdx+1)+' / '+detailImages.length; document.getElementById('detailDots').innerHTML=detailImages.map((_,i)=>'<div class="w-1.5 h-1.5 rounded-full '+(i===detailIdx?'bg-white':'bg-white/40')+'"></div>').join('');}
@@ -180,7 +335,14 @@ editingId=null; document.getElementById('addForm').reset(); addImages=[]; docume
 }
 }
 function closeAdd(){document.getElementById('addModal').classList.add('hidden'); editingId=null; addImages=[];}
-document.getElementById('addBtn').onclick=()=>openAdd(false);
+document.getElementById('addBtn').onclick=()=>{
+  if(!isSupabaseEnabled()){
+    alert('MUSISZ najpierw podłączyć Supabase!\n\nTa wersja zapisuje TYLKO w Supabase (bez limitu).\nKliknij ⚙️ Podłącz Supabase w lewym panelu filtrów.');
+    document.getElementById('setupSupabaseBtn')?.click();
+    return;
+  }
+  openAdd(false);
+};
 document.getElementById('closeAdd').onclick=closeAdd; document.getElementById('addBackdrop').onclick=closeAdd;
 document.getElementById('fUszkodzony').onchange=(e)=>{document.getElementById('uszkodBox').classList.toggle('hidden', !e.target.checked);};
 function renderPreview(){const p=document.getElementById('preview'); p.innerHTML=''; addImages.forEach((src,i)=>{const div=document.createElement('div'); div.className='relative rounded-lg overflow-hidden h-20 bg-gray-100'; div.innerHTML='<img src="'+src+'" class="w-full h-full object-cover"><button type="button" class="absolute top-1 right-1 w-6 h-6 bg-black/70 text-white rounded-full text-[12px]">✕</button>'; div.querySelector('button').onclick=()=>{addImages.splice(i,1); renderPreview();}; p.appendChild(div);}); document.getElementById('compressInfo').textContent=addImages.length?'Zdjęć: '+addImages.length+' / 5 (skompresowane ~100KB)':'';}
@@ -251,8 +413,28 @@ if(!lokEl.value.trim()){alert('Wpisz lokalizację'); return;}
 if(!telEl.value.trim()){alert('Wpisz telefon'); return;}
 const kontakt={tel:telEl.value, pref:document.getElementById('fKontaktPref').value, telCheck:document.getElementById('fKontaktTel').checked, sms:document.getElementById('fKontaktSms').checked, wapp:document.getElementById('fKontaktWapp').checked, wroomer:document.getElementById('fKontaktWroomer').checked};
 const data={marka:markaEl.value, model:modelEl.value.trim(), rok:parseInt(rokEl.value), przebieg:parseInt(przebiegEl.value), paliwo:document.getElementById('fPaliwo').value, skrzynia:document.getElementById('fSkrzynia').value, nadwozie:document.getElementById('fNadwozie').value, cena:parseInt(cenaEl.value), lok:lokEl.value, vin:document.getElementById('fVin').value, opis:document.getElementById('fOpis').value||'Brak opisu', images:[...addImages], uszkodzony:document.getElementById('fUszkodzony').checked, opisUszkod:document.getElementById('fOpisUszkod').value, kontakt, ownerEmail:currentUser.email, dist:Math.floor(Math.random()*15)+1, time:'teraz', typ:'P', owner:'Prywatny', wyr:false};
-if(editingId){const idx=listings.findIndex(x=>x.id===editingId); if(idx>-1) listings[idx]={...listings[idx], ...data, id:editingId}; alert('Zaktualizowano!');} else {data.id=Date.now(); listings.unshift(data); alert('Dodano ogłoszenie!');}
-if(!save()) return;
+if(!isSupabaseEnabled()){
+  alert('BŁĄD: Supabase nie podłączony! Ta wersja zapisuje TYLKO w Supabase.');
+  return;
+}
+if(editingId){
+  const idx=listings.findIndex(x=>x.id===editingId);
+  if(idx>-1){
+    const updated = {...listings[idx], ...data, id:editingId};
+    const ok = await saveToSupabase(updated);
+    if(!ok) return;
+    listings[idx]=updated;
+    alert('Zaktualizowano w Supabase!');
+  }
+} else {
+  data.id=Date.now();
+  const ok = await saveToSupabase(data);
+  if(!ok) return;
+  listings.unshift(data);
+  alert('Dodano do Supabase! Widoczne dla wszystkich użytkowników ✓');
+}
+await save();
+
 closeAdd(); render(); window.scrollTo({top:0, behavior:'smooth'});
 }catch(err){console.error(err); alert('Błąd zapisu: '+err.message);}
 };
@@ -268,9 +450,54 @@ const aside=document.getElementById('filtersAside');
 document.getElementById('mobileFilterBtn').onclick=()=>{aside.classList.remove('hidden'); aside.classList.add('fixed','inset-0','z-50','bg-white','overflow-auto','p-4');};
 document.getElementById('closeFiltersMobile').onclick=()=>{aside.classList.add('hidden'); if(window.innerWidth>=1024) aside.classList.remove('hidden');};
 document.getElementById('cancelAdd')?.addEventListener('click', closeAdd);
-document.getElementById('clearStorageBtn').onclick=()=>{if(confirm('Wyczyścić wszystkie ogłoszenia i zwolnić pamięć? Demo wróci.')){localStorage.removeItem('wroomer_listings'); location.reload();}};
+document.getElementById('clearStorageBtn').onclick=()=>{if(confirm('Wyczyścić konfigurację Supabase (URL i klucz)?')){localStorage.removeItem('wroomer_supabase_url'); localStorage.removeItem('wroomer_supabase_key'); location.reload();}};
+
+// Supabase UI handlers
+document.getElementById('setupSupabaseBtn')?.addEventListener('click', ()=>{
+  document.getElementById('supabaseConfigModal').classList.remove('hidden');
+  document.getElementById('sbUrl').value = localStorage.getItem('wroomer_supabase_url')||'';
+  document.getElementById('sbKey').value = localStorage.getItem('wroomer_supabase_key')||'';
+});
+document.getElementById('closeSupabaseModal')?.addEventListener('click', ()=>{ document.getElementById('supabaseConfigModal').classList.add('hidden'); });
+document.getElementById('supabaseBackdrop')?.addEventListener('click', ()=>{ document.getElementById('supabaseConfigModal').classList.add('hidden'); });
+document.getElementById('saveSupabase')?.addEventListener('click', ()=>{
+  const url = document.getElementById('sbUrl').value.trim();
+  const key = document.getElementById('sbKey').value.trim();
+  if(!url || !key){ alert('Wpisz URL i anon key'); return; }
+  localStorage.setItem('wroomer_supabase_url', url);
+  localStorage.setItem('wroomer_supabase_key', key);
+  alert('Zapisano! Odświeżam stronę aby połączyć z Supabase...');
+  location.reload();
+});
+document.getElementById('testSupabaseBtn')?.addEventListener('click', async ()=>{
+  if(!isSupabaseEnabled()){ alert('Najpierw podłącz Supabase - kliknij ⚙️ Podłącz Supabase i wpisz URL i klucz'); return; }
+  try{
+    const { data, error } = await supabaseClient.from('listings').select('id').limit(1);
+    if(error) throw error;
+    alert('Połączenie OK! Znaleziono '+ (data?.length||0) +' rekordów. Supabase działa ✓');
+  }catch(err){ alert('Błąd połączenia: '+err.message); }
+});
+
+// Override delete to also delete from Supabase
+const originalDeleteHandler = async (id) => {
+  // called from detail modal
+};
+
+// Load listings on start - replace old render call
+loadListings();
+
+// Make addForm onsubmit async
+const form = document.getElementById('addForm');
+if(form){
+  const oldOnSubmit = form.onsubmit;
+  // will be handled by new async version already replaced
+}
+
+
 if(window.innerWidth<1024) aside.classList.add('hidden');
-updateAccountUI(); render();
+updateAccountUI();
+// render() will be called by loadListings()
+
 </script>
 <footer class="mt-10 border-t bg-white py-6 text-[12px] text-gray-500"><div class="max-w-[1600px] mx-auto px-4 flex justify-between"><span>© 2025 WROOMER.PL • Swipe • Kompresja</span></div></footer>
 </body></html>

@@ -1,1 +1,1 @@
-ads.txt
+<html><body>ads.txt</body></html>
