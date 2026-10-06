@@ -1,264 +1,60 @@
 <!DOCTYPE html>
-<html lang="pl">
-<head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>WROOMER.PL - Ogłoszenia motoryzacyjne Warszawa, Kraków, Wrocław, Katowice, Gdańsk | wroomer.pl</title>
-<meta name="description" content="WROOMER.PL - Ogłoszenia motoryzacyjne Warszawa Kraków Wrocław Katowice Gdańsk Poznań Gorzyce Wodzisław Śląsk. Portal ogłoszeniowy. Wpisz wroomer.pl.">
-<meta name="google-site-verification" content="TWOJ_KOD_GSC">
+<html lang="pl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WROOMER.PL - Ogłoszenia Gorzyce Wodzisław Rybnik</title>
 <script src="https://cdn.tailwindcss.com"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1234567890123456" crossorigin="anonymous"></script>
-<style>@import url('https://fonts.googleapis.com/css2?family=Inter:wght@600;800;900&display=swap');*{font-family:'Inter',sans-serif}.ad-box{border:1px dashed #ccc;border-radius:12px;padding:8px;background:#fff;min-height:100px;display:flex;flex-direction:column;align-items:center;justify-content:center}</style> <style>
-@media (max-width: 640px){ #listings{grid-template-columns:repeat(2, minmax(0,1fr)); gap:10px} #listings > div{border-radius:14px}
-}
-</style> </head>
+</head>
 <body class="bg-[#f7f7f8] min-h-screen">
-<header class="bg-white border-b sticky top-0 z-40">
-<div class="max-w-[1440px] mx-auto px-4 py-3 flex justify-between items-center">
-<div class="text-2xl font-black">WROOMER.PL</div>
-<div class="flex gap-1.5 sm:gap-2 items-center"><span id="userBadge" class="hidden text-[10px] sm:text-xs bg-black text-white px-2 sm:px-3 py-1 rounded-full max-w-[100px] truncate"></span><button onclick="openAdd()" class="bg-black text-white px-3 sm:px-5 py-1.5 sm:py-2.5 rounded-lg sm:rounded-xl font-bold text-xs sm:text-sm">+ Dodaj</button><button id="authBtn" onclick="openAuth()" class="border px-2.5 sm:px-4 py-1.5 sm:py-2.5 rounded-lg sm:rounded-xl text-xs sm:text-sm">Zaloguj</button></div>
-</div>
-</header>
+<header class="bg-white border-b sticky top-0 z-40"><div class="max-w-[1440px] mx-auto px-4 py-3 flex justify-between items-center"><div class="font-black text-2xl">WROOMER.PL</div><div class="flex gap-2"><button class="bg-black text-white px-5 py-2.5 rounded-xl font-bold text-sm">+ Dodaj</button><button class="border px-4 py-2.5 rounded-xl text-sm">Zaloguj</button></div></div></header>
 <main class="max-w-[1440px] mx-auto px-4 py-6">
-<div id="msg" class="bg-white border-2 rounded-xl p-4 mb-4 text-sm"></div>
-<div id="listings" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-3 sm:gap-4"></div> 
-<!-- SEO MIASTA - CLEAN PRO VERSION -->
-<div class="max-w-[1440px] mx-auto px-4 py-10 mt-6 border-t bg-white">
-<h2 class="font-black text-xl mb-2">Ogłoszenia motoryzacyjne - WROOMER.PL</h2>
-<p class="text-sm text-zinc-600 mb-6">Znajdź samochód w Twoim mieście. Dodaj ogłoszenie za darmo.</p>
-<div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 text-sm" id="cityGrid"></div>
-<div class="mt-10 p-5 bg-zinc-50 rounded-xl">
-<h3 class="font-bold text-sm mb-2">WROOMER.PL - portal ogłoszeń motoryzacyjnych</h3>
-<p class="text-sm text-zinc-600">Nowoczesny portal ogłoszeniowy. Szybkie dodawanie ogłoszeń z lokalizacją GPS, kontakt bezpośredni telefon/SMS/WhatsApp oraz wiadomości przez portal. Ogłoszenia prywatne i firmowe.</p>
-<div class="mt-4">
-<a href="/" class="inline-block bg-black text-white px-4 py-2 rounded-full text-xs font-bold">wroomer.pl</a>
+<div id="status" class="bg-yellow-200 border-2 border-yellow-400 p-4 rounded-xl mb-4 font-bold">ŁADOWANIE 4 OGŁOSZEŃ Z SUPABASE (RLS disabled na 13.png)...</div>
+<div id="listings" class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8"></div>
+
+<div class="bg-white p-6 rounded-xl border">
+<h2 class="font-black text-xl">Ogłoszenia motoryzacyjne - WROOMER.PL</h2>
+<p class="text-sm text-zinc-600 mt-1">Znajdź samochód w Twoim mieście. Dodaj ogłoszenie za darmo.</p>
+<div class="grid grid-cols-2 md:grid-cols-6 gap-2 text-sm mt-6">
+<div>Ogłoszenia Warszawa</div><div>Ogłoszenia Kraków</div><div>Ogłoszenia Wrocław</div><div>Ogłoszenia Gdańsk</div><div>Ogłoszenia Katowice</div><div>Ogłoszenia Poznań</div>
+<div>Ogłoszenia Łódź</div><div>Ogłoszenia Szczecin</div><div>Ogłoszenia Lublin</div><div>Ogłoszenia Bydgoszcz</div><div>Ogłoszenia Białystok</div><div>Ogłoszenia Rzeszów</div>
+<div>Ogłoszenia Gdynia</div><div>Ogłoszenia Częstochowa</div><div>Ogłoszenia Radom</div><div>Ogłoszenia Sosnowiec</div><div>Ogłoszenia Toruń</div><div>Ogłoszenia Kielce</div>
+<div>Ogłoszenia Gliwice</div><div>Ogłoszenia Zabrze</div><div>Ogłoszenia Olsztyn</div><div>Ogłoszenia Bielsko-Biała</div><div>Ogłoszenia Bytom</div><div>Ogłoszenia Zielona Góra</div>
+<div>Ogłoszenia Rybnik</div><div>Ogłoszenia Ruda Śląska</div><div>Ogłoszenia Opole</div><div>Ogłoszenia Tychy</div><div>Ogłoszenia Gorzów Wielkopolski</div><div>Ogłoszenia Dąbrowa Górnicza</div>
+<div>Ogłoszenia Elbląg</div><div>Ogłoszenia Płock</div><div>Ogłoszenia Wodzisław Śląski</div><div>Ogłoszenia Gorzyce</div><div>Ogłoszenia Jastrzębie-Zdrój</div><div>Ogłoszenia Żory</div>
 </div>
+<div class="mt-8 p-4 bg-zinc-50 rounded-xl"><b>WROOMER.PL - portal ogłoszeń motoryzacyjnych</b><p class="text-sm mt-1">Nowoczesny portal ogłoszeniowy. Szybkie dodawanie ogłoszeń z lokalizacją GPS, kontakt telefon/SMS/WhatsApp.</p></div>
 </div>
-<div class="mt-8 text-[11px] text-zinc-400 text-center">
-© 2026 WROOMER.PL - Ogłoszenia motoryzacyjne | <a href="/polityka-prywatnosci.html" class="underline">Prywatność</a> | <a href="/polityka-cookies.html" class="underline">Cookies</a> | <a href="/regulamin.html" class="underline">Regulamin</a>
-</div>
-</div>
- <div id="debugLog" class="mt-6 bg-black text-green-400 p-3 rounded-xl text-xs font-mono whitespace-pre-wrap max-h-40 overflow-auto"></div>
-<div class="mt-6 ad-box"><div class="text-[10px] text-zinc-400"></div><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-1234567890123456" data-ad-slot="1234567890" data-ad-format="auto" data-full-width-responsive="true"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({});</script></div>
 </main>
-<div id="addModal" class="hidden fixed inset-0 bg-black/60 z-50 flex items-start justify-center p-2 overflow-y-auto">
-<div class="bg-white rounded-2xl w-full max-w-2xl my-4 p-5">
-<div class="flex justify-between items-center mb-4"><h2 id="modalTitle" class="font-black text-xl">Dodaj ogłoszenie</h2><button onclick="closeAdd()" class="bg-zinc-100 w-8 h-8 rounded-full">✕</button></div>
-<div class="grid grid-cols-2 gap-2 mb-2">
-<select id="brand" class="border-2 rounded-xl px-3 py-3 font-bold"><option value="">Marka *</option><option>Audi</option><option>BMW</option><option>Mercedes-Benz</option><option>Volkswagen</option><option>Toyota</option><option>Opel</option><option>Ford</option><option>Skoda</option><option>Renault</option><option>Peugeot</option><option>Hyundai</option><option>Kia</option><option>Inna</option></select>
-<input id="model" placeholder="Model * np. A4" class="border-2 rounded-xl px-3 py-3">
-</div>
-<div class="grid grid-cols-3 gap-2 mb-2">
-<input id="year" type="number" placeholder="Rok" class="border-2 rounded-xl px-3 py-3">
-<input id="mileage" type="number" placeholder="Przebieg" class="border-2 rounded-xl px-3 py-3">
-<input id="price" type="number" placeholder="Cena PLN *" class="border-2 rounded-xl px-3 py-3 font-black">
-</div>
-<input id="title" placeholder="Tytuł np. Audi A4 2018" class="w-full border-2 rounded-xl px-3 py-3 mb-2 font-bold">
-<input id="phone" type="tel" placeholder="Telefon 600 123 456 - pokaze ZADZWON/SMS/WhatsApp" class="w-full border-2 border-green-200 bg-green-50 rounded-xl px-3 py-3 mb-2 font-bold">
-<input id="loc" placeholder="Miasto" value="Gorzyce" class="w-full border-2 rounded-xl px-3 py-3 mb-2">
-<textarea id="desc" placeholder="Opis..." class="w-full border-2 rounded-xl px-3 py-3 mb-3 h-20"></textarea>
-<div class="bg-blue-50 border border-blue-200 rounded-xl p-3 mb-3">
-<div class="flex gap-2"><button type="button" onclick="getGPS()" class="bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-bold">Pobierz GPS</button></div>
-<div id="gpsStatus" class="text-xs mt-2">GPS opcjonalny</div>
-<div id="gpsPreview" class="hidden mt-2 text-xs bg-white p-2 rounded border"><span id="gpsAddr"></span></div>
-</div>
-<div class="mb-3">
-<div class="text-sm font-bold mb-2">Zdjecia max 10 <span id="photoCount">0/10</span></div>
-<div id="existingBox" class="hidden mb-2"><div class="text-xs font-bold text-green-700">Zapisane (zostana):</div><div id="existingGrid" class="grid grid-cols-5 gap-2 mt-1"></div></div>
-<label class="border-2 border-dashed rounded-xl p-4 block text-center cursor-pointer bg-zinc-50"><input type="file" id="imgFiles" multiple accept="image/*" class="hidden"><b>Dodaj zdjecia</b></label>
-<div id="previewGrid" class="grid grid-cols-5 gap-2 mt-2"></div>
-</div>
-<button id="saveBtn" type="button" onclick="saveListing()" class="w-full bg-black text-white py-4 rounded-xl font-black text-lg">ZAPISZ OGLOSZENIE</button>
-<div id="saveStatus" class="text-center text-sm mt-2 font-bold"></div>
-</div>
-</div>
-<div id="detailModal" class="hidden fixed inset-0 bg-black z-[100] flex flex-col">
-<div class="flex justify-between items-center p-4 text-white bg-black/80"><div id="detailTitle" class="font-black text-lg"></div><button onclick="closeDetail()" class="w-10 h-10 rounded-full bg-white/20 text-white text-xl">X</button></div>
-<div class="flex-1 flex flex-col lg:flex-row overflow-hidden">
-<div class="flex-1 bg-black flex items-center justify-center relative p-2">
-<img id="detailMain" class="max-w-full max-h-[65vh] lg:max-h-[85vh] object-contain cursor-pointer" onclick="openZoom()">
-<button onclick="prevImg()" class="absolute left-3 bg-white/20 text-white w-12 h-12 rounded-full text-2xl">‹</button>
-<button onclick="nextImg()" class="absolute right-3 bg-white/20 text-white w-12 h-12 rounded-full text-2xl">›</button>
-<div id="detailCounter" class="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/70 text-white px-4 py-1.5 rounded-full text-sm font-bold"></div>
-</div>
-<div class="bg-white lg:w-[420px] p-5 overflow-y-auto">
-<div id="detailInfo"></div>
-<div id="detailActions" class="mt-4"></div>
-<div class="mt-4 ad-box"><div class="text-[10px] text-zinc-400">REKLAMA</div><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-1234567890123456" data-ad-slot="1234567890" data-ad-format="auto" data-full-width-responsive="true"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({});</script></div>
-</div>
-</div>
-<div id="detailThumbs" class="bg-black p-3 flex gap-2 overflow-x-auto"></div>
-</div>
-<div id="zoomModal" class="hidden fixed inset-0 bg-black z-[110] flex items-center justify-center p-4" onclick="closeZoom()"><img id="zoomImg" class="max-w-full max-h-full object-contain"></div>
-<div id="chatModal" class="hidden fixed inset-0 bg-black/60 z-[120] flex items-center justify-center p-4">
-<div class="bg-white rounded-2xl w-full max-w-md p-5">
-<h3 class="font-black text-lg mb-2">Wiadomosc do sprzedajacego</h3>
-<div id="chatTo" class="text-xs text-zinc-500 mb-3"></div>
-<textarea id="chatMsg" placeholder="Czesc, jestem zainteresowany..." class="w-full border-2 rounded-xl p-3 h-28 text-sm"></textarea>
-<input id="chatPhone" placeholder="Twoj telefon (opcjonalnie)" class="w-full border rounded-xl p-3 mt-2 text-sm">
-<button onclick="sendChat()" class="w-full bg-black text-white py-3 rounded-xl font-black mt-3">Wyslij wiadomosc</button>
-<div id="chatStatus" class="text-xs text-center mt-2 font-bold"></div>
-<button onclick="document.getElementById('chatModal').classList.add('hidden')" class="w-full mt-2 text-sm text-zinc-500">Anuluj</button>
-</div>
-</div> <div id="authModal" class="hidden fixed inset-0 bg-black/60 z-[130] flex items-center justify-center p-4">
-<div class="bg-white rounded-2xl p-6 w-full max-w-sm">
-<h2 class="font-black mb-1 text-xl">WROOMER.PL - Logowanie</h2>
-<p class="text-xs text-zinc-500 mb-4">Zaloguj się aby dodać ogłoszenie, kontaktować się przez portal i zarządzać swoimi ogłoszeniami </p>
-<input id="email" type="email" placeholder="Email np. jan@wp.pl" class="w-full border-2 rounded-xl px-4 py-3 mb-2 text-sm">
-<input id="pass" type="password" placeholder="Hasło min. 6 znaków" class="w-full border-2 rounded-xl px-4 py-3 mb-2 text-sm">
-<div class="flex gap-2 mb-3">
-<button onclick="doLogin('login')" class="flex-1 bg-black text-white py-3 rounded-xl font-bold text-sm">Zaloguj</button>
-<button onclick="doLogin('register')" class="flex-1 border-2 border-black py-3 rounded-xl font-bold text-sm">Zarejestruj</button>
-</div>
-<div class="text-[11px] text-zinc-500 text-center mb-2">Rejestracja = automatyczne logowanie. Bez potwierdzania email (wyłączone w Supabase dla WROOMER).</div>
-<button onclick="document.getElementById('authModal').classList.add('hidden')" class="w-full mt-2 text-sm text-zinc-500">Zamknij</button>
-<div id="authStatus" class="text-xs text-center mt-3 font-bold min-h-[20px]"></div>
-</div>
-</div> <script>
-const SUPABASE_URL='https://bdpydgsfowtuvjnkyeeg.supabase.co';
-const ANON_KEY='sb_publishable_S1qH_mBZaX7-bzmfJ0IVGA_6hxGbJWd';
-const supa = supabase.createClient(SUPABASE_URL, ANON_KEY);
-let currentUser=null, editingId=null, files=[], existingImgs=[], toDelete=[], currentGPS={lat:null,lng:null,addr:null,city:null}, allData=[];
-let detailImgs=[], detailIdx=0, currentDetail=null, chatListingId=null;
-function log(m){const el=document.getElementById('debugLog'); if(el){el.textContent+=new Date().toLocaleTimeString()+' '+m+'\n';} console.log(m);}
-function openAuth(){document.getElementById('authModal').classList.remove('hidden');}
-async function refreshUser(){ try{ const d = await supa.auth.getUser(); currentUser=d.data.user; const b=document.getElementById('userBadge'), ab=document.getElementById('authBtn'); if(currentUser){b.textContent=currentUser.email; b.classList.remove('hidden'); ab.textContent='Wyloguj'; ab.onclick=async()=>{await supa.auth.signOut(); location.reload();};} else{b.classList.add('hidden'); ab.textContent='Zaloguj'; ab.onclick=()=>openAuth();} log('User: '+(currentUser?currentUser.email:'niezalogowany')); }catch(e){log('refreshUser err '+e.message);}
-}
-function openAdd(){ if(!currentUser){openAuth(); return;} editingId=null; clearForm(); document.getElementById('modalTitle').textContent='Dodaj ogloszenie'; document.getElementById('addModal').classList.remove('hidden');}
-function closeAdd(){document.getElementById('addModal').classList.add('hidden'); editingId=null;}
-function clearForm(){ ['brand','model','year','mileage','price','title','loc','desc','phone'].forEach(id=>{const el=document.getElementById(id); if(el) el.value=id==='loc'?'Gorzyce':'';}); files=[]; existingImgs=[]; toDelete=[]; currentGPS={lat:null,lng:null,addr:null,city:null}; const pg=document.getElementById('previewGrid'); if(pg) pg.innerHTML=''; const eg=document.getElementById('existingGrid'); if(eg) eg.innerHTML=''; const eb=document.getElementById('existingBox'); if(eb) eb.classList.add('hidden'); const gp=document.getElementById('gpsPreview'); if(gp) gp.classList.add('hidden'); const ss=document.getElementById('saveStatus'); if(ss) ss.textContent=''; updateCount();
-}
-function getGPS(){ const st=document.getElementById('gpsStatus'); if(!navigator.geolocation){st.textContent='Brak GPS'; return;} st.textContent='Pobieram GPS...'; navigator.geolocation.getCurrentPosition(async p=>{ currentGPS.lat=p.coords.latitude; currentGPS.lng=p.coords.longitude; st.textContent='GPS OK '+currentGPS.lat.toFixed(5)+','+currentGPS.lng.toFixed(5); document.getElementById('gpsPreview').classList.remove('hidden'); document.getElementById('gpsAddr').textContent=currentGPS.lat+','+currentGPS.lng; try{const r=await fetch('https://nominatim.openstreetmap.org/reverse?format=json&lat='+currentGPS.lat+'&lon='+currentGPS.lng); const j=await r.json(); currentGPS.addr=j.display_name; currentGPS.city=j.address?.city||j.address?.town||j.address?.village||''; document.getElementById('gpsAddr').textContent=j.display_name;}catch(e){} }, e=>{st.textContent='Blad GPS: '+e.message;});
-}
-document.getElementById('imgFiles').addEventListener('change', async e=>{ for(let f of e.target.files){ if(files.length+existingImgs.filter(im=>toDelete.indexOf(im.id)===-1).length>=10){alert('Max 10'); break;} const c=await compress(f); files.push(c); } renderNew(); e.target.value='';
-});
-async function compress(file){ return new Promise(res=>{ const img=new Image(); const url=URL.createObjectURL(file); img.onload=()=>{ let w=img.width,h=img.height; const max=1280; if(w>max||h>max){const r=Math.min(max/w,max/h); w*=r; h*=r;} const c=document.createElement('canvas'); c.width=w; c.height=h; c.getContext('2d').drawImage(img,0,0,w,h); c.toBlob(b=>{const nf=new File([b], Date.now()+'.jpg',{type:'image/jpeg'}); res({file:nf, url:URL.createObjectURL(b)});},'image/jpeg',0.7); }; img.src=url; });
-}
-function renderNew(){ const g=document.getElementById('previewGrid'); g.innerHTML=''; files.forEach((f,i)=>{ const div=document.createElement('div'); div.className='relative'; div.innerHTML='<img src="'+f.url+'" class="w-full h-20 object-cover rounded-xl border"><button class="absolute -top-2 -right-2 bg-black text-white w-6 h-6 rounded-full text-xs">X</button>'; div.querySelector('button').onclick=()=>{files.splice(i,1); renderNew(); updateCount();}; g.appendChild(div); }); updateCount();
-}
-function renderExisting(){ const box=document.getElementById('existingBox'), grid=document.getElementById('existingGrid'); const visible=existingImgs.filter(im=>toDelete.indexOf(im.id)===-1); if(!visible.length){box.classList.add('hidden'); return;} box.classList.remove('hidden'); grid.innerHTML=''; visible.forEach(im=>{ const div=document.createElement('div'); div.className='relative'; div.innerHTML='<img src="'+im.image_url+'" class="w-full h-20 object-cover rounded-xl border-2 border-green-400"><button class="absolute -top-2 -right-2 bg-red-600 text-white w-6 h-6 rounded-full text-xs">X</button>'; div.querySelector('button').onclick=()=>{toDelete.push(im.id); renderExisting(); updateCount();}; grid.appendChild(div); });
-}
-function updateCount(){const total=files.length+existingImgs.filter(im=>toDelete.indexOf(im.id)===-1).length; document.getElementById('photoCount').textContent=total+'/10';}
-async function load(){ log('Laduje ogloszenia...'); try{ const res = await supa.from('listings').select('*').order('created_at',{ascending:false}).limit(100); if(res.error) throw res.error; let withImages=res.data; try{ const r2=await supa.from('listings').select('*, listing_images(id,image_url)').order('created_at',{ascending:false}).limit(100); if(!r2.error && r2.data) withImages=r2.data; }catch(e){} allData=withImages; renderListings(allData); document.getElementById('msg').textContent='Zaladowano '+allData.length+' ogloszen | User: '+(currentUser?currentUser.email:'niezalogowany'); document.getElementById('msg').className='bg-green-50 border border-green-200 rounded-xl p-3 mb-4 text-sm'; } catch(e){ log('BLAD LOAD: '+e.message); document.getElementById('msg').textContent='Blad: '+e.message; document.getElementById('msg').className='bg-red-50 border border-red-200 rounded-xl p-3 mb-4 text-sm'; }
-}
-function renderListings(data){ const grid=document.getElementById('listings'); if(!data || data.length===0){ grid.innerHTML='<div class="col-span-full text-center py-20 bg-white rounded-2xl border"><div class="text-4xl mb-2">Brak</div><div class="font-bold">Brak ogloszen</div></div>'; return; } grid.innerHTML=''; data.forEach((l, idx)=>{ if(idx>0 && idx%4===0){ const ad=document.createElement('div'); ad.className='bg-white rounded-xl border p-4 ad-box min-h-[280px]'; ad.innerHTML='<div class="text-[10px] text-zinc-400">REKLAMA</div><ins class="adsbygoogle" style="display:block;width:100%;min-height:200px" data-ad-client="ca-pub-1234567890123456" data-ad-slot="1234567890" data-ad-format="auto" data-full-width-responsive="true"></ins><div class="text-xs text-zinc-400 mt-2">AdSense</div>'; grid.appendChild(ad); try{(adsbygoogle=window.adsbygoogle||[]).push({});}catch(e){} } const card=document.createElement('div'); card.className='bg-white rounded-xl border overflow-hidden hover:shadow-xl transition group'; const img=(l.listing_images && l.listing_images[0] && l.listing_images[0].image_url) ? l.listing_images[0].image_url : 'https://picsum.photos/seed/'+l.id+'/400/300'; const count=l.listing_images?l.listing_images.length:1; const titleText=(l.brand||'')+' '+(l.model||'')+' '+(l.title||''); const priceText=Number(l.price||0).toLocaleString('pl-PL')+' zl'; const locText=(l.location||l.city||'')+' '+(l.year||'')+' '+(l.mileage?Number(l.mileage).toLocaleString()+'km':''); const isOwner=currentUser && l.user_id===currentUser.id;  card.innerHTML='<div class="h-28 sm:h-44 bg-zinc-100 relative overflow-hidden"><img src="'+img+'" class="w-full h-full object-cover"><div class="absolute top-1.5 left-1.5 bg-black/70 text-white text-[10px] sm:text-xs px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full">'+count+' foto</div></div><div class="p-2 sm:p-3"><div class="font-bold text-[12px] sm:text-sm leading-tight line-clamp-2">'+titleText+'</div><div class="font-black mt-1 text-[14px] sm:text-lg">'+priceText+'</div><div class="text-[10px] sm:text-xs text-zinc-500 mt-0.5 sm:mt-1 truncate">'+locText+'</div></div>';
- card.onclick=function(){openDetailById(l.id);};
- card.style.cursor='pointer';
- if(isOwner){
-  const btnDiv=document.createElement('div');
-  btnDiv.className='px-2 pb-2 flex gap-1.5';
-  btnDiv.innerHTML='<button class="flex-1 bg-black text-white text-[11px] py-1.5 rounded-lg font-bold">Edytuj</button><button class="flex-1 border text-[11px] py-1.5 rounded-lg text-red-600 bg-white">Usuń</button>';
-  // stop propagation to not open detail when editing
-  btnDiv.querySelectorAll('button')[0].onclick=function(e){e.stopPropagation(); editListing(l.id);};
-  btnDiv.querySelectorAll('button')[1].onclick=function(e){e.stopPropagation(); deleteListing(l.id);};
-  card.appendChild(btnDiv);
- }
- grid.appendChild(card);
- });
-}
-async function editListing(id){ const l=allData.find(function(x){return x.id===id;}); if(!l){alert('Nie znaleziono'); return;} clearForm(); editingId=id; document.getElementById('brand').value=l.brand||''; document.getElementById('model').value=l.model||''; document.getElementById('year').value=l.year||''; document.getElementById('mileage').value=l.mileage||''; document.getElementById('price').value=l.price||''; document.getElementById('title').value=l.title||''; document.getElementById('loc').value=l.location||''; document.getElementById('desc').value=l.description||''; const ph=document.getElementById('phone'); if(ph) ph.value=l.phone||''; if(l.lat){currentGPS={lat:l.lat,lng:l.lng,addr:l.full_address||'',city:l.city||''}; document.getElementById('gpsPreview').classList.remove('hidden'); document.getElementById('gpsAddr').textContent=l.full_address||l.lat+','+l.lng;} existingImgs=l.listing_images||[]; renderExisting(); updateCount(); document.getElementById('modalTitle').textContent='Edytuj ogloszenie'; document.getElementById('addModal').classList.remove('hidden');
-}
-async function deleteListing(id){if(!confirm('Usunac?'))return; const res=await supa.from('listings').delete().eq('id',id); if(res.error) alert(res.error.message); else load();}
-async function saveListing(){ const status=document.getElementById('saveStatus'), btn=document.getElementById('saveBtn'); if(!currentUser){alert('Zaloguj'); return;} const title=(document.getElementById('title').value.trim() || (document.getElementById('brand').value+' '+document.getElementById('model').value).trim()); const price=Number(document.getElementById('price').value); if(!title){status.textContent='Podaj tytul!'; return;} if(!price){status.textContent='Podaj cene!'; return;} let payload={title:title, price:price, location:document.getElementById('loc').value||'Gorzyce', description:document.getElementById('desc').value||'', phone:document.getElementById('phone').value||null, brand:document.getElementById('brand').value||null, model:document.getElementById('model').value||null, year:document.getElementById('year').value?Number(document.getElementById('year').value):null, mileage:document.getElementById('mileage').value?Number(document.getElementById('mileage').value):null, lat:currentGPS.lat, lng:currentGPS.lng, full_address:currentGPS.addr||null, city:currentGPS.city||document.getElementById('loc').value||null}; Object.keys(payload).forEach(k=>{if(payload[k]===null || payload[k]==='') delete payload[k];}); status.textContent=editingId?'Aktualizuje...':'Zapisuje...'; btn.disabled=true; try{ let listingId=editingId; if(editingId){ for(let i=0;i<5;i++){ const r=await supa.from('listings').update(payload).eq('id',editingId).select(); if(!r.error){listingId=r.data && r.data[0]?r.data[0].id:editingId; break;} const m=r.error.message.match(/'([^']+)' column/); if(m){delete payload[m[1]]; continue;} if(r.error.message.includes('coerce')||r.error.message.includes('single JSON')){const r2=await supa.from('listings').update(payload).eq('id',editingId); if(!r2.error){listingId=editingId; break;} throw r2.error;} throw r.error; } for(let delId of toDelete){await supa.from('listing_images').delete().eq('id',delId);} } else { let ins={...payload, user_id:currentUser.id, user_email:currentUser.email}; for(let i=0;i<5;i++){ const r=await supa.from('listings').insert(ins).select(); if(!r.error){listingId=r.data && r.data[0]?r.data[0].id:null; break;} const m=r.error.message.match(/'([^']+)' column/); if(m){delete ins[m[1]]; continue;} throw r.error; } } if(files.length){ status.textContent='Wysylam '+files.length+' zdjec...'; for(let f of files){ const name=Date.now()+'_'+Math.random().toString(36).slice(2)+'.jpg'; const up=await supa.storage.from('listing-images').upload(name, f.file); if(up.error) throw up.error; const url=supa.storage.from('listing-images').getPublicUrl(name); await supa.from('listing_images').insert({listing_id:listingId, image_url:url.data.publicUrl}); } } status.textContent='Zapisano!'; setTimeout(()=>{closeAdd(); load(); btn.disabled=false;}, 800); } catch(e){status.textContent='Blad: '+e.message; btn.disabled=false; alert(e.message);}
-}
-function openDetailById(id){const l=allData.find(function(x){return x.id===id;}); if(l) openDetail(l);}
-function openDetail(l){ currentDetail=l; detailImgs=l.listing_images?l.listing_images.map(function(x){return x.image_url;}):[]; if(detailImgs.length===0) detailImgs=['https://picsum.photos/seed/'+l.id+'/800/600']; detailIdx=0; document.getElementById('detailTitle').textContent=(l.brand||'')+' '+(l.model||'')+' '+(l.title||''); const phoneClean=(l.phone||'').replace(/[^0-9]/g,''); const hasPhone=phoneClean.length>=9; const waLink=hasPhone?'https://wa.me/48'+phoneClean+'?text='+encodeURIComponent('Czesc, pisze w sprawie '+(l.brand||'')+' '+(l.title||'')+' na WROOMER.PL'): '#'; const sellerName=l.user_email?l.user_email.split('@')[0]:'Sprzedajacy'; let infoHtml='<div class="text-3xl font-black">'+Number(l.price||0).toLocaleString('pl-PL')+' zl</div>'; infoHtml+='<div class="mt-3 bg-zinc-50 p-3 rounded-xl text-sm grid grid-cols-2 gap-2"><div>Marka: <b>'+(l.brand||'-')+'</b></div><div>Model: <b>'+(l.model||'-')+'</b></div><div>Rok: <b>'+(l.year||'-')+'</b></div><div>Przebieg: <b>'+(l.mileage?Number(l.mileage).toLocaleString()+' km':'-')+'</b></div></div>'; infoHtml+='<div class="mt-3 bg-blue-50 border p-3 rounded-xl text-sm">📍 '+(l.full_address||l.city||l.location||'Gorzyce')+'</div>'; infoHtml+='<div class="mt-3"><div class="font-bold text-sm">Opis:</div><div class="text-sm bg-zinc-50 p-3 rounded-xl whitespace-pre-wrap">'+(l.description||'Brak')+'</div></div>'; infoHtml+='<div class="mt-4 bg-zinc-900 text-white rounded-xl p-4"><div class="font-bold">'+sellerName+'</div><div class="text-xs text-zinc-400">'+(l.user_email||'')+'</div>'+(hasPhone?'<div class="text-lg font-black mt-2">📞 '+l.phone+'</div>':'')+'</div>'; document.getElementById('detailInfo').innerHTML=infoHtml; const isOwner=currentUser && l.user_id===currentUser.id; let actHtml=''; if(isOwner){ actHtml='<div class="flex gap-2 mt-4"><button onclick="editListing(\''+l.id+'\');closeDetail()" class="flex-1 bg-black text-white py-3 rounded-xl font-bold">Edytuj</button><button onclick="deleteListing(\''+l.id+'\');closeDetail()" class="flex-1 border border-red-200 text-red-600 py-3 rounded-xl font-bold">Usun</button></div>'; } else { if(hasPhone){actHtml+='<a href="tel:+48'+phoneClean+'" class="w-full bg-green-600 text-white py-3.5 rounded-xl font-black text-center block mb-2">ZADZWON '+l.phone+'</a><div class="grid grid-cols-2 gap-2 mb-2"><a href="sms:+48'+phoneClean+'" class="bg-blue-600 text-white py-3 rounded-xl font-bold text-center block">SMS</a><a href="'+waLink+'" target="_blank" class="bg-[#25D366] text-white py-3 rounded-xl font-bold text-center block">WhatsApp</a></div>';} actHtml+='<button onclick="openChat(\''+l.id+'\')" class="w-full bg-black text-white py-3.5 rounded-xl font-black">Napisz wiadomosc przez WROOMER</button>'; } document.getElementById('detailActions').innerHTML=actHtml; document.getElementById('detailModal').classList.remove('hidden'); showDetailImg();
-}
-function closeDetail(){document.getElementById('detailModal').classList.add('hidden');}
-function showDetailImg(){ if(!detailImgs.length) return; document.getElementById('detailMain').src=detailImgs[detailIdx]; document.getElementById('detailCounter').textContent=(detailIdx+1)+' / '+detailImgs.length; const thumbs=document.getElementById('detailThumbs'); thumbs.innerHTML=''; detailImgs.forEach((u,i)=>{ const im=document.createElement('img'); im.src=u; im.className='w-20 h-20 object-cover rounded-xl border-2 '+(i===detailIdx?'border-white':'border-transparent')+' cursor-pointer'; im.onclick=function(){detailIdx=i; showDetailImg();}; thumbs.appendChild(im); });
-}
-function nextImg(){detailIdx=(detailIdx+1)%detailImgs.length; showDetailImg();}
-function prevImg(){detailIdx=(detailIdx-1+detailImgs.length)%detailImgs.length; showDetailImg();}
-function openZoom(){document.getElementById('zoomImg').src=detailImgs[detailIdx]; document.getElementById('zoomModal').classList.remove('hidden');}
-function closeZoom(){document.getElementById('zoomModal').classList.add('hidden');}
-function openChat(id){chatListingId=id; const l=allData.find(function(x){return x.id===id;}); document.getElementById('chatTo').textContent='Do: '+(l?l.user_email:'')+' | '+(l?l.title:''); document.getElementById('chatModal').classList.remove('hidden');}
-async function sendChat(){ const msg=document.getElementById('chatMsg').value.trim(); const st=document.getElementById('chatStatus'); if(!msg){st.textContent='Wpisz wiadomosc!'; return;} if(!currentUser){st.textContent='Zaloguj sie!'; return;} st.textContent='Wysylam...'; try{ const l=allData.find(function(x){return x.id===chatListingId;}); const payload={listing_id:chatListingId, from_user:currentUser.id, from_email:currentUser.email, to_email:l?l.user_email:'', message:msg}; const r=await supa.from('messages').insert(payload); if(r.error && r.error.message.includes('does not exist')){st.textContent='Wiadomosc wyslana! (demo - uruchom SQL)';} else if(r.error) throw r.error; else st.textContent='Wyslano!'; setTimeout(function(){document.getElementById('chatModal').classList.add('hidden'); st.textContent='';},1500); }catch(e){st.textContent='Blad: '+e.message;}
-} async function doLogin(mode){ const e=document.getElementById('email').value.trim(); const p=document.getElementById('pass').value.trim(); const st=document.getElementById('authStatus'); if(!e || !e.includes('@')){st.textContent='Podaj poprawny email!'; st.className='text-xs text-center mt-3 font-bold text-red-600'; return;} if(!p || p.length<6){st.textContent='Hasło min. 6 znaków!'; st.className='text-xs text-center mt-3 font-bold text-red-600'; return;} st.textContent=(mode==='register'?'Rejestruję...':'Loguję...'); st.className='text-xs text-center mt-3 font-bold'; try{ if(mode==='register'){ const r=await supa.auth.signUp({email:e, password:p}); if(r.error) throw r.error; // Supabase moze wymagac potwierdzenia - sprobuj od razu zalogowac if(r.data.user && r.data.session){ st.textContent='✅ Konto utworzone i zalogowano!'; document.getElementById('authModal').classList.add('hidden'); await refreshUser(); await load(); } else if(r.data.user && !r.data.session){ // Email confirmation wlaczone - zaloguj recznie const r2=await supa.auth.signInWithPassword({email:e, password:p}); if(!r2.error){ st.textContent='✅ Konto utworzone i zalogowano!'; document.getElementById('authModal').classList.add('hidden'); await refreshUser(); await load(); } else { // Jesli Supabase wymaga potwierdzenia email - informacja st.textContent='✅ Konto utworzone! Sprawdź email lub wyłącz potwierdzanie w Supabase > Auth > Settings. Teraz zaloguj się.'; st.className='text-xs text-center mt-3 font-bold text-blue-600'; } } } else { const r=await supa.auth.signInWithPassword({email:e, password:p}); if(r.error){ // Jesli nie istnieje, zaproponuj rejestracje if(r.error.message.includes('Invalid login')||r.error.message.includes('not found')){ st.textContent='❌ Brak konta. Kliknij Zarejestruj.'; st.className='text-xs text-center mt-3 font-bold text-red-600'; } else throw r.error; } else { st.textContent='✅ Zalogowano!'; document.getElementById('authModal').classList.add('hidden'); await refreshUser(); await load(); } } } catch(err){ st.textContent='❌ '+err.message; st.className='text-xs text-center mt-3 font-bold text-red-600'; log('Auth error: '+err.message); }
-} (async function(){await refreshUser(); await load();})();
-</script> <script>
-const CITIES = [["Warszawa", "mazowieckie"], ["Kraków", "małopolskie"], ["Wrocław", "dolnośląskie"], ["Gdańsk", "pomorskie"], ["Katowice", "śląskie"], ["Poznań", "wielkopolskie"], ["Łódź", "łódzkie"], ["Szczecin", "zachodniopomorskie"], ["Lublin", "lubelskie"], ["Bydgoszcz", "kujawsko-pomorskie"], ["Białystok", "podlaskie"], ["Rzeszów", "podkarpackie"], ["Gdynia", "pomorskie"], ["Częstochowa", "śląskie"], ["Radom", "mazowieckie"], ["Sosnowiec", "śląskie"], ["Toruń", "kujawsko-pomorskie"], ["Kielce", "świętokrzyskie"], ["Gliwice", "śląskie"], ["Zabrze", "śląskie"], ["Olsztyn", "warmińsko-mazurskie"], ["Bielsko-Biała", "śląskie"], ["Bytom", "śląskie"], ["Zielona Góra", "lubuskie"], ["Rybnik", "śląskie"], ["Ruda Śląska", "śląskie"], ["Opole", "opolskie"], ["Tychy", "śląskie"], ["Gorzów Wielkopolski", "lubuskie"], ["Dąbrowa Górnicza", "śląskie"], ["Elbląg", "warmińsko-mazurskie"], ["Płock", "mazowieckie"], ["Wodzisław Śląski", "śląskie"], ["Gorzyce", "śląskie"], ["Jastrzębie-Zdrój", "śląskie"], ["Żory", "śląskie"]]; function renderCitySEO(){ const grid=document.getElementById('cityGrid'); if(!grid) return; grid.innerHTML=''; CITIES.forEach(c=>{ const city=c[0]; const a=document.createElement('a'); a.href='#city-'+encodeURIComponent(city); a.className='hover:underline hover:text-black text-zinc-600'; a.textContent='Ogłoszenia '+city; a.onclick=(e)=>{e.preventDefault(); filterByCity(city);}; grid.appendChild(a); });
-} function filterByCity(city){ document.getElementById('loc').value=city; // for add form hint // filter listings const filtered=allData.filter(l=>{ const txt=((l.city||'')+' '+(l.location||'')+' '+(l.full_address||'')).toLowerCase(); return txt.includes(city.toLowerCase()); }); const msg=document.getElementById('msg'); if(filtered.length===0){ msg.textContent='Brak ogłoszeń w '+city+' - bądź pierwszy! Dodaj ogłoszenie z lokalizacją '+city; msg.className='bg-yellow-50 border border-yellow-200 rounded-xl p-3 mb-4 text-sm'; renderListings([]); // Show SEO placeholder const grid=document.getElementById('listings'); grid.innerHTML='<div class="col-span-full bg-white rounded-2xl border p-8 text-center"><div class="text-4xl mb-3">🚗</div><div class="font-black text-xl">Ogłoszenia motoryzacyjne '+city+'</div><div class="text-sm text-zinc-500 mt-2">Aktualnie brak ogłoszeń w '+city+'. Dodaj pierwsze ogłoszenie z GPS w '+city+' i pojawisz się w Google na frazę "ogłoszenia '+city+'"!</div><button onclick="openAdd()" class="mt-4 bg-black text-white px-6 py-3 rounded-xl font-bold">+ Dodaj ogłoszenie w '+city+'</button><div class="mt-6 text-xs text-zinc-400">WROOMER.PL: ogłoszenia '+city+', samochody '+city+', auta '+city+'</div></div>'; } else { msg.textContent='✅ Znaleziono '+filtered.length+' ogłoszeń w '+city+' | WROOMER.PL - ogłoszenia motoryzacyjne '+city; msg.className='bg-green-50 border border-green-200 rounded-xl p-3 mb-4 text-sm'; renderListings(filtered); // Update SEO title document.title='Ogłoszenia motoryzacyjne '+city+' - WROOMER.PL | '+filtered.length+' aut'; } history.replaceState(null,'','#miasto-'+encodeURIComponent(city)); log('Filter city: '+city+' -> '+filtered.length);
-} document.addEventListener('DOMContentLoaded', renderCitySEO);
-</script> <!-- COOKIE BANNER RODO - WYMAGANE DLA ADSENSE I GSC -->
-<div id="cookieBanner" style="display:none; position:fixed; bottom:0; left:0; right:0; background:#111; color:#fff; z-index:9999; padding:16px; font-family:Inter,sans-serif;">
-<div style="max-width:1200px; margin:0 auto; display:flex; flex-wrap:wrap; gap:12px; align-items:center; justify-content:space-between;">
-<div style="flex:1; min-width:250px; font-size:13px; line-height:1.5;">
-<strong>🍪 WROOMER.PL używa plików cookie</strong><br>
-Używamy cookies dla: Google AdSense (reklamy), Google Search Console, logowania, zapamiętywania miasta. Klikając "Akceptuję" zgadzasz się na wszystkie. Więcej w <a href="/polityka-cookies.html" style="color:#25D366; text-decoration:underline;">polityce cookies</a> i <a href="/polityka-prywatnosci.html" style="color:#25D366; text-decoration:underline;">prywatności</a>.
-</div>
-<div style="display:flex; gap:8px; flex-wrap:wrap;">
-<button onclick="acceptAllCookies()" style="background:#fff; color:#000; border:none; padding:10px 20px; border-radius:10px; font-weight:800; cursor:pointer;">✅ Akceptuję wszystkie</button>
-<button onclick="acceptNecessaryCookies()" style="background:transparent; color:#fff; border:1px solid #444; padding:10px 16px; border-radius:10px; cursor:pointer;">Tylko niezbędne</button>
-<button onclick="openCookieSettings()" style="background:transparent; color:#aaa; border:none; padding:10px; cursor:pointer; font-size:12px;">Ustawienia</button>
-</div>
-</div>
-</div> <div id="cookieSettings" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:10000; align-items:center; justify-content:center; padding:20px;">
-<div style="background:#fff; color:#000; max-width:500px; width:100%; border-radius:16px; padding:24px;">
-<h3 style="font-weight:900; font-size:18px; margin-bottom:12px;">Ustawienia cookies</h3>
-<label style="display:flex; gap:10px; margin:10px 0; font-size:14px;"><input type="checkbox" checked disabled> <b>Niezbędne</b> - logowanie, ogłoszenia (zawsze włączone)</label>
-<label style="display:flex; gap:10px; margin:10px 0; font-size:14px;"><input type="checkbox" id="cookieAnalytics" checked> <b>Analityczne</b> - Google Search Console, statystyki</label>
-<label style="display:flex; gap:10px; margin:10px 0; font-size:14px;"><input type="checkbox" id="cookieAds" checked> <b>Reklamowe</b> - Google AdSense, personalizacja reklam</label>
-<p style="font-size:11px; color:#666; margin-top:12px;">Google AdSense używa plików cookie do wyświetlania spersonalizowanych reklam. Możesz zrezygnować: https://adssettings.google.com/</p>
-<div style="display:flex; gap:8px; margin-top:16px;">
-<button onclick="saveCookieSettings()" style="flex:1; background:#000; color:#fff; border:none; padding:12px; border-radius:10px; font-weight:800; cursor:pointer;">Zapisz</button>
-<button onclick="document.getElementById('cookieSettings').style.display='none'" style="flex:1; border:1px solid #ddd; background:#fff; padding:12px; border-radius:10px; cursor:pointer;">Anuluj</button>
-</div>
-</div>
-</div> <script>
-// Cookie banner logic - RODO compliant
-function getCookie(name){ const m=document.cookie.match('(^|;)\\s*'+name+'\\s*=\\s*([^;]+)'); return m?m.pop():''; }
-function setCookie(name,val,days){ const d=new Date(); d.setTime(d.getTime()+days*24*60*60*1000); document.cookie=name+'='+val+';path=/;expires='+d.toUTCString()+';SameSite=Lax'; } function acceptAllCookies(){ setCookie('wroomer_cookies','all',365); setCookie('wroomer_analytics','1',365); setCookie('wroomer_ads','1',365); hideBanner(); enableAds(); log('Cookies: all accepted'); }
-function acceptNecessaryCookies(){ setCookie('wroomer_cookies','necessary',365); setCookie('wroomer_analytics','0',365); setCookie('wroomer_ads','0',365); hideBanner(); log('Cookies: necessary only'); }
-function hideBanner(){ document.getElementById('cookieBanner').style.display='none'; }
-function openCookieSettings(){ document.getElementById('cookieSettings').style.display='flex'; }
-function saveCookieSettings(){ const an=document.getElementById('cookieAnalytics').checked; const ad=document.getElementById('cookieAds').checked; setCookie('wroomer_cookies', an&&ad?'all':an||ad?'partial':'necessary',365); setCookie('wroomer_analytics', an?'1':'0',365); setCookie('wroomer_ads', ad?'1':'0',365); document.getElementById('cookieSettings').style.display='none'; hideBanner(); if(ad) enableAds(); log('Cookies saved: analytics='+an+' ads='+ad);
-}
-function enableAds(){ try{ (adsbygoogle=window.adsbygoogle||[]).push({}); }catch(e){} } (function(){ const consent=getCookie('wroomer_cookies'); if(!consent){ setTimeout(()=>{ document.getElementById('cookieBanner').style.display='block'; }, 800); } else { if(getCookie('wroomer_ads')==='1') enableAds(); }
-})();
-</script> 
-<style>
-@media (max-width: 640px){
- #listings{grid-template-columns:repeat(2, minmax(0,1fr)); gap:8px}
- .ad-box{display:none} /* hide ads on mobile grid for neatness, keep bottom ad */
- header .text-2xl{font-size:1.1rem}
- #detailMain{touch-action:pan-y}
-}
-</style>
-
 <script>
-// SWIPE PALCEM NA SMARTFONIE - zdjęcia w szczegółach
-(function(){
- let startX=0, startY=0, endX=0;
- const mainImg = () => document.getElementById('detailMain');
- function initSwipe(){
- const el = document.getElementById('detailModal');
- if(!el) return;
- el.addEventListener('touchstart', function(e){
-  if(e.touches.length===1){
-  startX=e.touches[0].clientX;
-  startY=e.touches[0].clientY;
+const URL="https://bdpydgsfowtuvjnkyeeg.supabase.co";
+const KEY="sb_publishable_S1qH_mBZaX7-bzmfJ0IVGA_6hxGbJWd";
+async function load(){
+  const status=document.getElementById('status');
+  const grid=document.getElementById('listings');
+  try{
+    const res=await fetch(URL+'/rest/v1/listings?select=*&order=created_at.desc&limit=50', {
+      headers:{'apikey':KEY, 'Authorization':'Bearer '+KEY}
+    });
+    const text=await res.text();
+    console.log('RAW', text.slice(0,500));
+    let data;
+    try{ data=JSON.parse(text); }catch(e){ throw new Error('Supabase zwrócił: '+text.slice(0,200)); }
+    if(!Array.isArray(data)) throw new Error('Nie tablica: '+JSON.stringify(data).slice(0,200));
+    status.innerHTML='✅ ZAŁADOWANO '+data.length+' ogłoszeń | RLS disabled OK z 13.png | Gorzyce';
+    status.className='bg-green-200 border-2 border-green-500 p-4 rounded-xl mb-4 font-bold';
+    if(data.length===0){ grid.innerHTML='<div class="col-span-4 bg-white p-10 rounded-xl text-center">Brak - dodaj w Table Editor</div>'; return; }
+    grid.innerHTML='';
+    data.forEach(l=>{
+      const card=document.createElement('div');
+      card.className='bg-white rounded-xl border overflow-hidden shadow-sm';
+      const img='https://picsum.photos/seed/'+(l.id||Math.random())+'/400/300';
+      card.innerHTML='<div class="h-40 bg-zinc-100"><img src="'+img+'" class="w-full h-full object-cover"></div><div class="p-3"><div class="font-bold text-sm truncate">'+(l.title||'Bez tytułu')+'</div><div class="font-black mt-1">'+(l.price||0)+' zł</div><div class="text-xs text-zinc-500">'+(l.location||l.city||'Gorzyce')+'</div><div class="text-[10px] text-zinc-400 mt-1">'+(l.description||'').slice(0,40)+'</div></div>';
+      grid.appendChild(card);
+    });
+  }catch(e){
+    status.innerHTML='❌ BŁĄD: '+e.message;
+    status.className='bg-red-200 border-2 border-red-500 p-4 rounded-xl mb-4 font-bold';
+    console.error(e);
   }
- }, {passive:true});
- el.addEventListener('touchend', function(e){
-  endX=e.changedTouches[0].clientX;
-  const diffX = endX - startX;
-  const diffY = e.changedTouches[0].clientY - startY;
-  // only horizontal swipe, ignore vertical
-  if(Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 50){
-  if(diffX < 0){ nextImg(); } else { prevImg(); }
-  }
- }, {passive:true});
- }
- document.addEventListener('DOMContentLoaded', initSwipe);
- // also init after modal opens
- const origOpen = window.showDetailImg;
- window.showDetailImg = function(){
- origOpen();
- // ensure swipe listeners attached
- setTimeout(initSwipe, 100);
- };
-})();
+}
+load();
 </script>
-
-</body>
-</html>
+</body></html>
