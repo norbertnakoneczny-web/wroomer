@@ -1,1 +1,1 @@
-google.com, pub-123, DIRECT
+ads.txt
