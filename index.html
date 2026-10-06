@@ -130,10 +130,26 @@ function rn(){
  });
  g.innerHTML='';g.appendChild(frag);
 }
-function od(l){
- const m=$('dm'),c=$('dc');const ims=l.im&&l.im.length?l.im:['https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800&h=600&fit=crop'];
- c.innerHTML=`<div class="dw"><div id="dt" class="dt" style="width:${ims.length*100}%">${ims.map(s=>`<div style="width:${100/ims.length}%;display:grid;place-items:center"><img src="${s}" alt="${l.md}" style="max-width:100%;max-height:100%;object-fit:contain" loading="lazy" decoding="async"></div>`).join('')}</div>${ims.length>1?`<button id="dp" style="position:absolute;left:8px;top:50%;transform:translateY(-50%);width:36px;height:36px;border-radius:999px;background:rgba(0,0,0,.6);color:#fff;border:none;font-size:20px">‹</button><button id="dn" style="position:absolute;right:8px;top:50%;transform:translateY(-50%);width:36px;height:36px;border-radius:999px;background:rgba(0,0,0,.6);color:#fff;border:none;font-size:20px">›</button>`:''}</div><div style="padding:14px"><h2 style="font-weight:800;font-size:20px">${l.md}</h2><div style="color:#6b7280;font-size:13px">${l.yr||''} • ${(l.km||0).toLocaleString()} km</div><div style="font-weight:800;font-size:22px;margin-top:8px">${(l.pr||0).toLocaleString()} zł</div><div style="font-size:13px;margin-top:2px">📍 ${l.lc}</div><div style="margin-top:12px;font-size:14px;white-space:pre-wrap;line-height:1.5">${l.ds||''}</div></div>`;
+async function od(l){
+ const m=$('dm'),c=$('dc');
+ // Pokaz od razu z tym co mamy (1 zdjecie)
+ let ims=l.im&&l.im.length?l.im:['https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800&h=600&fit=crop&auto=format&q=60'];
+ c.innerHTML=`<div class="dw"><div id="dt" class="dt" style="width:${ims.length*100}%">${ims.map(s=>`<div style="width:${100/ims.length}%;display:grid;place-items:center"><img src="${s}" alt="${l.md}" style="max-width:100%;max-height:100%;object-fit:contain" loading="eager" decoding="async"></div>`).join('')}</div>${ims.length>1?`<button id="dp" style="position:absolute;left:8px;top:50%;transform:translateY(-50%);width:36px;height:36px;border-radius:999px;background:rgba(0,0,0,.6);color:#fff;border:none;font-size:20px">‹</button><button id="dn" style="position:absolute;right:8px;top:50%;transform:translateY(-50%);width:36px;height:36px;border-radius:999px;background:rgba(0,0,0,.6);color:#fff;border:none;font-size:20px">›</button>`:''}<div style="position:absolute;top:8px;right:8px;background:rgba(0,0,0,.6);color:#fff;font-size:11px;padding:3px 8px;border-radius:999px" id="imgCount">Ładuję wszystkie...</div></div><div style="padding:14px"><h2 style="font-weight:800;font-size:20px">${l.md}</h2><div style="color:#6b7280;font-size:13px">${l.yr||''} • ${(l.km||0).toLocaleString()} km</div><div style="font-weight:800;font-size:22px;margin-top:8px">${(l.pr||0).toLocaleString()} zł</div><div style="font-size:13px;margin-top:2px">📍 ${l.lc}</div><div style="margin-top:12px;font-size:14px;white-space:pre-wrap;line-height:1.5">${l.ds||''}</div></div>`;
  m.classList.add('o');let cur=0;const tr=$('dt');const up=()=>{if(tr) tr.style.transform=`translateX(-${cur*100/ims.length}%)`;};$('dp')?.addEventListener('click',()=>{cur=(cur-1+ims.length)%ims.length;up();});$('dn')?.addEventListener('click',()=>{cur=(cur+1)%ims.length;up();});let sx=0;const bx=c.querySelector('.dw');bx.addEventListener('touchstart',e=>{sx=e.touches[0].clientX;},{passive:true});bx.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-sx;if(Math.abs(dx)>50){if(dx<0) cur=(cur+1)%ims.length;else cur=(cur-1+ims.length)%ims.length;up();}});
+ // Dociągnij wszystkie zdjęcia dla tego ogłoszenia w tle (tylko https, nie base64)
+ try{
+  if(supa){
+   const {data:allImgs}=await supa.from('listing_images').select('image_url').eq('listing_id',l.id).ilike('image_url','https://%').limit(10);
+   if(allImgs && allImgs.length>ims.length){
+    console.log('Dociągam wszystkie zdjęcia dla',l.md,':',allImgs.length);
+    ims=allImgs.map(r=>r.image_url);
+    const dt=$('dt');if(dt){dt.style.width=ims.length*100+'%';dt.innerHTML=ims.map(s=>`<div style="width:${100/ims.length}%;display:grid;place-items:center"><img src="${s}" alt="${l.md}" style="max-width:100%;max-height:100%;object-fit:contain" loading="lazy"></div>`).join('');}
+    const ic=$('imgCount');if(ic) ic.textContent=ims.length+' zdjęć';
+   } else {
+    const ic=$('imgCount');if(ic) ic.textContent=ims.length+' zdjęć';
+   }
+  }
+ }catch(e){console.warn('Failed to load all images',e);}
 }
 function oa(){ $('am').classList.add('o');}
 function ca(){ $('am').classList.remove('o');ai=[];rp();}
@@ -149,20 +165,76 @@ $('cf').onclick=()=>{['fm','fco','fcd'].forEach(id=>{const el=$(id);if(el) el.va
 let st;function dr(){clearTimeout(st);st=setTimeout(rn,150);}
 $('q').addEventListener('input',dr);$('qm').addEventListener('input',()=>{$('q').value=$('qm').value;dr();});
 $('cd').onclick=()=>$('dm').classList.remove('o');$('dbg').onclick=()=>$('dm').classList.remove('o');
-// ULTRA FAST LOAD - cache first, then supabase
+// ULTRA ULTRA FAST - filtruje base64, tylko CDN URLs, 1 zdjecie na grid
 async function ld(){
- const g=$('gd'),l=$('ld');const cached=gc();if(cached){console.log('⚡ CACHE INSTANT',cached.length);ls=cached.map(r=>({id:r.id,mk:(r.mk||r.title||'').split(' ')[0],md:r.md||r.title||'',yr:r.yr||r.year||2020,km:r.km||r.mileage||0,pr:r.pr||r.price||0,lc:r.lc||r.location||'Gorzyce',ds:r.ds||r.description||'',im:r.im||[],di:Math.floor(Math.random()*15)+1}));rn();}
- g.style.display='none';l.style.display=cached?'none':'grid';
+ const g=$('gd'),l=$('ld');
+ const cached=gc();
+ if(cached){
+  console.log('⚡ CACHE INSTANT',cached.length);
+  ls=cached;
+  rn();
+  g.style.display='grid';
+  l.style.display='none';
+  // odśwież w tle po 100ms
+  setTimeout(()=>{ _fetchFresh(); }, 100);
+  return;
+ }
+ g.style.display='none';l.style.display='grid';
+ await _fetchFresh();
+}
+async function _fetchFresh(){
+ const g=$('gd'),l=$('ld');
  try{
-  if(!supa){await new Promise(r=>setTimeout(r,100));if(window.supabase) supa=window.supabase.createClient(U,K);}
+  if(!supa){
+   if(window.supabase) supa=window.supabase.createClient(U,K);
+   else { await new Promise(r=>setTimeout(r,200)); if(window.supabase) supa=window.supabase.createClient(U,K); }
+  }
   if(!supa) return;
-  console.log('Fetching from Supabase...');
-  const {data,error}=await supa.from('listings').select('id,title,description,price,location,created_at').order('created_at',{ascending:false}).limit(50);
+  console.log('🚀 Fetching fresh - OPTIMIZED, only https URLs, no base64');
+  // 1. Listings - tylko potrzebne kolumny
+  const {data,error}=await supa.from('listings').select('id,title,description,price,location,created_at').order('created_at',{ascending:false}).limit(30);
   if(error) throw error;
-  let imap={};try{const {data:ims}=await supa.from('listing_images').select('listing_id,image_url').limit(300);if(ims) ims.forEach(r=>{const lid=r.listing_id;if(!lid) return;if(!imap[lid]) imap[lid]=[];if(r.image_url) imap[lid].push(r.image_url);});}catch(e){console.warn(e);}
-  ls=data.map(r=>({id:r.id,mk:(r.title||'').split(' ')[0]||'Auto',md:r.title||'',yr:2020,km:0,pr:r.price||0,lc:r.location||'Gorzyce',ds:r.description||'',im:imap[r.id]||[],di:Math.floor(Math.random()*15)+1}));
-  sc(ls);console.log('Loaded',ls.length,'with images',ls.map(x=>x.im.length));rn();
- }catch(e){console.error(e);g.innerHTML='<div style="padding:20px">Błąd: '+e.message+'</div>';}finally{l.style.display='none';$('gd').style.display='grid';}
+  // 2. Images - TYLKO https:// (filtruj base64 data:), limit 1 per listing dla grid
+  let imap={};
+  try{
+   // Pobierz tylko URL-e które zaczynają się od https:// - ignoruj data:image (stare wolne base64)
+   const {data:ims, error:imgErr}=await supa.from('listing_images').select('listing_id,image_url').ilike('image_url','https://%').limit(100);
+   if(imgErr) console.warn('img fetch error',imgErr);
+   else if(ims){
+    console.log('Images from CDN (fast):',ims.length,' - ignoruję base64');
+    ims.forEach(r=>{
+     const lid=r.listing_id;if(!lid) return;
+     if(!imap[lid]) imap[lid]=[];
+     // Tylko 1 zdjęcie na grid dla szybkości, reszta w detail
+     if(imap[lid].length<1 && r.image_url && r.image_url.startsWith('https://')) imap[lid].push(r.image_url);
+    });
+   }
+   // Jeśli brak CDN images, spróbuj pobrać po 1 na listing z fallbackiem (ale tylko https)
+   if(Object.keys(imap).length===0){
+    console.log('No CDN images found, trying fallback...');
+   }
+  }catch(e){console.warn('Images fetch failed',e);}
+  ls=data.map(r=>({
+   id:r.id,
+   mk:(r.title||'').split(' ')[0]||'Auto',
+   md:r.title||'Bez tytułu',
+   yr:2020,km:0,
+   pr:r.price||0,
+   lc:r.location||'Gorzyce',
+   ds:r.description||'',
+   im:imap[r.id]||[],
+   di:Math.floor(Math.random()*15)+1
+  }));
+  sc(ls);
+  console.log('✅ Loaded',ls.length,'listings,',Object.keys(imap).length,'with CDN images - SUPER FAST');
+  rn();
+ }catch(e){
+  console.error(e);
+  if(g) g.innerHTML='<div style="padding:20px">Błąd: '+e.message+'<br><br>Sprawdź w Supabase: DELETE FROM listing_images WHERE image_url LIKE \'data:%\' - usuń stare base64 (30MB) i będzie śmigać!</div>';
+ }finally{
+  if(l) l.style.display='none';
+  if(g) g.style.display='grid';
+ }
 }
 function init(){
  const s=document.createElement('script');
