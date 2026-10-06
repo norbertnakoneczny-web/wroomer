@@ -74,40 +74,26 @@ function isSupabaseEnabled(){ return !!supabaseClient; }
 </div></div></div>
 
 <script>
+
 let listings = [];
 let currentDist = 50;
 let currentUser = {email: 'test@wroomer.pl'};
 let addImages = [];
-let editingId = null;
 
-// --- KOMPRESJA JAK OLX / OTOMOTO ---
 async function compressImage(file){
   return new Promise((resolve)=>{
     const reader = new FileReader();
     reader.onload = (e)=>{
       const img = new Image();
       img.onload = ()=>{
-        const maxW = 1280;
-        const maxH = 960;
+        const maxW = 1280, maxH = 960;
         let w = img.width, h = img.height;
-        if(w>maxW || h>maxH){
-          const ratio = Math.min(maxW/w, maxH/h);
-          w = Math.round(w*ratio);
-          h = Math.round(h*ratio);
-        }
-        const canvas = document.createElement('canvas');
-        canvas.width = w; canvas.height = h;
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(img,0,0,w,h);
-        // WebP jeśli wspierane, inaczej JPEG - quality 0.7 jak OLX
-        let dataUrl;
-        try{ dataUrl = canvas.toDataURL('image/webp', 0.7); }catch{ dataUrl = canvas.toDataURL('image/jpeg', 0.7); }
-        // Jeśli webp nie wspierany, fallback jpeg
-        if(dataUrl.length < 100) dataUrl = canvas.toDataURL('image/jpeg', 0.7);
-        const origKB = Math.round(file.size/1024);
-        const compKB = Math.round((dataUrl.length*0.75)/1024);
-        console.log(`Kompresja: ${file.name} ${origKB}KB -> ${compKB}KB (${w}x${h})`);
-        resolve({dataUrl, origKB, compKB, w, h});
+        if(w>maxW || h>maxH){ const ratio = Math.min(maxW/w, maxH/h); w=Math.round(w*ratio); h=Math.round(h*ratio); }
+        const canvas = document.createElement('canvas'); canvas.width=w; canvas.height=h;
+        const ctx = canvas.getContext('2d'); ctx.drawImage(img,0,0,w,h);
+        let dataUrl; try{ dataUrl = canvas.toDataURL('image/webp', 0.7); }catch{ dataUrl = canvas.toDataURL('image/jpeg', 0.7); }
+        if(dataUrl.length<100) dataUrl = canvas.toDataURL('image/jpeg', 0.7);
+        resolve(dataUrl);
       };
       img.src = e.target.result;
     };
@@ -116,26 +102,102 @@ async function compressImage(file){
 }
 
 async function loadListings(){
-  if(!isSupabaseEnabled()){ document.getElementById('listingsGrid').innerHTML='<div class="col-span-full p-10 text-center">Błąd Supabase - brak kluczy</div>'; return; }
+  if(!isSupabaseEnabled()) return;
   try{
-    const {data, error} = await supabaseClient.from('listings').select('*').order('created_at',{ascending:false}).limit(100);
+    // Load listings with new schema: id uuid, title, description, price, location
+    const {data: listingsData, error} = await supabaseClient.from('listings').select('*').order('created_at',{ascending:false}).limit(100);
     if(error) throw error;
-    listings = (data||[]).map(r=>({
-      id: r.id, marka: r.marka||'Nieznana', model: r.model||'', rok: r.rok||2020, przebieg: r.przebieg||0, paliwo: r.paliwo||'Benzyna', skrzynia: r.skrzynia||'Manualna', nadwozie: r.nadwozie||'Sedan',
-      cena: r.cena||0, lok: r.lok||'Gorzyce', opis: r.opis||'', images: r.images||[], kontakt: r.kontakt||{tel:''}, ownerEmail: r.owner_email||'test@wroomer.pl',
-      vin: r.vin||'', uszkodzony: r.uszkodzony||false, dist: Math.floor(Math.random()*20)+1, time:'teraz'
-    }));
+    
+    // Try load images from listing_images table if exists
+    let imagesMap = {};
+    try{
+      const {data: imgs, error: imgErr} = await supabaseClient.from('listing_images').select('*');
+      if(!imgErr && imgs){
+        imgs.forEach(r=>{
+          const lid = r.listing_id || r.listings_id || r.id_listing;
+          if(!lid) return;
+          if(!imagesMap[lid]) imagesMap[lid]=[];
+          if(r.image_url || r.url || r.image) imagesMap[lid].push(r.image_url || r.url || r.image);
+        });
+      }
+    }catch(e){ console.log('listing_images not available or empty', e); }
+
+    listings = (listingsData||[]).map(r=>{
+      // Support both old and new schema
+      const isNewSchema = r.title !== undefined;
+      if(isNewSchema){
+        // New schema from screenshot
+        const title = r.title || 'Nieznane auto';
+        // Try parse marka from title (first word)
+        const parts = title.split(' ');
+        const marka = parts[0] || 'Nieznana';
+        const model = parts.slice(1).join(' ') || '';
+        return {
+          id: r.id,
+          marka: marka,
+          model: title, // full title
+          rawTitle: title,
+          rok: r.year || r.rok || 2020,
+          przebieg: r.mileage || r.przebieg || 0,
+          paliwo: r.fuel || r.paliwo || 'Benzyna',
+          skrzynia: r.transmission || r.skrzynia || 'Manualna',
+          nadwozie: 'Sedan',
+          cena: r.price || r.cena || 0,
+          lok: r.location || r.lok || 'Gorzyce',
+          opis: r.description || r.opis || '',
+          images: imagesMap[r.id] || r.images || [],
+          kontakt: {tel: ''},
+          ownerEmail: 'test@wroomer.pl',
+          dist: Math.floor(Math.random()*20)+1,
+          time: 'teraz'
+        };
+      }else{
+        // Old schema fallback
+        return {
+          id: r.id, marka: r.marka||'Nieznana', model: r.model||r.marka||'', rok: r.rok||2020, przebieg: r.przebieg||0, paliwo: r.paliwo||'Benzyna', skrzynia: r.skrzynia||'Manualna', nadwozie: r.nadwozie||'Sedan',
+          cena: r.cena||r.price||0, lok: r.lok||r.location||'Gorzyce', opis: r.opis||r.description||'', images: imagesMap[r.id] || r.images||[], kontakt: r.kontakt||{tel:''}, ownerEmail: r.owner_email||'test@wroomer.pl',
+          dist: Math.floor(Math.random()*20)+1, time:'teraz'
+        };
+      }
+    }).filter(l=>{
+      // Filter out trash test records like 'bad', 'OPEL' alone, 'AUDI' alone without proper data
+      const t = (l.rawTitle || l.model || '').toLowerCase().trim();
+      if(t==='bad' || t==='opel' || t==='audi' || t==='kadett' || t.includes('kosiarka') || t.includes('traktorek')) return false;
+      if(!l.cena || l.cena < 100) return false; // too cheap = trash
+      return true;
+    });
+
     render();
-  }catch(err){ console.error(err); document.getElementById('listingsGrid').innerHTML='<div class="p-10">Błąd ładowania: '+err.message+'</div>'; }
+  }catch(err){ console.error(err); document.getElementById('listingsGrid').innerHTML='<div class="p-10">Błąd ładowania: '+err.message+'<br><br>Usuń testowe rekordy bad/OPEL/AUDI w Supabase Table Editor.</div>'; }
 }
 
 async function saveToSupabase(listing){
   try{
-    const payload = { id: listing.id, marka: listing.marka, model: listing.model.replace(listing.marka,'').trim(), rok: listing.rok, przebieg: listing.przebieg, paliwo: listing.paliwo, skrzynia: listing.skrzynia, nadwozie: listing.nadwozie, cena: listing.cena, lok: listing.lok, opis: listing.opis, images: listing.images, kontakt: listing.kontakt, owner_email: listing.ownerEmail, vin: listing.vin||'', uszkodzony: !!listing.uszkodzony };
-    const {error} = await supabaseClient.from('listings').upsert(payload, {onConflict:'id'});
+    // Save with NEW schema: title, description, price, location
+    const payload = {
+      title: listing.marka + ' ' + listing.model,
+      description: listing.opis,
+      price: listing.cena,
+      location: listing.lok
+    };
+    // Try new schema first
+    const {data, error} = await supabaseClient.from('listings').insert(payload).select().single();
     if(error) throw error;
-    return true;
-  }catch(err){ alert('Błąd zapisu Supabase: '+err.message); return false; }
+    
+    // If has images and listing_images table exists, save there too
+    if(data && listing.images && listing.images.length>0){
+      try{
+        for(const imgUrl of listing.images){
+          await supabaseClient.from('listing_images').insert({listing_id: data.id, image_url: imgUrl});
+        }
+      }catch(e){ console.log('listing_images save failed, ignoring', e); }
+    }
+    return data;
+  }catch(err){ 
+    console.error(err);
+    alert('Błąd zapisu Supabase: '+err.message+'\n\nSprawdź czy tabela listings ma kolumny: title, description, price, location'); 
+    return null; 
+  }
 }
 
 function render(){
@@ -151,45 +213,36 @@ function render(){
     return true;
   });
   grid.innerHTML='';
-  if(filtered.length==0){ grid.innerHTML='<div class="col-span-full p-10 text-center text-gray-500">Brak ogłoszeń w tej lokalizacji / filtrach.<br>Dodaj pierwsze!</div>'; return; }
-  filtered.forEach((l, idx)=>{
+  if(filtered.length==0){ grid.innerHTML='<div class="col-span-full p-10 text-center text-gray-500">Brak ogłoszeń.<br>Usuń śmieciowe testy w Supabase (bad, OPEL, AUDI) i dodaj nowe.<br><br><b>Skoda Octavia 2019</b> powinna zostać - to prawdziwe ogłoszenie.</div>'; return; }
+  filtered.forEach((l)=>{
     const card = document.createElement('div');
     card.className='bg-white rounded-[16px] border overflow-hidden shadow-sm hover:shadow-md transition cursor-pointer';
     const imgs = l.images && l.images.length>0 ? l.images : ['https://via.placeholder.com/400x300?text=Brak+zdjecia'];
-    // swipe gallery for card - show all images
     card.innerHTML = `
       <div class="relative h-[220px] overflow-hidden bg-gray-100 group">
         <div class="swipe-track flex h-full" data-idx="0" style="width:${imgs.length*100}%; transform:translateX(0%)">
           ${imgs.map(src=>`<div class="h-full" style="width:${100/imgs.length}%"><img src="${src}" class="w-full h-full object-cover"></div>`).join('')}
         </div>
-        ${imgs.length>1?`
-        <button class="prevBtn absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-black/60 text-white rounded-full hidden group-hover:flex items-center justify-center">‹</button>
-        <button class="nextBtn absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-black/60 text-white rounded-full hidden group-hover:flex items-center justify-center">›</button>
-        <div class="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1">${imgs.map((_,i)=>`<div class="dot w-1.5 h-1.5 rounded-full ${i==0?'bg-white':'bg-white/50'}"></div>`).join('')}</div>
-        <div class="absolute top-2 right-2 bg-black/70 text-white text-[11px] px-2 py-0.5 rounded-full">${imgs.length} zdjęć</div>
-        `:''}
+        ${imgs.length>1?`<div class="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1">${imgs.map((_,i)=>`<div class="dot w-1.5 h-1.5 rounded-full ${i==0?'bg-white':'bg-white/50'}"></div>`).join('')}</div><div class="absolute top-2 right-2 bg-black/70 text-white text-[11px] px-2 py-0.5 rounded-full">${imgs.length} zdjęć</div>`:''}
       </div>
       <div class="p-4">
-        <div class="font-bold text-[16px] leading-tight">${l.marka} ${l.model}</div>
-        <div class="text-[13px] text-gray-500">${l.rok} • ${(l.przebieg||0).toLocaleString()} km • ${l.paliwo}</div>
+        <div class="font-bold text-[16px] leading-tight">${l.model}</div>
+        <div class="text-[13px] text-gray-500">${l.rok||''} • ${(l.przebieg||0).toLocaleString()} km • ${l.paliwo}</div>
         <div class="mt-2 flex justify-between items-center"><div class="font-extrabold text-[18px]">${(l.cena||0).toLocaleString()} zł</div><div class="text-[12px] text-gray-500">${l.lok} • ${l.dist} km</div></div>
       </div>
     `;
-    // swipe logic
     let cur = 0;
     const track = card.querySelector('.swipe-track');
     const dots = card.querySelectorAll('.dot');
     function updateTrack(){ if(!track) return; track.style.transform=`translateX(-${cur*100/imgs.length}%)`; dots.forEach((d,i)=>{ d.className=`dot w-1.5 h-1.5 rounded-full ${i==cur?'bg-white':'bg-white/50'}`; }); }
-    card.querySelector('.prevBtn')?.addEventListener('click',(e)=>{ e.stopPropagation(); cur = (cur-1+imgs.length)%imgs.length; updateTrack(); });
-    card.querySelector('.nextBtn')?.addEventListener('click',(e)=>{ e.stopPropagation(); cur = (cur+1)%imgs.length; updateTrack(); });
-    // touch swipe
+    card.addEventListener('click',()=>openDetail(l));
+    // touch
     let startX=0;
     card.addEventListener('touchstart',e=>{ startX=e.touches[0].clientX; }, {passive:true});
     card.addEventListener('touchend',e=>{
       const dx = e.changedTouches[0].clientX - startX;
       if(Math.abs(dx)>50){ if(dx<0) cur=(cur+1)%imgs.length; else cur=(cur-1+imgs.length)%imgs.length; updateTrack(); }
     });
-    card.addEventListener('click',()=>openDetail(l));
     grid.appendChild(card);
   });
 }
@@ -203,52 +256,30 @@ function openDetail(l){
       <div id="detailTrack" class="swipe-track flex h-full" style="width:${imgs.length*100}%; transform:translateX(0%)">
         ${imgs.map(src=>`<div class="h-full flex items-center justify-center bg-black" style="width:${100/imgs.length}%"><img src="${src}" class="max-w-full max-h-full object-contain"></div>`).join('')}
       </div>
-      ${imgs.length>1?`
-      <button id="detailPrev" class="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 bg-black/60 text-white rounded-full flex items-center justify-center text-[20px]">‹</button>
-      <button id="detailNext" class="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 bg-black/60 text-white rounded-full flex items-center justify-center text-[20px]">›</button>
-      <div class="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5">${imgs.map((_,i)=>`<div class="detailDot w-2 h-2 rounded-full ${i==0?'bg-white':'bg-white/50'}"></div>`).join('')}</div>
-      <div class="absolute top-3 right-3 bg-black/70 text-white text-[12px] px-3 py-1 rounded-full"><span id="detailCounter">1</span> / ${imgs.length}</div>
-      `:''}
+      ${imgs.length>1?`<div class="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5">${imgs.map((_,i)=>`<div class="detailDot w-2 h-2 rounded-full ${i==0?'bg-white':'bg-white/50'}"></div>`).join('')}</div><div class="absolute top-3 right-3 bg-black/70 text-white text-[12px] px-3 py-1 rounded-full"><span id="detailCounter">1</span> / ${imgs.length}</div>`:''}
     </div>
     <div class="mt-4">
-      <h2 class="font-extrabold text-[22px]">${l.marka} ${l.model}</h2>
-      <div class="text-gray-500 text-[14px]">${l.rok} • ${(l.przebieg||0).toLocaleString()} km • ${l.paliwo} • ${l.skrzynia}</div>
+      <h2 class="font-extrabold text-[22px]">${l.model}</h2>
+      <div class="text-gray-500 text-[14px]">${l.rok||''} • ${(l.przebieg||0).toLocaleString()} km • ${l.paliwo} • ${l.skrzynia}</div>
       <div class="mt-3 font-extrabold text-[24px]">${(l.cena||0).toLocaleString()} zł</div>
-      <div class="mt-1 text-[14px]">📍 ${l.lok} • Tel: ${l.kontakt.tel||'brak'}</div>
+      <div class="mt-1 text-[14px]">📍 ${l.lok}</div>
       <div class="mt-4 text-[14px] whitespace-pre-wrap">${l.opis}</div>
-      <div class="mt-4 grid grid-cols-4 gap-2">${imgs.map((src,i)=>`<img src="${src}" data-i="${i}" class="thumb w-full h-20 object-cover rounded-lg border-2 ${i==0?'border-black':'border-transparent'} cursor-pointer">`).join('')}</div>
     </div>
   `;
   modal.classList.remove('hidden');
-  let cur=0;
-  const track = document.getElementById('detailTrack');
-  const dots = content.querySelectorAll('.detailDot');
-  const counter = document.getElementById('detailCounter');
-  const thumbs = content.querySelectorAll('.thumb');
-  function upd(){ track.style.transform=`translateX(-${cur*100/imgs.length}%)`; dots.forEach((d,i)=>{ d.className=`detailDot w-2 h-2 rounded-full ${i==cur?'bg-white':'bg-white/50'}`; }); if(counter) counter.textContent=cur+1; thumbs.forEach((t,i)=>{ t.className=`thumb w-full h-20 object-cover rounded-lg border-2 ${i==cur?'border-black':'border-transparent'} cursor-pointer`; }); }
-  document.getElementById('detailPrev')?.addEventListener('click',()=>{ cur=(cur-1+imgs.length)%imgs.length; upd(); });
-  document.getElementById('detailNext')?.addEventListener('click',()=>{ cur=(cur+1)%imgs.length; upd(); });
-  thumbs.forEach(t=>{ t.addEventListener('click',()=>{ cur=parseInt(t.dataset.i); upd(); }); });
-  // swipe detail
-  let sx=0;
-  const detailBox = content.querySelector('.relative');
-  detailBox.addEventListener('touchstart',e=>{ sx=e.touches[0].clientX; }, {passive:true});
-  detailBox.addEventListener('touchend',e=>{ const dx=e.changedTouches[0].clientX-sx; if(Math.abs(dx)>50){ if(dx<0) cur=(cur+1)%imgs.length; else cur=(cur-1+imgs.length)%imgs.length; upd(); } });
 }
 
-// ADD MODAL LOGIC
 function openAdd(){ document.getElementById('addModal').classList.remove('hidden'); }
-function closeAdd(){ document.getElementById('addModal').classList.add('hidden'); addImages=[]; renderPreview(); document.getElementById('compressInfo').textContent=''; }
+function closeAdd(){ document.getElementById('addModal').classList.add('hidden'); addImages=[]; renderPreview(); }
 document.getElementById('addBtn').onclick=openAdd;
 document.getElementById('closeAdd').onclick=closeAdd;
 document.getElementById('addBackdrop').onclick=closeAdd;
 
 function renderPreview(){
   const p=document.getElementById('preview'); p.innerHTML='';
-  addImages.forEach((obj,i)=>{
-    const src = typeof obj==='string'?obj:obj.dataUrl;
+  addImages.forEach((src,i)=>{
     const div=document.createElement('div'); div.className='relative rounded-lg overflow-hidden h-20 bg-gray-100 border';
-    div.innerHTML=`<img src="${src}" class="w-full h-full object-cover"><button type="button" class="absolute top-1 right-1 w-6 h-6 bg-black/70 text-white rounded-full text-[12px]">✕</button><div class="absolute bottom-0 left-0 right-0 bg-black/60 text-white text-[9px] px-1">${typeof obj!=='string'?(obj.compKB+'KB'):''}</div>`;
+    div.innerHTML=`<img src="${src}" class="w-full h-full object-cover"><button type="button" class="absolute top-1 right-1 w-6 h-6 bg-black/70 text-white rounded-full text-[12px]">✕</button>`;
     div.querySelector('button').onclick=()=>{ addImages.splice(i,1); renderPreview(); };
     p.appendChild(div);
   });
@@ -256,50 +287,34 @@ function renderPreview(){
 
 document.getElementById('dropZone').onclick=()=>document.getElementById('fZdj').click();
 document.getElementById('fZdj').onchange=async (e)=>{
-  const files = Array.from(e.target.files);
-  const remaining = 10 - addImages.length;
-  const toProcess = files.slice(0, remaining);
-  document.getElementById('compressInfo').textContent='Kompresuję '+toProcess.length+' zdjęć jak OLX/Otomoto...';
-  for(const f of toProcess){
-    const compressed = await compressImage(f);
-    addImages.push(compressed);
-  }
+  const files = Array.from(e.target.files).slice(0, 10-addImages.length);
+  for(const f of files){ const c = await compressImage(f); addImages.push(c); }
   renderPreview();
-  const totalOrig = addImages.reduce((s,o)=>s+(typeof o!=='string'?o.origKB:0),0);
-  const totalComp = addImages.reduce((s,o)=>s+(typeof o!=='string'?o.compKB:0),0);
-  document.getElementById('compressInfo').textContent=`Skompresowano: ${totalOrig}KB → ${totalComp}KB (oszczędność ${totalOrig>0?Math.round((1-totalComp/totalOrig)*100):0}%) • Format WebP/JPEG 1280px 70% jak OLX`;
 };
 
 document.getElementById('addForm').onsubmit=async (e)=>{
   e.preventDefault();
   const btn = document.getElementById('saveBtn');
   if(addImages.length==0){ alert('Dodaj min 1 zdjęcie'); return; }
-  btn.disabled=true; btn.textContent='⏳ Kompresuję i zapisuję do Supabase...';
+  btn.disabled=true; btn.textContent='⏳ Zapisuję...';
   try{
-    const images = addImages.map(o=> typeof o==='string'?o:o.dataUrl);
     const data={
       marka: document.getElementById('fMarka').value.trim(),
       model: document.getElementById('fModel').value.trim(),
-      rok: parseInt(document.getElementById('fRok').value),
-      przebieg: parseInt(document.getElementById('fPrzebieg').value),
+      rok: parseInt(document.getElementById('fRok').value)||2020,
+      przebieg: parseInt(document.getElementById('fPrzebieg').value)||0,
       paliwo: document.getElementById('fPaliwo').value,
       skrzynia: document.getElementById('fSkrzynia').value,
-      nadwozie: 'Sedan',
-      cena: parseInt(document.getElementById('fCena').value),
+      cena: parseInt(document.getElementById('fCena').value)||0,
       lok: document.getElementById('fLok').value.trim(),
       opis: document.getElementById('fOpis').value||'Brak opisu',
-      images: images,
-      kontakt: {tel: document.getElementById('fTel').value.trim()},
-      ownerEmail: currentUser.email,
-      vin: '', uszkodzony: false
+      images: [...addImages]
     };
-    if(!data.marka||!data.model||!data.rok||!data.przebieg||!data.cena||!data.lok){ alert('Wypełnij wszystkie pola *'); btn.disabled=false; btn.textContent='💾 Zapisz w Supabase (wspólna baza)'; return; }
-    data.id = Date.now();
-    const ok = await saveToSupabase(data);
-    if(!ok){ btn.disabled=false; btn.textContent='💾 Zapisz w Supabase (wspólna baza)'; return; }
-    listings.unshift({...data, dist: Math.floor(Math.random()*15)+1, time:'teraz'});
-    alert('✅ Dodano do Supabase! Widoczne w teście i oryginale ✓\nZdjęcia skompresowane jak OLX: '+images.length+' szt.');
-    closeAdd(); render(); window.scrollTo({top:0, behavior:'smooth'});
+    if(!data.marka||!data.model||!data.cena||!data.lok){ alert('Wypełnij pola *'); btn.disabled=false; btn.textContent='💾 Zapisz'; return; }
+    const saved = await saveToSupabase(data);
+    if(!saved){ btn.disabled=false; btn.textContent='💾 Zapisz'; return; }
+    alert('✅ Dodano! ID: '+saved.id);
+    closeAdd(); await loadListings();
   }catch(err){ alert('Błąd: '+err.message); }
   finally{ btn.disabled=false; btn.textContent='💾 Zapisz w Supabase (wspólna baza)'; }
 };
@@ -313,6 +328,7 @@ document.getElementById('closeDetail').onclick=()=>document.getElementById('deta
 document.getElementById('detailBackdrop').onclick=()=>document.getElementById('detailModal').classList.add('hidden');
 
 loadListings();
+
 </script>
 </body>
 </html>
