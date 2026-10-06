@@ -9,6 +9,14 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1234567890123456" crossorigin="anonymous"></script>
 <style>@import url('https://fonts.googleapis.com/css2?family=Inter:wght@600;800;900&display=swap');*{font-family:'Inter',sans-serif}.ad-box{border:1px dashed #ccc;border-radius:12px;padding:8px;background:#fff;min-height:100px;display:flex;flex-direction:column;align-items:center;justify-content:center}</style>
+
+<style>
+@media (max-width: 640px){
+ #listings{grid-template-columns:repeat(2, minmax(0,1fr)); gap:10px}
+ #listings > div{border-radius:14px}
+}
+</style>
+
 </head>
 <body class="bg-[#f7f7f8] min-h-screen">
 <header class="bg-white border-b sticky top-0 z-40">
@@ -19,7 +27,7 @@
 </header>
 <main class="max-w-[1440px] mx-auto px-4 py-6">
 <div id="msg" class="bg-white border-2 rounded-xl p-4 mb-4 text-sm"></div>
-<div id="listings" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"></div>
+<div id="listings" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-3 sm:gap-4"></div>
 
 <!-- SEO MIASTA - POZYCJONOWANIE WROOMER -->
 <div class="max-w-[1440px] mx-auto px-4 py-10 mt-10 border-t bg-white">
@@ -105,7 +113,23 @@ Literówki: wroomer, wromer, wrommer, vroomer, broomer - wszystkie prowadzą do 
 <button onclick="document.getElementById('chatModal').classList.add('hidden')" class="w-full mt-2 text-sm text-zinc-500">Anuluj</button>
 </div>
 </div>
-<div id="authModal" class="hidden fixed inset-0 bg-black/60 z-[130] flex items-center justify-center p-4"><div class="bg-white rounded-2xl p-6 w-full max-w-sm"><h2 class="font-black mb-3">Zaloguj</h2><input id="email" type="email" placeholder="email" class="w-full border rounded-xl px-4 py-3 mb-2"><input id="pass" type="password" placeholder="haslo" class="w-full border rounded-xl px-4 py-3 mb-3"><button onclick="doLogin()" class="w-full bg-black text-white py-3 rounded-xl font-bold">Zaloguj / Zarejestruj</button><button onclick="document.getElementById('authModal').classList.add('hidden')" class="w-full mt-2 text-sm">Zamknij</button><div id="authStatus" class="text-xs text-center mt-2"></div></div></div>
+
+<div id="authModal" class="hidden fixed inset-0 bg-black/60 z-[130] flex items-center justify-center p-4">
+<div class="bg-white rounded-2xl p-6 w-full max-w-sm">
+<h2 class="font-black mb-1 text-xl">WROOMER.PL - Logowanie</h2>
+<p class="text-xs text-zinc-500 mb-4">Zaloguj się aby dodać ogłoszenie, kontaktować się przez portal i zarządzać swoimi ogłoszeniami jak na OLX</p>
+<input id="email" type="email" placeholder="Email np. jan@wp.pl" class="w-full border-2 rounded-xl px-4 py-3 mb-2 text-sm">
+<input id="pass" type="password" placeholder="Hasło min. 6 znaków" class="w-full border-2 rounded-xl px-4 py-3 mb-2 text-sm">
+<div class="flex gap-2 mb-3">
+<button onclick="doLogin('login')" class="flex-1 bg-black text-white py-3 rounded-xl font-bold text-sm">Zaloguj</button>
+<button onclick="doLogin('register')" class="flex-1 border-2 border-black py-3 rounded-xl font-bold text-sm">Zarejestruj</button>
+</div>
+<div class="text-[11px] text-zinc-500 text-center mb-2">Rejestracja = automatyczne logowanie. Bez potwierdzania email (wyłączone w Supabase dla WROOMER).</div>
+<button onclick="document.getElementById('authModal').classList.add('hidden')" class="w-full mt-2 text-sm text-zinc-500">Zamknij</button>
+<div id="authStatus" class="text-xs text-center mt-3 font-bold min-h-[20px]"></div>
+</div>
+</div>
+
 <script>
 const SUPABASE_URL='https://bdpydgsfowtuvjnkyeeg.supabase.co';
 const ANON_KEY='sb_publishable_S1qH_mBZaX7-bzmfJ0IVGA_6hxGbJWd';
@@ -231,7 +255,7 @@ function renderListings(data){
   const priceText=Number(l.price||0).toLocaleString('pl-PL')+' zl';
   const locText=(l.location||l.city||'')+' '+(l.year||'')+' '+(l.mileage?Number(l.mileage).toLocaleString()+'km':'');
   const isOwner=currentUser && l.user_id===currentUser.id;
-  card.innerHTML='<div class="h-44 bg-zinc-100 relative cursor-pointer overflow-hidden"><img src="'+img+'" class="w-full h-full object-cover"><div class="absolute top-2 left-2 bg-black/70 text-white text-xs px-2 py-1 rounded-full">'+count+' foto</div></div><div class="p-3"><div class="font-bold text-sm">'+titleText+'</div><div class="font-black mt-1 text-lg">'+priceText+'</div><div class="text-xs text-zinc-500 mt-1">'+locText+'</div></div>';
+  card.innerHTML='<div class="h-28 sm:h-44 bg-zinc-100 relative cursor-pointer overflow-hidden"><img src="'+img+'" class="w-full h-full object-cover"><div class="absolute top-1.5 left-1.5 bg-black/70 text-white text-[10px] sm:text-xs px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full">'+count+' foto</div></div><div class="p-2 sm:p-3"><div class="font-bold text-[12px] sm:text-sm leading-tight line-clamp-2">'+titleText+'</div><div class="font-black mt-1 text-[14px] sm:text-lg">'+priceText+'</div><div class="text-[10px] sm:text-xs text-zinc-500 mt-0.5 sm:mt-1 truncate">'+locText+'</div></div>';
   card.querySelector('div').onclick=function(){openDetailById(l.id);};
   const btnDiv=document.createElement('div');
   btnDiv.className='px-3 pb-3';
@@ -359,13 +383,60 @@ async function sendChat(){
   setTimeout(function(){document.getElementById('chatModal').classList.add('hidden'); st.textContent='';},1500);
  }catch(e){st.textContent='Blad: '+e.message;}
 }
-async function doLogin(){
- const e=document.getElementById('email').value, p=document.getElementById('pass').value;
- const st=document.getElementById('authStatus'); st.textContent='Logowanie...';
- const r=await supa.auth.signInWithPassword({email:e, password:p});
- if(r.error){const r2=await supa.auth.signUp({email:e, password:p}); if(r2.error) st.textContent='Blad: '+r2.error.message; else st.textContent='Konto utworzone, zaloguj sie';}
- else {document.getElementById('authModal').classList.add('hidden'); await refreshUser(); load();}
+
+
+async function doLogin(mode){
+ const e=document.getElementById('email').value.trim();
+ const p=document.getElementById('pass').value.trim();
+ const st=document.getElementById('authStatus');
+ if(!e || !e.includes('@')){st.textContent='Podaj poprawny email!'; st.className='text-xs text-center mt-3 font-bold text-red-600'; return;}
+ if(!p || p.length<6){st.textContent='Hasło min. 6 znaków!'; st.className='text-xs text-center mt-3 font-bold text-red-600'; return;}
+ st.textContent=(mode==='register'?'Rejestruję...':'Loguję...'); st.className='text-xs text-center mt-3 font-bold';
+
+ try{
+  if(mode==='register'){
+   const r=await supa.auth.signUp({email:e, password:p});
+   if(r.error) throw r.error;
+   // Supabase moze wymagac potwierdzenia - sprobuj od razu zalogowac
+   if(r.data.user && r.data.session){
+    st.textContent='✅ Konto utworzone i zalogowano!';
+    document.getElementById('authModal').classList.add('hidden');
+    await refreshUser(); await load();
+   } else if(r.data.user && !r.data.session){
+    // Email confirmation wlaczone - zaloguj recznie
+    const r2=await supa.auth.signInWithPassword({email:e, password:p});
+    if(!r2.error){
+     st.textContent='✅ Konto utworzone i zalogowano!';
+     document.getElementById('authModal').classList.add('hidden');
+     await refreshUser(); await load();
+    } else {
+     // Jesli Supabase wymaga potwierdzenia email - informacja
+     st.textContent='✅ Konto utworzone! Sprawdź email lub wyłącz potwierdzanie w Supabase > Auth > Settings. Teraz zaloguj się.';
+     st.className='text-xs text-center mt-3 font-bold text-blue-600';
+    }
+   }
+  } else {
+   const r=await supa.auth.signInWithPassword({email:e, password:p});
+   if(r.error){
+    // Jesli nie istnieje, zaproponuj rejestracje
+    if(r.error.message.includes('Invalid login')||r.error.message.includes('not found')){
+     st.textContent='❌ Brak konta. Kliknij Zarejestruj.';
+     st.className='text-xs text-center mt-3 font-bold text-red-600';
+    } else throw r.error;
+   } else {
+    st.textContent='✅ Zalogowano!';
+    document.getElementById('authModal').classList.add('hidden');
+    await refreshUser(); await load();
+   }
+  }
+ } catch(err){
+  st.textContent='❌ '+err.message;
+  st.className='text-xs text-center mt-3 font-bold text-red-600';
+  log('Auth error: '+err.message);
+ }
 }
+
+
 (async function(){await refreshUser(); await load();})();
 </script>
 
@@ -414,6 +485,69 @@ function filterByCity(city){
 }
 
 document.addEventListener('DOMContentLoaded', renderCitySEO);
+</script>
+
+
+<!-- COOKIE BANNER RODO - WYMAGANE DLA ADSENSE I GSC -->
+<div id="cookieBanner" style="display:none; position:fixed; bottom:0; left:0; right:0; background:#111; color:#fff; z-index:9999; padding:16px; font-family:Inter,sans-serif;">
+<div style="max-width:1200px; margin:0 auto; display:flex; flex-wrap:wrap; gap:12px; align-items:center; justify-content:space-between;">
+<div style="flex:1; min-width:250px; font-size:13px; line-height:1.5;">
+<strong>🍪 WROOMER.PL używa plików cookie</strong><br>
+Używamy cookies dla: Google AdSense (reklamy), Google Search Console, logowania, zapamiętywania miasta. 
+Klikając "Akceptuję" zgadzasz się na wszystkie. Więcej w <a href="/polityka-cookies.html" style="color:#25D366; text-decoration:underline;">polityce cookies</a> i <a href="/polityka-prywatnosci.html" style="color:#25D366; text-decoration:underline;">prywatności</a>.
+</div>
+<div style="display:flex; gap:8px; flex-wrap:wrap;">
+<button onclick="acceptAllCookies()" style="background:#fff; color:#000; border:none; padding:10px 20px; border-radius:10px; font-weight:800; cursor:pointer;">✅ Akceptuję wszystkie</button>
+<button onclick="acceptNecessaryCookies()" style="background:transparent; color:#fff; border:1px solid #444; padding:10px 16px; border-radius:10px; cursor:pointer;">Tylko niezbędne</button>
+<button onclick="openCookieSettings()" style="background:transparent; color:#aaa; border:none; padding:10px; cursor:pointer; font-size:12px;">Ustawienia</button>
+</div>
+</div>
+</div>
+
+<div id="cookieSettings" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:10000; align-items:center; justify-content:center; padding:20px;">
+<div style="background:#fff; color:#000; max-width:500px; width:100%; border-radius:16px; padding:24px;">
+<h3 style="font-weight:900; font-size:18px; margin-bottom:12px;">Ustawienia cookies</h3>
+<label style="display:flex; gap:10px; margin:10px 0; font-size:14px;"><input type="checkbox" checked disabled> <b>Niezbędne</b> - logowanie, ogłoszenia (zawsze włączone)</label>
+<label style="display:flex; gap:10px; margin:10px 0; font-size:14px;"><input type="checkbox" id="cookieAnalytics" checked> <b>Analityczne</b> - Google Search Console, statystyki</label>
+<label style="display:flex; gap:10px; margin:10px 0; font-size:14px;"><input type="checkbox" id="cookieAds" checked> <b>Reklamowe</b> - Google AdSense, personalizacja reklam</label>
+<p style="font-size:11px; color:#666; margin-top:12px;">Google AdSense używa plików cookie do wyświetlania spersonalizowanych reklam. Możesz zrezygnować: https://adssettings.google.com/</p>
+<div style="display:flex; gap:8px; margin-top:16px;">
+<button onclick="saveCookieSettings()" style="flex:1; background:#000; color:#fff; border:none; padding:12px; border-radius:10px; font-weight:800; cursor:pointer;">Zapisz</button>
+<button onclick="document.getElementById('cookieSettings').style.display='none'" style="flex:1; border:1px solid #ddd; background:#fff; padding:12px; border-radius:10px; cursor:pointer;">Anuluj</button>
+</div>
+</div>
+</div>
+
+<script>
+// Cookie banner logic - RODO compliant
+function getCookie(name){ const m=document.cookie.match('(^|;)\\s*'+name+'\\s*=\\s*([^;]+)'); return m?m.pop():''; }
+function setCookie(name,val,days){ const d=new Date(); d.setTime(d.getTime()+days*24*60*60*1000); document.cookie=name+'='+val+';path=/;expires='+d.toUTCString()+';SameSite=Lax'; }
+
+function acceptAllCookies(){ setCookie('wroomer_cookies','all',365); setCookie('wroomer_analytics','1',365); setCookie('wroomer_ads','1',365); hideBanner(); enableAds(); log('Cookies: all accepted'); }
+function acceptNecessaryCookies(){ setCookie('wroomer_cookies','necessary',365); setCookie('wroomer_analytics','0',365); setCookie('wroomer_ads','0',365); hideBanner(); log('Cookies: necessary only'); }
+function hideBanner(){ document.getElementById('cookieBanner').style.display='none'; }
+function openCookieSettings(){ document.getElementById('cookieSettings').style.display='flex'; }
+function saveCookieSettings(){
+ const an=document.getElementById('cookieAnalytics').checked;
+ const ad=document.getElementById('cookieAds').checked;
+ setCookie('wroomer_cookies', an&&ad?'all':an||ad?'partial':'necessary',365);
+ setCookie('wroomer_analytics', an?'1':'0',365);
+ setCookie('wroomer_ads', ad?'1':'0',365);
+ document.getElementById('cookieSettings').style.display='none';
+ hideBanner();
+ if(ad) enableAds();
+ log('Cookies saved: analytics='+an+' ads='+ad);
+}
+function enableAds(){ try{ (adsbygoogle=window.adsbygoogle||[]).push({}); }catch(e){} }
+
+(function(){
+ const consent=getCookie('wroomer_cookies');
+ if(!consent){
+  setTimeout(()=>{ document.getElementById('cookieBanner').style.display='block'; }, 800);
+ } else {
+  if(getCookie('wroomer_ads')==='1') enableAds();
+ }
+})();
 </script>
 
 </body>

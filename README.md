@@ -1,2 +1,2 @@
 # WROOMER.PL
-www.wroomer.pl
+www.wroomer.pl - Ogłoszenia motoryzacyjne
