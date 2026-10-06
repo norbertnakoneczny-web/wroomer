@@ -309,10 +309,9 @@ async function od(item){
  $('cd').onclick=closeDm;$('dbg').onclick=closeDm;
  try{
   if(supa && !item.id.startsWith('demo')){
-   const {data:all}=await supa.from('listing_images').select('image_url').eq('listing_id',item.id).order('created_at').limit(10);
+   const {data:all}=await supa.from('listing_images').select('image_url').eq('listing_id',item.id).ilike('image_url','https://%').order('created_at').limit(10);
    if(all&&all.length>0){
-    const allUrls=all.map(r=>r.image_url).filter(u=>u);
-    allUrls.sort((a,b)=> (a.startsWith('https://')?0:1) - (b.startsWith('https://')?0:1));
+    const allUrls=all.map(r=>r.image_url).filter(u=>u&&u.startsWith('https://'));
     if(allUrls.length>0){
      ims=allUrls;
      const dt=$('dt');if(dt){dt.style.width=ims.length*100+'%';dt.innerHTML=ims.map(s=>`<div><img src="${s}" alt="${item.md}" loading="lazy" draggable="false"></div>`).join('');const dotsEl=$('dots');if(dotsEl){dotsEl.innerHTML=ims.map((_,i)=>`<div class="dot ${i===0?'on':''}"></div>`).join('');}const thEl=$('thumbs');if(thEl){thEl.innerHTML=ims.map((s,i)=>`<div class="th ${i===0?'on':''}" data-i="${i}"><img src="${s}"></div>`).join('');}cur=0;upd();}
@@ -402,18 +401,19 @@ async function load(){
   console.log('Got', data.length, 'listings');
   let imap={};
   try{
-   const {data:ims}=await supa.from('listing_images').select('listing_id,image_url,created_at').order('created_at', {ascending:true}).limit(500);
-   console.log('Got', ims?.length||0, 'images from DB');
+   // TYLKO SZYBKIE https z CDN - ignoruj wolne base64
+   const {data:ims}=await supa.from('listing_images').select('listing_id,image_url,created_at').ilike('image_url','https://%').order('created_at', {ascending:true}).limit(500);
+   console.log('Got', ims?.length||0, 'FAST https images from DB (base64 ignored)');
    if(ims && ims.length>0){
-     // Sort https first for speed
-     ims.sort((a,b)=>{const ah=a.image_url?.startsWith('https://')?0:1; const bh=b.image_url?.startsWith('https://')?0:1; return ah-bh;});
      ims.forEach(r=>{
-       if(!r.image_url) return;
+       if(!r.image_url || !r.image_url.startsWith('https://')) return;
        const lid=r.listing_id; if(!lid) return;
        if(!imap[lid]) imap[lid]=[];
        if(imap[lid].length<10) imap[lid].push(r.image_url);
      });
-     console.log('Image map built:', Object.keys(imap).length);
+     console.log('Fast image map:', Object.keys(imap).length, 'listings, total', ims.length, 'fast images');
+   } else {
+     console.warn('No fast https images in DB - all are base64 slow! Run SQL cleanup');
    }
   }catch(e){console.warn('Images load error', e.message);}
   // Build final list with ALL images
@@ -424,7 +424,7 @@ async function load(){
     ls=final;
     filtered=[];
     rn();
-    $('count').textContent=`${ls.length} ogłoszeń • ${ls.reduce((s,x)=>s+(x.im?x.im.length:0),0)} zdjęć (ostre, idealnie wpasowane)`;
+    $('count').textContent=`${ls.length} ogłoszeń • ${ls.reduce((s,x)=>s+(x.im?x.im.length:0),0)} zdjęć • SZYBKIE CDN`;
     console.log('Rendered real listings with images');
   }
  }catch(err){
