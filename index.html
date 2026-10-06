@@ -354,16 +354,30 @@ $('af').onsubmit=async e=>{
   if(!supa) throw new Error('Baza nie gotowa');
   const {data,error}=await supa.from('listings').insert(pl).select().single();
   if(error) throw error;
+  let okCount=0, failCount=0;
   for(let i=0;i<ai.length;i++){
    const o=ai[i];
    try{
     const fn=data.id+'/'+Date.now()+'_'+i+'.webp';
     const bl=o.blob||d2b(o.data);
     const up=await supa.storage.from('listing-images').upload(fn, bl, {contentType:'image/webp', upsert:true});
-    let url;if(up.error){url=o.data;}else{const {data:pub}=supa.storage.from('listing-images').getPublicUrl(fn);url=pub.publicUrl;}
-    await supa.from('listing_images').insert({listing_id:data.id,image_url:url});
-   }catch{}
+    if(up.error){
+      console.error('Upload fail - NIE zapisuje wolnego base64:', up.error.message);
+      failCount++;
+      continue; // SKIP - nigdy nie zapisuj wolnego base64!
+    }
+    const {data:pub}=supa.storage.from('listing-images').getPublicUrl(fn);
+    const url=pub.publicUrl;
+    if(!url.startsWith('https://')){
+      console.error('URL not https - skip');
+      failCount++;
+      continue;
+    }
+    const ins=await supa.from('listing_images').insert({listing_id:data.id,image_url:url});
+    if(ins.error){console.error('Insert fail', ins.error.message); failCount++;} else {okCount++;}
+   }catch(e){console.error('Image save error', e.message); failCount++;}
   }
+  console.log(`Zapisano ${okCount} szybkich CDN, pominięto ${failCount} błędów (base64 nigdy nie zapisywane)`);
   alert('✅ Dodano!');
   closeAm();ai=[];$('pv').innerHTML='';$('af').reset();$('ci').textContent='';
   await load();
@@ -386,9 +400,9 @@ $('apply').addEventListener('click',applyFilters);
 
 async function load(){
  const g=$('gd'), l=$('ld'), e=$('empty');
- // Nie chowaj grida jeśli już jest demo
- if(g.innerHTML.trim()===''){ l.style.display='grid'; }
  e.style.display='none';
+ // Pokaz skeleton tylko jesli grid pusty
+ if(!g.innerHTML.trim()){ l.style.display='grid'; g.style.display='none'; }
  try{
   if(!supa){
    if(window.supabase) supa=window.supabase.createClient(U,K);
@@ -433,7 +447,7 @@ async function load(){
   // Zostaw demo jeśli błąd
   if(ls.length===0){ls=DEMO; filtered=[]; rn();}
  }
- finally{l.style.display='none'; g.style.display='grid';}
+ finally{ l.style.display='none'; g.style.display='grid'; e.style.display='none'; }
 }
 
 function init(){
