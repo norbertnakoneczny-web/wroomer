@@ -60,7 +60,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#f2f3f5}
 .px img{width:100%;height:100%;object-fit:cover}
 .px button{position:absolute;top:3px;right:3px;width:20px;height:20px;border-radius:50%;background:rgba(0,0,0,.75);color:#fff;border:none;cursor:pointer;font-size:10px}
 .btn-show{width:100%;height:44px;background:#002f34;color:#fff;border-radius:8px;font-weight:800;font-size:13px;border:none;cursor:pointer}
-.btn-edit{height:32px;padding:0 12px;background:#fff;border:1.5px solid #002f34;color:#002f34;border-radius:8px;font-weight:700;font-size:11px;cursor:pointer}
+.btn-edit{height:32px;padding:0 12px;background:#fff;border:1.5px solid #002f34;color:#002f34;border-radius:8px;font-weight:700;font-size:11px;cursor:pointer;display:none} .btn-edit.owner{display:inline-flex}
 </style>
 </head>
 <body>
@@ -91,7 +91,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#f2f3f5}
 <div style="padding:12px"><button id="apply" class="btn-show">Pokaż wyniki</button><div id="count" style="text-align:center;font-size:11px;color:#6b7280;margin-top:6px">Ładowanie...</div></div>
 </aside>
 <main class="main">
-<div style="background:#fff;padding:8px;display:flex;gap:6px;align-items:center;border-bottom:1px solid #e5e7eb"><button id="filterToggle" class="b" style="background:#f2f3f5;color:#002f34;border:1px solid #d8dfe0;font-weight:700">☰ Filtrowanie</button><input id="q2" class="pi2" style="flex:1" placeholder="Szybkie szukanie..."><button id="myBtn" class="b" style="background:#eef1f3">Moje</button></div>
+<div style="background:#fff;padding:8px;display:flex;gap:6px;align-items:center;border-bottom:1px solid #e5e7eb"><button id="filterToggle" class="b" style="background:#f2f3f5;color:#002f34;border:1px solid #d8dfe0;font-weight:700;height:36px;padding:0 12px;border-radius:8px">☰ Filtrowanie</button><input id="q2" class="pi2" style="flex:1" placeholder="Szybkie szukanie..."><button id="myBtn" class="b" style="background:#eef1f3">Moje</button></div>
 <div id="gd" class="gd"></div><div id="ld" class="gd"><div style="background:#e5e7eb;border-radius:10px;aspect-ratio:4/3"></div><div style="background:#e5e7eb;border-radius:10px;aspect-ratio:4/3"></div><div style="background:#e5e7eb;border-radius:10px;aspect-ratio:4/3"></div><div style="background:#e5e7eb;border-radius:10px;aspect-ratio:4/3"></div></div><div id="empty" style="display:none;padding:40px;text-align:center;background:#fff;margin:8px;border-radius:10px">Brak ogłoszeń</div>
 </main>
 </div>
@@ -185,6 +185,42 @@ function applyFilters(){
   }); rn();
 }
 
+
+// FIX: Strzałka wstecz z telefonu - cofa do początku ogłoszenia, nie zamyka strony
+(function(){
+  let modalOpen=false;
+  const origOd = window.od;
+  // Intercept od() to push history
+  const originalPush = history.pushState;
+  window.addEventListener('popstate', (e)=>{
+    const m=document.getElementById('dm');
+    if(m && m.classList.contains('o')){
+      // Jeśli modal otwarty, cofnij do początku ogłoszenia (scroll top)
+      const dc=document.getElementById('dc');
+      if(dc){
+        const scrollTop = dc.scrollTop;
+        if(scrollTop > 100){
+          // Jeśli zescrollowane w dół, cofnij na górę ogłoszenia
+          e.preventDefault();
+          dc.scrollTo({top:0, behavior:'smooth'});
+          history.pushState({modal:true}, '', '#ogloszenie-'+(currentEditId||''));
+          return;
+        } else {
+          // Jeśli już na górze, zamknij modal
+          m.classList.remove('o');
+          document.body.style.overflow='';
+        }
+      }
+    }
+  });
+
+  // Wrap od function to push state
+  const oldOd = window.od;
+  // We'll hook via replacing after definition - do it in init wrapper
+})();
+
+// Hook w od() - pushState przy otwarciu
+
 // LICZNIK WEJŚĆ
 function getViews(){ try{return JSON.parse(localStorage.getItem('wroomer_views')||'{}')}catch(e){return {}} }
 function incView(id){
@@ -218,7 +254,7 @@ function rn(){
     const d=document.createElement('div');d.className='cd';
     const first=x.im&&x.im[0]?x.im[0]:DEMO[0].im[0];
     const vc=getViewCount(x.id);
-    d.innerHTML=`<div class="cw"><img src="${first}" loading="lazy" alt="${x.md} - ${x.lc}" decoding="async" width="400" height="300"><div class="ct">${x.im?x.im.length:0} zdjęć</div><div style="position:absolute;bottom:6px;left:6px;background:rgba(0,0,0,.7);color:#fff;font-size:10px;padding:3px 6px;border-radius:4px">👁️ ${vc}</div></div><div class="cb"><div class="cti">${x.md}</div><div class="pr"><span>${(x.pr||0).toLocaleString()} zł</span><span style="font-size:11px;color:#6b7280">${x.lc}</span></div><div id="viewCounter-${x.id}" style="font-size:10px;color:#94a3b8;margin-top:2px">👁️ ${vc} wyświetleń</div></div>`;
+    d.innerHTML=`<div class="cw"><img src="${first}" loading="lazy" alt="${x.md} - ${x.lc}" decoding="async" width="400" height="300"><div class="ct">${x.im?x.im.length:0} zdjęć</div></div><div class="cb"><div class="cti">${x.md}</div><div class="pr"><span>${(x.pr||0).toLocaleString()} zł</span><span style="font-size:11px;color:#6b7280">${x.lc}</span></div></div>`;
     d.onclick=()=>{ incView(x.id); od(x); };g.appendChild(d);
   });
   $('count').textContent=data.length+' ogłoszeń • '+Object.keys(MODELS).length+' marek • '+Object.values(MODELS).flat().length+' modeli';
@@ -233,8 +269,8 @@ async function od(item){
   const viewsCount=incView(item.id);
   setTimeout(()=>{ const el=document.getElementById('viewCounterDetail'); if(el) el.textContent='👁️ '+viewsCount+' wyświetleń'; },100);
   const mine=isMine(item.id);
-  $('editBtn').style.display='block'; // ZAWSZE widoczny - fix dla użytkownika
-  if(mine){ $('editBtn').textContent='✏️ Edytuj (Twoje)'; $('editBtn').style.background='#e6f7f5'; } else { $('editBtn').textContent='✏️ Edytuj'; }
+  $('editBtn').style.display='none'; // ukryty domyślnie - fix dla użytkownika
+  if(mine){ $('editBtn').style.display='inline-flex'; $('editBtn').classList.add('owner'); $('editBtn').textContent='✏️ Edytuj'; $('editBtn').style.background='#e6f7f5'; } else { $('editBtn').style.display='none'; $('editBtn').classList.remove('owner'); }
   
   // Build full params table - OTOMOTO style
   const params = [
@@ -275,7 +311,7 @@ async function od(item){
     <div style="padding:16px">
       <h2 style="font-weight:800;font-size:20px;line-height:1.2">${item.md}</h2>
       <div style="font-weight:800;font-size:26px;margin-top:8px;color:#002f34">${(item.pr||0).toLocaleString()} zł</div>
-      <div id="viewCounterDetail" style="font-size:12px;color:#002f34;font-weight:700;margin-top:6px;background:#e6f7f5;padding:6px 10px;border-radius:6px;display:inline-block">👁️ 0 wyświetleń</div><div style="font-size:12px;color:#6b7280;margin-top:6px">📍 ${item.lc || '-'} • ${ims.length} zdjęć • przesuwaj palcem ↔️ • swipe działa</div>
+      <div id="viewCounterDetail" style="display:none" style="font-size:12px;color:#002f34;font-weight:700;margin-top:6px;background:#e6f7f5;padding:6px 10px;border-radius:6px;display:inline-block">👁️ 0 wyświetleń</div><div style="font-size:12px;color:#6b7280;margin-top:6px">📍 ${item.lc || '-'} • ${ims.length} zdjęć • przesuwaj palcem ↔️ • swipe działa</div>
       
       <div style="margin-top:16px;background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px">
         <div style="font-weight:800;font-size:14px;margin-bottom:8px">📋 Wszystkie informacje - OTOMOTO</div>
@@ -288,12 +324,14 @@ async function od(item){
     </div>
 
     <div style="display:flex;gap:8px;padding:12px;background:#fff;border-top:1px solid #eee;position:sticky;bottom:0">
-      <a href="tel:600000000" style="flex:1;height:44px;background:#002f34;color:#fff;border-radius:8px;display:grid;place-items:center;text-decoration:none;font-weight:800;font-size:13px">📞 Zadzwoń</a>
-      <a href="sms:600000000" style="flex:1;height:44px;background:#fff;border:1.5px solid #002f34;color:#002f34;border-radius:8px;display:grid;place-items:center;text-decoration:none;font-weight:800;font-size:13px">SMS</a>
-      <a href="https://wa.me/48600000000" target="_blank" style="flex:1;height:44px;background:#25D366;color:#fff;border-radius:8px;display:grid;place-items:center;text-decoration:none;font-weight:800;font-size:13px">WhatsApp</a>
+      <a href="tel:600000000" id="callBtn" style="flex:1;height:44px;background:#002f34;color:#fff;border-radius:8px;display:grid;place-items:center;text-decoration:none;font-weight:800;font-size:13px">📞 Zadzwoń</a>
+      <a href="sms:600000000?body=Cześć, piszę w sprawie ogłoszenia ${encodeURIComponent(item.md)}" id="smsBtn" style="flex:1;height:44px;background:#fff;border:1.5px solid #002f34;color:#002f34;border-radius:8px;display:grid;place-items:center;text-decoration:none;font-weight:800;font-size:13px">SMS</a>
+      <a href="https://wa.me/48600000000?text=Cześć, piszę w sprawie ${encodeURIComponent(item.md)}" id="waBtn" style="flex:1;height:44px;background:#25D366;color:#fff;border-radius:8px;display:grid;place-items:center;text-decoration:none;font-weight:800;font-size:13px">WhatsApp</a>
     </div>
   `;
   m.classList.add('o');document.body.style.overflow='hidden';
+  try{ history.pushState({modal:true, id:item.id}, '', '#'+item.id); }catch(e){}
+  const dcEl=document.getElementById('dc'); if(dcEl) dcEl.scrollTop=0;
   const mainImg=document.getElementById('mainGalleryImg');
   const upd=()=>{
     if(mainImg) mainImg.src=ims[cur];
@@ -309,7 +347,7 @@ async function od(item){
   const dwEl=document.getElementById('dw');
   dwEl.addEventListener('touchstart', e=>{if(e.target.closest('.nav')) return; sx=e.touches[0].clientX; drag=true;}, {passive:true});
   dwEl.addEventListener('touchend', e=>{if(!drag) return; drag=false; const dx=e.changedTouches[0].clientX-sx; if(Math.abs(dx)>40){ if(dx<0) cur=(cur+1)%ims.length; else cur=(cur-1+ims.length)%ims.length; upd(); }}, {passive:true});
-  const closeDm=()=>{m.classList.remove('o');document.body.style.overflow='';};
+  const closeDm=()=>{m.classList.remove('o');document.body.style.overflow=''; try{ if(history.state && history.state.modal) history.back(); }catch(e){} };
   $('cd').onclick=closeDm; $('dbg').onclick=closeDm;
 }
 
