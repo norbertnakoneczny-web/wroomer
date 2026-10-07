@@ -3,112 +3,120 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>WROOMER.PL - ADMIN + LICZNIK TYGODNIE</title>
+<title>WROOMER. ADMIN - FINAL</title>
 <meta name="robots" content="noindex, nofollow">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,sans-serif;background:#0f172a;color:#e2e8f0}
-.h{height:56px;background:#002f34;color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 16px;position:sticky;top:0;z-index:10}
-.b{height:36px;padding:0 14px;border-radius:8px;border:none;font-weight:700;cursor:pointer}
-.bb{background:#23e5db;color:#002f34}.bw{background:rgba(255,255,255,.15);color:#fff}.br{background:#ef4444;color:#fff}.bg{background:#22c55e;color:#fff}
-.pg{max-width:1400px;margin:0 auto;padding:16px}
-.card{background:#1e293b;border-radius:12px;padding:16px;margin-bottom:12px;border:1px solid #334155}
+body{font-family:Inter,-apple-system,sans-serif;background:#0b1220;color:#e2e8f0}
+.h{height:64px;background:#0a2f32;color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 24px;position:sticky;top:0;z-index:10;border-bottom:1px solid #123a3d}
+.h b{font-size:20px;letter-spacing:-.5px} .h b span{color:#22e6c8}
+.b{height:36px;padding:0 14px;border-radius:8px;border:none;font-weight:700;cursor:pointer;font-size:13px}
+.bb{background:#1f3a3f;color:#fff;border:1px solid #234a4e}.br{background:#ff4d4d;color:#fff}.bg{background:#22c55e;color:#fff}.by{background:#f59e0b;color:#fff}.bd{background:#0f172a;color:#fff;border:1px solid #1e293b}
+.pg{max-width:1400px;margin:0 auto;padding:20px}
+.card{background:#111c2f;border:1px solid #1a2a44;border-radius:16px;padding:16px;margin-bottom:16px}
 .grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
 @media(max-width:900px){.grid4{grid-template-columns:repeat(2,1fr)}}
-.stat{font-size:28px;font-weight:800;color:#23e5db}
-.input{height:40px;background:#0f172a;border:1px solid #334155;border-radius:8px;padding:0 10px;color:#fff}
+.stat{font-size:26px;font-weight:800;color:#22e6c8}
+.input{height:44px;background:#070d1a;border:1px solid #1e293b;border-radius:12px;padding:0 14px;color:#fff;width:100%}
 table{width:100%;border-collapse:collapse;font-size:13px}
-th,td{padding:10px;border-bottom:1px solid #334155;text-align:left}
-th{color:#94a3b8;font-size:11px;text-transform:uppercase}
-img.thumb{width:60px;height:45px;object-fit:cover;border-radius:6px}
-.weekBtn{padding:6px 12px;border-radius:999px;border:1px solid #334155;background:#0f172a;color:#94a3b8;cursor:pointer;font-size:12px}
-.weekBtn.on{background:#23e5db;color:#002f34;border-color:#23e5db;font-weight:800}
+th,td{padding:12px;border-bottom:1px solid #13203a;text-align:left}
+th{color:#64748b;font-size:11px;letter-spacing:.8px}
+img.thumb{width:64px;height:48px;object-fit:cover;border-radius:10px;background:#0b1220}
+.badge{font-size:11px;padding:4px 8px;border-radius:999px;font-weight:700}
+.badge-ok{background:#0f3a2e;color:#22c55e;border:1px solid #14532d}
+.badge-hide{background:#3a2f0f;color:#f59e0b;border:1px solid #854d0e}
+.badge-ban{background:#3a1010;color:#ff6b6b;border:1px solid #7f1d1d}
+.weekBtn{padding:8px 14px;border-radius:999px;border:1px solid #1e293b;background:#070d1a;color:#94a3b8;cursor:pointer;font-size:12px;font-weight:600}
+.weekBtn.on{background:#22e6c8;color:#002f34;border-color:#22e6c8;font-weight:800}
 </style>
 </head>
 <body>
 <header class="h">
-<div style="font-weight:900">WROOMER.PL - ADMIN + LICZNIK TYGODNIE</div>
+<b>WROOMER. <span>ADMIN</span></b>
 <div style="display:flex;gap:8px;align-items:center">
-<span id="adminEmail" style="font-size:12px;color:#23e5db"></span>
-<button id="loginBtn" class="b bw">Zaloguj jako admin</button>
+<span id="adminEmail" style="font-size:12px;color:#22e6c8"></span>
+<button id="loginBtn" class="b bb">Zaloguj jako admin</button>
+<button id="logoutBtn" class="b bd" style="display:none">Wyloguj</button>
 <a href="/" class="b bb" style="text-decoration:none;display:grid;place-items:center">← Portal</a>
 </div>
 </header>
 
-<div id="loginBox" class="pg" style="max-width:400px;margin-top:40px">
+<div id="loginBox" class="pg" style="max-width:420px;margin-top:60px">
 <div class="card">
 <h2 style="margin-bottom:12px">Logowanie admina</h2>
-<input id="email" class="input" placeholder="Email admina" style="margin-bottom:8px;width:100%">
-<input id="pass" type="password" class="input" placeholder="Hasło" style="margin-bottom:12px;width:100%">
-<button id="doLogin" class="b bb" style="width:100%">Zaloguj</button>
-<div id="msg" style="font-size:12px;margin-top:8px;text-align:center"></div>
+<input id="email" class="input" placeholder="Email admina" style="margin-bottom:10px">
+<input id="pass" type="password" class="input" placeholder="Hasło" style="margin-bottom:16px">
+<button id="doLogin" class="b" style="width:100%;background:#22e6c8;color:#002f34;height:44px">Zaloguj</button>
+<div id="msg" style="font-size:12px;margin-top:10px;text-align:center;color:#94a3b8"></div>
+<div style="font-size:11px;color:#475569;margin-top:12px">Po zalogowaniu zobaczysz licznik wejść + ban/hide</div>
 </div>
 </div>
 
 <div id="adminBox" style="display:none">
 <div class="pg">
 
-<!-- STATS -->
 <div class="grid4">
 <div class="card"><div style="font-size:11px;color:#94a3b8">OGŁOSZENIA</div><div id="statCount" class="stat">-</div></div>
 <div class="card"><div style="font-size:11px;color:#94a3b8">ZDJĘCIA</div><div id="statImgs" class="stat">-</div></div>
-<div class="card"><div style="font-size:11px;color:#94a3b8">GORZYCE</div><div id="statGorzyce" class="stat">-</div></div>
-<div class="card"><div style="font-size:11px;color:#94a3b8">WYŚWIETLENIA SUMA</div><div id="statViews" class="stat">-</div><div style="font-size:10px;color:#64748b">lokalne + baza</div></div>
+<div class="card"><div style="font-size:11px;color:#94a3b8">BUCKET</div><div style="font-size:12px;color:#94a3b8">listing-images</div><div id="statGorzyce" style="font-size:12px;color:#64748b;margin-top:4px"></div></div>
+<div class="card" style="border:2px solid #22c55e"><div style="font-size:11px;color:#94a3b8">WYŚWIETLENIA SUMA 👁️</div><div id="statViews" class="stat" style="color:#22c55e">-</div><div id="statViewsInfo" style="font-size:10px;color:#64748b">baza + lokalne</div></div>
 </div>
 
-<!-- WEEK FILTER -->
 <div class="card">
 <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px">
 <h3>📊 Licznik wejść - filtrowanie na tygodnie</h3>
-<div style="display:flex;gap:6px;flex-wrap:wrap" id="weekFilters">
+<div style="display:flex;gap:6px;flex-wrap:wrap">
 <button class="weekBtn on" data-week="all">Wszystkie</button>
 <button class="weekBtn" data-week="this">Ten tydzień</button>
 <button class="weekBtn" data-week="last">Poprzedni tydzień</button>
-<button class="weekBtn" data-week="2w">Ostatnie 2 tygodnie</button>
-<button class="weekBtn" data-week="4w">Ostatnie 4 tygodnie</button>
+<button class="weekBtn" data-week="2w">Ostatnie 2 tyg.</button>
+<button class="weekBtn" data-week="4w">Ostatnie 4 tyg.</button>
 </div>
 </div>
-
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px">
-<div style="background:#0f172a;border-radius:8px;padding:12px">
-<div style="font-size:11px;color:#94a3b8;margin-bottom:8px">WEJŚCIA W WYBRANYM OKRESIE</div>
-<div id="weekTotal" style="font-size:32px;font-weight:800;color:#22c55e">-</div>
+<div style="background:#070d1a;border-radius:12px;padding:14px;border:1px solid #1e293b">
+<div style="font-size:11px;color:#94a3b8;margin-bottom:6px">WEJŚCIA W WYBRANYM OKRESIE</div>
+<div id="weekTotal" style="font-size:30px;font-weight:800;color:#22c55e">-</div>
 <div id="weekRange" style="font-size:11px;color:#64748b;margin-top:4px"></div>
 </div>
-<div style="background:#0f172a;border-radius:8px;padding:12px">
-<div style="font-size:11px;color:#94a3b8;margin-bottom:8px">TOP OGŁOSZENIA W OKRESIE</div>
+<div style="background:#070d1a;border-radius:12px;padding:14px;border:1px solid #1e293b">
+<div style="font-size:11px;color:#94a3b8;margin-bottom:6px">TOP OGŁOSZENIA W OKRESIE</div>
 <div id="topWeek" style="font-size:12px"></div>
 </div>
 </div>
-
-<div style="margin-top:12px;display:flex;gap:8px">
-<input type="date" id="dateFrom" class="input"> <span style="align-self:center">→</span> <input type="date" id="dateTo" class="input">
-<button id="applyDate" class="b bw">Filtruj daty</button>
-<button id="clearDate" class="b" style="background:#334155;color:#fff">Wyczyść</button>
-<button id="exportCsv" class="b bb">📥 Export CSV</button>
+<div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
+<input type="date" id="dateFrom" class="input" style="width:160px"> <span style="align-self:center">→</span> <input type="date" id="dateTo" class="input" style="width:160px">
+<button id="applyDate" class="b bd">Filtruj daty</button>
+<button id="clearDate" class="b bd">Wyczyść</button>
+<button id="exportCsv" class="b" style="background:#22e6c8;color:#002f34">📥 Export CSV</button>
 </div>
 </div>
 
-<!-- TABLE -->
 <div class="card">
-<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px">
-<h3>🔧 Wszystkie ogłoszenia - zarządzaj + wyświetlenia + ban/hide</h3>
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:10px">
+<h2>Ogłoszenia</h2>
+<div style="display:flex;gap:8px;align-items:center">
+<span id="countInfo" style="font-size:12px;color:#64748b"></span>
+<button id="refresh" class="b bd">↻ Odśwież</button>
+<button id="exportBtn" class="b bd">Export CSV</button>
+</div>
+</div>
 
-<div style="display:flex;gap:6px;margin-bottom:8px">
+<div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap">
+<div style="flex:1;min-width:240px"><input id="search" class="input" placeholder="Szukaj po tytule, lokalizacji..."></div>
+<select id="sort" class="input" style="width:160px"><option value="newest">Najnowsze</option><option value="oldest">Najstarsze</option><option value="price_asc">Cena ↑</option><option value="price_desc">Cena ↓</option><option value="views_desc">Wyświetlenia ↓</option></select>
+</div>
+
+<div style="display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap">
 <button class="weekBtn on" data-filter="all" onclick="setAdminFilter('all')">Wszystkie</button>
 <button class="weekBtn" data-filter="visible" onclick="setAdminFilter('visible')">👁️ Widoczne</button>
 <button class="weekBtn" data-filter="hidden" onclick="setAdminFilter('hidden')">🙈 Ukryte</button>
 <button class="weekBtn" data-filter="banned" onclick="setAdminFilter('banned')">🚫 Zbanowane</button>
 </div>
 
-<div style="display:flex;gap:8px">
-<input id="search" class="input" placeholder="Szukaj tytułu/miejscowości..." style="width:220px">
-<button id="refresh" class="b bw">Odśwież</button>
-</div>
-</div>
-<div style="overflow:auto">
+<div style="overflow:auto;border-radius:12px;border:1px solid #1a2a44">
 <table>
-<thead><tr><th>Zdjęcie</th><th>Tytuł / Cena / Lok / 👁️</th><th>Wyświetlenia w okresie</th><th>Opis + OTOMOTO</th><th>User</th><th>Akcje</th></tr></thead>
+<thead><tr><th>ZDJĘCIE</th><th>TYTUŁ / ID</th><th>CENA</th><th>LOKALIZACJA</th><th>DATA</th><th>👁️ WYŚWIETLENIA</th><th>STATUS</th><th>AKCJE</th></tr></thead>
 <tbody id="tbody"></tbody>
 </table>
 </div>
@@ -121,16 +129,7 @@ img.thumb{width:60px;height:45px;object-fit:cover;border-radius:6px}
 <script>
 const U='https://bdpydgsfowtuvjnkyeeg.supabase.co', K='sb_publishable_S1qH_mBZaX7-bzmfJ0IVGA_6hxGbJWd';
 let supa=window.supabase.createClient(U,K);
-let listings=[], imap={}, viewLog=[], currentWeekFilter='all', customFrom=null, customTo=null, adminVisibilityFilter='all'
-
-let adminVisibilityFilter='all';
-function setAdminFilter(f){
-  adminVisibilityFilter=f;
-  document.querySelectorAll('[data-filter]').forEach(b=>b.classList.remove('on'));
-  document.querySelector(`[data-filter="${f}"]`)?.classList.add('on');
-  renderTable();
-}
-, customFrom=null, customTo=null;
+let listings=[], imap={}, viewLog=[], currentWeekFilter='all', customFrom=null, customTo=null, adminVisibilityFilter='all';
 
 function getWeekStart(d){ const date=new Date(d); const day=date.getDay(); const diff=date.getDate()-day+(day===0?-6:1); date.setDate(diff); date.setHours(0,0,0,0); return date; }
 function getDateRangeForFilter(filter){
@@ -159,13 +158,15 @@ async function checkAdmin(){
   document.getElementById('adminEmail').textContent=data.user.email;
   document.getElementById('loginBox').style.display='none';
   document.getElementById('adminBox').style.display='block';
-  document.getElementById('loginBtn').textContent='Wyloguj';
-  document.getElementById('loginBtn').onclick=async()=>{ await supa.auth.signOut(); location.reload(); };
+  document.getElementById('loginBtn').style.display='none';
+  document.getElementById('logoutBtn').style.display='block';
+  document.getElementById('logoutBtn').onclick=async()=>{ await supa.auth.signOut(); location.reload(); };
   loadAll();
 }
 
 async function loadAll(){
-  const {data: listingsData}=await supa.from('listings').select('id,title,description,price,location,created_at,user_id,views,is_hidden,is_banned').order('created_at',{ascending:false}).limit(500);
+  const {data: listingsData, error}=await supa.from('listings').select('id,title,description,price,location,created_at,user_id,views,is_hidden,is_banned').order('created_at',{ascending:false}).limit(500);
+  if(error){ console.log(error); alert('Błąd Supabase: '+error.message+'\n\nJeśli brak kolumn, uruchom SQL:\nALTER TABLE listings ADD COLUMN views INT DEFAULT 0;\nALTER TABLE listings ADD COLUMN is_hidden BOOLEAN DEFAULT false;\nALTER TABLE listings ADD COLUMN is_banned BOOLEAN DEFAULT false;'); }
   listings=listingsData||[];
   imap={};
   try{
@@ -173,22 +174,20 @@ async function loadAll(){
     if(ims) ims.forEach(r=>{ if(!imap[r.listing_id]) imap[r.listing_id]=[]; if(imap[r.listing_id].length<6) imap[r.listing_id].push(r.image_url); });
   }catch(e){}
   
-  // Load view log from localStorage (portal zapisuje)
   try{ viewLog=JSON.parse(localStorage.getItem('wroomer_view_log')||'[]'); }catch(e){ viewLog=[]; }
 
   document.getElementById('statCount').textContent=listings.length;
-  document.getElementById('statImgs').textContent=Object.values(imap).flat().length;
-  document.getElementById('statGorzyce').textContent=listings.filter(x=> (x.location||'').toLowerCase().includes('gorzyce')).length;
-  
-  let totalViews=0;
-  try{
-    const localViews=JSON.parse(localStorage.getItem('wroomer_views')||'{}');
-    totalViews=Object.values(localViews).reduce((a,b)=>a+b,0);
-  }catch(e){}
-  const dbViews = listings.reduce((sum,x)=> sum + (x.views||0), 0);
-  if(dbViews>0) totalViews = Math.max(totalViews, dbViews);
-  if(viewLog.length>0) totalViews = Math.max(totalViews, viewLog.length);
+  const totalImgs=Object.values(imap).flat().length;
+  document.getElementById('countInfo').textContent=`${listings.length} ogłoszeń • ${totalImgs} zdjęć • bucket: listing-images`;
+  document.getElementById('statImgs').textContent=totalImgs;
+  document.getElementById('statGorzyce').textContent=`Gorzyce: ${listings.filter(x=> (x.location||'').toLowerCase().includes('gorzyce')).length}`;
+
+  let localViewsCount=0, dbViews=0;
+  try{ const lv=JSON.parse(localStorage.getItem('wroomer_views')||'{}'); localViewsCount=Object.values(lv).reduce((a,b)=>a+b,0); }catch(e){}
+  dbViews=listings.reduce((s,x)=>s+(x.views||0),0);
+  let totalViews=Math.max(localViewsCount, dbViews, viewLog.length);
   document.getElementById('statViews').textContent=totalViews.toLocaleString();
+  document.getElementById('statViewsInfo').textContent=`baza:${dbViews} • lokalne:${localViewsCount} • log:${viewLog.length}`;
 
   renderWeekStats();
   renderTable();
@@ -198,49 +197,72 @@ function renderWeekStats(){
   const range=getDateRangeForFilter(currentWeekFilter);
   let filteredLog=viewLog;
   let rangeText='Wszystkie czasy';
-  
   if(range){
-    filteredLog=viewLog.filter(entry=>{
-      const d=new Date(entry.ts);
-      return d>=range.from && d<=range.to;
-    });
-    rangeText = range.from.toLocaleDateString('pl-PL') + ' → ' + range.to.toLocaleDateString('pl-PL');
+    filteredLog=viewLog.filter(entry=>{ const d=new Date(entry.ts); return d>=range.from && d<=range.to; });
+    rangeText=range.from.toLocaleDateString('pl-PL')+' → '+range.to.toLocaleDateString('pl-PL');
   } else if(currentWeekFilter==='all'){
     rangeText='Wszystkie czasy - '+viewLog.length+' logów lokalnych';
   }
-
-  document.getElementById('weekTotal').textContent=filteredLog.length.toLocaleString();
+  let weekTotalVal=filteredLog.length;
+  if(weekTotalVal===0 && currentWeekFilter==='all'){ weekTotalVal=listings.reduce((s,x)=>s+(x.views||0),0) || viewLog.length; }
+  document.getElementById('weekTotal').textContent=weekTotalVal.toLocaleString();
   document.getElementById('weekRange').textContent=rangeText;
 
-  // Top in period
   const counts={};
   filteredLog.forEach(e=>{ counts[e.id]=(counts[e.id]||0)+1; });
   const sorted=Object.entries(counts).sort((a,b)=>b[1]-a[1]).slice(0,5);
   const topEl=document.getElementById('topWeek');
-  if(sorted.length===0){ topEl.innerHTML='<div style="color:#64748b">Brak danych w okresie - zaloguj się na portalu i klikaj ogłoszenia</div>'; }
-  else {
+  if(sorted.length===0 && dbViewsForTop().length>0){
+    topEl.innerHTML=dbViewsForTop().slice(0,5).map(([id,c])=>{
+      const item=listings.find(x=>x.id===id);
+      const title=item?item.title:id.slice(0,8);
+      return `<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #13203a"><span>${title}</span><span style="color:#22c55e;font-weight:700">${c}</span></div>`;
+    }).join('');
+  } else if(sorted.length===0){
+    topEl.innerHTML='<div style="color:#475569">Brak danych - klikaj ogłoszenia na portalu</div>';
+  } else {
     topEl.innerHTML=sorted.map(([id,c])=>{
       const item=listings.find(x=>x.id===id);
       const title=item?item.title:id.slice(0,8);
-      return `<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #1e293b"><span>${title}</span><span style="color:#22c55e;font-weight:700">${c}</span></div>`;
+      return `<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #13203a"><span>${title}</span><span style="color:#22c55e;font-weight:700">${c}</span></div>`;
     }).join('');
   }
+}
+
+function dbViewsForTop(){ return listings.filter(x=>x.views>0).map(x=>[x.id, x.views]).sort((a,b)=>b[1]-a[1]); }
+
+function setAdminFilter(f){
+  adminVisibilityFilter=f;
+  document.querySelectorAll('[data-filter]').forEach(b=>b.classList.remove('on'));
+  document.querySelector(`[data-filter="${f}"]`)?.classList.add('on');
+  renderTable();
 }
 
 function renderTable(){
   const tbody=document.getElementById('tbody');
   tbody.innerHTML='';
   const q=(document.getElementById('search').value||'').toLowerCase();
+  const sort=document.getElementById('sort').value;
   const range=getDateRangeForFilter(currentWeekFilter);
   
-  listings.filter(x=>{
+  let filtered=listings.filter(x=>{
     if(q && !x.title.toLowerCase().includes(q) && !(x.location||'').toLowerCase().includes(q)) return false;
     if(adminVisibilityFilter==='visible' && (x.is_hidden || x.is_banned)) return false;
     if(adminVisibilityFilter==='hidden' && !x.is_hidden) return false;
     if(adminVisibilityFilter==='banned' && !x.is_banned) return false;
     return true;
-  }).forEach(item=>{
-    // Count views in selected period for this item
+  });
+
+  filtered.sort((a,b)=>{
+    if(sort==='newest') return new Date(b.created_at)-new Date(a.created_at);
+    if(sort==='oldest') return new Date(a.created_at)-new Date(b.created_at);
+    if(sort==='price_asc') return (a.price||0)-(b.price||0);
+    if(sort==='price_desc') return (b.price||0)-(a.price||0);
+    if(sort==='views_desc') return (b.views||0)-(a.views||0);
+    return 0;
+  });
+
+  filtered.forEach(item=>{
     let periodViews=0;
     if(range){
       periodViews=viewLog.filter(e=> e.id===item.id && new Date(e.ts)>=range.from && new Date(e.ts)<=range.to).length;
@@ -248,24 +270,29 @@ function renderTable(){
       periodViews=viewLog.filter(e=> e.id===item.id).length;
       if(periodViews===0) periodViews=item.views||0;
     }
-
     const tr=document.createElement('tr');
+    if(item.is_banned) tr.style.background='rgba(239,68,68,.08)';
+    if(item.is_hidden && !item.is_banned) tr.style.background='rgba(245,158,11,.08)';
+    
     const img=imap[item.id]?.[0]||'';
-    const hasOT = (item.description||'').includes('__OTOMOTO__');
-    const descClean = (item.description||'').split('__OTOMOTO__')[0].slice(0,120);
-    const totalItemViews = item.views || viewLog.filter(e=>e.id===item.id).length || 0;
+    const dateStr=new Date(item.created_at).toLocaleString('pl-PL');
+    const totalItemViews=item.views || viewLog.filter(e=>e.id===item.id).length || 0;
+    const statusBadge=item.is_banned?'<span class="badge badge-ban">🚫 ZBANOWANE</span>':(item.is_hidden?'<span class="badge badge-hide">🙈 UKRYTE</span>':'<span class="badge badge-ok">👁️ Widoczne</span>');
+    
     tr.innerHTML=`
-      <td>${img?`<img src="${img}" class="thumb">`:'-'}<div style="font-size:10px;color:#94a3b8">${imap[item.id]?.length||0} zdjęć ${hasOT?'• OTOMOTO':''}</div></td>
-      <td><div style="font-weight:700">${item.title}</div><div style="font-size:10px">${item.is_banned ? '<span style="background:#ef4444;color:#fff;padding:2px 6px;border-radius:4px">🚫 ZBANOWANE</span>' : ''} ${item.is_hidden && !item.is_banned ? '<span style="background:#f59e0b;color:#fff;padding:2px 6px;border-radius:4px">🙈 UKRYTE</span>' : ''}</div><div style="color:#23e5db">${(item.price||0).toLocaleString()} zł</div><div style="font-size:11px;color:#94a3b8">📍 ${item.location||''}</div><div style="font-size:11px;color:#f59e0b;font-weight:700">👁️ ${totalItemViews} suma</div></td>
-      <td><div style="font-size:18px;font-weight:800;color:#22c55e">${periodViews}</div><div style="font-size:10px;color:#64748b">w okresie</div><div style="font-size:10px;color:#94a3b8">${currentWeekFilter}</div></td>
-      <td style="max-width:300px"><div style="white-space:pre-wrap;font-size:11px">${descClean}</div></td>
-      <td style="font-size:10px;word-break:break-all">${item.user_id?item.user_id.slice(0,8):'anon'}</td>
+      <td>${img?`<img src="${img}" class="thumb">`:'<div style="width:64px;height:48px;background:#070d1a;border-radius:10px"></div>'}</td>
+      <td><div style="font-weight:700">${item.title}</div><div style="font-size:11px;color:#475569">${item.id.slice(0,8)}...</div></td>
+      <td style="font-weight:700;white-space:nowrap">${(item.price||0).toLocaleString()} zł</td>
+      <td>${item.location||''}</td>
+      <td style="font-size:11px;color:#94a3b8">${dateStr}</td>
+      <td><div style="font-size:16px;font-weight:800;color:#22c55e">${periodViews}</div><div style="font-size:10px;color:#64748b">w okresie / suma ${totalItemViews}</div></td>
+      <td>${statusBadge}<div style="font-size:10px;color:#64748b;margin-top:4px">${(imap[item.id]?.length||0)} zdjęć</div></td>
       <td>
-        <div style="display:flex;flex-direction:column;gap:4px">
-          ${item.is_hidden ? `<button class="b bg" style="height:28px;font-size:11px" onclick="unhideAd('${item.id}')">👁️ Odkryj</button>` : `<button class="b" style="height:28px;font-size:11px;background:#f59e0b;color:#fff" onclick="hideAd('${item.id}')">🙈 Ukryj</button>`}
-          ${item.is_banned ? `<button class="b bg" style="height:28px;font-size:11px" onclick="unbanAd('${item.id}')">✅ Odbanuj</button>` : `<button class="b br" style="height:28px;font-size:11px" onclick="banAd('${item.id}')">🚫 Banuj</button>`}
-          <button class="b br" style="height:28px;font-size:11px;opacity:.7" onclick="delAd('${item.id}')">🗑️ Usuń</button>
-          <a href="/?id=${item.id}" target="_blank" class="b bw" style="height:28px;font-size:11px;text-decoration:none;display:grid;place-items:center">👁️ Zobacz</a>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          ${item.is_hidden ? `<button class="b bg" style="height:32px" onclick="unhideAd('${item.id}')">👁️ Odkryj</button>` : `<button class="b by" style="height:32px" onclick="hideAd('${item.id}')">🙈 Ukryj</button>`}
+          ${item.is_banned ? `<button class="b bg" style="height:32px" onclick="unbanAd('${item.id}')">✅ Odbanuj</button>` : `<button class="b br" style="height:32px" onclick="banAd('${item.id}')">🚫 Ban</button>`}
+          <button class="b bd" style="height:32px" onclick="viewAd('${item.id}')">👁️</button>
+          <button class="b br" style="height:32px" onclick="delAd('${item.id}')">🗑️</button>
         </div>
       </td>
     `;
@@ -273,46 +300,60 @@ function renderTable(){
   });
 }
 
-
 async function hideAd(id){
-  if(!confirm('Ukryć ogłoszenie dla odwiedzających? Będzie niewidoczne na portalu, ale widoczne w adminie.')) return;
+  if(!confirm('Ukryć ogłoszenie dla odwiedzających?')) return;
   const {error}=await supa.from('listings').update({is_hidden:true}).eq('id',id);
-  if(error){ alert('Błąd: '+error.message+'\nUruchom SQL: ALTER TABLE listings ADD COLUMN is_hidden BOOLEAN DEFAULT false;'); } else { alert('Ukryto'); loadAll(); }
+  if(error){ alert('Błąd: '+error.message+'\nUruchom SQL: ALTER TABLE listings ADD COLUMN is_hidden BOOLEAN DEFAULT false;'); } else loadAll();
 }
 async function unhideAd(id){
   const {error}=await supa.from('listings').update({is_hidden:false}).eq('id',id);
-  if(error){ alert('Błąd: '+error.message); } else { loadAll(); }
+  if(error) alert(error.message); else loadAll();
 }
 async function banAd(id){
   if(!confirm('Zbanować ogłoszenie? Będzie ukryte i oznaczone jako zbanowane.')) return;
   const {error}=await supa.from('listings').update({is_banned:true, is_hidden:true}).eq('id',id);
-  if(error){ alert('Błąd: '+error.message+'\nUruchom SQL: ALTER TABLE listings ADD COLUMN is_banned BOOLEAN DEFAULT false;'); } else { alert('Zbanowano'); loadAll(); }
+  if(error){ alert('Błąd: '+error.message+'\nUruchom SQL: ALTER TABLE listings ADD COLUMN is_banned BOOLEAN DEFAULT false;'); } else loadAll();
 }
 async function unbanAd(id){
   const {error}=await supa.from('listings').update({is_banned:false, is_hidden:false}).eq('id',id);
-  if(error){ alert('Błąd: '+error.message); } else { loadAll(); }
+  if(error) alert(error.message); else loadAll();
 }
-
 async function delAd(id){
   if(!confirm('Usunąć ogłoszenie '+id+'?')) return;
   await supa.from('listing_images').delete().eq('listing_id',id);
   const {error}=await supa.from('listings').delete().eq('id',id);
-  if(error){ alert('Błąd: '+error.message); } else { alert('Usunięto'); loadAll(); }
+  if(error) alert('Błąd: '+error.message); else loadAll();
 }
+function viewAd(id){ window.open('/?id='+id,'_blank'); }
 
 document.getElementById('doLogin').onclick=login;
 document.getElementById('loginBtn').onclick=()=>document.getElementById('loginBox').style.display='block';
 document.getElementById('search').addEventListener('input',renderTable);
+document.getElementById('sort').addEventListener('change',renderTable);
 document.getElementById('refresh').onclick=loadAll;
+document.getElementById('exportBtn').onclick=document.getElementById('exportCsv').onclick=()=>{
+  const range=getDateRangeForFilter(currentWeekFilter);
+  let csv='id,title,price,location,views_total,views_period,period,is_hidden,is_banned,created_at\n';
+  listings.forEach(item=>{
+    let periodViews=viewLog.filter(e=>e.id===item.id).length;
+    if(range) periodViews=viewLog.filter(e=> e.id===item.id && new Date(e.ts)>=range.from && new Date(e.ts)<=range.to).length;
+    if(periodViews===0) periodViews=item.views||0;
+    csv+=`"${item.id}","${item.title.replace(/"/g,'""')}",${item.price},"${item.location}",${item.views||0},${periodViews},"${currentWeekFilter}",${item.is_hidden||false},${item.is_banned||false},"${item.created_at}"\n`;
+  });
+  const blob=new Blob([csv],{type:'text/csv'}); const url=URL.createObjectURL(blob);
+  const a=document.createElement('a'); a.href=url; a.download='wroomer_admin_'+currentWeekFilter+'_'+new Date().toISOString().slice(0,10)+'.csv'; a.click();
+};
 
 document.querySelectorAll('.weekBtn').forEach(btn=>{
-  btn.onclick=()=>{
-    document.querySelectorAll('.weekBtn').forEach(b=>b.classList.remove('on'));
-    btn.classList.add('on');
-    currentWeekFilter=btn.dataset.week;
-    customFrom=null; customTo=null;
-    renderWeekStats(); renderTable();
-  };
+  if(btn.dataset.week){
+    btn.onclick=()=>{
+      document.querySelectorAll('[data-week]').forEach(b=>b.classList.remove('on'));
+      btn.classList.add('on');
+      currentWeekFilter=btn.dataset.week;
+      customFrom=null; customTo=null;
+      renderWeekStats(); renderTable();
+    };
+  }
 });
 
 document.getElementById('applyDate').onclick=()=>{
@@ -321,30 +362,15 @@ document.getElementById('applyDate').onclick=()=>{
   if(!from||!to){ alert('Wybierz obie daty'); return; }
   customFrom=from; customTo=to+'T23:59:59';
   currentWeekFilter='custom';
-  document.querySelectorAll('.weekBtn').forEach(b=>b.classList.remove('on'));
+  document.querySelectorAll('[data-week]').forEach(b=>b.classList.remove('on'));
   renderWeekStats(); renderTable();
 };
-
 document.getElementById('clearDate').onclick=()=>{
   document.getElementById('dateFrom').value=''; document.getElementById('dateTo').value='';
   customFrom=null; customTo=null; currentWeekFilter='all';
-  document.querySelectorAll('.weekBtn').forEach(b=>b.classList.remove('on'));
+  document.querySelectorAll('[data-week]').forEach(b=>b.classList.remove('on'));
   document.querySelector('[data-week="all"]').classList.add('on');
   renderWeekStats(); renderTable();
-};
-
-document.getElementById('exportCsv').onclick=()=>{
-  const range=getDateRangeForFilter(currentWeekFilter);
-  let csv='id,title,price,location,views_total,views_period,period
-';
-  listings.forEach(item=>{
-    let periodViews=viewLog.filter(e=>e.id===item.id).length;
-    if(range) periodViews=viewLog.filter(e=> e.id===item.id && new Date(e.ts)>=range.from && new Date(e.ts)<=range.to).length;
-    csv+=`"${item.id}","${item.title.replace(/"/g,'""')}",${item.price},"${item.location}",${item.views||0},${periodViews},"${currentWeekFilter}"
-`;
-  });
-  const blob=new Blob([csv],{type:'text/csv'}); const url=URL.createObjectURL(blob);
-  const a=document.createElement('a'); a.href=url; a.download='wroomer_views_'+currentWeekFilter+'_'+new Date().toISOString().slice(0,10)+'.csv'; a.click();
 };
 
 checkAdmin();
