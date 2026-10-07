@@ -140,7 +140,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#f2f3f5}
 <div class="fr"><div class="f"><div class="lb">Pojemność cm3</div><input id="capacity" type="number" placeholder="1968" class="pi2"></div><div class="f"><div class="lb">Moc KM</div><input id="power" type="number" placeholder="140" class="pi2"></div></div>
 <div class="fr"><div class="f"><div class="lb">Przebieg km *</div><input id="mileage" type="number" required placeholder="120000" class="pi2"></div><div class="f"><div class="lb">Typ nadwozia</div><select id="body2" class="sel"><option value="">Wybierz</option><option>Sedan</option><option>Kombi</option><option>Hatchback</option><option>SUV</option><option>Coupe</option><option>Kabriolet</option><option>Minivan</option><option>Pickup</option><option>Van</option><option>Inny</option></select></div></div>
 <div class="fr"><div class="f"><div class="lb">Kolor</div><select id="color2" class="sel"><option value="">Wybierz</option><option>Biały</option><option>Czarny</option><option>Srebrny</option><option>Szary</option><option>Czerwony</option><option>Niebieski</option><option>Inny</option></select></div><div class="f"><div class="lb">Stan / Pochodzenie</div><select id="cond" class="sel"><option value="">Wybierz</option><option>Nowy</option><option>Używany</option><option>Uszkodzony</option></select></div></div>
-<div class="f"><div class="lb">Opis</div><textarea id="ds" rows="3" placeholder="Opis..."></textarea></div>
+<div class="f"><div class="lb">Telefon * - wymagany</div><input id="phone" required placeholder="600 123 456" class="pi2"></div><div class="f"><div class="lb">Opis</div><textarea id="ds" rows="3" placeholder="Opis..."></textarea></div>
 <div class="f"><div class="lb">📸 Zdjęcia - swipe palcem, kompresja 800px WebP, edycja bez potwierdzania</div><div id="dz" class="dp">📷 Dodaj zdjęcia max 10</div><input id="fi" type="file" multiple accept="image/*" style="display:none"><div id="pv" class="pv" style="margin-top:6px"></div><div id="ci" style="font-size:10px;color:#065f46"></div></div>
 <div id="editImages" style="display:none"><div class="lb">🖼️ Edytuj zdjęcia - kliknij ✕ usuwa od razu bez potwierdzania</div><div id="editPv" class="pv" style="margin-top:6px"></div></div>
 </div>
@@ -408,8 +408,156 @@ function setupAuth(){
   $('regBtn')?.addEventListener('click', doRegister);
 }
 
+
+function openAdd(){
+  if(!currentUser){ openAuth(); var m=document.getElementById('authMsg'); if(m){ m.textContent='Musisz sie zalogowac zeby dodac ogloszenie'; m.style.color='red'; } return; }
+  currentEditId=null;
+  var ft=document.getElementById('formTitle'); if(ft) ft.textContent='Dodaj ogloszenie';
+  var form=document.getElementById('af'); if(form) form.reset();
+  ai=[]; 
+  var pvEl=document.getElementById('pv'); if(pvEl) pvEl.innerHTML=''; 
+  var ciEl=document.getElementById('ci'); if(ciEl) ciEl.textContent='';
+  var ei=document.getElementById('editImages'); if(ei) ei.style.display='none';
+  var am=document.getElementById('am'); if(am) am.classList.add('o');
+}
+function closeAdd(){ var am=document.getElementById('am'); if(am) am.classList.remove('o'); }
+
+async function handleAddSubmit(e){
+  e.preventDefault();
+  if(!currentUser){ alert('Musisz byc zalogowany'); openAuth(); return; }
+  var mk=document.getElementById('mk').value;
+  var md=document.getElementById('md2').value || '';
+  var yr=document.getElementById('year').value;
+  var mileage=document.getElementById('mileage').value;
+  var pr=document.getElementById('pr').value;
+  var lc=document.getElementById('lc').value;
+  var phoneEl=document.getElementById('phone');
+  if(!phoneEl){ alert('Brak pola telefon'); return; }
+  var phone=phoneEl.value;
+  if(!mk){ alert('Wybierz marke'); return; }
+  if(!md){ alert('Wybierz model'); return; }
+  if(!yr){ alert('Podaj rok'); return; }
+  if(!mileage){ alert('Podaj przebieg'); return; }
+  if(!pr){ alert('Podaj cene'); return; }
+  if(!lc){ alert('Podaj lokalizacje'); return; }
+  if(!phone){ alert('Podaj telefon'); return; }
+  if(ai.length===0 && !currentEditId){ alert('Dodaj min 1 zdjecie'); return; }
+  var btn=document.getElementById('sbBtn'); var orig=btn?btn.textContent:''; if(btn){ btn.textContent='Zapisywanie...'; btn.disabled=true; }
+  try{
+    var images = ai.map(function(x){return x.data;});
+    if(supa && supa.storage){
+      try{
+        var uploaded=[];
+        for(var i=0;i<ai.length;i++){
+          var blob=ai[i].blob;
+          var name = currentUser.id+'/'+Date.now()+'_'+i+'.webp';
+          var resUp=await supa.storage.from('images').upload(name, blob, {contentType:'image/webp', upsert:true});
+          if(!resUp.error && resUp.data){
+            var pub=supa.storage.from('images').getPublicUrl(name);
+            uploaded.push(pub.data.publicUrl);
+          } else {
+            uploaded.push(ai[i].data);
+          }
+        }
+        if(uploaded.length) images=uploaded;
+      }catch(e){ console.log('storage fail', e); }
+    }
+    var payload={
+      title: mk+' '+md,
+      marka: mk,
+      model: md,
+      brand: mk,
+      price: parseInt(pr),
+      cena: parseInt(pr),
+      location: lc,
+      lokalizacja: lc,
+      description: document.getElementById('ds').value||'',
+      opis: document.getElementById('ds').value||'',
+      images: images,
+      zdjecia: images,
+      user_id: currentUser.id,
+      phone: phone,
+      telefon: phone,
+      year: parseInt(yr),
+      mileage: parseInt(mileage),
+      fuel: (document.getElementById('fuel')?document.getElementById('fuel').value:''),
+      gear: (document.getElementById('gear')?document.getElementById('gear').value:''),
+      body: (document.getElementById('body2')?document.getElementById('body2').value:''),
+      color: (document.getElementById('color2')?document.getElementById('color2').value:''),
+      capacity: parseInt(document.getElementById('capacity')?document.getElementById('capacity').value||0:0),
+      power: parseInt(document.getElementById('power')?document.getElementById('power').value||0:0),
+      cond: (document.getElementById('cond')?document.getElementById('cond').value:''),
+      created_at: new Date().toISOString()
+    };
+    var res=null;
+    var tables=['ogloszenia','ads','announcements'];
+    for(var t=0;t<tables.length;t++){
+      try{
+        var tbl=tables[t];
+        if(currentEditId){
+          res=await supa.from(tbl).update(payload).eq('id', currentEditId).select();
+        }else{
+          res=await supa.from(tbl).insert(payload).select();
+        }
+        if(res.data && !res.error){ console.log('saved to', tbl); break; }
+      }catch(e){}
+    }
+    if(res && res.error){
+      alert('Blad zapisu: '+res.error.message);
+    }else{
+      alert(currentEditId?'Zaktualizowano!':'Dodano ogloszenie!');
+      if(res && res.data && res.data[0] && res.data[0].id) addMyId(res.data[0].id);
+      closeAdd();
+      setTimeout(function(){loadReal();}, 500);
+    }
+  }catch(err){
+    alert('Blad: '+err.message);
+  }finally{
+    if(btn){ btn.textContent=orig; btn.disabled=false; }
+  }
+}
+
+function setupAdd(){
+  var ab=document.getElementById('ab'); if(ab) ab.addEventListener('click', openAdd);
+  var ca=document.getElementById('ca'); if(ca) ca.addEventListener('click', closeAdd);
+  var abg=document.getElementById('abg'); if(abg) abg.addEventListener('click', closeAdd);
+  var dz=document.getElementById('dz'); if(dz) dz.addEventListener('click', function(){ var fi=document.getElementById('fi'); if(fi) fi.click(); });
+  var fi=document.getElementById('fi'); if(fi) fi.addEventListener('change', async function(e){
+    var files=Array.from(e.target.files).slice(0,10-ai.length);
+    for(var f of files){
+      var c=await comp(f, 800, 0.65);
+      ai.push(c);
+    }
+    renderPv();
+    var ci=document.getElementById('ci'); if(ci) ci.textContent=ai.length+' zdjec';
+  });
+  var mk=document.getElementById('mk'); if(mk) mk.addEventListener('change', function(e){
+    populateModels(e.target.value, 'md2');
+    var tf=document.getElementById('titleFull'); if(tf && e.target.value){ tf.value=e.target.value+' '; }
+  });
+  var md2=document.getElementById('md2'); if(md2) md2.addEventListener('change', function(e){
+    var tf=document.getElementById('titleFull'); if(tf){ tf.value=(document.getElementById('mk').value+' '+e.target.value).trim(); }
+  });
+  var af=document.getElementById('af'); if(af) af.addEventListener('submit', handleAddSubmit);
+}
+
+function renderPv(){
+  var pv=document.getElementById('pv'); if(!pv) return; pv.innerHTML='';
+  ai.forEach(function(img,i){
+    var div=document.createElement('div'); div.className='px';
+    div.innerHTML='<img src="'+img.data+'"><button type="button" onclick="removeAi('+i+')">✕</button>';
+    pv.appendChild(div);
+  });
+}
+function removeAi(i){ ai.splice(i,1); renderPv(); }
+
+function od(item){
+  alert((item.md||'Auto')+'\n'+(item.pr||0)+' zl\n'+(item.lc||'')+'\n'+(item.ds||'').slice(0,200));
+}
+
 function init(){ 
   setTimeout(setupChipsPro, 500);
+  setupAdd();
   setupAuth();
   ls=DEMO; setTimeout(setupChipsPro, 300); rn();
   const s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js';s.async=true;
