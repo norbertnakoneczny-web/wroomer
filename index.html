@@ -155,7 +155,7 @@ async function comp(file,maxW=800,quality=0.65){
 }
 function getMyIds(){try{return JSON.parse(localStorage.getItem('wroomer_my_ids')||'[]')}catch(e){return []}}
 function addMyId(id){const ids=getMyIds(); if(!ids.includes(id)){ids.push(id); localStorage.setItem('wroomer_my_ids',JSON.stringify(ids));}}
-function isMine(id){return getMyIds().includes(id) || (currentUser && ls.find(x=>x.id===id)?.user_id===currentUser.id)}
+function isMine(id){ if(!currentUser) return false; const item=ls.find(x=>x.id===id); return item && item.user_id && item.user_id===currentUser.id; }
 
 function populateModels(brand,targetId){
   if(brand==='Inny'){
@@ -268,9 +268,9 @@ async function od(item){
   currentEditId=item.id;
   const viewsCount=incView(item.id);
   setTimeout(()=>{ const el=document.getElementById('viewCounterDetail'); if(el) el.textContent='👁️ '+viewsCount+' wyświetleń'; },100);
-  const mine=isMine(item.id);
+  const mine = currentUser && item.user_id && item.user_id===currentUser.id;
   $('editBtn').style.display='none'; // ukryty domyślnie - fix dla użytkownika
-  if(mine){ $('editBtn').style.display='inline-flex'; $('editBtn').classList.add('owner'); $('editBtn').textContent='✏️ Edytuj'; $('editBtn').style.background='#e6f7f5'; } else { $('editBtn').style.display='none'; $('editBtn').classList.remove('owner'); }
+  if(mine && currentUser){ $('editBtn').style.display='inline-flex'; $('editBtn').classList.add('owner'); $('editBtn').textContent='✏️ Edytuj'; $('editBtn').style.background='#e6f7f5'; } else { $('editBtn').style.display='none'; $('editBtn').classList.remove('owner'); $('editBtn').classList.remove('owner'); }
   
   // Build full params table - OTOMOTO style
   const params = [
@@ -473,7 +473,7 @@ async function loadReal(){
   }
 })();
 
-function init(){
+function init(){ $('editBtn').style.display='none';
   ls=DEMO;rn();
   const s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js';s.async=true;
   s.onload=()=>{supa=window.supabase.createClient(U,K);loadReal();};document.head.appendChild(s);
