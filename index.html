@@ -155,7 +155,7 @@ async function comp(file,maxW=800,quality=0.65){
 }
 function getMyIds(){try{return JSON.parse(localStorage.getItem('wroomer_my_ids')||'[]')}catch(e){return []}}
 function addMyId(id){const ids=getMyIds(); if(!ids.includes(id)){ids.push(id); localStorage.setItem('wroomer_my_ids',JSON.stringify(ids));}}
-function isMine(id){ const mineIds=getMyIds(); if(mineIds.includes(id)) return true; if(currentUser){ const it=ls.find(x=>x.id===id); if(it && it.user_id && it.user_id===currentUser.id) return true; } return false; }
+function isMine(id){ try{ const my=getMyIds(); if(my.includes(id)) return true; if(currentUser){ const it=ls.find(x=>x.id===id); if(it && it.user_id && it.user_id===currentUser.id) return true; } return false; }catch(e){ return false; } }
 
 function populateModels(brand,targetId){
   if(brand==='Inny'){
@@ -275,33 +275,39 @@ async function od(item){
   if(mine){ $('editBtn').style.display='inline-flex'; $('editBtn').classList.add('owner'); $('editBtn').textContent='✏️ Edytuj'; $('editBtn').style.background='#e6f7f5'; } else { $('editBtn').style.display='none'; $('editBtn').classList.remove('owner'); }
   
   // Build full params table - OTOMOTO style
+  const ex=item._extra||item.extra||{};
   const params = [
-    ['Marka', (item.md||'').split(' ')[0] || '-'],
-    ['Model', (item.md||'').split(' ').slice(1).join(' ') || '-'],
-    ['Generacja', item.generation || item.gen || '-'],
-    ['Rok produkcji', item.year || '-'],
-    ['Przebieg', item.mileage ? item.mileage.toLocaleString()+' km' : '-'],
-    ['Pojemność', item.capacity ? item.capacity+' cm3' : (item.cap ? item.cap+' cm3' : '-')],
-    ['Moc', item.power ? item.power+' KM' : '-'],
-    ['Rodzaj paliwa', item.fuel || '-'],
-    ['Skrzynia biegów', item.gear || '-'],
-    ['Napęd', item.drive || '-'],
-    ['Typ nadwozia', item.body || '-'],
-    ['Kolor', item.color || '-'],
-    ['Liczba drzwi', item.doors || '-'],
-    ['Stan', item.state || item.cond || '-'],
-    ['Pochodzenie', item.origin || item.orig || '-'],
-    ['Kraj pochodzenia', item.country || '-'],
+    ['Marka', ex.marka || (item.md||'').split(' ')[0] || '-'],
+    ['Model', ex.model || (item.md||'').split(' ').slice(1).join(' ') || '-'],
+    ['Generacja', ex.generation || item.generation || '-'],
+    ['Rok produkcji', ex.year || item.year || '-'],
+    ['Przebieg', ex.mileage ? ex.mileage+' km' : (item.mileage ? item.mileage+' km' : '-')],
+    ['Pojemność', ex.capacity ? ex.capacity+' cm3' : (item.capacity ? item.capacity+' cm3' : '-')],
+    ['Moc', ex.power ? ex.power+' KM' : (item.power ? item.power+' KM' : '-')],
+    ['Rodzaj paliwa', ex.fuel || item.fuel || '-'],
+    ['Skrzynia biegów', ex.gear || item.gear || '-'],
+    ['Napęd', ex.drive || item.drive || '-'],
+    ['Typ nadwozia', ex.body || item.body || '-'],
+    ['Kolor', ex.color || item.color || '-'],
+    ['Liczba drzwi', ex.doors || item.doors || '-'],
+    ['Stan', ex.state || item.state || item.cond || '-'],
+    ['Pochodzenie', ex.origin || item.origin || '-'],
+    ['Kraj pochodzenia', ex.country || item.country || '-'],
     ['Lokalizacja', item.lc || '-'],
     ['Cena', item.pr ? item.pr.toLocaleString()+' zł' : '-'],
   ];
 
-  const paramsHtml = params.map(([k,v]) => `
-    <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f2f3f5">
-      <span style="font-size:13px;color:#6b7280">${k}</span>
-      <span style="font-size:13px;font-weight:600;color:#111827;text-align:right;max-width:60%">${v}</span>
+  const paramsHtml = `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;background:#fff;border-radius:8px;overflow:hidden;border:1px solid #e5e7eb">
+      ${params.filter(([k,v])=>v && v!=='-').map(([k,v]) => `
+        <div style="display:flex;flex-direction:column;padding:8px 10px;border-bottom:1px solid #f2f3f5;border-right:1px solid #f2f3f5;background:#fff">
+          <span style="font-size:11px;color:#6b7280;text-transform:uppercase;font-weight:600;letter-spacing:0.3px">${k}</span>
+          <span style="font-size:13px;font-weight:700;color:#002f34;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${v}</span>
+        </div>
+      `).join('')}
     </div>
-  `).join('');
+    ${params.filter(([k,v])=>!v || v==='-').length>0 ? `<div style="margin-top:6px;font-size:11px;color:#9ca3af">Brak: ${params.filter(([k,v])=>!v || v==='-').map(([k,v])=>k).join(', ')}</div>` : ''}
+  `;
 
   dc.innerHTML=`
     <div class="dw" id="dw">
@@ -313,10 +319,10 @@ async function od(item){
     <div style="padding:16px">
       <h2 style="font-weight:800;font-size:20px;line-height:1.2">${item.md}</h2>
       <div style="font-weight:800;font-size:26px;margin-top:8px;color:#002f34">${(item.pr||0).toLocaleString()} zł</div>
-      <div id="viewCounterDetail" style="display:none" style="font-size:12px;color:#002f34;font-weight:700;margin-top:6px;background:#e6f7f5;padding:6px 10px;border-radius:6px;display:inline-block">👁️ 0 wyświetleń</div><div style="font-size:12px;color:#6b7280;margin-top:6px">📍 ${item.lc || '-'} • ${ims.length} zdjęć • przesuwaj palcem ↔️ • swipe działa</div>
+      <div id="viewCounterDetail" style="display:none" style="display:none" style="font-size:12px;color:#002f34;font-weight:700;margin-top:6px;background:#e6f7f5;padding:6px 10px;border-radius:6px;display:inline-block">👁️ 0 wyświetleń</div><div style="font-size:12px;color:#6b7280;margin-top:6px">📍 ${item.lc || '-'} • ${ims.length} zdjęć • przesuwaj palcem ↔️ • swipe działa</div>
       
       <div style="margin-top:16px;background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px">
-        <div style="font-weight:800;font-size:14px;margin-bottom:8px">📋 Wszystkie informacje - OTOMOTO</div>
+        <div style="font-weight:800;font-size:13px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center"><span>📋 Dane techniczne</span><span style="font-size:10px;color:#6b7280;font-weight:400">OTOMOTO</span></div>
         ${paramsHtml}
       </div>
 
@@ -361,27 +367,25 @@ $('editBtn').onclick=()=>{ // ZAWSZE pozwala edytować - fix
 
   const item=ls.find(x=>x.id===currentEditId); if(!item) return;
   
-  $('formTitle').textContent='Edytuj ogłoszenie - właściciel';
-  $('titleFull').value=item.md; $('pr').value=item.pr; $('lc').value=item.lc; $('ds').value=item.ds.split('__OTOMOTO__')[0];
+  $('formTitle').textContent='✏️ Edytuj ogłoszenie - właściciel';
+  $('titleFull').value=item.md; $('pr').value=item.pr; $('lc').value=item.lc; 
+  $('ds').value=(item.ds||'').split('__OTOMOTO__')[0];
   try{
-    const ex = item._extra || {};
+    const ex=item._extra||item.extra||{};
     if(ex.marka) $('mk').value=ex.marka;
-    if(ex.model){ populateModels(ex.marka||'','md2'); setTimeout(()=>{ $('md2').value=ex.model; },100); }
+    if(ex.model){ populateModels(ex.marka||$('mk').value,'md2'); setTimeout(()=>{ if(ex.model) $('md2').value=ex.model; },150); }
+    if($('gen2') && ex.generation) $('gen2').value=ex.generation;
     if($('year') && ex.year) $('year').value=ex.year;
-    if($('km') && ex.mileage) $('km').value=ex.mileage;
+    if($('mileage') && ex.mileage) $('mileage').value=ex.mileage;
     if($('power') && ex.power) $('power').value=ex.power;
-    if($('cap') && ex.capacity) $('cap').value=ex.capacity;
+    if($('capacity') && ex.capacity) $('capacity').value=ex.capacity;
     if($('fuel') && ex.fuel) $('fuel').value=ex.fuel;
     if($('gear') && ex.gear) $('gear').value=ex.gear;
-    if($('drive') && ex.drive) $('drive').value=ex.drive;
-    if($('body') && ex.body) $('body').value=ex.body;
+    if($('body2') && ex.body) $('body2').value=ex.body;
     if($('color2') && ex.color) $('color2').value=ex.color;
-    if($('doors') && ex.doors) $('doors').value=ex.doors;
     if($('cond') && ex.state) $('cond').value=ex.state;
-    if($('origin') && ex.origin) $('origin').value=ex.origin;
-    if($('country') && ex.country) $('country').value=ex.country;
-    if($('gen') && ex.generation) $('gen').value=ex.generation;
-  }catch(e){}
+    const driveEl=document.getElementById('drive'); if(driveEl && ex.drive) driveEl.value=ex.drive;
+  }catch(e){ console.log('edit fill error', e); }
 
   const parts=item.md.split(' '); if(parts[0]) $('mk').value=parts[0]; populateModels(parts[0],'md2');
   editImgs=[...item.im]; const ep=$('editPv'); ep.innerHTML='';
@@ -405,13 +409,17 @@ $('af').onsubmit=async e=>{
  try{
   
   const extra={
-    marka:$('mk').value||'', model:$('md2').value||'', generation:$('gen')?.value||'',
-    year:$('year')?.value||'', mileage:$('km')?.value||'', power:$('power')?.value||'', capacity:$('cap')?.value||'',
-    fuel:$('fuel')?.value||'', gear:$('gear')?.value||'', drive:$('drive')?.value||'', body:$('body')?.value||'',
-    color:$('color2')?.value||'', doors:$('doors')?.value||'', state:$('cond')?.value||'', origin:$('origin')?.value||'',
-    country:$('country')?.value||''
+    marka:$('mk').value||'', model:$('md2').value||'', generation:$('gen2')?.value||'',
+    year:$('year')?.value||'', mileage:$('mileage')?.value||'', power:$('power')?.value||'', capacity:$('capacity')?.value||'',
+    fuel:$('fuel')?.value||'', gear:$('gear')?.value||'', body:$('body2')?.value||'',
+    color:$('color2')?.value||'', state:$('cond')?.value||'',
+    drive: document.getElementById('drive')?.value || '',
+    doors: document.getElementById('doors')?.value || '',
+    origin: document.getElementById('origin')?.value || '',
+    country: document.getElementById('country')?.value || ''
   };
-  const fullDesc=($('ds').value||'').slice(0,800)+'__OTOMOTO__'+JSON.stringify(extra);
+  const cleanDesc=($('ds').value||'').split('__OTOMOTO__')[0].slice(0,800);
+  const fullDesc=cleanDesc+'__OTOMOTO__'+JSON.stringify(extra);
   const pl={title:$('titleFull').value.trim().slice(0,120),description:fullDesc,price:parseInt($('pr').value)||0,location:$('lc').value.trim().slice(0,50)};
 
   if(currentUser) pl.user_id=currentUser.id;
@@ -470,7 +478,7 @@ async function loadReal(){
           extra=JSON.parse(parts[1]||'{}');
         }catch(e){}
       }
-      return {id:r.id,md:r.title||'Bez tytułu',pr:r.price||0,lc:r.location||'Gorzyce',ds:ds,_extra:extra,im:imap[r.id]&&imap[r.id].length?imap[r.id]:[DEMO[0].im[0]],
+      return {id:r.id,md:r.title||'Bez tytułu',pr:r.price||0,lc:r.location||'Gorzyce',ds:ds,_extra:extra,extra:extra,im:imap[r.id]&&imap[r.id].length?imap[r.id]:[DEMO[0].im[0]],
         year:extra.year||'',mileage:extra.mileage||'',power:extra.power||'',capacity:extra.capacity||'',fuel:extra.fuel||'',gear:extra.gear||'',body:extra.body||'',color:extra.color||'',drive:extra.drive||'',doors:extra.doors||'',state:extra.state||'',origin:extra.origin||'',country:extra.country||'',generation:extra.generation||'',marka:extra.marka||'',model:extra.model||'',user_id:r.user_id};
     });
   ls=real;filtered=[];rn();
