@@ -62,7 +62,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#f2f3f5}
 .btn-show{width:100%;height:44px;background:#002f34;color:#fff;border-radius:8px;font-weight:800;font-size:13px;border:none;cursor:pointer}
 .btn-edit{height:32px;padding:0 12px;background:#fff;border:1.5px solid #002f34;color:#002f34;border-radius:8px;font-weight:700;font-size:11px;cursor:pointer;display:none} .btn-edit.owner{display:inline-flex}
 </style>
-</head>
+<style>.chip{padding:6px 12px;border:1.5px solid #d8dfe0;border-radius:20px;background:#fff;font-size:12px;font-weight:600;cursor:pointer;transition:all 0.15s} .chip.active{background:#002f34 !important;color:#fff !important;border-color:#002f34 !important} .chip:hover{border-color:#002f34}</style></head>
 <body>
 <header class="h">
 <div class="logo" onclick="location.reload()"><div class="li">W</div><div class="lt">WROOMER<span>.PL</span> TEST</div></div>
@@ -70,25 +70,46 @@ body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#f2f3f5}
 </header>
 <div class="pg">
 <aside class="sb" id="sb">
-<div style="padding:14px 16px;border-bottom:1px solid #f0f0f0;display:flex;justify-content:space-between"><div style="font-weight:800">🔍 Wyszukiwarka i filtry</div><div id="clear" style="color:#007185;font-size:12px;font-weight:700;cursor:pointer">Wyczyść</div></div>
+<div style="padding:14px 16px;border-bottom:1px solid #f0f0f0;display:flex;justify-content:space-between;align-items:center">
+<div style="font-weight:800">🔍 Filtry</div><div id="clear" style="color:#007185;font-size:12px;font-weight:700;cursor:pointer">Wyczyść</div>
+</div>
+
 <div class="fg"><div class="fl">Szukaj</div><input id="q" class="pi2" placeholder="Octavia, BMW..."></div>
-<div class="fg"><div class="fl">Marka - wszystkie marki</div><select id="brand" class="sel"><option value="">Wszystkie marki (49 + Inny)</option><option value="Abarth">Abarth</option><option value="Alfa Romeo">Alfa Romeo</option><option value="Audi">Audi</option><option value="BMW">BMW</option><option value="BYD">BYD</option><option value="Cadillac">Cadillac</option><option value="Chery">Chery</option><option value="Chevrolet">Chevrolet</option><option value="Chrysler">Chrysler</option><option value="Citroen">Citroen</option><option value="Cupra">Cupra</option><option value="Dacia">Dacia</option><option value="Daewoo">Daewoo</option><option value="Dodge">Dodge</option><option value="DS">DS</option><option value="Fiat">Fiat</option><option value="Ford">Ford</option><option value="Genesis">Genesis</option><option value="Honda">Honda</option><option value="Hyundai">Hyundai</option><option value="Infiniti">Infiniti</option><option value="Isuzu">Isuzu</option><option value="Jaguar">Jaguar</option><option value="Jeep">Jeep</option><option value="Kia">Kia</option><option value="Lancia">Lancia</option><option value="Land Rover">Land Rover</option><option value="Lexus">Lexus</option><option value="Mazda">Mazda</option><option value="Mercedes">Mercedes</option><option value="MG">MG</option><option value="Mini">Mini</option><option value="Mitsubishi">Mitsubishi</option><option value="Nissan">Nissan</option><option value="Opel">Opel</option><option value="Peugeot">Peugeot</option><option value="Polestar">Polestar</option><option value="Porsche">Porsche</option><option value="Renault">Renault</option><option value="Seat">Seat</option><option value="Skoda">Skoda</option><option value="Smart">Smart</option><option value="SsangYong">SsangYong</option><option value="Subaru">Subaru</option><option value="Suzuki">Suzuki</option><option value="Tesla">Tesla</option><option value="Toyota">Toyota</option><option value="Volkswagen">Volkswagen</option><option value="Volvo">Volvo</option><option value="Inny">Inny - wpisz ręcznie</option></select></div>
-<div class="fg"><div class="fl">Model - wszystkie modele</div><select id="model" class="sel"><option value="">Wszystkie modele</option></select><div id="modelCount" style="font-size:10px;color:#6b7280;margin-top:4px"></div></div>
+<div class="fg"><div class="fl">Marka</div><select id="brand" class="sel"><option value="">Wszystkie marki</option></select></div>
+<div class="fg"><div class="fl">Model</div><select id="model" class="sel"><option value="">Wszystkie modele</option></select><div id="modelCount" style="font-size:10px;color:#6b7280;margin-top:4px"></div></div>
 <div class="fg"><div class="fl">Cena</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px"><input id="pmin" class="pi2" type="number" placeholder="od zł"><input id="pmax" class="pi2" type="number" placeholder="do zł"></div></div>
 <div class="fg"><div class="fl">Lokalizacja</div><input id="loc" class="pi2" placeholder="Gorzyce"></div>
+<div class="fg"><div class="fl">Rok</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px"><input id="ymin" class="pi2" type="number" placeholder="od"><input id="ymax" class="pi2" type="number" placeholder="do"></div></div>
+<div class="fg"><div class="fl">Przebieg</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px"><input id="kmin" class="pi2" type="number" placeholder="od"><input id="kmax" class="pi2" type="number" placeholder="do"></div></div>
 
-<div class="fg"><div class="fl">Rok produkcji</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px"><input id="ymin" class="pi2" type="number" placeholder="od"><input id="ymax" class="pi2" type="number" placeholder="do"></div></div>
-<div class="fg"><div class="fl">Przebieg km</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px"><input id="kmin" class="pi2" type="number" placeholder="od"><input id="kmax" class="pi2" type="number" placeholder="do"></div></div>
+<div class="fg"><div class="fl">Paliwo - kliknij</div><div id="fuelFilters" style="display:flex;gap:5px;flex-wrap:wrap">
+<button type="button" class="chip" data-fuel="Benzyna">Benzyna</button>
+<button type="button" class="chip" data-fuel="Diesel">Diesel</button>
+<button type="button" class="chip" data-fuel="Hybryda">Hybryda</button>
+<button type="button" class="chip" data-fuel="Elektryczny">Elektryk</button>
+</div></div>
+
+<div class="fg"><div class="fl">Skrzynia - kliknij</div><div id="gearFilters" style="display:flex;gap:5px">
+<button type="button" class="chip" data-gear="Manualna">Manualna</button>
+<button type="button" class="chip" data-gear="Automatyczna">Automat</button>
+</div></div>
+
+<div class="fg"><div class="fl">Nadwozie</div><select id="body" class="sel"><option value="">Dowolny</option><option>Sedan</option><option>Kombi</option><option>Hatchback</option><option>SUV</option><option>Coupe</option><option>Kabriolet</option><option>Minivan</option></select></div>
+
+<details id="moreFilters" style="margin:8px;border:1px solid #e5e7eb;border-radius:10px;background:#f9fafb"><summary style="padding:10px;font-weight:700;font-size:13px;cursor:pointer;list-style:none;display:flex;justify-content:space-between"><span>⚙️ Więcej filtrów (połowa schowana)</span><span id="moreIcon">▼ Rozwiń</span></summary>
+<div style="padding:10px;display:flex;flex-direction:column;gap:10px;background:#fff">
 <div class="fg"><div class="fl">Moc KM</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px"><input id="powmin" class="pi2" type="number" placeholder="od"><input id="powmax" class="pi2" type="number" placeholder="do"></div></div>
 <div class="fg"><div class="fl">Pojemność cm3</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px"><input id="capmin" class="pi2" type="number" placeholder="od"><input id="capmax" class="pi2" type="number" placeholder="do"></div></div>
-<div class="fg"><div class="fl">Rodzaj paliwa - </div><div style="display:flex;gap:4px;flex-wrap:wrap" id="fuelFilters"><button class="chip" data-fuel="Benzyna">Benzyna</button><button class="chip" data-fuel="Diesel">Diesel</button><button class="chip" data-fuel="Benzyna+LPG">LPG</button><button class="chip" data-fuel="Hybryda">Hybryda</button><button class="chip" data-fuel="Elektryczny">Elektryk</button><button class="chip" data-fuel="CNG">CNG</button></div></div>
-<div class="fg"><div class="fl">Skrzynia biegów</div><div style="display:flex;gap:4px"><button class="chip" data-gear="Manualna">Manualna</button><button class="chip" data-gear="Automatyczna">Automat</button></div></div>
-<div class="fg"><div class="fl">Typ nadwozia - </div><select id="body" class="sel"><option value="">Dowolny</option><option>Sedan</option><option>Kombi</option><option>Hatchback</option><option>SUV</option><option>Coupe</option><option>Kabriolet</option><option>Minivan</option><option>Pickup</option><option>Van</option><option>Kompakt</option><option>Inny</option></select></div>
-<div class="fg"><div class="fl">Kolor</div><select id="color" class="sel"><option value="">Dowolny</option><option>Biały</option><option>Czarny</option><option>Srebrny</option><option>Szary</option><option>Czerwony</option><option>Niebieski</option><option>Zielony</option><option>Beżowy</option><option>Brązowy</option><option>Żółty</option><option>Inny</option></select></div>
+<div class="fg"><div class="fl">Kolor</div><select id="color" class="sel"><option value="">Dowolny</option><option>Biały</option><option>Czarny</option><option>Srebrny</option><option>Szary</option><option>Czerwony</option><option>Niebieski</option><option>Zielony</option><option>Inny</option></select></div>
 <div class="fg"><div class="fl">Stan</div><select id="state" class="sel"><option value="">Dowolny</option><option>Nowy</option><option>Używany</option><option>Uszkodzony</option></select></div>
 <div class="fg"><div class="fl">Pochodzenie</div><select id="origin" class="sel"><option value="">Dowolne</option><option>Krajowy</option><option>Importowany</option></select></div>
 <div class="fg"><div class="fl">Napęd</div><select id="drive" class="sel"><option value="">Dowolny</option><option>Przedni</option><option>Tylny</option><option>4x4 stały</option><option>4x4 dołączany</option></select></div>
-<div style="padding:12px"><button id="apply" class="btn-show">Pokaż wyniki</button><div id="count" style="text-align:center;font-size:11px;color:#6b7280;margin-top:6px">Ładowanie...</div></div>
+<button id="collapseBtn" type="button" style="width:100%;padding:10px;border:1px solid #d8dfe0;background:#fff;border-radius:8px;font-weight:700;cursor:pointer">▲ Zwiń dodatkowe filtry</button>
+</div>
+</details>
+
+<div id="count" style="padding:8px;text-align:center;color:#6b7280;font-size:11px">Ładowanie...</div>
+<button id="apply" class="btn-show">Pokaż wyniki</button>
 </aside>
 <main class="main">
 <div style="background:#fff;padding:8px;display:flex;gap:6px;align-items:center;border-bottom:1px solid #e5e7eb"><button id="filterToggle" class="b" style="background:#f2f3f5;color:#002f34;border:1px solid #d8dfe0;font-weight:700;height:36px;padding:0 12px;border-radius:8px">☰ Filtrowanie</button><input id="q2" class="pi2" style="flex:1" placeholder="Szybkie szukanie..."><button id="myBtn" class="b" style="background:#eef1f3">Moje</button></div>
@@ -105,7 +126,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#f2f3f5}
 <div class="f"><div class="lb">Tytuł *</div><input id="titleFull" required placeholder="Skoda Octavia 1.9 TDI 2010" class="pi2"></div>
 <div class="fr"><div class="f"><div class="lb">Cena *</div><input id="pr" type="number" required placeholder="23400" class="pi2"></div><div class="f"><div class="lb">Miejscowość *</div><input id="lc" required value="Gorzyce" class="pi2"></div></div>
 
-<div class="fl" style="margin-top:8px">Parametry  - wszystkie do filtrowania</div>
+<div class="fl" style="margin-top:8px">Parametry OTOMOTO - wszystkie do filtrowania</div>
 <div class="fr"><div class="f"><div class="lb">Generacja</div><select id="gen2" class="sel"><option value="">Wybierz</option><option>I</option><option>II</option><option>III</option><option>IV</option><option>V</option><option>VI</option></select></div><div class="f"><div class="lb">Rok produkcji *</div><input id="year" type="number" min="1950" max="2026" placeholder="2018" class="pi2"></div></div>
 <div class="fr"><div class="f"><div class="lb">Paliwo *</div><select id="fuel" required class="sel"><option value="">Wybierz</option><option>Benzyna</option><option>Diesel</option><option>Benzyna+LPG</option><option>Hybryda</option><option>Elektryczny</option><option>CNG</option></select></div><div class="f"><div class="lb">Skrzynia *</div><select id="gear" required class="sel"><option value="">Wybierz</option><option>Manualna</option><option>Automatyczna</option></select></div></div>
 <div class="fr"><div class="f"><div class="lb">Pojemność cm3</div><input id="capacity" type="number" placeholder="1968" class="pi2"></div><div class="f"><div class="lb">Moc KM</div><input id="power" type="number" placeholder="140" class="pi2"></div></div>
@@ -134,10 +155,11 @@ const MODELS = {"Skoda": ["Octavia", "Fabia", "Superb", "Kodiaq", "Karoq", "Kami
 const U='https://bdpydgsfowtuvjnkyeeg.supabase.co', K='sb_publishable_S1qH_mBZaX7-bzmfJ0IVGA_6hxGbJWd';
 let supa=null, ls=[], filtered=[], ai=[], editImgs=[], currentEditId=null, currentUser=null;
 const $=id=>document.getElementById(id);
+function populateBrands(){ const b=document.getElementById('brand'); if(!b) return; const brands=Object.keys(MODELS).sort(); const cur=b.value; b.innerHTML='<option value="">Wszystkie marki</option>'+brands.map(x=>`<option value="${x}">${x}</option>`).join('')+'<option value="Inny">Inny</option>'; if(cur) b.value=cur; }
 const DEMO=[
-{id:'demo1',md:'Skoda Octavia 1.9 TDI',pr:23400,lc:'Gorzyce',ds:'2008',im:['https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=400&q=60&auto=format&fm=webp']},
-{id:'demo2',md:'VW Passat B6 2.0',pr:18900,lc:'Wodzisław',im:['https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=400&q=60&auto=format&fm=webp']},
-{id:'demo3',md:'BMW 320d 2012',pr:42000,lc:'Rybnik',im:['https://images.unsplash.com/photo-1555215695-3004980ad54e?w=400&q=60&auto=format&fm=webp']},
+{id:'demo1',md:'Skoda Octavia 1.9 TDI',pr:23400,lc:'Gorzyce',ds:'Zadbana Octavia',im:['https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=400&q=60&auto=format&fm=webp'],_extra:{marka:'Skoda',model:'Octavia',generation:'II',year:'2008',mileage:'195000',capacity:'1896',power:'105',fuel:'Diesel',gear:'Manualna',body:'Kombi',color:'Srebrny',state:'Używany',origin:'Krajowy',drive:'Przedni'}},
+{id:'demo2',md:'VW Passat B6 2.0 TDI',pr:18900,lc:'Wodzisław',ds:'Passat',im:['https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=400&q=60&auto=format&fm=webp'],_extra:{marka:'Volkswagen',model:'Passat',generation:'B6',year:'2007',mileage:'220000',capacity:'1968',power:'140',fuel:'Diesel',gear:'Manualna',body:'Sedan',color:'Czarny',state:'Używany',origin:'Importowany',drive:'Przedni'}},
+{id:'demo3',md:'BMW 320d 2012',pr:42000,lc:'Rybnik',ds:'BMW',im:['https://images.unsplash.com/photo-1555215695-3004980ad54e?w=400&q=60&auto=format&fm=webp'],_extra:{marka:'BMW',model:'Seria 3',generation:'F30',year:'2012',mileage:'180000',capacity:'1995',power:'184',fuel:'Diesel',gear:'Automatyczna',body:'Sedan',color:'Biały',state:'Używany',origin:'Krajowy',drive:'Tylny'}},
 ];
 async function comp(file,maxW=800,quality=0.65){
   return new Promise(res=>{
@@ -170,22 +192,73 @@ function populateModels(brand,targetId){
   if(targetId==='model') $('modelCount').textContent=MODELS[brand].length+' modeli';}
 }
 function applyFilters(){
-  const q=($('q').value||$('q2').value||'').toLowerCase().trim();
+  const q=($('q').value||($('q2')?$('q2').value:'')||'').toLowerCase().trim();
   const brand=($('brand').value||'').toLowerCase();
   const model=($('model').value||'').toLowerCase();
   const pmin=parseInt($('pmin').value)||0; const pmax=parseInt($('pmax').value)||999999999;
   const loc=($('loc').value||'').toLowerCase();
+  const ymin=parseInt($('ymin')?.value)||0; const ymax=parseInt($('ymax')?.value)||9999;
+  const kmin=parseInt($('kmin')?.value)||0; const kmax=parseInt($('kmax')?.value)||9999999;
+  const powmin=parseInt($('powmin')?.value)||0; const powmax=parseInt($('powmax')?.value)||9999;
+  const capmin=parseInt($('capmin')?.value)||0; const capmax=parseInt($('capmax')?.value)||99999;
+  const body=($('body')?.value||'').toLowerCase();
+  const color=($('color')?.value||'').toLowerCase();
+  const state=($('state')?.value||'').toLowerCase();
+  const origin=($('origin')?.value||'').toLowerCase();
+  const drive=($('drive')?.value||'').toLowerCase();
+  const fuelEl=document.querySelector('#fuelFilters .chip.active');
+  const fuel=fuelEl?fuelEl.dataset.fuel.toLowerCase():'';
+  const gearEl=document.querySelector('#gearFilters .chip.active');
+  const gear=gearEl?gearEl.dataset.gear.toLowerCase():'';
   filtered=ls.filter(x=>{
-    if(q && !x.md.toLowerCase().includes(q) && !x.ds.toLowerCase().includes(q)) return false;
+    if(q && !x.md.toLowerCase().includes(q) && !(x.ds||'').toLowerCase().includes(q)) return false;
     if(x.is_banned) return false;
     if(x.is_hidden) return false;
-    if(brand && !x.md.toLowerCase().includes(brand)) return false;
-    if(model && !x.md.toLowerCase().includes(model)) return false;
+    if(brand && !x.md.toLowerCase().includes(brand) && (x._extra?.marka||'').toLowerCase()!==brand) return false;
+    if(model && !x.md.toLowerCase().includes(model) && (x._extra?.model||'').toLowerCase()!==model) return false;
     if(x.pr<pmin || x.pr>pmax) return false;
     if(loc && !x.lc.toLowerCase().includes(loc)) return false;
+    const ex=x._extra||x.extra||{};
+    const yr=parseInt(ex.year||0); if(ymin && yr && yr<ymin) return false; if(ymax && ymax!==9999 && yr && yr>ymax) return false;
+    const km=parseInt(ex.mileage||0); if(kmin && km && km<kmin) return false; if(kmax && kmax!==9999999 && km && km>kmax) return false;
+    const pw=parseInt(ex.power||0); if(powmin && pw && pw<powmin) return false; if(powmax && powmax!==9999 && pw && pw>powmax) return false;
+    const cap=parseInt(ex.capacity||0); if(capmin && cap && cap<capmin) return false; if(capmax && capmax!==99999 && cap && cap>capmax) return false;
+    if(fuel && ex.fuel && ex.fuel.toLowerCase()!==fuel) return false;
+    if(gear && ex.gear && ex.gear.toLowerCase()!==gear) return false;
+    if(body && ex.body && ex.body.toLowerCase()!==body) return false;
+    if(color && ex.color && ex.color.toLowerCase()!==color) return false;
+    if(state && ex.state && ex.state.toLowerCase()!==state) return false;
+    if(origin && ex.origin && ex.origin.toLowerCase()!==origin) return false;
+    if(drive && ex.drive && ex.drive.toLowerCase()!==drive) return false;
     return true;
   }); rn();
 }
+function setupChipsPro(){
+  document.querySelectorAll('#fuelFilters .chip').forEach(b=>{
+    b.addEventListener('click', function(){
+      const wasActive=this.classList.contains('active');
+      document.querySelectorAll('#fuelFilters .chip').forEach(x=>x.classList.remove('active'));
+      if(!wasActive) this.classList.add('active');
+      applyFilters();
+    });
+  });
+  document.querySelectorAll('#gearFilters .chip').forEach(b=>{
+    b.addEventListener('click', function(){
+      const wasActive=this.classList.contains('active');
+      document.querySelectorAll('#gearFilters .chip').forEach(x=>x.classList.remove('active'));
+      if(!wasActive) this.classList.add('active');
+      applyFilters();
+    });
+  });
+  const more=document.getElementById('moreFilters');
+  const icon=document.getElementById('moreIcon');
+  if(more){ more.addEventListener('toggle', ()=>{ if(icon) icon.textContent=more.open?'▲ Zwiń':'▼ Rozwiń'; }); }
+  const collapseBtn=document.getElementById('collapseBtn');
+  if(collapseBtn){ collapseBtn.addEventListener('click', ()=>{ if(more) more.open=false; if(icon) icon.textContent='▼ Rozwiń'; }); }
+  const clearBtn=document.getElementById('clear');
+  if(clearBtn){ clearBtn.addEventListener('click', ()=>{ setTimeout(()=>{ document.querySelectorAll('.chip.active').forEach(x=>x.classList.remove('active')); if(more) more.open=false; if(icon) icon.textContent='▼ Rozwiń'; }, 50); }); }
+}
+
 
 
 // FIX: Strzałka wstecz z telefonu - cofa do początku ogłoszenia, nie zamyka strony
@@ -274,7 +347,7 @@ async function od(item){
   $('editBtn').style.display='none'; // ukryty domyślnie - fix dla użytkownika
   if(mine){ $('editBtn').style.display='inline-flex'; $('editBtn').classList.add('owner'); $('editBtn').textContent='✏️ Edytuj'; $('editBtn').style.background='#e6f7f5'; } else { $('editBtn').style.display='none'; $('editBtn').classList.remove('owner'); }
   
-  // Build full params table -  style
+  // Build full params table - OTOMOTO style
   const ex=item._extra||item.extra||{};
   const params = [
     ['Marka', ex.marka || (item.md||'').split(' ')[0] || '-'],
@@ -306,7 +379,7 @@ async function od(item){
         </div>
       `).join('')}
     </div>
-    ${params.filter(([k,v])=>!v || v==='-').length>0 ? `` : ''}
+    ${params.filter(([k,v])=>!v || v==='-').length>0 ? `<div style="margin-top:6px;font-size:11px;color:#9ca3af">Brak: ${params.filter(([k,v])=>!v || v==='-').map(([k,v])=>k).join(', ')}</div>` : ''}
   `;
 
   dc.innerHTML=`
@@ -322,11 +395,11 @@ async function od(item){
       <div id="viewCounterDetail" style="display:none" style="display:none" style="font-size:12px;color:#002f34;font-weight:700;margin-top:6px;background:#e6f7f5;padding:6px 10px;border-radius:6px;display:inline-block">👁️ 0 wyświetleń</div><div style="font-size:12px;color:#6b7280;margin-top:6px">📍 ${item.lc || '-'} • ${ims.length} zdjęć • przesuwaj palcem ↔️ • swipe działa</div>
       
       <div style="margin-top:16px;background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px">
-        <div style="font-weight:800;font-size:13px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center"><span>📋 Dane techniczne</span><span style="font-size:10px;color:#6b7280;font-weight:400"></span></div>
+        <div style="font-weight:800;font-size:13px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center"><span>📋 Dane techniczne</span><span style="font-size:10px;color:#6b7280;font-weight:400">OTOMOTO</span></div>
         ${paramsHtml}
       </div>
 
-      ${(item.ds && item.ds.trim() && !item.ds.includes('{') )? `<div style="margin-top:12px;background:#f7f8f9;padding:14px;border-radius:10px"><div style="font-weight:700;font-size:13px;margin-bottom:6px">Opis</div><div style="font-size:13px;line-height:1.5;white-space:pre-wrap">${item.ds.replace(/__OTOMOTO__.*/, '').replace(/__DATA__.*/, '').trim()}</div></div>` : ''}
+      ${item.ds?`<div style="margin-top:12px;background:#f7f8f9;padding:14px;border-radius:10px"><div style="font-weight:700;font-size:13px;margin-bottom:6px">Opis</div><div style="font-size:13px;line-height:1.5;white-space:pre-wrap">${item.ds}</div></div>`:''}
 
       ${mine?`<div style="margin-top:12px;background:#e6f7f5;padding:10px;border-radius:8px;font-size:12px;color:#065f46">✅ To Twoje ogłoszenie - możesz edytować wszystkie parametry i zdjęcia bez potwierdzania przyciskiem Edytuj</div>`:''}
     </div>
@@ -369,7 +442,7 @@ $('editBtn').onclick=()=>{ // ZAWSZE pozwala edytować - fix
   
   $('formTitle').textContent='✏️ Edytuj ogłoszenie - właściciel';
   $('titleFull').value=item.md; $('pr').value=item.pr; $('lc').value=item.lc; 
-  $('ds').value=(item.ds||'').split('____')[0];
+  $('ds').value=(item.ds||'').split('__OTOMOTO__')[0];
   try{
     const ex=item._extra||item.extra||{};
     if(ex.marka) $('mk').value=ex.marka;
@@ -418,8 +491,8 @@ $('af').onsubmit=async e=>{
     origin: document.getElementById('origin')?.value || '',
     country: document.getElementById('country')?.value || ''
   };
-  const cleanDesc=($('ds').value||'').split('____')[0].slice(0,800);
-  const fullDesc=cleanDesc+'____'+JSON.stringify(extra);
+  const cleanDesc=($('ds').value||'').split('__OTOMOTO__')[0].slice(0,800);
+  const fullDesc=cleanDesc+'__OTOMOTO__'+JSON.stringify(extra);
   const pl={title:$('titleFull').value.trim().slice(0,120),description:fullDesc,price:parseInt($('pr').value)||0,location:$('lc').value.trim().slice(0,50)};
 
   if(currentUser) pl.user_id=currentUser.id;
@@ -471,9 +544,9 @@ async function loadReal(){
   const real=data.map(r=>{
       let ds=r.description||'';
       let extra={};
-      if(ds.includes('____')){
+      if(ds.includes('__OTOMOTO__')){
         try{
-          const parts=ds.split('____');
+          const parts=ds.split('__OTOMOTO__');
           ds=parts[0].trim();
           extra=JSON.parse(parts[1]||'{}');
         }catch(e){}
@@ -515,8 +588,8 @@ async function loadReal(){
   }
 })();
 
-function init(){
-  ls=DEMO;rn();
+function init(){ setTimeout(setupChipsPro, 500);
+  ls=DEMO; setTimeout(setupChipsPro, 300); rn();
   const s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js';s.async=true;
   s.onload=()=>{supa=window.supabase.createClient(U,K);loadReal();};document.head.appendChild(s);
 }
