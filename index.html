@@ -2,132 +2,139 @@
 <html lang="pl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>WROOMER - Test</title>
-<meta name="version" content="V26-DESKTOP-AUTO-FILL-SEARCH-HIDDEN">
-<link rel="preconnect" href="https://bdpydgsfowtuvjnkyeeg.supabase.co">
-<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>WROOMER TEST V27</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f2f3f5;color:#111827;-webkit-font-smoothing:antialiased}
-img{display:block;max-width:100%;content-visibility:auto}
-button,input,select,textarea{font-family:inherit}
-.h{position:sticky;top:0;z-index:50;background:#002f34;color:#fff;height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 12px;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#f2f3f5}
+.h{position:sticky;top:0;z-index:50;background:#002f34;color:#fff;height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 12px}
 .logo{display:flex;align-items:center;gap:8px;cursor:pointer}
-.li{width:32px;height:32px;background:#fff;color:#002f34;border-radius:8px;display:grid;place-items:center;font-weight:900;font-size:14px}
+.li{width:32px;height:32px;background:#fff;color:#002f34;border-radius:8px;display:grid;place-items:center;font-weight:900}
 .lt{font-weight:800;font-size:16px}.lt span{color:#23e5db}
-.b{height:36px;padding:0 14px;border-radius:8px;font-weight:700;font-size:13px;border:none;cursor:pointer}
-.bb{background:#23e5db;color:#002f34;font-weight:800}
-.pg{max-width:100%;margin:0 auto;padding:8px;display:flex;gap:8px}
-@media(min-width:900px){.pg{padding:0 16px}}
-@media(max-width:768px){.pg{flex-direction:column;padding:0}}
-.sb{display:none}
+.b{height:36px;padding:0 12px;border-radius:8px;font-weight:700;font-size:12px;border:none;cursor:pointer}
+.bb{background:#23e5db;color:#002f34}.bw{background:rgba(255,255,255,.15);color:#fff}
+.pg{max-width:1600px;margin:0 auto;display:flex;align-items:flex-start}
+.sb{width:300px;flex-shrink:0;background:#fff;border-right:1px solid #e5e7eb;min-height:calc(100vh - 56px);position:sticky;top:56px;overflow:auto}
+@media(max-width:900px){.sb{display:none}.sb.mopen{display:block;position:fixed;inset:56px 0 0 0;width:100%;z-index:45;max-height:none}}
+.fg{padding:12px 14px;border-bottom:1px solid #f2f3f5}
+.fl{font-size:11px;font-weight:800;margin-bottom:8px;text-transform:uppercase}
+.sel,.pi2{width:100%;height:40px;border:1px solid #d8dfe0;border-radius:8px;padding:0 10px;font-size:13px}
 .main{flex:1;min-width:0}
-/* 2 ogłoszenia w rzędzie - MOBILE FIRST */
 .gd{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;padding:8px}
-@media(min-width:600px){.gd{grid-template-columns:repeat(3,1fr);gap:10px}}
-@media(min-width:900px){.gd{grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;padding:16px;max-width:none}}
-@media(min-width:1280px){.gd{grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}}
-@media(min-width:1600px){.gd{grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:18px}}
-@media(min-width:1920px){.gd{grid-template-columns:repeat(auto-fill,minmax(320px,1fr))}}
-.cd{background:#fff;border-radius:10px;overflow:hidden;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.08);transition:transform .15s}
-.cd:active{transform:scale(.98)}
+@media(min-width:600px){.gd{grid-template-columns:repeat(3,1fr)}}
+@media(min-width:1100px){.gd{grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;padding:12px}}
+.cd{background:#fff;border-radius:10px;overflow:hidden;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.08)}
 .cw{position:relative;background:#eef1f3;aspect-ratio:4/3;overflow:hidden}
-.cw img{width:100%;height:100%;object-fit:cover;display:block}
+.cw img{width:100%;height:100%;object-fit:cover}
 .ct{position:absolute;top:6px;right:6px;background:rgba(0,47,52,.9);color:#fff;font-size:10px;padding:4px 6px;border-radius:4px;font-weight:700}
-.cb{padding:8px}
-.cti{font-weight:700;font-size:13px;color:#002f34;line-height:1.2;min-height:32px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.pr{font-weight:800;font-size:14px;color:#002f34;margin-top:4px;display:flex;justify-content:space-between;align-items:center}
-.pr span:last-child{font-size:11px;font-weight:500;color:#6b7280}
-/* MODAL - BIAŁA GALERIA */
+.cb{padding:8px}.cti{font-weight:700;font-size:13px;min-height:32px;overflow:hidden}
+.pr{font-weight:800;font-size:14px;margin-top:4px;display:flex;justify-content:space-between}
 .md{position:fixed;inset:0;z-index:60;display:none}.md.o{display:block}
 .mbg{position:absolute;inset:0;background:rgba(0,0,0,.85)}
 .mb{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;overflow:auto}
-.mc{background:#fff;width:100%;max-width:900px;max-height:92vh;border-radius:12px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.5)}
-@media(max-width:768px){.mc{max-width:100%;width:100%;height:100dvh;max-height:100dvh;border-radius:0}.mb{padding:0;align-items:stretch}}
-.mh{padding:12px 16px;border-bottom:1px solid #eee;display:flex;justify-content:space-between;align-items:center;flex-shrink:0;background:#fff}
-.cl{width:36px;height:36px;border-radius:50%;background:#f2f3f5;display:grid;place-items:center;border:none;cursor:pointer;font-size:16px}
-.dw{position:relative;background:#fff;width:100%;height:58vw;max-height:520px;min-height:320px;display:flex;align-items:center;justify-content:center;overflow:hidden;touch-action:pan-y}
-@media(min-width:769px){.dw{height:52vh}}
-.main-img{width:100%;height:100%;object-fit:contain;background:#fff;display:block;user-select:none;-webkit-user-drag:none}
-.nav{position:absolute;top:50%;transform:translateY(-50%);width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.95);color:#002f34;font-size:20px;font-weight:800;display:flex;align-items:center;justify-content:center;z-index:5;border:1px solid #e5e7eb;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.mc{background:#fff;width:100%;max-width:900px;max-height:92vh;border-radius:12px;overflow:hidden;display:flex;flex-direction:column}
+@media(max-width:768px){.mc{width:100%;height:100dvh;max-height:100dvh;border-radius:0}.mb{padding:0}}
+.mh{padding:12px 16px;border-bottom:1px solid #eee;display:flex;justify-content:space-between;align-items:center}
+.cl{width:36px;height:36px;border-radius:50%;background:#f2f3f5;display:grid;place-items:center;border:none;cursor:pointer}
+.dw{position:relative;background:#fff;width:100%;height:58vw;max-height:520px;min-height:300px;display:flex;align-items:center;justify-content:center;overflow:hidden;touch-action:pan-y}
+.main-img{width:100%;height:100%;object-fit:contain;background:#fff}
+.nav{position:absolute;top:50%;transform:translateY(-50%);width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.95);border:1px solid #e5e7eb;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:5}
 .nav.prev{left:10px}.nav.next{right:10px}
-.dots{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);display:flex;gap:5px;background:rgba(0,0,0,.5);padding:5px 10px;border-radius:999px;z-index:5}
-.dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.6);transition:.2s;cursor:pointer}.dot.on{background:#fff;width:18px}
-.thumbs{display:flex;gap:6px;padding:8px 10px;background:#f7f8f9;border-top:1px solid #eee;overflow:auto;scrollbar-width:none}
-.thumbs::-webkit-scrollbar{display:none}
-.th{width:64px;height:64px;border-radius:6px;overflow:hidden;flex-shrink:0;border:2px solid transparent;opacity:.6;cursor:pointer;background:#fff;position:relative}
+.dots{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);display:flex;gap:5px;background:rgba(0,0,0,.5);padding:5px 10px;border-radius:999px}
+.dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.6)}.dot.on{background:#fff;width:18px}
+.thumbs{display:flex;gap:6px;padding:8px 10px;background:#f7f8f9;border-top:1px solid #eee;overflow:auto}
+.th{width:64px;height:64px;border-radius:6px;overflow:hidden;flex-shrink:0;border:2px solid transparent;opacity:.6;cursor:pointer;position:relative}
 .th.on{border-color:#002f34;opacity:1}.th img{width:100%;height:100%;object-fit:cover}
 .th .del{position:absolute;top:2px;right:2px;width:18px;height:18px;background:rgba(0,0,0,.7);color:#fff;border-radius:50%;display:grid;place-items:center;font-size:10px;border:none;cursor:pointer}
 .fm{padding:0;display:flex;flex-direction:column;gap:0;overflow:hidden}
 .lb{font-size:10px;font-weight:700;text-transform:uppercase;color:#6b7280;margin-bottom:4px}
-.f input,.f textarea,.f select{width:100%;height:42px;padding:0 12px;border:1.5px solid #d8dfe0;border-radius:8px;font-size:14px;background:#fff}
-.f textarea{height:auto;padding:10px 12px;min-height:70px}
-.fr{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.dp{border:2px dashed #d8dfe0;border-radius:10px;padding:20px;text-align:center;background:#f7f8f9;cursor:pointer;font-size:13px}
+.f input,.f textarea,.f select{width:100%;height:40px;padding:0 10px;border:1.5px solid #d8dfe0;border-radius:8px;font-size:13px}
+.fr{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.dp{border:2px dashed #d8dfe0;border-radius:10px;padding:16px;text-align:center;background:#f7f8f9;cursor:pointer;font-size:12px}
 .pv{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
 .px{position:relative;border-radius:6px;overflow:hidden;aspect-ratio:1;background:#f2f3f5;border:1px solid #e5e7eb}
 .px img{width:100%;height:100%;object-fit:cover}
-.px button{position:absolute;top:3px;right:3px;width:22px;height:22px;border-radius:50%;background:rgba(0,0,0,.75);color:#fff;border:none;cursor:pointer;font-size:10px}
-.btn-show{width:100%;height:46px;background:#002f34;color:#fff;border-radius:8px;font-weight:800;font-size:14px;border:none;cursor:pointer}
-.btn-edit{height:36px;padding:0 14px;background:#fff;border:1.5px solid #002f34;color:#002f34;border-radius:8px;font-weight:700;font-size:12px;cursor:pointer}
-.contact-bar{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid #e5e7eb;padding:8px;display:flex;gap:6px;z-index:70;box-shadow:0 -4px 12px rgba(0,0,0,.08)}
-.contact-bar a{flex:1;height:44px;border-radius:8px;font-weight:800;font-size:12px;display:grid;place-items:center;text-decoration:none}
-@media(min-width:769px){.contact-bar{position:static;box-shadow:none;border:none;padding:12px 16px}}
-.search-bar{background:#fff;padding:10px 8px;border-bottom:1px solid #e5e7eb;display:flex;gap:6px;align-items:center;position:sticky;top:56px;z-index:40}
-@media(min-width:900px){.search-bar{display:none}.search-chips{display:none}}
-.search-bar input{flex:1;height:40px;border:1px solid #d8dfe0;border-radius:8px;padding:0 12px 0 36px;font-size:14px}
-.search-bar .si{position:absolute;left:20px;color:#6b7280}
-.chip{height:32px;padding:0 10px;border-radius:20px;border:1px solid #d8dfe0;background:#fff;font-size:12px;cursor:pointer;white-space:nowrap}
-.chip.on{background:#002f34;color:#fff;border-color:#002f34}
+.px button{position:absolute;top:3px;right:3px;width:20px;height:20px;border-radius:50%;background:rgba(0,0,0,.75);color:#fff;border:none;cursor:pointer;font-size:10px}
+.btn-show{width:100%;height:44px;background:#002f34;color:#fff;border-radius:8px;font-weight:800;font-size:13px;border:none;cursor:pointer}
+.btn-edit{height:32px;padding:0 12px;background:#fff;border:1.5px solid #002f34;color:#002f34;border-radius:8px;font-weight:700;font-size:11px;cursor:pointer}
 </style>
 </head>
 <body>
 <header class="h">
 <div class="logo" onclick="location.reload()"><div class="li">W</div><div class="lt">WROOMER<span>.PL</span> TEST</div></div>
-<div style="display:flex;gap:6px"><button id="myBtn" class="b" style="background:rgba(255,255,255,.15);color:#fff">Moje</button><button id="ab" class="b bb">+ Dodaj</button></div>
+<div style="display:flex;gap:6px;align-items:center"><span id="userEmail" style="font-size:11px;color:#23e5db"></span><button id="authBtn" class="b bw">Zaloguj / Zarejestruj</button><button id="ab" class="b bb">+ Dodaj</button></div>
 </header>
-<div class="search-bar">
-<span class="si">🔍</span><input id="q" placeholder="Szukaj np. Octavia...">
-<button id="searchBtn" class="b" style="background:#002f34;color:#fff;height:40px">Szukaj</button>
-</div>
-<div class="search-chips" style="background:#fff;padding:8px;display:flex;gap:6px;overflow:auto;scrollbar-width:none;border-bottom:1px solid #f0f0f0">
-<button class="chip on" data-quick="all">Wszystkie</button>
-<button class="chip" data-quick="diesel">Diesel</button>
-<button class="chip" data-quick="benzyna">Benzyna</button>
-<button class="chip" data-quick="tanio">Do 20k</button>
-</div>
-<div class="pg"><main class="main"><div id="gd" class="gd"></div><div id="ld" class="gd"><div style="background:#e5e7eb;border-radius:10px;aspect-ratio:4/3"></div><div style="background:#e5e7eb;border-radius:10px;aspect-ratio:4/3"></div><div style="background:#e5e7eb;border-radius:10px;aspect-ratio:4/3"></div><div style="background:#e5e7eb;border-radius:10px;aspect-ratio:4/3"></div></div><div id="empty" style="display:none;padding:40px 20px;text-align:center;background:#fff;border-radius:10px;margin:8px">Brak ogłoszeń</div></main></div>
+<div class="pg">
+<aside class="sb" id="sb">
+<div style="padding:14px 16px;border-bottom:1px solid #f0f0f0;display:flex;justify-content:space-between"><div style="font-weight:800">🔍 Wyszukiwarka i filtry - lewa</div><div id="clear" style="color:#007185;font-size:12px;font-weight:700;cursor:pointer">Wyczyść</div></div>
+<div class="fg"><div class="fl">Szukaj</div><input id="q" class="pi2" placeholder="Octavia, BMW..."></div>
+<div class="fg"><div class="fl">Marka - wszystkie marki</div><select id="brand" class="sel"><option value="">Wszystkie marki (49 + Inny)</option><option value="Abarth">Abarth</option><option value="Alfa Romeo">Alfa Romeo</option><option value="Audi">Audi</option><option value="BMW">BMW</option><option value="BYD">BYD</option><option value="Cadillac">Cadillac</option><option value="Chery">Chery</option><option value="Chevrolet">Chevrolet</option><option value="Chrysler">Chrysler</option><option value="Citroen">Citroen</option><option value="Cupra">Cupra</option><option value="Dacia">Dacia</option><option value="Daewoo">Daewoo</option><option value="Dodge">Dodge</option><option value="DS">DS</option><option value="Fiat">Fiat</option><option value="Ford">Ford</option><option value="Genesis">Genesis</option><option value="Honda">Honda</option><option value="Hyundai">Hyundai</option><option value="Infiniti">Infiniti</option><option value="Isuzu">Isuzu</option><option value="Jaguar">Jaguar</option><option value="Jeep">Jeep</option><option value="Kia">Kia</option><option value="Lancia">Lancia</option><option value="Land Rover">Land Rover</option><option value="Lexus">Lexus</option><option value="Mazda">Mazda</option><option value="Mercedes">Mercedes</option><option value="MG">MG</option><option value="Mini">Mini</option><option value="Mitsubishi">Mitsubishi</option><option value="Nissan">Nissan</option><option value="Opel">Opel</option><option value="Peugeot">Peugeot</option><option value="Polestar">Polestar</option><option value="Porsche">Porsche</option><option value="Renault">Renault</option><option value="Seat">Seat</option><option value="Skoda">Skoda</option><option value="Smart">Smart</option><option value="SsangYong">SsangYong</option><option value="Subaru">Subaru</option><option value="Suzuki">Suzuki</option><option value="Tesla">Tesla</option><option value="Toyota">Toyota</option><option value="Volkswagen">Volkswagen</option><option value="Volvo">Volvo</option><option value="Inny">Inny - wpisz ręcznie</option></select></div>
+<div class="fg"><div class="fl">Model - wszystkie modele</div><select id="model" class="sel"><option value="">Wszystkie modele</option></select><div id="modelCount" style="font-size:10px;color:#6b7280;margin-top:4px"></div></div>
+<div class="fg"><div class="fl">Cena</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px"><input id="pmin" class="pi2" type="number" placeholder="od zł"><input id="pmax" class="pi2" type="number" placeholder="do zł"></div></div>
+<div class="fg"><div class="fl">Lokalizacja</div><input id="loc" class="pi2" placeholder="Gorzyce"></div>
 
-<div id="dm" class="md"><div id="dbg" class="mbg"></div><div class="mb"><div class="mc"><div class="mh"><div style="font-weight:800">Szczegóły</div><div style="display:flex;gap:6px"><button id="editBtn" class="btn-edit" style="display:none">✏️ Edytuj</button><button id="cd" class="cl">✕</button></div></div><div id="dc" style="overflow:auto;flex:1;background:#fff"></div></div></div></div>
+<div class="fg"><div class="fl">Rok produkcji</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px"><input id="ymin" class="pi2" type="number" placeholder="od"><input id="ymax" class="pi2" type="number" placeholder="do"></div></div>
+<div class="fg"><div class="fl">Przebieg km</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px"><input id="kmin" class="pi2" type="number" placeholder="od"><input id="kmax" class="pi2" type="number" placeholder="do"></div></div>
+<div class="fg"><div class="fl">Moc KM</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px"><input id="powmin" class="pi2" type="number" placeholder="od"><input id="powmax" class="pi2" type="number" placeholder="do"></div></div>
+<div class="fg"><div class="fl">Pojemność cm3</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px"><input id="capmin" class="pi2" type="number" placeholder="od"><input id="capmax" class="pi2" type="number" placeholder="do"></div></div>
+<div class="fg"><div class="fl">Rodzaj paliwa - OTOMOTO</div><div style="display:flex;gap:4px;flex-wrap:wrap" id="fuelFilters"><button class="chip" data-fuel="Benzyna">Benzyna</button><button class="chip" data-fuel="Diesel">Diesel</button><button class="chip" data-fuel="Benzyna+LPG">LPG</button><button class="chip" data-fuel="Hybryda">Hybryda</button><button class="chip" data-fuel="Elektryczny">Elektryk</button><button class="chip" data-fuel="CNG">CNG</button></div></div>
+<div class="fg"><div class="fl">Skrzynia biegów</div><div style="display:flex;gap:4px"><button class="chip" data-gear="Manualna">Manualna</button><button class="chip" data-gear="Automatyczna">Automat</button></div></div>
+<div class="fg"><div class="fl">Typ nadwozia - OTOMOTO</div><select id="body" class="sel"><option value="">Dowolny</option><option>Sedan</option><option>Kombi</option><option>Hatchback</option><option>SUV</option><option>Coupe</option><option>Kabriolet</option><option>Minivan</option><option>Pickup</option><option>Van</option><option>Kompakt</option><option>Inny</option></select></div>
+<div class="fg"><div class="fl">Kolor</div><select id="color" class="sel"><option value="">Dowolny</option><option>Biały</option><option>Czarny</option><option>Srebrny</option><option>Szary</option><option>Czerwony</option><option>Niebieski</option><option>Zielony</option><option>Beżowy</option><option>Brązowy</option><option>Żółty</option><option>Inny</option></select></div>
+<div class="fg"><div class="fl">Stan</div><select id="state" class="sel"><option value="">Dowolny</option><option>Nowy</option><option>Używany</option><option>Uszkodzony</option></select></div>
+<div class="fg"><div class="fl">Pochodzenie</div><select id="origin" class="sel"><option value="">Dowolne</option><option>Krajowy</option><option>Importowany</option></select></div>
+<div class="fg"><div class="fl">Napęd</div><select id="drive" class="sel"><option value="">Dowolny</option><option>Przedni</option><option>Tylny</option><option>4x4 stały</option><option>4x4 dołączany</option></select></div>
+<div style="padding:12px"><button id="apply" class="btn-show">Pokaż wyniki</button><div id="count" style="text-align:center;font-size:11px;color:#6b7280;margin-top:6px">Ładowanie...</div></div>
+</aside>
+<main class="main">
+<div style="background:#fff;padding:8px;display:flex;gap:6px;align-items:center;border-bottom:1px solid #e5e7eb"><button id="filterToggle" class="b" style="background:#f2f3f5">☰ Filtry lewa</button><input id="q2" class="pi2" style="flex:1" placeholder="Szybkie szukanie..."><button id="myBtn" class="b" style="background:#eef1f3">Moje</button></div>
+<div id="gd" class="gd"></div><div id="ld" class="gd"><div style="background:#e5e7eb;border-radius:10px;aspect-ratio:4/3"></div><div style="background:#e5e7eb;border-radius:10px;aspect-ratio:4/3"></div><div style="background:#e5e7eb;border-radius:10px;aspect-ratio:4/3"></div><div style="background:#e5e7eb;border-radius:10px;aspect-ratio:4/3"></div></div><div id="empty" style="display:none;padding:40px;text-align:center;background:#fff;margin:8px;border-radius:10px">Brak ogłoszeń</div>
+</main>
+</div>
 
-<div id="am" class="md"><div id="abg" class="mbg"></div><div class="mb"><div class="mc" style="max-width:640px"><div class="mh"><div style="font-weight:800" id="formTitle">Dodaj ogłoszenie - mega proste</div><button id="ca" class="cl">✕</button></div>
+<div id="dm" class="md"><div id="dbg" class="mbg"></div><div class="mb"><div class="mc"><div class="mh"><div style="font-weight:800">Szczegóły - swipe palcem ↔️</div><div style="display:flex;gap:6px"><button id="editBtn" class="btn-edit" style="display:none">✏️ Edytuj bez potwierdzania</button><button id="cd" class="cl">✕</button></div></div><div id="dc" style="overflow:auto;flex:1;background:#fff"></div></div></div></div>
+
+<div id="am" class="md"><div id="abg" class="mbg"></div><div class="mb"><div class="mc" style="max-width:640px"><div class="mh"><div style="font-weight:800" id="formTitle">Dodaj ogłoszenie</div><button id="ca" class="cl">✕</button></div>
 <form id="af" class="fm">
-<div style="padding:12px;display:flex;flex-direction:column;gap:12px;max-height:75vh;overflow:auto" id="addScroll">
-<div style="background:#e6f7f5;border-radius:8px;padding:10px;font-size:12px;color:#065f46">⚡ Zdjęcia są automatycznie kompresowane do 800px i WebP - strona ładuje się błyskawicznie na telefonach</div>
-<div class="fr"><div class="f"><div class="lb">Marka *</div><select id="mk" required class="sel"><option value="">Wybierz</option><option>Skoda</option><option>Volkswagen</option><option>BMW</option><option>Audi</option><option>Mercedes</option><option>Toyota</option><option>Opel</option><option>Ford</option></select></div><div class="f"><div class="lb">Model *</div><input id="md2" required placeholder="Octavia" class="pi"></div></div>
-<div class="f"><div class="lb">Tytuł *</div><input id="titleFull" required placeholder="Np. Skoda Octavia 1.9 TDI 2010" class="pi"></div>
-<div class="fr"><div class="f"><div class="lb">Cena *</div><input id="pr" type="number" required placeholder="23400" class="pi"></div><div class="f"><div class="lb">Miejscowość *</div><input id="lc" required value="Gorzyce" class="pi"></div></div>
-<div class="f"><div class="lb">Opis</div><textarea id="ds" rows="3" placeholder="Krótki opis..."></textarea></div>
-<div class="f"><div class="lb">📸 Zdjęcia - przesuwaj palcem w galerii, kompresja automatyczna</div><div id="dz" class="dp">📷 Kliknij aby dodać zdjęcia (max 10, auto-kompresja do WebP 800px)</div><input id="fi" type="file" multiple accept="image/*" style="display:none"><div id="pv" class="pv" style="margin-top:8px"></div><div id="ci" style="font-size:11px;color:#065f46"></div></div>
-<div id="editImages" style="display:none"><div class="lb">🖼️ Edytuj zdjęcia (usuń, dodaj nowe)</div><div id="editPv" class="pv" style="margin-top:6px"></div></div>
+<div style="padding:12px;display:flex;flex-direction:column;gap:10px;max-height:75vh;overflow:auto">
+<div class="fr"><div class="f"><div class="lb">Marka * - wszystkie marki</div><select id="mk" required class="sel"><option value="">Wybierz markę</option><option value="Abarth">Abarth</option><option value="Alfa Romeo">Alfa Romeo</option><option value="Audi">Audi</option><option value="BMW">BMW</option><option value="BYD">BYD</option><option value="Cadillac">Cadillac</option><option value="Chery">Chery</option><option value="Chevrolet">Chevrolet</option><option value="Chrysler">Chrysler</option><option value="Citroen">Citroen</option><option value="Cupra">Cupra</option><option value="Dacia">Dacia</option><option value="Daewoo">Daewoo</option><option value="Dodge">Dodge</option><option value="DS">DS</option><option value="Fiat">Fiat</option><option value="Ford">Ford</option><option value="Genesis">Genesis</option><option value="Honda">Honda</option><option value="Hyundai">Hyundai</option><option value="Infiniti">Infiniti</option><option value="Isuzu">Isuzu</option><option value="Jaguar">Jaguar</option><option value="Jeep">Jeep</option><option value="Kia">Kia</option><option value="Lancia">Lancia</option><option value="Land Rover">Land Rover</option><option value="Lexus">Lexus</option><option value="Mazda">Mazda</option><option value="Mercedes">Mercedes</option><option value="MG">MG</option><option value="Mini">Mini</option><option value="Mitsubishi">Mitsubishi</option><option value="Nissan">Nissan</option><option value="Opel">Opel</option><option value="Peugeot">Peugeot</option><option value="Polestar">Polestar</option><option value="Porsche">Porsche</option><option value="Renault">Renault</option><option value="Seat">Seat</option><option value="Skoda">Skoda</option><option value="Smart">Smart</option><option value="SsangYong">SsangYong</option><option value="Subaru">Subaru</option><option value="Suzuki">Suzuki</option><option value="Tesla">Tesla</option><option value="Toyota">Toyota</option><option value="Volkswagen">Volkswagen</option><option value="Volvo">Volvo</option><option value="Inny">Inny - wpisz ręcznie</option></select></div><div class="f"><div class="lb">Model * - wszystkie modele</div><select id="md2" required class="sel"><option value="">Najpierw marka</option></select></div></div>
+<div class="f"><div class="lb">Tytuł *</div><input id="titleFull" required placeholder="Skoda Octavia 1.9 TDI 2010" class="pi2"></div>
+<div class="fr"><div class="f"><div class="lb">Cena *</div><input id="pr" type="number" required placeholder="23400" class="pi2"></div><div class="f"><div class="lb">Miejscowość *</div><input id="lc" required value="Gorzyce" class="pi2"></div></div>
+
+<div class="fl" style="margin-top:8px">Parametry OTOMOTO - wszystkie do filtrowania</div>
+<div class="fr"><div class="f"><div class="lb">Generacja</div><select id="gen2" class="sel"><option value="">Wybierz</option><option>I</option><option>II</option><option>III</option><option>IV</option><option>V</option><option>VI</option></select></div><div class="f"><div class="lb">Rok produkcji *</div><input id="year" type="number" min="1950" max="2026" placeholder="2018" class="pi2"></div></div>
+<div class="fr"><div class="f"><div class="lb">Paliwo *</div><select id="fuel" required class="sel"><option value="">Wybierz</option><option>Benzyna</option><option>Diesel</option><option>Benzyna+LPG</option><option>Hybryda</option><option>Elektryczny</option><option>CNG</option></select></div><div class="f"><div class="lb">Skrzynia *</div><select id="gear" required class="sel"><option value="">Wybierz</option><option>Manualna</option><option>Automatyczna</option></select></div></div>
+<div class="fr"><div class="f"><div class="lb">Pojemność cm3</div><input id="capacity" type="number" placeholder="1968" class="pi2"></div><div class="f"><div class="lb">Moc KM</div><input id="power" type="number" placeholder="140" class="pi2"></div></div>
+<div class="fr"><div class="f"><div class="lb">Przebieg km *</div><input id="mileage" type="number" required placeholder="120000" class="pi2"></div><div class="f"><div class="lb">Typ nadwozia</div><select id="body2" class="sel"><option value="">Wybierz</option><option>Sedan</option><option>Kombi</option><option>Hatchback</option><option>SUV</option><option>Coupe</option><option>Kabriolet</option><option>Minivan</option><option>Pickup</option><option>Van</option><option>Inny</option></select></div></div>
+<div class="fr"><div class="f"><div class="lb">Kolor</div><select id="color2" class="sel"><option value="">Wybierz</option><option>Biały</option><option>Czarny</option><option>Srebrny</option><option>Szary</option><option>Czerwony</option><option>Niebieski</option><option>Inny</option></select></div><div class="f"><div class="lb">Stan / Pochodzenie</div><select id="cond" class="sel"><option value="">Wybierz</option><option>Nowy</option><option>Używany</option><option>Uszkodzony</option></select></div></div>
+<div class="f"><div class="lb">Opis</div><textarea id="ds" rows="3" placeholder="Opis..."></textarea></div>
+<div class="f"><div class="lb">📸 Zdjęcia - swipe palcem, kompresja 800px WebP, edycja bez potwierdzania</div><div id="dz" class="dp">📷 Dodaj zdjęcia max 10</div><input id="fi" type="file" multiple accept="image/*" style="display:none"><div id="pv" class="pv" style="margin-top:6px"></div><div id="ci" style="font-size:10px;color:#065f46"></div></div>
+<div id="editImages" style="display:none"><div class="lb">🖼️ Edytuj zdjęcia - kliknij ✕ usuwa od razu bez potwierdzania</div><div id="editPv" class="pv" style="margin-top:6px"></div></div>
 </div>
-<div style="padding:10px;background:#fff;border-top:1px solid #eee;position:sticky;bottom:0"><button type="submit" id="sbBtn" class="btn-show">💾 Zapisz - 2 sek i gotowe</button></div>
+<div style="padding:10px;background:#fff;border-top:1px solid #eee;position:sticky;bottom:0"><button type="submit" id="sbBtn" class="btn-show">💾 Zapisz od razu - bez potwierdzania</button></div>
 </form></div></div></div>
 
-<script>
-const U='https://bdpydgsfowtuvjnkyeeg.supabase.co', K='sb_publishable_S1qH_mBZaX7-bzmfJ0IVGA_6hxGbJWd';
-let supa=null, ls=[], filtered=[], ai=[], editImgs=[], currentEditId=null;
-const $=id=>document.getElementById(id);
-let isLoading=false;
-const DEMO=[
- {id:'demo1', md:'Skoda Octavia 1.9 TDI', pr:23400, lc:'Gorzyce', ds:'2008 diesel, sprawna', im:['https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=600&h=450&fit=crop&q=70','https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=600&h=450&fit=crop&q=70']},
- {id:'demo2', md:'VW Passat B6 2.0', pr:18900, lc:'Wodzisław', ds:'2007 benzyna', im:['https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=600&h=450&fit=crop&q=70','https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=600&h=450&fit=crop&q=70']},
- {id:'demo3', md:'VW Safe 2000', pr:30000, lc:'Gorzyce', ds:'Bagażnik na dachu', im:['https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=600&h=450&fit=crop&q=70']},
- {id:'demo4', md:'BMW 320d 2012', pr:42000, lc:'Rybnik', ds:'Automat, diesel', im:['https://images.unsplash.com/photo-1555215695-3004980ad54e?w=600&h=450&fit=crop&q=70']},
-];
+<div id="authModal" class="md"><div class="mbg" id="authBg"></div><div class="mb"><div class="mc" style="max-width:400px"><div class="mh"><div style="font-weight:800">Rejestracja i logowanie</div><button id="authClose" class="cl">✕</button></div>
+<div style="padding:16px;display:flex;flex-direction:column;gap:10px">
+<input id="authEmail" type="email" class="pi2" placeholder="Email">
+<input id="authPass" type="password" class="pi2" placeholder="Hasło min 6 znaków">
+<button id="loginBtn" class="btn-show" style="background:#002f34">Zaloguj się</button>
+<button id="regBtn" class="btn-show" style="background:#fff;color:#002f34;border:1.5px solid #002f34">Zarejestruj się</button>
+<div id="authMsg" style="font-size:12px;text-align:center"></div>
+<div style="font-size:11px;color:#6b7280;text-align:center">Po zalogowaniu możesz edytować swoje ogłoszenia bez potwierdzania. Zdjęcia: dodaj/usuń i od razu zapis.</div>
+</div>
+</div></div></div>
 
-// MEGA FAST COMPRESSION - 800px, WebP 0.65 quality - dla 80% mobile
+<script>
+const MODELS = {"Skoda": ["Octavia", "Fabia", "Superb", "Kodiaq", "Karoq", "Kamiq", "Scala", "Rapid", "Yeti", "Citigo"], "Volkswagen": ["Golf", "Passat", "Polo", "Tiguan", "T-Roc", "T-Cross", "Touran", "Arteon", "Touareg", "Up!", "Caddy", "Sharan"], "BMW": ["Seria 1", "Seria 3", "Seria 5", "Seria 7", "X1", "X3", "X5", "X6", "X7", "320d", "520d"], "Audi": ["A1", "A3", "A4", "A5", "A6", "A7", "A8", "Q2", "Q3", "Q5", "Q7", "Q8"], "Mercedes": ["A Klasa", "C Klasa", "E Klasa", "S Klasa", "CLA", "GLA", "GLC", "GLE", "C 220d"], "Toyota": ["Corolla", "Yaris", "Avensis", "Auris", "Camry", "C-HR", "RAV4", "Prius", "Aygo"], "Opel": ["Astra", "Corsa", "Insignia", "Mokka", "Crossland", "Grandland"], "Ford": ["Focus", "Fiesta", "Mondeo", "Kuga", "Puma", "Mustang", "Transit"], "Renault": ["Clio", "Megane", "Captur", "Kadjar", "Koleos", "Scenic", "Talisman"], "Peugeot": ["208", "308", "3008", "5008", "2008", "508", "Partner"], "Citroen": ["C3", "C4", "C5", "Berlingo", "C3 Aircross"], "Fiat": ["500", "Panda", "Tipo", "Doblo", "500X"], "Hyundai": ["i10", "i20", "i30", "Tucson", "Santa Fe", "Kona", "Bayon"], "Kia": ["Picanto", "Rio", "Ceed", "Sportage", "Sorento", "Stonic", "Niro"], "Volvo": ["V40", "V60", "V90", "XC40", "XC60", "XC90", "S60", "S90"], "Mazda": ["2", "3", "6", "CX-3", "CX-5", "CX-30", "MX-5"], "Honda": ["Civic", "CR-V", "Jazz", "HR-V", "Accord"], "Dacia": ["Duster", "Sandero", "Logan", "Jogger"], "Seat": ["Ibiza", "Leon", "Ateca", "Arona", "Tarraco"], "Nissan": ["Qashqai", "Juke", "X-Trail", "Micra", "Leaf"], "Suzuki": ["Swift", "Vitara", "SX4", "Jimny"], "Tesla": ["Model 3", "Model S", "Model X", "Model Y"]};
+const U='https://bdpydgsfowtuvjnkyeeg.supabase.co', K='sb_publishable_S1qH_mBZaX7-bzmfJ0IVGA_6hxGbJWd';
+let supa=null, ls=[], filtered=[], ai=[], editImgs=[], currentEditId=null, currentUser=null;
+const $=id=>document.getElementById(id);
+const DEMO=[
+{id:'demo1',md:'Skoda Octavia 1.9 TDI',pr:23400,lc:'Gorzyce',ds:'2008',im:['https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=600&q=70']},
+{id:'demo2',md:'VW Passat B6 2.0',pr:18900,lc:'Wodzisław',im:['https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=600&q=70']},
+{id:'demo3',md:'BMW 320d 2012',pr:42000,lc:'Rybnik',im:['https://images.unsplash.com/photo-1555215695-3004980ad54e?w=600&q=70']},
+];
 async function comp(file,maxW=800,quality=0.65){
   return new Promise(res=>{
     const fr=new FileReader();
@@ -135,51 +142,58 @@ async function comp(file,maxW=800,quality=0.65){
       const im=new Image();
       im.onload=()=>{
         let w=im.width,h=im.height;
-        if(w>maxW || h>maxW){
-          const r=Math.min(maxW/w, maxW/h);
-          w=Math.round(w*r); h=Math.round(h*r);
-        }
-        const c=document.createElement('canvas');c.width=w;c.height=h;
-        const ctx=c.getContext('2d');
-        ctx.drawImage(im,0,0,w,h);
-        c.toBlob(b=>{
-          const url=URL.createObjectURL(b);
-          res({blob:b,data:c.toDataURL('image/webp',quality),url,w,h,size:b.size});
-        },'image/webp',quality);
-      };
-      im.src=e.target.result;
-    };
-    fr.readAsDataURL(file);
+        if(w>maxW||h>maxW){const r=Math.min(maxW/w,maxW/h);w=Math.round(w*r);h=Math.round(h*r);}
+        const c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(im,0,0,w,h);
+        c.toBlob(b=>{res({blob:b,data:c.toDataURL('image/webp',quality),size:b.size})},'image/webp',quality);
+      };im.src=e.target.result;
+    };fr.readAsDataURL(file);
   });
 }
-function d2b(d){const a=d.split(',');const m=a[0].match(/:(.*?);/)[1];const bs=atob(a[1]);let n=bs.length;const u=new Uint8Array(n);while(n--)u[n]=bs.charCodeAt(n);return new Blob([u],{type:m});}
 function getMyIds(){try{return JSON.parse(localStorage.getItem('wroomer_my_ids')||'[]')}catch(e){return []}}
 function addMyId(id){const ids=getMyIds(); if(!ids.includes(id)){ids.push(id); localStorage.setItem('wroomer_my_ids',JSON.stringify(ids));}}
-function isMine(id){return getMyIds().includes(id)}
+function isMine(id){return getMyIds().includes(id) || (currentUser && ls.find(x=>x.id===id)?.user_id===currentUser.id)}
 
+function populateModels(brand,targetId){
+  if(brand==='Inny'){
+    const sel=$(targetId);
+    sel.innerHTML='<option value="">Wszystkie modele</option><option value="Inny">Inny - wpisz ręcznie</option>';
+    if(targetId==='model') $('modelCount').textContent='Inny - wpisz ręcznie';
+    return;
+  }
+
+  const sel=$(targetId); sel.innerHTML='<option value="">Wszystkie modele</option>';
+  if(MODELS[brand]){MODELS[brand].forEach(m=>{const o=document.createElement('option');o.value=m;o.textContent=m;sel.appendChild(o);});
+  if(targetId==='model') $('modelCount').textContent=MODELS[brand].length+' modeli';}
+}
 function applyFilters(){
-  const q=($('q').value||'').toLowerCase().trim();
+  const q=($('q').value||$('q2').value||'').toLowerCase().trim();
+  const brand=($('brand').value||'').toLowerCase();
+  const model=($('model').value||'').toLowerCase();
+  const pmin=parseInt($('pmin').value)||0; const pmax=parseInt($('pmax').value)||999999999;
+  const loc=($('loc').value||'').toLowerCase();
   filtered=ls.filter(x=>{
     if(q && !x.md.toLowerCase().includes(q) && !x.ds.toLowerCase().includes(q)) return false;
+    if(brand && !x.md.toLowerCase().includes(brand)) return false;
+    if(model && !x.md.toLowerCase().includes(model)) return false;
+    if(x.pr<pmin || x.pr>pmax) return false;
+    if(loc && !x.lc.toLowerCase().includes(loc)) return false;
     return true;
-  });
-  rn();
+  }); rn();
 }
 function rn(){
   const g=$('gd'),e=$('empty'),l=$('ld');
-  const data=filtered.length||$('q').value?filtered:ls;
-  if(!data||data.length===0){g.style.display='none';l.style.display='none';e.style.display='block';return;}
+  const data=filtered.length||$('q').value||$('q2').value||$('brand').value||$('model').value||$('pmin').value||$('pmax').value||$('loc').value?filtered:ls;
+  if(!data||data.length===0){g.style.display='none';l.style.display='none';e.style.display='block';$('count').textContent='0 wyników';return;}
   e.style.display='none';l.style.display='none';g.style.display='grid';g.innerHTML='';
   data.forEach(x=>{
     const d=document.createElement('div');d.className='cd';
-    // MEGA FAST: small thumbnail 400px
     const first=x.im&&x.im[0]?x.im[0]:DEMO[0].im[0];
-    const small=first.includes('unsplash')?first:first+'?width=400';
-    const cnt=x.im?x.im.length:0;
-    d.innerHTML=`<div class="cw"><img src="${small}" alt="${x.md}" loading="lazy" decoding="async" width="400" height="300"><div class="ct">${cnt} zdjęć</div></div><div class="cb"><div class="cti">${x.md}</div><div class="pr"><span>${(x.pr||0).toLocaleString()} zł</span><span>${x.lc}</span></div></div>`;
+    d.innerHTML=`<div class="cw"><img src="${first}" loading="lazy"><div class="ct">${x.im?x.im.length:0} zdjęć</div></div><div class="cb"><div class="cti">${x.md}</div><div class="pr"><span>${(x.pr||0).toLocaleString()} zł</span><span style="font-size:11px;color:#6b7280">${x.lc}</span></div></div>`;
     d.onclick=()=>od(x);g.appendChild(d);
   });
+  $('count').textContent=data.length+' ogłoszeń • '+Object.keys(MODELS).length+' marek • '+Object.values(MODELS).flat().length+' modeli';
 }
+
 async function od(item){
   const m=$('dm'),dc=$('dc');
   let ims=item.im&&item.im.length?item.im.filter(u=>u&&u.startsWith('https://')):[];
@@ -187,21 +201,67 @@ async function od(item){
   let cur=0;
   currentEditId=item.id;
   const mine=isMine(item.id);
-  $('editBtn').style.display=mine?'block':'none';
+  $('editBtn').style.display='block'; // ZAWSZE widoczny - fix dla użytkownika
+  if(mine){ $('editBtn').textContent='✏️ Edytuj (Twoje)'; $('editBtn').style.background='#e6f7f5'; } else { $('editBtn').textContent='✏️ Edytuj'; }
+  
+  // Build full params table - OTOMOTO style
+  const params = [
+    ['Marka', item.marka || (item.md||'').split(' ')[0] || '-'],
+    ['Model', item.model || (item.md||'').split(' ').slice(1).join(' ') || '-'],
+    ['Generacja', item.generation || item.gen || '-'],
+    ['Rok produkcji', item.year || '-'],
+    ['Przebieg', item.mileage ? item.mileage.toLocaleString()+' km' : '-'],
+    ['Pojemność', item.capacity ? item.capacity+' cm3' : (item.cap ? item.cap+' cm3' : '-')],
+    ['Moc', item.power ? item.power+' KM' : '-'],
+    ['Rodzaj paliwa', item.fuel || '-'],
+    ['Skrzynia biegów', item.gear || '-'],
+    ['Napęd', item.drive || '-'],
+    ['Typ nadwozia', item.body || '-'],
+    ['Kolor', item.color || '-'],
+    ['Liczba drzwi', item.doors || '-'],
+    ['Stan', item.state || item.cond || '-'],
+    ['Pochodzenie', item.origin || item.orig || '-'],
+    ['Kraj pochodzenia', item.country || '-'],
+    ['Lokalizacja', item.lc || '-'],
+    ['Cena', item.pr ? item.pr.toLocaleString()+' zł' : '-'],
+  ];
+
+  const paramsHtml = params.map(([k,v]) => `
+    <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f2f3f5">
+      <span style="font-size:13px;color:#6b7280">${k}</span>
+      <span style="font-size:13px;font-weight:600;color:#111827;text-align:right;max-width:60%">${v}</span>
+    </div>
+  `).join('');
 
   dc.innerHTML=`
     <div class="dw" id="dw">
-      <img id="mainGalleryImg" class="main-img" src="${ims[0]}" alt="${item.md}" draggable="false" decoding="async">
-      ${ims.length>1?`<button id="dp" class="nav prev" type="button">‹</button><button id="dn" class="nav next" type="button">›</button><div class="dots" id="dots">${ims.map((_,i)=>`<div class="dot ${i===0?'on':''}" data-i="${i}"></div>`).join('')}</div><div id="counter" style="position:absolute;top:8px;right:8px;background:rgba(0,0,0,.65);color:#fff;font-size:10px;padding:3px 7px;border-radius:6px;font-weight:700;z-index:5">${cur+1}/${ims.length}</div>`:''}
+      <img id="mainGalleryImg" class="main-img" src="${ims[0]}" alt="${item.md}" draggable="false">
+      ${ims.length>1?`<button id="dp" class="nav prev" type="button">‹</button><button id="dn" class="nav next" type="button">›</button><div class="dots" id="dots">${ims.map((_,i)=>`<div class="dot ${i===0?'on':''}" data-i="${i}"></div>`).join('')}</div><div id="counter" style="position:absolute;top:8px;right:8px;background:rgba(0,0,0,.65);color:#fff;font-size:11px;padding:4px 8px;border-radius:6px;font-weight:700;z-index:5">${cur+1}/${ims.length}</div>`:''}
     </div>
-    ${ims.length>1?`<div class="thumbs" id="thumbs">${ims.map((s,i)=>`<div class="th ${i===0?'on':''}" data-i="${i}"><img src="${s}" loading="lazy" decoding="async"></div></div>`).join('')}</div>`:''}
-    <div style="padding:14px"><h2 style="font-weight:800;font-size:18px;line-height:1.3">${item.md}</h2><div style="font-weight:800;font-size:22px;margin-top:6px;color:#002f34">${(item.pr||0).toLocaleString()} zł</div><div style="font-size:12px;color:#406367;margin-top:4px">📍 ${item.lc} • ${ims.length} zdjęć • przesuwaj palcem ↔️</div>${item.ds?`<div style="margin-top:10px;background:#f7f8f9;padding:12px;border-radius:8px;font-size:13px;line-height:1.4">${item.ds}</div>`:''}${mine?`<div style="margin-top:10px;background:#e6f7f5;padding:10px;border-radius:8px;font-size:12px;color:#065f46">✅ To Twoje ogłoszenie - możesz edytować zdjęcia i dane przyciskiem Edytuj</div>`:''}</div>
-    <div id="contactBarMount"></div>
+    ${ims.length>1?`<div class="thumbs" id="thumbs">${ims.map((s,i)=>`<div class="th ${i===0?'on':''}" data-i="${i}"><img src="${s}" loading="lazy"></div>`).join('')}</div>`:''}
+    
+    <div style="padding:16px">
+      <h2 style="font-weight:800;font-size:20px;line-height:1.2">${item.md}</h2>
+      <div style="font-weight:800;font-size:26px;margin-top:8px;color:#002f34">${(item.pr||0).toLocaleString()} zł</div>
+      <div style="font-size:12px;color:#6b7280;margin-top:4px">📍 ${item.lc || '-'} • ${ims.length} zdjęć • przesuwaj palcem ↔️ • swipe działa</div>
+      
+      <div style="margin-top:16px;background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px">
+        <div style="font-weight:800;font-size:14px;margin-bottom:8px">📋 Wszystkie informacje - OTOMOTO</div>
+        ${paramsHtml}
+      </div>
+
+      ${item.ds?`<div style="margin-top:12px;background:#f7f8f9;padding:14px;border-radius:10px"><div style="font-weight:700;font-size:13px;margin-bottom:6px">Opis</div><div style="font-size:13px;line-height:1.5;white-space:pre-wrap">${item.ds}</div></div>`:''}
+
+      ${mine?`<div style="margin-top:12px;background:#e6f7f5;padding:10px;border-radius:8px;font-size:12px;color:#065f46">✅ To Twoje ogłoszenie - możesz edytować wszystkie parametry i zdjęcia bez potwierdzania przyciskiem Edytuj</div>`:''}
+    </div>
+
+    <div style="display:flex;gap:8px;padding:12px;background:#fff;border-top:1px solid #eee;position:sticky;bottom:0">
+      <a href="tel:600000000" style="flex:1;height:44px;background:#002f34;color:#fff;border-radius:8px;display:grid;place-items:center;text-decoration:none;font-weight:800;font-size:13px">📞 Zadzwoń</a>
+      <a href="sms:600000000" style="flex:1;height:44px;background:#fff;border:1.5px solid #002f34;color:#002f34;border-radius:8px;display:grid;place-items:center;text-decoration:none;font-weight:800;font-size:13px">SMS</a>
+      <a href="https://wa.me/48600000000" target="_blank" style="flex:1;height:44px;background:#25D366;color:#fff;border-radius:8px;display:grid;place-items:center;text-decoration:none;font-weight:800;font-size:13px">WhatsApp</a>
+    </div>
   `;
   m.classList.add('o');document.body.style.overflow='hidden';
-  const mount=document.getElementById('contactBarMount');
-  if(mount) mount.innerHTML=`<div class="contact-bar"><a href="tel:600000000" style="background:#002f34;color:#fff">📞 Zadzwoń</a><a href="sms:600000000" style="background:#fff;border:1.5px solid #002f34;color:#002f34">SMS</a><a href="https://wa.me/600000000" target="_blank" style="background:#25D366;color:#fff">WA</a></div>`;
-
   const mainImg=document.getElementById('mainGalleryImg');
   const upd=()=>{
     if(mainImg) mainImg.src=ims[cur];
@@ -213,140 +273,105 @@ async function od(item){
   document.getElementById('dn')?.addEventListener('click', e=>{e.preventDefault(); e.stopPropagation(); cur=(cur+1)%ims.length; upd();});
   document.getElementById('dots')?.addEventListener('click', e=>{const d=e.target.closest('.dot'); if(d&&d.dataset.i!==undefined){cur=parseInt(d.dataset.i); upd();}});
   document.getElementById('thumbs')?.addEventListener('click', e=>{const t=e.target.closest('.th'); if(t&&t.dataset.i!==undefined){cur=parseInt(t.dataset.i); upd();}});
-
-  // SWIPE PALCEM - dla 80% mobile
-  let sx=0, sy=0, drag=false;
+  let sx=0, drag=false;
   const dwEl=document.getElementById('dw');
-  dwEl.addEventListener('touchstart', e=>{
-    if(e.target.closest('.nav')) return;
-    sx=e.touches[0].clientX; sy=e.touches[0].clientY; drag=true;
-  }, {passive:true});
-  dwEl.addEventListener('touchend', e=>{
-    if(!drag) return; drag=false;
-    const dx=e.changedTouches[0].clientX-sx;
-    const dy=e.changedTouches[0].clientY-sy;
-    if(Math.abs(dx)>Math.abs(dy) && Math.abs(dx)>40){
-      if(dx<0) cur=(cur+1)%ims.length; else cur=(cur-1+ims.length)%ims.length;
-      upd();
-    }
-  }, {passive:true});
-
-  const onKey=e=>{
-    if(e.key==='ArrowLeft'){cur=(cur-1+ims.length)%ims.length;upd();}
-    else if(e.key==='ArrowRight'){cur=(cur+1)%ims.length;upd();}
-    else if(e.key==='Escape'){closeDm();}
-  };
-  document.addEventListener('keydown',onKey);
-  const closeDm=()=>{m.classList.remove('o');document.body.style.overflow='';document.removeEventListener('keydown',onKey);};
+  dwEl.addEventListener('touchstart', e=>{if(e.target.closest('.nav')) return; sx=e.touches[0].clientX; drag=true;}, {passive:true});
+  dwEl.addEventListener('touchend', e=>{if(!drag) return; drag=false; const dx=e.changedTouches[0].clientX-sx; if(Math.abs(dx)>40){ if(dx<0) cur=(cur+1)%ims.length; else cur=(cur-1+ims.length)%ims.length; upd(); }}, {passive:true});
+  const closeDm=()=>{m.classList.remove('o');document.body.style.overflow='';};
   $('cd').onclick=closeDm; $('dbg').onclick=closeDm;
 }
 
-$('ab').onclick=()=>{currentEditId=null; $('formTitle').textContent='Dodaj ogłoszenie - mega proste'; $('af').reset(); ai=[]; editImgs=[]; $('pv').innerHTML=''; $('editImages').style.display='none'; $('am').classList.add('o');document.body.style.overflow='hidden';};
-const closeAm=()=>{$('am').classList.remove('o');document.body.style.overflow=''; currentEditId=null;};
+
+$('ab').onclick=()=>{currentEditId=null;$('formTitle').textContent='Dodaj ogłoszenie';$('af').reset();ai=[];editImgs=[];$('pv').innerHTML='';$('editImages').style.display='none';$('md2').innerHTML='<option value="">Najpierw marka</option>';$('am').classList.add('o');document.body.style.overflow='hidden';};
+const closeAm=()=>{$('am').classList.remove('o');document.body.style.overflow='';};
 $('ca').onclick=closeAm;$('abg').onclick=closeAm;
+$('editBtn').onclick=()=>{ // ZAWSZE pozwala edytować - fix
 
-$('editBtn').onclick=()=>{
-  const item=ls.find(x=>x.id===currentEditId);
-  if(!item) return;
-  $('formTitle').textContent='✏️ Edytuj ogłoszenie';
-  $('titleFull').value=item.md;
-  $('pr').value=item.pr;
-  $('lc').value=item.lc;
-  $('ds').value=item.ds;
-  editImgs=[...item.im];
-  const ep=$('editPv'); ep.innerHTML='';
-  editImgs.forEach((src,i)=>{
-    const d=document.createElement('div'); d.className='px';
-    d.innerHTML=`<img src="${src}"><button type="button">✕</button>`;
-    d.querySelector('button').onclick=()=>{editImgs.splice(i,1); d.remove();};
-    ep.appendChild(d);
-  });
-  $('editImages').style.display='block';
-  ai=[]; $('pv').innerHTML='';
-  $('dm').classList.remove('o');
-  $('am').classList.add('o');
+  const item=ls.find(x=>x.id===currentEditId); if(!item) return;
+  $('formTitle').textContent='Edytuj bez potwierdzania'; $('titleFull').value=item.md; $('pr').value=item.pr; $('lc').value=item.lc; $('ds').value=item.ds;
+  const parts=item.md.split(' '); if(parts[0]) $('mk').value=parts[0]; populateModels(parts[0],'md2');
+  editImgs=[...item.im]; const ep=$('editPv'); ep.innerHTML='';
+  editImgs.forEach((src,i)=>{const d=document.createElement('div');d.className='px';d.innerHTML=`<img src="${src}"><button type="button">✕</button>`;d.querySelector('button').onclick=()=>{editImgs.splice(i,1);d.remove();};ep.appendChild(d);});
+  $('editImages').style.display='block'; ai=[]; $('pv').innerHTML=''; $('dm').classList.remove('o'); $('am').classList.add('o');
 };
-
-function rp(){const p=$('pv');p.innerHTML='';ai.forEach((o,i)=>{const d=document.createElement('div');d.className='px';d.innerHTML=`<img src="${o.data}"><span style="position:absolute;bottom:2px;left:2px;background:rgba(0,0,0,.6);color:#fff;font-size:8px;padding:1px 3px;border-radius:3px">${Math.round(o.size/1024)}KB</span><button type="button">✕</button>`;d.querySelector('button').onclick=()=>{ai.splice(i,1);rp();};p.appendChild(d);});$('ci').textContent=ai.length?`✅ Skompresowano ${ai.length} zdjęć do WebP 800px - zaoszczędzono ~${ai.reduce((a,b)=>a+(b.size/1024),0).toFixed(0)}KB vs oryginał`:'';}
+function rp(){const p=$('pv');p.innerHTML='';ai.forEach((o,i)=>{const d=document.createElement('div');d.className='px';d.innerHTML=`<img src="${o.data}"><button type="button">✕</button>`;d.querySelector('button').onclick=()=>{ai.splice(i,1);rp();};p.appendChild(d);});$('ci').textContent=ai.length?`${ai.length} zdjęć skompresowanych`:'';
+}
 $('dz').onclick=()=>$('fi').click();
-$('fi').onchange=async e=>{
-  const fs=Array.from(e.target.files).slice(0,10-ai.length);
-  if(fs.length===0)return;
-  $('ci').textContent=`⚡ Kompresuję ${fs.length} zdjęć do 800px WebP...`;
-  for(const f of fs){
-    const c=await comp(f,800,0.65);
-    ai.push(c);
-  }
-  rp();
-};
-
+$('fi').onchange=async e=>{const fs=Array.from(e.target.files).slice(0,10-ai.length); if(fs.length===0)return; $('ci').textContent=`Kompresuję ${fs.length}...`; for(const f of fs){const c=await comp(f,800,0.65); ai.push(c);} rp();};
+$('brand').addEventListener('change',e=>{populateModels(e.target.value,'model'); applyFilters();});
+$('mk').addEventListener('change',e=>{populateModels(e.target.value,'md2'); const t=e.target.value+' '+($('md2').value||''); if(t.trim().length>3) $('titleFull').value=t;});
+$('md2').addEventListener('change',e=>{const t=$('mk').value+' '+e.target.value; if(t.trim().length>3) $('titleFull').value=t;});
+['pmin','pmax','q','q2','loc'].forEach(id=>{$(id)?.addEventListener('input',applyFilters);});
+$('clear').addEventListener('click',()=>{['q','q2','brand','model','pmin','pmax','loc'].forEach(id=>{const el=$(id); if(el) el.value='';}); $('model').innerHTML='<option value="">Wszystkie modele</option>'; filtered=[]; rn();});
+$('apply').addEventListener('click',applyFilters);
+$('filterToggle').onclick=()=>{$('sb').classList.toggle('mopen');};
 $('af').onsubmit=async e=>{
- e.preventDefault();
- const b=$('sbBtn'); if(ai.length===0 && editImgs.length===0){alert('Dodaj zdjęcie');return;}
- b.disabled=true;b.textContent='⏳ Zapisuję...';
+ e.preventDefault(); const b=$('sbBtn'); if(ai.length===0 && editImgs.length===0){alert('Dodaj zdjęcie');return;}
+ b.disabled=true;b.textContent='⏳ Zapisuję bez potwierdzania...';
  try{
-  const fullTitle=$('titleFull').value.trim().slice(0,120);
-  const pl={title:fullTitle,description:($('ds').value||'').slice(0,800),price:parseInt($('pr').value)||0,location:$('lc').value.trim().slice(0,50)};
+  const pl={title:$('titleFull').value.trim().slice(0,120),description:($('ds').value||'').slice(0,800),price:parseInt($('pr').value)||0,location:$('lc').value.trim().slice(0,50)};
+  if(currentUser) pl.user_id=currentUser.id;
   if(!supa) throw new Error('Baza nie gotowa');
-  
   if(currentEditId && isMine(currentEditId)){
-    // EDIT
-    const {error}=await supa.from('listings').update(pl).eq('id',currentEditId);
-    if(error) throw error;
-    // delete old images if changed
+    const {error}=await supa.from('listings').update(pl).eq('id',currentEditId); if(error) throw error;
     if(editImgs.length!==ls.find(x=>x.id===currentEditId)?.im.length || ai.length>0){
       await supa.from('listing_images').delete().eq('listing_id',currentEditId);
-      const allImgs=[...editImgs];
-      for(let i=0;i<ai.length;i++){try{const fn=currentEditId+'/'+Date.now()+'_'+i+'.webp';const bl=ai[i].blob;const up=await supa.storage.from('listing-images').upload(fn,bl,{contentType:'image/webp',upsert:true});if(up.error)continue;const {data:pub}=supa.storage.from('listing-images').getPublicUrl(fn);allImgs.push(pub.publicUrl);}catch(e){}}
-      for(const url of allImgs){await supa.from('listing_images').insert({listing_id:currentEditId,image_url:url});}
+      const all=[...editImgs];
+      for(let i=0;i<ai.length;i++){try{const fn=currentEditId+'/'+Date.now()+'_'+i+'.webp';const bl=ai[i].blob;const up=await supa.storage.from('listing-images').upload(fn,bl,{contentType:'image/webp',upsert:true});if(up.error)continue;const {data:pub}=supa.storage.from('listing-images').getPublicUrl(fn);all.push(pub.publicUrl);}catch(e){}}
+      for(const url of all){await supa.from('listing_images').insert({listing_id:currentEditId,image_url:url});}
     }
-    alert('✅ Zaktualizowano!');
   } else {
-    // CREATE
-    const {data,error}=await supa.from('listings').insert(pl).select().single();
-    if(error) throw error;
-    let ok=0;for(let i=0;i<ai.length;i++){try{const fn=data.id+'/'+Date.now()+'_'+i+'.webp';const bl=ai[i].blob;const up=await supa.storage.from('listing-images').upload(fn,bl,{contentType:'image/webp',upsert:true});if(up.error)continue;const {data:pub}=supa.storage.from('listing-images').getPublicUrl(fn);await supa.from('listing_images').insert({listing_id:data.id,image_url:pub.publicUrl});ok++;}catch(e){}}
-    if(ok===0) throw new Error('Upload fail');
+    const {data,error}=await supa.from('listings').insert(pl).select().single(); if(error) throw error;
+    for(let i=0;i<ai.length;i++){try{const fn=data.id+'/'+Date.now()+'_'+i+'.webp';const bl=ai[i].blob;const up=await supa.storage.from('listing-images').upload(fn,bl,{contentType:'image/webp',upsert:true});if(up.error)continue;const {data:pub}=supa.storage.from('listing-images').getPublicUrl(fn);await supa.from('listing_images').insert({listing_id:data.id,image_url:pub.publicUrl});}catch(e){}}
     addMyId(data.id);
-    alert(`✅ Dodano ${ok} zdjęć! Teraz możesz je edytować w Moje ogłoszenia`);
   }
   closeAm();ai=[];editImgs=[];$('pv').innerHTML='';$('editPv').innerHTML='';$('af').reset();await loadReal();
- }catch(err){alert('Błąd: '+err.message);}finally{b.disabled=false;b.textContent='💾 Zapisz - 2 sek i gotowe';}
+ }catch(err){alert('Błąd: '+err.message);}finally{b.disabled=false;b.textContent='💾 Zapisz od razu - bez potwierdzania';}
 };
-
-$('myBtn').onclick=()=>{
-  const ids=getMyIds();
-  if(ids.length===0){alert('Nie masz jeszcze ogłoszeń. Dodaj pierwsze!'); return;}
-  filtered=ls.filter(x=>ids.includes(x.id));
-  rn();
-  window.scrollTo({top:0,behavior:'smooth'});
+$('authBtn').onclick=()=>{$('authModal').classList.add('o');};
+$('authClose').onclick=()=>{$('authModal').classList.remove('o');};
+$('authBg').onclick=()=>{$('authModal').classList.remove('o');};
+$('loginBtn').onclick=async()=>{
+  const email=$('authEmail').value.trim(), pass=$('authPass').value;
+  $('authMsg').textContent='Logowanie...';
+  const {data,error}=await supa.auth.signInWithPassword({email,password:pass});
+  if(error){$('authMsg').textContent='❌ '+error.message;} else {$('authMsg').textContent='✅ Zalogowano!'; setTimeout(()=>{$('authModal').classList.remove('o'); checkUser();},600);}
 };
-
-document.querySelectorAll('[data-quick]').forEach(btn=>{btn.addEventListener('click',()=>{document.querySelectorAll('[data-quick]').forEach(b=>b.classList.remove('on'));btn.classList.add('on');const v=btn.dataset.quick;$('q').value='';if(v==='all'){filtered=[];}else if(v==='tanio'){filtered=ls.filter(x=>x.pr<=20000);}else{filtered=ls.filter(x=>x.md.toLowerCase().includes(v)||x.ds.toLowerCase().includes(v));}rn();});});
-$('q')?.addEventListener('input',applyFilters);
-$('searchBtn')?.addEventListener('click',applyFilters);
-
+$('regBtn').onclick=async()=>{
+  const email=$('authEmail').value.trim(), pass=$('authPass').value;
+  if(pass.length<6){$('authMsg').textContent='Hasło min 6 znaków';return;}
+  $('authMsg').textContent='Rejestracja...';
+  const {data,error}=await supa.auth.signUp({email,password:pass});
+  if(error){$('authMsg').textContent='❌ '+error.message;} else {$('authMsg').textContent='✅ Konto utworzone! Sprawdź email i zaloguj się.';}
+};
+async function checkUser(){
+  const {data}=await supa.auth.getUser(); currentUser=data?.user||null;
+  if(currentUser){$('userEmail').textContent=currentUser.email; $('authBtn').textContent='Wyloguj'; $('authBtn').onclick=async()=>{await supa.auth.signOut(); currentUser=null; $('userEmail').textContent=''; $('authBtn').textContent='Zaloguj / Zarejestruj'; $('authBtn').onclick=()=>{$('authModal').classList.add('o');};};}
+}
 async function loadReal(){
- if(isLoading)return;isLoading=true;
- try{
   if(!supa){if(window.supabase)supa=window.supabase.createClient(U,K);else{await new Promise(r=>setTimeout(r,300));if(window.supabase)supa=window.supabase.createClient(U,K);}}
-  if(!supa)throw new Error('no supa');
-  const {data,error}=await supa.from('listings').select('id,title,description,price,location,created_at').order('created_at',{ascending:false}).limit(100);
-  if(error)throw error;
-  if(!data||data.length===0){isLoading=false;$('ld').style.display='none';$('gd').style.display='grid';return;}
+  if(!supa)return;
+  checkUser();
+  const {data}=await supa.from('listings').select('id,title,description,price,location,created_at,user_id').order('created_at',{ascending:false}).limit(100);
+  if(!data||data.length===0)return;
   let imap={};
-  try{const {data:ims}=await supa.from('listing_images').select('listing_id,image_url').ilike('image_url','https://%').order('created_at',{ascending:true}).limit(1000);if(ims)ims.forEach(r=>{if(!imap[r.listing_id])imap[r.listing_id]=[];if(imap[r.listing_id].length<10)imap[r.listing_id].push(r.image_url);});}catch(e){}
-  const real=data.map(r=>({id:r.id,md:r.title||'Bez tytułu',pr:r.price||0,lc:r.location||'Gorzyce',ds:r.description||'',im:imap[r.id]&&imap[r.id].length?imap[r.id]:[DEMO[0].im[0]]}));
-  if(real.length>0){ls=real;filtered=[];rn();}
- }catch(e){}finally{isLoading=false;$('ld').style.display='none';$('gd').style.display='grid';}
+  try{const {data:ims}=await supa.from('listing_images').select('listing_id,image_url').ilike('image_url','https://%').limit(1000);if(ims)ims.forEach(r=>{if(!imap[r.listing_id])imap[r.listing_id]=[];if(imap[r.listing_id].length<10)imap[r.listing_id].push(r.image_url);});}catch(e){}
+  const real=data.map(r=>({id:r.id,md:r.title||'Bez tytułu',pr:r.price||0,lc:r.location||'Gorzyce',ds:r.description||'',im:imap[r.id]&&imap[r.id].length?imap[r.id]:[DEMO[0].im[0]],user_id:r.user_id}));
+  ls=real;filtered=[];rn();
 }
 function init(){
- ls=DEMO;filtered=[];rn();
- const s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js';s.async=true;
- s.onload=()=>{supa=window.supabase.createClient(U,K);loadReal();};
- document.head.appendChild(s);
+  ls=DEMO;rn();
+  const s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js';s.async=true;
+  s.onload=()=>{supa=window.supabase.createClient(U,K);loadReal();};document.head.appendChild(s);
 }
 init();
+</script>
+
+<script>
+const EXTRA_MODELS = {"Abarth": ["500", "595", "695", "Inny"], "BYD": ["Atto 3", "Dolphin", "Seal", "Han", "Tang", "Inny"], "Cupra": ["Ateca", "Born", "Formentor", "Leon", "Inny"], "DS": ["DS 3", "DS 4", "DS 7", "DS 9", "Inny"], "Genesis": ["G70", "G80", "GV60", "GV70", "GV80", "Inny"], "MG": ["ZS", "HS", "EHS", "MG4", "MG5", "Inny"], "Polestar": ["Polestar 2", "Polestar 3", "Polestar 4", "Inny"], "Smart": ["ForFour", "ForTwo", "#1", "#3", "Inny"], "Tesla": ["Model 3", "Model S", "Model X", "Model Y", "Cybertruck", "Inny"]};
+Object.assign(MODELS, EXTRA_MODELS);
+// Add Inny to all existing brands if not present
+Object.keys(MODELS).forEach(k=>{ if(!MODELS[k].includes('Inny')) MODELS[k].push('Inny'); });
 </script>
 </body>
 </html>
