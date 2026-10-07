@@ -155,7 +155,7 @@ async function comp(file,maxW=800,quality=0.65){
 }
 function getMyIds(){try{return JSON.parse(localStorage.getItem('wroomer_my_ids')||'[]')}catch(e){return []}}
 function addMyId(id){const ids=getMyIds(); if(!ids.includes(id)){ids.push(id); localStorage.setItem('wroomer_my_ids',JSON.stringify(ids));}}
-function isMine(id){ try{ if(!currentUser) return false; const it=(typeof ls!=='undefined'?ls:[]).find(x=>x.id===id); if(!it) return false; if(it.user_id && it.user_id===currentUser.id) return true; const my=JSON.parse(localStorage.getItem('myListingIds')||'[]'); return my.includes(id); }catch(e){ return false; } }
+function isMine(id){ const mineIds=getMyIds(); if(mineIds.includes(id)) return true; if(currentUser){ const it=ls.find(x=>x.id===id); if(it && it.user_id && it.user_id===currentUser.id) return true; } return false; }
 
 function populateModels(brand,targetId){
   if(brand==='Inny'){
@@ -177,11 +177,11 @@ function applyFilters(){
   const loc=($('loc').value||'').toLowerCase();
   filtered=ls.filter(x=>{
     if(q && !x.md.toLowerCase().includes(q) && !x.ds.toLowerCase().includes(q)) return false;
+    if(x.is_banned) return false;
+    if(x.is_hidden) return false;
     if(brand && !x.md.toLowerCase().includes(brand)) return false;
     if(model && !x.md.toLowerCase().includes(model)) return false;
     if(x.pr<pmin || x.pr>pmax) return false;
-    if(x.is_banned) return false;
-    if(x.is_hidden) return false;
     if(loc && !x.lc.toLowerCase().includes(loc)) return false;
     return true;
   }); rn();
@@ -313,7 +313,7 @@ async function od(item){
     <div style="padding:16px">
       <h2 style="font-weight:800;font-size:20px;line-height:1.2">${item.md}</h2>
       <div style="font-weight:800;font-size:26px;margin-top:8px;color:#002f34">${(item.pr||0).toLocaleString()} zł</div>
-      <div style="font-size:12px;color:#6b7280;margin-top:6px">📍 ${item.lc || '-'} • ${ims.length} zdjęć • przesuwaj palcem ↔️ • swipe działa</div>
+      <div id="viewCounterDetail" style="display:none" style="font-size:12px;color:#002f34;font-weight:700;margin-top:6px;background:#e6f7f5;padding:6px 10px;border-radius:6px;display:inline-block">👁️ 0 wyświetleń</div><div style="font-size:12px;color:#6b7280;margin-top:6px">📍 ${item.lc || '-'} • ${ims.length} zdjęć • przesuwaj palcem ↔️ • swipe działa</div>
       
       <div style="margin-top:16px;background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px">
         <div style="font-weight:800;font-size:14px;margin-bottom:8px">📋 Wszystkie informacje - OTOMOTO</div>
@@ -360,7 +360,29 @@ $('ca').onclick=closeAm;$('abg').onclick=closeAm;
 $('editBtn').onclick=()=>{ // ZAWSZE pozwala edytować - fix
 
   const item=ls.find(x=>x.id===currentEditId); if(!item) return;
-  $('formTitle').textContent='Edytuj bez potwierdzania'; $('titleFull').value=item.md; $('pr').value=item.pr; $('lc').value=item.lc; $('ds').value=item.ds;
+  
+  $('formTitle').textContent='Edytuj ogłoszenie - właściciel';
+  $('titleFull').value=item.md; $('pr').value=item.pr; $('lc').value=item.lc; $('ds').value=item.ds.split('__OTOMOTO__')[0];
+  try{
+    const ex = item._extra || {};
+    if(ex.marka) $('mk').value=ex.marka;
+    if(ex.model){ populateModels(ex.marka||'','md2'); setTimeout(()=>{ $('md2').value=ex.model; },100); }
+    if($('year') && ex.year) $('year').value=ex.year;
+    if($('km') && ex.mileage) $('km').value=ex.mileage;
+    if($('power') && ex.power) $('power').value=ex.power;
+    if($('cap') && ex.capacity) $('cap').value=ex.capacity;
+    if($('fuel') && ex.fuel) $('fuel').value=ex.fuel;
+    if($('gear') && ex.gear) $('gear').value=ex.gear;
+    if($('drive') && ex.drive) $('drive').value=ex.drive;
+    if($('body') && ex.body) $('body').value=ex.body;
+    if($('color2') && ex.color) $('color2').value=ex.color;
+    if($('doors') && ex.doors) $('doors').value=ex.doors;
+    if($('cond') && ex.state) $('cond').value=ex.state;
+    if($('origin') && ex.origin) $('origin').value=ex.origin;
+    if($('country') && ex.country) $('country').value=ex.country;
+    if($('gen') && ex.generation) $('gen').value=ex.generation;
+  }catch(e){}
+
   const parts=item.md.split(' '); if(parts[0]) $('mk').value=parts[0]; populateModels(parts[0],'md2');
   editImgs=[...item.im]; const ep=$('editPv'); ep.innerHTML='';
   editImgs.forEach((src,i)=>{const d=document.createElement('div');d.className='px';d.innerHTML=`<img src="${src}"><button type="button">✕</button>`;d.querySelector('button').onclick=()=>{editImgs.splice(i,1);d.remove();};ep.appendChild(d);});
@@ -381,7 +403,17 @@ $('af').onsubmit=async e=>{
  e.preventDefault(); const b=$('sbBtn'); if(ai.length===0 && editImgs.length===0){alert('Dodaj zdjęcie');return;}
  b.disabled=true;b.textContent='⏳ Zapisuję bez potwierdzania...';
  try{
-  const pl={title:$('titleFull').value.trim().slice(0,120),description:($('ds').value||'').slice(0,800),price:parseInt($('pr').value)||0,location:$('lc').value.trim().slice(0,50)};
+  
+  const extra={
+    marka:$('mk').value||'', model:$('md2').value||'', generation:$('gen')?.value||'',
+    year:$('year')?.value||'', mileage:$('km')?.value||'', power:$('power')?.value||'', capacity:$('cap')?.value||'',
+    fuel:$('fuel')?.value||'', gear:$('gear')?.value||'', drive:$('drive')?.value||'', body:$('body')?.value||'',
+    color:$('color2')?.value||'', doors:$('doors')?.value||'', state:$('cond')?.value||'', origin:$('origin')?.value||'',
+    country:$('country')?.value||''
+  };
+  const fullDesc=($('ds').value||'').slice(0,800)+'__OTOMOTO__'+JSON.stringify(extra);
+  const pl={title:$('titleFull').value.trim().slice(0,120),description:fullDesc,price:parseInt($('pr').value)||0,location:$('lc').value.trim().slice(0,50)};
+
   if(currentUser) pl.user_id=currentUser.id;
   if(!supa) throw new Error('Baza nie gotowa');
   if(currentEditId && isMine(currentEditId)){
@@ -424,7 +456,7 @@ async function loadReal(){
   if(!supa){if(window.supabase)supa=window.supabase.createClient(U,K);else{await new Promise(r=>setTimeout(r,300));if(window.supabase)supa=window.supabase.createClient(U,K);}}
   if(!supa)return;
   checkUser();
-  const {data}=await supa.from('listings').select('id,title,description,price,location,created_at,user_id,views,is_hidden,is_banned').order('created_at',{ascending:false}).limit(100);
+  const {data}=await supa.from('listings').select('id,title,description,price,location,created_at,user_id').order('created_at',{ascending:false}).limit(100);
   if(!data||data.length===0)return;
   let imap={};
   try{const {data:ims}=await supa.from('listing_images').select('listing_id,image_url').ilike('image_url','https://%').limit(1000);if(ims)ims.forEach(r=>{if(!imap[r.listing_id])imap[r.listing_id]=[];if(imap[r.listing_id].length<10)imap[r.listing_id].push(r.image_url);});}catch(e){}
@@ -438,7 +470,7 @@ async function loadReal(){
           extra=JSON.parse(parts[1]||'{}');
         }catch(e){}
       }
-      return {id:r.id,md:r.title||'Bez tytułu',pr:r.price||0,lc:r.location||'Gorzyce',ds:ds,im:imap[r.id]&&imap[r.id].length?imap[r.id]:[DEMO[0].im[0]],
+      return {id:r.id,md:r.title||'Bez tytułu',pr:r.price||0,lc:r.location||'Gorzyce',ds:ds,_extra:extra,im:imap[r.id]&&imap[r.id].length?imap[r.id]:[DEMO[0].im[0]],
         year:extra.year||'',mileage:extra.mileage||'',power:extra.power||'',capacity:extra.capacity||'',fuel:extra.fuel||'',gear:extra.gear||'',body:extra.body||'',color:extra.color||'',drive:extra.drive||'',doors:extra.doors||'',state:extra.state||'',origin:extra.origin||'',country:extra.country||'',generation:extra.generation||'',marka:extra.marka||'',model:extra.model||'',user_id:r.user_id};
     });
   ls=real;filtered=[];rn();
