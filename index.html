@@ -3,7 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="WROOMER.PL - Auta z Twojej okolicy Gorzyce, Wodzislaw, Rybnik, Raciborz. 49 marek, 220 modeli."><title>WROOMER TEST V30 EDIT FIX - V41 PRO LAYOUT</title>
+<title>WROOMER.PL</title>
+<meta name="description" content="WROOMER.PL - Auta z Twojej okolicy: Gorzyce, Wodzisław, Rybnik, Racibórz. 49 marek, 300 modeli.">
+<meta property="og:title" content="WROOMER.PL">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#f2f3f5}
@@ -25,7 +27,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#f2f3f5}
 @media(min-width:1100px){.gd{grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;padding:12px}}
 .cd{background:#fff;border-radius:10px;overflow:hidden;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.08)}
 .cw{position:relative;background:#eef1f3;aspect-ratio:4/3;overflow:hidden}
-.cw img{width:100%;height:100%;object-fit:cover;content-visibility:auto}
+.cw img{width:100%;height:100%;object-fit:cover}
 .ct{position:absolute;top:6px;right:6px;background:rgba(0,47,52,.9);color:#fff;font-size:10px;padding:4px 6px;border-radius:4px;font-weight:700}
 .cb{padding:8px}.cti{font-weight:700;font-size:13px;min-height:32px;overflow:hidden}
 .pr{font-weight:800;font-size:14px;margin-top:4px;display:flex;justify-content:space-between}
@@ -66,7 +68,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#f2f3f5}
 </header>
 <div class="pg">
 <aside class="sb" id="sb">
-<div style="padding:14px 16px;border-bottom:1px solid #f0f0f0;display:flex;justify-content:space-between"><div style="font-weight:800">🔍 Wyszukiwarka i filtry - lewa</div><div id="clear" style="color:#007185;font-size:12px;font-weight:700;cursor:pointer">Wyczyść</div></div>
+<div style="padding:14px 16px;border-bottom:1px solid #f0f0f0;display:flex;justify-content:space-between"><div style="font-weight:800">🔍 Wyszukiwarka i filtry</div><div id="clear" style="color:#007185;font-size:12px;font-weight:700;cursor:pointer">Wyczyść</div></div>
 <div class="fg"><div class="fl">Szukaj</div><input id="q" class="pi2" placeholder="Octavia, BMW..."></div>
 <div class="fg"><div class="fl">Marka - wszystkie marki</div><select id="brand" class="sel"><option value="">Wszystkie marki (49 + Inny)</option><option value="Abarth">Abarth</option><option value="Alfa Romeo">Alfa Romeo</option><option value="Audi">Audi</option><option value="BMW">BMW</option><option value="BYD">BYD</option><option value="Cadillac">Cadillac</option><option value="Chery">Chery</option><option value="Chevrolet">Chevrolet</option><option value="Chrysler">Chrysler</option><option value="Citroen">Citroen</option><option value="Cupra">Cupra</option><option value="Dacia">Dacia</option><option value="Daewoo">Daewoo</option><option value="Dodge">Dodge</option><option value="DS">DS</option><option value="Fiat">Fiat</option><option value="Ford">Ford</option><option value="Genesis">Genesis</option><option value="Honda">Honda</option><option value="Hyundai">Hyundai</option><option value="Infiniti">Infiniti</option><option value="Isuzu">Isuzu</option><option value="Jaguar">Jaguar</option><option value="Jeep">Jeep</option><option value="Kia">Kia</option><option value="Lancia">Lancia</option><option value="Land Rover">Land Rover</option><option value="Lexus">Lexus</option><option value="Mazda">Mazda</option><option value="Mercedes">Mercedes</option><option value="MG">MG</option><option value="Mini">Mini</option><option value="Mitsubishi">Mitsubishi</option><option value="Nissan">Nissan</option><option value="Opel">Opel</option><option value="Peugeot">Peugeot</option><option value="Polestar">Polestar</option><option value="Porsche">Porsche</option><option value="Renault">Renault</option><option value="Seat">Seat</option><option value="Skoda">Skoda</option><option value="Smart">Smart</option><option value="SsangYong">SsangYong</option><option value="Subaru">Subaru</option><option value="Suzuki">Suzuki</option><option value="Tesla">Tesla</option><option value="Toyota">Toyota</option><option value="Volkswagen">Volkswagen</option><option value="Volvo">Volvo</option><option value="Inny">Inny - wpisz ręcznie</option></select></div>
 <div class="fg"><div class="fl">Model - wszystkie modele</div><select id="model" class="sel"><option value="">Wszystkie modele</option></select><div id="modelCount" style="font-size:10px;color:#6b7280;margin-top:4px"></div></div>
@@ -87,7 +89,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#f2f3f5}
 <div style="padding:12px"><button id="apply" class="btn-show">Pokaż wyniki</button><div id="count" style="text-align:center;font-size:11px;color:#6b7280;margin-top:6px">Ładowanie...</div></div>
 </aside>
 <main class="main">
-<div style="background:#fff;padding:8px;display:flex;gap:6px;align-items:center;border-bottom:1px solid #e5e7eb"><button id="filterToggle" class="b" style="background:#f2f3f5">☰ Filtry lewa</button><input id="q2" class="pi2" style="flex:1" placeholder="Szybkie szukanie..."><button id="myBtn" class="b" style="background:#eef1f3">Moje</button></div>
+<div style="background:#fff;padding:8px;display:flex;gap:6px;align-items:center;border-bottom:1px solid #e5e7eb"><button id="filterToggle" class="b bw" style="background:#f2f3f5">☰ Filtrowanie</button><input id="q2" class="pi2" style="flex:1" placeholder="Szybkie szukanie..."><button id="myBtn" class="b" style="background:#eef1f3">Moje</button></div>
 <div id="gd" class="gd"></div><div id="ld" class="gd"><div style="background:#e5e7eb;border-radius:10px;aspect-ratio:4/3"></div><div style="background:#e5e7eb;border-radius:10px;aspect-ratio:4/3"></div><div style="background:#e5e7eb;border-radius:10px;aspect-ratio:4/3"></div><div style="background:#e5e7eb;border-radius:10px;aspect-ratio:4/3"></div></div><div id="empty" style="display:none;padding:40px;text-align:center;background:#fff;margin:8px;border-radius:10px">Brak ogłoszeń</div>
 </main>
 </div>
@@ -131,9 +133,9 @@ const U='https://bdpydgsfowtuvjnkyeeg.supabase.co', K='sb_publishable_S1qH_mBZaX
 let supa=null, ls=[], filtered=[], ai=[], editImgs=[], currentEditId=null, currentUser=null;
 const $=id=>document.getElementById(id);
 const DEMO=[
-{id:'demo1',md:'Skoda Octavia 1.9 TDI',pr:23400,lc:'Gorzyce',ds:'2008',im:['https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=400&q=60&auto=format&fm=webp']},
-{id:'demo2',md:'VW Passat B6 2.0',pr:18900,lc:'Wodzisław',im:['https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=400&q=60&auto=format&fm=webp']},
-{id:'demo3',md:'BMW 320d 2012',pr:42000,lc:'Rybnik',im:['https://images.unsplash.com/photo-1555215695-3004980ad54e?w=400&q=60&auto=format&fm=webp']},
+{id:'demo1',md:'Skoda Octavia 1.9 TDI',pr:23400,lc:'Gorzyce',ds:'2008',im:['https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=600&q=70']},
+{id:'demo2',md:'VW Passat B6 2.0',pr:18900,lc:'Wodzisław',im:['https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=600&q=70']},
+{id:'demo3',md:'BMW 320d 2012',pr:42000,lc:'Rybnik',im:['https://images.unsplash.com/photo-1555215695-3004980ad54e?w=600&q=70']},
 ];
 async function comp(file,maxW=800,quality=0.65){
   return new Promise(res=>{
@@ -188,7 +190,7 @@ function rn(){
   data.forEach(x=>{
     const d=document.createElement('div');d.className='cd';
     const first=x.im&&x.im[0]?x.im[0]:DEMO[0].im[0];
-    d.innerHTML=`<div class="cw"><img src="${first}" loading="lazy" alt="${x.md}" decoding="async"><div class="ct">${x.im?x.im.length:0} zdjęć</div></div><div class="cb"><div class="cti">${x.md}</div><div class="pr"><span>${(x.pr||0).toLocaleString()} zł</span><span style="font-size:11px;color:#6b7280">${x.lc}</span></div></div>`;
+    d.innerHTML=`<div class="cw"><img src="${first}" loading="lazy"><div class="ct">${x.im?x.im.length:0} zdjęć</div></div><div class="cb"><div class="cti">${x.md}</div><div class="pr"><span>${(x.pr||0).toLocaleString()} zł</span><span style="font-size:11px;color:#6b7280">${x.lc}</span></div></div>`;
     d.onclick=()=>od(x);g.appendChild(d);
   });
   $('count').textContent=data.length+' ogłoszeń • '+Object.keys(MODELS).length+' marek • '+Object.values(MODELS).flat().length+' modeli';
@@ -297,7 +299,7 @@ $('editBtn').onclick=()=>{ // ZAWSZE pozwala edytować - fix
 function rp(){const p=$('pv');p.innerHTML='';ai.forEach((o,i)=>{const d=document.createElement('div');d.className='px';d.innerHTML=`<img src="${o.data}"><button type="button">✕</button>`;d.querySelector('button').onclick=()=>{ai.splice(i,1);rp();};p.appendChild(d);});$('ci').textContent=ai.length?`${ai.length} zdjęć skompresowanych`:'';
 }
 $('dz').onclick=()=>$('fi').click();
-$('fi').onchange=async e=>{const fs=Array.from(e.target.files).slice(0,10-ai.length); if(fs.length===0)return; $('ci').textContent=`Kompresuję ${fs.length}...`; for(const f of fs){const c=await comp(f,600,0.55); ai.push(c);} rp();};
+$('fi').onchange=async e=>{const fs=Array.from(e.target.files).slice(0,10-ai.length); if(fs.length===0)return; $('ci').textContent=`Kompresuję ${fs.length}...`; for(const f of fs){const c=await comp(f,800,0.65); ai.push(c);} rp();};
 $('brand').addEventListener('change',e=>{populateModels(e.target.value,'model'); applyFilters();});
 $('mk').addEventListener('change',e=>{populateModels(e.target.value,'md2'); const t=e.target.value+' '+($('md2').value||''); if(t.trim().length>3) $('titleFull').value=t;});
 $('md2').addEventListener('change',e=>{const t=$('mk').value+' '+e.target.value; if(t.trim().length>3) $('titleFull').value=t;});
@@ -307,15 +309,9 @@ $('apply').addEventListener('click',applyFilters);
 $('filterToggle').onclick=()=>{$('sb').classList.toggle('mopen');};
 $('af').onsubmit=async e=>{
  e.preventDefault(); const b=$('sbBtn'); if(ai.length===0 && editImgs.length===0){alert('Dodaj zdjęcie');return;}
- b.disabled=true;b.textContent='⏳ Zapisuję...';
+ b.disabled=true;b.textContent='⏳ Zapisuję bez potwierdzania...';
  try{
-  const marka=$('mk').value==='Inny'?($('mkOther')?.value.trim()||'Inny'):$('mk').value;
-  const modelVal=$('md2').value==='Inny'?($('mdOther')?.value.trim()||'Inny'):$('md2').value;
-  const fullTitle=($('titleFull').value.trim()||(marka+' '+modelVal)).slice(0,120);
-  const otomoto={marka,model:modelVal,generation:$('gen2')?.value||'',year:$('year')?.value||'',mileage:$('mileage')?.value||'',capacity:$('capacity')?.value||'',power:$('power')?.value||'',fuel:$('fuel')?.value||'',gear:$('gear')?.value||'',drive:$('drive2')?.value||'',body:$('body2')?.value||'',color:$('color2')?.value||'',doors:$('doors')?.value||'',state:$('cond')?.value||'',origin:$('orig2')?.value||'',country:$('country')?.value||''};
-  const userDesc=($('ds').value||'').trim();
-  const descWithParams=userDesc + "\n\n__OTOMOTO__" + JSON.stringify(otomoto);
-  const pl={title:fullTitle,description:descWithParams.slice(0,3000),price:parseInt($('pr').value)||0,location:$('lc').value.trim().slice(0,50)};
+  const pl={title:$('titleFull').value.trim().slice(0,120),description:($('ds').value||'').slice(0,800),price:parseInt($('pr').value)||0,location:$('lc').value.trim().slice(0,50)};
   if(currentUser) pl.user_id=currentUser.id;
   if(!supa) throw new Error('Baza nie gotowa');
   if(currentEditId && isMine(currentEditId)){
@@ -332,7 +328,6 @@ $('af').onsubmit=async e=>{
     addMyId(data.id);
   }
   closeAm();ai=[];editImgs=[];$('pv').innerHTML='';$('editPv').innerHTML='';$('af').reset();await loadReal();
-  alert('Zapisano '+Object.values(otomoto).filter(v=>v).length+' parametrów OTOMOTO - widoczne jak w png.3');
  }catch(err){alert('Błąd: '+err.message);}finally{b.disabled=false;b.textContent='💾 Zapisz od razu - bez potwierdzania';}
 };
 $('authBtn').onclick=()=>{$('authModal').classList.add('o');};
@@ -378,6 +373,38 @@ async function loadReal(){
     });
   ls=real;filtered=[];rn();
 }
+
+// FIX: Filtrowanie - zamykanie na smartfonie
+(function(){
+  const sb=document.getElementById('sb');
+  const toggle=document.getElementById('filterToggle');
+  if(!sb) return;
+  if(toggle){
+    toggle.textContent='☰ Filtrowanie';
+    toggle.onclick=function(){ sb.classList.toggle('mopen'); };
+  }
+  // Dodaj X Zamknij w nagłówku filtra
+  if(!document.getElementById('filterClose')){
+    const heads = sb.querySelectorAll('div');
+    const firstHead = heads[0];
+    if(firstHead){
+      const btn=document.createElement('button');
+      btn.id='filterClose';
+      btn.textContent='✕ Zamknij';
+      btn.style.cssText='height:32px;padding:0 12px;background:#002f34;color:#fff;border-radius:8px;border:none;font-weight:700;cursor:pointer;display:none;margin-left:8px';
+      firstHead.style.display='flex';
+      firstHead.style.justifyContent='space-between';
+      firstHead.style.alignItems='center';
+      firstHead.appendChild(btn);
+      btn.onclick=function(){ sb.classList.remove('mopen'); };
+      const obs=new MutationObserver(function(){
+        btn.style.display = (sb.classList.contains('mopen') && window.innerWidth<=900) ? 'inline-block' : 'none';
+      });
+      obs.observe(sb,{attributes:true,attributeFilter:['class']});
+    }
+  }
+})();
+
 function init(){
   ls=DEMO;rn();
   const s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js';s.async=true;
