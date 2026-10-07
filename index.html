@@ -3,7 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>WROOMER TEST V27</title>
+<title>WROOMER.PL</title>
+<link rel="preconnect" href="https://images.unsplash.com">
+<link rel="preconnect" href="https://bdpydgsfowtuvjnkyeeg.supabase.co">
+<meta name="description" content="WROOMER.PL - Auta z Twojej okolicy: Gorzyce, Wodzisław, Rybnik, Racibórz. 49 marek, 300 modeli.">
+<meta property="og:title" content="WROOMER.PL">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#f2f3f5}
@@ -24,22 +28,22 @@ body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#f2f3f5}
 @media(min-width:600px){.gd{grid-template-columns:repeat(3,1fr)}}
 @media(min-width:1100px){.gd{grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;padding:12px}}
 .cd{background:#fff;border-radius:10px;overflow:hidden;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.08)}
-.cw{position:relative;width:100%;aspect-ratio:4/3;background:#e8ecef;overflow:hidden}
-.cw img{width:100%;height:100%;object-fit:cover;object-position:center center;display:block}
+.cw{position:relative;background:#eef1f3;aspect-ratio:4/3;overflow:hidden;content-visibility:auto;contain-intrinsic-size:300px}
+.cw img{width:100%;height:100%;object-fit:cover}
 .ct{position:absolute;top:6px;right:6px;background:rgba(0,47,52,.9);color:#fff;font-size:10px;padding:4px 6px;border-radius:4px;font-weight:700}
 .cb{padding:8px}.cti{font-weight:700;font-size:13px;min-height:32px;overflow:hidden}
 .pr{font-weight:800;font-size:14px;margin-top:4px;display:flex;justify-content:space-between}
 .md{position:fixed;inset:0;z-index:60;display:none}.md.o{display:block}
 .mbg{position:absolute;inset:0;background:rgba(0,0,0,.85)}
 .mb{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;overflow:auto}
-.mc{background:#fff;width:100%;max-width:900px;max-height:92vh;border-radius:12px;overflow:hidden;display:flex;flex-direction:column}
+.mc{background:#fff;width:100%;max-width:1200px;max-height:96vh;width:96vw;border-radius:12px;overflow:hidden;display:flex;flex-direction:column}
 @media(max-width:768px){.mc{width:100%;height:100dvh;max-height:100dvh;border-radius:0}.mb{padding:0}}
 .mh{padding:12px 16px;border-bottom:1px solid #eee;display:flex;justify-content:space-between;align-items:center}
 .cl{width:36px;height:36px;border-radius:50%;background:#f2f3f5;display:grid;place-items:center;border:none;cursor:pointer}
-.dw{position:relative;background:#fff;width:100%;height:58vw;max-height:520px;min-height:300px;display:flex;align-items:center;justify-content:center;overflow:hidden;touch-action:pan-y}
-.main-img{width:100%;height:100%;object-fit:contain;background:#fff}
-.nav{position:absolute;top:50%;transform:translateY(-50%);width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.95);border:1px solid #e5e7eb;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:5}
-.nav.prev{left:10px}.nav.next{right:10px}
+.dw{position:relative;background:#fff;width:100%;height:68vh;max-height:750px;min-height:400px;display:flex;align-items:center;justify-content:center;overflow:hidden;touch-action:pan-y}
+.main-img{width:100%;height:100%;object-fit:contain;background:#000}
+.nav{position:absolute;top:50%;transform:translateY(-50%);width:56px;height:56px;border-radius:50%;background:rgba(0,0,0,.6);color:#fff;border:2px solid rgba(255,255,255,.8);display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:10;font-size:24px;font-weight:900;backdrop-filter:blur(4px)} .nav:hover{background:rgba(0,0,0,.8)}
+.nav.prev{left:16px}.nav.next{right:16px}
 .dots{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);display:flex;gap:5px;background:rgba(0,0,0,.5);padding:5px 10px;border-radius:999px}
 .dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.6)}.dot.on{background:#fff;width:18px}
 .thumbs{display:flex;gap:6px;padding:8px 10px;background:#f7f8f9;border-top:1px solid #eee;overflow:auto}
@@ -56,7 +60,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#f2f3f5}
 .px img{width:100%;height:100%;object-fit:cover}
 .px button{position:absolute;top:3px;right:3px;width:20px;height:20px;border-radius:50%;background:rgba(0,0,0,.75);color:#fff;border:none;cursor:pointer;font-size:10px}
 .btn-show{width:100%;height:44px;background:#002f34;color:#fff;border-radius:8px;font-weight:800;font-size:13px;border:none;cursor:pointer}
-.btn-edit{height:32px;padding:0 12px;background:#fff;border:1.5px solid #002f34;color:#002f34;border-radius:8px;font-weight:700;font-size:11px;cursor:pointer}
+.btn-edit{height:32px;padding:0 12px;background:#fff;border:1.5px solid #002f34;color:#002f34;border-radius:8px;font-weight:700;font-size:11px;cursor:pointer;display:none} .btn-edit.owner{display:inline-flex}
 </style>
 </head>
 <body>
@@ -66,7 +70,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#f2f3f5}
 </header>
 <div class="pg">
 <aside class="sb" id="sb">
-<div style="padding:14px 16px;border-bottom:1px solid #f0f0f0;display:flex;justify-content:space-between"><div style="font-weight:800">🔍 Wyszukiwarka i filtry - lewa</div><div id="clear" style="color:#007185;font-size:12px;font-weight:700;cursor:pointer">Wyczyść</div></div>
+<div style="padding:14px 16px;border-bottom:1px solid #f0f0f0;display:flex;justify-content:space-between"><div style="font-weight:800">🔍 Wyszukiwarka i filtry</div><div id="clear" style="color:#007185;font-size:12px;font-weight:700;cursor:pointer">Wyczyść</div></div>
 <div class="fg"><div class="fl">Szukaj</div><input id="q" class="pi2" placeholder="Octavia, BMW..."></div>
 <div class="fg"><div class="fl">Marka - wszystkie marki</div><select id="brand" class="sel"><option value="">Wszystkie marki (49 + Inny)</option><option value="Abarth">Abarth</option><option value="Alfa Romeo">Alfa Romeo</option><option value="Audi">Audi</option><option value="BMW">BMW</option><option value="BYD">BYD</option><option value="Cadillac">Cadillac</option><option value="Chery">Chery</option><option value="Chevrolet">Chevrolet</option><option value="Chrysler">Chrysler</option><option value="Citroen">Citroen</option><option value="Cupra">Cupra</option><option value="Dacia">Dacia</option><option value="Daewoo">Daewoo</option><option value="Dodge">Dodge</option><option value="DS">DS</option><option value="Fiat">Fiat</option><option value="Ford">Ford</option><option value="Genesis">Genesis</option><option value="Honda">Honda</option><option value="Hyundai">Hyundai</option><option value="Infiniti">Infiniti</option><option value="Isuzu">Isuzu</option><option value="Jaguar">Jaguar</option><option value="Jeep">Jeep</option><option value="Kia">Kia</option><option value="Lancia">Lancia</option><option value="Land Rover">Land Rover</option><option value="Lexus">Lexus</option><option value="Mazda">Mazda</option><option value="Mercedes">Mercedes</option><option value="MG">MG</option><option value="Mini">Mini</option><option value="Mitsubishi">Mitsubishi</option><option value="Nissan">Nissan</option><option value="Opel">Opel</option><option value="Peugeot">Peugeot</option><option value="Polestar">Polestar</option><option value="Porsche">Porsche</option><option value="Renault">Renault</option><option value="Seat">Seat</option><option value="Skoda">Skoda</option><option value="Smart">Smart</option><option value="SsangYong">SsangYong</option><option value="Subaru">Subaru</option><option value="Suzuki">Suzuki</option><option value="Tesla">Tesla</option><option value="Toyota">Toyota</option><option value="Volkswagen">Volkswagen</option><option value="Volvo">Volvo</option><option value="Inny">Inny - wpisz ręcznie</option></select></div>
 <div class="fg"><div class="fl">Model - wszystkie modele</div><select id="model" class="sel"><option value="">Wszystkie modele</option></select><div id="modelCount" style="font-size:10px;color:#6b7280;margin-top:4px"></div></div>
@@ -87,7 +91,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#f2f3f5}
 <div style="padding:12px"><button id="apply" class="btn-show">Pokaż wyniki</button><div id="count" style="text-align:center;font-size:11px;color:#6b7280;margin-top:6px">Ładowanie...</div></div>
 </aside>
 <main class="main">
-<div style="background:#fff;padding:8px;display:flex;gap:6px;align-items:center;border-bottom:1px solid #e5e7eb"><button id="filterToggle" class="b" style="background:#f2f3f5">☰ Filtry lewa</button><input id="q2" class="pi2" style="flex:1" placeholder="Szybkie szukanie..."><button id="myBtn" class="b" style="background:#eef1f3">Moje</button></div>
+<div style="background:#fff;padding:8px;display:flex;gap:6px;align-items:center;border-bottom:1px solid #e5e7eb"><button id="filterToggle" class="b" style="background:#f2f3f5;color:#002f34;border:1px solid #d8dfe0;font-weight:700;height:36px;padding:0 12px;border-radius:8px">☰ Filtrowanie</button><input id="q2" class="pi2" style="flex:1" placeholder="Szybkie szukanie..."><button id="myBtn" class="b" style="background:#eef1f3">Moje</button></div>
 <div id="gd" class="gd"></div><div id="ld" class="gd"><div style="background:#e5e7eb;border-radius:10px;aspect-ratio:4/3"></div><div style="background:#e5e7eb;border-radius:10px;aspect-ratio:4/3"></div><div style="background:#e5e7eb;border-radius:10px;aspect-ratio:4/3"></div><div style="background:#e5e7eb;border-radius:10px;aspect-ratio:4/3"></div></div><div id="empty" style="display:none;padding:40px;text-align:center;background:#fff;margin:8px;border-radius:10px">Brak ogłoszeń</div>
 </main>
 </div>
@@ -131,9 +135,9 @@ const U='https://bdpydgsfowtuvjnkyeeg.supabase.co', K='sb_publishable_S1qH_mBZaX
 let supa=null, ls=[], filtered=[], ai=[], editImgs=[], currentEditId=null, currentUser=null;
 const $=id=>document.getElementById(id);
 const DEMO=[
-{id:'demo1',md:'Skoda Octavia 1.9 TDI',pr:23400,lc:'Gorzyce',ds:'2008',im:['https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=600&q=70']},
-{id:'demo2',md:'VW Passat B6 2.0',pr:18900,lc:'Wodzisław',im:['https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=600&q=70']},
-{id:'demo3',md:'BMW 320d 2012',pr:42000,lc:'Rybnik',im:['https://images.unsplash.com/photo-1555215695-3004980ad54e?w=600&q=70']},
+{id:'demo1',md:'Skoda Octavia 1.9 TDI',pr:23400,lc:'Gorzyce',ds:'2008',im:['https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=400&q=60&auto=format&fm=webp']},
+{id:'demo2',md:'VW Passat B6 2.0',pr:18900,lc:'Wodzisław',im:['https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=400&q=60&auto=format&fm=webp']},
+{id:'demo3',md:'BMW 320d 2012',pr:42000,lc:'Rybnik',im:['https://images.unsplash.com/photo-1555215695-3004980ad54e?w=400&q=60&auto=format&fm=webp']},
 ];
 async function comp(file,maxW=800,quality=0.65){
   return new Promise(res=>{
@@ -151,7 +155,7 @@ async function comp(file,maxW=800,quality=0.65){
 }
 function getMyIds(){try{return JSON.parse(localStorage.getItem('wroomer_my_ids')||'[]')}catch(e){return []}}
 function addMyId(id){const ids=getMyIds(); if(!ids.includes(id)){ids.push(id); localStorage.setItem('wroomer_my_ids',JSON.stringify(ids));}}
-function isMine(id){ if(!currentUser) return false; const item=ls.find(x=>x.id===id); if(!item) return false; if(item.user_id && item.user_id===currentUser.id) return true; const myIds=getMyIds(); if(myIds.includes(id)) return true; return false; }
+function isMine(id){ try{ if(!currentUser) return false; const it=(typeof ls!=='undefined'?ls:[]).find(x=>x.id===id); if(!it) return false; if(it.user_id && it.user_id===currentUser.id) return true; const my=JSON.parse(localStorage.getItem('myListingIds')||'[]'); return my.includes(id); }catch(e){ return false; } }
 
 function populateModels(brand,targetId){
   if(brand==='Inny'){
@@ -176,12 +180,73 @@ function applyFilters(){
     if(brand && !x.md.toLowerCase().includes(brand)) return false;
     if(model && !x.md.toLowerCase().includes(model)) return false;
     if(x.pr<pmin || x.pr>pmax) return false;
-    if(loc && !x.lc.toLowerCase().includes(loc)) return false;
     if(x.is_banned) return false;
     if(x.is_hidden) return false;
+    if(loc && !x.lc.toLowerCase().includes(loc)) return false;
     return true;
   }); rn();
 }
+
+
+// FIX: Strzałka wstecz z telefonu - cofa do początku ogłoszenia, nie zamyka strony
+(function(){
+  let modalOpen=false;
+  const origOd = window.od;
+  // Intercept od() to push history
+  const originalPush = history.pushState;
+  window.addEventListener('popstate', (e)=>{
+    const m=document.getElementById('dm');
+    if(m && m.classList.contains('o')){
+      // Jeśli modal otwarty, cofnij do początku ogłoszenia (scroll top)
+      const dc=document.getElementById('dc');
+      if(dc){
+        const scrollTop = dc.scrollTop;
+        if(scrollTop > 100){
+          // Jeśli zescrollowane w dół, cofnij na górę ogłoszenia
+          e.preventDefault();
+          dc.scrollTo({top:0, behavior:'smooth'});
+          history.pushState({modal:true}, '', '#ogloszenie-'+(currentEditId||''));
+          return;
+        } else {
+          // Jeśli już na górze, zamknij modal
+          m.classList.remove('o');
+          document.body.style.overflow='';
+        }
+      }
+    }
+  });
+
+  // Wrap od function to push state
+  const oldOd = window.od;
+  // We'll hook via replacing after definition - do it in init wrapper
+})();
+
+// Hook w od() - pushState przy otwarciu
+
+// LICZNIK WEJŚĆ
+function getViews(){ try{return JSON.parse(localStorage.getItem('wroomer_views')||'{}')}catch(e){return {}} }
+function incView(id){
+  const views=getViews();
+  views[id]=(views[id]||0)+1;
+  localStorage.setItem('wroomer_views', JSON.stringify(views));
+  // Try supabase increment if column exists
+  if(supa){
+    supa.from('listings').select('views').eq('id',id).single().then(({data})=>{
+      if(data && typeof data.views!=='undefined'){
+        supa.from('listings').update({views:(data.views||0)+1}).eq('id',id).then(()=>{});
+      }
+    }).catch(()=>{});
+  }
+  // Update counter display if exists
+  const el=document.getElementById('viewCounter-'+id);
+  if(el) el.textContent=(views[id]||1)+' wyświetleń';
+  const el2=document.getElementById('viewCounterDetail');
+  if(el2) el2.textContent='👁️ '+(views[id]||1)+' wyświetleń';
+  return views[id]||1;
+}
+function getViewCount(id){ const v=getViews(); return v[id]||0; }
+function getTotalViews(){ const v=getViews(); return Object.values(v).reduce((a,b)=>a+b,0); }
+
 function rn(){
   const g=$('gd'),e=$('empty'),l=$('ld');
   const data=filtered.length||$('q').value||$('q2').value||$('brand').value||$('model').value||$('pmin').value||$('pmax').value||$('loc').value?filtered:ls;
@@ -190,8 +255,9 @@ function rn(){
   data.forEach(x=>{
     const d=document.createElement('div');d.className='cd';
     const first=x.im&&x.im[0]?x.im[0]:DEMO[0].im[0];
-    d.innerHTML=`<div class="cw"><img src="${first}" loading="lazy"><div class="ct">${x.im?x.im.length:0} zdjęć</div></div><div class="cb"><div class="cti">${x.md}</div><div class="pr"><span>${(x.pr||0).toLocaleString()} zł</span><span style="font-size:11px;color:#6b7280">${x.lc}</span></div></div>`;
-    d.onclick=()=>od(x);g.appendChild(d);
+    const vc=getViewCount(x.id);
+    d.innerHTML=`<div class="cw"><img src="${first}" loading="lazy" alt="${x.md} - ${x.lc}" decoding="async" width="400" height="300"><div class="ct">${x.im?x.im.length:0} zdjęć</div></div><div class="cb"><div class="cti">${x.md}</div><div class="pr"><span>${(x.pr||0).toLocaleString()} zł</span><span style="font-size:11px;color:#6b7280">${x.lc}</span></div></div>`;
+    d.onclick=()=>{ incView(x.id); od(x); };g.appendChild(d);
   });
   $('count').textContent=data.length+' ogłoszeń • '+Object.keys(MODELS).length+' marek • '+Object.values(MODELS).flat().length+' modeli';
 }
@@ -202,9 +268,11 @@ async function od(item){
   if(ims.length===0) ims=DEMO[0].im;
   let cur=0;
   currentEditId=item.id;
+  const viewsCount=incView(item.id);
+  setTimeout(()=>{ const el=document.getElementById('viewCounterDetail'); if(el) el.textContent='👁️ '+viewsCount+' wyświetleń'; },100);
   const mine=isMine(item.id);
-  $('editBtn').style.display='block'; // ZAWSZE widoczny - fix dla użytkownika
-  if(mine){ $('editBtn').textContent='✏️ Edytuj (Twoje)'; $('editBtn').style.background='#e6f7f5'; } else { $('editBtn').textContent='✏️ Edytuj'; }
+  $('editBtn').style.display='none'; // ukryty domyślnie - fix dla użytkownika
+  if(mine){ $('editBtn').style.display='inline-flex'; $('editBtn').classList.add('owner'); $('editBtn').textContent='✏️ Edytuj'; $('editBtn').style.background='#e6f7f5'; } else { $('editBtn').style.display='none'; $('editBtn').classList.remove('owner'); }
   
   // Build full params table - OTOMOTO style
   const params = [
@@ -237,15 +305,15 @@ async function od(item){
 
   dc.innerHTML=`
     <div class="dw" id="dw">
-      <img id="mainGalleryImg" class="main-img" src="${ims[0]}" alt="${item.md}" draggable="false">
-      ${ims.length>1?`<button id="dp" class="nav prev" type="button">‹</button><button id="dn" class="nav next" type="button">›</button><div class="dots" id="dots">${ims.map((_,i)=>`<div class="dot ${i===0?'on':''}" data-i="${i}"></div>`).join('')}</div><div id="counter" style="position:absolute;top:8px;right:8px;background:rgba(0,0,0,.65);color:#fff;font-size:11px;padding:4px 8px;border-radius:6px;font-weight:700;z-index:5">${cur+1}/${ims.length}</div>`:''}
+      <img id="mainGalleryImg" class="main-img" alt="" decoding="async" src="${ims[0]}" alt="${item.md}" draggable="false">
+      ${ims.length>1?`<button id="dp" class="nav prev" type="button" aria-label="Poprzednie zdjęcie">‹</button><button id="dn" class="nav next" type="button" aria-label="Następne zdjęcie">›</button><div class="dots" id="dots">${ims.map((_,i)=>`<div class="dot ${i===0?'on':''}" data-i="${i}"></div>`).join('')}</div><div id="counter" style="position:absolute;top:8px;right:8px;background:rgba(0,0,0,.65);color:#fff;font-size:11px;padding:4px 8px;border-radius:6px;font-weight:700;z-index:5">${cur+1}/${ims.length}</div>`:''}
     </div>
     ${ims.length>1?`<div class="thumbs" id="thumbs">${ims.map((s,i)=>`<div class="th ${i===0?'on':''}" data-i="${i}"><img src="${s}" loading="lazy"></div>`).join('')}</div>`:''}
     
     <div style="padding:16px">
       <h2 style="font-weight:800;font-size:20px;line-height:1.2">${item.md}</h2>
       <div style="font-weight:800;font-size:26px;margin-top:8px;color:#002f34">${(item.pr||0).toLocaleString()} zł</div>
-      <div style="font-size:12px;color:#6b7280;margin-top:4px">📍 ${item.lc || '-'} • ${ims.length} zdjęć • przesuwaj palcem ↔️ • swipe działa</div>
+      <div style="font-size:12px;color:#6b7280;margin-top:6px">📍 ${item.lc || '-'} • ${ims.length} zdjęć • przesuwaj palcem ↔️ • swipe działa</div>
       
       <div style="margin-top:16px;background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px">
         <div style="font-weight:800;font-size:14px;margin-bottom:8px">📋 Wszystkie informacje - OTOMOTO</div>
@@ -258,12 +326,14 @@ async function od(item){
     </div>
 
     <div style="display:flex;gap:8px;padding:12px;background:#fff;border-top:1px solid #eee;position:sticky;bottom:0">
-      <a href="tel:600000000" style="flex:1;height:44px;background:#002f34;color:#fff;border-radius:8px;display:grid;place-items:center;text-decoration:none;font-weight:800;font-size:13px">📞 Zadzwoń</a>
-      <a href="sms:600000000" style="flex:1;height:44px;background:#fff;border:1.5px solid #002f34;color:#002f34;border-radius:8px;display:grid;place-items:center;text-decoration:none;font-weight:800;font-size:13px">SMS</a>
-      <a href="https://wa.me/48600000000" target="_blank" style="flex:1;height:44px;background:#25D366;color:#fff;border-radius:8px;display:grid;place-items:center;text-decoration:none;font-weight:800;font-size:13px">WhatsApp</a>
+      <a href="tel:600000000" id="callBtn" style="flex:1;height:44px;background:#002f34;color:#fff;border-radius:8px;display:grid;place-items:center;text-decoration:none;font-weight:800;font-size:13px">📞 Zadzwoń</a>
+      <a href="sms:600000000?body=Cześć, piszę w sprawie ogłoszenia ${encodeURIComponent(item.md)}" id="smsBtn" style="flex:1;height:44px;background:#fff;border:1.5px solid #002f34;color:#002f34;border-radius:8px;display:grid;place-items:center;text-decoration:none;font-weight:800;font-size:13px">SMS</a>
+      <a href="https://wa.me/48600000000?text=Cześć, piszę w sprawie ${encodeURIComponent(item.md)}" id="waBtn" style="flex:1;height:44px;background:#25D366;color:#fff;border-radius:8px;display:grid;place-items:center;text-decoration:none;font-weight:800;font-size:13px">WhatsApp</a>
     </div>
   `;
-  m.classList.add('o');document.body.style.overflow='hidden'; try{ history.pushState({modal:true, id:item.id}, '', '#'+item.id); }catch(e){} const dcEl=document.getElementById('dc'); if(dcEl) dcEl.scrollTop=0;
+  m.classList.add('o');document.body.style.overflow='hidden';
+  try{ history.pushState({modal:true, id:item.id}, '', '#'+item.id); }catch(e){}
+  const dcEl=document.getElementById('dc'); if(dcEl) dcEl.scrollTop=0;
   const mainImg=document.getElementById('mainGalleryImg');
   const upd=()=>{
     if(mainImg) mainImg.src=ims[cur];
@@ -279,7 +349,7 @@ async function od(item){
   const dwEl=document.getElementById('dw');
   dwEl.addEventListener('touchstart', e=>{if(e.target.closest('.nav')) return; sx=e.touches[0].clientX; drag=true;}, {passive:true});
   dwEl.addEventListener('touchend', e=>{if(!drag) return; drag=false; const dx=e.changedTouches[0].clientX-sx; if(Math.abs(dx)>40){ if(dx<0) cur=(cur+1)%ims.length; else cur=(cur-1+ims.length)%ims.length; upd(); }}, {passive:true});
-  const closeDm=()=>{m.classList.remove('o');document.body.style.overflow='';};
+  const closeDm=()=>{m.classList.remove('o');document.body.style.overflow=''; try{ if(history.state && history.state.modal) history.back(); }catch(e){} };
   $('cd').onclick=closeDm; $('dbg').onclick=closeDm;
 }
 
@@ -299,7 +369,7 @@ $('editBtn').onclick=()=>{ // ZAWSZE pozwala edytować - fix
 function rp(){const p=$('pv');p.innerHTML='';ai.forEach((o,i)=>{const d=document.createElement('div');d.className='px';d.innerHTML=`<img src="${o.data}"><button type="button">✕</button>`;d.querySelector('button').onclick=()=>{ai.splice(i,1);rp();};p.appendChild(d);});$('ci').textContent=ai.length?`${ai.length} zdjęć skompresowanych`:'';
 }
 $('dz').onclick=()=>$('fi').click();
-$('fi').onchange=async e=>{const fs=Array.from(e.target.files).slice(0,10-ai.length); if(fs.length===0)return; $('ci').textContent=`Kompresuję ${fs.length}...`; for(const f of fs){const c=await comp(f,800,0.65); ai.push(c);} rp();};
+$('fi').onchange=async e=>{const fs=Array.from(e.target.files).slice(0,10-ai.length); if(fs.length===0)return; $('ci').textContent=`Kompresuję ${fs.length}...`; for(const f of fs){const c=await comp(f,500,0.50); ai.push(c);} rp();};
 $('brand').addEventListener('change',e=>{populateModels(e.target.value,'model'); applyFilters();});
 $('mk').addEventListener('change',e=>{populateModels(e.target.value,'md2'); const t=e.target.value+' '+($('md2').value||''); if(t.trim().length>3) $('titleFull').value=t;});
 $('md2').addEventListener('change',e=>{const t=$('mk').value+' '+e.target.value; if(t.trim().length>3) $('titleFull').value=t;});
@@ -358,9 +428,53 @@ async function loadReal(){
   if(!data||data.length===0)return;
   let imap={};
   try{const {data:ims}=await supa.from('listing_images').select('listing_id,image_url').ilike('image_url','https://%').limit(1000);if(ims)ims.forEach(r=>{if(!imap[r.listing_id])imap[r.listing_id]=[];if(imap[r.listing_id].length<10)imap[r.listing_id].push(r.image_url);});}catch(e){}
-  const real=data.map(r=>({id:r.id,md:r.title||'Bez tytułu',pr:r.price||0,lc:r.location||'Gorzyce',ds:r.description||'',im:imap[r.id]&&imap[r.id].length?imap[r.id]:[DEMO[0].im[0]],user_id:r.user_id}));
+  const real=data.map(r=>{
+      let ds=r.description||'';
+      let extra={};
+      if(ds.includes('__OTOMOTO__')){
+        try{
+          const parts=ds.split('__OTOMOTO__');
+          ds=parts[0].trim();
+          extra=JSON.parse(parts[1]||'{}');
+        }catch(e){}
+      }
+      return {id:r.id,md:r.title||'Bez tytułu',pr:r.price||0,lc:r.location||'Gorzyce',ds:ds,im:imap[r.id]&&imap[r.id].length?imap[r.id]:[DEMO[0].im[0]],
+        year:extra.year||'',mileage:extra.mileage||'',power:extra.power||'',capacity:extra.capacity||'',fuel:extra.fuel||'',gear:extra.gear||'',body:extra.body||'',color:extra.color||'',drive:extra.drive||'',doors:extra.doors||'',state:extra.state||'',origin:extra.origin||'',country:extra.country||'',generation:extra.generation||'',marka:extra.marka||'',model:extra.model||'',user_id:r.user_id};
+    });
   ls=real;filtered=[];rn();
 }
+
+// FIX: Filtrowanie - zamykanie na smartfonie
+(function(){
+  const sb=document.getElementById('sb');
+  const toggle=document.getElementById('filterToggle');
+  if(!sb) return;
+  if(toggle){
+    toggle.textContent='☰ Filtrowanie';
+    toggle.onclick=function(){ sb.classList.toggle('mopen'); };
+  }
+  // Dodaj X Zamknij w nagłówku filtra
+  if(!document.getElementById('filterClose')){
+    const heads = sb.querySelectorAll('div');
+    const firstHead = heads[0];
+    if(firstHead){
+      const btn=document.createElement('button');
+      btn.id='filterClose';
+      btn.textContent='✕ Zamknij';
+      btn.style.cssText='height:32px;padding:0 12px;background:#002f34;color:#fff;border-radius:8px;border:none;font-weight:700;cursor:pointer;display:none;margin-left:8px';
+      firstHead.style.display='flex';
+      firstHead.style.justifyContent='space-between';
+      firstHead.style.alignItems='center';
+      firstHead.appendChild(btn);
+      btn.onclick=function(){ sb.classList.remove('mopen'); };
+      const obs=new MutationObserver(function(){
+        btn.style.display = (sb.classList.contains('mopen') && window.innerWidth<=900) ? 'inline-block' : 'none';
+      });
+      obs.observe(sb,{attributes:true,attributeFilter:['class']});
+    }
+  }
+})();
+
 function init(){
   ls=DEMO;rn();
   const s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js';s.async=true;
