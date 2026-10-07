@@ -1,0 +1,18 @@
+-- URUCHOM TO W SUPABASE SQL EDITOR:
+
+-- 1. Licznik wejść
+ALTER TABLE listings ADD COLUMN IF NOT EXISTS views INTEGER DEFAULT 0;
+
+-- 2. Banowanie i chowanie ogłoszeń
+ALTER TABLE listings ADD COLUMN IF NOT EXISTS is_hidden BOOLEAN DEFAULT false;
+ALTER TABLE listings ADD COLUMN IF NOT EXISTS is_banned BOOLEAN DEFAULT false;
+
+-- 3. Opcjonalnie: log wyświetleń z datami (dla filtrowania na tygodnie globalnie)
+CREATE TABLE IF NOT EXISTS view_logs (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  listing_id TEXT,
+  viewed_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Sprawdź:
+SELECT id, title, views, is_hidden, is_banned FROM listings LIMIT 5;

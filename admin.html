@@ -92,7 +92,15 @@ img.thumb{width:60px;height:45px;object-fit:cover;border-radius:6px}
 <!-- TABLE -->
 <div class="card">
 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px">
-<h3>🔧 Wszystkie ogłoszenia - zarządzaj + wyświetlenia</h3>
+<h3>🔧 Wszystkie ogłoszenia - zarządzaj + wyświetlenia + ban/hide</h3>
+
+<div style="display:flex;gap:6px;margin-bottom:8px">
+<button class="weekBtn on" data-filter="all" onclick="setAdminFilter('all')">Wszystkie</button>
+<button class="weekBtn" data-filter="visible" onclick="setAdminFilter('visible')">👁️ Widoczne</button>
+<button class="weekBtn" data-filter="hidden" onclick="setAdminFilter('hidden')">🙈 Ukryte</button>
+<button class="weekBtn" data-filter="banned" onclick="setAdminFilter('banned')">🚫 Zbanowane</button>
+</div>
+
 <div style="display:flex;gap:8px">
 <input id="search" class="input" placeholder="Szukaj tytułu/miejscowości..." style="width:220px">
 <button id="refresh" class="b bw">Odśwież</button>
@@ -113,7 +121,16 @@ img.thumb{width:60px;height:45px;object-fit:cover;border-radius:6px}
 <script>
 const U='https://bdpydgsfowtuvjnkyeeg.supabase.co', K='sb_publishable_S1qH_mBZaX7-bzmfJ0IVGA_6hxGbJWd';
 let supa=window.supabase.createClient(U,K);
-let listings=[], imap={}, viewLog=[], currentWeekFilter='all', customFrom=null, customTo=null;
+let listings=[], imap={}, viewLog=[], currentWeekFilter='all', customFrom=null, customTo=null, adminVisibilityFilter='all'
+
+let adminVisibilityFilter='all';
+function setAdminFilter(f){
+  adminVisibilityFilter=f;
+  document.querySelectorAll('[data-filter]').forEach(b=>b.classList.remove('on'));
+  document.querySelector(`[data-filter="${f}"]`)?.classList.add('on');
+  renderTable();
+}
+, customFrom=null, customTo=null;
 
 function getWeekStart(d){ const date=new Date(d); const day=date.getDay(); const diff=date.getDate()-day+(day===0?-6:1); date.setDate(diff); date.setHours(0,0,0,0); return date; }
 function getDateRangeForFilter(filter){
@@ -148,7 +165,7 @@ async function checkAdmin(){
 }
 
 async function loadAll(){
-  const {data: listingsData}=await supa.from('listings').select('id,title,description,price,location,created_at,user_id,views').order('created_at',{ascending:false}).limit(500);
+  const {data: listingsData}=await supa.from('listings').select('id,title,description,price,location,created_at,user_id,views,is_hidden,is_banned').order('created_at',{ascending:false}).limit(500);
   listings=listingsData||[];
   imap={};
   try{
@@ -216,7 +233,13 @@ function renderTable(){
   const q=(document.getElementById('search').value||'').toLowerCase();
   const range=getDateRangeForFilter(currentWeekFilter);
   
-  listings.filter(x=> !q || x.title.toLowerCase().includes(q) || (x.location||'').toLowerCase().includes(q)).forEach(item=>{
+  listings.filter(x=>{
+    if(q && !x.title.toLowerCase().includes(q) && !(x.location||'').toLowerCase().includes(q)) return false;
+    if(adminVisibilityFilter==='visible' && (x.is_hidden || x.is_banned)) return false;
+    if(adminVisibilityFilter==='hidden' && !x.is_hidden) return false;
+    if(adminVisibilityFilter==='banned' && !x.is_banned) return false;
+    return true;
+  }).forEach(item=>{
     // Count views in selected period for this item
     let periodViews=0;
     if(range){
@@ -233,19 +256,41 @@ function renderTable(){
     const totalItemViews = item.views || viewLog.filter(e=>e.id===item.id).length || 0;
     tr.innerHTML=`
       <td>${img?`<img src="${img}" class="thumb">`:'-'}<div style="font-size:10px;color:#94a3b8">${imap[item.id]?.length||0} zdjęć ${hasOT?'• OTOMOTO':''}</div></td>
-      <td><div style="font-weight:700">${item.title}</div><div style="color:#23e5db">${(item.price||0).toLocaleString()} zł</div><div style="font-size:11px;color:#94a3b8">📍 ${item.location||''}</div><div style="font-size:11px;color:#f59e0b;font-weight:700">👁️ ${totalItemViews} suma</div></td>
+      <td><div style="font-weight:700">${item.title}</div><div style="font-size:10px">${item.is_banned ? '<span style="background:#ef4444;color:#fff;padding:2px 6px;border-radius:4px">🚫 ZBANOWANE</span>' : ''} ${item.is_hidden && !item.is_banned ? '<span style="background:#f59e0b;color:#fff;padding:2px 6px;border-radius:4px">🙈 UKRYTE</span>' : ''}</div><div style="color:#23e5db">${(item.price||0).toLocaleString()} zł</div><div style="font-size:11px;color:#94a3b8">📍 ${item.location||''}</div><div style="font-size:11px;color:#f59e0b;font-weight:700">👁️ ${totalItemViews} suma</div></td>
       <td><div style="font-size:18px;font-weight:800;color:#22c55e">${periodViews}</div><div style="font-size:10px;color:#64748b">w okresie</div><div style="font-size:10px;color:#94a3b8">${currentWeekFilter}</div></td>
       <td style="max-width:300px"><div style="white-space:pre-wrap;font-size:11px">${descClean}</div></td>
       <td style="font-size:10px;word-break:break-all">${item.user_id?item.user_id.slice(0,8):'anon'}</td>
       <td>
         <div style="display:flex;flex-direction:column;gap:4px">
-          <button class="b br" style="height:28px;font-size:11px" onclick="delAd('${item.id}')">🗑️ Usuń</button>
+          ${item.is_hidden ? `<button class="b bg" style="height:28px;font-size:11px" onclick="unhideAd('${item.id}')">👁️ Odkryj</button>` : `<button class="b" style="height:28px;font-size:11px;background:#f59e0b;color:#fff" onclick="hideAd('${item.id}')">🙈 Ukryj</button>`}
+          ${item.is_banned ? `<button class="b bg" style="height:28px;font-size:11px" onclick="unbanAd('${item.id}')">✅ Odbanuj</button>` : `<button class="b br" style="height:28px;font-size:11px" onclick="banAd('${item.id}')">🚫 Banuj</button>`}
+          <button class="b br" style="height:28px;font-size:11px;opacity:.7" onclick="delAd('${item.id}')">🗑️ Usuń</button>
           <a href="/?id=${item.id}" target="_blank" class="b bw" style="height:28px;font-size:11px;text-decoration:none;display:grid;place-items:center">👁️ Zobacz</a>
         </div>
       </td>
     `;
     tbody.appendChild(tr);
   });
+}
+
+
+async function hideAd(id){
+  if(!confirm('Ukryć ogłoszenie dla odwiedzających? Będzie niewidoczne na portalu, ale widoczne w adminie.')) return;
+  const {error}=await supa.from('listings').update({is_hidden:true}).eq('id',id);
+  if(error){ alert('Błąd: '+error.message+'\nUruchom SQL: ALTER TABLE listings ADD COLUMN is_hidden BOOLEAN DEFAULT false;'); } else { alert('Ukryto'); loadAll(); }
+}
+async function unhideAd(id){
+  const {error}=await supa.from('listings').update({is_hidden:false}).eq('id',id);
+  if(error){ alert('Błąd: '+error.message); } else { loadAll(); }
+}
+async function banAd(id){
+  if(!confirm('Zbanować ogłoszenie? Będzie ukryte i oznaczone jako zbanowane.')) return;
+  const {error}=await supa.from('listings').update({is_banned:true, is_hidden:true}).eq('id',id);
+  if(error){ alert('Błąd: '+error.message+'\nUruchom SQL: ALTER TABLE listings ADD COLUMN is_banned BOOLEAN DEFAULT false;'); } else { alert('Zbanowano'); loadAll(); }
+}
+async function unbanAd(id){
+  const {error}=await supa.from('listings').update({is_banned:false, is_hidden:false}).eq('id',id);
+  if(error){ alert('Błąd: '+error.message); } else { loadAll(); }
 }
 
 async function delAd(id){
