@@ -62,7 +62,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#f2f3f5}
 .btn-show{width:100%;height:44px;background:#002f34;color:#fff;border-radius:8px;font-weight:800;font-size:13px;border:none;cursor:pointer}
 .btn-edit{height:32px;padding:0 12px;background:#fff;border:1.5px solid #002f34;color:#002f34;border-radius:8px;font-weight:700;font-size:11px;cursor:pointer;display:none} .btn-edit.owner{display:inline-flex}
 </style>
-<style>.chip{padding:7px 14px;border:1.5px solid #d8dfe0;border-radius:20px;background:#fff;font-size:12px;font-weight:600;cursor:pointer;transition:all 0.15s} .chip.active{background:#002f34 !important;color:#fff !important;border-color:#002f34 !important} .chip:hover{border-color:#002f34}</style></head>
+</head>
 <body>
 <header class="h">
 <div class="logo" onclick="location.reload()"><div class="li">W</div><div class="lt">WROOMER<span>.PL</span> TEST</div></div>
@@ -70,54 +70,25 @@ body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#f2f3f5}
 </header>
 <div class="pg">
 <aside class="sb" id="sb">
-<div style="padding:14px 16px;border-bottom:1px solid #f0f0f0;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:#fff;z-index:2">
-<div style="font-weight:800;font-size:14px">🔍 Filtry</div>
-<div id="clear" style="color:#007185;font-size:12px;font-weight:700;cursor:pointer;background:#f0f7f7;padding:4px 10px;border-radius:6px">Wyczyść</div>
-</div>
+<div style="padding:14px 16px;border-bottom:1px solid #f0f0f0;display:flex;justify-content:space-between"><div style="font-weight:800">🔍 Wyszukiwarka i filtry</div><div id="clear" style="color:#007185;font-size:12px;font-weight:700;cursor:pointer">Wyczyść</div></div>
+<div class="fg"><div class="fl">Szukaj</div><input id="q" class="pi2" placeholder="Octavia, BMW..."></div>
+<div class="fg"><div class="fl">Marka - wszystkie marki</div><select id="brand" class="sel"><option value="">Wszystkie marki (49 + Inny)</option><option value="Abarth">Abarth</option><option value="Alfa Romeo">Alfa Romeo</option><option value="Audi">Audi</option><option value="BMW">BMW</option><option value="BYD">BYD</option><option value="Cadillac">Cadillac</option><option value="Chery">Chery</option><option value="Chevrolet">Chevrolet</option><option value="Chrysler">Chrysler</option><option value="Citroen">Citroen</option><option value="Cupra">Cupra</option><option value="Dacia">Dacia</option><option value="Daewoo">Daewoo</option><option value="Dodge">Dodge</option><option value="DS">DS</option><option value="Fiat">Fiat</option><option value="Ford">Ford</option><option value="Genesis">Genesis</option><option value="Honda">Honda</option><option value="Hyundai">Hyundai</option><option value="Infiniti">Infiniti</option><option value="Isuzu">Isuzu</option><option value="Jaguar">Jaguar</option><option value="Jeep">Jeep</option><option value="Kia">Kia</option><option value="Lancia">Lancia</option><option value="Land Rover">Land Rover</option><option value="Lexus">Lexus</option><option value="Mazda">Mazda</option><option value="Mercedes">Mercedes</option><option value="MG">MG</option><option value="Mini">Mini</option><option value="Mitsubishi">Mitsubishi</option><option value="Nissan">Nissan</option><option value="Opel">Opel</option><option value="Peugeot">Peugeot</option><option value="Polestar">Polestar</option><option value="Porsche">Porsche</option><option value="Renault">Renault</option><option value="Seat">Seat</option><option value="Skoda">Skoda</option><option value="Smart">Smart</option><option value="SsangYong">SsangYong</option><option value="Subaru">Subaru</option><option value="Suzuki">Suzuki</option><option value="Tesla">Tesla</option><option value="Toyota">Toyota</option><option value="Volkswagen">Volkswagen</option><option value="Volvo">Volvo</option><option value="Inny">Inny - wpisz ręcznie</option></select></div>
+<div class="fg"><div class="fl">Model - wszystkie modele</div><select id="model" class="sel"><option value="">Wszystkie modele</option></select><div id="modelCount" style="font-size:10px;color:#6b7280;margin-top:4px"></div></div>
+<div class="fg"><div class="fl">Cena</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px"><input id="pmin" class="pi2" type="number" placeholder="od zł"><input id="pmax" class="pi2" type="number" placeholder="do zł"></div></div>
+<div class="fg"><div class="fl">Lokalizacja</div><input id="loc" class="pi2" placeholder="Gorzyce"></div>
 
-<div style="padding:12px;display:flex;flex-direction:column;gap:14px">
-
-<!-- NAJWAŻNIEJSZE - ZAWSZE WIDOCZNE -->
-<div class="fg" style="margin:0"><div class="fl" style="font-weight:700;font-size:12px">Szukaj</div><input id="q" class="pi2" placeholder="Model, marka..."></div>
-
-<div class="fg" style="margin:0"><div class="fl" style="font-weight:700;font-size:12px">Marka i model</div><select id="brand" class="sel"><option value="">Wszystkie marki</option></select><select id="model" class="sel" style="margin-top:6px"><option value="">Wszystkie modele</option></select><div id="modelCount" style="font-size:10px;color:#6b7280;margin-top:4px"></div></div>
-
-<div class="fg" style="margin:0"><div class="fl" style="font-weight:700;font-size:12px">Cena</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px"><input id="pmin" class="pi2" type="number" placeholder="od zł"><input id="pmax" class="pi2" type="number" placeholder="do zł"></div></div>
-
-<div class="fg" style="margin:0"><div class="fl" style="font-weight:700;font-size:12px">Lokalizacja</div><input id="loc" class="pi2" placeholder="Np. Gorzyce, Rybnik"></div>
-
-<div class="fg" style="margin:0"><div class="fl" style="font-weight:700;font-size:12px">Rok i przebieg</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:6px"><input id="ymin" class="pi2" type="number" placeholder="Rok od"><input id="ymax" class="pi2" type="number" placeholder="Rok do"></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px"><input id="kmin" class="pi2" type="number" placeholder="km od"><input id="kmax" class="pi2" type="number" placeholder="km do"></div></div>
-
-<div class="fg" style="margin:0"><div class="fl" style="font-weight:700;font-size:12px;margin-bottom:6px">Paliwo</div><div id="fuelFilters" style="display:flex;gap:5px;flex-wrap:wrap"><button type="button" class="chip" data-fuel="Benzyna">Benzyna</button><button type="button" class="chip" data-fuel="Diesel">Diesel</button><button type="button" class="chip" data-fuel="Benzyna+LPG">LPG</button><button type="button" class="chip" data-fuel="Hybryda">Hybryda</button><button type="button" class="chip" data-fuel="Elektryczny">Elektryk</button></div></div>
-
-<div class="fg" style="margin:0"><div class="fl" style="font-weight:700;font-size:12px;margin-bottom:6px">Skrzynia</div><div id="gearFilters" style="display:flex;gap:6px"><button type="button" class="chip" data-gear="Manualna" style="flex:1">Manualna</button><button type="button" class="chip" data-gear="Automatyczna" style="flex:1">Automat</button></div></div>
-
-</div>
-
-<!-- RESZTA - ZWINIĘTA -->
-<details id="moreFilters" style="margin:12px;border:1px solid #e5e7eb;border-radius:12px;background:#f9fafb;overflow:hidden"><summary id="moreSummary" style="cursor:pointer;padding:12px 14px;font-weight:700;font-size:13px;list-style:none;display:flex;justify-content:space-between;align-items:center;background:#fff"><span>⚙️ Więcej filtrów</span><span id="moreIcon" style="background:#002f34;color:#fff;padding:2px 8px;border-radius:10px;font-size:11px">▼ Rozwiń</span></summary>
-<div style="padding:12px;display:flex;flex-direction:column;gap:12px;background:#fff;border-top:1px solid #e5e7eb">
-
-<div class="fg" style="margin:0"><div class="fl">Nadwozie</div><select id="body" class="sel"><option value="">Dowolny</option><option>Sedan</option><option>Kombi</option><option>Hatchback</option><option>SUV</option><option>Coupe</option><option>Kabriolet</option><option>Minivan</option><option>Pickup</option><option>Van</option></select></div>
-
-<div class="fg" style="margin:0"><div class="fl">Moc i pojemność</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:6px"><input id="powmin" class="pi2" type="number" placeholder="Moc od KM"><input id="powmax" class="pi2" type="number" placeholder="Moc do KM"></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px"><input id="capmin" class="pi2" type="number" placeholder="Poj. od cm3"><input id="capmax" class="pi2" type="number" placeholder="Poj. do cm3"></div></div>
-
-<div class="fg" style="margin:0"><div class="fl">Kolor</div><select id="color" class="sel"><option value="">Dowolny</option><option>Biały</option><option>Czarny</option><option>Srebrny</option><option>Szary</option><option>Czerwony</option><option>Niebieski</option><option>Zielony</option><option>Beżowy</option><option>Brązowy</option><option>Żółty</option><option>Inny</option></select></div>
-
-<div class="fg" style="margin:0"><div class="fl">Stan i pochodzenie</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px"><select id="state" class="sel"><option value="">Stan</option><option>Nowy</option><option>Używany</option><option>Uszkodzony</option></select><select id="origin" class="sel"><option value="">Pochodzenie</option><option>Krajowy</option><option>Importowany</option></select></div></div>
-
-<div class="fg" style="margin:0"><div class="fl">Napęd</div><select id="drive" class="sel"><option value="">Dowolny</option><option>Przedni</option><option>Tylny</option><option>4x4 stały</option><option>4x4 dołączany</option></select></div>
-
-<button id="collapseBtn" type="button" style="width:100%;padding:10px;border:1.5px solid #002f34;background:#fff;color:#002f34;border-radius:8px;font-weight:700;cursor:pointer;margin-top:4px">▲ Zwiń filtry</button>
-
-</div>
-</details>
-
-<div style="padding:12px;border-top:1px solid #f0f0f0;background:#fff;position:sticky;bottom:0">
-<div id="count" style="text-align:center;color:#6b7280;font-size:11px;margin-bottom:8px">Ładowanie...</div>
-<button id="apply" class="btn-show" style="height:44px;border-radius:8px">Pokaż wyniki</button>
-</div>
-
+<div class="fg"><div class="fl">Rok produkcji</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px"><input id="ymin" class="pi2" type="number" placeholder="od"><input id="ymax" class="pi2" type="number" placeholder="do"></div></div>
+<div class="fg"><div class="fl">Przebieg km</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px"><input id="kmin" class="pi2" type="number" placeholder="od"><input id="kmax" class="pi2" type="number" placeholder="do"></div></div>
+<div class="fg"><div class="fl">Moc KM</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px"><input id="powmin" class="pi2" type="number" placeholder="od"><input id="powmax" class="pi2" type="number" placeholder="do"></div></div>
+<div class="fg"><div class="fl">Pojemność cm3</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px"><input id="capmin" class="pi2" type="number" placeholder="od"><input id="capmax" class="pi2" type="number" placeholder="do"></div></div>
+<div class="fg"><div class="fl">Rodzaj paliwa - </div><div style="display:flex;gap:4px;flex-wrap:wrap" id="fuelFilters"><button class="chip" data-fuel="Benzyna">Benzyna</button><button class="chip" data-fuel="Diesel">Diesel</button><button class="chip" data-fuel="Benzyna+LPG">LPG</button><button class="chip" data-fuel="Hybryda">Hybryda</button><button class="chip" data-fuel="Elektryczny">Elektryk</button><button class="chip" data-fuel="CNG">CNG</button></div></div>
+<div class="fg"><div class="fl">Skrzynia biegów</div><div style="display:flex;gap:4px"><button class="chip" data-gear="Manualna">Manualna</button><button class="chip" data-gear="Automatyczna">Automat</button></div></div>
+<div class="fg"><div class="fl">Typ nadwozia - </div><select id="body" class="sel"><option value="">Dowolny</option><option>Sedan</option><option>Kombi</option><option>Hatchback</option><option>SUV</option><option>Coupe</option><option>Kabriolet</option><option>Minivan</option><option>Pickup</option><option>Van</option><option>Kompakt</option><option>Inny</option></select></div>
+<div class="fg"><div class="fl">Kolor</div><select id="color" class="sel"><option value="">Dowolny</option><option>Biały</option><option>Czarny</option><option>Srebrny</option><option>Szary</option><option>Czerwony</option><option>Niebieski</option><option>Zielony</option><option>Beżowy</option><option>Brązowy</option><option>Żółty</option><option>Inny</option></select></div>
+<div class="fg"><div class="fl">Stan</div><select id="state" class="sel"><option value="">Dowolny</option><option>Nowy</option><option>Używany</option><option>Uszkodzony</option></select></div>
+<div class="fg"><div class="fl">Pochodzenie</div><select id="origin" class="sel"><option value="">Dowolne</option><option>Krajowy</option><option>Importowany</option></select></div>
+<div class="fg"><div class="fl">Napęd</div><select id="drive" class="sel"><option value="">Dowolny</option><option>Przedni</option><option>Tylny</option><option>4x4 stały</option><option>4x4 dołączany</option></select></div>
+<div style="padding:12px"><button id="apply" class="btn-show">Pokaż wyniki</button><div id="count" style="text-align:center;font-size:11px;color:#6b7280;margin-top:6px">Ładowanie...</div></div>
 </aside>
 <main class="main">
 <div style="background:#fff;padding:8px;display:flex;gap:6px;align-items:center;border-bottom:1px solid #e5e7eb"><button id="filterToggle" class="b" style="background:#f2f3f5;color:#002f34;border:1px solid #d8dfe0;font-weight:700;height:36px;padding:0 12px;border-radius:8px">☰ Filtrowanie</button><input id="q2" class="pi2" style="flex:1" placeholder="Szybkie szukanie..."><button id="myBtn" class="b" style="background:#eef1f3">Moje</button></div>
@@ -134,13 +105,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#f2f3f5}
 <div class="f"><div class="lb">Tytuł *</div><input id="titleFull" required placeholder="Skoda Octavia 1.9 TDI 2010" class="pi2"></div>
 <div class="fr"><div class="f"><div class="lb">Cena *</div><input id="pr" type="number" required placeholder="23400" class="pi2"></div><div class="f"><div class="lb">Miejscowość *</div><input id="lc" required value="Gorzyce" class="pi2"></div></div>
 
-<div class="fl" style="margin-top:8px">Parametry OTOMOTO - wszystkie do filtrowania</div>
+<div class="fl" style="margin-top:8px">Parametry  - wszystkie do filtrowania</div>
 <div class="fr"><div class="f"><div class="lb">Generacja</div><select id="gen2" class="sel"><option value="">Wybierz</option><option>I</option><option>II</option><option>III</option><option>IV</option><option>V</option><option>VI</option></select></div><div class="f"><div class="lb">Rok produkcji *</div><input id="year" type="number" min="1950" max="2026" placeholder="2018" class="pi2"></div></div>
 <div class="fr"><div class="f"><div class="lb">Paliwo *</div><select id="fuel" required class="sel"><option value="">Wybierz</option><option>Benzyna</option><option>Diesel</option><option>Benzyna+LPG</option><option>Hybryda</option><option>Elektryczny</option><option>CNG</option></select></div><div class="f"><div class="lb">Skrzynia *</div><select id="gear" required class="sel"><option value="">Wybierz</option><option>Manualna</option><option>Automatyczna</option></select></div></div>
 <div class="fr"><div class="f"><div class="lb">Pojemność cm3</div><input id="capacity" type="number" placeholder="1968" class="pi2"></div><div class="f"><div class="lb">Moc KM</div><input id="power" type="number" placeholder="140" class="pi2"></div></div>
 <div class="fr"><div class="f"><div class="lb">Przebieg km *</div><input id="mileage" type="number" required placeholder="120000" class="pi2"></div><div class="f"><div class="lb">Typ nadwozia</div><select id="body2" class="sel"><option value="">Wybierz</option><option>Sedan</option><option>Kombi</option><option>Hatchback</option><option>SUV</option><option>Coupe</option><option>Kabriolet</option><option>Minivan</option><option>Pickup</option><option>Van</option><option>Inny</option></select></div></div>
 <div class="fr"><div class="f"><div class="lb">Kolor</div><select id="color2" class="sel"><option value="">Wybierz</option><option>Biały</option><option>Czarny</option><option>Srebrny</option><option>Szary</option><option>Czerwony</option><option>Niebieski</option><option>Inny</option></select></div><div class="f"><div class="lb">Stan / Pochodzenie</div><select id="cond" class="sel"><option value="">Wybierz</option><option>Nowy</option><option>Używany</option><option>Uszkodzony</option></select></div></div>
-<div class="f"><div class="lb">Telefon * - wymagany</div><input id="phone" required placeholder="600 123 456" class="pi2"></div><div class="f"><div class="lb">Opis</div><textarea id="ds" rows="3" placeholder="Opis..."></textarea></div>
+<div class="f"><div class="lb">Opis</div><textarea id="ds" rows="3" placeholder="Opis..."></textarea></div>
 <div class="f"><div class="lb">📸 Zdjęcia - swipe palcem, kompresja 800px WebP, edycja bez potwierdzania</div><div id="dz" class="dp">📷 Dodaj zdjęcia max 10</div><input id="fi" type="file" multiple accept="image/*" style="display:none"><div id="pv" class="pv" style="margin-top:6px"></div><div id="ci" style="font-size:10px;color:#065f46"></div></div>
 <div id="editImages" style="display:none"><div class="lb">🖼️ Edytuj zdjęcia - kliknij ✕ usuwa od razu bez potwierdzania</div><div id="editPv" class="pv" style="margin-top:6px"></div></div>
 </div>
@@ -163,7 +134,11 @@ const MODELS = {"Skoda": ["Octavia", "Fabia", "Superb", "Kodiaq", "Karoq", "Kami
 const U='https://bdpydgsfowtuvjnkyeeg.supabase.co', K='sb_publishable_S1qH_mBZaX7-bzmfJ0IVGA_6hxGbJWd';
 let supa=null, ls=[], filtered=[], ai=[], editImgs=[], currentEditId=null, currentUser=null;
 const $=id=>document.getElementById(id);
-const DEMO=[];
+const DEMO=[
+{id:'demo1',md:'Skoda Octavia 1.9 TDI',pr:23400,lc:'Gorzyce',ds:'2008',im:['https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=400&q=60&auto=format&fm=webp']},
+{id:'demo2',md:'VW Passat B6 2.0',pr:18900,lc:'Wodzisław',im:['https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=400&q=60&auto=format&fm=webp']},
+{id:'demo3',md:'BMW 320d 2012',pr:42000,lc:'Rybnik',im:['https://images.unsplash.com/photo-1555215695-3004980ad54e?w=400&q=60&auto=format&fm=webp']},
+];
 async function comp(file,maxW=800,quality=0.65){
   return new Promise(res=>{
     const fr=new FileReader();
@@ -195,386 +170,357 @@ function populateModels(brand,targetId){
   if(targetId==='model') $('modelCount').textContent=MODELS[brand].length+' modeli';}
 }
 function applyFilters(){
-  const q=($('q').value||($('q2')?$('q2').value:'')||'').toLowerCase().trim();
+  const q=($('q').value||$('q2').value||'').toLowerCase().trim();
   const brand=($('brand').value||'').toLowerCase();
   const model=($('model').value||'').toLowerCase();
   const pmin=parseInt($('pmin').value)||0; const pmax=parseInt($('pmax').value)||999999999;
   const loc=($('loc').value||'').toLowerCase();
-  const ymin=parseInt($('ymin')?.value)||0; const ymax=parseInt($('ymax')?.value)||9999;
-  const kmin=parseInt($('kmin')?.value)||0; const kmax=parseInt($('kmax')?.value)||9999999;
-  const powmin=parseInt($('powmin')?.value)||0; const powmax=parseInt($('powmax')?.value)||9999;
-  const capmin=parseInt($('capmin')?.value)||0; const capmax=parseInt($('capmax')?.value)||99999;
-  const body=($('body')?.value||'').toLowerCase();
-  const color=($('color')?.value||'').toLowerCase();
-  const state=($('state')?.value||'').toLowerCase();
-  const origin=($('origin')?.value||'').toLowerCase();
-  const drive=($('drive')?.value||'').toLowerCase();
-  const fuelEl=document.querySelector('#fuelFilters .chip.active');
-  const fuelRaw=fuelEl?fuelEl.dataset.fuel:'';
-  const fuel=fuelRaw.toLowerCase();
-  const gearEl=document.querySelector('#gearFilters .chip.active');
-  const gearRaw=gearEl?gearEl.dataset.gear:'';
-  const gear=gearRaw.toLowerCase();
   filtered=ls.filter(x=>{
-    if(q && !x.md.toLowerCase().includes(q) && !(x.ds||'').toLowerCase().includes(q)) return false;
+    if(q && !x.md.toLowerCase().includes(q) && !x.ds.toLowerCase().includes(q)) return false;
     if(x.is_banned) return false;
     if(x.is_hidden) return false;
-    if(brand && !x.md.toLowerCase().includes(brand) && (x._extra?.marka||'').toLowerCase()!==brand) return false;
-    if(model && !x.md.toLowerCase().includes(model) && (x._extra?.model||'').toLowerCase()!==model) return false;
+    if(brand && !x.md.toLowerCase().includes(brand)) return false;
+    if(model && !x.md.toLowerCase().includes(model)) return false;
     if(x.pr<pmin || x.pr>pmax) return false;
     if(loc && !x.lc.toLowerCase().includes(loc)) return false;
-    const ex=x._extra||x.extra||{};
-    const yr=parseInt(ex.year||0); if(ymin && yr && yr<ymin) return false; if(ymax && ymax!==9999 && yr && yr>ymax) return false;
-    const km=parseInt(ex.mileage||0); if(kmin && km && km<kmin) return false; if(kmax && kmax!==9999999 && km && km>kmax) return false;
-    const pw=parseInt(ex.power||0); if(powmin && pw && pw<powmin) return false; if(powmax && powmax!==9999 && pw && pw>powmax) return false;
-    const cap=parseInt(ex.capacity||0); if(capmin && cap && cap<capmin) return false; if(capmax && capmax!==99999 && cap && cap>capmax) return false;
-    if(fuel){
-      const carFuel=(ex.fuel||'').toLowerCase().trim();
-      if(!carFuel) return false;
-      if(fuel.includes('lpg')){
-        if(!carFuel.includes('lpg') && !carFuel.includes('gaz')) return false;
-      } else if(fuel.includes('hybryd')){
-        if(!carFuel.includes('hybryd')) return false;
-      } else if(fuel.includes('elektr')){
-        if(!(carFuel.includes('elektr') || carFuel.includes('electric'))) return false;
-      } else if(fuel.includes('cng')){
-        if(!carFuel.includes('cng')) return false;
-      } else {
-        if(carFuel!==fuel) return false;
-      }
-    }
-    if(gear){
-      const carGear=(ex.gear||'').toLowerCase().trim();
-      if(!carGear) return false;
-      if(carGear!==gear) return false;
-    }
-    if(body){ const v=(ex.body||'').toLowerCase().trim(); if(!v) return false; if(v!==body) return false; }
-    if(color){ const v=(ex.color||'').toLowerCase().trim(); if(!v) return false; if(v!==color) return false; }
-    if(state){ const v=(ex.state||ex.cond||'').toLowerCase().trim(); if(!v) return false; if(v!==state) return false; }
-    if(origin){ const v=(ex.origin||'').toLowerCase().trim(); if(!v) return false; if(v!==origin) return false; }
-    if(drive){ const v=(ex.drive||'').toLowerCase().trim(); if(!v) return false; if(v!==drive) return false; }
     return true;
   }); rn();
 }
+
+
+// FIX: Strzałka wstecz z telefonu - cofa do początku ogłoszenia, nie zamyka strony
+(function(){
+  let modalOpen=false;
+  const origOd = window.od;
+  // Intercept od() to push history
+  const originalPush = history.pushState;
+  window.addEventListener('popstate', (e)=>{
+    const m=document.getElementById('dm');
+    if(m && m.classList.contains('o')){
+      // Jeśli modal otwarty, cofnij do początku ogłoszenia (scroll top)
+      const dc=document.getElementById('dc');
+      if(dc){
+        const scrollTop = dc.scrollTop;
+        if(scrollTop > 100){
+          // Jeśli zescrollowane w dół, cofnij na górę ogłoszenia
+          e.preventDefault();
+          dc.scrollTo({top:0, behavior:'smooth'});
+          history.pushState({modal:true}, '', '#ogloszenie-'+(currentEditId||''));
+          return;
+        } else {
+          // Jeśli już na górze, zamknij modal
+          m.classList.remove('o');
+          document.body.style.overflow='';
+        }
+      }
+    }
+  });
+
+  // Wrap od function to push state
+  const oldOd = window.od;
+  // We'll hook via replacing after definition - do it in init wrapper
+})();
+
+// Hook w od() - pushState przy otwarciu
+
+// LICZNIK WEJŚĆ
+function getViews(){ try{return JSON.parse(localStorage.getItem('wroomer_views')||'{}')}catch(e){return {}} }
+function incView(id){
+  const views=getViews();
+  views[id]=(views[id]||0)+1;
+  localStorage.setItem('wroomer_views', JSON.stringify(views));
+  // Try supabase increment if column exists
+  if(supa){
+    supa.from('listings').select('views').eq('id',id).single().then(({data})=>{
+      if(data && typeof data.views!=='undefined'){
+        supa.from('listings').update({views:(data.views||0)+1}).eq('id',id).then(()=>{});
+      }
+    }).catch(()=>{});
+  }
+  // Update counter display if exists
+  const el=document.getElementById('viewCounter-'+id);
+  if(el) el.textContent=(views[id]||1)+' wyświetleń';
+  const el2=document.getElementById('viewCounterDetail');
+  if(el2) el2.textContent='👁️ '+(views[id]||1)+' wyświetleń';
+  return views[id]||1;
+}
+function getViewCount(id){ const v=getViews(); return v[id]||0; }
+function getTotalViews(){ const v=getViews(); return Object.values(v).reduce((a,b)=>a+b,0); }
+
 function rn(){
-  const g=$('grid'); if(!g) return;
-  g.innerHTML='';
-  const countEl=$('count');
-  if(filtered.length===0){
-    g.innerHTML='<div style="grid-column:1/-1;padding:40px 20px;text-align:center;background:#fff;border-radius:12px;border:1px dashed #d1d5db"><div style="font-size:48px;margin-bottom:12px">🔍</div><div style="font-weight:800;font-size:16px;margin-bottom:6px">Brak ogłoszeń dla wybranych filtrów</div><div style="font-size:13px;color:#6b7280;margin-bottom:16px">Wybrane kryteria: paliwo, skrzynia, kolor - nie pasują do żadnego auta</div><button onclick="document.getElementById(\'clear\').click()" style="padding:10px 18px;background:#002f34;color:#fff;border:none;border-radius:8px;font-weight:700;cursor:pointer">Wyczyść filtry</button></div>';
-    if(countEl) countEl.textContent='0 wyników - brak aut dla tych kryteriów';
-    return;
-  }
-  if(countEl){
-    const fuelEl=document.querySelector('#fuelFilters .chip.active');
-    const gearEl=document.querySelector('#gearFilters .chip.active');
-    const active=[];
-    if(fuelEl) active.push('⛽ '+fuelEl.dataset.fuel);
-    if(gearEl) active.push('⚙️ '+gearEl.dataset.gear);
-    if(active.length) countEl.textContent=filtered.length+' wyników | '+active.join(' + ');
-    else countEl.textContent=filtered.length+' ogłoszeń';
-  }
-  filtered.forEach(item=>{
-    const d=document.createElement('div'); d.className='cd';
-    d.innerHTML=`<img src="${(item.im&&item.im[0])||''}" loading="lazy"><div style="padding:10px"><div style="font-weight:700;font-size:13px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${item.md}</div><div style="font-weight:800;margin-top:4px">${(item.pr||0).toLocaleString()} zł</div><div style="font-size:11px;color:#6b7280;margin-top:2px">${item.lc||''} • ${(item._extra?.fuel||'')||''} ${(item._extra?.gear||'')||''}</div></div>`;
-    d.onclick=()=>od(item);
-    g.appendChild(d);
+  const g=$('gd'),e=$('empty'),l=$('ld');
+  const data=filtered.length||$('q').value||$('q2').value||$('brand').value||$('model').value||$('pmin').value||$('pmax').value||$('loc').value?filtered:ls;
+  if(!data||data.length===0){g.style.display='none';l.style.display='none';e.style.display='block';$('count').textContent='0 wyników';return;}
+  e.style.display='none';l.style.display='none';g.style.display='grid';g.innerHTML='';
+  data.forEach(x=>{
+    const d=document.createElement('div');d.className='cd';
+    const first=x.im&&x.im[0]?x.im[0]:DEMO[0].im[0];
+    const vc=getViewCount(x.id);
+    d.innerHTML=`<div class="cw"><img src="${first}" loading="lazy" alt="${x.md} - ${x.lc}" decoding="async" width="400" height="300"><div class="ct">${x.im?x.im.length:0} zdjęć</div></div><div class="cb"><div class="cti">${x.md}</div><div class="pr"><span>${(x.pr||0).toLocaleString()} zł</span><span style="font-size:11px;color:#6b7280">${x.lc}</span></div></div>`;
+    d.onclick=()=>{ incView(x.id); od(x); };g.appendChild(d);
   });
-}
-function setupChipsPro(){
-  document.querySelectorAll('#fuelFilters .chip').forEach(b=>{
-    b.addEventListener('click', function(){ const was=this.classList.contains('active'); document.querySelectorAll('#fuelFilters .chip').forEach(x=>x.classList.remove('active')); if(!was) this.classList.add('active'); applyFilters(); });
-  });
-  document.querySelectorAll('#gearFilters .chip').forEach(b=>{
-    b.addEventListener('click', function(){ const was=this.classList.contains('active'); document.querySelectorAll('#gearFilters .chip').forEach(x=>x.classList.remove('active')); if(!was) this.classList.add('active'); applyFilters(); });
-  });
-  const more=document.getElementById('moreFilters');
-  const icon=document.getElementById('moreIcon');
-  if(more){ more.addEventListener('toggle', ()=>{ if(icon){ icon.textContent=more.open?'▲ Zwiń':'▼ Rozwiń'; }}); }
-  const collapseBtn=document.getElementById('collapseBtn');
-  if(collapseBtn){ collapseBtn.addEventListener('click', ()=>{ if(more) more.open=false; }); }
-  const clearBtn=document.getElementById('clear');
-  if(clearBtn){ clearBtn.addEventListener('click', ()=>{ setTimeout(()=>{ document.querySelectorAll('.chip.active').forEach(x=>x.classList.remove('active')); if(more) more.open=false; applyFilters(); }, 100); }); }
+  $('count').textContent=data.length+' ogłoszeń • '+Object.keys(MODELS).length+' marek • '+Object.values(MODELS).flat().length+' modeli';
 }
 
-async function loadReal(){
-  if(!supa) return;
-  try{
-    // próbuj różnych nazw tabel
-    const tables=['ogloszenia','ads','announcements','listings','auta','cars'];
-    let data=null;
-    for(let t of tables){
-      try{
-        const r=await supa.from(t).select('*').order('created_at',{ascending:false}).limit(100);
-        if(r.data && !r.error){ data=r.data; console.log('Tabela:',t, data.length); break; }
-      }catch(e){}
-    }
-    if(data && data.length){
-      ls=data.map(row=>({
-        id: row.id,
-        md: row.title || row.marka || row.brand || row.md || 'Auto',
-        pr: row.price || row.cena || row.pr || 0,
-        lc: row.location || row.lokalizacja || row.lc || '',
-        ds: row.description || row.opis || row.ds || '',
-        im: row.images || row.zdjecia || row.im || [],
-        user_id: row.user_id || row.owner || null,
-        _extra: row,
-        created_at: row.created_at
-      }));
-      rn();
-    }
-  }catch(e){ console.log('loadReal error', e); }
-}
+async function od(item){
+  const m=$('dm'),dc=$('dc');
+  let ims=item.im&&item.im.length?item.im.filter(u=>u&&u.startsWith('https://')):[];
+  if(ims.length===0) ims=DEMO[0].im;
+  let cur=0;
+  currentEditId=item.id;
+  const viewsCount=incView(item.id);
+  setTimeout(()=>{ const el=document.getElementById('viewCounterDetail'); if(el) el.textContent='👁️ '+viewsCount+' wyświetleń'; },100);
+  const mine=isMine(item.id);
+  $('editBtn').style.display='none'; // ukryty domyślnie - fix dla użytkownika
+  if(mine){ $('editBtn').style.display='inline-flex'; $('editBtn').classList.add('owner'); $('editBtn').textContent='✏️ Edytuj'; $('editBtn').style.background='#e6f7f5'; } else { $('editBtn').style.display='none'; $('editBtn').classList.remove('owner'); }
+  
+  // Build full params table -  style
+  const ex=item._extra||item.extra||{};
+  const params = [
+    ['Marka', ex.marka || (item.md||'').split(' ')[0] || '-'],
+    ['Model', ex.model || (item.md||'').split(' ').slice(1).join(' ') || '-'],
+    ['Generacja', ex.generation || item.generation || '-'],
+    ['Rok produkcji', ex.year || item.year || '-'],
+    ['Przebieg', ex.mileage ? ex.mileage+' km' : (item.mileage ? item.mileage+' km' : '-')],
+    ['Pojemność', ex.capacity ? ex.capacity+' cm3' : (item.capacity ? item.capacity+' cm3' : '-')],
+    ['Moc', ex.power ? ex.power+' KM' : (item.power ? item.power+' KM' : '-')],
+    ['Rodzaj paliwa', ex.fuel || item.fuel || '-'],
+    ['Skrzynia biegów', ex.gear || item.gear || '-'],
+    ['Napęd', ex.drive || item.drive || '-'],
+    ['Typ nadwozia', ex.body || item.body || '-'],
+    ['Kolor', ex.color || item.color || '-'],
+    ['Liczba drzwi', ex.doors || item.doors || '-'],
+    ['Stan', ex.state || item.state || item.cond || '-'],
+    ['Pochodzenie', ex.origin || item.origin || '-'],
+    ['Kraj pochodzenia', ex.country || item.country || '-'],
+    ['Lokalizacja', item.lc || '-'],
+    ['Cena', item.pr ? item.pr.toLocaleString()+' zł' : '-'],
+  ];
 
-async function checkSession(){
-  if(!supa) return;
-  const {data} = await supa.auth.getSession();
-  if(data.session){ currentUser=data.session.user; updateAuthUI(); }
-}
+  const paramsHtml = `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;background:#fff;border-radius:8px;overflow:hidden;border:1px solid #e5e7eb">
+      ${params.filter(([k,v])=>v && v!=='-').map(([k,v]) => `
+        <div style="display:flex;flex-direction:column;padding:8px 10px;border-bottom:1px solid #f2f3f5;border-right:1px solid #f2f3f5;background:#fff">
+          <span style="font-size:11px;color:#6b7280;text-transform:uppercase;font-weight:600;letter-spacing:0.3px">${k}</span>
+          <span style="font-size:13px;font-weight:700;color:#002f34;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${v}</span>
+        </div>
+      `).join('')}
+    </div>
+    ${params.filter(([k,v])=>!v || v==='-').length>0 ? `` : ''}
+  `;
 
-function updateAuthUI(){
-  const btn=$('authBtn'), mail=$('userEmail');
-  if(currentUser){
-    if(btn) btn.textContent='Wyloguj';
-    if(mail) mail.textContent=currentUser.email;
-  }else{
-    if(btn) btn.textContent='Zaloguj / Zarejestruj';
-    if(mail) mail.textContent='';
-  }
-}
+  dc.innerHTML=`
+    <div class="dw" id="dw">
+      <img id="mainGalleryImg" class="main-img" alt="" decoding="async" src="${ims[0]}" alt="${item.md}" draggable="false">
+      ${ims.length>1?`<button id="dp" class="nav prev" type="button" aria-label="Poprzednie zdjęcie">‹</button><button id="dn" class="nav next" type="button" aria-label="Następne zdjęcie">›</button><div class="dots" id="dots">${ims.map((_,i)=>`<div class="dot ${i===0?'on':''}" data-i="${i}"></div>`).join('')}</div><div id="counter" style="position:absolute;top:8px;right:8px;background:rgba(0,0,0,.65);color:#fff;font-size:11px;padding:4px 8px;border-radius:6px;font-weight:700;z-index:5">${cur+1}/${ims.length}</div>`:''}
+    </div>
+    ${ims.length>1?`<div class="thumbs" id="thumbs">${ims.map((s,i)=>`<div class="th ${i===0?'on':''}" data-i="${i}"><img src="${s}" loading="lazy"></div>`).join('')}</div>`:''}
+    
+    <div style="padding:16px">
+      <h2 style="font-weight:800;font-size:20px;line-height:1.2">${item.md}</h2>
+      <div style="font-weight:800;font-size:26px;margin-top:8px;color:#002f34">${(item.pr||0).toLocaleString()} zł</div>
+      <div id="viewCounterDetail" style="display:none" style="display:none" style="font-size:12px;color:#002f34;font-weight:700;margin-top:6px;background:#e6f7f5;padding:6px 10px;border-radius:6px;display:inline-block">👁️ 0 wyświetleń</div><div style="font-size:12px;color:#6b7280;margin-top:6px">📍 ${item.lc || '-'} • ${ims.length} zdjęć • przesuwaj palcem ↔️ • swipe działa</div>
+      
+      <div style="margin-top:16px;background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px">
+        <div style="font-weight:800;font-size:13px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center"><span>📋 Dane techniczne</span><span style="font-size:10px;color:#6b7280;font-weight:400"></span></div>
+        ${paramsHtml}
+      </div>
 
-function openAuth(){ $('authModal').classList.add('o'); $('authMsg').textContent=''; }
-function closeAuth(){ $('authModal').classList.remove('o'); }
+      ${(item.ds && item.ds.trim() && !item.ds.includes('{') )? `<div style="margin-top:12px;background:#f7f8f9;padding:14px;border-radius:10px"><div style="font-weight:700;font-size:13px;margin-bottom:6px">Opis</div><div style="font-size:13px;line-height:1.5;white-space:pre-wrap">${item.ds.replace(/__OTOMOTO__.*/, '').replace(/__DATA__.*/, '').trim()}</div></div>` : ''}
 
-async function doLogin(){
-  const email=$('authEmail').value.trim();
-  const pass=$('authPass').value;
-  const msg=$('authMsg');
-  if(!email||!pass){ msg.textContent='Wpisz email i hasło'; msg.style.color='red'; return; }
-  msg.textContent='Logowanie...'; msg.style.color='#666';
-  const {data, error}=await supa.auth.signInWithPassword({email, password: pass});
-  if(error){
-    console.log(error);
-    if(error.message.includes('Email not confirmed')){
-      msg.textContent='Email nie potwierdzony - sprawdź SPAM lub wyłącz Confirm email w Supabase (SQL: update auth.users set email_confirmed_at=now())';
-    }else if(error.message.includes('Invalid login')){
-      msg.textContent='Nieprawidłowy email lub hasło. Jeśli nie masz konta - kliknij Zarejestruj się.';
-    }else{
-      msg.textContent='Błąd: '+error.message;
-    }
-    msg.style.color='red';
-  }else{
-    currentUser=data.user;
-    updateAuthUI();
-    msg.textContent='Zalogowano! '+data.user.email;
-    msg.style.color='green';
-    setTimeout(closeAuth, 800);
-  }
-}
+      ${mine?`<div style="margin-top:12px;background:#e6f7f5;padding:10px;border-radius:8px;font-size:12px;color:#065f46">✅ To Twoje ogłoszenie - możesz edytować wszystkie parametry i zdjęcia bez potwierdzania przyciskiem Edytuj</div>`:''}
+    </div>
 
-async function doRegister(){
-  const email=$('authEmail').value.trim();
-  const pass=$('authPass').value;
-  const msg=$('authMsg');
-  if(!email||pass.length<6){ msg.textContent='Email i hasło min 6 znaków'; msg.style.color='red'; return; }
-  msg.textContent='Rejestracja...'; msg.style.color='#666';
-  const {data, error}=await supa.auth.signUp({email, password: pass});
-  if(error){
-    msg.textContent='Błąd: '+error.message;
-    msg.style.color='red';
-  }else{
-    if(data.session){
-      currentUser=data.user;
-      updateAuthUI();
-      msg.textContent='Konto utworzone i zalogowano! Możesz dodawać ogłoszenia.';
-      msg.style.color='green';
-      setTimeout(closeAuth, 800);
-    }else{
-      msg.textContent='Konto utworzone! Sprawdź email (SPAM) i potwierdź, lub wyłącz Confirm email w Supabase żeby logowało od razu.';
-      msg.style.color='#065f46';
-    }
-  }
-}
-
-function setupAuth(){
-  $('authBtn')?.addEventListener('click', ()=>{
-    if(currentUser){
-      supa.auth.signOut().then(()=>{ currentUser=null; updateAuthUI(); });
-    }else openAuth();
-  });
-  $('authClose')?.addEventListener('click', closeAuth);
-  $('authBg')?.addEventListener('click', closeAuth);
-  $('loginBtn')?.addEventListener('click', doLogin);
-  $('regBtn')?.addEventListener('click', doRegister);
-}
-
-
-function openAdd(){
-  if(!currentUser){ openAuth(); var m=document.getElementById('authMsg'); if(m){ m.textContent='Musisz sie zalogowac zeby dodac ogloszenie'; m.style.color='red'; } return; }
-  currentEditId=null;
-  var ft=document.getElementById('formTitle'); if(ft) ft.textContent='Dodaj ogloszenie';
-  var form=document.getElementById('af'); if(form) form.reset();
-  ai=[]; 
-  var pvEl=document.getElementById('pv'); if(pvEl) pvEl.innerHTML=''; 
-  var ciEl=document.getElementById('ci'); if(ciEl) ciEl.textContent='';
-  var ei=document.getElementById('editImages'); if(ei) ei.style.display='none';
-  var am=document.getElementById('am'); if(am) am.classList.add('o');
-}
-function closeAdd(){ var am=document.getElementById('am'); if(am) am.classList.remove('o'); }
-
-async function handleAddSubmit(e){
-  e.preventDefault();
-  if(!currentUser){ alert('Musisz byc zalogowany'); openAuth(); return; }
-  var mk=document.getElementById('mk').value;
-  var md=document.getElementById('md2').value || '';
-  var yr=document.getElementById('year').value;
-  var mileage=document.getElementById('mileage').value;
-  var pr=document.getElementById('pr').value;
-  var lc=document.getElementById('lc').value;
-  var phoneEl=document.getElementById('phone');
-  if(!phoneEl){ alert('Brak pola telefon'); return; }
-  var phone=phoneEl.value;
-  if(!mk){ alert('Wybierz marke'); return; }
-  if(!md){ alert('Wybierz model'); return; }
-  if(!yr){ alert('Podaj rok'); return; }
-  if(!mileage){ alert('Podaj przebieg'); return; }
-  if(!pr){ alert('Podaj cene'); return; }
-  if(!lc){ alert('Podaj lokalizacje'); return; }
-  if(!phone){ alert('Podaj telefon'); return; }
-  if(ai.length===0 && !currentEditId){ alert('Dodaj min 1 zdjecie'); return; }
-  var btn=document.getElementById('sbBtn'); var orig=btn?btn.textContent:''; if(btn){ btn.textContent='Zapisywanie...'; btn.disabled=true; }
-  try{
-    var images = ai.map(function(x){return x.data;});
-    if(supa && supa.storage){
-      try{
-        var uploaded=[];
-        for(var i=0;i<ai.length;i++){
-          var blob=ai[i].blob;
-          var name = currentUser.id+'/'+Date.now()+'_'+i+'.webp';
-          var resUp=await supa.storage.from('images').upload(name, blob, {contentType:'image/webp', upsert:true});
-          if(!resUp.error && resUp.data){
-            var pub=supa.storage.from('images').getPublicUrl(name);
-            uploaded.push(pub.data.publicUrl);
-          } else {
-            uploaded.push(ai[i].data);
-          }
-        }
-        if(uploaded.length) images=uploaded;
-      }catch(e){ console.log('storage fail', e); }
-    }
-    var payload={
-      title: mk+' '+md,
-      marka: mk,
-      model: md,
-      brand: mk,
-      price: parseInt(pr),
-      cena: parseInt(pr),
-      location: lc,
-      lokalizacja: lc,
-      description: document.getElementById('ds').value||'',
-      opis: document.getElementById('ds').value||'',
-      images: images,
-      zdjecia: images,
-      user_id: currentUser.id,
-      phone: phone,
-      telefon: phone,
-      year: parseInt(yr),
-      mileage: parseInt(mileage),
-      fuel: (document.getElementById('fuel')?document.getElementById('fuel').value:''),
-      gear: (document.getElementById('gear')?document.getElementById('gear').value:''),
-      body: (document.getElementById('body2')?document.getElementById('body2').value:''),
-      color: (document.getElementById('color2')?document.getElementById('color2').value:''),
-      capacity: parseInt(document.getElementById('capacity')?document.getElementById('capacity').value||0:0),
-      power: parseInt(document.getElementById('power')?document.getElementById('power').value||0:0),
-      cond: (document.getElementById('cond')?document.getElementById('cond').value:''),
-      created_at: new Date().toISOString()
-    };
-    var res=null;
-    var tables=['ogloszenia','ads','announcements'];
-    for(var t=0;t<tables.length;t++){
-      try{
-        var tbl=tables[t];
-        if(currentEditId){
-          res=await supa.from(tbl).update(payload).eq('id', currentEditId).select();
-        }else{
-          res=await supa.from(tbl).insert(payload).select();
-        }
-        if(res.data && !res.error){ console.log('saved to', tbl); break; }
-      }catch(e){}
-    }
-    if(res && res.error){
-      alert('Blad zapisu: '+res.error.message);
-    }else{
-      alert(currentEditId?'Zaktualizowano!':'Dodano ogloszenie!');
-      if(res && res.data && res.data[0] && res.data[0].id) addMyId(res.data[0].id);
-      closeAdd();
-      setTimeout(function(){loadReal();}, 500);
-    }
-  }catch(err){
-    alert('Blad: '+err.message);
-  }finally{
-    if(btn){ btn.textContent=orig; btn.disabled=false; }
-  }
-}
-
-function setupAdd(){
-  var ab=document.getElementById('ab'); if(ab) ab.addEventListener('click', openAdd);
-  var ca=document.getElementById('ca'); if(ca) ca.addEventListener('click', closeAdd);
-  var abg=document.getElementById('abg'); if(abg) abg.addEventListener('click', closeAdd);
-  var dz=document.getElementById('dz'); if(dz) dz.addEventListener('click', function(){ var fi=document.getElementById('fi'); if(fi) fi.click(); });
-  var fi=document.getElementById('fi'); if(fi) fi.addEventListener('change', async function(e){
-    var files=Array.from(e.target.files).slice(0,10-ai.length);
-    for(var f of files){
-      var c=await comp(f, 800, 0.65);
-      ai.push(c);
-    }
-    renderPv();
-    var ci=document.getElementById('ci'); if(ci) ci.textContent=ai.length+' zdjec';
-  });
-  var mk=document.getElementById('mk'); if(mk) mk.addEventListener('change', function(e){
-    populateModels(e.target.value, 'md2');
-    var tf=document.getElementById('titleFull'); if(tf && e.target.value){ tf.value=e.target.value+' '; }
-  });
-  var md2=document.getElementById('md2'); if(md2) md2.addEventListener('change', function(e){
-    var tf=document.getElementById('titleFull'); if(tf){ tf.value=(document.getElementById('mk').value+' '+e.target.value).trim(); }
-  });
-  var af=document.getElementById('af'); if(af) af.addEventListener('submit', handleAddSubmit);
-}
-
-function renderPv(){
-  var pv=document.getElementById('pv'); if(!pv) return; pv.innerHTML='';
-  ai.forEach(function(img,i){
-    var div=document.createElement('div'); div.className='px';
-    div.innerHTML='<img src="'+img.data+'"><button type="button" onclick="removeAi('+i+')">✕</button>';
-    pv.appendChild(div);
-  });
-}
-function removeAi(i){ ai.splice(i,1); renderPv(); }
-
-function od(item){
-  alert((item.md||'Auto')+'\n'+(item.pr||0)+' zl\n'+(item.lc||'')+'\n'+(item.ds||'').slice(0,200));
-}
-
-function init(){ 
-  setTimeout(setupChipsPro, 500);
-  setupAdd();
-  setupAuth();
-  ls=DEMO; setTimeout(setupChipsPro, 300); rn();
-  const s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js';s.async=true;
-  s.onload=()=>{
-    supa=window.supabase.createClient(U,K, {auth:{persistSession:true, autoRefreshToken:true}});
-    loadReal();
-    checkSession();
-    supa.auth.onAuthStateChange((ev, sess)=>{
-      console.log('Auth event', ev);
-      if(sess?.user){ currentUser=sess.user; updateAuthUI(); }
-      else if(ev==='SIGNED_OUT'){ currentUser=null; updateAuthUI(); }
-    });
+    <div style="display:flex;gap:8px;padding:12px;background:#fff;border-top:1px solid #eee;position:sticky;bottom:0">
+      <a href="tel:600000000" id="callBtn" style="flex:1;height:44px;background:#002f34;color:#fff;border-radius:8px;display:grid;place-items:center;text-decoration:none;font-weight:800;font-size:13px">📞 Zadzwoń</a>
+      <a href="sms:600000000?body=Cześć, piszę w sprawie ogłoszenia ${encodeURIComponent(item.md)}" id="smsBtn" style="flex:1;height:44px;background:#fff;border:1.5px solid #002f34;color:#002f34;border-radius:8px;display:grid;place-items:center;text-decoration:none;font-weight:800;font-size:13px">SMS</a>
+      <a href="https://wa.me/48600000000?text=Cześć, piszę w sprawie ${encodeURIComponent(item.md)}" id="waBtn" style="flex:1;height:44px;background:#25D366;color:#fff;border-radius:8px;display:grid;place-items:center;text-decoration:none;font-weight:800;font-size:13px">WhatsApp</a>
+    </div>
+  `;
+  m.classList.add('o');document.body.style.overflow='hidden';
+  try{ history.pushState({modal:true, id:item.id}, '', '#'+item.id); }catch(e){}
+  const dcEl=document.getElementById('dc'); if(dcEl) dcEl.scrollTop=0;
+  const mainImg=document.getElementById('mainGalleryImg');
+  const upd=()=>{
+    if(mainImg) mainImg.src=ims[cur];
+    const c=document.getElementById('counter'); if(c) c.textContent=(cur+1)+'/'+ims.length;
+    const dots=document.getElementById('dots'); if(dots) [...dots.children].forEach((d,i)=>d.classList.toggle('on',i===cur));
+    const thumbs=document.getElementById('thumbs'); if(thumbs) [...thumbs.children].forEach((t,i)=>t.classList.toggle('on',i===cur));
   };
-  document.head.appendChild(s);
+  document.getElementById('dp')?.addEventListener('click', e=>{e.preventDefault(); e.stopPropagation(); cur=(cur-1+ims.length)%ims.length; upd();});
+  document.getElementById('dn')?.addEventListener('click', e=>{e.preventDefault(); e.stopPropagation(); cur=(cur+1)%ims.length; upd();});
+  document.getElementById('dots')?.addEventListener('click', e=>{const d=e.target.closest('.dot'); if(d&&d.dataset.i!==undefined){cur=parseInt(d.dataset.i); upd();}});
+  document.getElementById('thumbs')?.addEventListener('click', e=>{const t=e.target.closest('.th'); if(t&&t.dataset.i!==undefined){cur=parseInt(t.dataset.i); upd();}});
+  let sx=0, drag=false;
+  const dwEl=document.getElementById('dw');
+  dwEl.addEventListener('touchstart', e=>{if(e.target.closest('.nav')) return; sx=e.touches[0].clientX; drag=true;}, {passive:true});
+  dwEl.addEventListener('touchend', e=>{if(!drag) return; drag=false; const dx=e.changedTouches[0].clientX-sx; if(Math.abs(dx)>40){ if(dx<0) cur=(cur+1)%ims.length; else cur=(cur-1+ims.length)%ims.length; upd(); }}, {passive:true});
+  const closeDm=()=>{m.classList.remove('o');document.body.style.overflow=''; try{ if(history.state && history.state.modal) history.back(); }catch(e){} };
+  $('cd').onclick=closeDm; $('dbg').onclick=closeDm;
+}
+
+
+$('ab').onclick=()=>{currentEditId=null;$('formTitle').textContent='Dodaj ogłoszenie';$('af').reset();ai=[];editImgs=[];$('pv').innerHTML='';$('editImages').style.display='none';$('md2').innerHTML='<option value="">Najpierw marka</option>';$('am').classList.add('o');document.body.style.overflow='hidden';};
+const closeAm=()=>{$('am').classList.remove('o');document.body.style.overflow='';};
+$('ca').onclick=closeAm;$('abg').onclick=closeAm;
+$('editBtn').onclick=()=>{ // ZAWSZE pozwala edytować - fix
+
+  const item=ls.find(x=>x.id===currentEditId); if(!item) return;
+  
+  $('formTitle').textContent='✏️ Edytuj ogłoszenie - właściciel';
+  $('titleFull').value=item.md; $('pr').value=item.pr; $('lc').value=item.lc; 
+  $('ds').value=(item.ds||'').split('____')[0];
+  try{
+    const ex=item._extra||item.extra||{};
+    if(ex.marka) $('mk').value=ex.marka;
+    if(ex.model){ populateModels(ex.marka||$('mk').value,'md2'); setTimeout(()=>{ if(ex.model) $('md2').value=ex.model; },150); }
+    if($('gen2') && ex.generation) $('gen2').value=ex.generation;
+    if($('year') && ex.year) $('year').value=ex.year;
+    if($('mileage') && ex.mileage) $('mileage').value=ex.mileage;
+    if($('power') && ex.power) $('power').value=ex.power;
+    if($('capacity') && ex.capacity) $('capacity').value=ex.capacity;
+    if($('fuel') && ex.fuel) $('fuel').value=ex.fuel;
+    if($('gear') && ex.gear) $('gear').value=ex.gear;
+    if($('body2') && ex.body) $('body2').value=ex.body;
+    if($('color2') && ex.color) $('color2').value=ex.color;
+    if($('cond') && ex.state) $('cond').value=ex.state;
+    const driveEl=document.getElementById('drive'); if(driveEl && ex.drive) driveEl.value=ex.drive;
+  }catch(e){ console.log('edit fill error', e); }
+
+  const parts=item.md.split(' '); if(parts[0]) $('mk').value=parts[0]; populateModels(parts[0],'md2');
+  editImgs=[...item.im]; const ep=$('editPv'); ep.innerHTML='';
+  editImgs.forEach((src,i)=>{const d=document.createElement('div');d.className='px';d.innerHTML=`<img src="${src}"><button type="button">✕</button>`;d.querySelector('button').onclick=()=>{editImgs.splice(i,1);d.remove();};ep.appendChild(d);});
+  $('editImages').style.display='block'; ai=[]; $('pv').innerHTML=''; $('dm').classList.remove('o'); $('am').classList.add('o');
+};
+function rp(){const p=$('pv');p.innerHTML='';ai.forEach((o,i)=>{const d=document.createElement('div');d.className='px';d.innerHTML=`<img src="${o.data}"><button type="button">✕</button>`;d.querySelector('button').onclick=()=>{ai.splice(i,1);rp();};p.appendChild(d);});$('ci').textContent=ai.length?`${ai.length} zdjęć skompresowanych`:'';
+}
+$('dz').onclick=()=>$('fi').click();
+$('fi').onchange=async e=>{const fs=Array.from(e.target.files).slice(0,10-ai.length); if(fs.length===0)return; $('ci').textContent=`Kompresuję ${fs.length}...`; for(const f of fs){const c=await comp(f,500,0.50); ai.push(c);} rp();};
+$('brand').addEventListener('change',e=>{populateModels(e.target.value,'model'); applyFilters();});
+$('mk').addEventListener('change',e=>{populateModels(e.target.value,'md2'); const t=e.target.value+' '+($('md2').value||''); if(t.trim().length>3) $('titleFull').value=t;});
+$('md2').addEventListener('change',e=>{const t=$('mk').value+' '+e.target.value; if(t.trim().length>3) $('titleFull').value=t;});
+['pmin','pmax','q','q2','loc'].forEach(id=>{$(id)?.addEventListener('input',applyFilters);});
+$('clear').addEventListener('click',()=>{['q','q2','brand','model','pmin','pmax','loc'].forEach(id=>{const el=$(id); if(el) el.value='';}); $('model').innerHTML='<option value="">Wszystkie modele</option>'; filtered=[]; rn();});
+$('apply').addEventListener('click',applyFilters);
+$('filterToggle').onclick=()=>{$('sb').classList.toggle('mopen');};
+$('af').onsubmit=async e=>{
+ e.preventDefault(); const b=$('sbBtn'); if(ai.length===0 && editImgs.length===0){alert('Dodaj zdjęcie');return;}
+ b.disabled=true;b.textContent='⏳ Zapisuję bez potwierdzania...';
+ try{
+  
+  const extra={
+    marka:$('mk').value||'', model:$('md2').value||'', generation:$('gen2')?.value||'',
+    year:$('year')?.value||'', mileage:$('mileage')?.value||'', power:$('power')?.value||'', capacity:$('capacity')?.value||'',
+    fuel:$('fuel')?.value||'', gear:$('gear')?.value||'', body:$('body2')?.value||'',
+    color:$('color2')?.value||'', state:$('cond')?.value||'',
+    drive: document.getElementById('drive')?.value || '',
+    doors: document.getElementById('doors')?.value || '',
+    origin: document.getElementById('origin')?.value || '',
+    country: document.getElementById('country')?.value || ''
+  };
+  const cleanDesc=($('ds').value||'').split('____')[0].slice(0,800);
+  const fullDesc=cleanDesc+'____'+JSON.stringify(extra);
+  const pl={title:$('titleFull').value.trim().slice(0,120),description:fullDesc,price:parseInt($('pr').value)||0,location:$('lc').value.trim().slice(0,50)};
+
+  if(currentUser) pl.user_id=currentUser.id;
+  if(!supa) throw new Error('Baza nie gotowa');
+  if(currentEditId && isMine(currentEditId)){
+    const {error}=await supa.from('listings').update(pl).eq('id',currentEditId); if(error) throw error;
+    if(editImgs.length!==ls.find(x=>x.id===currentEditId)?.im.length || ai.length>0){
+      await supa.from('listing_images').delete().eq('listing_id',currentEditId);
+      const all=[...editImgs];
+      for(let i=0;i<ai.length;i++){try{const fn=currentEditId+'/'+Date.now()+'_'+i+'.webp';const bl=ai[i].blob;const up=await supa.storage.from('listing-images').upload(fn,bl,{contentType:'image/webp',upsert:true});if(up.error)continue;const {data:pub}=supa.storage.from('listing-images').getPublicUrl(fn);all.push(pub.publicUrl);}catch(e){}}
+      for(const url of all){await supa.from('listing_images').insert({listing_id:currentEditId,image_url:url});}
+    }
+  } else {
+    const {data,error}=await supa.from('listings').insert(pl).select().single(); if(error) throw error;
+    for(let i=0;i<ai.length;i++){try{const fn=data.id+'/'+Date.now()+'_'+i+'.webp';const bl=ai[i].blob;const up=await supa.storage.from('listing-images').upload(fn,bl,{contentType:'image/webp',upsert:true});if(up.error)continue;const {data:pub}=supa.storage.from('listing-images').getPublicUrl(fn);await supa.from('listing_images').insert({listing_id:data.id,image_url:pub.publicUrl});}catch(e){}}
+    addMyId(data.id);
+  }
+  closeAm();ai=[];editImgs=[];$('pv').innerHTML='';$('editPv').innerHTML='';$('af').reset();await loadReal();
+ }catch(err){alert('Błąd: '+err.message);}finally{b.disabled=false;b.textContent='💾 Zapisz od razu - bez potwierdzania';}
+};
+$('authBtn').onclick=()=>{$('authModal').classList.add('o');};
+$('authClose').onclick=()=>{$('authModal').classList.remove('o');};
+$('authBg').onclick=()=>{$('authModal').classList.remove('o');};
+$('loginBtn').onclick=async()=>{
+  const email=$('authEmail').value.trim(), pass=$('authPass').value;
+  $('authMsg').textContent='Logowanie...';
+  const {data,error}=await supa.auth.signInWithPassword({email,password:pass});
+  if(error){$('authMsg').textContent='❌ '+error.message;} else {$('authMsg').textContent='✅ Zalogowano!'; setTimeout(()=>{$('authModal').classList.remove('o'); checkUser();},600);}
+};
+$('regBtn').onclick=async()=>{
+  const email=$('authEmail').value.trim(), pass=$('authPass').value;
+  if(pass.length<6){$('authMsg').textContent='Hasło min 6 znaków';return;}
+  $('authMsg').textContent='Rejestracja...';
+  const {data,error}=await supa.auth.signUp({email,password:pass});
+  if(error){$('authMsg').textContent='❌ '+error.message;} else {$('authMsg').textContent='✅ Konto utworzone! Sprawdź email i zaloguj się.';}
+};
+async function checkUser(){
+  const {data}=await supa.auth.getUser(); currentUser=data?.user||null;
+  if(currentUser){$('userEmail').textContent=currentUser.email; $('authBtn').textContent='Wyloguj'; $('authBtn').onclick=async()=>{await supa.auth.signOut(); currentUser=null; $('userEmail').textContent=''; $('authBtn').textContent='Zaloguj / Zarejestruj'; $('authBtn').onclick=()=>{$('authModal').classList.add('o');};};}
+}
+async function loadReal(){
+  if(!supa){if(window.supabase)supa=window.supabase.createClient(U,K);else{await new Promise(r=>setTimeout(r,300));if(window.supabase)supa=window.supabase.createClient(U,K);}}
+  if(!supa)return;
+  checkUser();
+  const {data}=await supa.from('listings').select('id,title,description,price,location,created_at,user_id').order('created_at',{ascending:false}).limit(100);
+  if(!data||data.length===0)return;
+  let imap={};
+  try{const {data:ims}=await supa.from('listing_images').select('listing_id,image_url').ilike('image_url','https://%').limit(1000);if(ims)ims.forEach(r=>{if(!imap[r.listing_id])imap[r.listing_id]=[];if(imap[r.listing_id].length<10)imap[r.listing_id].push(r.image_url);});}catch(e){}
+  const real=data.map(r=>{
+      let ds=r.description||'';
+      let extra={};
+      if(ds.includes('____')){
+        try{
+          const parts=ds.split('____');
+          ds=parts[0].trim();
+          extra=JSON.parse(parts[1]||'{}');
+        }catch(e){}
+      }
+      return {id:r.id,md:r.title||'Bez tytułu',pr:r.price||0,lc:r.location||'Gorzyce',ds:ds,_extra:extra,extra:extra,im:imap[r.id]&&imap[r.id].length?imap[r.id]:[DEMO[0].im[0]],
+        year:extra.year||'',mileage:extra.mileage||'',power:extra.power||'',capacity:extra.capacity||'',fuel:extra.fuel||'',gear:extra.gear||'',body:extra.body||'',color:extra.color||'',drive:extra.drive||'',doors:extra.doors||'',state:extra.state||'',origin:extra.origin||'',country:extra.country||'',generation:extra.generation||'',marka:extra.marka||'',model:extra.model||'',user_id:r.user_id};
+    });
+  ls=real;filtered=[];rn();
+}
+
+// FIX: Filtrowanie - zamykanie na smartfonie
+(function(){
+  const sb=document.getElementById('sb');
+  const toggle=document.getElementById('filterToggle');
+  if(!sb) return;
+  if(toggle){
+    toggle.textContent='☰ Filtrowanie';
+    toggle.onclick=function(){ sb.classList.toggle('mopen'); };
+  }
+  // Dodaj X Zamknij w nagłówku filtra
+  if(!document.getElementById('filterClose')){
+    const heads = sb.querySelectorAll('div');
+    const firstHead = heads[0];
+    if(firstHead){
+      const btn=document.createElement('button');
+      btn.id='filterClose';
+      btn.textContent='✕ Zamknij';
+      btn.style.cssText='height:32px;padding:0 12px;background:#002f34;color:#fff;border-radius:8px;border:none;font-weight:700;cursor:pointer;display:none;margin-left:8px';
+      firstHead.style.display='flex';
+      firstHead.style.justifyContent='space-between';
+      firstHead.style.alignItems='center';
+      firstHead.appendChild(btn);
+      btn.onclick=function(){ sb.classList.remove('mopen'); };
+      const obs=new MutationObserver(function(){
+        btn.style.display = (sb.classList.contains('mopen') && window.innerWidth<=900) ? 'inline-block' : 'none';
+      });
+      obs.observe(sb,{attributes:true,attributeFilter:['class']});
+    }
+  }
+})();
+
+function init(){
+  ls=DEMO;rn();
+  const s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js';s.async=true;
+  s.onload=()=>{supa=window.supabase.createClient(U,K);loadReal();};document.head.appendChild(s);
 }
 init();
-
 </script>
 
 <script>
