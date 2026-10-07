@@ -50,6 +50,7 @@ img.thumb{width:60px;height:45px;object-fit:cover;border-radius:6px}
 <div class="card"><div style="font-size:11px;color:#94a3b8">ZDJĘCIA</div><div id="statImgs" class="stat">-</div></div>
 <div class="card"><div style="font-size:11px;color:#94a3b8">UŻYTKOWNICY</div><div id="statUsers" class="stat">-</div></div>
 <div class="card"><div style="font-size:11px;color:#94a3b8">GORZYCE</div><div id="statGorzyce" class="stat">-</div></div>
+<div class="card"><div style="font-size:11px;color:#94a3b8">WYŚWIETLENIA (SUMA)</div><div id="statViews" class="stat">-</div><div style="font-size:10px;color:#64748b">lokalne + baza</div></div>
 </div>
 
 <div class="card">
@@ -62,7 +63,7 @@ img.thumb{width:60px;height:45px;object-fit:cover;border-radius:6px}
 </div>
 <div style="overflow:auto">
 <table>
-<thead><tr><th>Zdjęcie</th><th>Tytuł / Cena / Lok</th><th>Opis + OTOMOTO</th><th>User</th><th>Akcje</th></tr></thead>
+<thead><tr><th>Zdjęcie</th><th>Tytuł / Cena / Lok / 👁️</th><th>Opis + OTOMOTO</th><th>User</th><th>Akcje</th></tr></thead>
 <tbody id="tbody"></tbody>
 </table>
 </div>
@@ -103,7 +104,7 @@ async function checkAdmin(){
 }
 
 async function loadAll(){
-  const {data: listingsData}=await supa.from('listings').select('id,title,description,price,location,created_at,user_id').order('created_at',{ascending:false}).limit(500);
+  const {data: listingsData}=await supa.from('listings').select('id,title,description,price,location,created_at,user_id,views').order('created_at',{ascending:false}).limit(500);
   listings=listingsData||[];
   let imap={};
   try{
@@ -114,6 +115,17 @@ async function loadAll(){
   document.getElementById('statCount').textContent=listings.length;
   document.getElementById('statImgs').textContent=Object.values(imap).flat().length;
   document.getElementById('statGorzyce').textContent=listings.filter(x=> (x.location||'').toLowerCase().includes('gorzyce')).length;
+  // Views from localStorage (for demo) + from DB if column exists
+  let totalViews=0;
+  try{
+    const localViews=JSON.parse(localStorage.getItem('wroomer_views')||'{}');
+    totalViews=Object.values(localViews).reduce((a,b)=>a+b,0);
+  }catch(e){}
+  // If DB has views column, sum it
+  const dbViews = listings.reduce((sum,x)=> sum + (x.views||0), 0);
+  if(dbViews>0) totalViews = Math.max(totalViews, dbViews);
+  document.getElementById('statViews').textContent=totalViews.toLocaleString();
+
   
   const tbody=document.getElementById('tbody');
   tbody.innerHTML='';
@@ -125,7 +137,7 @@ async function loadAll(){
     const descClean = (item.description||'').split('__OTOMOTO__')[0].slice(0,120);
     tr.innerHTML=`
       <td>${img?`<img src="${img}" class="thumb">`:'-'}<div style="font-size:10px;color:#94a3b8">${imap[item.id]?.length||0} zdjęć ${hasOT?'• OTOMOTO':''}</div></td>
-      <td><div style="font-weight:700">${item.title}</div><div style="color:#23e5db">${(item.price||0).toLocaleString()} zł</div><div style="font-size:11px;color:#94a3b8">📍 ${item.location||''}</div><div style="font-size:10px;color:#64748b">${new Date(item.created_at).toLocaleString('pl-PL')}</div></td>
+      <td><div style="font-weight:700">${item.title}</div><div style="color:#23e5db">${(item.price||0).toLocaleString()} zł</div><div style="font-size:11px;color:#94a3b8">📍 ${item.location||''}</div><div style="font-size:11px;color:#f59e0b;font-weight:700">👁️ ${(item.views||0)} wyświetleń</div><div style="font-size:10px;color:#64748b">${new Date(item.created_at).toLocaleString('pl-PL')}</div></td>
       <td style="max-width:300px"><div style="white-space:pre-wrap;font-size:11px">${descClean}</div>${hasOT?`<div style="font-size:10px;color:#22c55e;margin-top:4px">✅ OTOMOTO sparsowane</div>`:''}</td>
       <td style="font-size:10px;word-break:break-all">${item.user_id||'anon'}</td>
       <td>

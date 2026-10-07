@@ -36,14 +36,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#f2f3f5}
 .md{position:fixed;inset:0;z-index:60;display:none}.md.o{display:block}
 .mbg{position:absolute;inset:0;background:rgba(0,0,0,.85)}
 .mb{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;overflow:auto}
-.mc{background:#fff;width:100%;max-width:900px;max-height:92vh;border-radius:12px;overflow:hidden;display:flex;flex-direction:column}
+.mc{background:#fff;width:100%;max-width:1200px;max-height:96vh;width:96vw;border-radius:12px;overflow:hidden;display:flex;flex-direction:column}
 @media(max-width:768px){.mc{width:100%;height:100dvh;max-height:100dvh;border-radius:0}.mb{padding:0}}
 .mh{padding:12px 16px;border-bottom:1px solid #eee;display:flex;justify-content:space-between;align-items:center}
 .cl{width:36px;height:36px;border-radius:50%;background:#f2f3f5;display:grid;place-items:center;border:none;cursor:pointer}
-.dw{position:relative;background:#fff;width:100%;height:58vw;max-height:520px;min-height:300px;display:flex;align-items:center;justify-content:center;overflow:hidden;touch-action:pan-y}
-.main-img{width:100%;height:100%;object-fit:contain;background:#fff}
-.nav{position:absolute;top:50%;transform:translateY(-50%);width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.95);border:1px solid #e5e7eb;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:5}
-.nav.prev{left:10px}.nav.next{right:10px}
+.dw{position:relative;background:#fff;width:100%;height:68vh;max-height:750px;min-height:400px;display:flex;align-items:center;justify-content:center;overflow:hidden;touch-action:pan-y}
+.main-img{width:100%;height:100%;object-fit:contain;background:#000}
+.nav{position:absolute;top:50%;transform:translateY(-50%);width:56px;height:56px;border-radius:50%;background:rgba(0,0,0,.6);color:#fff;border:2px solid rgba(255,255,255,.8);display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:10;font-size:24px;font-weight:900;backdrop-filter:blur(4px)} .nav:hover{background:rgba(0,0,0,.8)}
+.nav.prev{left:16px}.nav.next{right:16px}
 .dots{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);display:flex;gap:5px;background:rgba(0,0,0,.5);padding:5px 10px;border-radius:999px}
 .dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.6)}.dot.on{background:#fff;width:18px}
 .thumbs{display:flex;gap:6px;padding:8px 10px;background:#f7f8f9;border-top:1px solid #eee;overflow:auto}
@@ -91,7 +91,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#f2f3f5}
 <div style="padding:12px"><button id="apply" class="btn-show">Pokaż wyniki</button><div id="count" style="text-align:center;font-size:11px;color:#6b7280;margin-top:6px">Ładowanie...</div></div>
 </aside>
 <main class="main">
-<div style="background:#fff;padding:8px;display:flex;gap:6px;align-items:center;border-bottom:1px solid #e5e7eb"><button id="filterToggle" class="b bw">☰ Filtrowanie</button><input id="q2" class="pi2" style="flex:1" placeholder="Szybkie szukanie..."><button id="myBtn" class="b" style="background:#eef1f3">Moje</button></div>
+<div style="background:#fff;padding:8px;display:flex;gap:6px;align-items:center;border-bottom:1px solid #e5e7eb"><button id="filterToggle" class="b" style="background:#f2f3f5;color:#002f34;border:1px solid #d8dfe0;font-weight:700">☰ Filtrowanie</button><input id="q2" class="pi2" style="flex:1" placeholder="Szybkie szukanie..."><button id="myBtn" class="b" style="background:#eef1f3">Moje</button></div>
 <div id="gd" class="gd"></div><div id="ld" class="gd"><div style="background:#e5e7eb;border-radius:10px;aspect-ratio:4/3"></div><div style="background:#e5e7eb;border-radius:10px;aspect-ratio:4/3"></div><div style="background:#e5e7eb;border-radius:10px;aspect-ratio:4/3"></div><div style="background:#e5e7eb;border-radius:10px;aspect-ratio:4/3"></div></div><div id="empty" style="display:none;padding:40px;text-align:center;background:#fff;margin:8px;border-radius:10px">Brak ogłoszeń</div>
 </main>
 </div>
@@ -184,6 +184,31 @@ function applyFilters(){
     return true;
   }); rn();
 }
+
+// LICZNIK WEJŚĆ
+function getViews(){ try{return JSON.parse(localStorage.getItem('wroomer_views')||'{}')}catch(e){return {}} }
+function incView(id){
+  const views=getViews();
+  views[id]=(views[id]||0)+1;
+  localStorage.setItem('wroomer_views', JSON.stringify(views));
+  // Try supabase increment if column exists
+  if(supa){
+    supa.from('listings').select('views').eq('id',id).single().then(({data})=>{
+      if(data && typeof data.views!=='undefined'){
+        supa.from('listings').update({views:(data.views||0)+1}).eq('id',id).then(()=>{});
+      }
+    }).catch(()=>{});
+  }
+  // Update counter display if exists
+  const el=document.getElementById('viewCounter-'+id);
+  if(el) el.textContent=(views[id]||1)+' wyświetleń';
+  const el2=document.getElementById('viewCounterDetail');
+  if(el2) el2.textContent='👁️ '+(views[id]||1)+' wyświetleń';
+  return views[id]||1;
+}
+function getViewCount(id){ const v=getViews(); return v[id]||0; }
+function getTotalViews(){ const v=getViews(); return Object.values(v).reduce((a,b)=>a+b,0); }
+
 function rn(){
   const g=$('gd'),e=$('empty'),l=$('ld');
   const data=filtered.length||$('q').value||$('q2').value||$('brand').value||$('model').value||$('pmin').value||$('pmax').value||$('loc').value?filtered:ls;
@@ -192,8 +217,9 @@ function rn(){
   data.forEach(x=>{
     const d=document.createElement('div');d.className='cd';
     const first=x.im&&x.im[0]?x.im[0]:DEMO[0].im[0];
-    d.innerHTML=`<div class="cw"><img src="${first}" loading="lazy" alt="${x.md} - ${x.lc}" decoding="async" width="400" height="300"><div class="ct">${x.im?x.im.length:0} zdjęć</div></div><div class="cb"><div class="cti">${x.md}</div><div class="pr"><span>${(x.pr||0).toLocaleString()} zł</span><span style="font-size:11px;color:#6b7280">${x.lc}</span></div></div>`;
-    d.onclick=()=>od(x);g.appendChild(d);
+    const vc=getViewCount(x.id);
+    d.innerHTML=`<div class="cw"><img src="${first}" loading="lazy" alt="${x.md} - ${x.lc}" decoding="async" width="400" height="300"><div class="ct">${x.im?x.im.length:0} zdjęć</div><div style="position:absolute;bottom:6px;left:6px;background:rgba(0,0,0,.7);color:#fff;font-size:10px;padding:3px 6px;border-radius:4px">👁️ ${vc}</div></div><div class="cb"><div class="cti">${x.md}</div><div class="pr"><span>${(x.pr||0).toLocaleString()} zł</span><span style="font-size:11px;color:#6b7280">${x.lc}</span></div><div id="viewCounter-${x.id}" style="font-size:10px;color:#94a3b8;margin-top:2px">👁️ ${vc} wyświetleń</div></div>`;
+    d.onclick=()=>{ incView(x.id); od(x); };g.appendChild(d);
   });
   $('count').textContent=data.length+' ogłoszeń • '+Object.keys(MODELS).length+' marek • '+Object.values(MODELS).flat().length+' modeli';
 }
@@ -204,6 +230,8 @@ async function od(item){
   if(ims.length===0) ims=DEMO[0].im;
   let cur=0;
   currentEditId=item.id;
+  const viewsCount=incView(item.id);
+  setTimeout(()=>{ const el=document.getElementById('viewCounterDetail'); if(el) el.textContent='👁️ '+viewsCount+' wyświetleń'; },100);
   const mine=isMine(item.id);
   $('editBtn').style.display='block'; // ZAWSZE widoczny - fix dla użytkownika
   if(mine){ $('editBtn').textContent='✏️ Edytuj (Twoje)'; $('editBtn').style.background='#e6f7f5'; } else { $('editBtn').textContent='✏️ Edytuj'; }
@@ -240,14 +268,14 @@ async function od(item){
   dc.innerHTML=`
     <div class="dw" id="dw">
       <img id="mainGalleryImg" class="main-img" alt="" decoding="async" src="${ims[0]}" alt="${item.md}" draggable="false">
-      ${ims.length>1?`<button id="dp" class="nav prev" type="button">‹</button><button id="dn" class="nav next" type="button">›</button><div class="dots" id="dots">${ims.map((_,i)=>`<div class="dot ${i===0?'on':''}" data-i="${i}"></div>`).join('')}</div><div id="counter" style="position:absolute;top:8px;right:8px;background:rgba(0,0,0,.65);color:#fff;font-size:11px;padding:4px 8px;border-radius:6px;font-weight:700;z-index:5">${cur+1}/${ims.length}</div>`:''}
+      ${ims.length>1?`<button id="dp" class="nav prev" type="button" aria-label="Poprzednie zdjęcie">‹</button><button id="dn" class="nav next" type="button" aria-label="Następne zdjęcie">›</button><div class="dots" id="dots">${ims.map((_,i)=>`<div class="dot ${i===0?'on':''}" data-i="${i}"></div>`).join('')}</div><div id="counter" style="position:absolute;top:8px;right:8px;background:rgba(0,0,0,.65);color:#fff;font-size:11px;padding:4px 8px;border-radius:6px;font-weight:700;z-index:5">${cur+1}/${ims.length}</div>`:''}
     </div>
     ${ims.length>1?`<div class="thumbs" id="thumbs">${ims.map((s,i)=>`<div class="th ${i===0?'on':''}" data-i="${i}"><img src="${s}" loading="lazy"></div>`).join('')}</div>`:''}
     
     <div style="padding:16px">
       <h2 style="font-weight:800;font-size:20px;line-height:1.2">${item.md}</h2>
       <div style="font-weight:800;font-size:26px;margin-top:8px;color:#002f34">${(item.pr||0).toLocaleString()} zł</div>
-      <div style="font-size:12px;color:#6b7280;margin-top:4px">📍 ${item.lc || '-'} • ${ims.length} zdjęć • przesuwaj palcem ↔️ • swipe działa</div>
+      <div id="viewCounterDetail" style="font-size:12px;color:#002f34;font-weight:700;margin-top:6px;background:#e6f7f5;padding:6px 10px;border-radius:6px;display:inline-block">👁️ 0 wyświetleń</div><div style="font-size:12px;color:#6b7280;margin-top:6px">📍 ${item.lc || '-'} • ${ims.length} zdjęć • przesuwaj palcem ↔️ • swipe działa</div>
       
       <div style="margin-top:16px;background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px">
         <div style="font-weight:800;font-size:14px;margin-bottom:8px">📋 Wszystkie informacje - OTOMOTO</div>
