@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>WROOMER.PL - Auta z Twojej okolicy</title>
-<meta name="version" content="V19-PRO-SWIPE-FIXED-PERFECT-SCALE">
+<meta name="version" content="V20-FIX-BLACK-BAR-FINAL-2025">
 <link rel="preconnect" href="https://bdpydgsfowtuvjnkyeeg.supabase.co" crossorigin>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <style>
@@ -55,10 +55,10 @@ button,input,select,textarea{font-family:inherit}
 .mc{background:#fff;width:100%;max-width:900px;max-height:92vh;border-radius:12px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 24px 80px rgba(0,0,0,.5)}
 .mh{padding:16px 20px;border-bottom:1px solid #eee;display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
 .cl{width:40px;height:40px;border-radius:50%;background:#f2f3f5;display:grid;place-items:center;border:none;cursor:pointer}
-.dw{position:relative;background:#f7f8f9;flex-shrink:0;height:52vh;max-height:520px;min-height:320px;display:flex;align-items:center;justify-content:center;overflow:hidden;touch-action:pan-y}
-.main-img{width:100%;height:100%;object-fit:contain;object-position:center center;display:block;background:#f7f8f9;user-select:none;-webkit-user-drag:none;pointer-events:none}
-.dt{display:none} /* old slider hidden */
-.nav{position:absolute;top:50%;transform:translateY(-50%);width:54px;height:54px;border-radius:50%;background:#fff;color:#002f34;font-size:32px;font-weight:800;display:grid;place-items:center;z-index:30;border:2px solid #002f34;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.4);pointer-events:auto;touch-action:manipulation}
+.dw{position:relative;background:#f7f8f9;flex-shrink:0;height:52vh;max-height:520px;min-height:340px;display:flex;align-items:center;justify-content:center;overflow:hidden;touch-action:pan-y;border-bottom:1px solid #eee}
+.main-img{width:100%;height:100%;object-fit:contain;object-position:center;background:#f7f8f9;display:block;user-select:none;-webkit-user-drag:none}
+.dt{display:none}
+.nav{position:absolute;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.95);color:#002f34;font-size:22px;font-weight:800;display:grid;place-items:center;z-index:30;border:1px solid rgba(0,0,0,.08);cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.18);pointer-events:auto;touch-action:manipulation;backdrop-filter:blur(4px)} .nav:hover{background:#002f34;color:#fff}
 .nav.prev{left:12px}.nav.next{right:12px}
 .dots{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);display:flex;gap:6px;background:rgba(0,0,0,.55);padding:6px 12px;border-radius:999px;z-index:10}
 .dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.5)}.dot.on{background:#fff;width:20px}
@@ -79,7 +79,7 @@ button,input,select,textarea{font-family:inherit}
 @media(max-width:768px){
   .mc{max-width:100% !important;width:100% !important;height:100dvh !important;max-height:100dvh !important;border-radius:0 !important}
   .mb{padding:0 !important;align-items:stretch !important}
-  .dw{height:62vw !important;max-height:62vw !important}
+  .dw{height:58vw !important;max-height:58vw !important;min-height:220px !important;background:#f7f8f9 !important}
   #addScroll{max-height:calc(100dvh - 140px) !important}
   .h{padding:0 12px;height:56px}
   .search-wrap{display:none}
@@ -215,8 +215,8 @@ async function od(item){
   dc.innerHTML=`
     <div class="dw" id="dw">
       <img id="mainGalleryImg" class="main-img" src="${ims[0]}" alt="${item.md}" draggable="false">
-      ${ims.length>1?`<button id="dp" class="nav prev" type="button" aria-label="Poprzednie">‹</button><button id="dn" class="nav next" type="button" aria-label="Następne">›</button><div class="dots" id="dots">${ims.map((_,i)=>`<div class="dot ${i===0?'on':''}" data-i="${i}"></div>`).join('')}</div>`:''}
-      <div style="position:absolute;top:10px;right:10px;background:rgba(0,47,52,.9);color:#fff;font-size:11px;padding:5px 9px;border-radius:4px;font-weight:700;z-index:5" id="counter">${cur+1} / ${ims.length}</div>
+      ${ims.length>1?`<button id="dp" class="nav prev" type="button">‹</button><button id="dn" class="nav next" type="button">›</button>`:''}
+      ${ims.length>1?`<div class="dots" id="dots">${ims.map((_,i)=>`<div class="dot ${i===0?'on':''}" data-i="${i}"></div>`).join('')}</div><div style="position:absolute;top:10px;right:10px;background:rgba(0,0,0,.65);color:#fff;font-size:11px;padding:4px 8px;border-radius:4px;font-weight:700;z-index:5" id="counter">${cur+1}/${ims.length}</div>`:''}
     </div>
     ${ims.length>1?`<div class="thumbs" id="thumbs">${ims.map((s,i)=>`<div class="th ${i===0?'on':''}" data-i="${i}"><img src="${s}" loading="lazy" draggable="false"></div>`).join('')}</div>`:''}
     <div style="padding:18px 18px 12px">
@@ -232,7 +232,7 @@ async function od(item){
   document.body.style.overflow='hidden';
   
   const cleanPhone='600000000';
-  $('contactBarMount').innerHTML=`<div class="contact-bar"><a href="tel:${cleanPhone}" style="background:#002f34;color:#fff">📞 Zadzwoń</a><a href="sms:${cleanPhone}" style="background:#fff;border:1.5px solid #002f34;color:#002f34">SMS</a><a href="https://wa.me/${cleanPhone}" target="_blank" style="background:#25D366;color:#fff">WhatsApp</a><a href="#" style="background:#23e5db;color:#002f34">Wroomer Chat</a></div>`;
+  $('contactBarMount').innerHTML=`<div class="contact-bar"><a href="tel:${cleanPhone}" style="background:#002f34;color:#fff">📞 Zadzwoń</a><a href="sms:${cleanPhone}" style="background:#fff;border:1.5px solid #002f34;color:#002f34">SMS</a><a href="https://wa.me/${cleanPhone}" target="_blank" style="background:#25D366;color:#fff">WA</a><a href="#" style="background:#23e5db;color:#002f34">Wroomer</a></div>`;
 
   const mainImg=$('mainGalleryImg');
   const dots=$('dots');
@@ -240,8 +240,9 @@ async function od(item){
   const counter=$('counter');
   
   const upd=()=>{
+    if(!mainImg) return;
     mainImg.src=ims[cur];
-    counter.textContent=(cur+1)+' / '+ims.length;
+    if(counter) counter.textContent=(cur+1)+'/'+ims.length;
     if(dots) Array.from(dots.children).forEach((d,i)=>d.classList.toggle('on',i===cur));
     if(thumbs) Array.from(thumbs.children).forEach((t,i)=>t.classList.toggle('on',i===cur));
   };
@@ -262,10 +263,10 @@ async function od(item){
     if(th?.dataset.i!==undefined){ cur=parseInt(th.dataset.i); upd(); }
   });
 
-  // SWIPE - prosty i niezawodny
+  // SWIPE
   let startX=0, isDrag=false;
-  const getX=e=>e.touches?e.touches[0].clientX:e.clientX;
   const dw=$('dw');
+  const getX=e=>e.touches?e.touches[0].clientX:e.clientX;
   
   dw.addEventListener('touchstart', e=>{
     if(e.target.closest('.nav')) return;
@@ -275,29 +276,21 @@ async function od(item){
   dw.addEventListener('touchend', e=>{
     if(!isDrag) return;
     isDrag=false;
-    const diff=getX(e.changedTouches?e.changedTouches[0]:e)-startX;
-    if(Math.abs(diff)>60){
-      if(diff<0) goNext(); else goPrev();
-    }
+    const diff=(e.changedTouches?e.changedTouches[0].clientX:getX(e))-startX;
+    if(Math.abs(diff)>60){ if(diff<0) goNext(); else goPrev(); }
   }, {passive:true});
   
   dw.addEventListener('mousedown', e=>{
     if(e.target.closest('.nav')) return;
     startX=e.clientX; isDrag=true;
-    dw.style.cursor='grabbing';
   });
   
   dw.addEventListener('mouseup', e=>{
     if(!isDrag) return;
     isDrag=false;
-    dw.style.cursor='grab';
     const diff=e.clientX-startX;
-    if(Math.abs(diff)>60){
-      if(diff<0) goNext(); else goPrev();
-    }
+    if(Math.abs(diff)>60){ if(diff<0) goNext(); else goPrev(); }
   });
-  
-  dw.addEventListener('mouseleave', ()=>{ isDrag=false; dw.style.cursor=''; });
 
   const onKey=e=>{
     if(e.key==='ArrowLeft') goPrev();
