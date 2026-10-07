@@ -1,11 +1,5 @@
 {
   "cleanUrls": true,
-  "rewrites": [
-    {
-      "source": "/admin",
-      "destination": "/admin.html"
-    }
-  ],
   "headers": [
     {
       "source": "/(.*)",
@@ -13,10 +7,6 @@
         {
           "key": "Cache-Control",
           "value": "no-store, no-cache, must-revalidate, max-age=0"
-        },
-        {
-          "key": "Pragma",
-          "value": "no-cache"
         }
       ]
     }
