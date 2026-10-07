@@ -1,187 +1,308 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>WROOMER Admin - Panel</title>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>WROOMER.PL - ADMIN + LICZNIK TYGODNIE</title>
+<meta name="robots" content="noindex, nofollow">
 <style>
-*{box-sizing:border-box;margin:0;padding:0}body{font-family:Inter,system-ui,sans-serif;background:#0f1419;color:#e5e7eb;min-height:100vh}
-.h{height:64px;background:#002f34;display:flex;align-items:center;justify-content:space-between;padding:0 20px;position:sticky;top:0;z-index:10}
-.logo{font-weight:900;font-size:18px;color:#fff}.logo span{color:#23e5db}
-.btn{height:40px;padding:0 16px;border-radius:6px;border:none;font-weight:700;cursor:pointer;font-size:13px}
-.btn-green{background:#23e5db;color:#002f34}.btn-red{background:#ef4444;color:#fff}.btn-ghost{background:#1f2937;color:#e5e7eb;border:1px solid #374151}
-.wrap{max-width:1200px;margin:0 auto;padding:20px}
-.card{background:#1a2332;border:1px solid #233041;border-radius:10px;padding:16px;margin-bottom:12px}
-.input{width:100%;height:44px;background:#0f1419;border:1px solid #2a3a4f;border-radius:6px;padding:0 12px;color:#fff;font-size:14px}
-table{width:100%;border-collapse:collapse}th{font-size:11px;text-transform:uppercase;color:#6b7280;padding:10px;text-align:left;border-bottom:1px solid #233041}
-td{padding:12px 10px;border-bottom:1px solid #1f2937;font-size:13px;vertical-align:top}
-.thumb{width:60px;height:45px;border-radius:6px;object-fit:cover;background:#0f1419}
-.login{max-width:380px;margin:80px auto;padding:24px;background:#1a2332;border-radius:12px;border:1px solid #233041}
-.badge{font-size:11px;padding:3px 8px;border-radius:999px;background:#1f2937;color:#9ca3af}
-.badge-ok{background:#065f46;color:#6ee7b7}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,sans-serif;background:#0f172a;color:#e2e8f0}
+.h{height:56px;background:#002f34;color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 16px;position:sticky;top:0;z-index:10}
+.b{height:36px;padding:0 14px;border-radius:8px;border:none;font-weight:700;cursor:pointer}
+.bb{background:#23e5db;color:#002f34}.bw{background:rgba(255,255,255,.15);color:#fff}.br{background:#ef4444;color:#fff}.bg{background:#22c55e;color:#fff}
+.pg{max-width:1400px;margin:0 auto;padding:16px}
+.card{background:#1e293b;border-radius:12px;padding:16px;margin-bottom:12px;border:1px solid #334155}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
+@media(max-width:900px){.grid4{grid-template-columns:repeat(2,1fr)}}
+.stat{font-size:28px;font-weight:800;color:#23e5db}
+.input{height:40px;background:#0f172a;border:1px solid #334155;border-radius:8px;padding:0 10px;color:#fff}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{padding:10px;border-bottom:1px solid #334155;text-align:left}
+th{color:#94a3b8;font-size:11px;text-transform:uppercase}
+img.thumb{width:60px;height:45px;object-fit:cover;border-radius:6px}
+.weekBtn{padding:6px 12px;border-radius:999px;border:1px solid #334155;background:#0f172a;color:#94a3b8;cursor:pointer;font-size:12px}
+.weekBtn.on{background:#23e5db;color:#002f34;border-color:#23e5db;font-weight:800}
 </style>
 </head>
 <body>
-<div class="h"><div class="logo">WROOMER.<span> ADMIN</span></div><div><button id="logoutBtn" class="btn btn-ghost" style="display:none">Wyloguj</button></div></div>
+<header class="h">
+<div style="font-weight:900">WROOMER.PL - ADMIN + LICZNIK TYGODNIE</div>
+<div style="display:flex;gap:8px;align-items:center">
+<span id="adminEmail" style="font-size:12px;color:#23e5db"></span>
+<button id="loginBtn" class="b bw">Zaloguj jako admin</button>
+<a href="/" class="b bb" style="text-decoration:none;display:grid;place-items:center">← Portal</a>
+</div>
+</header>
 
-<div id="loginView" class="login">
-<h2 style="font-size:20px;margin-bottom:6px">Panel Admin</h2>
-<p style="font-size:12px;color:#6b7280;margin-bottom:18px">Projekt: bdpydgsfowtuvjnkyeeg.supabase.co • bucket: listing-images</p>
-<input id="pass" class="input" type="password" placeholder="Hasło admin (domyślnie: wroomer123)"><br><br>
-<button id="loginBtn" class="btn btn-green" style="width:100%;height:48px">Zaloguj</button>
-<div id="loginErr" style="font-size:12px;color:#ef4444;margin-top:10px;display:none"></div>
+<div id="loginBox" class="pg" style="max-width:400px;margin-top:40px">
+<div class="card">
+<h2 style="margin-bottom:12px">Logowanie admina</h2>
+<input id="email" class="input" placeholder="Email admina" style="margin-bottom:8px;width:100%">
+<input id="pass" type="password" class="input" placeholder="Hasło" style="margin-bottom:12px;width:100%">
+<button id="doLogin" class="b bb" style="width:100%">Zaloguj</button>
+<div id="msg" style="font-size:12px;margin-top:8px;text-align:center"></div>
+</div>
 </div>
 
-<div id="adminView" class="wrap" style="display:none">
-<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:12px">
-<div><h1 style="font-size:22px">Ogłoszenia</h1><div id="stats" style="font-size:12px;color:#6b7280;margin-top:4px">Ładowanie...</div></div>
-<div style="display:flex;gap:8px"><button id="refreshBtn" class="btn btn-ghost">↻ Odśwież</button><button id="exportBtn" class="btn btn-ghost">Export CSV</button></div>
+<div id="adminBox" style="display:none">
+<div class="pg">
+
+<!-- STATS -->
+<div class="grid4">
+<div class="card"><div style="font-size:11px;color:#94a3b8">OGŁOSZENIA</div><div id="statCount" class="stat">-</div></div>
+<div class="card"><div style="font-size:11px;color:#94a3b8">ZDJĘCIA</div><div id="statImgs" class="stat">-</div></div>
+<div class="card"><div style="font-size:11px;color:#94a3b8">GORZYCE</div><div id="statGorzyce" class="stat">-</div></div>
+<div class="card"><div style="font-size:11px;color:#94a3b8">WYŚWIETLENIA SUMA</div><div id="statViews" class="stat">-</div><div style="font-size:10px;color:#64748b">lokalne + baza</div></div>
 </div>
 
-<div class="card" style="display:flex;gap:10px">
-<input id="q" class="input" placeholder="Szukaj po tytule, lokalizacji..." style="flex:1">
-<select id="sort" class="input" style="width:160px"><option value="newest">Najnowsze</option><option value="oldest">Najstarsze</option><option value="priceHigh">Cena ↓</option><option value="priceLow">Cena ↑</option></select>
+<!-- WEEK FILTER -->
+<div class="card">
+<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px">
+<h3>📊 Licznik wejść - filtrowanie na tygodnie</h3>
+<div style="display:flex;gap:6px;flex-wrap:wrap" id="weekFilters">
+<button class="weekBtn on" data-week="all">Wszystkie</button>
+<button class="weekBtn" data-week="this">Ten tydzień</button>
+<button class="weekBtn" data-week="last">Poprzedni tydzień</button>
+<button class="weekBtn" data-week="2w">Ostatnie 2 tygodnie</button>
+<button class="weekBtn" data-week="4w">Ostatnie 4 tygodnie</button>
+</div>
 </div>
 
-<div class="card" style="padding:0;overflow:auto">
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px">
+<div style="background:#0f172a;border-radius:8px;padding:12px">
+<div style="font-size:11px;color:#94a3b8;margin-bottom:8px">WEJŚCIA W WYBRANYM OKRESIE</div>
+<div id="weekTotal" style="font-size:32px;font-weight:800;color:#22c55e">-</div>
+<div id="weekRange" style="font-size:11px;color:#64748b;margin-top:4px"></div>
+</div>
+<div style="background:#0f172a;border-radius:8px;padding:12px">
+<div style="font-size:11px;color:#94a3b8;margin-bottom:8px">TOP OGŁOSZENIA W OKRESIE</div>
+<div id="topWeek" style="font-size:12px"></div>
+</div>
+</div>
+
+<div style="margin-top:12px;display:flex;gap:8px">
+<input type="date" id="dateFrom" class="input"> <span style="align-self:center">→</span> <input type="date" id="dateTo" class="input">
+<button id="applyDate" class="b bw">Filtruj daty</button>
+<button id="clearDate" class="b" style="background:#334155;color:#fff">Wyczyść</button>
+<button id="exportCsv" class="b bb">📥 Export CSV</button>
+</div>
+</div>
+
+<!-- TABLE -->
+<div class="card">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px">
+<h3>🔧 Wszystkie ogłoszenia - zarządzaj + wyświetlenia</h3>
+<div style="display:flex;gap:8px">
+<input id="search" class="input" placeholder="Szukaj tytułu/miejscowości..." style="width:220px">
+<button id="refresh" class="b bw">Odśwież</button>
+</div>
+</div>
+<div style="overflow:auto">
 <table>
-<thead><tr><th>Zdjęcie</th><th>Tytuł / ID</th><th>Cena</th><th>Lokalizacja</th><th>Data</th><th>Zdjęcia</th><th>Akcje</th></tr></thead>
+<thead><tr><th>Zdjęcie</th><th>Tytuł / Cena / Lok / 👁️</th><th>Wyświetlenia w okresie</th><th>Opis + OTOMOTO</th><th>User</th><th>Akcje</th></tr></thead>
 <tbody id="tbody"></tbody>
 </table>
 </div>
-
-<div id="empty" style="display:none;text-align:center;padding:40px;color:#6b7280">Brak ogłoszeń w bazie</div>
 </div>
 
+</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script>
-const U='https://bdpydgsfowtuvjnkyeeg.supabase.co';
-const K='sb_publishable_S1qH_mBZaX7-bzmfJ0IVGA_6hxGbJWd';
-let supa=null;
-let listings=[];
+const U='https://bdpydgsfowtuvjnkyeeg.supabase.co', K='sb_publishable_S1qH_mBZaX7-bzmfJ0IVGA_6hxGbJWd';
+let supa=window.supabase.createClient(U,K);
+let listings=[], imap={}, viewLog=[], currentWeekFilter='all', customFrom=null, customTo=null;
 
-const ADMIN_PASS='wroomer123';
+function getWeekStart(d){ const date=new Date(d); const day=date.getDay(); const diff=date.getDate()-day+(day===0?-6:1); date.setDate(diff); date.setHours(0,0,0,0); return date; }
+function getDateRangeForFilter(filter){
+  const now=new Date();
+  if(filter==='this'){ const start=getWeekStart(now); return {from:start, to:now}; }
+  if(filter==='last'){ const thisStart=getWeekStart(now); const lastStart=new Date(thisStart); lastStart.setDate(thisStart.getDate()-7); const lastEnd=new Date(thisStart); lastEnd.setDate(thisStart.getDate()-1); lastEnd.setHours(23,59,59); return {from:lastStart, to:lastEnd}; }
+  if(filter==='2w'){ const from=new Date(); from.setDate(now.getDate()-14); return {from, to:now}; }
+  if(filter==='4w'){ const from=new Date(); from.setDate(now.getDate()-28); return {from, to:now}; }
+  if(filter==='all') return null;
+  if(customFrom && customTo) return {from:new Date(customFrom), to:new Date(customTo)};
+  return null;
+}
 
-const $=id=>document.getElementById(id);
+async function login(){
+  const email=document.getElementById('email').value.trim();
+  const pass=document.getElementById('pass').value;
+  document.getElementById('msg').textContent='Logowanie...';
+  const {data,error}=await supa.auth.signInWithPassword({email,password:pass});
+  if(error){ document.getElementById('msg').textContent='❌ '+error.message; return; }
+  checkAdmin();
+}
 
-function initSupa(){
-  if(window.supabase) supa=window.supabase.createClient(U,K);
+async function checkAdmin(){
+  const {data}=await supa.auth.getUser();
+  if(!data?.user){ document.getElementById('loginBox').style.display='block'; document.getElementById('adminBox').style.display='none'; return; }
+  document.getElementById('adminEmail').textContent=data.user.email;
+  document.getElementById('loginBox').style.display='none';
+  document.getElementById('adminBox').style.display='block';
+  document.getElementById('loginBtn').textContent='Wyloguj';
+  document.getElementById('loginBtn').onclick=async()=>{ await supa.auth.signOut(); location.reload(); };
+  loadAll();
+}
+
+async function loadAll(){
+  const {data: listingsData}=await supa.from('listings').select('id,title,description,price,location,created_at,user_id,views').order('created_at',{ascending:false}).limit(500);
+  listings=listingsData||[];
+  imap={};
+  try{
+    const {data:ims}=await supa.from('listing_images').select('listing_id,image_url').limit(1000);
+    if(ims) ims.forEach(r=>{ if(!imap[r.listing_id]) imap[r.listing_id]=[]; if(imap[r.listing_id].length<6) imap[r.listing_id].push(r.image_url); });
+  }catch(e){}
+  
+  // Load view log from localStorage (portal zapisuje)
+  try{ viewLog=JSON.parse(localStorage.getItem('wroomer_view_log')||'[]'); }catch(e){ viewLog=[]; }
+
+  document.getElementById('statCount').textContent=listings.length;
+  document.getElementById('statImgs').textContent=Object.values(imap).flat().length;
+  document.getElementById('statGorzyce').textContent=listings.filter(x=> (x.location||'').toLowerCase().includes('gorzyce')).length;
+  
+  let totalViews=0;
+  try{
+    const localViews=JSON.parse(localStorage.getItem('wroomer_views')||'{}');
+    totalViews=Object.values(localViews).reduce((a,b)=>a+b,0);
+  }catch(e){}
+  const dbViews = listings.reduce((sum,x)=> sum + (x.views||0), 0);
+  if(dbViews>0) totalViews = Math.max(totalViews, dbViews);
+  if(viewLog.length>0) totalViews = Math.max(totalViews, viewLog.length);
+  document.getElementById('statViews').textContent=totalViews.toLocaleString();
+
+  renderWeekStats();
+  renderTable();
+}
+
+function renderWeekStats(){
+  const range=getDateRangeForFilter(currentWeekFilter);
+  let filteredLog=viewLog;
+  let rangeText='Wszystkie czasy';
+  
+  if(range){
+    filteredLog=viewLog.filter(entry=>{
+      const d=new Date(entry.ts);
+      return d>=range.from && d<=range.to;
+    });
+    rangeText = range.from.toLocaleDateString('pl-PL') + ' → ' + range.to.toLocaleDateString('pl-PL');
+  } else if(currentWeekFilter==='all'){
+    rangeText='Wszystkie czasy - '+viewLog.length+' logów lokalnych';
+  }
+
+  document.getElementById('weekTotal').textContent=filteredLog.length.toLocaleString();
+  document.getElementById('weekRange').textContent=rangeText;
+
+  // Top in period
+  const counts={};
+  filteredLog.forEach(e=>{ counts[e.id]=(counts[e.id]||0)+1; });
+  const sorted=Object.entries(counts).sort((a,b)=>b[1]-a[1]).slice(0,5);
+  const topEl=document.getElementById('topWeek');
+  if(sorted.length===0){ topEl.innerHTML='<div style="color:#64748b">Brak danych w okresie - zaloguj się na portalu i klikaj ogłoszenia</div>'; }
   else {
-    const s=document.createElement('script');
-    s.src='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js';
-    s.onload=()=>{supa=window.supabase.createClient(U,K); if(localStorage.getItem('wroomer_admin')) load();};
-    document.head.appendChild(s);
+    topEl.innerHTML=sorted.map(([id,c])=>{
+      const item=listings.find(x=>x.id===id);
+      const title=item?item.title:id.slice(0,8);
+      return `<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #1e293b"><span>${title}</span><span style="color:#22c55e;font-weight:700">${c}</span></div>`;
+    }).join('');
   }
 }
 
-$('loginBtn').onclick=()=>{
-  const p=$('pass').value;
-  if(p===ADMIN_PASS || p==='admin' || p==='1234'){
-    localStorage.setItem('wroomer_admin','1');
-    showAdmin();
-  } else {
-    $('loginErr').style.display='block';
-    $('loginErr').textContent='Błędne hasło. Spróbuj: wroomer123';
-  }
-};
-$('pass').addEventListener('keydown',e=>{if(e.key==='Enter') $('loginBtn').click()});
+function renderTable(){
+  const tbody=document.getElementById('tbody');
+  tbody.innerHTML='';
+  const q=(document.getElementById('search').value||'').toLowerCase();
+  const range=getDateRangeForFilter(currentWeekFilter);
+  
+  listings.filter(x=> !q || x.title.toLowerCase().includes(q) || (x.location||'').toLowerCase().includes(q)).forEach(item=>{
+    // Count views in selected period for this item
+    let periodViews=0;
+    if(range){
+      periodViews=viewLog.filter(e=> e.id===item.id && new Date(e.ts)>=range.from && new Date(e.ts)<=range.to).length;
+    } else {
+      periodViews=viewLog.filter(e=> e.id===item.id).length;
+      if(periodViews===0) periodViews=item.views||0;
+    }
 
-function showAdmin(){
-  $('loginView').style.display='none';
-  $('adminView').style.display='block';
-  $('logoutBtn').style.display='block';
-  load();
-}
-if(localStorage.getItem('wroomer_admin')){ $('loginView').style.display='none'; $('adminView').style.display='block'; $('logoutBtn').style.display='block'; }
-
-$('logoutBtn').onclick=()=>{localStorage.removeItem('wroomer_admin'); location.reload();};
-
-async function load(){
-  if(!supa){ initSupa(); setTimeout(load,500); return; }
-  $('stats').textContent='Ładowanie z Supabase...';
-  try{
-    const {data, error} = await supa.from('listings').select('id,title,description,price,location,created_at').order('created_at',{ascending:false}).limit(200);
-    if(error) throw error;
-    listings=data||[];
-    // load images count
-    let imap={};
-    try{
-      const {data:ims}=await supa.from('listing_images').select('listing_id,image_url').order('created_at',{ascending:true}).limit(1000);
-      if(ims) ims.forEach(r=>{ if(!imap[r.listing_id]) imap[r.listing_id]=[]; imap[r.listing_id].push(r.image_url); });
-    }catch(e){}
-    listings = listings.map(l=>({...l, images: imap[l.id]||[]}));
-    render();
-  }catch(e){
-    $('stats').textContent='Błąd: '+e.message;
-  }
-}
-
-function render(){
-  const q=($('q').value||'').toLowerCase();
-  const sort=$('sort').value;
-  let data=listings.filter(l=>{
-    if(!q) return true;
-    return (l.title||'').toLowerCase().includes(q) || (l.location||'').toLowerCase().includes(q) || (l.id||'').toLowerCase().includes(q);
-  });
-  if(sort==='priceHigh') data.sort((a,b)=>(b.price||0)-(a.price||0));
-  else if(sort==='priceLow') data.sort((a,b)=>(a.price||0)-(b.price||0));
-  else if(sort==='oldest') data.sort((a,b)=>new Date(a.created_at)-new Date(b.created_at));
-  else data.sort((a,b)=>new Date(b.created_at)-new Date(a.created_at));
-
-  $('stats').textContent=`${data.length} ogłoszeń • ${listings.reduce((s,l)=>s+(l.images?.length||0),0)} zdjęć • bucket: listing-images`;
-  const tb=$('tbody'); tb.innerHTML='';
-  if(data.length===0){ $('empty').style.display='block'; return; } $('empty').style.display='none';
-  data.forEach(l=>{
     const tr=document.createElement('tr');
-    const firstImg=l.images?.[0]||'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=200';
-    const date=new Date(l.created_at).toLocaleString('pl-PL');
-    tr.innerHTML=`<td><img class="thumb" src="${firstImg}" onerror="this.src='https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=200'"></td>
-    <td><div style="font-weight:700;max-width:240px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${l.title||'Bez tytułu'}</div><div class="badge" style="margin-top:4px">${l.id.slice(0,8)}...</div></td>
-    <td style="font-weight:800">${(l.price||0).toLocaleString()} zł</td>
-    <td>${l.location||'-'}</td>
-    <td style="font-size:11px;color:#9ca3af">${date}</td>
-    <td><span class="badge badge-ok">${l.images?.length||0} zdjęć</span></td>
-    <td><div style="display:flex;gap:6px"><button class="btn btn-ghost" style="height:32px" onclick="viewListing('${l.id}')">👁</button><button class="btn btn-red" style="height:32px" onclick="deleteListing('${l.id}')">🗑</button></div></td>`;
-    tb.appendChild(tr);
+    const img=imap[item.id]?.[0]||'';
+    const hasOT = (item.description||'').includes('__OTOMOTO__');
+    const descClean = (item.description||'').split('__OTOMOTO__')[0].slice(0,120);
+    const totalItemViews = item.views || viewLog.filter(e=>e.id===item.id).length || 0;
+    tr.innerHTML=`
+      <td>${img?`<img src="${img}" class="thumb">`:'-'}<div style="font-size:10px;color:#94a3b8">${imap[item.id]?.length||0} zdjęć ${hasOT?'• OTOMOTO':''}</div></td>
+      <td><div style="font-weight:700">${item.title}</div><div style="color:#23e5db">${(item.price||0).toLocaleString()} zł</div><div style="font-size:11px;color:#94a3b8">📍 ${item.location||''}</div><div style="font-size:11px;color:#f59e0b;font-weight:700">👁️ ${totalItemViews} suma</div></td>
+      <td><div style="font-size:18px;font-weight:800;color:#22c55e">${periodViews}</div><div style="font-size:10px;color:#64748b">w okresie</div><div style="font-size:10px;color:#94a3b8">${currentWeekFilter}</div></td>
+      <td style="max-width:300px"><div style="white-space:pre-wrap;font-size:11px">${descClean}</div></td>
+      <td style="font-size:10px;word-break:break-all">${item.user_id?item.user_id.slice(0,8):'anon'}</td>
+      <td>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <button class="b br" style="height:28px;font-size:11px" onclick="delAd('${item.id}')">🗑️ Usuń</button>
+          <a href="/?id=${item.id}" target="_blank" class="b bw" style="height:28px;font-size:11px;text-decoration:none;display:grid;place-items:center">👁️ Zobacz</a>
+        </div>
+      </td>
+    `;
+    tbody.appendChild(tr);
   });
 }
 
-window.viewListing=(id)=>{
-  const l=listings.find(x=>x.id===id);
-  if(!l) return;
-  alert(`Tytuł: ${l.title}\nCena: ${l.price} zł\nLok: ${l.location}\nOpis: ${l.description||'-'}\nZdjęcia: ${l.images.length}\nID: ${l.id}`);
+async function delAd(id){
+  if(!confirm('Usunąć ogłoszenie '+id+'?')) return;
+  await supa.from('listing_images').delete().eq('listing_id',id);
+  const {error}=await supa.from('listings').delete().eq('id',id);
+  if(error){ alert('Błąd: '+error.message); } else { alert('Usunięto'); loadAll(); }
+}
+
+document.getElementById('doLogin').onclick=login;
+document.getElementById('loginBtn').onclick=()=>document.getElementById('loginBox').style.display='block';
+document.getElementById('search').addEventListener('input',renderTable);
+document.getElementById('refresh').onclick=loadAll;
+
+document.querySelectorAll('.weekBtn').forEach(btn=>{
+  btn.onclick=()=>{
+    document.querySelectorAll('.weekBtn').forEach(b=>b.classList.remove('on'));
+    btn.classList.add('on');
+    currentWeekFilter=btn.dataset.week;
+    customFrom=null; customTo=null;
+    renderWeekStats(); renderTable();
+  };
+});
+
+document.getElementById('applyDate').onclick=()=>{
+  const from=document.getElementById('dateFrom').value;
+  const to=document.getElementById('dateTo').value;
+  if(!from||!to){ alert('Wybierz obie daty'); return; }
+  customFrom=from; customTo=to+'T23:59:59';
+  currentWeekFilter='custom';
+  document.querySelectorAll('.weekBtn').forEach(b=>b.classList.remove('on'));
+  renderWeekStats(); renderTable();
 };
 
-window.deleteListing=async(id)=>{
-  if(!confirm('Usunąć ogłoszenie '+id.slice(0,8)+'...? To usunie też zdjęcia z bazy.')) return;
-  try{
-    // delete images records first
-    await supa.from('listing_images').delete().eq('listing_id', id);
-    // try delete storage files
-    try{
-      const {data:files}=await supa.storage.from('listing-images').list(id);
-      if(files && files.length){
-        const paths=files.map(f=>id+'/'+f.name);
-        await supa.storage.from('listing-images').remove(paths);
-      }
-    }catch(e){}
-    const {error}=await supa.from('listings').delete().eq('id', id);
-    if(error) throw error;
-    listings=listings.filter(x=>x.id!==id);
-    render();
-  }catch(e){ alert('Błąd usuwania: '+e.message); }
+document.getElementById('clearDate').onclick=()=>{
+  document.getElementById('dateFrom').value=''; document.getElementById('dateTo').value='';
+  customFrom=null; customTo=null; currentWeekFilter='all';
+  document.querySelectorAll('.weekBtn').forEach(b=>b.classList.remove('on'));
+  document.querySelector('[data-week="all"]').classList.add('on');
+  renderWeekStats(); renderTable();
 };
 
-$('q').addEventListener('input', render);
-$('sort').addEventListener('change', render);
-$('refreshBtn').onclick=load;
-$('exportBtn').onclick=()=>{
-  const csv=['id,title,price,location,created_at,images'].concat(listings.map(l=>`"${l.id}","${(l.title||'').replace(/"/g,'""')}",${l.price},"${l.location}",${l.created_at},${l.images.length}`)).join('\n');
+document.getElementById('exportCsv').onclick=()=>{
+  const range=getDateRangeForFilter(currentWeekFilter);
+  let csv='id,title,price,location,views_total,views_period,period
+';
+  listings.forEach(item=>{
+    let periodViews=viewLog.filter(e=>e.id===item.id).length;
+    if(range) periodViews=viewLog.filter(e=> e.id===item.id && new Date(e.ts)>=range.from && new Date(e.ts)<=range.to).length;
+    csv+=`"${item.id}","${item.title.replace(/"/g,'""')}",${item.price},"${item.location}",${item.views||0},${periodViews},"${currentWeekFilter}"
+`;
+  });
   const blob=new Blob([csv],{type:'text/csv'}); const url=URL.createObjectURL(blob);
-  const a=document.createElement('a'); a.href=url; a.download='wroomer-listings.csv'; a.click();
+  const a=document.createElement('a'); a.href=url; a.download='wroomer_views_'+currentWeekFilter+'_'+new Date().toISOString().slice(0,10)+'.csv'; a.click();
 };
 
-initSupa();
-if(localStorage.getItem('wroomer_admin')) setTimeout(load,800);
+checkAdmin();
 </script>
 </body>
 </html>
