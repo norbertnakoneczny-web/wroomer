@@ -21,7 +21,7 @@ body{font-family:Inter,-apple-system,sans-serif;background:#0b1220;color:#e2e8f0
 table{width:100%;border-collapse:collapse;font-size:13px}
 th,td{padding:12px;border-bottom:1px solid #13203a;text-align:left}
 th{color:#64748b;font-size:11px;letter-spacing:.8px}
-img.thumb{width:64px;height:48px;object-fit:cover;border-radius:10px;background:#0b1220}
+img.thumb{width:64px;height:48px;object-fit:contain;object-position:center center;border-radius:10px;background:#070d1a;border:1px solid #1e293b;display:block}
 .badge{font-size:11px;padding:4px 8px;border-radius:999px;font-weight:700}
 .badge-ok{background:#0f3a2e;color:#22c55e;border:1px solid #14532d}
 .badge-hide{background:#3a2f0f;color:#f59e0b;border:1px solid #854d0e}
@@ -47,8 +47,8 @@ img.thumb{width:64px;height:48px;object-fit:cover;border-radius:10px;background:
 <input id="email" class="input" placeholder="Email admina" style="margin-bottom:10px">
 <input id="pass" type="password" class="input" placeholder="Hasło" style="margin-bottom:16px">
 <button id="doLogin" class="b" style="width:100%;background:#22e6c8;color:#002f34;height:44px">Zaloguj</button>
-<div id="msg" style="font-size:12px;margin-top:10px;text-align:center;color:#94a3b8"></div>
-<div style="font-size:11px;color:#475569;margin-top:12px">Po zalogowaniu zobaczysz licznik wejść + ban/hide</div>
+<div id="msg" style="font-size:12px;margin-top:10px;text-align:center;color:#ef4444;min-height:16px"></div>
+
 </div>
 </div>
 
@@ -280,7 +280,7 @@ function renderTable(){
     const statusBadge=item.is_banned?'<span class="badge badge-ban">🚫 ZBANOWANE</span>':(item.is_hidden?'<span class="badge badge-hide">🙈 UKRYTE</span>':'<span class="badge badge-ok">👁️ Widoczne</span>');
     
     tr.innerHTML=`
-      <td>${img?`<img src="${img}" class="thumb">`:'<div style="width:64px;height:48px;background:#070d1a;border-radius:10px"></div>'}</td>
+      <td>${img?`<img src="${img}" class="thumb">`:'<div style="width:64px;height:48px;background:#070d1a;border-radius:10px;border:1px solid #1e293b;display:grid;place-items:center;color:#475569;font-size:10px">brak</div>'}</td>
       <td><div style="font-weight:700">${item.title}</div><div style="font-size:11px;color:#475569">${item.id.slice(0,8)}...</div></td>
       <td style="font-weight:700;white-space:nowrap">${(item.price||0).toLocaleString()} zł</td>
       <td>${item.location||''}</td>
