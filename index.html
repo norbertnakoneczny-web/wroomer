@@ -277,6 +277,7 @@ async function od(item){
   const dwEl=document.getElementById('dw');
   dwEl.addEventListener('touchstart', e=>{if(e.target.closest('.nav')) return; sx=e.touches[0].clientX; drag=true;}, {passive:true});
   dwEl.addEventListener('touchend', e=>{if(!drag) return; drag=false; const dx=e.changedTouches[0].clientX-sx; if(Math.abs(dx)>40){ if(dx<0) cur=(cur+1)%ims.length; else cur=(cur-1+ims.length)%ims.length; upd(); }}, {passive:true});
+  const deleteCurrent=async()=>{ if(!currentEditId) return; if(!confirm('Usunąć to stare ogłoszenie bez parametrów? Potem dodaj nowe po V31.')) return; try{ await supa.from('listing_images').delete().eq('listing_id',currentEditId); await supa.from('listings').delete().eq('id',currentEditId); m.classList.remove('o'); document.body.style.overflow=''; await loadReal(); }catch(e){ alert('Błąd usuwania: '+e.message); } };
   const closeDm=()=>{m.classList.remove('o');document.body.style.overflow='';};
   $('cd').onclick=closeDm; $('dbg').onclick=closeDm;
 }
@@ -285,15 +286,43 @@ async function od(item){
 $('ab').onclick=()=>{currentEditId=null;$('formTitle').textContent='Dodaj ogłoszenie';$('af').reset();ai=[];editImgs=[];$('pv').innerHTML='';$('editImages').style.display='none';$('md2').innerHTML='<option value="">Najpierw marka</option>';$('am').classList.add('o');document.body.style.overflow='hidden';};
 const closeAm=()=>{$('am').classList.remove('o');document.body.style.overflow='';};
 $('ca').onclick=closeAm;$('abg').onclick=closeAm;
-$('editBtn').onclick=()=>{ // ZAWSZE pozwala edytować - fix
 
+$('editBtn').onclick=()=>{
   const item=ls.find(x=>x.id===currentEditId); if(!item) return;
-  $('formTitle').textContent='Edytuj bez potwierdzania'; $('titleFull').value=item.md; $('pr').value=item.pr; $('lc').value=item.lc; $('ds').value=item.ds;
-  const parts=item.md.split(' '); if(parts[0]) $('mk').value=parts[0]; populateModels(parts[0],'md2');
-  editImgs=[...item.im]; const ep=$('editPv'); ep.innerHTML='';
-  editImgs.forEach((src,i)=>{const d=document.createElement('div');d.className='px';d.innerHTML=`<img src="${src}"><button type="button">✕</button>`;d.querySelector('button').onclick=()=>{editImgs.splice(i,1);d.remove();};ep.appendChild(d);});
-  $('editImages').style.display='block'; ai=[]; $('pv').innerHTML=''; $('dm').classList.remove('o'); $('am').classList.add('o');
+  $('formTitle').textContent='Edytuj - naprawia stare ogłoszenie - uzupełnij braki';
+  $('titleFull').value=item.md; $('pr').value=item.pr; $('lc').value=item.lc; $('ds').value=item.ds||'';
+  $('year').value=item.year||''; $('mileage').value=item.mileage||''; $('power').value=item.power||''; $('capacity').value=item.capacity||item.cap||'';
+  $('fuel').value=item.fuel||''; $('gear').value=item.gear||''; $('drive2').value=item.drive||''; $('body2').value=item.body||''; $('color2').value=item.color||''; $('doors').value=item.doors||''; $('cond').value=item.state||item.cond||''; $('orig2').value=item.origin||item.orig||''; $('country').value=item.country||''; $('gen2').value=item.generation||item.gen||'';
+  const parts=item.md.split(' '); 
+  if(parts[0]){
+    const brandFound = Object.keys(MODELS).find(b=> b.toLowerCase()===parts[0].toLowerCase()) || (MODELS[parts[0]] ? parts[0] : 'Inny');
+    if(brandFound==='Inny'){
+      $('mk').value='Inny'; $('mkOther').style.display='block'; $('mkOther').value=item.marka||parts[0];
+      populateModels(parts[0],'md2');
+    } else {
+      $('mk').value=brandFound; populateModels(brandFound,'md2');
+    }
+    const modelPart = parts.slice(1).join(' ');
+    if(modelPart){
+      const sel=$('md2');
+      const exists=[...sel.options].some(o=>o.value.toLowerCase()===modelPart.toLowerCase() || modelPart.toLowerCase().includes(o.value.toLowerCase()));
+      if(!exists && modelPart){
+        sel.innerHTML+='<option value="'+modelPart+'">'+modelPart+' (stare)</option>';
+      }
+      sel.value=modelPart||'Inny';
+      if(sel.value==='Inny'){ $('mdOther').style.display='block'; $('mdOther').value=item.model||modelPart; }
+    }
+  }
+  editImgs=[...item.im]; const ep=$('editPv'); ep.innerHTML=''; editImgs.forEach((src,i)=>{const d=document.createElement('div');d.className='px';d.innerHTML=`<img src="${src}"><button type="button">✕</button>`;d.querySelector('button').onclick=()=>{editImgs.splice(i,1);d.remove();};ep.appendChild(d);}); $('editImages').style.display='block'; ai=[]; $('pv').innerHTML=''; $('dm').classList.remove('o'); $('am').classList.add('o');
+  // Info for old listings
+  if(!item.year && !item.fuel){
+    const info=document.createElement('div');
+    info.style.cssText='background:#fef3c7;padding:8px;border-radius:8px;font-size:11px;color:#92400e;margin-bottom:8px';
+    info.textContent='⚠️ To stare ogłoszenie sprzed V31 - uzupełnij Rok, Przebieg, Moc, Pojemność, Paliwo, Skrzynię - po zapisie wszystko pojawi się w szczegółach bez "-".';
+    $('addScroll').prepend(info);
+  }
 };
+
 function rp(){const p=$('pv');p.innerHTML='';ai.forEach((o,i)=>{const d=document.createElement('div');d.className='px';d.innerHTML=`<img src="${o.data}"><button type="button">✕</button>`;d.querySelector('button').onclick=()=>{ai.splice(i,1);rp();};p.appendChild(d);});$('ci').textContent=ai.length?`${ai.length} zdjęć skompresowanych`:'';
 }
 $('dz').onclick=()=>$('fi').click();
