@@ -4,12 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>WROOMER.PL - Auta z Twojej okolicy</title>
-<meta name="version" content="V22-FINAL-WORKING-NO-BLACK">
+<meta name="version" content="V23-PROFESSIONAL-WHITE-GALLERY-FIX">
 <link rel="preconnect" href="https://bdpydgsfowtuvjnkyeeg.supabase.co" crossorigin>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f2f3f5;color:#111827}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f2f3f5;color:#111827;-webkit-font-smoothing:antialiased}
 img{display:block;max-width:100%}
 button,input,select,textarea{font-family:inherit}
 .h{position:sticky;top:0;z-index:50;background:#002f34;color:#fff;height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 16px 0 24px;box-shadow:0 2px 8px rgba(0,0,0,.15)}
@@ -43,7 +43,7 @@ button,input,select,textarea{font-family:inherit}
 .cd{background:#fff;border-radius:8px;overflow:hidden;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.1);transition:.2s}
 .cd:hover{box-shadow:0 6px 20px rgba(0,0,0,.12);transform:translateY(-1px)}
 .cw{position:relative;background:#e9ecef;aspect-ratio:4/3;overflow:hidden;display:flex;align-items:center;justify-content:center}
-.cw img{width:100%;height:100%;object-fit:cover;object-position:center;transition:transform .3s;display:block}
+.cw img{width:100%;height:100%;object-fit:cover;object-position:center center;transition:transform .3s;display:block}
 .cd:hover .cw img{transform:scale(1.03)}
 .ct{position:absolute;top:8px;right:8px;background:rgba(0,47,52,.92);color:#fff;font-size:11px;padding:5px 9px;border-radius:4px;font-weight:700;z-index:2}
 .cb{padding:12px}
@@ -55,17 +55,16 @@ button,input,select,textarea{font-family:inherit}
 .mc{background:#fff;width:100%;max-width:900px;max-height:92vh;border-radius:12px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 24px 80px rgba(0,0,0,.5)}
 .mh{padding:16px 20px;border-bottom:1px solid #eee;display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
 .cl{width:40px;height:40px;border-radius:50%;background:#f2f3f5;display:grid;place-items:center;border:none;cursor:pointer}
-/* FINAL GALLERY - NO BLACK BAR - WHITE BACKGROUND */
-.dw{position:relative;background:#ffffff;flex-shrink:0;height:52vh;max-height:520px;min-height:360px;display:flex;align-items:center;justify-content:center;overflow:hidden;touch-action:pan-y;border-bottom:1px solid #eee}
-.main-img{width:100%;height:100%;object-fit:contain;object-position:center center;background:#fff;display:block}
-.nav{position:absolute;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.96);color:#002f34;font-size:22px;font-weight:800;display:grid;place-items:center;z-index:20;border:1px solid rgba(0,0,0,.08);cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.18);transition:.15s}
-.nav:hover{background:#002f34;color:#fff}
+.dw{position:relative;background:#ffffff;flex-shrink:0;height:52vh;max-height:520px;min-height:380px;display:flex;align-items:center;justify-content:center;overflow:hidden;touch-action:pan-y;border-bottom:1px solid #e5e7eb}
+.dt{display:none !important}
+.main-img{width:100%;height:100%;object-fit:contain;object-position:center center;background:#fff;display:block;max-width:100%;max-height:100%}
+.nav{position:absolute;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.96);color:#002f34;font-size:20px;font-weight:800;display:grid;place-items:center;z-index:30;border:1px solid #e5e7eb;cursor:pointer;box-shadow:0 2px 12px rgba(0,0,0,.18);pointer-events:auto;touch-action:manipulation;user-select:none}
 .nav.prev{left:12px}.nav.next{right:12px}
 .dots{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);display:flex;gap:6px;background:rgba(0,0,0,.55);padding:6px 12px;border-radius:999px;z-index:10}
-.dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.5);cursor:pointer;transition:.2s}.dot.on{background:#fff;width:20px}
+.dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.5)}.dot.on{background:#fff;width:20px}
 .thumbs{display:flex;gap:8px;padding:10px 12px;background:#f7f8f9;border-top:1px solid #eee;overflow:auto}
 .th{width:68px;height:68px;border-radius:6px;overflow:hidden;flex-shrink:0;border:2px solid transparent;opacity:.6;cursor:pointer;background:#f2f3f5;display:flex;align-items:center;justify-content:center}
-.th.on{border-color:#002f34;opacity:1}.th img{width:100%;height:100%;object-fit:cover;display:block}
+.th.on{border-color:#002f34;opacity:1}.th img{width:100%;height:100%;object-fit:cover;object-position:center center;display:block}
 .fm{padding:0;display:flex;flex-direction:column;gap:0;overflow:hidden}
 .lb{font-size:11px;font-weight:700;text-transform:uppercase;color:#6b7280;margin-bottom:6px}
 .f input,.f textarea,.f select{width:100%;height:46px;padding:0 14px;border:1.5px solid #d8dfe0;border-radius:6px;font-size:15px;background:#fff}
@@ -75,12 +74,12 @@ button,input,select,textarea{font-family:inherit}
 .dp{border:2px dashed #d8dfe0;border-radius:8px;padding:24px;text-align:center;background:#f7f8f9;cursor:pointer}
 .pv{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
 .px{position:relative;border-radius:6px;overflow:hidden;aspect-ratio:1;background:#f2f3f5;border:1px solid #e5e7eb;display:flex;align-items:center;justify-content:center}
-.px img{width:100%;height:100%;object-fit:cover;display:block}
+.px img{width:100%;height:100%;object-fit:cover;object-position:center center;display:block}
 .px button{position:absolute;top:4px;right:4px;width:26px;height:26px;border-radius:50%;background:rgba(0,0,0,.75);color:#fff;border:none;cursor:pointer}
 @media(max-width:768px){
   .mc{max-width:100% !important;width:100% !important;height:100dvh !important;max-height:100dvh !important;border-radius:0 !important}
   .mb{padding:0 !important;align-items:stretch !important}
-  .dw{height:62vw !important;max-height:62vw !important;min-height:280px !important;background:#fff !important}
+  .dw{height:62vw !important;max-height:62vw !important;min-height:300px !important;background:#fff !important}
   #addScroll{max-height:calc(100dvh - 140px) !important}
   .h{padding:0 12px;height:56px}
   .search-wrap{display:none}
@@ -157,8 +156,8 @@ const $=id=>document.getElementById(id);
 let isLoading=false;
 const DEMO=[
  {id:'demo1', md:'Skoda Octavia 1.9 TDI', pr:23400, lc:'Gorzyce', ds:'2008 diesel', im:['https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=1200&h=900&fit=crop','https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=1200&h=900&fit=crop','https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=1200&h=900&fit=crop']},
- {id:'demo2', md:'Volkswagen Passat B6 2.0', pr:18900, lc:'Wodzisław', ds:'2007 benzyna', im:['https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=1200','https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=1200']},
- {id:'demo3', md:'Robur - okazja', pr:30000, lc:'Gorzyce', ds:'Ciężarowy', im:['https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=1200','https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?w=1200']},
+ {id:'demo2', md:'VW Passat B8 2.0 TDI', pr:48900, lc:'Wodzisław', ds:'2020 diesel automat', im:['https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=1200&h=900&fit=crop','https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=1200&h=900&fit=crop','https://images.unsplash.com/photo-1555215695-3004980ad54e?w=1200&h=900&fit=crop','https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=1200&h=900&fit=crop']},
+ {id:'demo3', md:'BMW 320d F30', pr:62500, lc:'Rybnik', ds:'2016 diesel', im:['https://images.unsplash.com/photo-1555215695-3004980ad54e?w=1200&h=900&fit=crop','https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=1200&h=900&fit=crop']}
 ];
 const modelsByBrand={Skoda:['Octavia','Fabia','Superb'], Volkswagen:['Passat','Golf'], BMW:['320d','X3'], Audi:['A4','A6'], Mercedes:['C 220d'], Toyota:['Avensis']};
 async function comp(file,maxW=1200){
@@ -212,40 +211,101 @@ async function od(item){
   let ims=item.im&&item.im.length?item.im.filter(u=>u&&u.startsWith('https://')):[];
   if(ims.length===0) ims=DEMO[0].im;
   let cur=0;
-  // NO BLACK BAR - WHITE GALLERY
-  dc.innerHTML=`
+
+  // PROFESSIONAL FIX: single img, white background, no black bar, no innerHTML+=
+  dc.innerHTML = `
     <div class="dw" id="dw">
-      <img id="mainGalleryImg" class="main-img" src="${ims[0]}" alt="${item.md}" draggable="false">
-      ${ims.length>1?`<button id="dp" class="nav prev" type="button">‹</button><button id="dn" class="nav next" type="button">›</button><div class="dots" id="dots">${ims.map((_,i)=>`<div class="dot ${i===0?'on':''}" data-i="${i}"></div>`).join('')}</div><div id="counter" style="position:absolute;top:10px;right:10px;background:rgba(0,0,0,.7);color:#fff;font-size:11px;padding:4px 8px;border-radius:6px;font-weight:700;z-index:5">${cur+1}/${ims.length}</div>`:''}
+      <img id="mainGalleryImg" class="main-img" src="${ims[0]}" alt="${item.md}" draggable="false" decoding="async">
+      ${ims.length>1?`<button id="dp" class="nav prev" type="button" aria-label="Poprzednie">‹</button><button id="dn" class="nav next" type="button" aria-label="Następne">›</button><div class="dots" id="dots">${ims.map((_,i)=>`<div class="dot ${i===0?'on':''}" data-i="${i}"></div>`).join('')}</div><div id="counter" style="position:absolute;top:10px;right:10px;background:rgba(0,0,0,.68);color:#fff;font-size:11px;padding:4px 8px;border-radius:6px;font-weight:700;z-index:5">${cur+1}/${ims.length}</div>`:''}
     </div>
     ${ims.length>1?`<div class="thumbs" id="thumbs">${ims.map((s,i)=>`<div class="th ${i===0?'on':''}" data-i="${i}"><img src="${s}" loading="lazy" draggable="false"></div>`).join('')}</div>`:''}
-    <div style="padding:18px 18px 12px"><h2 style="font-weight:800;font-size:20px">${item.md}</h2><div style="font-weight:800;font-size:24px;margin-top:8px">${(item.pr||0).toLocaleString()} zł</div><div style="font-size:13px;color:#406367;margin-top:4px">📍 ${item.lc} • ${ims.length} zdjęć</div>${item.ds?`<div style="margin-top:12px;background:#f7f8f9;padding:14px;border-radius:8px;font-size:14px;white-space:pre-wrap">${item.ds}</div>`:''}</div>
+    <div style="padding:18px 18px 12px"><h2 style="font-weight:800;font-size:20px;line-height:1.3">${item.md}</h2><div style="font-weight:800;font-size:24px;margin-top:8px;color:#002f34">${(item.pr||0).toLocaleString()} zł</div><div style="font-size:13px;color:#406367;margin-top:6px">📍 ${item.lc} • ${ims.length} ${ims.length===1?'zdjęcie':ims.length<5?'zdjęcia':'zdjęć'}</div>${item.ds?`<div style="margin-top:12px;background:#f7f8f9;padding:14px;border-radius:8px;font-size:14px;line-height:1.5;white-space:pre-wrap">${item.ds}</div>`:''}</div>
     <div id="contactBarMount"></div>
   `;
-  m.classList.add('o');document.body.style.overflow='hidden';
-  $('contactBarMount').innerHTML=`<div class="contact-bar"><a href="tel:600000000" style="background:#002f34;color:#fff">📞 Zadzwoń</a><a href="sms:600000000" style="background:#fff;border:1.5px solid #002f34;color:#002f34">SMS</a><a href="https://wa.me/600000000" target="_blank" style="background:#25D366;color:#fff">WA</a><a href="#" style="background:#23e5db;color:#002f34">Wroomer</a></div>`;
-  const mainImg=$('mainGalleryImg');
-  const upd=()=>{
-    if(mainImg) mainImg.src=ims[cur];
-    const c=$('counter'); if(c) c.textContent=(cur+1)+'/'+ims.length;
-    const dots=$('dots'); if(dots) [...dots.children].forEach((d,i)=>d.classList.toggle('on',i===cur));
-    const thumbs=$('thumbs'); if(thumbs) [...thumbs.children].forEach((t,i)=>t.classList.toggle('on',i===cur));
+
+  m.classList.add('o');
+  document.body.style.overflow='hidden';
+
+  // PROFESSIONAL: use innerHTML on mount, NOT dc.innerHTML+= which destroys listeners
+  const mount = document.getElementById('contactBarMount');
+  if(mount){
+    mount.innerHTML = `<div class="contact-bar"><a href="tel:600000000" style="background:#002f34;color:#fff">📞 Zadzwoń</a><a href="sms:600000000" style="background:#fff;border:1.5px solid #002f34;color:#002f34">SMS</a><a href="https://wa.me/600000000" target="_blank" style="background:#25D366;color:#fff">WA</a><a href="#" style="background:#23e5db;color:#002f34">Wroomer</a></div>`;
+  }
+
+  const mainImg = document.getElementById('mainGalleryImg');
+  const counter = document.getElementById('counter');
+  const dots = document.getElementById('dots');
+  const thumbs = document.getElementById('thumbs');
+
+  const upd = ()=>{
+    if(mainImg) mainImg.src = ims[cur];
+    if(counter) counter.textContent = (cur+1)+'/'+ims.length;
+    if(dots) [...dots.children].forEach((d,i)=>d.classList.toggle('on',i===cur));
+    if(thumbs) [...thumbs.children].forEach((t,i)=>t.classList.toggle('on',i===cur));
   };
-  $('dp')?.addEventListener('click', e=>{e.preventDefault(); e.stopPropagation(); cur=(cur-1+ims.length)%ims.length; upd();});
-  $('dn')?.addEventListener('click', e=>{e.preventDefault(); e.stopPropagation(); cur=(cur+1)%ims.length; upd();});
-  $('dots')?.addEventListener('click', e=>{const d=e.target.closest('.dot'); if(d&&d.dataset.i!==undefined){cur=parseInt(d.dataset.i); upd();}});
-  $('thumbs')?.addEventListener('click', e=>{const t=e.target.closest('.th'); if(t&&t.dataset.i!==undefined){cur=parseInt(t.dataset.i); upd();}});
-  let sx=0, drag=false;
-  const dw=$('dw');
-  dw.addEventListener('touchstart', e=>{if(e.target.closest('.nav')) return; sx=e.touches[0].clientX; drag=true;}, {passive:true});
-  dw.addEventListener('touchend', e=>{if(!drag) return; drag=false; const dx=e.changedTouches[0].clientX-sx; if(Math.abs(dx)>50){ if(dx<0) cur=(cur+1)%ims.length; else cur=(cur-1+ims.length)%ims.length; upd(); }}, {passive:true});
-  dw.addEventListener('mousedown', e=>{if(e.target.closest('.nav')) return; sx=e.clientX; drag=true;});
-  dw.addEventListener('mouseup', e=>{if(!drag) return; drag=false; const dx=e.clientX-sx; if(Math.abs(dx)>50){ if(dx<0) cur=(cur+1)%ims.length; else cur=(cur-1+ims.length)%ims.length; upd(); }});
-  const onKey=e=>{if(e.key==='ArrowLeft'){cur=(cur-1+ims.length)%ims.length;upd();} else if(e.key==='ArrowRight'){cur=(cur+1)%ims.length;upd();} else if(e.key==='Escape'){closeDm();}};
+
+  const goPrev = (e)=>{ if(e){e.preventDefault(); e.stopPropagation();} cur=(cur-1+ims.length)%ims.length; upd(); };
+  const goNext = (e)=>{ if(e){e.preventDefault(); e.stopPropagation();} cur=(cur+1)%ims.length; upd(); };
+
+  document.getElementById('dp')?.addEventListener('click', goPrev);
+  document.getElementById('dn')?.addEventListener('click', goNext);
+
+  dots?.addEventListener('click', e=>{
+    const dot = e.target.closest('.dot');
+    if(dot && dot.dataset.i!==undefined){ cur=parseInt(dot.dataset.i); upd(); }
+  });
+
+  thumbs?.addEventListener('click', e=>{
+    const th = e.target.closest('.th');
+    if(th && th.dataset.i!==undefined){ cur=parseInt(th.dataset.i); upd(); }
+  });
+
+  // Swipe - professional simple
+  let startX=0, isDragging=false;
+  const dwEl = document.getElementById('dw');
+  const getX = (ev)=> ev.touches ? ev.touches[0].clientX : ev.clientX;
+
+  dwEl.addEventListener('touchstart', e=>{
+    if(e.target.closest('.nav')) return;
+    startX=getX(e); isDragging=true;
+  }, {passive:true});
+
+  dwEl.addEventListener('touchend', e=>{
+    if(!isDragging) return;
+    isDragging=false;
+    const endX = e.changedTouches[0].clientX;
+    const diff = endX - startX;
+    if(Math.abs(diff)>60){ if(diff<0) goNext(); else goPrev(); }
+  }, {passive:true});
+
+  dwEl.addEventListener('mousedown', e=>{
+    if(e.target.closest('.nav')) return;
+    startX=e.clientX; isDragging=true;
+  });
+
+  dwEl.addEventListener('mouseup', e=>{
+    if(!isDragging) return;
+    isDragging=false;
+    const diff=e.clientX-startX;
+    if(Math.abs(diff)>60){ if(diff<0) goNext(); else goPrev(); }
+  });
+
+  const onKey=(e)=>{
+    if(e.key==='ArrowLeft'){cur=(cur-1+ims.length)%ims.length;upd();}
+    else if(e.key==='ArrowRight'){cur=(cur+1)%ims.length;upd();}
+    else if(e.key==='Escape'){closeDm();}
+  };
   document.addEventListener('keydown',onKey);
-  const closeDm=()=>{m.classList.remove('o'); document.body.style.overflow=''; document.removeEventListener('keydown',onKey);};
-  $('cd').onclick=closeDm; $('dbg').onclick=closeDm;
+
+  const closeDm=()=>{
+    m.classList.remove('o');
+    document.body.style.overflow='';
+    document.removeEventListener('keydown',onKey);
+  };
+  $('cd').onclick=closeDm;
+  $('dbg').onclick=closeDm;
 }
+
 $('ab').onclick=()=>{$('am').classList.add('o');document.body.style.overflow='hidden';};
 const closeAm=()=>{$('am').classList.remove('o');document.body.style.overflow='';};
 $('ca').onclick=closeAm;$('abg').onclick=closeAm;
