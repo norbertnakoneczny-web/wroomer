@@ -81,9 +81,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#f2f3f5}
 <div class="fg"><div class="fl">Przebieg km</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px"><input id="kmin" class="pi2" type="number" placeholder="od"><input id="kmax" class="pi2" type="number" placeholder="do"></div></div>
 <div class="fg"><div class="fl">Moc KM</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px"><input id="powmin" class="pi2" type="number" placeholder="od"><input id="powmax" class="pi2" type="number" placeholder="do"></div></div>
 <div class="fg"><div class="fl">Pojemność cm3</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px"><input id="capmin" class="pi2" type="number" placeholder="od"><input id="capmax" class="pi2" type="number" placeholder="do"></div></div>
-<div class="fg"><div class="fl">Rodzaj paliwa - OTOMOTO</div><div style="display:flex;gap:4px;flex-wrap:wrap" id="fuelFilters"><button class="chip" data-fuel="Benzyna">Benzyna</button><button class="chip" data-fuel="Diesel">Diesel</button><button class="chip" data-fuel="Benzyna+LPG">LPG</button><button class="chip" data-fuel="Hybryda">Hybryda</button><button class="chip" data-fuel="Elektryczny">Elektryk</button><button class="chip" data-fuel="CNG">CNG</button></div></div>
+<div class="fg"><div class="fl">Rodzaj paliwa - </div><div style="display:flex;gap:4px;flex-wrap:wrap" id="fuelFilters"><button class="chip" data-fuel="Benzyna">Benzyna</button><button class="chip" data-fuel="Diesel">Diesel</button><button class="chip" data-fuel="Benzyna+LPG">LPG</button><button class="chip" data-fuel="Hybryda">Hybryda</button><button class="chip" data-fuel="Elektryczny">Elektryk</button><button class="chip" data-fuel="CNG">CNG</button></div></div>
 <div class="fg"><div class="fl">Skrzynia biegów</div><div style="display:flex;gap:4px"><button class="chip" data-gear="Manualna">Manualna</button><button class="chip" data-gear="Automatyczna">Automat</button></div></div>
-<div class="fg"><div class="fl">Typ nadwozia - OTOMOTO</div><select id="body" class="sel"><option value="">Dowolny</option><option>Sedan</option><option>Kombi</option><option>Hatchback</option><option>SUV</option><option>Coupe</option><option>Kabriolet</option><option>Minivan</option><option>Pickup</option><option>Van</option><option>Kompakt</option><option>Inny</option></select></div>
+<div class="fg"><div class="fl">Typ nadwozia - </div><select id="body" class="sel"><option value="">Dowolny</option><option>Sedan</option><option>Kombi</option><option>Hatchback</option><option>SUV</option><option>Coupe</option><option>Kabriolet</option><option>Minivan</option><option>Pickup</option><option>Van</option><option>Kompakt</option><option>Inny</option></select></div>
 <div class="fg"><div class="fl">Kolor</div><select id="color" class="sel"><option value="">Dowolny</option><option>Biały</option><option>Czarny</option><option>Srebrny</option><option>Szary</option><option>Czerwony</option><option>Niebieski</option><option>Zielony</option><option>Beżowy</option><option>Brązowy</option><option>Żółty</option><option>Inny</option></select></div>
 <div class="fg"><div class="fl">Stan</div><select id="state" class="sel"><option value="">Dowolny</option><option>Nowy</option><option>Używany</option><option>Uszkodzony</option></select></div>
 <div class="fg"><div class="fl">Pochodzenie</div><select id="origin" class="sel"><option value="">Dowolne</option><option>Krajowy</option><option>Importowany</option></select></div>
@@ -105,7 +105,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#f2f3f5}
 <div class="f"><div class="lb">Tytuł *</div><input id="titleFull" required placeholder="Skoda Octavia 1.9 TDI 2010" class="pi2"></div>
 <div class="fr"><div class="f"><div class="lb">Cena *</div><input id="pr" type="number" required placeholder="23400" class="pi2"></div><div class="f"><div class="lb">Miejscowość *</div><input id="lc" required value="Gorzyce" class="pi2"></div></div>
 
-<div class="fl" style="margin-top:8px">Parametry OTOMOTO - wszystkie do filtrowania</div>
+<div class="fl" style="margin-top:8px">Parametry  - wszystkie do filtrowania</div>
 <div class="fr"><div class="f"><div class="lb">Generacja</div><select id="gen2" class="sel"><option value="">Wybierz</option><option>I</option><option>II</option><option>III</option><option>IV</option><option>V</option><option>VI</option></select></div><div class="f"><div class="lb">Rok produkcji *</div><input id="year" type="number" min="1950" max="2026" placeholder="2018" class="pi2"></div></div>
 <div class="fr"><div class="f"><div class="lb">Paliwo *</div><select id="fuel" required class="sel"><option value="">Wybierz</option><option>Benzyna</option><option>Diesel</option><option>Benzyna+LPG</option><option>Hybryda</option><option>Elektryczny</option><option>CNG</option></select></div><div class="f"><div class="lb">Skrzynia *</div><select id="gear" required class="sel"><option value="">Wybierz</option><option>Manualna</option><option>Automatyczna</option></select></div></div>
 <div class="fr"><div class="f"><div class="lb">Pojemność cm3</div><input id="capacity" type="number" placeholder="1968" class="pi2"></div><div class="f"><div class="lb">Moc KM</div><input id="power" type="number" placeholder="140" class="pi2"></div></div>
@@ -274,7 +274,7 @@ async function od(item){
   $('editBtn').style.display='none'; // ukryty domyślnie - fix dla użytkownika
   if(mine){ $('editBtn').style.display='inline-flex'; $('editBtn').classList.add('owner'); $('editBtn').textContent='✏️ Edytuj'; $('editBtn').style.background='#e6f7f5'; } else { $('editBtn').style.display='none'; $('editBtn').classList.remove('owner'); }
   
-  // Build full params table - OTOMOTO style
+  // Build full params table -  style
   const ex=item._extra||item.extra||{};
   const params = [
     ['Marka', ex.marka || (item.md||'').split(' ')[0] || '-'],
@@ -306,7 +306,7 @@ async function od(item){
         </div>
       `).join('')}
     </div>
-    ${params.filter(([k,v])=>!v || v==='-').length>0 ? `<div style="margin-top:6px;font-size:11px;color:#9ca3af">Brak: ${params.filter(([k,v])=>!v || v==='-').map(([k,v])=>k).join(', ')}</div>` : ''}
+    ${params.filter(([k,v])=>!v || v==='-').length>0 ? `` : ''}
   `;
 
   dc.innerHTML=`
@@ -322,11 +322,11 @@ async function od(item){
       <div id="viewCounterDetail" style="display:none" style="display:none" style="font-size:12px;color:#002f34;font-weight:700;margin-top:6px;background:#e6f7f5;padding:6px 10px;border-radius:6px;display:inline-block">👁️ 0 wyświetleń</div><div style="font-size:12px;color:#6b7280;margin-top:6px">📍 ${item.lc || '-'} • ${ims.length} zdjęć • przesuwaj palcem ↔️ • swipe działa</div>
       
       <div style="margin-top:16px;background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px">
-        <div style="font-weight:800;font-size:13px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center"><span>📋 Dane techniczne</span><span style="font-size:10px;color:#6b7280;font-weight:400">OTOMOTO</span></div>
+        <div style="font-weight:800;font-size:13px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center"><span>📋 Dane techniczne</span><span style="font-size:10px;color:#6b7280;font-weight:400"></span></div>
         ${paramsHtml}
       </div>
 
-      ${item.ds?`<div style="margin-top:12px;background:#f7f8f9;padding:14px;border-radius:10px"><div style="font-weight:700;font-size:13px;margin-bottom:6px">Opis</div><div style="font-size:13px;line-height:1.5;white-space:pre-wrap">${item.ds}</div></div>`:''}
+      ${(item.ds && item.ds.trim() && !item.ds.includes('{') )? `<div style="margin-top:12px;background:#f7f8f9;padding:14px;border-radius:10px"><div style="font-weight:700;font-size:13px;margin-bottom:6px">Opis</div><div style="font-size:13px;line-height:1.5;white-space:pre-wrap">${item.ds.replace(/__OTOMOTO__.*/, '').replace(/__DATA__.*/, '').trim()}</div></div>` : ''}
 
       ${mine?`<div style="margin-top:12px;background:#e6f7f5;padding:10px;border-radius:8px;font-size:12px;color:#065f46">✅ To Twoje ogłoszenie - możesz edytować wszystkie parametry i zdjęcia bez potwierdzania przyciskiem Edytuj</div>`:''}
     </div>
@@ -369,7 +369,7 @@ $('editBtn').onclick=()=>{ // ZAWSZE pozwala edytować - fix
   
   $('formTitle').textContent='✏️ Edytuj ogłoszenie - właściciel';
   $('titleFull').value=item.md; $('pr').value=item.pr; $('lc').value=item.lc; 
-  $('ds').value=(item.ds||'').split('__OTOMOTO__')[0];
+  $('ds').value=(item.ds||'').split('____')[0];
   try{
     const ex=item._extra||item.extra||{};
     if(ex.marka) $('mk').value=ex.marka;
@@ -418,8 +418,8 @@ $('af').onsubmit=async e=>{
     origin: document.getElementById('origin')?.value || '',
     country: document.getElementById('country')?.value || ''
   };
-  const cleanDesc=($('ds').value||'').split('__OTOMOTO__')[0].slice(0,800);
-  const fullDesc=cleanDesc+'__OTOMOTO__'+JSON.stringify(extra);
+  const cleanDesc=($('ds').value||'').split('____')[0].slice(0,800);
+  const fullDesc=cleanDesc+'____'+JSON.stringify(extra);
   const pl={title:$('titleFull').value.trim().slice(0,120),description:fullDesc,price:parseInt($('pr').value)||0,location:$('lc').value.trim().slice(0,50)};
 
   if(currentUser) pl.user_id=currentUser.id;
@@ -471,9 +471,9 @@ async function loadReal(){
   const real=data.map(r=>{
       let ds=r.description||'';
       let extra={};
-      if(ds.includes('__OTOMOTO__')){
+      if(ds.includes('____')){
         try{
-          const parts=ds.split('__OTOMOTO__');
+          const parts=ds.split('____');
           ds=parts[0].trim();
           extra=JSON.parse(parts[1]||'{}');
         }catch(e){}
