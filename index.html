@@ -42,9 +42,9 @@ button,input,select,textarea{font-family:inherit}
 @media(max-width:639px){.gd{grid-template-columns:1fr}}
 .cd{background:#fff;border-radius:8px;overflow:hidden;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.1);transition:.2s}
 .cd:hover{box-shadow:0 6px 20px rgba(0,0,0,.12);transform:translateY(-1px)}
-.cw{position:relative;width:100%;aspect-ratio:4/3;background:#f8fafc;border-radius:12px 12px 0 0;overflow:hidden;display:grid;place-items:center}
-.cw img{width:100%;height:100%;object-fit:contain;object-position:center center;background:#f8fafc}
-.cd:hover .cw img{width:100%;height:100%;object-fit:contain;object-position:center center;background:#f8fafc}
+.cw{position:relative;background:#e9ecef;aspect-ratio:4/3;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.cw img{width:100%;height:100%;object-fit:cover;object-position:center center;transition:transform .3s;display:block}
+.cd:hover .cw img{transform:scale(1.03)}
 .ct{position:absolute;top:8px;right:8px;background:rgba(0,47,52,.92);color:#fff;font-size:11px;padding:5px 9px;border-radius:4px;font-weight:700;z-index:2}
 .cb{padding:12px}
 .cti{font-weight:700;font-size:15px;color:#002f34;line-height:1.25;min-height:38px}
@@ -65,7 +65,7 @@ button,input,select,textarea{font-family:inherit}
 .dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.5)}.dot.on{background:#fff;width:20px}
 .thumbs{display:flex;gap:8px;padding:10px 12px;background:#f7f8f9;border-top:1px solid #eee;overflow:auto}
 .th{width:68px;height:68px;border-radius:6px;overflow:hidden;flex-shrink:0;border:2px solid transparent;opacity:.6;cursor:pointer;background:#f2f3f5;display:flex;align-items:center;justify-content:center}
-.th.on{border-color:#002f34;opacity:1}.th img{width:100%;height:100%;object-fit:contain;object-position:center center;display:block}
+.th.on{border-color:#002f34;opacity:1}.th img{width:100%;height:100%;object-fit:cover;object-position:center center;display:block}
 .fm{padding:0;display:flex;flex-direction:column;gap:0;overflow:hidden}
 .lb{font-size:11px;font-weight:700;text-transform:uppercase;color:#6b7280;margin-bottom:6px}
 .f input,.f textarea,.f select{width:100%;height:46px;padding:0 14px;border:1.5px solid #d8dfe0;border-radius:6px;font-size:15px;background:#fff}
@@ -75,7 +75,7 @@ button,input,select,textarea{font-family:inherit}
 .dp{border:2px dashed #d8dfe0;border-radius:8px;padding:24px;text-align:center;background:#f7f8f9;cursor:pointer}
 .pv{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
 .px{position:relative;border-radius:6px;overflow:hidden;aspect-ratio:1;background:#f2f3f5;border:1px solid #e5e7eb;display:flex;align-items:center;justify-content:center}
-.px img{width:100%;height:100%;object-fit:contain;object-position:center center;display:block}
+.px img{width:100%;height:100%;object-fit:cover;object-position:center center;display:block}
 .px button{position:absolute;top:4px;right:4px;width:26px;height:26px;border-radius:50%;background:rgba(0,0,0,.75);color:#fff;border:none;cursor:pointer}
 @media(max-width:768px){
   .mc{max-width:100% !important;width:100% !important;height:100dvh !important;max-height:100dvh !important;border-radius:0 !important}
@@ -354,7 +354,11 @@ async function loadReal(){
   let imap={};
   try{const {data:ims}=await supa.from('listing_images').select('listing_id,image_url').ilike('image_url','https://%').order('created_at',{ascending:true}).limit(500);if(ims)ims.forEach(r=>{if(!imap[r.listing_id])imap[r.listing_id]=[];if(imap[r.listing_id].length<10)imap[r.listing_id].push(r.image_url);});}catch(e){}
   const real=data.map(r=>({id:r.id,md:r.title||'Bez tytułu',pr:r.price||0,lc:r.location||'Gorzyce',ds:r.description||'',im:imap[r.id]&&imap[r.id].length?imap[r.id]:[DEMO[0].im[0]]}));
-  if(real.length>0){ls=real;filtered=[];rn();}
+  if(real.length>0){ls=real.filter(x=>!x.is_banned && !x.is_hidden); // ukryte i zbanowane niewidoczne dla odwiedzających i zbanowane niewidoczne dla odwiedzających
+  // Zapisz wszystkie do window.allListings dla debug
+  window.allListings=real;
+  filtered=[];rn();
+  console.log('Ukryte/zbanowane:', real.length - ls.length);}
  }catch(e){}finally{isLoading=false;$('ld').style.display='none';$('gd').style.display='grid';}
 }
 function init(){
