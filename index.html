@@ -55,11 +55,10 @@ button,input,select,textarea{font-family:inherit}
 .mc{background:#fff;width:100%;max-width:900px;max-height:92vh;border-radius:12px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 24px 80px rgba(0,0,0,.5)}
 .mh{padding:16px 20px;border-bottom:1px solid #eee;display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
 .cl{width:40px;height:40px;border-radius:50%;background:#f2f3f5;display:grid;place-items:center;border:none;cursor:pointer}
-.dw{position:relative;background:#0f0f0f;flex-shrink:0;height:56vh;max-height:560px;display:flex;align-items:center;justify-content:center;overflow:hidden;touch-action:pan-y}
-.dt{display:flex;height:100%;width:100%;transition:transform .35s cubic-bezier(.32,.72,0,1);will-change:transform}
-.dt>div{flex:0 0 100%;min-width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#0f0f0f;position:relative;overflow:hidden;user-select:none;-webkit-user-drag:none}
-.dt img{width:100%;height:100%;max-width:100%;max-height:100%;object-fit:contain;object-position:center center;display:block;margin:auto;pointer-events:none;user-select:none}
-.nav{position:absolute;top:50%;transform:translateY(-50%);width:52px;height:52px;border-radius:50%;background:rgba(255,255,255,.96);color:#002f34;font-size:32px;font-weight:700;display:grid;place-items:center;z-index:20;border:none;cursor:pointer;box-shadow:0 2px 12px rgba(0,0,0,.4)}
+.dw{position:relative;background:#f7f8f9;flex-shrink:0;height:52vh;max-height:520px;min-height:320px;display:flex;align-items:center;justify-content:center;overflow:hidden;touch-action:pan-y}
+.main-img{width:100%;height:100%;object-fit:contain;object-position:center center;display:block;background:#f7f8f9;user-select:none;-webkit-user-drag:none;pointer-events:none}
+.dt{display:none} /* old slider hidden */
+.nav{position:absolute;top:50%;transform:translateY(-50%);width:54px;height:54px;border-radius:50%;background:#fff;color:#002f34;font-size:32px;font-weight:800;display:grid;place-items:center;z-index:30;border:2px solid #002f34;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.4);pointer-events:auto;touch-action:manipulation}
 .nav.prev{left:12px}.nav.next{right:12px}
 .dots{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);display:flex;gap:6px;background:rgba(0,0,0,.55);padding:6px 12px;border-radius:999px;z-index:10}
 .dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.5)}.dot.on{background:#fff;width:20px}
@@ -211,62 +210,111 @@ async function od(item){
   const m=$('dm'),dc=$('dc');
   let ims=item.im&&item.im.length?item.im.filter(u=>u&&u.startsWith('https://')):[];
   if(ims.length===0) ims=DEMO[0].im;
-  dc.innerHTML=`<div class="dw" id="dw"><div id="dt" class="dt">${ims.map(s=>`<div><img src="${s}" alt="${item.md}" loading="eager" draggable="false"></div>`).join('')}</div>${ims.length>1?`<button id="dp" class="nav prev">‹</button><button id="dn" class="nav next">›</button><div class="dots" id="dots">${ims.map((_,i)=>`<div class="dot ${i===0?'on':''}"></div>`).join('')}</div>`:''}</div>${ims.length>1?`<div class="thumbs" id="thumbs">${ims.map((s,i)=>`<div class="th ${i===0?'on':''}" data-i="${i}"><img src="${s}" loading="eager"></div>`).join('')}</div>`:''}<div style="padding:18px 18px 100px"><h2 style="font-weight:800;font-size:20px">${item.md}</h2><div style="font-weight:800;font-size:24px;margin-top:8px">${(item.pr||0).toLocaleString()} zł</div><div style="font-size:13px;color:#406367;margin-top:4px">📍 ${item.lc} • ${ims.length} zdjęć • swipe działa</div>${item.ds?`<div style="margin-top:12px;background:#f7f8f9;padding:14px;border-radius:6px;font-size:14px;white-space:pre-wrap">${item.ds}</div>`:''}</div>`;
-  m.classList.add('o');document.body.style.overflow='hidden';
   let cur=0;
-  const tr=$('dt'), dots=$('dots'), dw=$('dw'), thumbs=$('thumbs');
-  const upd=()=>{if(tr) tr.style.transform=`translateX(-${cur*100}%)`; if(dots) Array.from(dots.children).forEach((d,i)=>d.classList.toggle('on',i===cur)); if(thumbs) Array.from(thumbs.children).forEach((t,i)=>t.classList.toggle('on',i===cur));};
-  $('dp')?.addEventListener('click', e=>{e.stopPropagation(); cur=(cur-1+ims.length)%ims.length; upd();});
-  $('dn')?.addEventListener('click', e=>{e.stopPropagation(); cur=(cur+1)%ims.length; upd();});
-  thumbs?.addEventListener('click', e=>{const th=e.target.closest('.th'); if(th){cur=parseInt(th.dataset.i); upd();}});
   
-  // FIXED SWIPE LOGIC - 100% working
-  let startX=0, currentX=0, isDragging=false;
-  const getX = e => e.touches ? e.touches[0].clientX : e.clientX;
-  const onStart = e => {
-    isDragging=true;
-    startX=getX(e);
-    currentX=startX;
-    tr.style.transition='none';
-  };
-  const onMove = e => {
-    if(!isDragging) return;
-    currentX=getX(e);
-    const diff=currentX-startX;
-    let translate = -cur*100 + (diff/window.innerWidth)*100;
-    if((cur===0 && diff>0) || (cur===ims.length-1 && diff<0)){
-      translate = -cur*100 + (diff/window.innerWidth)*25;
-    }
-    tr.style.transform=`translateX(${translate}%)`;
-    if(Math.abs(diff)>10 && e.cancelable) e.preventDefault();
-  };
-  const onEnd = () => {
-    if(!isDragging) return;
-    isDragging=false;
-    tr.style.transition='';
-    const diff=currentX-startX;
-    if(Math.abs(diff)>50){
-      if(diff<0) cur=(cur+1)%ims.length;
-      else cur=(cur-1+ims.length)%ims.length;
-    }
-    upd();
-  };
-  dw.addEventListener('touchstart', onStart, {passive:true});
-  dw.addEventListener('touchmove', onMove, {passive:false});
-  dw.addEventListener('touchend', onEnd, {passive:true});
-  dw.addEventListener('mousedown', onStart);
-  dw.addEventListener('mousemove', onMove);
-  dw.addEventListener('mouseup', onEnd);
-  dw.addEventListener('mouseleave', onEnd);
-  dw.addEventListener('dragstart', e=>e.preventDefault());
-
+  dc.innerHTML=`
+    <div class="dw" id="dw">
+      <img id="mainGalleryImg" class="main-img" src="${ims[0]}" alt="${item.md}" draggable="false">
+      ${ims.length>1?`<button id="dp" class="nav prev" type="button" aria-label="Poprzednie">‹</button><button id="dn" class="nav next" type="button" aria-label="Następne">›</button><div class="dots" id="dots">${ims.map((_,i)=>`<div class="dot ${i===0?'on':''}" data-i="${i}"></div>`).join('')}</div>`:''}
+      <div style="position:absolute;top:10px;right:10px;background:rgba(0,47,52,.9);color:#fff;font-size:11px;padding:5px 9px;border-radius:4px;font-weight:700;z-index:5" id="counter">${cur+1} / ${ims.length}</div>
+    </div>
+    ${ims.length>1?`<div class="thumbs" id="thumbs">${ims.map((s,i)=>`<div class="th ${i===0?'on':''}" data-i="${i}"><img src="${s}" loading="lazy" draggable="false"></div>`).join('')}</div>`:''}
+    <div style="padding:18px 18px 12px">
+      <h2 style="font-weight:800;font-size:20px;line-height:1.25">${item.md}</h2>
+      <div style="font-weight:800;font-size:24px;margin-top:8px;color:#002f34">${(item.pr||0).toLocaleString()} zł</div>
+      <div style="font-size:13px;color:#406367;margin-top:6px">📍 ${item.lc} • ${ims.length} ${ims.length===1?'zdjęcie':ims.length<5?'zdjęcia':'zdjęć'}</div>
+      ${item.ds?`<div style="margin-top:12px;background:#f7f8f9;padding:14px;border-radius:8px;font-size:14px;line-height:1.5;white-space:pre-wrap">${item.ds}</div>`:''}
+    </div>
+    <div id="contactBarMount"></div>
+  `;
+  
+  m.classList.add('o');
+  document.body.style.overflow='hidden';
+  
   const cleanPhone='600000000';
-  dc.innerHTML+=`<div class="contact-bar"><a href="tel:${cleanPhone}" style="background:#002f34;color:#fff">📞 Zadzwoń</a><a href="sms:${cleanPhone}" style="background:#fff;border:1.5px solid #002f34;color:#002f34">SMS</a><a href="https://wa.me/${cleanPhone}" target="_blank" style="background:#25D366;color:#fff">WA</a><a href="#" style="background:#23e5db;color:#002f34">Wroomer</a></div>`;
-  const onKey=e=>{if(e.key==='ArrowLeft'){cur=(cur-1+ims.length)%ims.length;upd();}else if(e.key==='ArrowRight'){cur=(cur+1)%ims.length;upd();}else if(e.key==='Escape'){closeDm();}};
+  $('contactBarMount').innerHTML=`<div class="contact-bar"><a href="tel:${cleanPhone}" style="background:#002f34;color:#fff">📞 Zadzwoń</a><a href="sms:${cleanPhone}" style="background:#fff;border:1.5px solid #002f34;color:#002f34">SMS</a><a href="https://wa.me/${cleanPhone}" target="_blank" style="background:#25D366;color:#fff">WhatsApp</a><a href="#" style="background:#23e5db;color:#002f34">Wroomer Chat</a></div>`;
+
+  const mainImg=$('mainGalleryImg');
+  const dots=$('dots');
+  const thumbs=$('thumbs');
+  const counter=$('counter');
+  
+  const upd=()=>{
+    mainImg.src=ims[cur];
+    counter.textContent=(cur+1)+' / '+ims.length;
+    if(dots) Array.from(dots.children).forEach((d,i)=>d.classList.toggle('on',i===cur));
+    if(thumbs) Array.from(thumbs.children).forEach((t,i)=>t.classList.toggle('on',i===cur));
+  };
+  
+  const goPrev=(e)=>{ if(e){e.preventDefault(); e.stopPropagation();} cur=(cur-1+ims.length)%ims.length; upd(); };
+  const goNext=(e)=>{ if(e){e.preventDefault(); e.stopPropagation();} cur=(cur+1)%ims.length; upd(); };
+  
+  $('dp')?.addEventListener('click', goPrev);
+  $('dn')?.addEventListener('click', goNext);
+  
+  dots?.addEventListener('click', e=>{
+    const dot=e.target.closest('.dot');
+    if(dot?.dataset.i!==undefined){ cur=parseInt(dot.dataset.i); upd(); }
+  });
+  
+  thumbs?.addEventListener('click', e=>{
+    const th=e.target.closest('.th');
+    if(th?.dataset.i!==undefined){ cur=parseInt(th.dataset.i); upd(); }
+  });
+
+  // SWIPE - prosty i niezawodny
+  let startX=0, isDrag=false;
+  const getX=e=>e.touches?e.touches[0].clientX:e.clientX;
+  const dw=$('dw');
+  
+  dw.addEventListener('touchstart', e=>{
+    if(e.target.closest('.nav')) return;
+    startX=getX(e); isDrag=true;
+  }, {passive:true});
+  
+  dw.addEventListener('touchend', e=>{
+    if(!isDrag) return;
+    isDrag=false;
+    const diff=getX(e.changedTouches?e.changedTouches[0]:e)-startX;
+    if(Math.abs(diff)>60){
+      if(diff<0) goNext(); else goPrev();
+    }
+  }, {passive:true});
+  
+  dw.addEventListener('mousedown', e=>{
+    if(e.target.closest('.nav')) return;
+    startX=e.clientX; isDrag=true;
+    dw.style.cursor='grabbing';
+  });
+  
+  dw.addEventListener('mouseup', e=>{
+    if(!isDrag) return;
+    isDrag=false;
+    dw.style.cursor='grab';
+    const diff=e.clientX-startX;
+    if(Math.abs(diff)>60){
+      if(diff<0) goNext(); else goPrev();
+    }
+  });
+  
+  dw.addEventListener('mouseleave', ()=>{ isDrag=false; dw.style.cursor=''; });
+
+  const onKey=e=>{
+    if(e.key==='ArrowLeft') goPrev();
+    else if(e.key==='ArrowRight') goNext();
+    else if(e.key==='Escape') closeDm();
+  };
   document.addEventListener('keydown',onKey);
-  const closeDm=()=>{m.classList.remove('o');document.body.style.overflow='';document.removeEventListener('keydown',onKey);};
-  $('cd').onclick=closeDm;$('dbg').onclick=closeDm;
+  
+  const closeDm=()=>{
+    m.classList.remove('o');
+    document.body.style.overflow='';
+    document.removeEventListener('keydown',onKey);
+  };
+  $('cd').onclick=closeDm;
+  $('dbg').onclick=closeDm;
 }
+
 $('ab').onclick=()=>{$('am').classList.add('o');document.body.style.overflow='hidden';};
 const closeAm=()=>{$('am').classList.remove('o');document.body.style.overflow='';};
 $('ca').onclick=closeAm;$('abg').onclick=closeAm;
