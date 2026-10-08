@@ -2,111 +2,264 @@
 <html lang="pl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>WROOMER.PL - Auta Gorzyce, Wodzisław, Rybnik</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>WROOMER.PL - Auta z okolicy Gorzyce, Wodzisław, Rybnik</title>
 <link rel="preconnect" href="https://bdpydgsfowtuvjnkyeeg.supabase.co">
+<meta name="description" content="WROOMER.PL - auta z Twojej okolicy. Gorzyce, Wodzisław Śląski, Rybnik, Racibórz. Szybkie zdjęcia, GPS, promień.">
 <style>
+:root{--nav:#002f34;--acc:#23e5db;--bg:#f2f3f5;--card:#fff;--border:#e5e7eb;--text:#0f172a;--muted:#64748b}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#f2f3f5}
-.h{position:sticky;top:0;z-index:50;background:#002f34;color:#fff;height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 12px}
-.logo{display:flex;align-items:center;gap:8px;cursor:pointer}
-.li{width:32px;height:32px;background:#fff;color:#002f34;border-radius:8px;display:grid;place-items:center;font-weight:900}
-.lt{font-weight:800;font-size:16px}.lt span{color:#23e5db}
-.b{height:36px;padding:0 12px;border-radius:8px;font-weight:700;font-size:12px;border:none;cursor:pointer}
-.bb{background:#23e5db;color:#002f34}.bw{background:rgba(255,255,255,.15);color:#fff}
-.pg{max-width:1600px;margin:0 auto;display:flex;align-items:flex-start}
-.sb{width:300px;flex-shrink:0;background:#fff;border-right:1px solid #e5e7eb;min-height:calc(100vh - 56px);position:sticky;top:56px;overflow:auto}
-@media(max-width:900px){.sb{display:none}.sb.mopen{display:block;position:fixed;inset:56px 0 0 0;width:100%;z-index:45}}
-.fg{padding:12px 14px;border-bottom:1px solid #f2f3f5}
-.fl{font-size:11px;font-weight:800;margin-bottom:8px;text-transform:uppercase}
-.sel,.pi2{width:100%;height:40px;border:1px solid #d8dfe0;border-radius:8px;padding:0 10px;font-size:13px}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,Inter,Segoe UI,sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
+a{color:inherit}
+.h{position:sticky;top:0;z-index:40;background:var(--nav);color:#fff;height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 12px;gap:8px}
+@media(min-width:900px){.h{height:64px;padding:0 20px}}
+.logo{display:flex;align-items:center;gap:10px;cursor:pointer;flex-shrink:0}
+.li{width:34px;height:34px;background:#fff;color:var(--nav);border-radius:10px;display:grid;place-items:center;font-weight:900;font-size:16px}
+.lt{font-weight:800;font-size:16px;letter-spacing:.2px}.lt span{color:var(--acc)}
+.searchTop{display:none;flex:1;max-width:480px}
+@media(min-width:900px){.searchTop{display:flex}}
+.stIn{width:100%;height:40px;border-radius:999px;border:none;padding:0 18px 0 42px;background:#fff;color:#111;font-size:14px}
+.stW{position:relative;flex:1}
+.stI{position:absolute;left:14px;top:50%;transform:translateY(-50%);opacity:.5}
+.b{height:36px;padding:0 14px;border-radius:999px;font-weight:700;font-size:13px;border:none;cursor:pointer;white-space:nowrap;display:inline-flex;align-items:center;gap:6px}
+.bb{background:var(--acc);color:var(--nav)} .bw{background:rgba(255,255,255,.12);color:#fff} .bdark{background:var(--nav);color:#fff}
+.pg{max-width:1600px;margin:0 auto;display:flex;align-items:flex-start;min-height:calc(100vh - 56px)}
+.sb{width:320px;flex-shrink:0;background:#fff;border-right:1px solid var(--border);min-height:calc(100vh - 64px);position:sticky;top:64px;overflow:auto;display:flex;flex-direction:column}
+@media(max-width:900px){.sb{position:fixed;inset:0;top:0;width:100%;z-index:50;transform:translateY(100%);transition:transform .28s cubic-bezier(.32,.72,0,1);border-radius:24px 24px 0 0;top:auto;bottom:0;max-height:92dvh;min-height:auto} .sb.open{transform:translateY(0)} .sbHead{display:flex !important} }
+.sbHead{display:none;position:sticky;top:0;background:#fff;z-index:2;padding:14px 16px;border-bottom:1px solid var(--border);align-items:center;justify-content:space-between}
+.sbInner{flex:1;overflow:auto}
+.fg{padding:14px 16px;border-bottom:1px solid #f5f5f5}
+.fl{font-size:11px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:#111;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
+.sel,.pi2{width:100%;height:44px;border:1.5px solid var(--border);border-radius:12px;padding:0 12px;font-size:14px;background:#fff;transition:border .15s}
+.sel:focus,.pi2:focus{outline:none;border-color:var(--nav)}
+.chipRow{display:flex;gap:6px;flex-wrap:wrap}
+.chip{padding:8px 14px;border:1.5px solid var(--border);border-radius:999px;background:#fff;font-size:13px;font-weight:600;cursor:pointer;transition:all .15s} .chip.active{background:var(--nav);color:#fff;border-color:var(--nav)}
+.range2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.locBox{display:flex;gap:6px}
+.locBtn{height:44px;padding:0 12px;border-radius:12px;border:1.5px solid var(--border);background:#fff;cursor:pointer;font-weight:700;font-size:12px;white-space:nowrap}
+.locBtn.active{background:var(--nav);color:#fff;border-color:var(--nav)}
 .main{flex:1;min-width:0}
-.gd{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;padding:8px}
+.topBar{position:sticky;top:56px;z-index:30;background:#fff;border-bottom:1px solid var(--border);padding:10px 12px;display:flex;gap:8px;align-items:center}
+@media(min-width:900px){.topBar{top:64px;padding:12px 16px}}
+.topBar .pi2{height:40px}
+.gd{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:10px}
 @media(min-width:600px){.gd{grid-template-columns:repeat(3,1fr)}}
-@media(min-width:1100px){.gd{grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;padding:12px}}
-.cd{background:#fff;border-radius:10px;overflow:hidden;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.08)}
-.cw{position:relative;background:#eef1f3;aspect-ratio:4/3;overflow:hidden}
-.cw img{width:100%;height:100%;object-fit:cover}
-.ct{position:absolute;top:6px;right:6px;background:rgba(0,47,52,.9);color:#fff;font-size:10px;padding:4px 6px;border-radius:4px;font-weight:700}
-.cb{padding:8px}.cti{font-weight:700;font-size:13px;min-height:32px;overflow:hidden}
-.pr{font-weight:800;font-size:14px;margin-top:4px;display:flex;justify-content:space-between}
-.md{position:fixed;inset:0;z-index:60;display:none}.md.o{display:block}
-.mbg{position:absolute;inset:0;background:rgba(0,0,0,.85)}
-.mb{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;overflow:auto}
-.mc{background:#fff;width:100%;max-width:1200px;max-height:96vh;width:96vw;border-radius:12px;overflow:hidden;display:flex;flex-direction:column}
-@media(max-width:768px){.mc{width:100%;height:100dvh;max-height:100dvh;border-radius:0}}
-.mh{padding:12px 16px;border-bottom:1px solid #eee;display:flex;justify-content:space-between;align-items:center}
-.cl{width:36px;height:36px;border-radius:50%;background:#f2f3f5;display:grid;place-items:center;border:none;cursor:pointer}
-.dp{border:2px dashed #d8dfe0;border-radius:10px;padding:16px;text-align:center;background:#f7f8f9;cursor:pointer;font-size:12px}
-.pv{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
-.px{position:relative;border-radius:6px;overflow:hidden;aspect-ratio:1;background:#f2f3f5;border:1px solid #e5e7eb}
+@media(min-width:1100px){.gd{grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;padding:16px}}
+.cd{background:var(--card);border-radius:16px;overflow:hidden;cursor:pointer;box-shadow:0 2px 12px rgba(0,0,0,.06);transition:transform .18s, box-shadow .18s;position:relative}
+.cd:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.10)}
+.cw{position:relative;background:#eef2f3;aspect-ratio:4/3;overflow:hidden}
+.cw img{width:100%;height:100%;object-fit:cover;transition:transform .4s}
+.cd:hover .cw img{transform:scale(1.04)}
+.ct{position:absolute;top:8px;left:8px;background:rgba(0,0,0,.72);backdrop-filter:blur(8px);color:#fff;font-size:11px;padding:5px 8px;border-radius:999px;font-weight:700;display:flex;gap:4px;align-items:center}
+.cb{padding:10px 12px 12px}
+.cti{font-weight:750;font-size:14px;line-height:1.25;min-height:34px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.pr{font-weight:800;font-size:16px;margin-top:6px;display:flex;justify-content:space-between;align-items:center}
+.meta{font-size:12px;color:var(--muted);margin-top:4px;display:flex;gap:8px;flex-wrap:wrap}
+.badgeOwn{position:absolute;top:8px;right:8px;background:var(--acc);color:var(--nav);font-size:10px;font-weight:800;padding:4px 8px;border-radius:999px}
+.btn-show{width:100%;height:48px;background:var(--nav);color:#fff;border-radius:14px;font-weight:800;font-size:14px;border:none;cursor:pointer}
+.btn-ghost{width:100%;height:44px;background:#fff;color:var(--nav);border:1.5px solid var(--border);border-radius:14px;font-weight:700}
+
+/* GALLERY PRO like otomoto */
+.md{position:fixed;inset:0;z-index:80;display:none} .md.o{display:block}
+.mbg{position:absolute;inset:0;background:rgba(0,0,0,.92)}
+.mb{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+.mc{background:#fff;width:100%;max-width:1200px;max-height:96vh;height:96vh;width:96vw;border-radius:20px;overflow:hidden;display:flex;flex-direction:column}
+@media(max-width:768px){.mc{width:100%;height:100dvh;max-height:100dvh;border-radius:0} .mb{padding:0}}
+.mh{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;gap:8px}
+.cl{width:40px;height:40px;border-radius:50%;background:#f2f3f5;display:grid;place-items:center;border:none;cursor:pointer;font-size:18px}
+
+/* Detail gallery */
+.gal{flex:1;display:flex;flex-direction:column;min-height:0;background:#000;position:relative}
+.galMain{flex:1;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden;touch-action:none}
+.galMain img{max-width:100%;max-height:100%;object-fit:contain;user-select:none;transition:transform .2s}
+.galNav{position:absolute;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.15);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.25);color:#fff;display:grid;place-items:center;cursor:pointer;z-index:3;font-size:20px}
+.galNav.prev{left:12px} .galNav.next{right:12px}
+.galNav:active{transform:translateY(-50%) scale(.94)}
+.galCounter{position:absolute;top:12px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.6);color:#fff;padding:6px 12px;border-radius:999px;font-size:12px;font-weight:700;z-index:3}
+.galThumbs{display:flex;gap:6px;padding:8px 10px;background:#0a0a0a;border-top:1px solid #222;overflow:auto;scrollbar-width:none}
+.galThumbs::-webkit-scrollbar{display:none}
+.gTh{width:64px;height:64px;border-radius:10px;overflow:hidden;flex-shrink:0;border:2px solid transparent;opacity:.6;cursor:pointer;position:relative}
+.gTh.on{border-color:#fff;opacity:1}
+.gTh img{width:100%;height:100%;object-fit:cover}
+
+/* Bottom nav mobile */
+.bottomNav{position:fixed;bottom:0;left:0;right:0;z-index:35;background:#fff;border-top:1px solid var(--border);display:flex;padding:6px 4px calc(6px + env(safe-area-inset-bottom));gap:4px}
+@media(min-width:900px){.bottomNav{display:none}}
+.bnItem{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 2px;border-radius:12px;border:none;background:transparent;cursor:pointer;font-size:10px;font-weight:700;color:var(--muted)}
+.bnItem.active{color:var(--nav);background:#f2f3f5}
+.bnItem b{font-size:20px;line-height:1}
+
+.pv{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.px{position:relative;border-radius:12px;overflow:hidden;aspect-ratio:1;background:#f2f3f5;border:1px solid var(--border)}
 .px img{width:100%;height:100%;object-fit:cover}
-.px button{position:absolute;top:3px;right:3px;width:20px;height:20px;border-radius:50%;background:rgba(0,0,0,.75);color:#fff;border:none;cursor:pointer;font-size:10px}
-.btn-show{width:100%;height:44px;background:#002f34;color:#fff;border-radius:8px;font-weight:800;font-size:13px;border:none;cursor:pointer}
+.px button{position:absolute;top:4px;right:4px;width:22px;height:22px;border-radius:50%;background:rgba(0,0,0,.75);color:#fff;border:none;cursor:pointer}
+.dp{border:2px dashed var(--border);border-radius:14px;padding:18px;text-align:center;background:#f7f8f9;cursor:pointer;font-size:13px;font-weight:600}
+.skel{background:linear-gradient(90deg,#e5e7eb 25%,#f3f4f6 37%,#e5e7eb 63%);background-size:400% 100%;animation:sh 1.4s ease infinite}
+@keyframes sh{0%{background-position:100% 0}100%{background-position:-100% 0}}
+.toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:12px 18px;border-radius:999px;font-size:13px;font-weight:600;z-index:90;display:none}
+.toast.show{display:block;animation:tin .25s}
+@keyframes tin{from{transform:translateX(-50%) translateY(10px);opacity:0}to{transform:translateX(-50%) translateY(0);opacity:1}}
 </style>
-<style>.chip{padding:7px 14px;border:1.5px solid #d8dfe0;border-radius:20px;background:#fff;font-size:12px;font-weight:600;cursor:pointer}.chip.active{background:#002f34 !important;color:#fff !important;border-color:#002f34 !important}</style>
 </head>
 <body>
 <header class="h">
-<div class="logo" onclick="location.reload()"><div class="li">W</div><div class="lt">WROOMER<span>.PL</span> - Gorzyce</div></div>
-<div style="display:flex;gap:6px;align-items:center"><span id="userEmail" style="font-size:11px;color:#23e5db"></span><button id="authBtn" class="b bw">Zaloguj / Zarejestruj</button><button id="ab" class="b bb">+ Dodaj</button><span id="diag" style="font-size:10px;color:#ff0;margin-left:8px"></span></div>
+<div class="logo" onclick="location.reload()"><div class="li">W</div><div class="lt">WROOMER<span>.PL</span></div></div>
+<div class="searchTop"><div class="stW"><span class="stI">🔍</span><input id="qTop" class="stIn" placeholder="Szukaj: marka, model, np. Octavia 2.0 TDI..."></div></div>
+<div style="display:flex;gap:8px;align-items:center">
+<span id="userEmail" style="font-size:11px;color:#23e5db;display:none"></span>
+<button id="authBtn" class="b bw">Zaloguj</button>
+<button id="ab" class="b bb">+ Dodaj</button>
+</div>
 </header>
+
 <div class="pg">
 <aside class="sb" id="sb">
-<div class="fg"><div class="fl">Szukaj</div><input id="q" class="pi2" placeholder="Model, marka..."></div>
-<div class="fg"><div class="fl">Marka i model</div><select id="brand" class="sel"><option value="">Wszystkie marki</option></select><select id="model" class="sel" style="margin-top:6px"><option value="">Wszystkie modele</option></select><div id="modelCount" style="font-size:10px;color:#6b7280;margin-top:4px"></div></div>
-<div class="fg"><div class="fl">Cena</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px"><input id="pmin" class="pi2" type="number" placeholder="od zł"><input id="pmax" class="pi2" type="number" placeholder="do zł"></div></div>
-<div class="fg"><div class="fl">Lokalizacja</div><input id="loc" class="pi2" placeholder="Np. Gorzyce"></div>
-<div class="fg"><div class="fl">Paliwo</div><div id="fuelFilters" style="display:flex;gap:5px;flex-wrap:wrap"><button type="button" class="chip" data-fuel="Benzyna">Benzyna</button><button type="button" class="chip" data-fuel="Diesel">Diesel</button><button type="button" class="chip" data-fuel="Benzyna+LPG">LPG</button><button type="button" class="chip" data-fuel="Hybryda">Hybryda</button><button type="button" class="chip" data-fuel="Elektryczny">Elektryk</button></div></div>
-<div class="fg"><div class="fl">Skrzynia</div><div id="gearFilters" style="display:flex;gap:6px"><button type="button" class="chip" data-gear="Manualna" style="flex:1">Manualna</button><button type="button" class="chip" data-gear="Automatyczna" style="flex:1">Automat</button></div></div>
-<div style="padding:12px;border-top:1px solid #f0f0f0;background:#fff;position:sticky;bottom:0">
-<div id="count" style="text-align:center;color:#6b7280;font-size:11px;margin-bottom:8px">Ładowanie...</div>
+<div class="sbHead"><div style="font-weight:800">Filtry</div><button id="sbClose" class="cl">✕</button></div>
+<div class="sbInner">
+<div class="fg">
+<div class="fl">📍 Lokalizacja i promień</div>
+<div class="locBox" style="margin-bottom:8px"><input id="loc" class="pi2" style="flex:1" placeholder="Miejscowość, np. Gorzyce"><button id="gpsBtn" class="locBtn" title="Użyj mojej lokalizacji">📍 GPS</button></div>
+<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px">
+<button class="chip radiusChip" data-r="0">Cała PL</button>
+<button class="chip radiusChip" data-r="10">+10 km</button>
+<button class="chip radiusChip active" data-r="30">+30 km</button>
+<button class="chip radiusChip" data-r="50">+50 km</button>
+<button class="chip radiusChip" data-r="100">+100 km</button>
+<button class="chip radiusChip" data-r="200">+200 km</button>
+</div>
+<div id="gpsInfo" style="font-size:11px;color:#065f46;display:none"></div>
+</div>
+
+<div class="fg">
+<div class="fl">Marka i model</div>
+<select id="brand" class="sel"><option value="">Wszystkie marki (49)</option></select>
+<select id="model" class="sel" style="margin-top:8px"><option value="">Wszystkie modele</option></select>
+<div id="modelCount" style="font-size:11px;color:#64748b;margin-top:6px"></div>
+</div>
+
+<div class="fg">
+<div class="fl">Cena <span id="priceVal" style="font-weight:400;text-transform:none;color:#64748b"></span></div>
+<div class="range2"><input id="pmin" class="pi2" type="number" placeholder="od zł"><input id="pmax" class="pi2" type="number" placeholder="do zł"></div>
+<div style="display:flex;gap:6px;margin-top:8px;flex-wrap:wrap">
+<button class="chip priceChip" data-min="0" data-max="10000"><10k</button>
+<button class="chip priceChip" data-min="10000" data-max="30000">10-30k</button>
+<button class="chip priceChip" data-min="30000" data-max="60000">30-60k</button>
+<button class="chip priceChip" data-min="60000" data-max="120000">60-120k</button>
+</div>
+</div>
+
+<div class="fg">
+<div class="fl">Rocznik i przebieg</div>
+<div class="range2" style="margin-bottom:8px"><input id="ymin" class="pi2" type="number" placeholder="Rok od"><input id="ymax" class="pi2" type="number" placeholder="Rok do"></div>
+<div class="range2"><input id="kmin" class="pi2" type="number" placeholder="km od"><input id="kmax" class="pi2" type="number" placeholder="km do"></div>
+</div>
+
+<div class="fg">
+<div class="fl">Paliwo</div>
+<div id="fuelFilters" class="chipRow"><button class="chip" data-fuel="Benzyna">Benzyna</button><button class="chip" data-fuel="Diesel">Diesel</button><button class="chip" data-fuel="Benzyna+LPG">LPG</button><button class="chip" data-fuel="Hybryda">Hybryda</button><button class="chip" data-fuel="Elektryczny">Elektryk</button></div>
+</div>
+<div class="fg">
+<div class="fl">Skrzynia</div>
+<div id="gearFilters" class="chipRow"><button class="chip" data-gear="Manualna" style="flex:1">Manualna</button><button class="chip" data-gear="Automatyczna" style="flex:1">Automat</button></div>
+</div>
+
+<details style="margin:0"><summary style="list-style:none;cursor:pointer;padding:12px 16px;font-weight:700;font-size:13px;display:flex;justify-content:space-between;border-top:1px solid #f2f3f5">⚙️ Więcej parametrów <span>▼</span></summary>
+<div>
+<div class="fg"><div class="fl">Nadwozie</div><select id="body" class="sel"><option value="">Dowolne</option><option>Sedan</option><option>Kombi</option><option>Hatchback</option><option>SUV</option><option>Coupe</option><option>Kabriolet</option><option>Minivan</option><option>Pickup</option></select></div>
+<div class="fg"><div class="fl">Kolor</div><select id="color" class="sel"><option value="">Dowolny</option><option>Biały</option><option>Czarny</option><option>Srebrny</option><option>Szary</option><option>Czerwony</option><option>Niebieski</option></select></div>
+<div class="fg"><div class="fl">Moc i pojemność</div><div class="range2"><input id="powmin" class="pi2" type="number" placeholder="Moc od KM"><input id="powmax" class="pi2" type="number" placeholder="Moc do KM"></div></div>
+<div class="fg"><div class="fl">Stan</div><select id="state" class="sel"><option value="">Dowolny</option><option>Nowy</option><option>Używany</option><option>Uszkodzony</option></select></div>
+</div>
+</details>
+
+<div style="padding:14px 16px;background:#fff;position:sticky;bottom:0;border-top:1px solid #f2f3f5">
+<div id="count" style="text-align:center;color:#64748b;font-size:12px;margin-bottom:10px">Ładowanie...</div>
 <button id="apply" class="btn-show">Pokaż wyniki</button>
-<button id="clear" class="btn-show" style="background:#fff;color:#002f34;border:1px solid #d8dfe0;margin-top:6px">Wyczyść filtry</button>
+<button id="clear" class="btn-ghost" style="margin-top:8px">Wyczyść wszystko</button>
+<div style="font-size:10px;color:#94a3b8;text-align:center;margin-top:10px">GPS + promień działa jak OLX/OTOMOTO • zdjęcia szybkie URL</div>
+</div>
 </div>
 </aside>
+
 <main class="main">
-<div style="background:#fff;padding:8px;display:flex;gap:6px;align-items:center;border-bottom:1px solid #e5e7eb"><button id="filterToggle" class="b" style="background:#f2f3f5;color:#002f34;border:1px solid #d8dfe0">☰ Filtry</button><input id="q2" class="pi2" style="flex:1" placeholder="Szybkie szukanie..."><button id="myBtn" class="b" style="background:#eef1f3">Moje</button></div>
-<div id="gd" class="gd"></div><div id="ld" class="gd"><div style="background:#e5e7eb;border-radius:10px;aspect-ratio:4/3"></div><div style="background:#e5e7eb;border-radius:10px;aspect-ratio:4/3"></div><div style="background:#e5e7eb;border-radius:10px;aspect-ratio:4/3"></div><div style="background:#e5e7eb;border-radius:10px;aspect-ratio:4/3"></div></div>
-<div id="empty" style="display:none;padding:40px;text-align:center;background:#fff;margin:8px;border-radius:10px">Brak ogłoszeń - dodaj pierwsze!</div>
-<div id="debug" style="background:#000;color:#0f0;font-family:monospace;font-size:11px;padding:8px;margin:8px;border-radius:8px;white-space:pre-wrap;display:none"></div>
+<div class="topBar">
+<button id="filterToggle" class="b" style="background:#f2f3f5;color:#002f34;border:1px solid #e5e7eb">☰ Filtry</button>
+<input id="q2" class="pi2" style="flex:1" placeholder="Szukaj w WROOMER.PL...">
+<select id="sort" class="sel" style="width:150px;flex-shrink:0"><option value="new">Najnowsze</option><option value="priceAsc">Najtańsze</option><option value="priceDesc">Najdroższe</option><option value="yearDesc">Najnowszy rocznik</option><option value="mileageAsc">Najmniejszy przebieg</option><option value="dist">Najbliżej (GPS)</option></select>
+<button id="myBtn" class="b" style="background:#eef1f3">Moje</button>
+</div>
+<div id="gd" class="gd"></div>
+<div id="ld" class="gd"><div class="skel" style="border-radius:16px;aspect-ratio:4/3"></div><div class="skel" style="border-radius:16px;aspect-ratio:4/3"></div><div class="skel" style="border-radius:16px;aspect-ratio:4/3"></div><div class="skel" style="border-radius:16px;aspect-ratio:4/3"></div><div class="skel" style="border-radius:16px;aspect-ratio:4/3"></div><div class="skel" style="border-radius:16px;aspect-ratio:4/3"></div></div>
+<div id="empty" style="display:none;padding:50px 20px;text-align:center;background:#fff;margin:12px;border-radius:20px">
+<div style="font-size:48px">🔍</div><div style="font-weight:800;margin-top:8px">Brak aut dla tych filtrów</div><div style="font-size:13px;color:#64748b;margin-top:6px">Spróbuj zwiększyć promień, zmienić cenę lub wyczyścić filtry</div><button onclick="document.getElementById('clear').click()" class="b bdark" style="margin-top:14px">Wyczyść filtry</button>
+</div>
+<div id="debug" style="background:#111;color:#0f0;font-family:monospace;font-size:11px;padding:10px;margin:12px;border-radius:12px;white-space:pre-wrap;display:none"></div>
 </main>
 </div>
 
-<div id="am" class="md"><div id="abg" class="mbg"></div><div class="mb"><div class="mc" style="max-width:600px"><div class="mh"><div id="formTitle" style="font-weight:800">Dodaj ogłoszenie</div><button id="ca" class="cl">✕</button></div>
-<form id="af" style="padding:12px;display:flex;flex-direction:column;gap:10px;overflow:auto">
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><div><div style="font-size:10px;font-weight:700">Marka *</div><select id="mk" class="sel" required><option value="">Wybierz</option></select></div><div><div style="font-size:10px;font-weight:700">Model *</div><select id="md2" class="sel" required><option value="">Wybierz</option></select></div></div>
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><div><div style="font-size:10px;font-weight:700">Rok *</div><input id="year" type="number" class="pi2" required placeholder="2018"></div><div><div style="font-size:10px;font-weight:700">Przebieg km *</div><input id="mileage" type="number" class="pi2" required placeholder="120000"></div></div>
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><div><div style="font-size:10px;font-weight:700">Cena zł *</div><input id="pr" type="number" class="pi2" required placeholder="25000"></div><div><div style="font-size:10px;font-weight:700">Miejscowość *</div><input id="lc" class="pi2" required placeholder="Gorzyce"></div></div>
-<div><div style="font-size:10px;font-weight:700">Telefon *</div><input id="phone" class="pi2" required placeholder="600 123 456"></div>
-<div><div style="font-size:10px;font-weight:700">Tytuł pełny</div><input id="titleFull" class="pi2" placeholder="Np. Skoda Octavia 1.9 TDI"></div>
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><div><div style="font-size:10px;font-weight:700">Paliwo</div><select id="fuel" class="sel"><option value="">Wybierz</option><option>Benzyna</option><option>Diesel</option><option>Benzyna+LPG</option><option>Hybryda</option><option>Elektryczny</option></select></div><div><div style="font-size:10px;font-weight:700">Skrzynia</div><select id="gear" class="sel"><option value="">Wybierz</option><option>Manualna</option><option>Automatyczna</option></select></div></div>
-<div><div style="font-size:10px;font-weight:700">Opis</div><textarea id="ds" rows="3" class="pi2" style="height:80px;padding:8px" placeholder="Opis..."></textarea></div>
-<div><div style="font-size:10px;font-weight:700">📸 Zdjęcia - max 10, tylko szybkie URL-e (bez base64)</div><div id="dz" class="dp">📷 Kliknij lub przeciągnij zdjęcia</div><input id="fi" type="file" multiple accept="image/*" style="display:none"><div id="pv" class="pv" style="margin-top:6px"></div><div id="ci" style="font-size:10px;color:#065f46"></div></div>
-<button type="submit" id="sbBtn" class="btn-show">💾 Zapisz</button>
+<div class="bottomNav" id="bottomNav">
+<button class="bnItem" id="bnFilter"><b>☰</b>Filtry</button>
+<button class="bnItem" id="bnSearch"><b>🔍</b>Szukaj</button>
+<button class="bnItem" id="bnAdd" style="background:#002f34;color:#fff;border-radius:14px"><b>+</b>Dodaj</button>
+<button class="bnItem" id="bnMy"><b>👤</b>Moje</button>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<!-- ADD MODAL -->
+<div id="am" class="md"><div id="abg" class="mbg"></div><div class="mb"><div class="mc" style="max-width:620px"><div class="mh"><div id="formTitle" style="font-weight:800">Dodaj ogłoszenie</div><button id="ca" class="cl">✕</button></div>
+<form id="af" style="padding:14px;display:flex;flex-direction:column;gap:12px;overflow:auto">
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px"><div><div style="font-size:11px;font-weight:700;margin-bottom:4px">Marka *</div><select id="mk" class="sel" required><option value="">Wybierz</option></select></div><div><div style="font-size:11px;font-weight:700;margin-bottom:4px">Model *</div><select id="md2" class="sel" required><option value="">Wybierz</option></select></div></div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px"><div><div style="font-size:11px;font-weight:700;margin-bottom:4px">Rok *</div><input id="year" type="number" class="pi2" required placeholder="2018"></div><div><div style="font-size:11px;font-weight:700;margin-bottom:4px">Przebieg km *</div><input id="mileage" type="number" class="pi2" required placeholder="120000"></div></div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px"><div><div style="font-size:11px;font-weight:700;margin-bottom:4px">Cena zł *</div><input id="pr" type="number" class="pi2" required placeholder="25000"></div><div><div style="font-size:11px;font-weight:700;margin-bottom:4px">Miejscowość *</div><input id="lc" class="pi2" required placeholder="Gorzyce"><button type="button" id="geocodeBtn" style="font-size:11px;color:#002f34;background:transparent;border:none;text-decoration:underline;cursor:pointer;margin-top:4px">📍 Pobierz GPS z miejscowości</button></div></div>
+<div><div style="font-size:11px;font-weight:700;margin-bottom:4px">Telefon *</div><input id="phone" class="pi2" required placeholder="600 123 456"></div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px"><div><div style="font-size:11px;font-weight:700;margin-bottom:4px">Paliwo</div><select id="fuel" class="sel"><option value="">Wybierz</option><option>Benzyna</option><option>Diesel</option><option>Benzyna+LPG</option><option>Hybryda</option><option>Elektryczny</option></select></div><div><div style="font-size:11px;font-weight:700;margin-bottom:4px">Skrzynia</div><select id="gear" class="sel"><option value="">Wybierz</option><option>Manualna</option><option>Automatyczna</option></select></div></div>
+<div><div style="font-size:11px;font-weight:700;margin-bottom:4px">Opis</div><textarea id="ds" rows="4" class="pi2" style="height:90px;padding:10px" placeholder="Opis, wyposażenie, historia..."></textarea></div>
+<div><div style="font-size:11px;font-weight:700;margin-bottom:6px">📸 Zdjęcia - max 10, szybkie URL-e (jak OLX/OTOMOTO)</div><div id="dz" class="dp">📷 Kliknij lub przeciągnij do 10 zdjęć • kompresja WebP 1024px</div><input id="fi" type="file" multiple accept="image/*" style="display:none"><div id="pv" class="pv" style="margin-top:10px"></div><div id="ci" style="font-size:11px;color:#065f46"></div></div>
+<div style="display:none"><input id="lat"><input id="lng"><input id="titleFull"></div>
+<button type="submit" id="sbBtn" class="btn-show">💾 Zapisz ogłoszenie</button>
 </form></div></div></div>
 
-<div id="authModal" class="md"><div class="mbg" id="authBg"></div><div class="mb"><div class="mc" style="max-width:380px"><div class="mh"><div style="font-weight:800">Logowanie / Rejestracja</div><button id="authClose" class="cl">✕</button></div>
-<div style="padding:16px;display:flex;flex-direction:column;gap:10px">
+<!-- AUTH -->
+<div id="authModal" class="md"><div class="mbg" id="authBg"></div><div class="mb"><div class="mc" style="max-width:380px;height:auto;max-height:90vh"><div class="mh"><div style="font-weight:800">Logowanie / Rejestracja</div><button id="authClose" class="cl">✕</button></div>
+<div style="padding:18px;display:flex;flex-direction:column;gap:12px">
 <input id="authEmail" type="email" class="pi2" placeholder="Email">
 <input id="authPass" type="password" class="pi2" placeholder="Hasło min 6 znaków">
 <button id="loginBtn" class="btn-show" style="background:#002f34">Zaloguj się</button>
-<button id="regBtn" class="btn-show" style="background:#fff;color:#002f34;border:1.5px solid #002f34">Zarejestruj się</button>
+<button id="regBtn" class="btn-show" style="background:#fff;color:#002f34;border:1.5px solid #e5e7eb">Zarejestruj się</button>
 <div id="authMsg" style="font-size:12px;text-align:center;min-height:20px"></div>
-<div style="font-size:10px;color:#666">Po zalogowaniu dodasz ogłoszenia. Zdjęcia zapisują się jako https://.../storage/... (szybkie), nie base64.</div>
 </div></div></div></div>
 
+<!-- DETAIL + PRO GALLERY -->
+<div id="detailModal" class="md"><div class="mbg" id="detailBg"></div><div class="mb"><div class="mc" id="detailMc">
+<div class="mh"><div style="font-weight:800;display:flex;align-items:center;gap:8px"><button id="detailBack" class="cl" style="width:36px;height:36px">‹</button><span id="detailTitle">Szczegóły</span></div><div style="display:flex;gap:8px"><button id="editBtn" class="b" style="display:none;background:#fff;border:1.5px solid #002f34;color:#002f34">✏️ Edytuj</button><button id="detailClose" class="cl">✕</button></div></div>
+<div class="gal" id="gal">
+<div class="galMain" id="galMain">
+<img id="galImg" src="" alt="">
+<button class="galNav prev" id="galPrev">‹</button>
+<button class="galNav next" id="galNext">›</button>
+<div class="galCounter" id="galCounter">1 / 1</div>
+</div>
+<div class="galThumbs" id="galThumbs"></div>
+</div>
+<div id="detailInfo" style="padding:16px;overflow:auto;background:#fff"></div>
+</div></div></div>
+
 <script>
-const MODELS = {"Skoda":["Octavia","Fabia","Superb","Kodiaq"],"Volkswagen":["Golf","Passat","Tiguan"],"BMW":["Seria 3","X5"],"Audi":["A4","Q5"],"Mercedes":["C Klasa","E Klasa"],"Toyota":["Corolla","RAV4"],"Opel":["Astra","Mokka"],"Ford":["Focus","Kuga"],"Renault":["Clio","Megane"],"Peugeot":["308","3008"],"Hyundai":["i30","Tucson"],"Kia":["Sportage","Ceed"],"Volvo":["XC60"],"Mazda":["CX-5"],"Tesla":["Model 3","Model Y"]};
+const MODELS = {"Abarth":["500","595"],"Alfa Romeo":["Giulia","Stelvio","Giulietta"],"Audi":["A3","A4","A6","Q3","Q5","Q7","Q8"],"BMW":["Seria 1","Seria 3","Seria 5","X1","X3","X5","X6"],"BYD":["Atto 3","Seal"],"Citroen":["C3","C4","C5"],"Cupra":["Formentor","Leon"],"Dacia":["Duster","Sandero","Logan","Jogger"],"DS":["DS 3","DS 7"],"Fiat":["500","Tipo","Doblo"],"Ford":["Focus","Fiesta","Kuga","Puma","Mondeo"],"Honda":["Civic","CR-V"],"Hyundai":["i10","i20","i30","Tucson","Kona"],"Kia":["Ceed","Sportage","Sorento","Stonic"],"Mazda":["3","6","CX-3","CX-5","CX-30"],"Mercedes":["A Klasa","C Klasa","E Klasa","GLC","GLE"],"MG":["ZS","HS"],"Mini":["Cooper","Countryman"],"Nissan":["Qashqai","Juke","X-Trail"],"Opel":["Astra","Corsa","Mokka","Grandland"],"Peugeot":["208","308","3008","5008"],"Polestar":["Polestar 2"],"Renault":["Clio","Megane","Captur","Kadjar"],"Seat":["Ibiza","Leon","Ateca","Arona"],"Skoda":["Octavia","Fabia","Superb","Kodiaq","Karoq","Kamiq","Scala"],"Smart":["ForTwo"],"Suzuki":["Swift","Vitara","SX4"],"Tesla":["Model 3","Model S","Model X","Model Y"],"Toyota":["Corolla","Yaris","RAV4","C-HR","Avensis"],"Volkswagen":["Golf","Passat","Tiguan","T-Roc","Polo","Arteon"],"Volvo":["XC40","XC60","XC90","V60"]};
 const U='https://bdpydgsfowtuvjnkyeeg.supabase.co';
 const K='sb_publishable_S1qH_mBZaX7-bzmfJ0IVGA_6hxGbJWd';
-const AUTH_URL=U+'/auth/v1';
-const REST=U+'/rest/v1';
+const AUTH_URL=U+'/auth/v1', REST=U+'/rest/v1';
 let supa=null, ls=[], filtered=[], ai=[], currentUser=null, currentEditId=null;
+let userPos=null, radiusKm=30, galIdx=0, galImgs=[], currentDetailItem=null, startX=0, scale=1;
 const $=id=>document.getElementById(id);
 const DEMO=[];
 
-async function comp(file,maxW=1024,quality=0.7){
+function toast(m){ const t=$('toast'); t.textContent=m; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2600); }
+function logDebug(m){ const el=$('debug'); if(!el) return; el.style.display='block'; el.textContent+=m+'\\n'; }
+
+async function comp(file,maxW=1024,q=0.7){
   return new Promise(res=>{
     const fr=new FileReader();
     fr.onload=e=>{
@@ -115,109 +268,139 @@ async function comp(file,maxW=1024,quality=0.7){
         let w=im.width,h=im.height;
         if(w>maxW||h>maxW){const r=Math.min(maxW/w,maxW/h);w=Math.round(w*r);h=Math.round(h*r);}
         const c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(im,0,0,w,h);
-        c.toBlob(b=>{res({blob:b,data:c.toDataURL('image/webp',quality)});},'image/webp',quality);
+        c.toBlob(b=>{res({blob:b,data:c.toDataURL('image/webp',q)});},'image/webp',q);
       };im.src=e.target.result;
     };fr.readAsDataURL(file);
   });
 }
 
-function logDebug(m){ const el=$('debug'); if(el){ el.style.display='block'; el.textContent+=m+'\n'; console.log(m); } }
-
 function populateBrands(){
   const sel=$('brand'), sel2=$('mk');
-  if(!sel) return;
   Object.keys(MODELS).sort().forEach(b=>{
-    const o=document.createElement('option'); o.value=b; o.textContent=b; sel.appendChild(o.cloneNode(true));
-    const o2=document.createElement('option'); o2.value=b; o2.textContent=b; sel2.appendChild(o2);
+    const o=document.createElement('option'); o.value=b; o.textContent=b;
+    if(sel) sel.appendChild(o.cloneNode(true));
+    if(sel2) sel2.appendChild(o.cloneNode(true));
   });
 }
 function populateModels(brand,targetId){
   const sel=$(targetId); if(!sel) return;
-  sel.innerHTML='<option value="">Wszystkie modele</option>';
+  sel.innerHTML='<option value="">Wszystkie modele</option><option value="Inny">Inny</option>';
   if(MODELS[brand]) MODELS[brand].forEach(m=>{const o=document.createElement('option');o.value=m;o.textContent=m;sel.appendChild(o);});
   if(targetId==='model') $('modelCount').textContent=(MODELS[brand]?.length||0)+' modeli';
 }
 
+function haversine(lat1,lon1,lat2,lon2){
+  const R=6371; const dLat=(lat2-lat1)*Math.PI/180; const dLon=(lon2-lon1)*Math.PI/180;
+  const a=Math.sin(dLat/2)**2 + Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)**2;
+  return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+}
+
 function applyFilters(){
-  const q=($('q').value||$('q2').value||'').toLowerCase().trim();
+  const q=($('q').value||$('qTop')?.value||$('q2').value||'').toLowerCase().trim();
   const brand=($('brand').value||'').toLowerCase();
   const model=($('model').value||'').toLowerCase();
   const pmin=parseInt($('pmin').value)||0, pmax=parseInt($('pmax').value)||999999999;
   const loc=($('loc').value||'').toLowerCase();
+  const ymin=parseInt($('ymin')?.value)||0, ymax=parseInt($('ymax')?.value)||9999;
+  const kmin=parseInt($('kmin')?.value)||0, kmax=parseInt($('kmax')?.value)||9999999;
+  const powmin=parseInt($('powmin')?.value)||0, powmax=parseInt($('powmax')?.value)||9999;
+  const fuelEl=document.querySelector('#fuelFilters .chip.active'), gearEl=document.querySelector('#gearFilters .chip.active');
+  const fuel=fuelEl?fuelEl.dataset.fuel.toLowerCase():'', gear=gearEl?gearEl.dataset.gear.toLowerCase():'';
+  const body=($('body').value||'').toLowerCase(), color=($('color').value||'').toLowerCase(), state=($('state').value||'').toLowerCase();
+  const sort=$('sort').value;
+
   filtered=ls.filter(x=>{
     if(q && !x.md.toLowerCase().includes(q) && !(x.ds||'').toLowerCase().includes(q)) return false;
     if(brand && !x.md.toLowerCase().includes(brand) && (x._extra?.marka||'').toLowerCase()!==brand) return false;
-    if(model && !x.md.toLowerCase().includes(model)) return false;
+    if(model && model!=='inny' && !x.md.toLowerCase().includes(model) && (x._extra?.model||'').toLowerCase()!==model) return false;
     if(x.pr<pmin || x.pr>pmax) return false;
     if(loc && !x.lc.toLowerCase().includes(loc)) return false;
+    const ex=x._extra||{};
+    const yr=parseInt(ex.year||0); if(ymin && yr && yr<ymin) return false; if(ymax!==9999 && yr && yr>ymax) return false;
+    const km=parseInt(ex.mileage||0); if(kmin && km && km<kmin) return false; if(kmax!==9999999 && km && km>kmax) return false;
+    const pw=parseInt(ex.power||0); if(powmin && pw && pw<powmin) return false; if(powmax && pw && pw>powmax) return false;
+    if(fuel){ const cf=(ex.fuel||'').toLowerCase(); if(!cf.includes(fuel) && !(fuel==='lpg' && cf.includes('gaz'))) return false; }
+    if(gear){ const cg=(ex.gear||'').toLowerCase(); if(cg!==gear) return false; }
+    if(body && (ex.body||'').toLowerCase()!==body) return false;
+    if(color && (ex.color||'').toLowerCase()!==color) return false;
+    if(state && (ex.state||ex.cond||'').toLowerCase()!==state) return false;
+    // GPS radius
+    if(radiusKm>0 && userPos && ex.latitude && ex.longitude){
+      const d=haversine(userPos.lat,userPos.lng,parseFloat(ex.latitude),parseFloat(ex.longitude));
+      if(d>radiusKm) return false;
+      x._dist=d;
+    } else if(radiusKm>0 && userPos && x._dist!==undefined && x._dist>radiusKm) return false;
     return true;
-  }); rn();
+  });
+
+  // sort
+  if(sort==='priceAsc') filtered.sort((a,b)=>a.pr-b.pr);
+  else if(sort==='priceDesc') filtered.sort((a,b)=>b.pr-a.pr);
+  else if(sort==='yearDesc') filtered.sort((a,b)=>(b._extra?.year||0)-(a._extra?.year||0));
+  else if(sort==='mileageAsc') filtered.sort((a,b)=>(a._extra?.mileage||0)-(b._extra?.mileage||0));
+  else if(sort==='dist' && userPos) filtered.sort((a,b)=>(a._dist||9999)-(b._dist||9999));
+  else filtered.sort((a,b)=> new Date(b.created_at)-new Date(a.created_at));
+
+  rn();
 }
+
 function rn(){
   const g=$('gd'), ld=$('ld'), empty=$('empty'), countEl=$('count');
   if(ld) ld.style.display='none';
   if(!g) return; g.innerHTML='';
-  if(countEl) countEl.textContent=filtered.length+' ogłoszeń';
+  if(countEl){
+    let txt=filtered.length+' ogłoszeń';
+    if(radiusKm>0 && userPos) txt+=' • '+radiusKm+' km od Ciebie';
+    if(document.querySelector('#fuelFilters .chip.active')) txt+=' • '+document.querySelector('#fuelFilters .chip.active').dataset.fuel;
+    countEl.textContent=txt;
+  }
   if(filtered.length===0){ if(empty) empty.style.display='block'; return; } else if(empty) empty.style.display='none';
   filtered.forEach(item=>{
     const d=document.createElement('div'); d.className='cd';
-    const firstImg = (item.im && item.im[0] && item.im[0].startsWith('https://')) ? item.im[0] : 'https://via.placeholder.com/400x300?text=Brak+foto';
-    const year=item._extra?.year||'';
-    d.innerHTML=`<div class="cw"><img src="${firstImg}" loading="lazy" onerror="this.src='https://via.placeholder.com/400x300?text=Foto'"><div class="ct">${item.im?.length||0} zdj</div></div><div class="cb"><div class="cti">${item.md}</div><div class="pr"><span>${(item.pr||0).toLocaleString()} zł</span><span style="font-size:10px;color:#666">${year}</span></div><div style="font-size:11px;color:#666">${item.lc||''}</div></div>`;
+    const firstImg = (item.im && item.im[0] && item.im[0].startsWith('https://')) ? item.im[0] : 'https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=600&h=450&fit=crop';
+    const isOwn = currentUser && item.user_id===currentUser.id;
+    const distTxt = item._dist ? item._dist.toFixed(1)+' km' : '';
+    const fuel=item._extra?.fuel||'', gear=item._extra?.gear||'', year=item._extra?.year||'';
+    d.innerHTML=`<div class="cw"><img src="${firstImg}" loading="lazy" onerror="this.src='https://via.placeholder.com/400x300?text=Foto'"><div class="ct">📷 ${item.im?.length||0}${distTxt?' • '+distTxt:''}</div>${isOwn?'<div class="badgeOwn">MOJE • ✏️</div>':''}</div><div class="cb"><div class="cti">${item.md}</div><div class="pr"><span>${(item.pr||0).toLocaleString()} zł</span><span style="font-size:11px;color:#64748b">${year}</span></div><div class="meta"><span>${item.lc||''}</span>${fuel?'<span>• '+fuel+'</span>':''}${gear?'<span>• '+gear+'</span>':''}${item._extra?.mileage?'<span>• '+(item._extra.mileage/1000).toFixed(0)+'k km</span>':''}</div></div>`;
     d.onclick=()=>openDetail(item);
     g.appendChild(d);
   });
 }
 
 async function loadReal(){
-  if(!supa){ logDebug('loadReal: supa null'); return; }
-  logDebug('loadReal: start - user='+(currentUser?.email||'anon')+' token='+!!localStorage.getItem('wroomer_access_token'));
+  if(!supa) return;
   try{
-    const r=await supa.from('ogloszenia').select('*').order('created_at',{ascending:false}).limit(200);
-    console.log('SELECT result', r);
-    if(r.error){
-      logDebug('SELECT ERROR: '+r.error.message+' - to jest RLS! Uruchom SQL z politykami SELECT');
-      $('count').textContent='Błąd RLS: '+r.error.message;
-      // fallback REST
-      const restRes=await fetch(REST+'/ogloszenia?order=created_at.desc&limit=200',{headers:{'apikey':K,'Authorization':'Bearer '+K}});
-      const restData=await restRes.json();
-      console.log('REST fallback', restData);
-      if(Array.isArray(restData) && restData.length>0){
-        ls=restData.map(mapRow).filter(x=>x.im.length>0 || true);
-        filtered=[...ls]; rn(); logDebug('REST fallback OK: '+ls.length); return;
-      }
-      ls=[]; filtered=[]; rn(); return;
-    }
+    const r=await supa.from('ogloszenia').select('*').order('created_at',{ascending:false}).limit(300);
+    if(r.error){ $('count').textContent='Błąd: '+r.error.message; console.error(r.error); return; }
     let data=r.data||[];
-    logDebug('SELECT OK: '+data.length+' wierszy');
-    if(data.length===0){ ls=[]; filtered=[]; rn(); return; }
-    ls=data.map(mapRow);
-    // filtruj base64 - pokaz tylko https
-    ls=ls.map(it=>{ it.im=it.im.filter(u=>u.startsWith('https://')); return it; });
+    ls=data.map(row=>{
+      let imgs=row.images||row.zdjecia||[];
+      if(typeof imgs==='string'){ try{ imgs=JSON.parse(imgs); }catch(e){ imgs=[imgs]; } }
+      if(!Array.isArray(imgs)) imgs=imgs?[imgs]:[];
+      imgs=imgs.filter(u=>String(u).startsWith('https://'));
+      return {id:row.id, md:row.title||(row.marka+' '+(row.model||''))||'Auto', pr:row.price||row.cena||0, lc:row.location||row.lokalizacja||'', ds:row.description||row.opis||'', im:imgs, user_id:row.user_id||null, _extra:row, created_at:row.created_at, _dist: row._dist};
+    });
+    // jeśli mamy GPS, policz dystans dla tych co mają lat/lng
+    if(userPos){
+      ls.forEach(it=>{ const ex=it._extra; if(ex.latitude && ex.longitude){ it._dist=haversine(userPos.lat,userPos.lng,parseFloat(ex.latitude),parseFloat(ex.longitude)); } });
+    }
     filtered=[...ls];
-    rn();
-    logDebug('Załadowano '+ls.length+' ogłoszeń, pierwsze zdjęcia: '+(ls[0]?.im?.[0]?.substring(0,60)||'brak'));
-  }catch(e){ logDebug('loadReal exception: '+e.message); }
-}
-function mapRow(row){
-  let imgs=row.images||row.zdjecia||[];
-  if(typeof imgs==='string'){ try{ imgs=JSON.parse(imgs); }catch(e){ imgs=[imgs]; } }
-  if(!Array.isArray(imgs)) imgs=imgs?[imgs]:[];
-  return {id:row.id, md:row.title||row.marka+' '+(row.model||'')||'Auto', pr:row.price||row.cena||0, lc:row.location||row.lokalizacja||'', ds:row.description||row.opis||'', im:imgs, user_id:row.user_id||null, _extra:row, created_at:row.created_at};
+    applyFilters();
+  }catch(e){ console.error(e); }
 }
 
 async function checkSession(){
   try{
     const at=localStorage.getItem('wroomer_access_token'), em=localStorage.getItem('wroomer_user_email'), uid=localStorage.getItem('wroomer_user_id');
-    if(at && em && uid){ currentUser={id:uid,email:em,access_token:at}; updateAuthUI(); logDebug('Sesja z localStorage: '+em); return; }
+    if(at && em && uid){ currentUser={id:uid,email:em,access_token:at}; updateAuthUI(); return; }
   }catch(e){}
   if(!supa) return;
-  try{ const {data}=await supa.auth.getSession(); if(data.session?.user){ currentUser=data.session.user; updateAuthUI(); logDebug('Sesja supa: '+currentUser.email); } }catch(e){ logDebug('checkSession err: '+e.message); }
+  try{ const {data}=await supa.auth.getSession(); if(data.session?.user){ currentUser=data.session.user; updateAuthUI(); } }catch(e){}
 }
 function updateAuthUI(){
   const btn=$('authBtn'), mail=$('userEmail');
-  if(currentUser){ if(btn) btn.textContent='Wyloguj ('+currentUser.email.split('@')[0]+')'; if(mail) mail.textContent=currentUser.email; }
-  else { if(btn) btn.textContent='Zaloguj / Zarejestruj'; if(mail) mail.textContent=''; }
+  if(currentUser){ if(btn) btn.textContent='Wyloguj ('+currentUser.email.split('@')[0]+')'; if(mail){ mail.textContent=currentUser.email; mail.style.display='inline'; } }
+  else { if(btn) btn.textContent='Zaloguj'; if(mail) mail.style.display='none'; }
 }
 function openAuth(){ $('authModal').classList.add('o'); $('authMsg').textContent=''; }
 function closeAuth(){ $('authModal').classList.remove('o'); }
@@ -228,31 +411,25 @@ async function doLogin(){
   msg.textContent='Logowanie...'; msg.style.color='#666';
   try{
     const res=await fetch(AUTH_URL+'/token?grant_type=password',{method:'POST',headers:{'Content-Type':'application/json','apikey':K,'Authorization':'Bearer '+K},body:JSON.stringify({email,password:pass})});
-    const data=await res.json();
-    if(!res.ok) throw new Error(data.error_description||data.msg||'Błąd logowania');
-    currentUser={id:data.user.id,email:data.user.email,access_token:data.access_token,refresh_token:data.refresh_token};
-    localStorage.setItem('wroomer_user_email',data.user.email); localStorage.setItem('wroomer_user_id',data.user.id); localStorage.setItem('wroomer_access_token',data.access_token); localStorage.setItem('wroomer_refresh_token',data.refresh_token);
+    const data=await res.json(); if(!res.ok) throw new Error(data.error_description||'Błąd');
+    currentUser={id:data.user.id,email:data.user.email,access_token:data.access_token}; localStorage.setItem('wroomer_user_email',data.user.email); localStorage.setItem('wroomer_user_id',data.user.id); localStorage.setItem('wroomer_access_token',data.access_token); localStorage.setItem('wroomer_refresh_token',data.refresh_token);
     if(supa?.auth) try{ await supa.auth.setSession({access_token:data.access_token,refresh_token:data.refresh_token}); }catch(e){}
-    updateAuthUI(); msg.textContent='Zalogowano! '+data.user.email; msg.style.color='green'; setTimeout(closeAuth,800); loadReal();
-  }catch(e){ msg.textContent='Błąd: '+e.message; msg.style.color='red'; logDebug('Login err: '+e.message); }
+    updateAuthUI(); msg.textContent='Zalogowano!'; msg.style.color='green'; setTimeout(closeAuth,700); loadReal();
+  }catch(e){ msg.textContent='Błąd: '+e.message; msg.style.color='red'; }
 }
 async function doRegister(){
   const email=$('authEmail').value.trim().toLowerCase(), pass=$('authPass').value, msg=$('authMsg');
   if(!email||pass.length<6){ msg.textContent='Email i hasło min 6 znaków'; msg.style.color='red'; return; }
-  msg.textContent='Rejestracja...'; msg.style.color='#666';
+  msg.textContent='Rejestracja...';
   try{
     const res=await fetch(AUTH_URL+'/signup',{method:'POST',headers:{'Content-Type':'application/json','apikey':K,'Authorization':'Bearer '+K},body:JSON.stringify({email,password:pass})});
-    const data=await res.json();
-    if(!res.ok) throw new Error(data.msg||data.error_description||'Błąd rejestracji');
-    msg.textContent='Konto utworzone! Logowanie...';
+    const data=await res.json(); if(!res.ok) throw new Error(data.msg||data.error_description||'Błąd');
     const loginRes=await fetch(AUTH_URL+'/token?grant_type=password',{method:'POST',headers:{'Content-Type':'application/json','apikey':K,'Authorization':'Bearer '+K},body:JSON.stringify({email,password:pass})});
-    const loginData=await loginRes.json();
-    if(!loginRes.ok){ msg.textContent='Konto utworzone! Uruchom SQL: UPDATE auth.users SET email_confirmed_at=now()'; msg.style.color='orange'; return; }
-    currentUser={id:loginData.user.id,email:loginData.user.email,access_token:loginData.access_token};
-    localStorage.setItem('wroomer_user_email',loginData.user.email); localStorage.setItem('wroomer_user_id',loginData.user.id); localStorage.setItem('wroomer_access_token',loginData.access_token);
-    if(supa?.auth) try{ await supa.auth.setSession({access_token:loginData.access_token,refresh_token:loginData.refresh_token}); }catch(e){}
-    updateAuthUI(); msg.textContent='Zarejestrowano i zalogowano!'; msg.style.color='green'; setTimeout(closeAuth,800); loadReal();
-  }catch(e){ msg.textContent='Błąd: '+e.message; msg.style.color='red'; logDebug('Register err: '+e.message); }
+    const ld=await loginRes.json(); if(!loginRes.ok){ msg.textContent='Konto utworzone! Sprawdź email lub uruchom SQL confirm'; return; }
+    currentUser={id:ld.user.id,email:ld.user.email}; localStorage.setItem('wroomer_user_email',ld.user.email); localStorage.setItem('wroomer_user_id',ld.user.id); localStorage.setItem('wroomer_access_token',ld.access_token);
+    if(supa?.auth) try{ await supa.auth.setSession({access_token:ld.access_token,refresh_token:ld.refresh_token}); }catch(e){}
+    updateAuthUI(); msg.textContent='Gotowe!'; setTimeout(closeAuth,700); loadReal();
+  }catch(e){ msg.textContent='Błąd: '+e.message; msg.style.color='red'; }
 }
 function setupAuth(){
   $('authBtn')?.addEventListener('click', async()=>{ if(currentUser){ try{ if(supa?.auth) await supa.auth.signOut(); }catch(e){} localStorage.clear(); currentUser=null; updateAuthUI(); location.reload(); } else openAuth(); });
@@ -261,73 +438,201 @@ function setupAuth(){
 }
 
 function openAdd(){
-  if(!currentUser){ openAuth(); $('authMsg').textContent='Musisz się zalogować żeby dodać ogłoszenie'; $('authMsg').style.color='red'; return; }
+  if(!currentUser){ openAuth(); $('authMsg').textContent='Musisz się zalogować'; $('authMsg').style.color='red'; return; }
   currentEditId=null; $('formTitle').textContent='Dodaj ogłoszenie'; $('af').reset(); ai=[]; $('pv').innerHTML=''; $('ci').textContent=''; $('am').classList.add('o');
 }
 function closeAdd(){ $('am').classList.remove('o'); }
 
+function openEdit(item){
+  if(!currentUser || item.user_id!==currentUser.id){ toast('To nie Twoje ogłoszenie'); return; }
+  currentEditId=item.id; $('formTitle').textContent='Edytuj: '+item.md; $('af').reset();
+  $('mk').value=item._extra?.marka||item._extra?.brand||''; populateModels($('mk').value,'md2'); setTimeout(()=>{ $('md2').value=item._extra?.model||''; },100);
+  $('year').value=item._extra?.year||''; $('mileage').value=item._extra?.mileage||''; $('pr').value=item.pr||''; $('lc').value=item.lc||''; $('phone').value=item._extra?.phone||item._extra?.telefon||''; $('fuel').value=item._extra?.fuel||''; $('gear').value=item._extra?.gear||''; $('ds').value=item.ds||''; $('lat').value=item._extra?.latitude||''; $('lng').value=item._extra?.longitude||'';
+  ai=item.im.map(url=>({blob:null,data:url})); renderPv(); $('am').classList.add('o'); closeDetail();
+}
+
 async function handleAddSubmit(e){
   e.preventDefault();
-  if(!currentUser){ alert('Musisz być zalogowany'); openAuth(); return; }
+  if(!currentUser){ openAuth(); return; }
   const mk=$('mk').value.trim(), md=$('md2').value.trim(), yr=$('year').value, mileage=$('mileage').value, pr=$('pr').value, lc=$('lc').value.trim(), phone=$('phone').value.trim();
-  if(!mk||!md||!yr||!mileage||!pr||!lc||!phone){ alert('Wypełnij wszystkie *'); return; }
-  if(ai.length===0){ alert('Dodaj min 1 zdjęcie'); return; }
-  const btn=$('sbBtn'), orig=btn.textContent; btn.textContent='Wysyłam '+ai.length+' zdjęć do Storage...'; btn.disabled=true;
+  if(!mk||!md||!yr||!mileage||!pr||!lc||!phone){ toast('Wypełnij wszystkie *'); return; }
+  if(ai.length===0){ toast('Dodaj min 1 zdjęcie'); return; }
+  const btn=$('sbBtn'), orig=btn.textContent; btn.textContent='Wysyłam '+ai.length+' zdjęć...'; btn.disabled=true;
   try{
     const images=[];
     for(let i=0;i<ai.length;i++){
-      const item=ai[i];
-      if(item.data.startsWith('https://')){ images.push(item.data); continue; }
-      const safeName=(mk+'-'+md+'-'+Date.now()+'-'+i).replace(/[^a-zA-Z0-9-_]/g,'_')+'.webp';
-      const path=currentUser.id+'/'+safeName;
+      const it=ai[i];
+      if(it.data.startsWith('https://')){ images.push(it.data); continue; }
+      const safe=(mk+'-'+md+'-'+Date.now()+'-'+i).replace(/[^a-z0-9-_]/gi,'_')+'.webp';
+      const path=currentUser.id+'/'+safe;
       btn.textContent='Wysyłam '+(i+1)+'/'+ai.length+'...';
-      logDebug('Upload '+path);
-      const {error}=await supa.storage.from('images').upload(path, item.blob, {contentType:'image/webp', upsert:true});
-      if(error){ logDebug('Upload error: '+error.message); if(error.message.toLowerCase().includes('bucket')) throw new Error('Bucket images nie istnieje! Uruchom SQL z INSERT INTO storage.buckets'); throw error; }
+      const {error}=await supa.storage.from('images').upload(path, it.blob, {contentType:'image/webp', upsert:true});
+      if(error) throw error;
       const pub=supa.storage.from('images').getPublicUrl(path);
       images.push(pub.data.publicUrl);
-      logDebug('Uploaded URL: '+pub.data.publicUrl);
     }
-    // blokada base64
-    if(images.some(u=>u.startsWith('data:'))){ throw new Error('Base64 zablokowane!'); }
-    const payload={title:mk+' '+md, marka:mk, model:md, brand:mk, price:parseInt(pr), cena:parseInt(pr), location:lc, lokalizacja:lc, description:$('ds').value||'', opis:$('ds').value||'', images:images, zdjecia:images, user_id:currentUser.id, phone:phone, telefon:phone, year:parseInt(yr), mileage:parseInt(mileage), fuel:$('fuel').value||'', gear:$('gear').value||'', created_at:new Date().toISOString()};
-    logDebug('Insert payload: '+JSON.stringify(payload).substring(0,300));
-    const res=await supa.from('ogloszenia').insert(payload).select();
-    console.log('Insert res', res);
-    if(res.error){ logDebug('Insert error: '+res.error.message); alert('Błąd zapisu: '+res.error.message+'\nUruchom SQL z RLS'); throw res.error; }
-    alert('Dodano ogłoszenie! ID: '+(res.data?.[0]?.id?.slice(0,8)||'')); closeAdd(); setTimeout(loadReal,1000);
-  }catch(err){ alert('Błąd: '+err.message); logDebug('handleAddSubmit err: '+err.message); }
+    if(images.some(u=>u.startsWith('data:'))) throw new Error('Base64 zablokowane');
+    const payload={title:mk+' '+md, marka:mk, model:md, brand:mk, price:parseInt(pr), cena:parseInt(pr), location:lc, lokalizacja:lc, description:$('ds').value||'', opis:$('ds').value||'', images:images, zdjecia:images, user_id:currentUser.id, phone:phone, telefon:phone, year:parseInt(yr), mileage:parseInt(mileage), fuel:$('fuel').value||'', gear:$('gear').value||'', latitude:$('lat').value||null, longitude:$('lng').value||null, created_at:new Date().toISOString()};
+    let res;
+    if(currentEditId){ res=await supa.from('ogloszenia').update(payload).eq('id',currentEditId).select(); }
+    else { res=await supa.from('ogloszenia').insert(payload).select(); }
+    if(res.error) throw res.error;
+    toast(currentEditId?'Zaktualizowano!':'Dodano ogłoszenie!'); closeAdd(); setTimeout(loadReal,800);
+  }catch(err){ toast('Błąd: '+err.message); console.error(err); }
   finally{ btn.textContent=orig; btn.disabled=false; }
 }
 
 function setupAdd(){
-  $('ab')?.addEventListener('click', openAdd); $('ca')?.addEventListener('click', closeAdd); $('abg')?.addEventListener('click', closeAdd);
+  $('ab')?.addEventListener('click', openAdd); $('bnAdd')?.addEventListener('click', openAdd);
+  $('ca')?.addEventListener('click', closeAdd); $('abg')?.addEventListener('click', closeAdd);
   $('dz')?.addEventListener('click', ()=>$('fi').click());
   $('fi')?.addEventListener('change', async(e)=>{
     const files=Array.from(e.target.files||[]).slice(0,10-ai.length);
     if(!files.length) return;
     $('ci').textContent='Kompresuję '+files.length+'...';
-    for(const f of files){ const c=await comp(f,1024,0.7); ai.push(c); }
+    for(const f of files){ const c=await comp(f,1280,0.72); ai.push(c); }
     renderPv(); $('ci').textContent=ai.length+' zdjęć'; e.target.value='';
   });
+  $('dz')?.addEventListener('dragover', e=>{ e.preventDefault(); e.currentTarget.style.background='#e6f7f6'; });
+  $('dz')?.addEventListener('dragleave', e=>{ e.currentTarget.style.background='#f7f8f9'; });
+  $('dz')?.addEventListener('drop', async e=>{ e.preventDefault(); e.currentTarget.style.background='#f7f8f9'; const files=Array.from(e.dataTransfer.files||[]).filter(f=>f.type.startsWith('image/')).slice(0,10-ai.length); for(const f of files){ const c=await comp(f,1280,0.72); ai.push(c); } renderPv(); });
   $('mk')?.addEventListener('change', e=>populateModels(e.target.value,'md2'));
   $('af')?.addEventListener('submit', handleAddSubmit);
-  $('apply')?.addEventListener('click', applyFilters);
-  $('clear')?.addEventListener('click', ()=>{ $('q').value=''; $('brand').value=''; $('model').value=''; $('pmin').value=''; $('pmax').value=''; $('loc').value=''; document.querySelectorAll('.chip.active').forEach(x=>x.classList.remove('active')); applyFilters(); });
-  $('q')?.addEventListener('input', applyFilters); $('q2')?.addEventListener('input', ()=>{ $('q').value=$('q2').value; applyFilters(); });
-  $('filterToggle')?.addEventListener('click', ()=>{ const sb=$('sb'); sb.classList.toggle('mopen'); });
+  $('geocodeBtn')?.addEventListener('click', async()=>{ const q=$('lc').value.trim(); if(!q) return; toast('Szukam GPS dla '+q+'...'); try{ const res=await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(q+', Polska')}&limit=1`); const j=await res.json(); if(j[0]){ $('lat').value=j[0].lat; $('lng').value=j[0].lon; toast('GPS: '+parseFloat(j[0].lat).toFixed(4)+', '+parseFloat(j[0].lon).toFixed(4)); } else toast('Nie znaleziono miejscowości'); }catch(e){ toast('Błąd GPS'); } });
 }
+
 function renderPv(){ const pv=$('pv'); if(!pv) return; pv.innerHTML=''; ai.forEach((img,i)=>{ const d=document.createElement('div'); d.className='px'; d.innerHTML=`<img src="${img.data}"><button type="button" onclick="ai.splice(${i},1);renderPv()">✕</button>`; pv.appendChild(d); }); }
+
+// GALLERY PRO - OTOMOTO STYLE
 function openDetail(item){
-  const gallery=item.im.map(s=>`<img src="${s}" style="width:80px;height:60px;object-fit:cover;border-radius:6px;margin:2px;cursor:pointer" onclick="window.open('${s}','_blank')">`).join('');
-  const html=`<div style="position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.85);display:flex;align-items:center;justify-content:center;padding:12px" onclick="if(event.target===this)this.remove()"><div style="background:#fff;border-radius:12px;max-width:600px;width:100%;max-height:90vh;overflow:auto;padding:12px"><div style="font-weight:800;font-size:18px">${item.md}</div><div style="font-weight:800;font-size:20px;color:#002f34">${(item.pr||0).toLocaleString()} zł</div><div style="font-size:13px;color:#666">${item.lc||''} • ${item._extra?.year||''} • ${item._extra?.mileage||''} km</div><div style="font-size:13px;margin-top:8px;white-space:pre-wrap">${item.ds||''}</div><div style="margin-top:8px">Tel: <a href="tel:${item._extra?.phone||item._extra?.telefon||''}">${item._extra?.phone||item._extra?.telefon||''}</a></div><div style="margin-top:12px">${gallery}</div><button onclick="this.closest('div').parentElement.remove()" style="margin-top:12px;width:100%;height:44px;background:#002f34;color:#fff;border:none;border-radius:8px">Zamknij</button></div></div></div>`;
-  const d=document.createElement('div'); d.innerHTML=html; document.body.appendChild(d.firstChild);
+  currentDetailItem=item; galImgs=item.im && item.im.length? item.im : ['https://via.placeholder.com/800x600']; galIdx=0;
+  $('detailTitle').textContent=item.md;
+  const isOwn=currentUser && item.user_id===currentUser.id;
+  $('editBtn').style.display=isOwn?'inline-flex':'none';
+  $('editBtn').onclick=()=>openEdit(item);
+  renderGallery(); renderDetailInfo(item);
+  $('detailModal').classList.add('o');
+  document.body.style.overflow='hidden';
+}
+function closeDetail(){ $('detailModal').classList.remove('o'); document.body.style.overflow=''; currentDetailItem=null; }
+function renderGallery(){
+  if(!galImgs.length) return;
+  const img=$('galImg'); img.src=galImgs[galIdx]; img.style.transform='scale(1)';
+  $('galCounter').textContent=(galIdx+1)+' / '+galImgs.length;
+  const thumbs=$('galThumbs'); thumbs.innerHTML='';
+  galImgs.forEach((src,i)=>{
+    const d=document.createElement('div'); d.className='gTh'+(i===galIdx?' on':'');
+    d.innerHTML=`<img src="${src}" loading="lazy">`;
+    d.onclick=()=>{ galIdx=i; renderGallery(); };
+    thumbs.appendChild(d);
+  });
+  // scroll thumb into view
+  setTimeout(()=>{ const on=thumbs.querySelector('.on'); if(on) on.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'}); },100);
+}
+function nextGal(){ galIdx=(galIdx+1)%galImgs.length; renderGallery(); }
+function prevGal(){ galIdx=(galIdx-1+galImgs.length)%galImgs.length; renderGallery(); }
+
+function renderDetailInfo(item){
+  const ex=item._extra||{};
+  const isOwn=currentUser && item.user_id===currentUser.id;
+  $('detailInfo').innerHTML=`
+  <div style="display:flex;justify-content:space-between;align-items:start;gap:12px">
+    <div><div style="font-weight:800;font-size:22px">${item.md}</div><div style="font-size:13px;color:#64748b;margin-top:4px">${item.lc||''} ${item._dist? '• '+item._dist.toFixed(1)+' km od Ciebie':''} • ${ex.year||''} • ${(ex.mileage||0).toLocaleString()} km</div></div>
+    <div style="font-weight:900;font-size:22px;color:#002f34">${(item.pr||0).toLocaleString()} zł</div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px">
+    <div style="background:#f8fafc;padding:10px;border-radius:12px"><div style="font-size:11px;color:#64748b">Paliwo</div><div style="font-weight:700">${ex.fuel||'-'}</div></div>
+    <div style="background:#f8fafc;padding:10px;border-radius:12px"><div style="font-size:11px;color:#64748b">Skrzynia</div><div style="font-weight:700">${ex.gear||'-'}</div></div>
+    <div style="background:#f8fafc;padding:10px;border-radius:12px"><div style="font-size:11px;color:#64748b">Moc</div><div style="font-weight:700">${ex.power||'-'} KM</div></div>
+    <div style="background:#f8fafc;padding:10px;border-radius:12px"><div style="font-size:11px;color:#64748b">Pojemność</div><div style="font-weight:700">${ex.capacity||'-'} cm³</div></div>
+    <div style="background:#f8fafc;padding:10px;border-radius:12px"><div style="font-size:11px;color:#64748b">Nadwozie</div><div style="font-weight:700">${ex.body||'-'}</div></div>
+    <div style="background:#f8fafc;padding:10px;border-radius:12px"><div style="font-size:11px;color:#64748b">Kolor</div><div style="font-weight:700">${ex.color||'-'}</div></div>
+  </div>
+  <div style="margin-top:16px"><div style="font-weight:700;margin-bottom:6px">Opis</div><div style="font-size:14px;line-height:1.5;white-space:pre-wrap;color:#334155">${item.ds||'Brak opisu'}</div></div>
+  <div style="margin-top:16px;display:flex;gap:8px">
+    <a href="tel:${ex.phone||ex.telefon||''}" style="flex:1" class="btn-show" style="display:flex;align-items:center;justify-content:center;text-decoration:none">📞 Zadzwoń: ${ex.phone||ex.telefon||''}</a>
+    ${isOwn?'<button id="delOwn" class="b" style="background:#fee2e2;color:#991b1b;border:1px solid #fecaca">🗑️ Usuń</button>':''}
+  </div>
+  <div style="margin-top:12px;font-size:11px;color:#94a3b8">ID: ${item.id.slice(0,8)} • Dodano: ${new Date(item.created_at).toLocaleString('pl-PL')} ${item._dist? '• Odległość: '+item._dist.toFixed(1)+' km':''}</div>
+  `;
+  const delBtn=document.getElementById('delOwn'); if(delBtn){ delBtn.onclick=async()=>{ if(!confirm('Usunąć ogłoszenie?')) return; const {error}=await supa.from('ogloszenia').delete().eq('id',item.id); if(error) toast(error.message); else { toast('Usunięto'); closeDetail(); loadReal(); } }; }
+}
+
+function setupGallery(){
+  $('galNext')?.addEventListener('click', nextGal);
+  $('galPrev')?.addEventListener('click', prevGal);
+  $('detailClose')?.addEventListener('click', closeDetail);
+  $('detailBack')?.addEventListener('click', closeDetail);
+  $('detailBg')?.addEventListener('click', closeDetail);
+  // swipe
+  const main=$('galMain');
+  main.addEventListener('touchstart', e=>{ startX=e.touches[0].clientX; },{passive:true});
+  main.addEventListener('touchend', e=>{
+    const dx=e.changedTouches[0].clientX-startX;
+    if(Math.abs(dx)>50){ if(dx<0) nextGal(); else prevGal(); }
+  },{passive:true});
+  // keyboard
+  document.addEventListener('keydown', e=>{
+    if(!$('detailModal').classList.contains('o')) return;
+    if(e.key==='ArrowRight') nextGal();
+    if(e.key==='ArrowLeft') prevGal();
+    if(e.key==='Escape') closeDetail();
+  });
+  // zoom double tap
+  const img=$('galImg');
+  img.addEventListener('dblclick', ()=>{ scale=scale===1?2:1; img.style.transform='scale('+scale+')'; });
+  let lastTouch=0;
+  img.addEventListener('touchend', e=>{ const now=Date.now(); if(now-lastTouch<300){ scale=scale===1?2:1; img.style.transform='scale('+scale+')'; } lastTouch=now; });
+}
+
+function setupFilters(){
+  $('brand')?.addEventListener('change', e=>{ populateModels(e.target.value,'model'); applyFilters(); });
+  $('model')?.addEventListener('change', applyFilters);
+  $('pmin')?.addEventListener('input', applyFilters); $('pmax')?.addEventListener('input', applyFilters);
+  $('ymin')?.addEventListener('input', applyFilters); $('ymax')?.addEventListener('input', applyFilters);
+  $('kmin')?.addEventListener('input', applyFilters); $('kmax')?.addEventListener('input', applyFilters);
+  $('loc')?.addEventListener('input', ()=>{ if($('loc').value.length>2) applyFilters(); });
+  $('body')?.addEventListener('change', applyFilters); $('color')?.addEventListener('change', applyFilters); $('state')?.addEventListener('change', applyFilters);
+  $('sort')?.addEventListener('change', applyFilters);
+  document.querySelectorAll('#fuelFilters .chip').forEach(b=>{ b.addEventListener('click', function(){ const was=this.classList.contains('active'); document.querySelectorAll('#fuelFilters .chip').forEach(x=>x.classList.remove('active')); if(!was) this.classList.add('active'); applyFilters(); }); });
+  document.querySelectorAll('#gearFilters .chip').forEach(b=>{ b.addEventListener('click', function(){ const was=this.classList.contains('active'); document.querySelectorAll('#gearFilters .chip').forEach(x=>x.classList.remove('active')); if(!was) this.classList.add('active'); applyFilters(); }); });
+  document.querySelectorAll('.radiusChip').forEach(b=>{ b.addEventListener('click', function(){ document.querySelectorAll('.radiusChip').forEach(x=>x.classList.remove('active')); this.classList.add('active'); radiusKm=parseInt(this.dataset.r); if(radiusKm===0) { toast('Promień wyłączony - cała Polska'); } else { toast('Promień: '+radiusKm+' km'); } if(!userPos && radiusKm>0){ getGPS(); } else applyFilters(); }); });
+  document.querySelectorAll('.priceChip').forEach(b=>{ b.addEventListener('click', function(){ document.querySelectorAll('.priceChip').forEach(x=>x.classList.remove('active')); this.classList.add('active'); $('pmin').value=this.dataset.min; $('pmax').value=this.dataset.max; applyFilters(); }); });
+  $('apply')?.addEventListener('click', ()=>{ applyFilters(); $('sb').classList.remove('open'); });
+  $('clear')?.addEventListener('click', ()=>{ $('q').value=''; $('qTop').value=''; $('q2').value=''; $('brand').value=''; $('model').value=''; $('pmin').value=''; $('pmax').value=''; $('loc').value=''; $('ymin').value=''; $('ymax').value=''; $('kmin').value=''; $('kmax').value=''; $('body').value=''; $('color').value=''; $('state').value=''; document.querySelectorAll('.chip.active').forEach(x=>x.classList.remove('active')); document.querySelector('.radiusChip[data-r="30"]')?.classList.add('active'); radiusKm=30; applyFilters(); });
+  $('filterToggle')?.addEventListener('click', ()=>$('sb').classList.add('open')); $('sbClose')?.addEventListener('click', ()=>$('sb').classList.remove('open'));
+  $('bnFilter')?.addEventListener('click', ()=>$('sb').classList.add('open'));
+  $('bnSearch')?.addEventListener('click', ()=>{ $('q2').focus(); window.scrollTo({top:0,behavior:'smooth'}); });
+  $('bnMy')?.addEventListener('click', ()=>{ if(!currentUser){ openAuth(); return; } $('q').value=''; $('brand').value=''; const own=ls.filter(x=>x.user_id===currentUser.id); filtered=own; rn(); toast('Twoje ogłoszenia: '+own.length); });
+  $('myBtn')?.addEventListener('click', ()=>{ if(!currentUser){ openAuth(); return; } const own=ls.filter(x=>x.user_id===currentUser.id); filtered=own; rn(); toast('Twoje: '+own.length); });
+  $('q')?.addEventListener('input', applyFilters); $('qTop')?.addEventListener('input', ()=>{ $('q').value=$('qTop').value; $('q2').value=$('qTop').value; applyFilters(); }); $('q2')?.addEventListener('input', ()=>{ $('q').value=$('q2').value; $('qTop').value=$('q2').value; applyFilters(); });
+}
+
+async function getGPS(){
+  if(!navigator.geolocation){ toast('GPS nie wspierane'); return; }
+  $('gpsBtn').textContent='⏳ GPS...';
+  navigator.geolocation.getCurrentPosition(pos=>{
+    userPos={lat:pos.coords.latitude,lng:pos.coords.longitude};
+    $('gpsInfo').style.display='block';
+    $('gpsInfo').textContent='📍 Twoja pozycja: '+userPos.lat.toFixed(4)+', '+userPos.lng.toFixed(4)+' • promień '+radiusKm+' km';
+    $('gpsBtn').textContent='✅ GPS'; $('gpsBtn').classList.add('active');
+    $('diag').textContent='GPS ON';
+    // reverse geocode
+    fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${userPos.lat}&lon=${userPos.lng}`).then(r=>r.json()).then(j=>{ if(j.address){ const city=j.address.city||j.address.town||j.address.village||''; if(city){ $('loc').value=city; toast('Znaleziono: '+city); } } }).catch(()=>{});
+    applyFilters();
+  }, err=>{
+    toast('Błąd GPS: '+err.message); $('gpsBtn').textContent='📍 GPS';
+  }, {enableHighAccuracy:true,timeout:8000});
+}
+function setupGPS(){
+  $('gpsBtn')?.addEventListener('click', getGPS);
 }
 
 function init(){
-  populateBrands(); setupAdd(); setupAuth(); ls=DEMO; rn();
+  populateBrands(); setupAdd(); setupAuth(); setupFilters(); setupGallery(); setupGPS();
+  ls=DEMO; rn();
   const s=document.createElement('script'); s.src='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js'; s.async=true;
-  s.onload=()=>{ supa=window.supabase.createClient(U,K,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:false}}); logDebug('Supa client OK, key: '+K.substring(0,20)+'...'); loadReal(); checkSession(); supa.auth.onAuthStateChange((ev,sess)=>{ if(sess?.user){ currentUser=sess.user; updateAuthUI(); } }); };
+  s.onload=()=>{ supa=window.supabase.createClient(U,K,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:false}}); loadReal(); checkSession(); supa.auth.onAuthStateChange((ev,sess)=>{ if(sess?.user){ currentUser=sess.user; updateAuthUI(); } }); };
   document.head.appendChild(s);
 }
 init();
