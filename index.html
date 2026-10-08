@@ -160,7 +160,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#f2f3f5}
 
 <script>
 const MODELS = {"Skoda": ["Octavia", "Fabia", "Superb", "Kodiaq", "Karoq", "Kamiq", "Scala", "Rapid", "Yeti", "Citigo"], "Volkswagen": ["Golf", "Passat", "Polo", "Tiguan", "T-Roc", "T-Cross", "Touran", "Arteon", "Touareg", "Up!", "Caddy", "Sharan"], "BMW": ["Seria 1", "Seria 3", "Seria 5", "Seria 7", "X1", "X3", "X5", "X6", "X7", "320d", "520d"], "Audi": ["A1", "A3", "A4", "A5", "A6", "A7", "A8", "Q2", "Q3", "Q5", "Q7", "Q8"], "Mercedes": ["A Klasa", "C Klasa", "E Klasa", "S Klasa", "CLA", "GLA", "GLC", "GLE", "C 220d"], "Toyota": ["Corolla", "Yaris", "Avensis", "Auris", "Camry", "C-HR", "RAV4", "Prius", "Aygo"], "Opel": ["Astra", "Corsa", "Insignia", "Mokka", "Crossland", "Grandland"], "Ford": ["Focus", "Fiesta", "Mondeo", "Kuga", "Puma", "Mustang", "Transit"], "Renault": ["Clio", "Megane", "Captur", "Kadjar", "Koleos", "Scenic", "Talisman"], "Peugeot": ["208", "308", "3008", "5008", "2008", "508", "Partner"], "Citroen": ["C3", "C4", "C5", "Berlingo", "C3 Aircross"], "Fiat": ["500", "Panda", "Tipo", "Doblo", "500X"], "Hyundai": ["i10", "i20", "i30", "Tucson", "Santa Fe", "Kona", "Bayon"], "Kia": ["Picanto", "Rio", "Ceed", "Sportage", "Sorento", "Stonic", "Niro"], "Volvo": ["V40", "V60", "V90", "XC40", "XC60", "XC90", "S60", "S90"], "Mazda": ["2", "3", "6", "CX-3", "CX-5", "CX-30", "MX-5"], "Honda": ["Civic", "CR-V", "Jazz", "HR-V", "Accord"], "Dacia": ["Duster", "Sandero", "Logan", "Jogger"], "Seat": ["Ibiza", "Leon", "Ateca", "Arona", "Tarraco"], "Nissan": ["Qashqai", "Juke", "X-Trail", "Micra", "Leaf"], "Suzuki": ["Swift", "Vitara", "SX4", "Jimny"], "Tesla": ["Model 3", "Model S", "Model X", "Model Y"]};
-const U='https://bdpydgsfowtuvjnkyeeg.supabase.co', K='sb_publishable_S1qH_mBZaX7-bzmfJ0IVGA_6hxGbJWd';
+const U='https://bdpydgsfowtuvjnkyeeg.supabase.co';
+const K='sb_publishable_S1qH_mBZaX7-bzmfJ0IVGA_6hxGbJWd';
+const PUBLISHABLE_KEY=K;
+const SUPABASE_REST = U + '/rest/v1';
+const AUTH_URL = U + '/auth/v1'; // do danych tylko // ZMIEŃ NA eyJ... ANON KEY
+// const K='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9....' // <- tu wklej prawdziwy anon key
+
 let supa=null, ls=[], filtered=[], ai=[], editImgs=[], currentEditId=null, currentUser=null;
 const $=id=>document.getElementById(id);
 const DEMO=[]; // CZYSTE
@@ -338,13 +344,17 @@ async function loadReal(){
         };
       });
       filtered = [...ls];
-      console.log('Zaladowano do ls:', ls.length, 'pierwsze zdjecia:', ls[0]?.im?.length);
+      console.log('Zaladowano do ls:', ls.length, 'pierwsze zdjecia:', ls[0]?.im?.length, 'pierwszy URL:', ls[0]?.im?.[0]?.substring(0,100));
+      // jesli zdjecia nie laduja - bucket images nie jest publiczny, zrob go public w Storage
       applyFilters();
     }
   }catch(e){ console.log('loadReal error', e); }
 }
 
 async function checkSession(){
+  // try localStorage token first (publishable key flow)
+  try{ var at=localStorage.getItem('wroomer_access_token'); var em=localStorage.getItem('wroomer_user_email'); var uid=localStorage.getItem('wroomer_user_id'); if(at && em && uid){ currentUser={id:uid,email:em,access_token:at}; updateAuthUI(); console.log('Sesja z localStorage', em); return; } }catch(e){}
+  async function _origCheck(){
   if(!supa) return;
   try{
     const {data} = await supa.auth.getSession();
@@ -386,29 +396,39 @@ async function doLogin(){
   const pass=$('authPass').value;
   const msg=$('authMsg');
   if(!email||!pass){ msg.textContent='Wpisz email i hasło'; msg.style.color='red'; return; }
-  msg.textContent='Logowanie...'; msg.style.color='#666';
+  msg.textContent='Logowanie... (publishable key)'; msg.style.color='#666';
   try{
-    const {data, error}=await supa.auth.signInWithPassword({email, password: pass});
-    if(error) throw error;
-    currentUser=data.user || data.session?.user;
-    localStorage.setItem('wroomer_user_email', currentUser.email);
-    localStorage.setItem('wroomer_user_id', currentUser.id);
+    // direct fetch to auth - works with sb_publishable_ key
+    const res = await fetch(AUTH_URL + '/token?grant_type=password', {
+      method:'POST',
+      headers:{'Content-Type':'application/json','apikey':K, 'Authorization':'Bearer '+K},
+      body: JSON.stringify({email, password:pass})
+    });
+    const data = await res.json();
+    if(!res.ok) throw new Error(data.error_description || data.msg || data.message || 'Błąd logowania');
+    // data contains access_token, user
+    const user = data.user;
+    currentUser = {id:user.id, email:user.email, access_token:data.access_token, refresh_token:data.refresh_token};
+    localStorage.setItem('wroomer_user_email', user.email);
+    localStorage.setItem('wroomer_user_id', user.id);
+    localStorage.setItem('wroomer_access_token', data.access_token);
+    localStorage.setItem('wroomer_refresh_token', data.refresh_token);
+    // set supa session manually if supa exists
+    if(supa && supa.auth && data.access_token){
+      try{ await supa.auth.setSession({access_token:data.access_token, refresh_token:data.refresh_token}); }catch(e){}
+    }
     updateAuthUI();
-    msg.textContent='Zalogowano! '+currentUser.email+' - zapamietano';
+    msg.textContent='Zalogowano! '+user.email;
     msg.style.color='green';
     setTimeout(closeAuth, 800);
-    return;
   }catch(error){
     console.log(error);
-    if(error.message && error.message.includes('Email not confirmed')){
-      msg.textContent='Email nie potwierdzony - w Supabase uruchom: UPDATE auth.users SET email_confirmed_at=now() WHERE email_confirmed_at IS NULL';
-    }else if(error.message && error.message.includes('Invalid login')){
-      msg.textContent='Nieprawidłowy email lub hasło. Jeśli nie masz konta - kliknij Zarejestruj się.';
+    if((error.message||'').toLowerCase().includes('email not confirmed')){
+      msg.textContent='Email nie potwierdzony - uruchom w SQL: UPDATE auth.users SET email_confirmed_at=now()';
     }else{
       msg.textContent='Błąd: '+(error.message||error);
     }
     msg.style.color='red';
-    return;
   }
 }
 async function doRegister(){
@@ -418,41 +438,43 @@ async function doRegister(){
   if(!email||pass.length<6){ msg.textContent='Email i hasło min 6 znaków'; msg.style.color='red'; return; }
   msg.textContent='Rejestracja...'; msg.style.color='#666';
   try{
-    const {data, error}=await supa.auth.signUp({email, password: pass, options:{emailRedirectTo: window.location.href}});
-    if(error) throw error;
-    if(data.session && data.session.user){
-      currentUser=data.session.user;
-      localStorage.setItem('wroomer_user_email', currentUser.email);
-      localStorage.setItem('wroomer_user_id', currentUser.id);
-      updateAuthUI();
-      msg.textContent='Konto utworzone i zalogowano! Zapamietano. Mozesz dodawac ogloszenia.';
-      msg.style.color='green';
-      setTimeout(closeAuth, 800);
-    }else if(data.user){
-      // bez sesji - potwierdz email w SQL i zaloguj
-      msg.textContent='Konto utworzone! Loguje automatycznie...';
+    const res = await fetch(AUTH_URL + '/signup', {
+      method:'POST',
+      headers:{'Content-Type':'application/json','apikey':K, 'Authorization':'Bearer '+K},
+      body: JSON.stringify({email, password:pass})
+    });
+    const data = await res.json();
+    if(!res.ok) throw new Error(data.msg || data.message || data.error_description || 'Błąd rejestracji');
+    // auto login after signup
+    msg.textContent='Konto utworzone! Logowanie...';
+    // try login immediately
+    const loginRes = await fetch(AUTH_URL + '/token?grant_type=password', {
+      method:'POST',
+      headers:{'Content-Type':'application/json','apikey':K, 'Authorization':'Bearer '+K},
+      body: JSON.stringify({email, password:pass})
+    });
+    const loginData = await loginRes.json();
+    if(!loginRes.ok){
+      msg.textContent='Konto utworzone! Jeśli nie loguje - w SQL uruchom: UPDATE auth.users SET email_confirmed_at=now()';
       msg.style.color='#065f46';
-      // sprobuj zalogowac od razu
-      try{
-        const {data:loginData, error:loginErr}=await supa.auth.signInWithPassword({email, password: pass});
-        if(!loginErr && loginData.user){
-          currentUser=loginData.user;
-          localStorage.setItem('wroomer_user_email', currentUser.email);
-          updateAuthUI();
-          msg.textContent='Zalogowano! '+currentUser.email;
-          setTimeout(closeAuth, 800);
-        }else{
-          msg.textContent='Konto utworzone! Sprawdz SPAM lub w Supabase uruchom: UPDATE auth.users SET email_confirmed_at=now()';
-        }
-      }catch(e){
-        msg.textContent='Konto utworzone! W Supabase uruchom: UPDATE auth.users SET email_confirmed_at=now() WHERE email_confirmed_at IS NULL';
-      }
+      return;
     }
-    return;
+    const user = loginData.user;
+    currentUser = {id:user.id, email:user.email, access_token:loginData.access_token};
+    localStorage.setItem('wroomer_user_email', user.email);
+    localStorage.setItem('wroomer_user_id', user.id);
+    localStorage.setItem('wroomer_access_token', loginData.access_token);
+    if(supa && loginData.access_token){
+      try{ await supa.auth.setSession({access_token:loginData.access_token, refresh_token:loginData.refresh_token}); }catch(e){}
+    }
+    updateAuthUI();
+    msg.textContent='Konto utworzone i zalogowano! '+user.email;
+    msg.style.color='green';
+    setTimeout(closeAuth, 800);
   }catch(error){
+    console.log(error);
     msg.textContent='Błąd: '+(error.message||error);
     msg.style.color='red';
-    return;
   }
 }
 async function _oldReg_UNUSED(){
@@ -684,7 +706,7 @@ function init(){
   ls=DEMO; setTimeout(setupChipsPro, 300); rn();
   const s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js';s.async=true;
   s.onload=()=>{
-    supa=window.supabase.createClient(U,K, {auth:{persistSession:true, autoRefreshToken:true}});
+    supa=window.supabase.createClient(U, K, {auth:{persistSession:true, autoRefreshToken:true}});
     loadReal();
     checkSession();
     supa.auth.onAuthStateChange((ev, sess)=>{
