@@ -434,6 +434,11 @@ function applyFilters(){
 function rn(){
   const g=$('gd'), ld=$('ld'), empty=$('empty'), countEl=$('count');
   if(ld) ld.style.display='none';
+  // filtruj zbanowane dla zwykłych userów - admin widzi wszystko
+  const isAdminView = false; // na głównej zawsze ukrywaj zbanowane
+  if(!isAdminView){
+    filtered = filtered.filter(x=>!x._extra?.is_banned);
+  }
   if(!g) return; g.innerHTML='';
   if(countEl){
     let txt=filtered.length+' ogłoszeń';
@@ -449,7 +454,9 @@ function rn(){
     const isOwn = currentUser && item.user_id===currentUser.id;
     const distTxt = item._dist ? item._dist.toFixed(1)+' km' : '';
     const fuel=item._extra?.fuel||'', gear=item._extra?.gear||'', year=item._extra?.year||'';
-    d.innerHTML=`<div class="cw"><img src="${firstImg}" loading="lazy" onerror="this.src='https://via.placeholder.com/400x300?text=Foto'"><div class="ct">📷 ${item.im?.length||0}${distTxt?' • '+distTxt:''}</div>${isOwn?'<div class="badgeOwn">MOJE • ✏️</div>':''}</div><div class="cb"><div class="cti">${item.md}</div><div class="pr"><span>${(item.pr||0).toLocaleString()} zł</span><span style="font-size:11px;color:#64748b">${year}</span></div><div class="meta"><span>${item.lc||''}</span>${fuel?'<span>• '+fuel+'</span>':''}${gear?'<span>• '+gear+'</span>':''}${item._extra?.mileage?'<span>• '+(item._extra.mileage/1000).toFixed(0)+'k km</span>':''}</div></div>`;
+    const views=item._extra?.views||0;
+    const isBanned=item._extra?.is_banned;
+    d.innerHTML=`<div class="cw"><img src="${firstImg}" loading="lazy" onerror="this.src='https://via.placeholder.com/400x300?text=Foto'"><div class="ct">📷 ${item.im?.length||0}${distTxt?' • '+distTxt:''} • 👁️ ${views}</div>${isOwn?'<div class="badgeOwn">MOJE • ✏️</div>':''}${isBanned?'<div style="position:absolute;bottom:8px;left:8px;background:#ff3b30;color:#fff;font-size:10px;font-weight:800;padding:4px 8px;border-radius:999px">🚫 ZBANOWANE</div>':''}</div><div class="cb"><div class="cti">${item.md}</div><div class="pr"><span>${(item.pr||0).toLocaleString()} zł</span><span style="font-size:11px;color:#64748b">${year}</span></div><div class="meta"><span>${item.lc||''}</span>${fuel?'<span>• '+fuel+'</span>':''}${gear?'<span>• '+gear+'</span>':''}${item._extra?.mileage?'<span>• '+(item._extra.mileage/1000).toFixed(0)+'k km</span>':''}<span>• 👁️ ${views}</span></div></div>`;
     d.onclick=()=>openDetail(item);
     g.appendChild(d);
   });
@@ -603,6 +610,30 @@ function openDetail(item){
   renderGallery(); renderDetailInfo(item);
   $('detailModal').classList.add('o');
   document.body.style.overflow='hidden';
+  // STATS - increment views
+  try{ incrementView(item.id); }catch(e){}
+}
+
+async function incrementView(id){
+  if(!supa) return;
+  // anti-spam: nie licz 2x w ciagu 5 minut tego samego ogloszenia
+  const key='view_'+id;
+  const last=localStorage.getItem(key);
+  if(last && Date.now()-parseInt(last)<300000) return;
+  localStorage.setItem(key, Date.now().toString());
+  try{
+    // RPC function
+    const {error} = await supa.rpc('increment_views', {ogloszenie_id: id});
+    if(error){
+      // fallback direct update
+      const {data} = await supa.from('ogloszenia').select('views').eq('id', id).single();
+      const cur = data?.views||0;
+      await supa.from('ogloszenia').update({views: cur+1, last_viewed_at: new Date().toISOString()}).eq('id', id);
+    }
+    // update local
+    const it=ls.find(x=>x.id===id);
+    if(it){ it._extra.views=(it._extra.views||0)+1; if(currentDetailItem && currentDetailItem.id===id) currentDetailItem._extra.views=it._extra.views; }
+  }catch(e){ console.log('view err', e); }
 }
 function closeDetail(){ $('detailModal').classList.remove('o'); document.body.style.overflow=''; currentDetailItem=null; }
 function renderGallery(){
