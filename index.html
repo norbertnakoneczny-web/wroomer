@@ -542,52 +542,65 @@ async function handleAddSubmit(e){
   var btn=document.getElementById('sbBtn'); var orig=btn?btn.textContent:''; if(btn){ btn.textContent='Wysylam '+ai.length+' zdjec do Supabase...'; btn.disabled=true; }
   try{
     var images=[];
-    // 1. Upload wszystkich zdjec do Supabase Storage
-    if(supa && supa.storage && ai.length>0){
-      try{
-        // upewnij sie ze bucket istnieje (cicha proba)
-        var uploaded=[];
-        var uploadPromises = ai.map(async function(item, i){
-          try{
-            // jesli to juz URL z Supabase (edycja), zostaw
-            if(item.data && item.data.startsWith && item.data.startsWith('https://') && item.data.includes('supabase')){
-              return item.data;
-            }
-            var blob=item.blob;
-            if(!blob) return item.data;
-            var safeName = (mk+'-'+md+'-'+Date.now()+'-'+i).replace(/[^a-zA-Z0-9-_]/g,'_') + '.webp';
-            var path = currentUser.id + '/' + safeName;
-            var resUp=await supa.storage.from('images').upload(path, blob, {contentType:'image/webp', upsert:true, cacheControl:'3600'});
-            if(resUp.error){
-              console.log('upload err', resUp.error);
-              // fallback: jesli bucket nie istnieje, sprobuj base64 - ale zwroc blad uzytkownikowi
-              if(resUp.error.message && resUp.error.message.toLowerCase().includes('bucket')){
-                throw resUp.error;
-              }
-              return item.data; // fallback base64
-            }
-            var pub=supa.storage.from('images').getPublicUrl(path);
-            return pub.data.publicUrl;
-          }catch(err){
-            console.log('single upload fail', err);
-            return item.data;
+    // 1. Upload wszystkich zdjec do Supabase Storage - TYLKO URL, nigdy base64
+    if(!supa || !supa.storage){
+      alert('Supabase nie zaladowane - odswiez strone');
+      throw new Error('supa not ready');
+    }
+    if(ai.length>0){
+      var uploaded=[];
+      if(btn) btn.textContent='Wysylam '+ai.length+' zdjec do Storage...';
+      for(var i=0;i<ai.length;i++){
+        var item=ai[i];
+        // jesli to juz URL https (edycja), zostaw
+        if(item.data && item.data.startsWith && item.data.startsWith('https://')){
+          uploaded.push(item.data);
+          continue;
+        }
+        if(!item.blob){
+          console.log('Brak blob dla', i);
+          continue;
+        }
+        var safeName = (mk+'-'+md+'-'+Date.now()+'-'+i).replace(/[^a-zA-Z0-9-_]/g,'_') + '.webp';
+        var storagePath = currentUser.id + '/' + safeName;
+        if(btn) btn.textContent='Wysylam zdjecie '+(i+1)+'/'+ai.length+'...';
+        var resUp = await supa.storage.from('images').upload(storagePath, item.blob, {contentType:'image/webp', upsert:true, cacheControl:'3600'});
+        if(resUp.error){
+          console.log('upload err', resUp.error);
+          if(resUp.error.message && resUp.error.message.toLowerCase().includes('bucket not found')){
+            alert('BŁĄD: Bucket images nie istnieje! Uruchom w SQL: INSERT INTO storage.buckets (id, name, public) VALUES (\'images\', \'images\', true) ON CONFLICT (id) DO UPDATE SET public = true; oraz polityki. Potem sprobuj ponownie.');
+            throw resUp.error;
           }
-        });
-        uploaded = await Promise.all(uploadPromises);
-        images = uploaded.filter(Boolean);
-        console.log('Uploaded images:', images.length);
-      }catch(e){
-        console.log('storage fail overall', e);
-        alert('Uwaga: Bucket images nie istnieje! Uruchom SQL UTWORZ-TABELE.sql zeby utworzyc bucket. Zapisuje jako base64 tymczasowo.');
-        images = ai.map(function(x){return x.data;});
+          if(resUp.error.message && resUp.error.message.toLowerCase().includes('row-level security')){
+            alert('BŁĄD: Brak polityki Storage! Uruchom SQL z politykami public read images');
+            throw resUp.error;
+          }
+          throw resUp.error;
+        }
+        var pub = supa.storage.from('images').getPublicUrl(storagePath);
+        var url = pub.data.publicUrl;
+        console.log('Uploaded', url);
+        uploaded.push(url);
+      }
+      images = uploaded;
+      console.log('Wszystkie URL:', images);
+      if(images.length===0){
+        alert('Nie udało się wysłać zdjęć - bucket images?');
+        throw new Error('no images uploaded');
       }
     }else{
-      images = ai.map(function(x){return x.data;});
+      // edycja bez nowych zdjec
+      if(currentEditId && window._oldImages){
+        images = window._oldImages.filter(function(u){ return u.startsWith('https://'); });
+      }
     }
     // jesli edycja i nie dodano nowych zdjec, zachowaj stare
     if(currentEditId && images.length===0 && window._oldImages){
       images = window._oldImages;
     }
+    // blokada base64 - jesli jakis URL ma base64, wyrzuc
+    var bad = images.filter(function(u){ return u.startsWith('data:'); });
+    if(bad.length>0){ alert('BŁĄD: Zdjęcia w base64 są zablokowane - są wolne! Bucket images musi być publiczny i polityka musi istnieć. Usuń stare ogłoszenia z base64.'); throw new Error('base64 blocked'); }
     var payload={
 
       title: mk+' '+md,
