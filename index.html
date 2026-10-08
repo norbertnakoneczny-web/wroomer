@@ -276,7 +276,11 @@ function rn(){
   }
   filtered.forEach(item=>{
     const d=document.createElement('div'); d.className='cd';
-    d.innerHTML=`<img src="${(item.im&&item.im[0])||''}" loading="lazy"><div style="padding:10px"><div style="font-weight:700;font-size:13px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${item.md}</div><div style="font-weight:800;margin-top:4px">${(item.pr||0).toLocaleString()} zł</div><div style="font-size:11px;color:#6b7280;margin-top:2px">${item.lc||''} • ${(item._extra?.fuel||'')||''} ${(item._extra?.gear||'')||''}</div></div>`;
+    const firstImg = (item.im && item.im[0]) ? item.im[0] : 'https://via.placeholder.com/400x300?text=Brak+zdjecia';
+    const fuel = (item._extra?.fuel||'').toString();
+    const gear = (item._extra?.gear||'').toString();
+    const year = item._extra?.year || '';
+    d.innerHTML=`<div class="cw"><img src="${firstImg}" loading="lazy" onerror="this.src='https://via.placeholder.com/400x300?text=Foto'"><div class="ct">${item.im ? item.im.length+' zdj' : ''}</div></div><div class="cb"><div class="cti">${item.md}</div><div class="pr"><span>${(item.pr||0).toLocaleString()} zł</span><span style="font-size:10px;font-weight:600;color:#6b7280">${year}</span></div><div style="font-size:11px;color:#6b7280;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${item.lc||''} ${fuel ? '• '+fuel : ''} ${gear ? '• '+gear : ''}</div></div>`;
     d.onclick=()=>od(item);
     g.appendChild(d);
   });
@@ -312,21 +316,30 @@ async function loadReal(){
     if(!data || !data.length){
       console.log('Brak ogloszen w Supabase - pusto');
       // nie nadpisuj jesli juz sa lokalne? ale chcemy pusto
-      ls=[]; filtered=[]; rn(); return;
+      ls=[]; filtered=[]; applyFilters(); return;
     }
     if(data && data.length){
-      ls=data.map(row=>({
-        id: row.id,
-        md: row.title || row.marka || row.brand || row.md || 'Auto',
-        pr: row.price || row.cena || row.pr || 0,
-        lc: row.location || row.lokalizacja || row.lc || '',
-        ds: row.description || row.opis || row.ds || '',
-        im: (Array.isArray(row.images) ? row.images : (Array.isArray(row.zdjecia) ? row.zdjecia : (row.images ? (typeof row.images==='string' ? JSON.parse(row.images) : [row.images]) : []))) || [],
-        user_id: row.user_id || row.owner || null,
-        _extra: row,
-        created_at: row.created_at
-      }));
-      rn();
+      ls=data.map(row=>{
+        var imgs = row.images || row.zdjecia || [];
+        if(typeof imgs === 'string'){
+          try{ imgs = JSON.parse(imgs); }catch(e){ imgs = [imgs]; }
+        }
+        if(!Array.isArray(imgs)) imgs = imgs ? [imgs] : [];
+        return {
+          id: row.id,
+          md: row.title || row.marka || row.brand || row.md || 'Auto',
+          pr: row.price || row.cena || row.pr || 0,
+          lc: row.location || row.lokalizacja || row.lc || '',
+          ds: row.description || row.opis || row.ds || '',
+          im: imgs,
+          user_id: row.user_id || row.owner || null,
+          _extra: row,
+          created_at: row.created_at
+        };
+      });
+      filtered = [...ls];
+      console.log('Zaladowano do ls:', ls.length, 'pierwsze zdjecia:', ls[0]?.im?.length);
+      applyFilters();
     }
   }catch(e){ console.log('loadReal error', e); }
 }
@@ -655,7 +668,13 @@ function renderPv(){
 function removeAi(i){ ai.splice(i,1); renderPv(); }
 
 function od(item){
-  alert((item.md||'Auto')+'\n'+(item.pr||0)+' zl\n'+(item.lc||'')+'\n'+(item.ds||'').slice(0,200));
+  // prosty modal z galeria
+  var gallery = '';
+  if(item.im && item.im.length){
+    gallery = item.im.map((src,i)=>`<div style="display:inline-block;margin:2px"><img src="${src}" style="width:80px;height:60px;object-fit:cover;border-radius:6px;cursor:pointer" onclick="window.open('${src}','_blank')"></div>`).join('');
+  }
+  var html = `<div style="position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;padding:12px" onclick="if(event.target===this)this.remove()"><div style="background:#fff;border-radius:12px;max-width:600px;width:100%;max-height:90vh;overflow:auto"><div style="padding:12px"><div style="font-weight:800;font-size:18px">${item.md}</div><div style="font-weight:800;font-size:20px;margin-top:4px;color:#002f34">${(item.pr||0).toLocaleString()} zł</div><div style="font-size:13px;color:#666;margin-top:4px">${item.lc||''} • ${item._extra?.year||''} • ${item._extra?.mileage||''} km • ${item._extra?.fuel||''} • ${item._extra?.gear||''}</div><div style="font-size:13px;margin-top:10px;white-space:pre-wrap">${item.ds||''}</div><div style="margin-top:10px">Tel: <a href="tel:${item._extra?.phone||''}">${item._extra?.phone||''}</a></div><div style="margin-top:12px">${gallery}</div><button onclick="this.closest('div[style*=fixed]').remove()" style="margin-top:12px;width:100%;height:44px;background:#002f34;color:#fff;border:none;border-radius:8px;font-weight:700">Zamknij</button></div></div></div></div>`;
+  var div=document.createElement('div'); div.innerHTML=html; document.body.appendChild(div.firstChild);
 }
 
 function init(){ 
