@@ -28,10 +28,11 @@ input{height:40px;border:1.5px solid #d8dfe0;border-radius:8px;padding:0 10px}
 <script>
 const U='https://bdpydgsfowtuvjnkyeeg.supabase.co';
 const K='sb_publishable_S1qH_mBZaX7-bzmfJ0IVGA_6hxGbJWd';
-const AUTH_URL = U + '/auth/v1';; const SUPABASE_REST = U + '/rest/v1';, K='sb_publishable_S1qH_mBZaX7-bzmfJ0IVGA_6hxGbJWd';
+const AUTH_URL = U + '/auth/v1'; const SUPABASE_REST = U + '/rest/v1';
 let supa=null, currentUser=null, all=[];
 async function init(){
   supa=window.supabase.createClient(U,K,{auth:{persistSession:true,autoRefreshToken:true}});
+  try{ var at=localStorage.getItem('wroomer_access_token'); var em=localStorage.getItem('wroomer_user_email'); if(at && em){ currentUser={id:localStorage.getItem('wroomer_user_id'), email:em}; showPanel(); return; } }catch(e){}
   const {data}=await supa.auth.getSession();
   if(data.session){ currentUser=data.session.user; showPanel(); }
   supa.auth.onAuthStateChange((e,s)=>{ if(s?.user){ currentUser=s.user; showPanel(); } else { currentUser=null; showLogin(); } });
@@ -43,7 +44,7 @@ async function init(){
     const res = await fetch(AUTH_URL + '/token?grant_type=password', {method:'POST', headers:{'Content-Type':'application/json','apikey':K,'Authorization':'Bearer '+K}, body: JSON.stringify({email, password:pass})}); const data = await res.json(); const error = res.ok ? null : {message:data.error_description||data.msg};
     if(error){ msg.textContent='Błąd: '+error.message; msg.style.color='red'; } else { msg.textContent='OK'; }
   };
-  document.getElementById('logout').onclick=async()=>{ await supa.auth.signOut(); location.reload(); };
+  document.getElementById('logout').onclick=async()=>{ try{ await supa.auth.signOut(); }catch(e){} localStorage.removeItem('wroomer_access_token'); localStorage.removeItem('wroomer_refresh_token'); location.reload(); };
   document.getElementById('refresh').onclick=load;
   document.getElementById('clearAll').onclick=async()=>{
     if(!confirm('Na pewno USUNĄĆ WSZYSTKIE 2 ogłoszenia? Tego nie cofniesz!')) return;

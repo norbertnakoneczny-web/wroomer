@@ -354,7 +354,6 @@ async function loadReal(){
 async function checkSession(){
   // try localStorage token first (publishable key flow)
   try{ var at=localStorage.getItem('wroomer_access_token'); var em=localStorage.getItem('wroomer_user_email'); var uid=localStorage.getItem('wroomer_user_id'); if(at && em && uid){ currentUser={id:uid,email:em,access_token:at}; updateAuthUI(); console.log('Sesja z localStorage', em); return; } }catch(e){}
-  async function _origCheck(){
   if(!supa) return;
   try{
     const {data} = await supa.auth.getSession();
@@ -365,7 +364,6 @@ async function checkSession(){
       updateAuthUI();
       console.log('Sesja przywrocona:', currentUser.email);
     }else{
-      // sprobuj localStorage
       var savedEmail=localStorage.getItem('wroomer_user_email');
       if(savedEmail){
         var ue=document.getElementById('userEmail');
@@ -502,9 +500,10 @@ async function _oldReg_UNUSED(){
 }
 
 function setupAuth(){
-  $('authBtn')?.addEventListener('click', ()=>{
+  $('authBtn')?.addEventListener('click', async ()=>{
     if(currentUser){
-      supa.auth.signOut().then(()=>{ currentUser=null; updateAuthUI(); });
+      try{ if(supa && supa.auth) await supa.auth.signOut(); }catch(e){}
+      localStorage.removeItem('wroomer_access_token'); localStorage.removeItem('wroomer_refresh_token'); currentUser=null; updateAuthUI(); location.reload();
     }else openAuth();
   });
   $('authClose')?.addEventListener('click', closeAuth);
@@ -719,7 +718,7 @@ function init(){
   ls=DEMO; setTimeout(setupChipsPro, 300); rn();
   const s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js';s.async=true;
   s.onload=()=>{
-    supa=window.supabase.createClient(U, K, {auth:{persistSession:true, autoRefreshToken:true}});
+    supa=window.supabase.createClient(U, K, {auth:{persistSession:true, autoRefreshToken:true, detectSessionInUrl:false}}); console.log('Supa client created with K', K.substring(0,20)+'...');
     loadReal();
     checkSession();
     supa.auth.onAuthStateChange((ev, sess)=>{
