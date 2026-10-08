@@ -69,19 +69,45 @@ a{color:inherit}
 .mh{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;gap:8px}
 .cl{width:40px;height:40px;border-radius:50%;background:#f2f3f5;display:grid;place-items:center;border:none;cursor:pointer;font-size:18px}
 
-/* Detail gallery */
+/* OLX STYLE DETAIL */
+.detailLayout{display:flex;flex-direction:column;height:100%;overflow:hidden}
+@media(min-width:900px){.detailLayout{flex-direction:row}}
+.galWrap{flex:1;display:flex;flex-direction:column;min-height:0;background:#000;position:relative;overflow:hidden}
+@media(min-width:900px){.galWrap{flex:1.2}}
 .gal{flex:1;display:flex;flex-direction:column;min-height:0;background:#000;position:relative}
-.galMain{flex:1;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden;touch-action:none}
-.galMain img{max-width:100%;max-height:100%;object-fit:contain;user-select:none;transition:transform .2s}
+.galMain{flex:1;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden;touch-action:none;background:#000}
+.galMain img{max-width:100%;max-height:100%;object-fit:contain;user-select:none;transition:transform .2s;cursor:zoom-in}
 .galNav{position:absolute;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.15);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.25);color:#fff;display:grid;place-items:center;cursor:pointer;z-index:3;font-size:20px}
 .galNav.prev{left:12px} .galNav.next{right:12px}
 .galNav:active{transform:translateY(-50%) scale(.94)}
-.galCounter{position:absolute;top:12px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.6);color:#fff;padding:6px 12px;border-radius:999px;font-size:12px;font-weight:700;z-index:3}
-.galThumbs{display:flex;gap:6px;padding:8px 10px;background:#0a0a0a;border-top:1px solid #222;overflow:auto;scrollbar-width:none}
+.galNav:hover{background:rgba(255,255,255,.28)}
+.galCounter{position:absolute;top:12px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.7);color:#fff;padding:6px 14px;border-radius:999px;font-size:12px;font-weight:700;z-index:3;backdrop-filter:blur(8px)}
+.galCounterFull{position:absolute;bottom:12px;left:12px;background:rgba(0,0,0,.6);color:#fff;padding:5px 10px;border-radius:8px;font-size:11px;z-index:3}
+.galThumbs{display:flex;gap:8px;padding:10px 12px;background:#0a0a0a;border-top:1px solid #222;overflow:auto;scrollbar-width:none}
 .galThumbs::-webkit-scrollbar{display:none}
-.gTh{width:64px;height:64px;border-radius:10px;overflow:hidden;flex-shrink:0;border:2px solid transparent;opacity:.6;cursor:pointer;position:relative}
-.gTh.on{border-color:#fff;opacity:1}
+.gTh{width:72px;height:72px;border-radius:12px;overflow:hidden;flex-shrink:0;border:2.5px solid transparent;opacity:.55;cursor:pointer;position:relative;transition:all .18s}
+.gTh.on{border-color:#fff;opacity:1;transform:scale(1.05)}
 .gTh img{width:100%;height:100%;object-fit:cover}
+.gTh:hover{opacity:.9}
+.galDots{display:none;gap:6px;justify-content:center;padding:10px}
+@media(max-width:900px){.galDots{display:flex} .galThumbs{display:none}}
+.dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.3);transition:all .2s}
+.dot.on{background:#fff;width:22px}
+.detailInfoPanel{width:100%;background:#fff;overflow:auto;flex:1}
+@media(min-width:900px){.detailInfoPanel{width:420px;flex-shrink:0;border-left:1px solid #e5e7eb}}
+.olxSection{padding:16px 18px;border-bottom:1px solid #f1f5f9}
+.olxSection:last-child{border-bottom:none}
+.olxLabel{font-size:11px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:#64748b;margin-bottom:10px}
+.olxGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.olxParam{background:#f8fafc;border:1px solid #f1f5f9;padding:12px;border-radius:14px}
+.olxParam b{font-size:11px;color:#64748b;font-weight:600;text-transform:uppercase;display:block;margin-bottom:2px}
+.olxParam span{font-weight:750;font-size:14px;color:#0f172a}
+.olxParamFull{grid-column:span 2}
+.olxPriceBox{background:#002f34;color:#fff;padding:16px;border-radius:16px;display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.olxPriceBox .price{font-size:26px;font-weight:900;letter-spacing:-.5px}
+.olxContactBox{background:#f8fafc;border:1px solid #e2e8f0;border-radius:16px;padding:14px;display:flex;gap:12px;align-items:center}
+.olxAvatar{width:48px;height:48px;background:#e2e8f0;border-radius:50%;display:grid;place-items:center;font-weight:800}
+
 
 /* Bottom nav mobile */
 .bottomNav{position:fixed;bottom:0;left:0;right:0;z-index:35;background:#fff;border-top:1px solid var(--border);display:flex;padding:6px 4px calc(6px + env(safe-area-inset-bottom));gap:4px}
@@ -231,19 +257,25 @@ a{color:inherit}
 <div id="authMsg" style="font-size:12px;text-align:center;min-height:20px"></div>
 </div></div></div></div>
 
-<!-- DETAIL + PRO GALLERY -->
-<div id="detailModal" class="md"><div class="mbg" id="detailBg"></div><div class="mb"><div class="mc" id="detailMc">
+<!-- DETAIL OLX STYLE -->
+<div id="detailModal" class="md"><div class="mbg" id="detailBg"></div><div class="mb"><div class="mc" id="detailMc" style="max-width:1200px;height:96vh">
 <div class="mh"><div style="font-weight:800;display:flex;align-items:center;gap:8px"><button id="detailBack" class="cl" style="width:36px;height:36px">‹</button><span id="detailTitle">Szczegóły</span></div><div style="display:flex;gap:8px"><button id="editBtn" class="b" style="display:none;background:#fff;border:1.5px solid #002f34;color:#002f34">✏️ Edytuj</button><button id="detailClose" class="cl">✕</button></div></div>
+<div class="detailLayout">
+<div class="galWrap">
 <div class="gal" id="gal">
 <div class="galMain" id="galMain">
 <img id="galImg" src="" alt="">
 <button class="galNav prev" id="galPrev">‹</button>
 <button class="galNav next" id="galNext">›</button>
 <div class="galCounter" id="galCounter">1 / 1</div>
+<div class="galCounterFull" id="galCounterFull">Kliknij by powiększyć</div>
 </div>
 <div class="galThumbs" id="galThumbs"></div>
+<div class="galDots" id="galDots"></div>
 </div>
-<div id="detailInfo" style="padding:16px;overflow:auto;background:#fff"></div>
+</div>
+<div id="detailInfo" class="detailInfoPanel"></div>
+</div>
 </div></div></div>
 
 <script>
@@ -575,7 +607,7 @@ function openDetail(item){
 function closeDetail(){ $('detailModal').classList.remove('o'); document.body.style.overflow=''; currentDetailItem=null; }
 function renderGallery(){
   if(!galImgs.length) return;
-  const img=$('galImg'); img.src=galImgs[galIdx]; img.style.transform='scale(1)';
+  const img=$('galImg'); img.src=galImgs[galIdx]; img.style.transform='scale(1)'; scale=1;
   $('galCounter').textContent=(galIdx+1)+' / '+galImgs.length;
   const thumbs=$('galThumbs'); thumbs.innerHTML='';
   galImgs.forEach((src,i)=>{
@@ -584,7 +616,7 @@ function renderGallery(){
     d.onclick=()=>{ galIdx=i; renderGallery(); };
     thumbs.appendChild(d);
   });
-  // scroll thumb into view
+  const dots=$('galDots'); if(dots){ dots.innerHTML=''; galImgs.forEach((_,i)=>{ const dot=document.createElement('div'); dot.className='dot'+(i===galIdx?' on':''); dot.onclick=()=>{ galIdx=i; renderGallery(); }; dots.appendChild(dot); }); }
   setTimeout(()=>{ const on=thumbs.querySelector('.on'); if(on) on.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'}); },100);
 }
 function nextGal(){ galIdx=(galIdx+1)%galImgs.length; renderGallery(); }
@@ -593,27 +625,71 @@ function prevGal(){ galIdx=(galIdx-1+galImgs.length)%galImgs.length; renderGalle
 function renderDetailInfo(item){
   const ex=item._extra||{};
   const isOwn=currentUser && item.user_id===currentUser.id;
+  const fmt = (v,d='-') => (v!==undefined && v!==null && String(v).trim()!=='' ? v : d);
+  const marka = fmt(ex.marka||ex.brand||item.md.split(' ')[0]);
+  const model = fmt(ex.model||item.md.split(' ').slice(1).join(' '));
+  const rok = fmt(ex.year||ex.rok);
+  const przebieg = ex.mileage||ex.przebieg ? (parseInt(ex.mileage||ex.przebieg).toLocaleString()+' km') : '-';
+  const paliwo = fmt(ex.fuel||ex.paliwo);
+  const skrzynia = fmt(ex.gear||ex.skrzynia);
+  const moc = ex.power||ex.moc ? fmt((ex.power||ex.moc)+' KM') : '-';
+  const pojemnosc = ex.capacity||ex.pojemnosc ? fmt((ex.capacity||ex.pojemnosc)+' cm³') : '-';
+  const nadwozie = fmt(ex.body||ex.nadwozie);
+  const kolor = fmt(ex.color||ex.kolor);
+  const stan = fmt(ex.state||ex.cond||ex.stan||'Używany');
+  const phone = fmt(ex.phone||ex.telefon);
+  const loc = fmt(item.lc||ex.location||ex.lokalizacja);
+  const desc = item.ds||ex.description||ex.opis||'';
+  const lat = ex.latitude, lng = ex.longitude;
+  const created = new Date(item.created_at).toLocaleString('pl-PL');
+
   $('detailInfo').innerHTML=`
-  <div style="display:flex;justify-content:space-between;align-items:start;gap:12px">
-    <div><div style="font-weight:800;font-size:22px">${item.md}</div><div style="font-size:13px;color:#64748b;margin-top:4px">${item.lc||''} ${item._dist? '• '+item._dist.toFixed(1)+' km od Ciebie':''} • ${ex.year||''} • ${(ex.mileage||0).toLocaleString()} km</div></div>
-    <div style="font-weight:900;font-size:22px;color:#002f34">${(item.pr||0).toLocaleString()} zł</div>
+  <div class="olxSection">
+    <div class="olxPriceBox"><div><div style="font-size:11px;opacity:.7;letter-spacing:.5px">CENA</div><div class="price">${(item.pr||0).toLocaleString()} zł</div></div><div style="text-align:right"><div style="font-size:11px;opacity:.7">${rok!=='-'?rok:''} • ${przebieg}</div><div style="font-size:12px;margin-top:2px">📍 ${loc}</div></div></div>
+    <div style="font-weight:900;font-size:20px;line-height:1.2;margin-bottom:4px">${item.md}</div>
+    <div style="font-size:13px;color:#64748b">${loc} ${item._dist? '• '+item._dist.toFixed(1)+' km od Ciebie':''} • Dodano ${created} • ID ${item.id.slice(0,8)}</div>
   </div>
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px">
-    <div style="background:#f8fafc;padding:10px;border-radius:12px"><div style="font-size:11px;color:#64748b">Paliwo</div><div style="font-weight:700">${ex.fuel||'-'}</div></div>
-    <div style="background:#f8fafc;padding:10px;border-radius:12px"><div style="font-size:11px;color:#64748b">Skrzynia</div><div style="font-weight:700">${ex.gear||'-'}</div></div>
-    <div style="background:#f8fafc;padding:10px;border-radius:12px"><div style="font-size:11px;color:#64748b">Moc</div><div style="font-weight:700">${ex.power||'-'} KM</div></div>
-    <div style="background:#f8fafc;padding:10px;border-radius:12px"><div style="font-size:11px;color:#64748b">Pojemność</div><div style="font-weight:700">${ex.capacity||'-'} cm³</div></div>
-    <div style="background:#f8fafc;padding:10px;border-radius:12px"><div style="font-size:11px;color:#64748b">Nadwozie</div><div style="font-weight:700">${ex.body||'-'}</div></div>
-    <div style="background:#f8fafc;padding:10px;border-radius:12px"><div style="font-size:11px;color:#64748b">Kolor</div><div style="font-weight:700">${ex.color||'-'}</div></div>
+
+  <div class="olxSection">
+    <div class="olxLabel">Szczegóły pojazdu - z formularza</div>
+    <div class="olxGrid">
+      <div class="olxParam"><b>Marka</b><span>${marka}</span></div>
+      <div class="olxParam"><b>Model</b><span>${model}</span></div>
+      <div class="olxParam"><b>Rocznik</b><span>${rok}</span></div>
+      <div class="olxParam"><b>Przebieg</b><span>${przebieg}</span></div>
+      <div class="olxParam"><b>Paliwo</b><span>${paliwo}</span></div>
+      <div class="olxParam"><b>Skrzynia</b><span>${skrzynia}</span></div>
+      <div class="olxParam"><b>Moc</b><span>${moc}</span></div>
+      <div class="olxParam"><b>Pojemność</b><span>${pojemnosc}</span></div>
+      <div class="olxParam"><b>Nadwozie</b><span>${nadwozie}</span></div>
+      <div class="olxParam"><b>Kolor</b><span>${kolor}</span></div>
+      <div class="olxParam"><b>Stan</b><span>${stan}</span></div>
+      <div class="olxParam"><b>Lokalizacja</b><span>${loc}</span></div>
+      ${lat&&lng ? `<div class="olxParam olxParamFull"><b>GPS</b><span>${parseFloat(lat).toFixed(4)}, ${parseFloat(lng).toFixed(4)} • <a href="https://www.google.com/maps?q=${lat},${lng}" target="_blank" style="color:#002f34;text-decoration:underline">Otwórz mapy</a></span></div>` : ''}
+    </div>
   </div>
-  <div style="margin-top:16px"><div style="font-weight:700;margin-bottom:6px">Opis</div><div style="font-size:14px;line-height:1.5;white-space:pre-wrap;color:#334155">${item.ds||'Brak opisu'}</div></div>
-  <div style="margin-top:16px;display:flex;gap:8px">
-    <a href="tel:${ex.phone||ex.telefon||''}" style="flex:1" class="btn-show" style="display:flex;align-items:center;justify-content:center;text-decoration:none">📞 Zadzwoń: ${ex.phone||ex.telefon||''}</a>
-    ${isOwn?'<button id="delOwn" class="b" style="background:#fee2e2;color:#991b1b;border:1px solid #fecaca">🗑️ Usuń</button>':''}
+
+  <div class="olxSection">
+    <div class="olxLabel">Opis</div>
+    <div style="font-size:14px;line-height:1.6;white-space:pre-wrap;color:#1e293b;background:#f8fafc;border:1px solid #f1f5f9;padding:14px;border-radius:14px;min-height:60px">${desc ? desc : '<span style=color:#94a3b8>Brak opisu - sprzedający nie dodał opisu</span>'}</div>
   </div>
-  <div style="margin-top:12px;font-size:11px;color:#94a3b8">ID: ${item.id.slice(0,8)} • Dodano: ${new Date(item.created_at).toLocaleString('pl-PL')} ${item._dist? '• Odległość: '+item._dist.toFixed(1)+' km':''}</div>
+
+  <div class="olxSection">
+    <div class="olxLabel">Kontakt</div>
+    <div class="olxContactBox">
+      <div class="olxAvatar">${(ex.marka||'U')[0].toUpperCase()}</div>
+      <div style="flex:1"><div style="font-weight:800">${marka} ${model}</div><div style="font-size:12px;color:#64748b">📍 ${loc} • ${rok}</div></div>
+    </div>
+    <a href="tel:${phone}" style="display:flex;align-items:center;justify-content:center;gap:8px;width:100%;height:52px;background:#002f34;color:#fff;border-radius:14px;font-weight:800;font-size:15px;text-decoration:none;margin-top:12px">📞 Zadzwoń: ${phone}</a>
+    <div style="display:flex;gap:8px;margin-top:10px">
+      <button id="shareBtn" class="btn-ghost" style="flex:1;height:44px">🔗 Udostępnij</button>
+      ${isOwn?'<button id="delOwn" class="b" style="flex:1;height:44px;background:#fee2e2;color:#991b1b;border:1px solid #fecaca">🗑️ Usuń</button>':''}
+    </div>
+    <div style="margin-top:12px;font-size:11px;color:#94a3b8;text-align:center">ID: ${item.id.slice(0,8)} • Dodano: ${created} ${item._dist? '• '+item._dist.toFixed(1)+' km od Ciebie':''}</div>
+  </div>
   `;
   const delBtn=document.getElementById('delOwn'); if(delBtn){ delBtn.onclick=async()=>{ if(!confirm('Usunąć ogłoszenie?')) return; const {error}=await supa.from('ogloszenia').delete().eq('id',item.id); if(error) toast(error.message); else { toast('Usunięto'); closeDetail(); loadReal(); } }; }
+  const shareBtn=document.getElementById('shareBtn'); if(shareBtn){ shareBtn.onclick=()=>{ const url=location.origin+'#'+item.id; if(navigator.share){ navigator.share({title:item.md, text:item.md+' - '+item.pr+' zł', url}); } else { navigator.clipboard.writeText(url); toast('Link skopiowany!'); } }; }
 }
 
 function setupGallery(){

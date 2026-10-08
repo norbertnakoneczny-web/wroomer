@@ -12,8 +12,8 @@
 <div class="h"><div style="font-weight:800">WROOMER.PL - ADMIN + DIAGNOSTYKA PROFESJONALNA</div><div><span id="u" style="font-size:12px;color:#23e5db"></span> <button id="logout" class="btn" style="background:rgba(255,255,255,.15);color:#fff">Wyloguj</button> <a href="/" style="color:#23e5db;text-decoration:none;margin-left:8px">← Strona</a></div></div>
 
 <div id="loginBox" style="background:#111;border:1px solid #333;border-radius:10px;padding:16px;margin-top:12px;max-width:400px">
-<h3 style="color:#fff;font-family:sans-serif">Logowanie admin</h3>
-<input id="em" type="email" placeholder="Email" style="width:100%;margin:8px 0;height:40px;background:#222;color:#fff;border:1px solid #444;border-radius:8px;padding:0 10px">
+<h3 style="color:#fff;font-family:sans-serif">Logowanie admin</h3><div style="font-size:11px;color:#aaa;margin-top:4px">Admin: norbert.nakoneczny@gmail.com<br>Jeśli nie masz konta - zarejestruj się tym emailem na stronie głównej</div>
+<input id="em" type="email" placeholder="Email" value="norbert.nakoneczny@gmail.com" style="width:100%;margin:8px 0;height:40px;background:#222;color:#fff;border:1px solid #444;border-radius:8px;padding:0 10px">
 <input id="pw" type="password" placeholder="Hasło" style="width:100%;margin-bottom:8px;height:40px;background:#222;color:#fff;border:1px solid #444;border-radius:8px;padding:0 10px">
 <button id="lb" class="btn bb" style="width:100%">Zaloguj</button><div id="msg" style="font-size:12px;margin-top:8px;color:#ff0"></div>
 </div>
@@ -65,7 +65,21 @@ async function init(){
 }
 
 function showLogin(){ document.getElementById('loginBox').style.display='block'; document.getElementById('panel').style.display='none'; }
-function showPanel(){ document.getElementById('loginBox').style.display='none'; document.getElementById('panel').style.display='block'; document.getElementById('u').textContent=currentUser.email; load(); }
+function showPanel(){
+  const allowedAdmins=['norbert.nakoneczny@gmail.com','admin@wroomer.pl'];
+  if(!allowedAdmins.includes(currentUser.email.toLowerCase())){
+    document.getElementById('loginBox').style.display='none';
+    document.getElementById('panel').style.display='block';
+    document.getElementById('u').textContent=currentUser.email+' (USER - tylko podgląd)';
+    document.getElementById('diagLog').textContent='ZALOGOWANY JAKO: '+currentUser.email+'\n\nDOSTĘP ADMIN TYLKO DLA: norbert.nakoneczny@gmail.com\n\nMożesz przeglądać ogłoszenia, ale usuwanie wszystkich jest zablokowane dla zwykłych userów.\n\nJeśli to Ty - zaloguj się jako norbert.nakoneczny@gmail.com';
+    load();
+    return;
+  }
+  document.getElementById('loginBox').style.display='none';
+  document.getElementById('panel').style.display='block';
+  document.getElementById('u').textContent=currentUser.email+' (ADMIN)';
+  load();
+}
 
 async function diagnose(){
   const logEl=document.getElementById('diagLog'); logEl.textContent='=== DIAGNOZA START ===\n';
