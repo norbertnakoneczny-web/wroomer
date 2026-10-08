@@ -1,93 +1,130 @@
 <!DOCTYPE html>
 <html lang="pl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>WROOMER - Admin</title>
-<style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#f2f3f5;padding:12px}
-.h{background:#002f34;color:#fff;padding:12px 16px;border-radius:10px;display:flex;justify-content:space-between;align-items:center}
-.card{background:#fff;border-radius:10px;padding:12px;margin:8px 0;display:flex;gap:12px;align-items:center;box-shadow:0 1px 3px rgba(0,0,0,.08)}
-.card img{width:120px;height:90px;object-fit:cover;border-radius:8px;background:#eee}
-.btn{height:36px;padding:0 14px;border-radius:8px;border:none;font-weight:700;cursor:pointer}
+<title>WROOMER - Admin Diagnostyka</title>
+<style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:monospace;background:#0a0a0a;color:#0f0;padding:12px}
+.h{background:#002f34;color:#fff;padding:12px 16px;border-radius:10px;display:flex;justify-content:space-between;align-items:center;font-family:sans-serif}
+.card{background:#111;border:1px solid #333;border-radius:10px;padding:12px;margin:8px 0;display:flex;gap:12px;align-items:center}
+.card img{width:120px;height:90px;object-fit:cover;border-radius:8px;background:#222}
+.btn{height:36px;padding:0 14px;border-radius:8px;border:none;font-weight:700;cursor:pointer;font-family:sans-serif}
 .bd{background:#ff3b30;color:#fff}.bb{background:#002f34;color:#fff}
-input{height:40px;border:1.5px solid #d8dfe0;border-radius:8px;padding:0 10px}
+.log{background:#000;border:1px solid #0f0;padding:10px;border-radius:8px;white-space:pre-wrap;font-size:11px;margin-top:10px;max-height:400px;overflow:auto}
 </style></head><body>
-<div class="h"><div style="font-weight:800">WROOMER.PL - ADMIN - Gorzyce</div><div><span id="u" style="font-size:12px;color:#23e5db"></span> <button id="logout" class="btn" style="background:rgba(255,255,255,.15);color:#fff">Wyloguj</button> <a href="/" style="color:#23e5db;text-decoration:none;margin-left:8px">← Strona</a></div></div>
-<div id="loginBox" style="background:#fff;border-radius:10px;padding:16px;margin-top:12px;max-width:400px">
-<h3>Logowanie admin</h3><p style="font-size:12px;color:#666;margin:8px 0">Zaloguj się tym samym kontem co na stronie</p>
-<input id="em" type="email" placeholder="Email" style="width:100%;margin-bottom:8px">
-<input id="pw" type="password" placeholder="Hasło" style="width:100%;margin-bottom:8px">
-<button id="lb" class="btn bb" style="width:100%">Zaloguj</button><div id="msg" style="font-size:12px;margin-top:8px"></div>
+<div class="h"><div style="font-weight:800">WROOMER.PL - ADMIN + DIAGNOSTYKA PROFESJONALNA</div><div><span id="u" style="font-size:12px;color:#23e5db"></span> <button id="logout" class="btn" style="background:rgba(255,255,255,.15);color:#fff">Wyloguj</button> <a href="/" style="color:#23e5db;text-decoration:none;margin-left:8px">← Strona</a></div></div>
+
+<div id="loginBox" style="background:#111;border:1px solid #333;border-radius:10px;padding:16px;margin-top:12px;max-width:400px">
+<h3 style="color:#fff;font-family:sans-serif">Logowanie admin</h3>
+<input id="em" type="email" placeholder="Email" style="width:100%;margin:8px 0;height:40px;background:#222;color:#fff;border:1px solid #444;border-radius:8px;padding:0 10px">
+<input id="pw" type="password" placeholder="Hasło" style="width:100%;margin-bottom:8px;height:40px;background:#222;color:#fff;border:1px solid #444;border-radius:8px;padding:0 10px">
+<button id="lb" class="btn bb" style="width:100%">Zaloguj</button><div id="msg" style="font-size:12px;margin-top:8px;color:#ff0"></div>
 </div>
+
 <div id="panel" style="display:none;margin-top:12px">
-<div style="background:#fff;border-radius:10px;padding:12px;display:flex;gap:8px;align-items:center">
-<input id="search" placeholder="Szukaj..." style="flex:1"><span id="cnt" style="font-size:12px;color:#666"></span>
+<div style="background:#111;border:1px solid #333;border-radius:10px;padding:12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+<input id="search" placeholder="Szukaj..." style="flex:1;min-width:150px;height:36px;background:#222;color:#fff;border:1px solid #444;border-radius:8px;padding:0 10px"><span id="cnt" style="font-size:12px;color:#666"></span>
 <button id="refresh" class="btn bb">Odśwież</button>
-<button id="clearAll" class="btn bd">Usuń WSZYSTKIE (2)</button>
+<button id="diagBtn" class="btn" style="background:#ff0;color:#000">🔍 DIAGNOZA</button>
+<button id="clearAll" class="btn bd">Usuń WSZYSTKIE</button>
 </div>
+<div id="diagLog" class="log">Kliknij DIAGNOZA aby sprawdzić wszystkie połączenia...</div>
 <div id="list"></div>
 </div>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script>
 const U='https://bdpydgsfowtuvjnkyeeg.supabase.co';
 const K='sb_publishable_S1qH_mBZaX7-bzmfJ0IVGA_6hxGbJWd';
-const AUTH_URL = U + '/auth/v1'; const SUPABASE_REST = U + '/rest/v1';
+const AUTH_URL=U+'/auth/v1', REST=U+'/rest/v1';
 let supa=null, currentUser=null, all=[];
+
+function log(m){ const el=document.getElementById('diagLog'); el.textContent+=m+'\n'; console.log(m); }
+
 async function init(){
   supa=window.supabase.createClient(U,K,{auth:{persistSession:true,autoRefreshToken:true}});
-  try{ var at=localStorage.getItem('wroomer_access_token'); var em=localStorage.getItem('wroomer_user_email'); if(at && em){ currentUser={id:localStorage.getItem('wroomer_user_id'), email:em}; showPanel(); return; } }catch(e){}
+  try{ const at=localStorage.getItem('wroomer_access_token'), em=localStorage.getItem('wroomer_user_email'); if(at && em){ currentUser={id:localStorage.getItem('wroomer_user_id'), email:em}; showPanel(); return; } }catch(e){}
   const {data}=await supa.auth.getSession();
   if(data.session){ currentUser=data.session.user; showPanel(); }
-  supa.auth.onAuthStateChange((e,s)=>{ if(s?.user){ currentUser=s.user; showPanel(); } else { currentUser=null; showLogin(); } });
   document.getElementById('lb').onclick=async()=>{
-    const email=document.getElementById('em').value.trim().toLowerCase();
-    const pass=document.getElementById('pw').value;
-    const msg=document.getElementById('msg');
+    const email=document.getElementById('em').value.trim().toLowerCase(), pass=document.getElementById('pw').value, msg=document.getElementById('msg');
     msg.textContent='Logowanie...';
-    const res = await fetch(AUTH_URL + '/token?grant_type=password', {method:'POST', headers:{'Content-Type':'application/json','apikey':K,'Authorization':'Bearer '+K}, body: JSON.stringify({email, password:pass})}); const data = await res.json(); const error = res.ok ? null : {message:data.error_description||data.msg};
-    if(error){ msg.textContent='Błąd: '+error.message; msg.style.color='red'; } else { msg.textContent='OK'; }
+    const res=await fetch(AUTH_URL+'/token?grant_type=password',{method:'POST',headers:{'Content-Type':'application/json','apikey':K,'Authorization':'Bearer '+K},body:JSON.stringify({email,password:pass})});
+    const d=await res.json();
+    if(!res.ok){ msg.textContent='Błąd: '+(d.error_description||d.msg); msg.style.color='red'; log('LOGIN ERROR: '+JSON.stringify(d)); return; }
+    localStorage.setItem('wroomer_access_token',d.access_token); localStorage.setItem('wroomer_user_email',d.user.email); localStorage.setItem('wroomer_user_id',d.user.id);
+    try{ await supa.auth.setSession({access_token:d.access_token,refresh_token:d.refresh_token}); }catch(e){}
+    currentUser={id:d.user.id,email:d.user.email}; showPanel(); msg.textContent='OK';
   };
-  document.getElementById('logout').onclick=async()=>{ try{ await supa.auth.signOut(); }catch(e){} localStorage.removeItem('wroomer_access_token'); localStorage.removeItem('wroomer_refresh_token'); location.reload(); };
+  document.getElementById('logout').onclick=async()=>{ try{ await supa.auth.signOut(); }catch(e){} localStorage.clear(); location.reload(); };
   document.getElementById('refresh').onclick=load;
+  document.getElementById('diagBtn').onclick=diagnose;
   document.getElementById('clearAll').onclick=async()=>{
-    if(!confirm('Na pewno USUNĄĆ WSZYSTKIE 2 ogłoszenia? Tego nie cofniesz!')) return;
+    if(!confirm('Usunąć WSZYSTKIE ogłoszenia?')) return;
     const {error}=await supa.from('ogloszenia').delete().neq('id','00000000-0000-0000-0000-000000000000');
-    if(error) alert('Błąd: '+error.message); else { alert('Usunięto wszystkie'); load(); }
+    if(error) alert('Błąd: '+error.message); else { alert('Usunięto'); load(); }
   };
   document.getElementById('search').oninput=render;
 }
+
 function showLogin(){ document.getElementById('loginBox').style.display='block'; document.getElementById('panel').style.display='none'; }
-function showPanel(){
-  document.getElementById('loginBox').style.display='none';
-  document.getElementById('panel').style.display='block';
-  document.getElementById('u').textContent=currentUser.email;
-  load();
+function showPanel(){ document.getElementById('loginBox').style.display='none'; document.getElementById('panel').style.display='block'; document.getElementById('u').textContent=currentUser.email; load(); }
+
+async function diagnose(){
+  const logEl=document.getElementById('diagLog'); logEl.textContent='=== DIAGNOZA START ===\n';
+  log('URL: '+U); log('KEY: '+K.substring(0,30)+'...');
+  // 1. REST ogloszenia
+  try{
+    const r=await supa.from('ogloszenia').select('*').limit(5);
+    log('\n1. SELECT ogloszenia via supa: '+ (r.error ? 'ERROR '+r.error.message : 'OK '+r.data.length+' wierszy'));
+    if(r.data && r.data[0]){ const row=r.data[0]; log('   Przykład: id='+row.id.slice(0,8)+' title='+row.title+' images type='+(typeof row.images)+' len='+(Array.isArray(row.images)?row.images.length: String(row.images).length)); if(row.images && row.images[0]) log('   Pierwsze zdjęcie: '+String(row.images[0]).substring(0,120)); const hasBase64 = JSON.stringify(row.images).includes('base64'); log('   Zawiera base64? '+(hasBase64?'TAK - WOLNE!':'NIE - OK szybkie URL')); }
+    if(r.error && r.error.message.includes('policy')) log('   -> FIX: Uruchom SQL z CREATE POLICY FOR SELECT USING (true)');
+  }catch(e){ log('1. SELECT exception: '+e.message); }
+  // 2. REST buckets
+  try{
+    const b=await supa.storage.listBuckets();
+    log('\n2. Storage buckets: '+(b.error ? 'ERROR '+b.error.message : 'OK '+b.data.map(x=>x.id+': public='+x.public).join(', ')));
+    const hasImages = b.data?.some(x=>x.id==='images');
+    if(!hasImages) log('   BRAK bucket images! Uruchom INSERT INTO storage.buckets');
+    else { const imgB = b.data.find(x=>x.id==='images'); if(!imgB.public) log('   Bucket images NIE jest publiczny! Uruchom UPDATE storage.buckets SET public=true'); else log('   Bucket images publiczny - OK'); }
+  }catch(e){ log('2. Buckets exception: '+e.message); }
+  // 3. Storage list
+  try{
+    const l=await supa.storage.from('images').list('',{limit:5});
+    log('\n3. Storage images list: '+(l.error ? 'ERROR '+l.error.message : 'OK '+l.data.length+' plików'));
+    if(l.data && l.data[0]) log('   Przykład plik: '+l.data[0].name);
+    if(l.error) log('   -> Możliwe brak polityki storage.objects');
+  }catch(e){ log('3. Storage list exception: '+e.message); }
+  // 4. Auth
+  log('\n4. Auth user: '+(currentUser? currentUser.email+' id='+currentUser.id.slice(0,8) : 'anon - nie zalogowany'));
+  // 5. REST direct
+  try{
+    const restRes=await fetch(REST+'/ogloszenia?select=*&limit=1',{headers:{'apikey':K,'Authorization':'Bearer '+K}});
+    const restJson=await restRes.json();
+    log('\n5. REST direct /ogloszenia: status='+restRes.status+' len='+(Array.isArray(restJson)?restJson.length: JSON.stringify(restJson).substring(0,200)));
+  }catch(e){ log('5. REST direct exception: '+e.message); }
+  log('\n=== DIAGNOZA KONIEC - jeśli są błędy, uruchom SQL FIX-RLS-NIEWIDOCZNE-OGLOSZENIA.sql ===');
 }
+
 async function load(){
-  const list=document.getElementById('list');
-  list.innerHTML='Ładowanie...';
+  const list=document.getElementById('list'); list.innerHTML='Ładowanie...';
   const {data,error}=await supa.from('ogloszenia').select('*').order('created_at',{ascending:false}).limit(200);
-  if(error){ list.innerHTML='Błąd: '+error.message; return; }
-  all=data||[];
-  render();
+  if(error){ list.innerHTML='Błąd: '+error.message+'<br><br>Uruchom SQL:<br>CREATE POLICY "public read ogloszenia" ON ogloszenia FOR SELECT USING (true)'; log('LOAD ERROR: '+error.message); return; }
+  all=data||[]; render();
 }
 function render(){
   const q=(document.getElementById('search').value||'').toLowerCase();
   const list=document.getElementById('list');
-  let filtered=all;
-  if(q) filtered=all.filter(r=> (r.title||'').toLowerCase().includes(q) || (r.marka||'').toLowerCase().includes(q) );
+  let filtered=all; if(q) filtered=all.filter(r=> (r.title||'').toLowerCase().includes(q));
   document.getElementById('cnt').textContent=filtered.length+' / '+all.length;
   document.getElementById('clearAll').textContent='Usuń WSZYSTKIE ('+all.length+')';
   list.innerHTML='';
   filtered.forEach(row=>{
-    const img = (Array.isArray(row.images)?row.images[0]: (Array.isArray(row.zdjecia)?row.zdjecia[0]:'')) || '';
+    let img = (Array.isArray(row.images)?row.images[0]:'')||''; 
+    const isBase64 = String(img).startsWith('data:');
+    const isUrl = String(img).startsWith('https://');
     const d=document.createElement('div'); d.className='card';
-    d.innerHTML=`<img src="${img}" onerror="this.src='https://via.placeholder.com/120x90'"><div style="flex:1"><div style="font-weight:700">${row.title||row.marka+' '+row.model}</div><div style="font-size:12px;color:#666">${row.price||row.cena||0} zł • ${row.location||row.lokalizacja||''} • ${row.year||''} • ${row.phone||row.telefon||''}</div><div style="font-size:11px;color:#999">ID: ${row.id.slice(0,8)}... • user: ${(row.user_id||'').slice(0,8)} • ${new Date(row.created_at).toLocaleString('pl-PL')}</div></div><div style="display:flex;flex-direction:column;gap:6px"><button class="btn bd del" data-id="${row.id}">Usuń</button><a class="btn" style="background:#f2f3f5;text-align:center;text-decoration:none;color:#002f34" href="/?id=${row.id}" target="_blank">Podgląd</a></div>`;
+    d.innerHTML=`<img src="${isUrl?img:'https://via.placeholder.com/120x90?text='+(isBase64?'BASE64-WOLNE':'BRAK')}" onerror="this.src='https://via.placeholder.com/120x90?text=ERROR'"><div style="flex:1"><div style="font-weight:700;color:#fff">${row.title||row.marka+' '+row.model} ${isBase64?'<span style=color:red>[BASE64 WOLNE!]</span>':''} ${isUrl?'<span style=color:#0f0>[URL OK]</span>':''}</div><div style="font-size:12px;color:#999">${row.price||row.cena||0} zł • ${row.location||''} • ${row.year||''}</div><div style="font-size:10px;color:#666">ID: ${row.id.slice(0,8)} • user: ${(row.user_id||'').slice(0,8)} • images: ${(row.images||[]).length} • ${new Date(row.created_at).toLocaleString('pl-PL')}</div><div style="font-size:10px;color:#ff0;word-break:break-all">${String(img).substring(0,150)}</div></div><div style="display:flex;flex-direction:column;gap:6px"><button class="btn bd del" data-id="${row.id}">Usuń</button></div>`;
     list.appendChild(d);
   });
-  list.querySelectorAll('.del').forEach(b=>b.onclick=async()=>{
-    if(!confirm('Usunąć to ogłoszenie?')) return;
-    const id=b.dataset.id;
-    const {error}=await supa.from('ogloszenia').delete().eq('id',id);
-    if(error) alert('Błąd: '+error.message); else load();
-  });
+  list.querySelectorAll('.del').forEach(b=>b.onclick=async()=>{ if(!confirm('Usunąć?')) return; const {error}=await supa.from('ogloszenia').delete().eq('id',b.dataset.id); if(error) alert(error.message); else load(); });
 }
 init();
 </script></body></html>
