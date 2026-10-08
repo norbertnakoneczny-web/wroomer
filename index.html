@@ -490,7 +490,7 @@ async function handleAddSubmit(e){
       created_at: new Date().toISOString()
     };
     var res=null;
-    var tables=['ogloszenia','ads','announcements'];
+    var tables=['ogloszenia']; // TYLKO ogloszenia - reszta nie istnieje
     for(var t=0;t<tables.length;t++){
       try{
         var tbl=tables[t];
