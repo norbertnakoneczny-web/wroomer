@@ -121,9 +121,9 @@ a{color:inherit}
 <div class="fl">📍 Lokalizacja i promień</div>
 <div class="locBox" style="margin-bottom:8px"><input id="loc" class="pi2" style="flex:1" placeholder="Miejscowość, np. Gorzyce"><button id="gpsBtn" class="locBtn" title="Użyj mojej lokalizacji">📍 GPS</button></div>
 <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px">
-<button class="chip radiusChip" data-r="0">Cała PL</button>
+<button class="chip radiusChip active" data-r="0">Cała PL</button>
 <button class="chip radiusChip" data-r="10">+10 km</button>
-<button class="chip radiusChip active" data-r="30">+30 km</button>
+<button class="chip radiusChip" data-r="30">+30 km</button>
 <button class="chip radiusChip" data-r="50">+50 km</button>
 <button class="chip radiusChip" data-r="100">+100 km</button>
 <button class="chip radiusChip" data-r="200">+200 km</button>
@@ -252,7 +252,7 @@ const U='https://bdpydgsfowtuvjnkyeeg.supabase.co';
 const K='sb_publishable_S1qH_mBZaX7-bzmfJ0IVGA_6hxGbJWd';
 const AUTH_URL=U+'/auth/v1', REST=U+'/rest/v1';
 let supa=null, ls=[], filtered=[], ai=[], currentUser=null, currentEditId=null;
-let userPos=null, radiusKm=30, galIdx=0, galImgs=[], currentDetailItem=null, startX=0, scale=1;
+let userPos=null, radiusKm=0, galIdx=0, galImgs=[], currentDetailItem=null, startX=0, scale=1;
 const $=id=>document.getElementById(id);
 const DEMO=[];
 
@@ -295,45 +295,98 @@ function haversine(lat1,lon1,lat2,lon2){
   return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
 }
 
+
+function getActiveFuel(){
+  const el=document.querySelector('#fuelFilters .chip.active');
+  return el ? (el.dataset.fuel||'').toLowerCase() : '';
+}
+function getActiveGear(){
+  const el=document.querySelector('#gearFilters .chip.active');
+  return el ? (el.dataset.gear||'').toLowerCase() : '';
+}
+
 function applyFilters(){
-  const q=($('q').value||$('qTop')?.value||$('q2').value||'').toLowerCase().trim();
-  const brand=($('brand').value||'').toLowerCase();
-  const model=($('model').value||'').toLowerCase();
-  const pmin=parseInt($('pmin').value)||0, pmax=parseInt($('pmax').value)||999999999;
-  const loc=($('loc').value||'').toLowerCase();
+  const q=($('q')?.value||$('qTop')?.value||$('q2')?.value||'').toLowerCase().trim();
+  const brand=($('brand')?.value||'').toLowerCase();
+  const model=($('model')?.value||'').toLowerCase();
+  const pmin=parseInt($('pmin')?.value)||0, pmax=parseInt($('pmax')?.value)||999999999;
+  const loc=($('loc')?.value||'').toLowerCase();
   const ymin=parseInt($('ymin')?.value)||0, ymax=parseInt($('ymax')?.value)||9999;
   const kmin=parseInt($('kmin')?.value)||0, kmax=parseInt($('kmax')?.value)||9999999;
   const powmin=parseInt($('powmin')?.value)||0, powmax=parseInt($('powmax')?.value)||9999;
-  const fuelEl=document.querySelector('#fuelFilters .chip.active'), gearEl=document.querySelector('#gearFilters .chip.active');
-  const fuel=fuelEl?fuelEl.dataset.fuel.toLowerCase():'', gear=gearEl?gearEl.dataset.gear.toLowerCase():'';
-  const body=($('body').value||'').toLowerCase(), color=($('color').value||'').toLowerCase(), state=($('state').value||'').toLowerCase();
-  const sort=$('sort').value;
+  const fuel=getActiveFuel();
+  const gear=getActiveGear();
+  const body=($('body')?.value||'').toLowerCase(), color=($('color')?.value||'').toLowerCase(), state=($('state')?.value||'').toLowerCase();
+  const sort=$('sort')?.value||'new';
+
+  console.log('FILTERS:', {q,brand,model,pmin,pmax,loc,ymin,ymax,fuel,gear,body,radiusKm, userPos: !!userPos, ls: ls.length});
 
   filtered=ls.filter(x=>{
-    if(q && !x.md.toLowerCase().includes(q) && !(x.ds||'').toLowerCase().includes(q)) return false;
-    if(brand && !x.md.toLowerCase().includes(brand) && (x._extra?.marka||'').toLowerCase()!==brand) return false;
-    if(model && model!=='inny' && !x.md.toLowerCase().includes(model) && (x._extra?.model||'').toLowerCase()!==model) return false;
-    if(x.pr<pmin || x.pr>pmax) return false;
-    if(loc && !x.lc.toLowerCase().includes(loc)) return false;
-    const ex=x._extra||{};
-    const yr=parseInt(ex.year||0); if(ymin && yr && yr<ymin) return false; if(ymax!==9999 && yr && yr>ymax) return false;
-    const km=parseInt(ex.mileage||0); if(kmin && km && km<kmin) return false; if(kmax!==9999999 && km && km>kmax) return false;
-    const pw=parseInt(ex.power||0); if(powmin && pw && pw<powmin) return false; if(powmax && pw && pw>powmax) return false;
-    if(fuel){ const cf=(ex.fuel||'').toLowerCase(); if(!cf.includes(fuel) && !(fuel==='lpg' && cf.includes('gaz'))) return false; }
-    if(gear){ const cg=(ex.gear||'').toLowerCase(); if(cg!==gear) return false; }
-    if(body && (ex.body||'').toLowerCase()!==body) return false;
-    if(color && (ex.color||'').toLowerCase()!==color) return false;
-    if(state && (ex.state||ex.cond||'').toLowerCase()!==state) return false;
-    // GPS radius
-    if(radiusKm>0 && userPos && ex.latitude && ex.longitude){
-      const d=haversine(userPos.lat,userPos.lng,parseFloat(ex.latitude),parseFloat(ex.longitude));
-      if(d>radiusKm) return false;
-      x._dist=d;
-    } else if(radiusKm>0 && userPos && x._dist!==undefined && x._dist>radiusKm) return false;
-    return true;
+    try{
+      if(q && !x.md.toLowerCase().includes(q) && !(x.ds||'').toLowerCase().includes(q)) return false;
+      if(brand && !x.md.toLowerCase().includes(brand) && (x._extra?.marka||x._extra?.brand||'').toLowerCase()!==brand && (x._extra?.marka||'').toLowerCase()!==brand) return false;
+      if(model && model!=='inny' && !x.md.toLowerCase().includes(model) && (x._extra?.model||'').toLowerCase()!==model) return false;
+      if(x.pr<pmin || x.pr>pmax) return false;
+      if(loc && !x.lc.toLowerCase().includes(loc)) return false;
+      const ex=x._extra||{};
+      const yr=parseInt(ex.year||ex.rok||0); if(ymin && yr && yr<ymin) return false; if(ymax!==9999 && yr && yr>ymax) return false;
+      const km=parseInt(ex.mileage||ex.przebieg||0); if(kmin && km && km<kmin) return false; if(kmax!==9999999 && km && km>kmax) return false;
+      const pw=parseInt(ex.power||ex.moc||0); if(powmin && pw && pw<powmin) return false; if(powmax!==9999 && pw && pw>powmax) return false;
+      
+      // FUEL - profesjonalnie, wszystkie warianty
+      if(fuel){
+        const cf=((ex.fuel||ex.paliwo||ex.fuel_type||'')+'').toLowerCase().trim();
+        // jeśli brak paliwa w ogłoszeniu, nie pokazuj gdy filtr aktywny
+        if(!cf){
+          // console.log('Brak paliwa w ogłoszeniu', x.md);
+          return false;
+        }
+        if(fuel==='benzyna+lpg' || fuel==='lpg' || fuel.includes('lpg')){
+          if(!(cf.includes('lpg') || cf.includes('gaz') || cf.includes('lpg'))) return false;
+        } else if(fuel==='benzyna'){
+          if(!cf.includes('benzyna') && !cf.includes('benzyn')) return false;
+        } else if(fuel==='diesel'){
+          if(!cf.includes('diesel') && !cf.includes('diesla')) return false;
+        } else if(fuel==='hybryda'){
+          if(!cf.includes('hybryd')) return false;
+        } else if(fuel==='elektryczny' || fuel==='elektryk'){
+          if(!(cf.includes('elektr') || cf.includes('electric'))) return false;
+        } else {
+          if(!cf.includes(fuel)) return false;
+        }
+      }
+      // GEAR - profesjonalnie
+      if(gear){
+        const cg=((ex.gear||ex.skrzynia||ex.transmission||ex.gearbox||'')+'').toLowerCase().trim();
+        if(!cg) return false; // brak skrzyni = ukryj gdy filtr aktywny
+        if(gear.includes('automat')){
+          if(!(cg.includes('automat') || cg.includes('auto') || cg.includes('a/t'))) return false;
+        } else if(gear.includes('manual')){
+          if(!(cg.includes('manual') || cg.includes('man') || cg.includes('m/t'))) return false;
+        } else {
+          if(!cg.includes(gear)) return false;
+        }
+      }
+      if(body){ const cb=((ex.body||ex.nadwozie||'')+'').toLowerCase(); if(cb && cb!==body) return false; }
+      if(color){ const cc=((ex.color||ex.kolor||'')+'').toLowerCase(); if(cc && cc!==color) return false; }
+      if(state){ const cs=((ex.state||ex.cond||ex.stan||'')+'').toLowerCase(); if(cs && cs!==state) return false; }
+      
+      if(radiusKm>0 && userPos){
+        if(ex.latitude && ex.longitude){
+          const d=haversine(userPos.lat,userPos.lng,parseFloat(ex.latitude),parseFloat(ex.longitude));
+          if(d>radiusKm) return false;
+          x._dist=d;
+        } else if(x._dist!==undefined && x._dist>radiusKm){
+          return false;
+        }
+      }
+      return true;
+    }catch(e){
+      console.error('Filter error', e, x);
+      return true;
+    }
   });
 
-  // sort
   if(sort==='priceAsc') filtered.sort((a,b)=>a.pr-b.pr);
   else if(sort==='priceDesc') filtered.sort((a,b)=>b.pr-a.pr);
   else if(sort==='yearDesc') filtered.sort((a,b)=>(b._extra?.year||0)-(a._extra?.year||0));
@@ -341,8 +394,10 @@ function applyFilters(){
   else if(sort==='dist' && userPos) filtered.sort((a,b)=>(a._dist||9999)-(b._dist||9999));
   else filtered.sort((a,b)=> new Date(b.created_at)-new Date(a.created_at));
 
+  console.log('FILTERED RESULT:', filtered.length, 'from', ls.length);
   rn();
 }
+
 
 function rn(){
   const g=$('gd'), ld=$('ld'), empty=$('empty'), countEl=$('count');
@@ -351,10 +406,11 @@ function rn(){
   if(countEl){
     let txt=filtered.length+' ogłoszeń';
     if(radiusKm>0 && userPos) txt+=' • '+radiusKm+' km od Ciebie';
-    if(document.querySelector('#fuelFilters .chip.active')) txt+=' • '+document.querySelector('#fuelFilters .chip.active').dataset.fuel;
+    const fuelActive=document.querySelector('#fuelFilters .chip.active'); if(fuelActive) txt+=' • '+fuelActive.dataset.fuel;
+    if(ls.length===0) txt='Ładowanie... lub 0 ogłoszeń w bazie';
     countEl.textContent=txt;
   }
-  if(filtered.length===0){ if(empty) empty.style.display='block'; return; } else if(empty) empty.style.display='none';
+  if(filtered.length===0){ if(empty){ empty.style.display='block'; if(ls.length===0){ empty.innerHTML='<div style="font-size:48px">📭</div><div style="font-weight:800;margin-top:8px">Brak ogłoszeń w bazie lub filtr ukrywa</div><div style="font-size:13px;color:#64748b;margin-top:6px">Kliknij Wyczyść wszystko lub dodaj pierwsze ogłoszenie</div><button onclick="clearAllFilters()" class="b bdark" style="margin-top:14px">Wyczyść filtry</button>'; } else { empty.innerHTML='<div style="font-size:48px">🔍</div><div style="font-weight:800;margin-top:8px">Brak aut dla tych filtrów</div><div style="font-size:13px;color:#64748b;margin-top:6px">Spróbuj zwiększyć promień lub wyczyścić filtry</div><button onclick="clearAllFilters()" class="b bdark" style="margin-top:14px">Wyczyść filtry</button>'; } } return; } else if(empty) empty.style.display='none';
   filtered.forEach(item=>{
     const d=document.createElement('div'); d.className='cd';
     const firstImg = (item.im && item.im[0] && item.im[0].startsWith('https://')) ? item.im[0] : 'https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=600&h=450&fit=crop';
@@ -377,8 +433,10 @@ async function loadReal(){
       let imgs=row.images||row.zdjecia||[];
       if(typeof imgs==='string'){ try{ imgs=JSON.parse(imgs); }catch(e){ imgs=[imgs]; } }
       if(!Array.isArray(imgs)) imgs=imgs?[imgs]:[];
-      imgs=imgs.filter(u=>String(u).startsWith('https://'));
-      return {id:row.id, md:row.title||(row.marka+' '+(row.model||''))||'Auto', pr:row.price||row.cena||0, lc:row.location||row.lokalizacja||'', ds:row.description||row.opis||'', im:imgs, user_id:row.user_id||null, _extra:row, created_at:row.created_at, _dist: row._dist};
+      const httpsImgs=imgs.filter(u=>String(u).startsWith('https://'));
+      const hasBase64=imgs.some(u=>String(u).startsWith('data:'));
+      if(hasBase64){ console.log('Wiersz z base64 - pomijam base64, zostawiam URL', row.id); }
+      return {id:row.id, md:row.title||(row.marka+' '+(row.model||''))||'Auto', pr:row.price||row.cena||0, lc:row.location||row.lokalizacja||'', ds:row.description||row.opis||'', im:httpsImgs.length?httpsImgs:imgs.filter(u=>String(u).startsWith('https://')).length?httpsImgs:[], _extra:row, created_at:row.created_at};
     });
     // jeśli mamy GPS, policz dystans dla tych co mają lat/lng
     if(userPos){
@@ -594,12 +652,71 @@ function setupFilters(){
   $('loc')?.addEventListener('input', ()=>{ if($('loc').value.length>2) applyFilters(); });
   $('body')?.addEventListener('change', applyFilters); $('color')?.addEventListener('change', applyFilters); $('state')?.addEventListener('change', applyFilters);
   $('sort')?.addEventListener('change', applyFilters);
-  document.querySelectorAll('#fuelFilters .chip').forEach(b=>{ b.addEventListener('click', function(){ const was=this.classList.contains('active'); document.querySelectorAll('#fuelFilters .chip').forEach(x=>x.classList.remove('active')); if(!was) this.classList.add('active'); applyFilters(); }); });
-  document.querySelectorAll('#gearFilters .chip').forEach(b=>{ b.addEventListener('click', function(){ const was=this.classList.contains('active'); document.querySelectorAll('#gearFilters .chip').forEach(x=>x.classList.remove('active')); if(!was) this.classList.add('active'); applyFilters(); }); });
-  document.querySelectorAll('.radiusChip').forEach(b=>{ b.addEventListener('click', function(){ document.querySelectorAll('.radiusChip').forEach(x=>x.classList.remove('active')); this.classList.add('active'); radiusKm=parseInt(this.dataset.r); if(radiusKm===0) { toast('Promień wyłączony - cała Polska'); } else { toast('Promień: '+radiusKm+' km'); } if(!userPos && radiusKm>0){ getGPS(); } else applyFilters(); }); });
+  function setupChipGroup(selector){
+    const chips=document.querySelectorAll(selector+' .chip');
+    console.log('Setup chips', selector, chips.length);
+    chips.forEach(b=>{
+      // usuń stare listenery klonując
+      const clone=b.cloneNode(true);
+      b.parentNode.replaceChild(clone, b);
+    });
+    // ponownie pobierz po klonowaniu
+    document.querySelectorAll(selector+' .chip').forEach(b=>{
+      b.addEventListener('click', function(e){
+        e.preventDefault();
+        const was=this.classList.contains('active');
+        document.querySelectorAll(selector+' .chip').forEach(x=>x.classList.remove('active'));
+        if(!was){
+          this.classList.add('active');
+          toast((this.dataset.fuel||this.dataset.gear||'Filtr')+' ✓');
+        } else {
+          toast('Filtr usunięty');
+        }
+        console.log('Chip click', selector, 'was', was, 'now', !was ? (this.dataset.fuel||this.dataset.gear) : 'none');
+        setTimeout(applyFilters, 50);
+      });
+    });
+  }
+  setupChipGroup('#fuelFilters');
+  setupChipGroup('#gearFilters');
+  document.querySelectorAll('.radiusChip').forEach(b=>{ b.addEventListener('click', function(){ document.querySelectorAll('.radiusChip').forEach(x=>x.classList.remove('active')); this.classList.add('active'); radiusKm=parseInt(this.dataset.r); if(radiusKm===0){ toast('Promień wyłączony - cała Polska'); ls.forEach(it=>delete it._dist); applyFilters(); } else { if(!userPos){ toast('Kliknij 📍 GPS aby użyć promienia '+radiusKm+' km - na razie pokazuję wszystkie'); applyFilters(); } else { toast('Promień: '+radiusKm+' km'); applyFilters(); } } }); });
   document.querySelectorAll('.priceChip').forEach(b=>{ b.addEventListener('click', function(){ document.querySelectorAll('.priceChip').forEach(x=>x.classList.remove('active')); this.classList.add('active'); $('pmin').value=this.dataset.min; $('pmax').value=this.dataset.max; applyFilters(); }); });
   $('apply')?.addEventListener('click', ()=>{ applyFilters(); $('sb').classList.remove('open'); });
-  $('clear')?.addEventListener('click', ()=>{ $('q').value=''; $('qTop').value=''; $('q2').value=''; $('brand').value=''; $('model').value=''; $('pmin').value=''; $('pmax').value=''; $('loc').value=''; $('ymin').value=''; $('ymax').value=''; $('kmin').value=''; $('kmax').value=''; $('body').value=''; $('color').value=''; $('state').value=''; document.querySelectorAll('.chip.active').forEach(x=>x.classList.remove('active')); document.querySelector('.radiusChip[data-r="30"]')?.classList.add('active'); radiusKm=30; applyFilters(); });
+  function clearAllFilters(){
+    const ids=['q','qTop','q2','brand','model','pmin','pmax','loc','ymin','ymax','kmin','kmax','body','color','state','powmin','powmax'];
+    ids.forEach(id=>{ const el=$(id); if(el) el.value=''; });
+    document.querySelectorAll('.chip.active').forEach(x=>x.classList.remove('active'));
+    document.querySelectorAll('.radiusChip').forEach(x=>x.classList.remove('active'));
+    const r0=document.querySelector('.radiusChip[data-r="0"]'); if(r0) r0.classList.add('active');
+    radiusKm=0; userPos=null;
+    const gi=$('gpsInfo'); if(gi) gi.style.display='none';
+    const gb=$('gpsBtn'); if(gb){ gb.textContent='📍 GPS'; gb.classList.remove('active'); }
+    if(ls && ls.length){ ls.forEach(it=>{ if(it) delete it._dist; }); filtered=[...ls]; }
+    else { filtered=[]; }
+    // force show all without additional filtering
+    const g=$('gd'), ld=$('ld'), empty=$('empty'), countEl=$('count');
+    if(ld) ld.style.display='none';
+    if(g){
+      if(ls.length===0){
+        // jeśli ls puste, spróbuj przeładować z bazy
+        if(supa) loadReal();
+        else { g.innerHTML=''; if(empty) empty.style.display='block'; if(countEl) countEl.textContent='0 ogłoszeń - ładuję...'; }
+      } else {
+        // ręcznie narysuj bez applyFilters żeby nie zależeć od stanu filtrów
+        filtered=[...ls];
+        rn();
+      }
+    }
+    toast('Filtry wyczyszczone - pokazuję wszystkie ('+(ls.length||0)+')');
+    $('sb')?.classList.remove('open');
+  }
+  $('clear')?.addEventListener('click', clearAllFilters);
+  // drugi przycisk jeśli istnieje - np. clearAll, clear2, btn-clear
+  document.querySelectorAll('[id*="clear"], .btn-clear, .clearBtn').forEach(btn=>{
+    if(btn.id!=='clear') btn.addEventListener('click', clearAllFilters);
+  });
+  // global dla konsoli
+  window.clearAllFilters=clearAllFilters;
   $('filterToggle')?.addEventListener('click', ()=>$('sb').classList.add('open')); $('sbClose')?.addEventListener('click', ()=>$('sb').classList.remove('open'));
   $('bnFilter')?.addEventListener('click', ()=>$('sb').classList.add('open'));
   $('bnSearch')?.addEventListener('click', ()=>{ $('q2').focus(); window.scrollTo({top:0,behavior:'smooth'}); });
@@ -609,20 +726,29 @@ function setupFilters(){
 }
 
 async function getGPS(){
-  if(!navigator.geolocation){ toast('GPS nie wspierane'); return; }
-  $('gpsBtn').textContent='⏳ GPS...';
+  if(!navigator.geolocation){ toast('GPS nie wspierane w przeglądarce'); return; }
+  const btn=$('gpsBtn'); if(btn) btn.textContent='⏳ GPS...';
   navigator.geolocation.getCurrentPosition(pos=>{
     userPos={lat:pos.coords.latitude,lng:pos.coords.longitude};
-    $('gpsInfo').style.display='block';
-    $('gpsInfo').textContent='📍 Twoja pozycja: '+userPos.lat.toFixed(4)+', '+userPos.lng.toFixed(4)+' • promień '+radiusKm+' km';
-    $('gpsBtn').textContent='✅ GPS'; $('gpsBtn').classList.add('active');
-    $('diag').textContent='GPS ON';
-    // reverse geocode
-    fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${userPos.lat}&lon=${userPos.lng}`).then(r=>r.json()).then(j=>{ if(j.address){ const city=j.address.city||j.address.town||j.address.village||''; if(city){ $('loc').value=city; toast('Znaleziono: '+city); } } }).catch(()=>{});
+    const gi=$('gpsInfo'); if(gi){ gi.style.display='block'; gi.textContent='📍 Twoja pozycja: '+userPos.lat.toFixed(4)+', '+userPos.lng.toFixed(4)+' • promień '+radiusKm+' km'; }
+    if(btn){ btn.textContent='✅ GPS'; btn.classList.add('active'); }
+    const diag=$('diag'); if(diag) diag.textContent='GPS ON';
+    try{
+      fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${userPos.lat}&lon=${userPos.lng}`).then(r=>r.json()).then(j=>{ if(j && j.address){ const city=j.address.city||j.address.town||j.address.village||''; if(city){ $('loc').value=city; toast('GPS OK: '+city+' - '+radiusKm+' km'); } else { toast('GPS OK - promień '+radiusKm+' km'); } } }).catch(()=>{ toast('GPS OK - promień '+radiusKm+' km'); });
+    }catch(e){ toast('GPS OK - promień '+radiusKm+' km'); }
     applyFilters();
   }, err=>{
-    toast('Błąd GPS: '+err.message); $('gpsBtn').textContent='📍 GPS';
-  }, {enableHighAccuracy:true,timeout:8000});
+    let msg='Błąd GPS';
+    if(err.code===1) msg='Odmówiono dostępu do GPS - włącz lokalizację w przeglądarce';
+    else if(err.code===2) msg='GPS niedostępny';
+    else if(err.code===3) msg='Timeout GPS';
+    else msg='Błąd GPS: '+err.message;
+    toast(msg+' - pokazuję wszystkie ogłoszenia');
+    if(btn){ btn.textContent='📍 GPS'; btn.classList.remove('active'); }
+    radiusKm=0; document.querySelectorAll('.radiusChip').forEach(x=>x.classList.remove('active')); document.querySelector('.radiusChip[data-r="0"]')?.classList.add('active');
+    const gi=$('gpsInfo'); if(gi) gi.style.display='none';
+    applyFilters();
+  }, {enableHighAccuracy:false,timeout:10000,maximumAge:60000});
 }
 function setupGPS(){
   $('gpsBtn')?.addEventListener('click', getGPS);
@@ -636,6 +762,14 @@ function init(){
   document.head.appendChild(s);
 }
 init();
+</script>
+
+<div id="filterDebug" style="position:fixed;bottom:80px;left:10px;background:#000;color:#0f0;font-family:monospace;font-size:10px;padding:8px;border-radius:8px;max-width:300px;max-height:200px;overflow:auto;display:none;z-index:100"></div>
+<script>
+window.testFilters=()=>{
+  console.log('LS sample', ls.slice(0,2).map(x=>({md:x.md, fuel:x._extra?.fuel, gear:x._extra?.gear})));
+  const dbg=document.getElementById('filterDebug'); if(dbg){ dbg.style.display='block'; dbg.innerHTML='LS: '+ls.length+'<br>'+ls.slice(0,3).map(x=>x.md+' fuel:'+(x._extra?.fuel||'-')+' gear:'+(x._extra?.gear||'-')).join('<br>'); }
+};
 </script>
 </body>
 </html>
