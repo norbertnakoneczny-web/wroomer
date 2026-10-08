@@ -300,14 +300,19 @@ function setupChipsPro(){
 async function loadReal(){
   if(!supa) return;
   try{
-    // próbuj różnych nazw tabel
-    const tables=['ogloszenia','ads','announcements','listings','auta','cars'];
+    const tables=['ogloszenia']; // tylko ogloszenia
     let data=null;
     for(let t of tables){
       try{
-        const r=await supa.from(t).select('*').order('created_at',{ascending:false}).limit(100);
-        if(r.data && !r.error){ data=r.data; console.log('Tabela:',t, data.length); break; }
-      }catch(e){}
+        const r=await supa.from(t).select('*').order('created_at',{ascending:false}).limit(200);
+        if(r.data && !r.error){ data=r.data; console.log('Tabela:',t, 'znaleziono', data.length); break; }
+        else if(r.error){ console.log('Tabela',t,'blad', r.error.message); }
+      }catch(e){ console.log('Tabela',t,'exception', e); }
+    }
+    if(!data || !data.length){
+      console.log('Brak ogloszen w Supabase - pusto');
+      // nie nadpisuj jesli juz sa lokalne? ale chcemy pusto
+      ls=[]; filtered=[]; rn(); return;
     }
     if(data && data.length){
       ls=data.map(row=>({
@@ -316,7 +321,7 @@ async function loadReal(){
         pr: row.price || row.cena || row.pr || 0,
         lc: row.location || row.lokalizacja || row.lc || '',
         ds: row.description || row.opis || row.ds || '',
-        im: row.images || row.zdjecia || row.im || [],
+        im: (Array.isArray(row.images) ? row.images : (Array.isArray(row.zdjecia) ? row.zdjecia : (row.images ? (typeof row.images==='string' ? JSON.parse(row.images) : [row.images]) : []))) || [],
         user_id: row.user_id || row.owner || null,
         _extra: row,
         created_at: row.created_at
@@ -328,15 +333,32 @@ async function loadReal(){
 
 async function checkSession(){
   if(!supa) return;
-  const {data} = await supa.auth.getSession();
-  if(data.session){ currentUser=data.session.user; updateAuthUI(); }
+  try{
+    const {data} = await supa.auth.getSession();
+    if(data.session && data.session.user){
+      currentUser=data.session.user;
+      localStorage.setItem('wroomer_user_email', currentUser.email);
+      localStorage.setItem('wroomer_user_id', currentUser.id);
+      updateAuthUI();
+      console.log('Sesja przywrocona:', currentUser.email);
+    }else{
+      // sprobuj localStorage
+      var savedEmail=localStorage.getItem('wroomer_user_email');
+      if(savedEmail){
+        var ue=document.getElementById('userEmail');
+        if(ue) ue.textContent=savedEmail+' (odswiezam...)';
+      }
+    }
+  }catch(e){ console.log('checkSession err', e); }
 }
 
 function updateAuthUI(){
   const btn=$('authBtn'), mail=$('userEmail');
   if(currentUser){
-    if(btn) btn.textContent='Wyloguj';
+    if(btn) btn.textContent='Wyloguj ('+currentUser.email.split('@')[0]+')';
     if(mail) mail.textContent=currentUser.email;
+    localStorage.setItem('wroomer_user_email', currentUser.email);
+    localStorage.setItem('wroomer_user_id', currentUser.id);
   }else{
     if(btn) btn.textContent='Zaloguj / Zarejestruj';
     if(mail) mail.textContent='';
@@ -347,32 +369,80 @@ function openAuth(){ $('authModal').classList.add('o'); $('authMsg').textContent
 function closeAuth(){ $('authModal').classList.remove('o'); }
 
 async function doLogin(){
-  const email=$('authEmail').value.trim();
+  const email=$('authEmail').value.trim().toLowerCase();
   const pass=$('authPass').value;
   const msg=$('authMsg');
   if(!email||!pass){ msg.textContent='Wpisz email i hasło'; msg.style.color='red'; return; }
   msg.textContent='Logowanie...'; msg.style.color='#666';
-  const {data, error}=await supa.auth.signInWithPassword({email, password: pass});
-  if(error){
-    console.log(error);
-    if(error.message.includes('Email not confirmed')){
-      msg.textContent='Email nie potwierdzony - sprawdź SPAM lub wyłącz Confirm email w Supabase (SQL: update auth.users set email_confirmed_at=now())';
-    }else if(error.message.includes('Invalid login')){
-      msg.textContent='Nieprawidłowy email lub hasło. Jeśli nie masz konta - kliknij Zarejestruj się.';
-    }else{
-      msg.textContent='Błąd: '+error.message;
-    }
-    msg.style.color='red';
-  }else{
-    currentUser=data.user;
+  try{
+    const {data, error}=await supa.auth.signInWithPassword({email, password: pass});
+    if(error) throw error;
+    currentUser=data.user || data.session?.user;
+    localStorage.setItem('wroomer_user_email', currentUser.email);
+    localStorage.setItem('wroomer_user_id', currentUser.id);
     updateAuthUI();
-    msg.textContent='Zalogowano! '+data.user.email;
+    msg.textContent='Zalogowano! '+currentUser.email+' - zapamietano';
     msg.style.color='green';
     setTimeout(closeAuth, 800);
+    return;
+  }catch(error){
+    console.log(error);
+    if(error.message && error.message.includes('Email not confirmed')){
+      msg.textContent='Email nie potwierdzony - w Supabase uruchom: UPDATE auth.users SET email_confirmed_at=now() WHERE email_confirmed_at IS NULL';
+    }else if(error.message && error.message.includes('Invalid login')){
+      msg.textContent='Nieprawidłowy email lub hasło. Jeśli nie masz konta - kliknij Zarejestruj się.';
+    }else{
+      msg.textContent='Błąd: '+(error.message||error);
+    }
+    msg.style.color='red';
+    return;
   }
 }
-
 async function doRegister(){
+  const email=$('authEmail').value.trim().toLowerCase();
+  const pass=$('authPass').value;
+  const msg=$('authMsg');
+  if(!email||pass.length<6){ msg.textContent='Email i hasło min 6 znaków'; msg.style.color='red'; return; }
+  msg.textContent='Rejestracja...'; msg.style.color='#666';
+  try{
+    const {data, error}=await supa.auth.signUp({email, password: pass, options:{emailRedirectTo: window.location.href}});
+    if(error) throw error;
+    if(data.session && data.session.user){
+      currentUser=data.session.user;
+      localStorage.setItem('wroomer_user_email', currentUser.email);
+      localStorage.setItem('wroomer_user_id', currentUser.id);
+      updateAuthUI();
+      msg.textContent='Konto utworzone i zalogowano! Zapamietano. Mozesz dodawac ogloszenia.';
+      msg.style.color='green';
+      setTimeout(closeAuth, 800);
+    }else if(data.user){
+      // bez sesji - potwierdz email w SQL i zaloguj
+      msg.textContent='Konto utworzone! Loguje automatycznie...';
+      msg.style.color='#065f46';
+      // sprobuj zalogowac od razu
+      try{
+        const {data:loginData, error:loginErr}=await supa.auth.signInWithPassword({email, password: pass});
+        if(!loginErr && loginData.user){
+          currentUser=loginData.user;
+          localStorage.setItem('wroomer_user_email', currentUser.email);
+          updateAuthUI();
+          msg.textContent='Zalogowano! '+currentUser.email;
+          setTimeout(closeAuth, 800);
+        }else{
+          msg.textContent='Konto utworzone! Sprawdz SPAM lub w Supabase uruchom: UPDATE auth.users SET email_confirmed_at=now()';
+        }
+      }catch(e){
+        msg.textContent='Konto utworzone! W Supabase uruchom: UPDATE auth.users SET email_confirmed_at=now() WHERE email_confirmed_at IS NULL';
+      }
+    }
+    return;
+  }catch(error){
+    msg.textContent='Błąd: '+(error.message||error);
+    msg.style.color='red';
+    return;
+  }
+}
+async function _oldReg_UNUSED(){
   const email=$('authEmail').value.trim();
   const pass=$('authPass').value;
   const msg=$('authMsg');
@@ -425,44 +495,66 @@ function closeAdd(){ var am=document.getElementById('am'); if(am) am.classList.r
 async function handleAddSubmit(e){
   e.preventDefault();
   if(!currentUser){ alert('Musisz byc zalogowany'); openAuth(); return; }
-  var mk=document.getElementById('mk').value;
-  var md=document.getElementById('md2').value || '';
+  var mk=document.getElementById('mk').value.trim();
+  var md=document.getElementById('md2').value.trim() || '';
   var yr=document.getElementById('year').value;
   var mileage=document.getElementById('mileage').value;
   var pr=document.getElementById('pr').value;
-  var lc=document.getElementById('lc').value;
-  var phoneEl=document.getElementById('phone');
-  if(!phoneEl){ alert('Brak pola telefon'); return; }
-  var phone=phoneEl.value;
-  if(!mk){ alert('Wybierz marke'); return; }
-  if(!md){ alert('Wybierz model'); return; }
-  if(!yr){ alert('Podaj rok'); return; }
-  if(!mileage){ alert('Podaj przebieg'); return; }
-  if(!pr){ alert('Podaj cene'); return; }
-  if(!lc){ alert('Podaj lokalizacje'); return; }
-  if(!phone){ alert('Podaj telefon'); return; }
-  if(ai.length===0 && !currentEditId){ alert('Dodaj min 1 zdjecie'); return; }
-  var btn=document.getElementById('sbBtn'); var orig=btn?btn.textContent:''; if(btn){ btn.textContent='Zapisywanie...'; btn.disabled=true; }
+  var lc=document.getElementById('lc').value.trim();
+  var phone=(document.getElementById('phone')?document.getElementById('phone').value.trim():'');
+  if(!mk||!md||!yr||!mileage||!pr||!lc||!phone){ alert('Wypelnij wszystkie pola * (marka, model, rok, przebieg, cena, miejscowosc, telefon)'); return; }
+  if(ai.length===0 && !currentEditId){ alert('Dodaj min 1 zdjecie - możesz zaznaczyć kilka naraz!'); return; }
+  var btn=document.getElementById('sbBtn'); var orig=btn?btn.textContent:''; if(btn){ btn.textContent='Wysylam '+ai.length+' zdjec do Supabase...'; btn.disabled=true; }
   try{
-    var images = ai.map(function(x){return x.data;});
-    if(supa && supa.storage){
+    var images=[];
+    // 1. Upload wszystkich zdjec do Supabase Storage
+    if(supa && supa.storage && ai.length>0){
       try{
+        // upewnij sie ze bucket istnieje (cicha proba)
         var uploaded=[];
-        for(var i=0;i<ai.length;i++){
-          var blob=ai[i].blob;
-          var name = currentUser.id+'/'+Date.now()+'_'+i+'.webp';
-          var resUp=await supa.storage.from('images').upload(name, blob, {contentType:'image/webp', upsert:true});
-          if(!resUp.error && resUp.data){
-            var pub=supa.storage.from('images').getPublicUrl(name);
-            uploaded.push(pub.data.publicUrl);
-          } else {
-            uploaded.push(ai[i].data);
+        var uploadPromises = ai.map(async function(item, i){
+          try{
+            // jesli to juz URL z Supabase (edycja), zostaw
+            if(item.data && item.data.startsWith && item.data.startsWith('https://') && item.data.includes('supabase')){
+              return item.data;
+            }
+            var blob=item.blob;
+            if(!blob) return item.data;
+            var safeName = (mk+'-'+md+'-'+Date.now()+'-'+i).replace(/[^a-zA-Z0-9-_]/g,'_') + '.webp';
+            var path = currentUser.id + '/' + safeName;
+            var resUp=await supa.storage.from('images').upload(path, blob, {contentType:'image/webp', upsert:true, cacheControl:'3600'});
+            if(resUp.error){
+              console.log('upload err', resUp.error);
+              // fallback: jesli bucket nie istnieje, sprobuj base64 - ale zwroc blad uzytkownikowi
+              if(resUp.error.message && resUp.error.message.toLowerCase().includes('bucket')){
+                throw resUp.error;
+              }
+              return item.data; // fallback base64
+            }
+            var pub=supa.storage.from('images').getPublicUrl(path);
+            return pub.data.publicUrl;
+          }catch(err){
+            console.log('single upload fail', err);
+            return item.data;
           }
-        }
-        if(uploaded.length) images=uploaded;
-      }catch(e){ console.log('storage fail', e); }
+        });
+        uploaded = await Promise.all(uploadPromises);
+        images = uploaded.filter(Boolean);
+        console.log('Uploaded images:', images.length);
+      }catch(e){
+        console.log('storage fail overall', e);
+        alert('Uwaga: Bucket images nie istnieje! Uruchom SQL UTWORZ-TABELE.sql zeby utworzyc bucket. Zapisuje jako base64 tymczasowo.');
+        images = ai.map(function(x){return x.data;});
+      }
+    }else{
+      images = ai.map(function(x){return x.data;});
+    }
+    // jesli edycja i nie dodano nowych zdjec, zachowaj stare
+    if(currentEditId && images.length===0 && window._oldImages){
+      images = window._oldImages;
     }
     var payload={
+
       title: mk+' '+md,
       marka: mk,
       model: md,
@@ -521,15 +613,26 @@ function setupAdd(){
   var ab=document.getElementById('ab'); if(ab) ab.addEventListener('click', openAdd);
   var ca=document.getElementById('ca'); if(ca) ca.addEventListener('click', closeAdd);
   var abg=document.getElementById('abg'); if(abg) abg.addEventListener('click', closeAdd);
-  var dz=document.getElementById('dz'); if(dz) dz.addEventListener('click', function(){ var fi=document.getElementById('fi'); if(fi) fi.click(); });
+  var dz=document.getElementById('dz'); if(dz){
+    dz.addEventListener('click', function(){ var fi=document.getElementById('fi'); if(fi) fi.click(); });
+    // drag & drop kilka zdjec
+    dz.addEventListener('dragover', function(e){ e.preventDefault(); this.style.background='#e6f7f6'; });
+    dz.addEventListener('dragleave', function(e){ this.style.background='#f7f8f9'; });
+    dz.addEventListener('drop', async function(e){
+      e.preventDefault(); this.style.background='#f7f8f9';
+      var files=Array.from(e.dataTransfer.files||[]).filter(f=>f.type.startsWith('image/')).slice(0,10-ai.length);
+      if(!files.length) return;
+      var ci=document.getElementById('ci'); if(ci) ci.textContent='Przetwarzam '+files.length+' zdjec...';
+      for(var f of files){ var c=await comp(f, 1024, 0.7); ai.push(c); }
+      renderPv(); if(ci) ci.textContent=ai.length+' zdjec wybranych (max 10)';
+    });
+  }
   var fi=document.getElementById('fi'); if(fi) fi.addEventListener('change', async function(e){
-    var files=Array.from(e.target.files).slice(0,10-ai.length);
-    for(var f of files){
-      var c=await comp(f, 800, 0.65);
-      ai.push(c);
-    }
-    renderPv();
-    var ci=document.getElementById('ci'); if(ci) ci.textContent=ai.length+' zdjec';
+    var files=Array.from(e.target.files||[]).slice(0,10-ai.length);
+    if(!files.length){ e.target.value=''; return; }
+    var ci=document.getElementById('ci'); if(ci) ci.textContent='Kompresuje '+files.length+' zdjec...';
+    for(var f of files){ var c=await comp(f, 1024, 0.7); ai.push(c); }
+    renderPv(); if(ci) ci.textContent=ai.length+' zdjec wybranych (max 10)'; e.target.value='';
   });
   var mk=document.getElementById('mk'); if(mk) mk.addEventListener('change', function(e){
     populateModels(e.target.value, 'md2');
