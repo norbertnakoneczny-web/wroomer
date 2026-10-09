@@ -194,6 +194,23 @@ a{color:inherit}
   #ab{padding:0 10px !important;font-size:11px !important}
 }
 
+
+/* PRO - duze zdjecie od razu po kliknieciu ogłoszenia jak w OTOMOTO */
+.galMain{flex:1;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden;touch-action:none;background:#000;min-height:50vh}
+.galMain img{width:100%;height:100%;object-fit:contain;max-height:70vh;transition:transform .2s}
+@media(max-width:768px){
+  .galWrap{flex:none !important;height:62vh !important;min-height:62vh !important}
+  .galMain{height:62vh !important;min-height:62vh !important}
+  .galMain img{max-height:62vh !important;object-fit:contain !important}
+  .detailInfoPanel{flex:1;overflow:auto}
+  #detailModal .mc{height:100dvh !important;max-height:100dvh !important}
+}
+@media(min-width:769px){
+  .galWrap{flex:1.4 !important}
+  .detailInfoPanel{flex:0.9}
+  .galMain img{max-height:80vh}
+}
+
 </style>
 </head>
 <body>
@@ -306,7 +323,7 @@ a{color:inherit}
 <form id="af" style="padding:14px;display:flex;flex-direction:column;gap:12px;overflow:auto">
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px"><div><div style="font-size:11px;font-weight:700;margin-bottom:4px">Marka *</div><select id="mk" class="sel" required><option value="">Wybierz</option></select></div><div><div style="font-size:11px;font-weight:700;margin-bottom:4px">Model *</div><select id="md2" class="sel" required><option value="">Wybierz</option></select></div></div>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px"><div><div style="font-size:11px;font-weight:700;margin-bottom:4px">Rok *</div><input id="year" type="number" class="pi2" required placeholder="2018"></div><div><div style="font-size:11px;font-weight:700;margin-bottom:4px">Przebieg km *</div><input id="mileage" type="number" class="pi2" required placeholder="120000"></div></div>
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px"><div><div style="font-size:11px;font-weight:700;margin-bottom:4px">Cena zł *</div><input id="pr" type="number" class="pi2" required placeholder="25000"></div><div><div style="font-size:11px;font-weight:700;margin-bottom:4px">Miejscowość *</div><input id="lc" class="pi2" required placeholder="Gorzyce"><button type="button" id="geocodeBtn" style="font-size:11px;color:#002f34;background:transparent;border:none;text-decoration:underline;cursor:pointer;margin-top:4px">📍 Pobierz GPS z miejscowości</button></div></div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px"><div><div style="font-size:11px;font-weight:700;margin-bottom:4px">Cena zł *</div><input id="pr" type="number" class="pi2" required placeholder="25000"></div><div><div style="font-size:11px;font-weight:700;margin-bottom:4px">Miejscowość *</div><input id="lc" class="pi2" required placeholder="Gorzyce"><button type="button" id="geocodeBtn" style="font-size:11px;color:#002f34;background:transparent;border:none;text-decoration:underline;cursor:pointer;margin-top:4px">📍 Pobierz GPS z miejscowości</button><button type="button" id="gpsAddBtn" style="font-size:11px;color:#fff;background:#002f34;border:none;border-radius:8px;padding:6px 10px;cursor:pointer;margin-top:6px;margin-left:6px;display:inline-flex;align-items:center;gap:4px">📍 Użyj mojej lokalizacji</button></div></div>
 <div><div style="font-size:11px;font-weight:700;margin-bottom:4px">Telefon *</div><input id="phone" class="pi2" required placeholder="600 123 456"></div>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px"><div><div style="font-size:11px;font-weight:700;margin-bottom:4px">Paliwo</div><select id="fuel" class="sel"><option value="">Wybierz</option><option>Benzyna</option><option>Diesel</option><option>Benzyna+LPG</option><option>Hybryda</option><option>Elektryczny</option></select></div><div><div style="font-size:11px;font-weight:700;margin-bottom:4px">Skrzynia</div><select id="gear" class="sel"><option value="">Wybierz</option><option>Manualna</option><option>Automatyczna</option></select></div></div>
 <div><div style="font-size:11px;font-weight:700;margin-bottom:4px">Opis</div><textarea id="ds" rows="4" class="pi2" style="height:90px;padding:10px" placeholder="Opis, wyposażenie, historia..."></textarea></div>
