@@ -1,0 +1,37 @@
+FACHOWIEC - JAK WYCZYSCIC REPO Z STARYCH PLIKOW:
+
+PROBLEM: Masz 9 plikow w repo:
+- app.js (9h temu) ❌ STARY - USUN
+- style.css (9h temu) ❌ STARY - USUN
+- README.txt - moze zostac ale lepiej usun
+- README_PRO.txt - moze zostac ale lepiej usun
+- index.html (1 min temu) ✅ NOWY
+- admin.html (5h temu) ❌ STARY - WGRAJ NOWY Z TEGO ZIP
+- vercel.json (8h temu) ❌ STARY - WGRAJ NOWY Z TEGO ZIP
+- package.json (1 min temu) - OK ale wgraj nowy
+- rollback.html (25m temu) - OK ale wgraj nowy
+
+ROZWIAZANIE - 2 OPCJE:
+
+OPCJA 1 - SZYBKA (GitHub UI):
+1. Wejdz na github.com -> Twoje repo
+2. Kliknij app.js -> ikona kosza Delete file -> Commit directly -> Commit changes
+3. Kliknij style.css -> Delete -> Commit
+4. Kliknij README.txt -> Delete -> Commit
+5. Kliknij README_PRO.txt -> Delete -> Commit
+6. Teraz masz tylko 5 plikow: index, admin, rollback, vercel, package
+7. Kliknij Add file -> Upload files -> przeciagnij WSZYSTKIE 5 plikow z tego ZIP -> Commit
+8. Vercel -> Deployments -> ... -> Redeploy -> ODZNACZ Use existing Build Cache -> Redeploy
+9. Ctrl+Shift+R na portalu
+
+OPCJA 2 - CZYSTA (zalecana przez fachowca):
+1. Na GitHub kliknij Settings -> Danger Zone -> Delete this repository -> wpisz nazwe -> Delete
+2. Stworz nowe repo o tej samej nazwie wroomer
+3. Upload files -> wgraj TYLKO 5 plikow z tego ZIP (index, admin, rollback, vercel, package)
+4. Commit
+5. Vercel automatycznie zrobi nowy deployment bez cache
+6. Polacz domene wroomer.pl ponownie
+
+PO TYM POWINNO BYC JAK W PODGLADZIE: ciemne tlo #0f0f0f, wyszukiwarka z boku 320px, zolto-czarny, Twoje ogloszenia
+
+Sprawdz czy po wejsciu na strone w zrodle Ctrl+U widzisz: version 35-final-clean
