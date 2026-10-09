@@ -1,0 +1,16 @@
+WROOMER-ADMIN-PRO-STATS-EDYCJA-BAN-CLEAN - INSTRUKCJA
+
+1. To jest wersja CLEAN - 100% autorska
+2. Usunieto wszelkie slady / nazwy / komentarze zewnetrznych serwisow
+3. Wszystkie klasy to wroomer-*
+4. Gotowe do wgrania na Vercel
+5. Brak jakichkolwiek nawiazan do innych portali - czysty kod WROOMER
+
+Zawartosc:
+- index.html - strona glowna
+- admin.html - panel ADMIN z PRO, STATS, EDYCJA, BAN
+- style.css - autorski design system WROOMER
+- app.js - logika PRO/STATS/EDYCJA/BAN
+- package.json / vercel.json
+
+Wgraj calosc na Vercel jako projekt wroomer.pl
