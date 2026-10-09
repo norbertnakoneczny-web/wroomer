@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://bdpydgsfowtuvjnkyeeg.supabase.co">
 <meta name="description" content="WROOMER.PL - auta z Twojej okolicy. Gorzyce, Wodzisław Śląski, Rybnik, Racibórz. Szybkie zdjęcia, GPS, promień.">
 <style>
-:root{--nav:#002f34;--acc:#23e5db;--bg:#f2f3f5;--card:#fff;--border:#e5e7eb;--text:#0f172a;--muted:#64748b}
+:root{--nav:#000000;--acc:#ffcc00;--bg:#f2f3f5;--card:#fff;--border:#e5e7eb;--text:#0f172a;--muted:#64748b}
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{font-family:-apple-system,BlinkMacSystemFont,Inter,Segoe UI,sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
@@ -103,7 +103,7 @@ a{color:inherit}
 .olxParam b{font-size:11px;color:#64748b;font-weight:600;text-transform:uppercase;display:block;margin-bottom:2px}
 .olxParam span{font-weight:750;font-size:14px;color:#0f172a}
 .olxParamFull{grid-column:span 2}
-.olxPriceBox{background:#002f34;color:#fff;padding:16px;border-radius:16px;display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.olxPriceBox{background:#000000;color:#fff;padding:16px;border-radius:16px;display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
 .olxPriceBox .price{font-size:26px;font-weight:900;letter-spacing:-.5px}
 .olxContactBox{background:#f8fafc;border:1px solid #e2e8f0;border-radius:16px;padding:14px;display:flex;gap:12px;align-items:center}
 .olxAvatar{width:48px;height:48px;background:#e2e8f0;border-radius:50%;display:grid;place-items:center;font-weight:800}
@@ -211,6 +211,26 @@ a{color:inherit}
   .galMain img{max-height:80vh}
 }
 
+
+/* YELLOW-BLACK OTOMOTO - CALY PORTAL PRO */
+:root{--nav:#000000 !important;--acc:#ffcc00 !important;--card:#1a1a1a;--border:#2a2a2a}
+.h{background:#000 !important;border-bottom:3px solid #ffcc00 !important}
+.li{background:#ffcc00 !important;color:#000 !important;font-weight:900 !important}
+.lt{color:#fff !important}
+.lt span{color:#ffcc00 !important}
+#ab{background:#ffcc00 !important;color:#000 !important;font-weight:900 !important;border:2px solid #ffcc00 !important}
+#ab:hover{background:#ffd633 !important}
+#authBtn{background:#1a1a1a !important;color:#ffcc00 !important;border:1px solid #333 !important}
+#authBtn:hover{background:#222 !important}
+.btn-show{background:#ffcc00 !important;color:#000 !important;font-weight:900 !important}
+.sel{border-color:#2a2a2a !important}
+.pi2:focus,.sel:focus{border-color:#ffcc00 !important;box-shadow:0 0 0 3px rgba(255,204,0,.2) !important}
+#gpsBtn.active{background:#ffcc00 !important;color:#000 !important}
+.badge.view{background:#ffcc00 !important;color:#000 !important}
+.card:hover{border-color:#ffcc00 !important}
+.fab{background:#ffcc00 !important;color:#000 !important;font-weight:900 !important;box-shadow:0 4px 12px rgba(255,204,0,.4) !important}
+.toast{background:#000 !important;color:#ffcc00 !important;border:1px solid #ffcc00 !important}
+
 </style>
 </head>
 <body>
@@ -218,7 +238,7 @@ a{color:inherit}
 <div class="logo" onclick="location.reload()"><div class="li">W</div><div class="lt">WROOMER<span>.PL</span></div></div>
 <div class="searchTop"><div class="stW"><span class="stI">🔍</span><input id="qTop" class="stIn" placeholder="Szukaj: marka, model, np. Octavia 2.0 TDI..."></div></div>
 <div style="display:flex;gap:8px;align-items:center">
-<span id="userEmail" style="font-size:11px;color:#23e5db;display:none"></span>
+<span id="userEmail" style="font-size:11px;color:#ffcc00;display:none"></span>
 <button id="authBtn" class="b bw">Zaloguj</button>
 <button id="ab" class="b bb">+ Dodaj</button>
 </div>
@@ -295,7 +315,7 @@ a{color:inherit}
 
 <main class="main">
 <div class="topBar">
-<button id="filterToggle" class="b" style="background:#f2f3f5;color:#002f34;border:1px solid #e5e7eb">☰ Filtry</button>
+<button id="filterToggle" class="b" style="background:#f2f3f5;color:#000000;border:1px solid #e5e7eb">☰ Filtry</button>
 <input id="q2" class="pi2" style="flex:1" placeholder="Szukaj w WROOMER.PL...">
 <select id="sort" class="sel" style="width:150px;flex-shrink:0"><option value="new">Najnowsze</option><option value="priceAsc">Najtańsze</option><option value="priceDesc">Najdroższe</option><option value="yearDesc">Najnowszy rocznik</option><option value="mileageAsc">Najmniejszy przebieg</option><option value="dist">Najbliżej (GPS)</option></select>
 <button id="myBtn" class="b" style="background:#eef1f3">Moje</button>
@@ -312,7 +332,7 @@ a{color:inherit}
 <div class="bottomNav" id="bottomNav">
 <button class="bnItem" id="bnFilter"><b>☰</b>Filtry</button>
 <button class="bnItem" id="bnSearch"><b>🔍</b>Szukaj</button>
-<button class="bnItem" id="bnAdd" style="background:#002f34;color:#fff;border-radius:14px"><b>+</b>Dodaj</button>
+<button class="bnItem" id="bnAdd" style="background:#000000;color:#fff;border-radius:14px"><b>+</b>Dodaj</button>
 <button class="bnItem" id="bnMy"><b>👤</b>Moje</button>
 </div>
 
@@ -323,7 +343,7 @@ a{color:inherit}
 <form id="af" style="padding:14px;display:flex;flex-direction:column;gap:12px;overflow:auto">
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px"><div><div style="font-size:11px;font-weight:700;margin-bottom:4px">Marka *</div><select id="mk" class="sel" required><option value="">Wybierz</option></select></div><div><div style="font-size:11px;font-weight:700;margin-bottom:4px">Model *</div><select id="md2" class="sel" required><option value="">Wybierz</option></select></div></div>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px"><div><div style="font-size:11px;font-weight:700;margin-bottom:4px">Rok *</div><input id="year" type="number" class="pi2" required placeholder="2018"></div><div><div style="font-size:11px;font-weight:700;margin-bottom:4px">Przebieg km *</div><input id="mileage" type="number" class="pi2" required placeholder="120000"></div></div>
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px"><div><div style="font-size:11px;font-weight:700;margin-bottom:4px">Cena zł *</div><input id="pr" type="number" class="pi2" required placeholder="25000"></div><div><div style="font-size:11px;font-weight:700;margin-bottom:4px">Miejscowość *</div><input id="lc" class="pi2" required placeholder="Gorzyce"><button type="button" id="geocodeBtn" style="font-size:11px;color:#002f34;background:transparent;border:none;text-decoration:underline;cursor:pointer;margin-top:4px">📍 Pobierz GPS z miejscowości</button><button type="button" id="gpsAddBtn" style="font-size:11px;color:#fff;background:#002f34;border:none;border-radius:8px;padding:6px 10px;cursor:pointer;margin-top:6px;margin-left:6px;display:inline-flex;align-items:center;gap:4px">📍 Użyj mojej lokalizacji</button></div></div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px"><div><div style="font-size:11px;font-weight:700;margin-bottom:4px">Cena zł *</div><input id="pr" type="number" class="pi2" required placeholder="25000"></div><div><div style="font-size:11px;font-weight:700;margin-bottom:4px">Miejscowość *</div><input id="lc" class="pi2" required placeholder="Gorzyce"><button type="button" id="geocodeBtn" style="font-size:11px;color:#000000;background:transparent;border:none;text-decoration:underline;cursor:pointer;margin-top:4px">📍 Pobierz GPS z miejscowości</button><button type="button" id="gpsAddBtn" style="font-size:11px;color:#fff;background:#000000;border:none;border-radius:8px;padding:6px 10px;cursor:pointer;margin-top:6px;margin-left:6px;display:inline-flex;align-items:center;gap:4px">📍 Użyj mojej lokalizacji</button></div></div>
 <div><div style="font-size:11px;font-weight:700;margin-bottom:4px">Telefon *</div><input id="phone" class="pi2" required placeholder="600 123 456"></div>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px"><div><div style="font-size:11px;font-weight:700;margin-bottom:4px">Paliwo</div><select id="fuel" class="sel"><option value="">Wybierz</option><option>Benzyna</option><option>Diesel</option><option>Benzyna+LPG</option><option>Hybryda</option><option>Elektryczny</option></select></div><div><div style="font-size:11px;font-weight:700;margin-bottom:4px">Skrzynia</div><select id="gear" class="sel"><option value="">Wybierz</option><option>Manualna</option><option>Automatyczna</option></select></div></div>
 <div><div style="font-size:11px;font-weight:700;margin-bottom:4px">Opis</div><textarea id="ds" rows="4" class="pi2" style="height:90px;padding:10px" placeholder="Opis, wyposażenie, historia..."></textarea></div>
@@ -337,14 +357,14 @@ a{color:inherit}
 <div style="padding:18px;display:flex;flex-direction:column;gap:12px">
 <input id="authEmail" type="email" class="pi2" placeholder="Email">
 <input id="authPass" type="password" class="pi2" placeholder="Hasło min 6 znaków">
-<button id="loginBtn" class="btn-show" style="background:#002f34">Zaloguj się</button>
-<button id="regBtn" class="btn-show" style="background:#fff;color:#002f34;border:1.5px solid #e5e7eb">Zarejestruj się</button>
+<button id="loginBtn" class="btn-show" style="background:#000000">Zaloguj się</button>
+<button id="regBtn" class="btn-show" style="background:#fff;color:#000000;border:1.5px solid #e5e7eb">Zarejestruj się</button>
 <div id="authMsg" style="font-size:12px;text-align:center;min-height:20px"></div>
 </div></div></div></div>
 
 <!-- DETAIL OLX STYLE -->
 <div id="detailModal" class="md"><div class="mbg" id="detailBg"></div><div class="mb"><div class="mc" id="detailMc" style="max-width:1200px;height:96vh">
-<div class="mh"><div style="font-weight:800;display:flex;align-items:center;gap:8px"><button id="detailBack" class="cl" style="width:36px;height:36px">‹</button><span id="detailTitle">Szczegóły</span></div><div style="display:flex;gap:8px"><button id="editBtn" class="b" style="display:none;background:#fff;border:1.5px solid #002f34;color:#002f34">✏️ Edytuj</button><button id="detailClose" class="cl">✕</button></div></div>
+<div class="mh"><div style="font-weight:800;display:flex;align-items:center;gap:8px"><button id="detailBack" class="cl" style="width:36px;height:36px">‹</button><span id="detailTitle">Szczegóły</span></div><div style="display:flex;gap:8px"><button id="editBtn" class="b" style="display:none;background:#fff;border:1.5px solid #000000;color:#000000">✏️ Edytuj</button><button id="detailClose" class="cl">✕</button></div></div>
 <div class="detailLayout">
 <div class="galWrap">
 <div class="gal" id="gal">
@@ -371,7 +391,16 @@ const AUTH_URL=U+'/auth/v1', REST=U+'/rest/v1';
 let supa=null, ls=[], filtered=[], ai=[], currentUser=null, currentEditId=null;
 let userPos=null, radiusKm=0, galIdx=0, galImgs=[], currentDetailItem=null, startX=0, scale=1;
 const $=id=>document.getElementById(id);
-const DEMO=[];
+const DEMO=[
+  {id:'demo1', md:'BMW 5 530d 2020', pr:89000, lc:'Gorzyce, Śląskie', ds:'BMW 5 530d xDrive, 265KM, full opcja, serwis ASO, 1 właściciel, bezwypadkowy', im:['https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800&h=600&fit=crop'], _extra:{marka:'BMW', model:'5', year:2020, fuel:'Diesel', gear:'Automatyczna', phone:'600 123 456', views:124, is_banned:false, latitude:'50.023', longitude:'18.397'}, created_at:new Date(Date.now()-86400000*1).toISOString()},
+  {id:'demo2', md:'Audi A6 C8 2019', pr:75000, lc:'Wodzisław Śląski', ds:'Audi A6 2.0 TDI 190KM S-Line, virtual cockpit, matrix LED, salon PL', im:['https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=800&h=600&fit=crop'], _extra:{marka:'Audi', model:'A6', year:2019, fuel:'Diesel', gear:'Automatyczna', phone:'600 111 222', views:89, is_banned:false, latitude:'49.999', longitude:'18.455'}, created_at:new Date(Date.now()-86400000*2).toISOString()},
+  {id:'demo3', md:'Mercedes C 220d 2021', pr:95000, lc:'Rybnik, Śląskie', ds:'Mercedes C 220d AMG Line, 194KM, 4Matic, Burmester, 360 camera', im:['https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=800&h=600&fit=crop'], _extra:{marka:'Mercedes', model:'C', year:2021, fuel:'Diesel', gear:'Automatyczna', phone:'600 333 444', views:201, is_banned:false, latitude:'50.096', longitude:'18.542'}, created_at:new Date(Date.now()-86400000*3).toISOString()},
+  {id:'demo4', md:'VW Passat B8 2018', pr:55000, lc:'Jastrzębie-Zdrój', ds:'VW Passat 2.0 TDI 150KM Highline, ACC, LED, skóra', im:['https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800&h=600&fit=crop'], _extra:{marka:'Volkswagen', model:'Passat', year:2018, fuel:'Diesel', gear:'Manualna', phone:'600 555 666', views:67, is_banned:false, latitude:'49.95', longitude:'18.58'}, created_at:new Date(Date.now()-86400000*4).toISOString()},
+  {id:'demo5', md:'Toyota Camry 2020', pr:82000, lc:'Żory', ds:'Toyota Camry Hybrid 2.5 218KM, Executive, salon PL, gwarancja', im:['https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=800&h=600&fit=crop'], _extra:{marka:'Toyota', model:'Camry', year:2020, fuel:'Hybryda', gear:'Automatyczna', phone:'600 777 888', views:145, is_banned:false, latitude:'50.04', longitude:'18.70'}, created_at:new Date(Date.now()-86400000*5).toISOString()},
+  {id:'demo6', md:'Skoda Superb 2019', pr:62000, lc:'Pszów', ds:'Skoda Superb 2.0 TDI 190KM Laurin&Klement, 4x4, full opcja', im:['https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800&h=600&fit=crop'], _extra:{marka:'Skoda', model:'Superb', year:2019, fuel:'Diesel', gear:'Automatyczna', phone:'600 999 000', views:98, is_banned:false, latitude:'50.04', longitude:'18.39'}, created_at:new Date(Date.now()-86400000*6).toISOString()}
+];
+
+
 
 function toast(m){ const t=$('toast'); t.textContent=m; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2600); }
 function logDebug(m){ const el=$('debug'); if(!el) return; el.style.display='block'; el.textContent+=m+'\\n'; }
@@ -520,10 +549,9 @@ function rn(){
   const g=$('gd'), ld=$('ld'), empty=$('empty'), countEl=$('count');
   if(ld) ld.style.display='none';
   // filtruj zbanowane dla zwykłych userów - admin widzi wszystko
-  const isAdminView = false; // na głównej zawsze ukrywaj zbanowane
-  if(!isAdminView){
-    filtered = filtered.filter(x=>!x._extra?.is_banned);
-  }
+  // na głównej ukrywaj zbanowane - tylko aktywne jak u profesjonalisty
+  filtered = filtered.filter(x=>!x._extra?.is_banned);
+
   if(!g) return; g.innerHTML='';
   if(countEl){
     let txt=filtered.length+' ogłoszeń';
@@ -566,9 +594,10 @@ async function loadReal(){
     if(userPos){
       ls.forEach(it=>{ const ex=it._extra; if(ex.latitude && ex.longitude){ it._dist=haversine(userPos.lat,userPos.lng,parseFloat(ex.latitude),parseFloat(ex.longitude)); } });
     }
+    if(ls.length===0 && DEMO.length>0){ ls=[...DEMO]; console.log('Używam DEMO - Supabase puste'); }
     filtered=[...ls];
     applyFilters();
-  }catch(e){ console.error(e); }
+  }catch(e){ console.error('Błąd ładowania ogłoszeń:', e); const countEl=document.getElementById('count'); if(countEl) countEl.textContent='Błąd bazy - pokazuję DEMO'; if(DEMO.length>0){ ls=[...DEMO]; filtered=[...ls]; applyFilters(); } }
 }
 
 async function checkSession(){
@@ -788,7 +817,7 @@ function renderDetailInfo(item){
       <div class="olxParam"><b>Kolor</b><span>${kolor}</span></div>
       <div class="olxParam"><b>Stan</b><span>${stan}</span></div>
       <div class="olxParam"><b>Lokalizacja</b><span>${loc}</span></div>
-      ${lat&&lng ? `<div class="olxParam olxParamFull"><b>GPS</b><span>${parseFloat(lat).toFixed(4)}, ${parseFloat(lng).toFixed(4)} • <a href="https://www.google.com/maps?q=${lat},${lng}" target="_blank" style="color:#002f34;text-decoration:underline">Otwórz mapy</a></span></div>` : ''}
+      ${lat&&lng ? `<div class="olxParam olxParamFull"><b>GPS</b><span>${parseFloat(lat).toFixed(4)}, ${parseFloat(lng).toFixed(4)} • <a href="https://www.google.com/maps?q=${lat},${lng}" target="_blank" style="color:#000000;text-decoration:underline">Otwórz mapy</a></span></div>` : ''}
     </div>
   </div>
 
@@ -803,7 +832,7 @@ function renderDetailInfo(item){
       <div class="olxAvatar">${(ex.marka||'U')[0].toUpperCase()}</div>
       <div style="flex:1"><div style="font-weight:800">${marka} ${model}</div><div style="font-size:12px;color:#64748b">📍 ${loc} • ${rok}</div></div>
     </div>
-    <a href="tel:${phone}" style="display:flex;align-items:center;justify-content:center;gap:8px;width:100%;height:52px;background:#002f34;color:#fff;border-radius:14px;font-weight:800;font-size:15px;text-decoration:none;margin-top:12px">📞 Zadzwoń: ${phone}</a>
+    <a href="tel:${phone}" style="display:flex;align-items:center;justify-content:center;gap:8px;width:100%;height:52px;background:#000000;color:#fff;border-radius:14px;font-weight:800;font-size:15px;text-decoration:none;margin-top:12px">📞 Zadzwoń: ${phone}</a>
     <div style="display:flex;gap:8px;margin-top:10px">
       <button id="shareBtn" class="btn-ghost" style="flex:1;height:44px">🔗 Udostępnij</button>
       ${isOwn?'<button id="delOwn" class="b" style="flex:1;height:44px;background:#fee2e2;color:#991b1b;border:1px solid #fecaca">🗑️ Usuń</button>':''}
