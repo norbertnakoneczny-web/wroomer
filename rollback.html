@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="pl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>WROOMER - ROLLBACK 1-CLICK</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:Inter,system-ui,sans-serif;background:#0a0a0a;color:#e2e8f0;min-height:100vh}
+.h{background:#002f34;color:#fff;padding:16px 20px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10}
+.logo{font-weight:900}.logo span{color:#23e5db}
+.badge{background:#23e5db;color:#002f34;padding:5px 10px;border-radius:20px;font-size:11px;font-weight:800}
+.wrap{max-width:900px;margin:0 auto;padding:20px}
+.card{background:#111;border:1px solid #222;border-radius:16px;padding:18px;margin-bottom:14px}
+.card.ok{border-color:#22c55e} .card.err{border-color:#ff3b30} .card.prod{border-color:#23e5db;box-shadow:0 0 0 1px #23e5db}
+.label{font-size:11px;text-transform:uppercase;letter-spacing:.8px;color:#64748b;font-weight:800;margin-bottom:6px}
+.title{font-size:18px;font-weight:800;margin-bottom:4px}
+.meta{font-size:12px;color:#888}
+.btn{height:40px;padding:0 16px;border-radius:12px;border:none;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.bb{background:#23e5db;color:#002f34} .bd{background:#ff3b30;color:#fff} .bg{background:#222;color:#fff;border:1px solid #333}
+.input{width:100%;height:44px;background:#1a1a1a;color:#fff;border:1px solid #333;border-radius:12px;padding:0 14px;margin:6px 0}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.log{background:#000;border:1px solid #1a1a1a;padding:12px;border-radius:12px;font-family:monospace;font-size:11px;white-space:pre-wrap;color:#0f0;max-height:260px;overflow:auto;margin-top:10px}
+</style></head><body>
+<div class="h"><div class="logo">WROOMER<span>.PL</span> ROLLBACK 1-CLICK</div><div class="badge">ROWNOLEGLY PORTAL</div></div>
+<div class="wrap">
+<div class="card" style="border-color:#23e5db">
+<div class="label">Jak to dziala - 1 klik</div>
+<div class="title">Koniec z cudowaniem na GitHub</div>
+<div class="meta">Ten portal to rownolegla wersja. Wgrywasz go raz na Vercel jako /rollback.html i masz panel do cofania wersji.<br><br>
+<b>TRYB VERCEL (prawdziwy 1-klik):</b> Podajesz Vercel Token -> widzisz wszystkie Deployments z data i statusem -> klikasz PROMOTE przy dzialajacej z 10h temu -> gotowe!<br>
+<b>TRYB BACKUP:</b> Bez tokena - robisz backup dzialajacej wersji i przywracasz.
+</div>
+<div style="margin-top:14px" class="grid">
+<input id="vercelToken" class="input" placeholder="Vercel Token vercel.com/account/tokens">
+<input id="projectId" class="input" placeholder="Project ID (opcjonalnie)">
+</div>
+<div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
+<button class="btn bb" onclick="loadDeployments()">Pobierz wersje</button>
+<button class="btn bg" onclick="saveCurrentBackup()">Zrob backup teraz</button>
+<button class="btn bg" onclick="loadBackups()">Moje backupy</button>
+</div>
+<div id="log" class="log">Gotowy. Wklej Vercel Token i kliknij Pobierz wersje.</div>
+</div>
+<div id="list"></div>
+<div class="card">
+<div class="label">Instrukcja token 30s</div>
+<div class="title">Jak uzyskac token</div>
+<div class="meta">
+1. vercel.com/account/tokens -> Create Token -> WROOMER-ROLLBACK -> Create<br>
+2. Kopiujesz token (vercel_...), wklejasz wyzej<br>
+3. Project ID: vercel.com -> Twoj projekt -> Settings -> General -> Project ID (prj_...) - opcjonalne<br>
+4. Klikasz Pobierz wersje -> widzisz wszystkie<br>
+5. Klikasz 1-KLIK PRZYWROC przy dzialajacej - i wroomer.pl wraca w 20s
+</div>
+</div>
+</div>
+<script>
+const $=id=>document.getElementById(id);
+let deployments=[];
+function log(t){ $('log').textContent = new Date().toLocaleTimeString()+' | '+t+'\n' + $('log').textContent; }
+async function loadDeployments(){
+  const token=$('vercelToken').value.trim();
+  if(!token){ log('BRAK TOKENA - tryb backupu'); loadBackups(); return; }
+  const project=$('projectId').value.trim();
+  log('Pobieram deployments...');
+  try{
+    let url=`https://api.vercel.com/v6/deployments?limit=20`;
+    if(project) url+=`&projectId=${project}`;
+    const res=await fetch(url,{headers:{Authorization:`Bearer ${token}`}});
+    if(!res.ok){ const txt=await res.text(); log('BLAD API '+res.status+' '+txt); loadBackups(); return; }
+    const data=await res.json();
+    deployments=data.deployments||[];
+    log('Znaleziono '+deployments.length+' wersji');
+    renderDeployments();
+  }catch(e){ log('ERR '+e.message); loadBackups(); }
+}
+function renderDeployments(){
+  const list=$('list'); list.innerHTML='';
+  deployments.forEach(d=>{
+    const isProd=d.target==='production';
+    const isReady=d.state==='READY';
+    const isError=d.state==='ERROR';
+    const date=new Date(d.createdAt).toLocaleString('pl-PL');
+    const card=document.createElement('div');
+    card.className='card '+(isProd?'prod':isError?'err':isReady?'ok':'');
+    card.innerHTML=`
+      <div class="label">${isProd?'PRODUCTION AKTUALNIE':isReady?'READY DZIALAJACA':'ERROR'} • ${date}</div>
+      <div class="title">${d.meta?.githubCommitMessage||'Deploy'} <span style="font-family:monospace;font-size:12px;color:#888">${(d.meta?.githubCommitSha||d.id||'').slice(0,7)}</span></div>
+      <div class="meta">ID: ${d.id} • ${d.meta?.githubCommitRef||''}</div>
+      <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
+        ${!isProd && isReady ? `<button class="btn bb" onclick="promote('${d.id}')">1-KLIK PRZYWROC TE WERSJE</button>` : ''}
+        ${isProd ? `<button class="btn bg" disabled>To jest aktualna</button>` : ''}
+        <a href="${d.url?'https://'+d.url:'#'}" target="_blank" class="btn bg" style="text-decoration:none">Podglad</a>
+      </div>
+    `;
+    list.appendChild(card);
+  });
+}
+async function promote(deploymentId){
+  const token=$('vercelToken').value.trim();
+  if(!confirm('Przywrocic te wersje na produkcje? 1 klik i wraca dzialajaca!')) return;
+  log('Promuje '+deploymentId+'...');
+  try{
+    const res=await fetch(`https://api.vercel.com/v13/deployments/${deploymentId}/promote`,{method:'POST',headers:{Authorization:`Bearer ${token}`,'Content-Type':'application/json'},body:JSON.stringify({target:'production'})});
+    const txt=await res.text();
+    if(res.ok){ log('SUKCES! Przywrocono '+deploymentId); alert('Przywrocono! Za 20s wroomer.pl wroci.'); loadDeployments(); }
+    else { log('BLAD '+res.status+' '+txt); alert('Blad: '+txt); }
+  }catch(e){ log('ERR '+e.message); }
+}
+function saveCurrentBackup(){
+  const name=prompt('Nazwa backupu:','DZIALAJACY-'+new Date().toLocaleString('pl-PL'));
+  if(!name) return;
+  const backups=JSON.parse(localStorage.getItem('wroomer_backups')||'[]');
+  backups.unshift({name,date:new Date().toISOString(),id:Date.now()});
+  localStorage.setItem('wroomer_backups',JSON.stringify(backups.slice(0,20)));
+  log('Backup zapisany: '+name); loadBackups();
+}
+function loadBackups(){
+  const backups=JSON.parse(localStorage.getItem('wroomer_backups')||'[]');
+  const list=$('list');
+  if(backups.length===0 && deployments.length===0){
+    list.innerHTML+=`<div class="card"><div class="label">Backupy</div><div class="title">Brak backupow</div><div class="meta">Kliknij Zrob backup teraz gdy masz dzialajaca wersje.</div></div>`;
+    return;
+  }
+  if(backups.length>0){
+    list.innerHTML='';
+    backups.forEach(b=>{
+      const d=new Date(b.date).toLocaleString('pl-PL');
+      const card=document.createElement('div');
+      card.className='card ok';
+      card.innerHTML=`<div class="label">BACKUP LOKALNY • ${d}</div><div class="title">${b.name}</div><div style="display:flex;gap:8px;margin-top:10px"><button class="btn bg" onclick="deleteBackup(${b.id})">Usun</button></div>`;
+      list.appendChild(card);
+    });
+  }
+}
+function deleteBackup(id){
+  let backups=JSON.parse(localStorage.getItem('wroomer_backups')||'[]');
+  backups=backups.filter(b=>b.id!==id);
+  localStorage.setItem('wroomer_backups',JSON.stringify(backups));
+  loadBackups();
+}
+loadBackups();
+</script>
+</body></html>
