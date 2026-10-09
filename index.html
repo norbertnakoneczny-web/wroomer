@@ -160,29 +160,38 @@ a{color:inherit}
 
 /* FIX: po zalogowaniu przycisk Dodaj przesuniety za ekran - usun zielony napis na mobile */
 @media(max-width:768px){
-  #userEmail{display:none !important}
-  .h{padding:0 10px !important;gap:6px !important}
-  .h .logo{flex-shrink:0}
-  #authBtn{font-size:12px !important;padding:0 10px !important;max-width:90px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  #ab{flex-shrink:0;padding:0 14px !important}
-  /* gdy zalogowany, authBtn to Wyloguj - zrob maly */
-  .h div[style*="display:flex;gap:8px"]{gap:6px !important;flex-shrink:0}
-}
-
-@media(max-width:400px){
-  #authBtn{display:none !important} /* na bardzo malym ekranie calkiem ukryj Wyloguj, zostaw tylko + Dodaj - wylogowanie w Moje */
+   /* na bardzo malym ekranie calkiem ukryj Wyloguj, zostaw tylko + Dodaj - wylogowanie w Moje */
   .lt{font-size:15px !important}
 }
 
 
-/* FINAL: calkiem ukryj zielony email - za malo miejsca */
-#userEmail{display:none !important}
+
 @media(max-width:768px){
   #authBtn{font-size:12px !important;padding:0 12px !important}
   .h{padding:0 10px !important}
 }
 @media(max-width:400px){
   #authBtn{display:none !important}
+}
+
+
+/* FINAL HEADER MOBILE - oba przyciski widoczne: Zaloguj/Wyloguj + Dodaj */
+#userEmail{display:none !important}
+.h{height:52px !important}
+@media(max-width:768px){
+  .h{padding:0 8px !important;gap:6px !important}
+  .logo{gap:6px !important}
+  .li{width:30px !important;height:30px !important;font-size:14px !important}
+  .lt{font-size:15px !important}
+  #authBtn{font-size:11px !important;padding:0 10px !important;height:32px !important;min-width:62px;max-width:78px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  #ab{font-size:12px !important;padding:0 12px !important;height:32px !important;flex-shrink:0}
+  .h div[style*="display:flex;gap:8px"]{gap:5px !important}
+}
+@media(max-width:380px){
+  .h{padding:0 6px !important}
+  .lt{font-size:14px !important}
+  #authBtn{padding:0 8px !important;min-width:58px;font-size:10px !important}
+  #ab{padding:0 10px !important;font-size:11px !important}
 }
 
 </style>
@@ -556,20 +565,14 @@ async function checkSession(){
 function updateAuthUI(){
   const btn=$('authBtn'), mail=$('userEmail');
   if(currentUser){
-    if(btn){
-      const isMobile = window.innerWidth <= 768;
-      btn.textContent = 'Wyloguj';
-      btn.style.maxWidth = isMobile ? '80px' : '120px';
-      btn.style.overflow = 'hidden';
-      btn.style.textOverflow = 'ellipsis';
-    }
-    if(mail){ mail.style.display='none'; }
-  }
-  else {
-    if(btn){ btn.textContent='Zaloguj'; btn.style.maxWidth=''; }
+    if(btn){ btn.textContent='Wyloguj'; btn.title=currentUser.email; }
+    if(mail) mail.style.display='none';
+  } else {
+    if(btn){ btn.textContent='Zaloguj'; }
     if(mail) mail.style.display='none';
   }
 }
+
 
 function openAuth(){ $('authModal').classList.add('o'); $('authMsg').textContent=''; }
 function closeAuth(){ $('authModal').classList.remove('o'); }
