@@ -11,43 +11,40 @@
 .card.ok{border-color:#22c55e} .card.err{border-color:#ff3b30} .card.prod{border-color:#23e5db;box-shadow:0 0 0 1px #23e5db}
 .label{font-size:11px;text-transform:uppercase;letter-spacing:.8px;color:#64748b;font-weight:800;margin-bottom:6px}
 .title{font-size:18px;font-weight:800;margin-bottom:4px}
-.meta{font-size:12px;color:#888}
+.meta{font-size:12px;color:#888;line-height:1.5}
 .btn{height:40px;padding:0 16px;border-radius:12px;border:none;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
 .bb{background:#23e5db;color:#002f34} .bd{background:#ff3b30;color:#fff} .bg{background:#222;color:#fff;border:1px solid #333}
 .input{width:100%;height:44px;background:#1a1a1a;color:#fff;border:1px solid #333;border-radius:12px;padding:0 14px;margin:6px 0}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .log{background:#000;border:1px solid #1a1a1a;padding:12px;border-radius:12px;font-family:monospace;font-size:11px;white-space:pre-wrap;color:#0f0;max-height:260px;overflow:auto;margin-top:10px}
 </style></head><body>
-<div class="h"><div class="logo">WROOMER<span>.PL</span> ROLLBACK 1-CLICK</div><div class="badge">ROWNOLEGLY PORTAL</div></div>
+<div class="h"><div class="logo">WROOMER<span>.PL</span> ROLLBACK 1-CLICK</div><div class="badge">GOTOWIEC</div></div>
 <div class="wrap">
 <div class="card" style="border-color:#23e5db">
-<div class="label">Jak to dziala - 1 klik</div>
+<div class="label">WROOMER ROLLBACK - 1 KLIK</div>
 <div class="title">Koniec z cudowaniem na GitHub</div>
-<div class="meta">Ten portal to rownolegla wersja. Wgrywasz go raz na Vercel jako /rollback.html i masz panel do cofania wersji.<br><br>
-<b>TRYB VERCEL (prawdziwy 1-klik):</b> Podajesz Vercel Token -> widzisz wszystkie Deployments z data i statusem -> klikasz PROMOTE przy dzialajacej z 10h temu -> gotowe!<br>
-<b>TRYB BACKUP:</b> Bez tokena - robisz backup dzialajacej wersji i przywracasz.
-</div>
+<div class="meta">Wgraj te pliki na GitHub i od razu masz:<br>• wroomer.pl = portal dziala<br>• wroomer.pl/admin.html = admin PRO STATS EDYCJA BAN<br>• wroomer.pl/rollback.html = ten panel do cofania wersji 1 klikiem<br><br><b>TRYB 1-KLIK VERCEL:</b> Wklej token z vercel.com/account/tokens i kliknij Pobierz wersje -> zobaczysz wszystkie deploye -> klikasz PRZYWROC<br><b>TRYB BACKUP:</b> Bez tokena - klikasz Zrob backup teraz przy dzialajacej wersji</div>
 <div style="margin-top:14px" class="grid">
-<input id="vercelToken" class="input" placeholder="Vercel Token vercel.com/account/tokens">
-<input id="projectId" class="input" placeholder="Project ID (opcjonalnie)">
+<input id="vercelToken" class="input" placeholder="Vercel Token (vercel.com/account/tokens) - opcjonalnie">
+<input id="projectId" class="input" placeholder="Project ID prj_... (opcjonalnie)">
 </div>
 <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
-<button class="btn bb" onclick="loadDeployments()">Pobierz wersje</button>
+<button class="btn bb" onclick="loadDeployments()">Pobierz wersje Vercel</button>
 <button class="btn bg" onclick="saveCurrentBackup()">Zrob backup teraz</button>
 <button class="btn bg" onclick="loadBackups()">Moje backupy</button>
 </div>
-<div id="log" class="log">Gotowy. Wklej Vercel Token i kliknij Pobierz wersje.</div>
+<div id="log" class="log">Gotowy. Wklej token Vercel i kliknij Pobierz wersje. Bez tokena dziala tryb backupu.</div>
 </div>
 <div id="list"></div>
 <div class="card">
-<div class="label">Instrukcja token 30s</div>
-<div class="title">Jak uzyskac token</div>
+<div class="label">Jak uzyskac token 30 sekund</div>
+<div class="title">Vercel Token - raz</div>
 <div class="meta">
-1. vercel.com/account/tokens -> Create Token -> WROOMER-ROLLBACK -> Create<br>
-2. Kopiujesz token (vercel_...), wklejasz wyzej<br>
-3. Project ID: vercel.com -> Twoj projekt -> Settings -> General -> Project ID (prj_...) - opcjonalne<br>
-4. Klikasz Pobierz wersje -> widzisz wszystkie<br>
-5. Klikasz 1-KLIK PRZYWROC przy dzialajacej - i wroomer.pl wraca w 20s
+1. vercel.com/account/tokens -> Create Token -> nazwa WROOMER-ROLLBACK -> Create<br>
+2. Kopiuj token vercel_... i wklej wyzej<br>
+3. Klikasz Pobierz wersje -> widzisz wszystkie wersje z data, READY/ERROR<br>
+4. Klikasz 1-KLIK PRZYWROC przy dzialajacej z 10h temu -> za 20s wroomer.pl wraca<br>
+5. Koniec - od teraz zawsze 1 klik zamiast cudowania na GitHub
 </div>
 </div>
 </div>
@@ -58,12 +55,12 @@ function log(t){ $('log').textContent = new Date().toLocaleTimeString()+' | '+t+
 async function loadDeployments(){
   const token=$('vercelToken').value.trim();
   if(!token){ log('BRAK TOKENA - tryb backupu'); loadBackups(); return; }
-  const project=$('projectId').value.trim();
-  log('Pobieram deployments...');
+  log('Pobieram deployments Vercel...');
   try{
-    let url=`https://api.vercel.com/v6/deployments?limit=20`;
-    if(project) url+=`&projectId=${project}`;
-    const res=await fetch(url,{headers:{Authorization:`Bearer ${token}`}});
+    let url='https://api.vercel.com/v6/deployments?limit=20';
+    const project=$('projectId').value.trim();
+    if(project) url+='&projectId='+project;
+    const res=await fetch(url,{headers:{Authorization:'Bearer '+token}});
     if(!res.ok){ const txt=await res.text(); log('BLAD API '+res.status+' '+txt); loadBackups(); return; }
     const data=await res.json();
     deployments=data.deployments||[];
@@ -82,8 +79,8 @@ function renderDeployments(){
     card.className='card '+(isProd?'prod':isError?'err':isReady?'ok':'');
     card.innerHTML=`
       <div class="label">${isProd?'PRODUCTION AKTUALNIE':isReady?'READY DZIALAJACA':'ERROR'} • ${date}</div>
-      <div class="title">${d.meta?.githubCommitMessage||'Deploy'} <span style="font-family:monospace;font-size:12px;color:#888">${(d.meta?.githubCommitSha||d.id||'').slice(0,7)}</span></div>
-      <div class="meta">ID: ${d.id} • ${d.meta?.githubCommitRef||''}</div>
+      <div class="title">${(d.meta?.githubCommitMessage||'Deploy')} <span style="font-family:monospace;font-size:12px;color:#888">${(d.meta?.githubCommitSha||d.id||'').slice(0,7)}</span></div>
+      <div class="meta">ID: ${d.id}</div>
       <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
         ${!isProd && isReady ? `<button class="btn bb" onclick="promote('${d.id}')">1-KLIK PRZYWROC TE WERSJE</button>` : ''}
         ${isProd ? `<button class="btn bg" disabled>To jest aktualna</button>` : ''}
@@ -93,14 +90,14 @@ function renderDeployments(){
     list.appendChild(card);
   });
 }
-async function promote(deploymentId){
+async function promote(id){
   const token=$('vercelToken').value.trim();
-  if(!confirm('Przywrocic te wersje na produkcje? 1 klik i wraca dzialajaca!')) return;
-  log('Promuje '+deploymentId+'...');
+  if(!confirm('Przywrocic te wersje na produkcje?')) return;
+  log('Promuje '+id+'...');
   try{
-    const res=await fetch(`https://api.vercel.com/v13/deployments/${deploymentId}/promote`,{method:'POST',headers:{Authorization:`Bearer ${token}`,'Content-Type':'application/json'},body:JSON.stringify({target:'production'})});
+    const res=await fetch(`https://api.vercel.com/v13/deployments/${id}/promote`,{method:'POST',headers:{Authorization:'Bearer '+token,'Content-Type':'application/json'},body:JSON.stringify({target:'production'})});
     const txt=await res.text();
-    if(res.ok){ log('SUKCES! Przywrocono '+deploymentId); alert('Przywrocono! Za 20s wroomer.pl wroci.'); loadDeployments(); }
+    if(res.ok){ log('SUKCES! Przywrocono '+id); alert('Przywrocono! Za 20s wroomer.pl wroci.'); loadDeployments(); }
     else { log('BLAD '+res.status+' '+txt); alert('Blad: '+txt); }
   }catch(e){ log('ERR '+e.message); }
 }
@@ -116,7 +113,7 @@ function loadBackups(){
   const backups=JSON.parse(localStorage.getItem('wroomer_backups')||'[]');
   const list=$('list');
   if(backups.length===0 && deployments.length===0){
-    list.innerHTML+=`<div class="card"><div class="label">Backupy</div><div class="title">Brak backupow</div><div class="meta">Kliknij Zrob backup teraz gdy masz dzialajaca wersje.</div></div>`;
+    list.innerHTML=`<div class="card"><div class="label">Backupy</div><div class="title">Brak backupow</div><div class="meta">Kliknij Zrob backup teraz gdy masz dzialajaca wersje.</div></div>`;
     return;
   }
   if(backups.length>0){

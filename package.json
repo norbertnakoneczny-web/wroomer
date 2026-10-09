@@ -1,4 +1,5 @@
 {
-  "name": "wroomer-rollback",
-  "private": true
+  "name": "wroomer",
+  "private": true,
+  "version": "10.0.3-gotowiec"
 }
