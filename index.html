@@ -57,11 +57,7 @@ a{color:inherit}
 .pr{font-weight:800;font-size:16px;margin-top:6px;display:flex;justify-content:space-between;align-items:center}
 .meta{font-size:12px;color:var(--muted);margin-top:4px;display:flex;gap:8px;flex-wrap:wrap}
 .badgeOwn{position:absolute;top:8px;right:8px;background:var(--acc);color:var(--nav);font-size:10px;font-weight:800;padding:4px 8px;border-radius:999px}
-.btn-show{width:100%;height:52px;background:var(--nav);color:#fff;border-radius:14px;font-weight:800;font-size:15px;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 16px rgba(0,47,52,.25);transition:all .15s}
-.btn-show:active{transform:scale(.98)}
-.btn-show:disabled{opacity:.6;transform:none}
-.formFooter{position:sticky;bottom:0;background:#fff;padding:12px 16px calc(12px + env(safe-area-inset-bottom));border-top:1px solid var(--border);margin:12px -14px -14px;z-index:5}
-@media(max-width:768px){.btn-show{height:56px;font-size:16px;border-radius:16px} .formFooter{padding:14px 16px calc(14px + env(safe-area-inset-bottom) + 60px)} }
+.btn-show{width:100%;height:52px;background:var(--nav);color:#fff;border-radius:14px;font-weight:800;font-size:15px;border:none;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 12px rgba(0,47,52,.18);transition:transform .12s}
 .btn-ghost{width:100%;height:44px;background:#fff;color:var(--nav);border:1.5px solid var(--border);border-radius:14px;font-weight:700}
 
 /* GALLERY PRO like otomoto */
@@ -69,14 +65,7 @@ a{color:inherit}
 .mbg{position:absolute;inset:0;background:rgba(0,0,0,.92)}
 .mb{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
 .mc{background:#fff;width:100%;max-width:1200px;max-height:96vh;height:96vh;width:96vw;border-radius:20px;overflow:hidden;display:flex;flex-direction:column}
-@media(max-width:768px){
-.mc{width:100%;height:100dvh;max-height:100dvh;border-radius:0;display:flex;flex-direction:column}
-.mb{padding:0;width:100%;max-width:100%;height:100dvh;max-height:100dvh;border-radius:0}
-#am .mb,#am .mc{height:100dvh;max-height:100dvh}
-#authModal .mb,#authModal .mc{height:auto;max-height:92vh;margin:auto;width:92%;max-width:400px;border-radius:20px}
-#af{flex:1;overflow:auto;padding-bottom:20px}
-.formFooter{position:sticky;bottom:0}
-}
+@media(max-width:768px){.mc{width:100%;height:100dvh;max-height:100dvh;border-radius:0} .mb{padding:0}}
 .mh{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;gap:8px}
 .cl{width:40px;height:40px;border-radius:50%;background:#f2f3f5;display:grid;place-items:center;border:none;cursor:pointer;font-size:18px}
 
@@ -138,12 +127,35 @@ a{color:inherit}
 .toast.show{display:block;animation:tin .25s}
 @keyframes tin{from{transform:translateX(-50%) translateY(10px);opacity:0}to{transform:translateX(-50%) translateY(0);opacity:1}}
 
+/* PRO MOBILE - jak OLX/OTOMOTO - tylko CSS, nie rusza JS */
 @media(max-width:768px){
-#authModal .pi2{height:48px;font-size:16px}
-#authModal .btn{height:48px;font-size:15px}
+  .btn-show{height:58px !important;font-size:17px !important;border-radius:16px !important}
+  .btn-show:active{transform:scale(.97)}
+  /* Add modal - full screen like native app */
+  #am .mb, #am .mc{height:100dvh !important;max-height:100dvh !important;border-radius:0 !important;width:100% !important;max-width:100% !important}
+  #am .mc{display:flex !important;flex-direction:column !important}
+  #af{flex:1 !important;overflow:auto !important;padding-bottom:100px !important;-webkit-overflow-scrolling:touch}
+  #sbBtn{position:sticky !important;bottom:0 !important;left:0;right:0;z-index:5;margin:12px 0 0 !important;width:100% !important;box-shadow:0 -8px 24px rgba(255,255,255,.9), 0 -2px 0 #fff, 0 4px 16px rgba(0,47,52,.25) !important}
+  /* Auth modal - centered card like big players */
+  #authModal .mc{width:92% !important;max-width:400px !important;height:auto !important;max-height:92vh !important;margin:auto !important;border-radius:24px !important;overflow:hidden !important}
+  #authModal .mb{padding:12px !important;background:rgba(0,0,0,.88) !important}
+  #authModal .pi2{height:50px !important;font-size:16px !important;border-radius:14px !important}
+  #authModal .btn-show{height:52px !important}
+  /* Detail modal stays working - no body fixed */
+  #detailModal .mc{height:100dvh !important;max-height:100dvh !important;border-radius:0 !important}
+  /* Hide bottom nav when any modal open - CSS only with :has (supported in modern browsers) */
+  body:has(#am.o) .bottomNav, body:has(#authModal.o) .bottomNav, body:has(#detailModal.o) .bottomNav{display:none !important}
+  /* Fix page after registration - ensure toast above */
+  .toast{bottom:100px !important;z-index:100 !important}
 }
-body.modalOpen{overflow:hidden;position:fixed;width:100%;height:100%}
-body.modalOpen .bottomNav{display:none !important}
+
+/* Desktop - button slightly bigger */
+@media(min-width:769px){
+  .btn-show{height:54px;font-size:15px}
+}
+
+/* Professional focus states like big players */
+.pi2:focus, .sel:focus{border-color:var(--nav) !important;box-shadow:0 0 0 3px rgba(0,47,52,.08) !important}
 
 </style>
 </head>
@@ -263,7 +275,7 @@ body.modalOpen .bottomNav{display:none !important}
 <div><div style="font-size:11px;font-weight:700;margin-bottom:4px">Opis</div><textarea id="ds" rows="4" class="pi2" style="height:90px;padding:10px" placeholder="Opis, wyposażenie, historia..."></textarea></div>
 <div><div style="font-size:11px;font-weight:700;margin-bottom:6px">📸 Zdjęcia - max 10, szybkie URL-e (jak OLX/OTOMOTO)</div><div id="dz" class="dp">📷 Kliknij lub przeciągnij do 10 zdjęć • kompresja WebP 1024px</div><input id="fi" type="file" multiple accept="image/*" style="display:none"><div id="pv" class="pv" style="margin-top:10px"></div><div id="ci" style="font-size:11px;color:#065f46"></div></div>
 <div style="display:none"><input id="lat"><input id="lng"><input id="titleFull"></div>
-<div class="formFooter"><button type="submit" id="sbBtn" class="btn-show">💾 Zapisz ogłoszenie</button>
+<button type="submit" id="sbBtn" class="btn-show">💾 Zapisz ogłoszenie</button>
 </form></div></div></div>
 
 <!-- AUTH -->
@@ -897,27 +909,5 @@ window.testFilters=()=>{
   const dbg=document.getElementById('filterDebug'); if(dbg){ dbg.style.display='block'; dbg.innerHTML='LS: '+ls.length+'<br>'+ls.slice(0,3).map(x=>x.md+' fuel:'+(x._extra?.fuel||'-')+' gear:'+(x._extra?.gear||'-')).join('<br>'); }
 };
 </script>
-
-<script>
-(function(){
-  window.openAdd = function(){
-    const cu = typeof currentUser!=='undefined'?currentUser:null;
-    if(!cu){ const am=document.getElementById('authModal'); if(am) am.classList.add('o'); const msg=document.getElementById('authMsg'); if(msg){ msg.textContent='Musisz się zalogować'; msg.style.color='red'; } document.body.classList.add('modalOpen'); return; }
-    window.currentEditId=null;
-    const ft=document.getElementById('formTitle'); if(ft) ft.textContent='Dodaj ogłoszenie';
-    const af=document.getElementById('af'); if(af) af.reset();
-    if(typeof ai!=='undefined'){ ai=[]; }
-    const pv=document.getElementById('pv'); if(pv) pv.innerHTML='';
-    const ci=document.getElementById('ci'); if(ci) ci.textContent='';
-    document.getElementById('am').classList.add('o');
-    document.body.classList.add('modalOpen');
-    window.scrollTo(0,0);
-  };
-  window.closeAdd = function(){ const el=document.getElementById('am'); if(el) el.classList.remove('o'); document.body.classList.remove('modalOpen'); };
-  window.openAuth = function(){ const m=document.getElementById('authModal'); if(m) m.classList.add('o'); const msg=document.getElementById('authMsg'); if(msg) msg.textContent=''; document.body.classList.add('modalOpen'); };
-  window.closeAuth = function(){ const m=document.getElementById('authModal'); if(m) m.classList.remove('o'); document.body.classList.remove('modalOpen'); };
-})();
-</script>
-
 </body>
 </html>
