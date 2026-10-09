@@ -643,7 +643,7 @@ function setupAdd(){
   $('dz')?.addEventListener('drop', async e=>{ e.preventDefault(); e.currentTarget.style.background='#f7f8f9'; const files=Array.from(e.dataTransfer.files||[]).filter(f=>f.type.startsWith('image/')).slice(0,10-ai.length); for(const f of files){ const c=await comp(f,1280,0.72); ai.push(c); } renderPv(); });
   $('mk')?.addEventListener('change', e=>populateModels(e.target.value,'md2'));
   $('af')?.addEventListener('submit', handleAddSubmit);
-  $('geocodeBtn')?.addEventListener('click', async()=>{ const q=$('lc').value.trim(); if(!q) return; toast('Szukam GPS dla '+q+'...'); try{ const res=await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(q+', Polska')}&limit=1`); const j=await res.json(); if(j[0]){ $('lat').value=j[0].lat; $('lng').value=j[0].lon; toast('GPS: '+parseFloat(j[0].lat).toFixed(4)+', '+parseFloat(j[0].lon).toFixed(4)); } else toast('Nie znaleziono miejscowości'); }catch(e){ toast('Błąd GPS'); } });
+  $('gpsAddBtn')?.addEventListener('click', getGPSForAdd); $('geocodeBtn')?.addEventListener('click', async()=>{ const q=$('lc').value.trim(); if(!q) return; toast('Szukam GPS dla '+q+'...'); try{ const res=await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(q+', Polska')}&limit=1`); const j=await res.json(); if(j[0]){ $('lat').value=j[0].lat; $('lng').value=j[0].lon; toast('GPS: '+parseFloat(j[0].lat).toFixed(4)+', '+parseFloat(j[0].lon).toFixed(4)); } else toast('Nie znaleziono miejscowości'); }catch(e){ toast('Błąd GPS'); } });
 }
 
 function renderPv(){ const pv=$('pv'); if(!pv) return; pv.innerHTML=''; ai.forEach((img,i)=>{ const d=document.createElement('div'); d.className='px'; d.innerHTML=`<img src="${img.data}"><button type="button" onclick="ai.splice(${i},1);renderPv()">✕</button>`; pv.appendChild(d); }); }
@@ -881,6 +881,64 @@ function setupFilters(){
 }
 
 async function getGPS(){
+  if(!navigator.geolocation){ toast('GPS nie wspierane - włącz lokalizację w telefonie'); return; }
+  const btn=$('gpsBtn'); if(btn) btn.textContent='⏳ Szukam GPS...';
+  toast('📍 Pobieram Twoją lokalizację... zezwól w telefonie');
+  const opts={enableHighAccuracy:true,timeout:15000,maximumAge:0};
+  navigator.geolocation.getCurrentPosition(pos=>{
+    userPos={lat:pos.coords.latitude,lng:pos.coords.longitude};
+    const gi=$('gpsInfo'); if(gi){ gi.style.display='block'; gi.textContent='📍 Twoja pozycja: '+userPos.lat.toFixed(4)+', '+userPos.lng.toFixed(4)+' • promień '+radiusKm+' km'; }
+    if(btn){ btn.textContent='✅ GPS '+userPos.lat.toFixed(3); btn.classList.add('active'); }
+    const diag=$('diag'); if(diag) diag.textContent='GPS ON '+userPos.lat.toFixed(4);
+    // reverse geocode to fill loc filter
+    try{
+      fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${userPos.lat}&lon=${userPos.lng}&zoom=10`,{headers:{'Accept-Language':'pl'}}).then(r=>r.json()).then(j=>{ if(j && j.address){ const city=j.address.city||j.address.town||j.address.village||''; if(city){ const locEl=$('loc'); if(locEl && !locEl.value) locEl.value=city; toast('✅ GPS: '+city+' • '+radiusKm+' km'); } else toast('✅ GPS złapany - promień '+radiusKm+' km'); applyFilters(); } }).catch(()=>{ toast('✅ GPS złapany'); applyFilters(); });
+    }catch(e){ toast('✅ GPS OK'); applyFilters(); }
+    applyFilters();
+  }, err=>{
+    console.error('GPS err', err);
+    let msg='Błąd GPS: ';
+    if(err.code===1) msg+='Odmówiono dostępu - włącz lokalizację w ustawieniach telefonu (Ustawienia > Prywatność > Lokalizacja > Chrome/Safari > Zezwól)';
+    else if(err.code===2) msg+='Brak sygnału GPS - wyjdź na zewnątrz lub włącz WiFi';
+    else if(err.code===3) msg+='Timeout - spróbuj ponownie';
+    else msg+=err.message;
+    toast(msg);
+    if(btn) btn.textContent='📍 GPS';
+  }, opts);
+}
+
+async function getGPSForAdd(){
+  if(!navigator.geolocation){ toast('GPS nie wspierane - włącz lokalizację'); return; }
+  const btn=$('gpsAddBtn'); if(btn) btn.textContent='⏳ GPS...';
+  toast('📍 Pobieram lokalizację dla ogłoszenia...');
+  const opts={enableHighAccuracy:true,timeout:15000,maximumAge:0};
+  navigator.geolocation.getCurrentPosition(async pos=>{
+    const lat=pos.coords.latitude, lng=pos.coords.longitude;
+    $('lat').value=lat; $('lng').value=lng;
+    if(btn) btn.textContent='✅ GPS złapany';
+    // reverse geocode to fill miejscowosc
+    try{
+      const res=await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=12`,{headers:{'Accept-Language':'pl'}});
+      const j=await res.json();
+      if(j && j.address){
+        const city=j.address.city||j.address.town||j.address.village||j.address.municipality||'';
+        if(city && !$('lc').value){ $('lc').value=city; }
+        const full=j.display_name||'';
+        $('titleFull').value=full;
+        toast('✅ GPS: '+(city||full.slice(0,40))+' - lat/lng zapisane');
+      } else toast('✅ GPS zapisany: '+lat.toFixed(4)+','+lng.toFixed(4));
+    }catch(e){ toast('✅ GPS zapisany: '+lat.toFixed(4)); }
+  }, err=>{
+    let msg='Błąd GPS: ';
+    if(err.code===1) msg+='Odmówiono - włącz lokalizację: Ustawienia telefonu > Lokalizacja > Zezwól dla przeglądarki';
+    else if(err.code===2) msg+='Brak sygnału - wyjdź na zewnątrz';
+    else msg+='Timeout - spróbuj ponownie';
+    toast(msg);
+    if(btn) btn.textContent='📍 Użyj mojej lokalizacji';
+  }, opts);
+}
+
+async function getGPS_OLD(){
   if(!navigator.geolocation){ toast('GPS nie wspierane w przeglądarce'); return; }
   const btn=$('gpsBtn'); if(btn) btn.textContent='⏳ GPS...';
   navigator.geolocation.getCurrentPosition(pos=>{
