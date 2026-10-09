@@ -1,5 +1,4 @@
 
-/* WROOMER.PL - DESIGN SYSTEM - WROOMER-ADMIN-PRO-STATS-EDYCJA-BAN */
 :root{--w-primary:#0f172a;--w-accent:#facc15;--w-bg:#f8fafc;--w-card:#ffffff;--w-border:#e2e8f0}
 *{box-sizing:border-box}body{font-family:Inter,system-ui,sans-serif;background:var(--w-bg);margin:0;color:var(--w-primary)}
 .w-header{background:var(--w-primary);color:#fff;padding:14px 20px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10}

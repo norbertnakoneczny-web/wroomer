@@ -1,11 +1,5 @@
 {
-  "name": "wroomer-admin-pro-stats-edycja-ban",
-  "version": "10.0.0-noc-dzialajacy",
-  "private": true,
-  "description": "WROOMER.PL - WROOMER-ADMIN-PRO-STATS-EDYCJA-BAN - wersja nocna dzialajaca - 6 plikow",
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start"
-  }
+  "name": "wroomer",
+  "version": "10.0.1-fix",
+  "private": true
 }
