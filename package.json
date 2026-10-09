@@ -1,6 +1,4 @@
 {
-  "name": "wroomer-test",
-  "version": "10.0.2-original-fixed",
-  "private": true,
-  "description": "WROOMER.PL original working - test fixed"
+  "name": "wroomer-rollback",
+  "private": true
 }
