@@ -1,430 +1,158 @@
 <!DOCTYPE html>
 <html lang="pl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>WROOMER - ADMIN FIRMA PRO</title>
+<title>WROOMER ADMIN PRO MAX - Zarządzanie wszystkimi ogłoszeniami</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Inter,-apple-system,Segoe UI,sans-serif;background:#070a0e;color:#e2e8f0;min-height:100vh}
-:root{--nav:#002f34;--acc:#23e5db;--card:#111820;--border:#1a2a32;--muted:#64748b;--ok:#22c55e;--bad:#ef4444}
-.h{height:64px;background:var(--nav);color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 18px;position:sticky;top:0;z-index:40;border-bottom:1px solid #0a3a3f}
+:root{--nav:#002f34;--acc:#23e5db;--card:#111820;--border:#1a2a32;--muted:#64748b;--ok:#22c55e;--bad:#ef4444;--warn:#f59e0b}
+.h{height:60px;background:var(--nav);color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 16px;position:sticky;top:0;z-index:50;border-bottom:1px solid #0a3a3f}
 .logo{font-weight:900;font-size:18px}.logo span{color:var(--acc)}
-.btn{height:38px;padding:0 14px;border-radius:10px;border:none;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-size:13px}
-.bb{background:var(--acc);color:var(--nav)} .bd{background:var(--bad);color:#fff} .bg{background:#1a2a32;color:#fff;border:1px solid #243a46} .bok{background:var(--ok);color:#000}
-.wrap{max-width:1600px;margin:0 auto;padding:16px}
-.tabs{display:flex;gap:8px;margin:12px 0;flex-wrap:wrap}
-.tab{padding:10px 16px;border-radius:999px;background:#111820;border:1px solid var(--border);cursor:pointer;font-weight:700;font-size:13px;color:#8aa0b0}
+.btn{height:36px;padding:0 12px;border-radius:10px;border:none;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-size:12px}
+.bb{background:var(--acc);color:var(--nav)} .bd{background:var(--bad);color:#fff} .bg{background:#1a2a32;color:#fff;border:1px solid #243a46} .bok{background:var(--ok);color:#000} .bw{background:var(--warn);color:#000}
+.wrap{max-width:1700px;margin:0 auto;padding:12px}
+.tabs{display:flex;gap:6px;margin:12px 0;flex-wrap:wrap;position:sticky;top:60px;z-index:40;background:#070a0e;padding:8px 0;border-bottom:1px solid var(--border)}
+.tab{padding:8px 14px;border-radius:999px;background:#111820;border:1px solid var(--border);cursor:pointer;font-weight:700;font-size:12px;color:#8aa0b0}
 .tab.active{background:var(--acc);color:var(--nav);border-color:var(--acc)}
-.kpiGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:12px 0}
-.kpi{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:14px;position:relative;overflow:hidden}
-.kpi b{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.7px;display:block;margin-bottom:6px}
-.kpi span{font-size:26px;font-weight:900;color:#fff;display:block}
-.kpi i{font-size:12px;color:#8aa0b0;font-style:normal;margin-top:4px;display:block}
-.chartGrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0}
-@media(max-width:900px){.chartGrid{grid-template-columns:1fr}}
-.chartCard{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:14px}
-.chartCard h4{font-size:13px;font-weight:800;margin-bottom:10px;color:#cbd5e1}
-.tableCard{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:0;overflow:hidden;margin:12px 0}
-.tableHead{padding:14px 16px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;font-weight:800;font-size:13px}
-table{width:100%;border-collapse:collapse;font-size:13px}
-th{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;padding:10px 12px;text-align:left;background:#0e151c;border-bottom:1px solid var(--border)}
-td{padding:10px 12px;border-bottom:1px solid #0e151c;vertical-align:middle}
-tr:hover{background:#0e151c}
-.listCard{background:#0e151c;border:1px solid var(--border);border-radius:14px;padding:10px;display:flex;gap:10px;align-items:center;margin:6px 0}
-.listCard img{width:72px;height:54px;object-fit:cover;border-radius:8px;background:#222}
-.badge{font-size:10px;font-weight:800;padding:4px 8px;border-radius:999px}
-.ban{background:var(--bad);color:#fff} .ok{background:var(--ok);color:#000} .view{background:#1a2a32;color:#8aa0b0}
-.log{background:#000;border:1px solid #111;padding:12px;border-radius:12px;font-family:monospace;font-size:11px;white-space:pre-wrap;color:#0f0;max-height:260px;overflow:auto}
-input,select,textarea{width:100%;height:42px;background:#0e151c;color:#fff;border:1px solid var(--border);border-radius:10px;padding:0 12px;font-size:13px}
-textarea{height:90px;padding:10px}
+.kpiGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin:10px 0}
+.kpi{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:12px}
+.kpi b{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.7px;display:block;margin-bottom:4px}
+.kpi span{font-size:22px;font-weight:900;color:#fff}
+.kpi i{font-size:11px;color:#8aa0b0}
+.toolbar{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:10px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:10px 0}
+.toolbar input,.toolbar select{height:38px;background:#0e151c;color:#fff;border:1px solid var(--border);border-radius:10px;padding:0 10px;font-size:12px}
+.toolbar input{flex:1;min-width:200px}
+.listCard{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:10px;display:flex;gap:10px;margin:6px 0;align-items:flex-start}
+.listCard.banned{border-color:var(--bad);background:#1a0a0a}
+.listCard img{width:110px;height:82px;object-fit:cover;border-radius:8px;background:#222;flex-shrink:0}
+.badge{font-size:9px;font-weight:800;padding:3px 6px;border-radius:999px;display:inline-block;margin:2px}
+.ban{background:var(--bad);color:#fff} .ok{background:var(--ok);color:#000} .view{background:#1a2a32;color:#8aa0b0} .top{background:var(--warn);color:#000}
+.actions{display:flex;gap:4px;flex-wrap:wrap;margin-top:6px}
+.actions .btn{height:30px;font-size:11px;padding:0 8px}
+.check{width:18px;height:18px}
+.bulkBar{position:sticky;bottom:0;background:#111820;border-top:1px solid var(--border);padding:10px;display:flex;gap:8px;align-items:center;z-index:30;border-radius:12px;margin-top:10px;flex-wrap:wrap}
 .md{position:fixed;inset:0;z-index:60;display:none} .md.o{display:flex}
-.mbg{position:absolute;inset:0;background:rgba(0,0,0,.82)}
-.mb{position:relative;z-index:2;background:#111820;border:1px solid #243a46;width:96%;max-width:640px;margin:auto;border-radius:16px;overflow:hidden;max-height:90vh;display:flex;flex-direction:column}
-.mh{padding:14px 16px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;font-weight:800}
-.cl{width:36px;height:36px;border-radius:50%;background:#1a2a32;border:none;color:#fff;cursor:pointer}
-.form{padding:16px;display:flex;flex-direction:column;gap:10px;overflow:auto}
+.mbg{position:absolute;inset:0;background:rgba(0,0,0,.85)}
+.mb{position:relative;z-index:2;background:#111820;border:1px solid #243a46;width:96%;max-width:720px;margin:auto;border-radius:16px;overflow:hidden;max-height:92vh;display:flex;flex-direction:column}
+.mh{padding:12px 14px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;font-weight:800;font-size:13px}
+.cl{width:34px;height:34px;border-radius:50%;background:#1a2a32;border:none;color:#fff;cursor:pointer}
+.form{padding:14px;display:flex;flex-direction:column;gap:10px;overflow:auto}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+input.e,select.e,textarea.e{width:100%;height:40px;background:#0e151c;color:#fff;border:1px solid var(--border);border-radius:10px;padding:0 10px;font-size:12px}
+textarea.e{height:80px;padding:8px}
+.log{background:#000;border:1px solid #111;padding:10px;border-radius:10px;font-family:monospace;font-size:11px;white-space:pre-wrap;color:#0f0;max-height:200px;overflow:auto}
 </style></head><body>
-<div class="h"><div class="logo">WROOMER<span>.PL</span> <span style="font-size:11px;background:var(--acc);color:var(--nav);padding:3px 8px;border-radius:999px;margin-left:8px">ADMIN FIRMA PRO</span></div>
-<div style="display:flex;gap:8px;align-items:center"><span id="u" style="font-size:12px;color:var(--acc)"></span><button id="logout" class="btn bg">Wyloguj</button><a href="/" class="btn bg">Portal</a><a href="/rollback.html" class="btn bg">Rollback</a></div></div>
+<div class="h"><div class="logo">WROOMER<span>.PL</span> <span style="font-size:10px;background:var(--acc);color:var(--nav);padding:2px 6px;border-radius:999px;margin-left:6px">ADMIN PRO MAX - WSZYSTKIE OGLOSZENIA</span></div>
+<div style="display:flex;gap:6px;align-items:center"><span id="u" style="font-size:11px;color:var(--acc)"></span><button id="logout" class="btn bg">Wyloguj</button><a href="/" class="btn bg">Portal</a></div></div>
 
-<div id="loginBox" class="wrap" style="max-width:460px">
-<div class="chartCard">
-<h4>Logowanie administratora</h4>
-<div style="font-size:11px;color:#8aa0b0;margin:8px 0">Master: norbert.nakoneczny@gmail.com / WROOMER-MASTER-2024</div>
-<input id="em" type="email" value="norbert.nakoneczny@gmail.com">
-<input id="pw" type="password" placeholder="Haslo" style="margin-top:8px">
-<button id="lb" class="btn bb" style="width:100%;height:46px;margin-top:12px">Zaloguj FIRMA PRO</button>
-<div id="msg" style="font-size:12px;margin-top:10px;color:#f59e0b;white-space:pre-wrap"></div>
-</div>
-</div>
+<div id="loginBox" class="wrap" style="max-width:420px;margin-top:40px">
+<div style="background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px">
+<h4>Logowanie Admin PRO MAX</h4>
+<div style="font-size:11px;color:#8aa0b0;margin:6px 0">Master: norbert.nakoneczny@gmail.com / WROOMER-MASTER-2024<br>Pełna administracja wszystkich ogłoszeń jak w OTOMOTO - edycja, ban, usuwanie, podbijanie, bulk</div>
+<input id="em" type="email" class="e" value="norbert.nakoneczny@gmail.com" style="margin-top:10px">
+<input id="pw" type="password" class="e" placeholder="Haslo" style="margin-top:8px">
+<button id="lb" class="btn bb" style="width:100%;height:44px;margin-top:10px">Zaloguj PRO MAX</button>
+<div id="msg" style="font-size:12px;margin-top:8px;color:#f59e0b;white-space:pre-wrap"></div>
+</div></div>
 
 <div id="panel" class="wrap" style="display:none">
 <div class="tabs">
-<button class="tab active" data-tab="dash">Dashboard firmy</button>
-<button class="tab" data-tab="listings">Ogloszenia + Edycja</button>
+<button class="tab active" data-tab="all">Wszystkie ogłoszenia PRO</button>
+<button class="tab" data-tab="dash">Dashboard</button>
+<button class="tab" data-tab="mod">Moderacja</button>
+<button class="tab" data-tab="users">Użytkownicy</button>
 <button class="tab" data-tab="finance">Finanse</button>
-<button class="tab" data-tab="users">Uzytkownicy</button>
 <button class="tab" data-tab="system">System</button>
 </div>
 
-<div id="tab-dash">
+<div id="tab-dash" style="display:none">
 <div class="kpiGrid">
-<div class="kpi"><b>Lacznie ogloszen</b><span id="kTotal">-</span><i id="kTotalSub"></i></div>
-<div class="kpi"><b>Aktywne / Ban</b><span id="kActive">-</span><i id="kBannedSub"></i></div>
-<div class="kpi"><b>Wyswietlenia</b><span id="kViews">-</span><i id="kViewsSub"></i></div>
-<div class="kpi"><b>Dzis / 7 dni</b><span id="kToday">-</span><i id="kWeekSub"></i></div>
-<div class="kpi"><b>Srednia cena</b><span id="kAvgPrice">-</span><i>PLN</i></div>
-<div class="kpi"><b>Wartosc floty</b><span id="kTotalValue">-</span><i>laczna wartosc</i></div>
-<div class="kpi"><b>Nowych dzis</b><span id="kNewToday">-</span><i>ogloszen</i></div>
-<div class="kpi"><b>Top CTR</b><span id="kTopCtr">-</span><i id="kTopCtrSub"></i></div>
+<div class="kpi"><b>Łącznie</b><span id="kTotal">-</span></div>
+<div class="kpi"><b>Aktywne</b><span id="kActive">-</span></div>
+<div class="kpi"><b>Zbanowane</b><span id="kBanned">-</span></div>
+<div class="kpi"><b>Views</b><span id="kViews">-</span></div>
+<div class="kpi"><b>Dziś</b><span id="kToday">-</span></div>
+<div class="kpi"><b>Śr cena</b><span id="kAvg">-</span></div>
+<div class="kpi"><b>Wartość</b><span id="kVal">-</span></div>
 </div>
-<div class="chartGrid">
-<div class="chartCard"><h4>Views 30 dni</h4><canvas id="cViews" height="180"></canvas></div>
-<div class="chartCard"><h4>Top 10 marek</h4><canvas id="cBrands" height="180"></canvas></div>
-<div class="chartCard"><h4>Lokalizacje</h4><canvas id="cLoc" height="180"></canvas></div>
-<div class="chartCard"><h4>Paliwo</h4><canvas id="cFuel" height="180"></canvas></div>
-<div class="chartCard"><h4>Rozklad cen</h4><canvas id="cPrice" height="180"></canvas></div>
-<div class="chartCard"><h4>Views vs Cena</h4><canvas id="cViewsPrice" height="180"></canvas></div>
-</div>
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-<div class="tableCard"><div class="tableHead">Top 5 views <button class="btn bg" onclick="exportCSV()">CSV</button></div><div id="topList"></div></div>
-<div class="tableCard"><div class="tableHead">Ostatnie 5</div><div id="recentList"></div></div>
-</div>
-<div class="tableCard"><div class="tableHead">Niskie views &lt;10</div><div id="lowList"></div></div>
+<div id="topListDash"></div>
 </div>
 
-<div id="tab-listings" style="display:none">
-<div class="chartCard" style="display:flex;gap:8px;flex-wrap:wrap">
-<input id="search" placeholder="Szukaj..." style="flex:1;min-width:200px">
-<select id="filterStatus" style="width:150px"><option value="">Wszystkie</option><option value="active">Aktywne</option><option value="banned">Ban</option><option value="top">Top &gt;100</option><option value="low">Low &lt;10</option></select>
-<select id="sortBy" style="width:150px"><option value="new">Najnowsze</option><option value="views">Views</option><option value="priceAsc">Cena up</option><option value="priceDesc">Cena down</option></select>
-<span id="cnt" style="font-size:12px"></span>
-<button id="refresh" class="btn bb">Odswiez</button>
-<button id="clearAll" class="btn bd">Usun wszystkie</button>
+<div id="tab-all">
+<div class="toolbar">
+<input type="checkbox" id="selAll" class="check" title="Zaznacz wszystkie"><label for="selAll" style="font-size:12px">Zaznacz</label>
+<input id="search" placeholder="Szukaj: marka, model, telefon, miejscowość, paliwo...">
+<select id="filterStatus"><option value="">Wszystkie</option><option value="active">Aktywne</option><option value="banned">Zbanowane</option><option value="noimg">Bez zdjęć</option><option value="top">Top >100</option><option value="low">Low <10</option></select>
+<select id="sortBy"><option value="new">Najnowsze</option><option value="views">Views</option><option value="priceAsc">Cena ↑</option><option value="priceDesc">Cena ↓</option><option value="old">Najstarsze</option></select>
+<select id="perPage"><option value="25">25</option><option value="50" selected>50</option><option value="100">100</option><option value="500">500</option></select>
+<span id="cnt" style="font-size:11px;color:#8aa0b0"></span>
+<button id="refresh" class="btn bb">Odśwież</button>
 </div>
 <div id="list"></div>
+<div class="bulkBar">
+<span id="selCount" style="font-size:12px">0 zaznaczonych</span>
+<button class="btn bg" onclick="bulkAction('ban')">🚫 Ban zaznaczone</button>
+<button class="btn bok" onclick="bulkAction('unban')">✅ Odbanuj</button>
+<button class="btn bd" onclick="bulkAction('del')">🗑️ Usuń zaznaczone</button>
+<button class="btn bb" onclick="bulkAction('bump')">⬆️ Podbij (na górę)</button>
+<button class="btn bg" onclick="exportCSV()">📥 CSV</button>
+</div>
 </div>
 
-<div id="tab-finance" style="display:none">
-<div class="kpiGrid">
-<div class="kpi"><b>Srednia cena</b><span id="fAvg">-</span></div>
-<div class="kpi"><b>Mediana</b><span id="fMed">-</span></div>
-<div class="kpi"><b>Min / Max</b><span id="fMinMax">-</span></div>
-<div class="kpi"><b>Laczna wartosc</b><span id="fTotalVal">-</span></div>
-</div>
-<div class="chartGrid">
-<div class="chartCard"><h4>Srednia wg marki</h4><canvas id="cAvgBrand" height="200"></canvas></div>
-<div class="chartCard"><h4>Roczniki</h4><canvas id="cYear" height="200"></canvas></div>
-</div>
-<div id="financeTable" class="tableCard"></div>
-</div>
-
-<div id="tab-users" style="display:none">
-<div class="kpiGrid">
-<div class="kpi"><b>Wlasciciele</b><span id="uOwners">-</span></div>
-<div class="kpi"><b>Srednio aut</b><span id="uAvg">-</span></div>
-<div class="kpi"><b>Top sprzedawca</b><span id="uTop" style="font-size:14px">-</span></div>
-</div>
-<div id="usersTable" class="tableCard"></div>
-</div>
-
+<div id="tab-mod" style="display:none"><div id="modList"></div></div>
+<div id="tab-users" style="display:none"><div id="usersTable"></div></div>
+<div id="tab-finance" style="display:none"><div id="financeTable"></div></div>
 <div id="tab-system" style="display:none">
-<div class="chartCard">
-<div style="display:flex;gap:8px;flex-wrap:wrap">
+<div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:12px">
+<div style="display:flex;gap:6px;flex-wrap:wrap">
 <button id="diagBtn" class="btn bb">Diagnoza</button>
 <button id="backupBtn" class="btn bg">Backup CSV</button>
-<button class="btn bg" onclick="localStorage.clear(); location.reload()">Wyczysc cache</button>
+<button class="btn bg" onclick="localStorage.clear(); location.reload()">Wyczyść cache</button>
 </div>
-<div id="diagLog" class="log">Kliknij Diagnoza...</div>
+<div id="diagLog" class="log" style="margin-top:10px">...</div>
 </div>
-<div class="tableCard"><div class="tableHead">Log systemowy</div><div id="sysLog" style="padding:12px;font-family:monospace;font-size:11px;white-space:pre-wrap"></div></div>
 </div>
 </div>
 
-<div id="editModal" class="md"><div class="mbg" onclick="document.getElementById('editModal').classList.remove('o')"></div>
-<div class="mb"><div class="mh"><div id="editTitle">Edytuj</div><button class="cl" onclick="document.getElementById('editModal').classList.remove('o')">x</button></div>
+<div id="editModal" class="md"><div class="mbg" onclick="closeEdit()"></div>
+<div class="mb"><div class="mh"><div id="editTitle">Edytuj PRO MAX - wszystkie pola</div><button class="cl" onclick="closeEdit()">✕</button></div>
 <div class="form">
-<div class="grid2"><div><label style="font-size:11px">Marka</label><input id="eMarka"></div><div><label style="font-size:11px">Model</label><input id="eModel"></div></div>
-<div class="grid2"><div><label style="font-size:11px">Rok</label><input id="eYear" type="number"></div><div><label style="font-size:11px">Przebieg</label><input id="eMileage" type="number"></div></div>
-<div class="grid2"><div><label style="font-size:11px">Cena</label><input id="ePrice" type="number"></div><div><label style="font-size:11px">Lokalizacja</label><input id="eLoc"></div></div>
-<div class="grid2"><div><label style="font-size:11px">Paliwo</label><select id="eFuel"><option>Benzyna</option><option>Diesel</option><option>LPG</option><option>Hybryda</option><option>Elektryczny</option></select></div><div><label style="font-size:11px">Skrzynia</label><select id="eGear"><option>Manualna</option><option>Automatyczna</option></select></div></div>
-<div><label style="font-size:11px">Telefon</label><input id="ePhone"></div>
-<div><label style="font-size:11px">Opis</label><textarea id="eDesc"></textarea></div>
-<div class="grid2"><div><label style="font-size:11px">Views</label><input id="eViews" type="number"></div><div><label style="font-size:11px">Ban</label><select id="eBanned"><option value="false">Aktywne</option><option value="true">Ban</option></select></div></div>
-<div id="eBanReasonWrap" style="display:none"><label style="font-size:11px">Powod bana</label><input id="eBanReason"></div>
-<div id="eImages" style="display:flex;gap:6px;flex-wrap:wrap"></div>
-<div id="editMsg" style="font-size:12px"></div>
-<div style="display:flex;gap:8px"><button id="eSave" class="btn bb" style="flex:1;height:44px">Zapisz PRO</button><button class="btn bg" style="flex:1;height:44px" onclick="document.getElementById('editModal').classList.remove('o')">Anuluj</button></div>
+<div class="grid2"><div><label style="font-size:10px">Marka *</label><input id="eMarka" class="e"></div><div><label style="font-size:10px">Model *</label><input id="eModel" class="e"></div></div>
+<div class="grid2"><div><label style="font-size:10px">Rok</label><input id="eYear" type="number" class="e"></div><div><label style="font-size:10px">Przebieg km</label><input id="eMileage" type="number" class="e"></div></div>
+<div class="grid2"><div><label style="font-size:10px">Cena PLN *</label><input id="ePrice" type="number" class="e"></div><div><label style="font-size:10px">Miejscowość *</label><input id="eLoc" class="e"></div></div>
+<div class="grid2"><div><label style="font-size:10px">Paliwo</label><select id="eFuel" class="e"><option>Benzyna</option><option>Diesel</option><option>Benzyna+LPG</option><option>Hybryda</option><option>Elektryczny</option></select></div><div><label style="font-size:10px">Skrzynia</label><select id="eGear" class="e"><option>Manualna</option><option>Automatyczna</option></select></div></div>
+<div class="grid2"><div><label style="font-size:10px">Telefon *</label><input id="ePhone" class="e"></div><div><label style="font-size:10px">Moc KM</label><input id="ePower" type="number" class="e"></div></div>
+<div><label style="font-size:10px">Opis PRO</label><textarea id="eDesc" class="e"></textarea></div>
+<div class="grid2"><div><label style="font-size:10px">Views (oko - tylko admin widzi)</label><input id="eViews" type="number" class="e"></div><div><label style="font-size:10px">Status</label><select id="eBanned" class="e"><option value="false">Aktywne ✅</option><option value="true">Zbanowane 🚫</option></select></div></div>
+<div id="eBanWrap" style="display:none"><label style="font-size:10px">Powód bana</label><input id="eBanReason" class="e"></div>
+<div><label style="font-size:10px">Lat / Lng (GPS)</label><div class="grid2"><input id="eLat" class="e" placeholder="lat"><input id="eLng" class="e" placeholder="lng"></div></div>
+<div><label style="font-size:10px">Zdjęcia URL https (jedno per linia)</label><textarea id="eImagesTxt" class="e" placeholder="https://..."></textarea><div id="eImages" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px"></div></div>
+<div id="editMsg" style="font-size:11px;color:#f59e0b"></div>
+<div style="display:flex;gap:8px"><button id="eSave" class="btn bb" style="flex:1;height:42px">💾 Zapisz wszystkie zmiany</button><button class="btn bg" style="flex:1" onclick="closeEdit()">Anuluj</button></div>
 </div></div></div>
 
 <script>
-const U='https://bdpydgsfowtuvjnkyeeg.supabase.co';
-const K='sb_publishable_S1qH_mBZaX7-bzmfJ0IVGA_6hxGbJWd';
-let supa=null, allRows=[], charts={};
-function toast(m){ const el=document.createElement('div'); el.textContent=m; el.style.cssText='position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:10px 18px;border-radius:999px;z-index:999;font-size:13px;border:1px solid #333'; document.body.appendChild(el); setTimeout(()=>el.remove(),2500); }
-function initSupa(){
-  const s=document.createElement('script'); s.src='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js'; s.async=true;
-  s.onload=()=>{ supa=window.supabase.createClient(U,K,{auth:{persistSession:true}}); checkAuth(); };
-  document.head.appendChild(s);
-}
-async function checkAuth(){
-  const {data} = await supa.auth.getSession();
-  if(data.session){ onLogin(data.session.user); } else { document.getElementById('loginBox').style.display='block'; }
-}
-function onLogin(user){
-  document.getElementById('loginBox').style.display='none';
-  document.getElementById('panel').style.display='block';
-  document.getElementById('u').textContent=user.email;
-  loadAll();
-}
-async function doLogin(){
-  const em=document.getElementById('em').value.trim();
-  const pw=document.getElementById('pw').value.trim();
-  const msg=document.getElementById('msg');
-  if(em==='norbert.nakoneczny@gmail.com' && (pw==='WROOMER-MASTER-2024' || pw==='admin123')){
-    document.getElementById('loginBox').style.display='none';
-    document.getElementById('panel').style.display='block';
-    document.getElementById('u').textContent=em+' (MASTER)';
-    if(!supa){ initSupa(); setTimeout(loadAll,1200); } else loadAll();
-    return;
-  }
-  const {data,error}=await supa.auth.signInWithPassword({email:em,password:pw});
-  if(error){ msg.textContent='Blad: '+error.message; } else { onLogin(data.user); }
-}
-function setupTabs(){
-  document.querySelectorAll('.tab').forEach(t=>{
-    t.addEventListener('click',()=>{
-      document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
-      t.classList.add('active');
-      const id=t.dataset.tab;
-      ['dash','listings','finance','users','system'].forEach(k=>{
-        document.getElementById('tab-'+k).style.display=k===id?'block':'none';
-      });
-      if(id==='dash') setTimeout(renderCharts,100);
-      if(id==='finance') setTimeout(renderFinance,100);
-    });
-  });
-}
-async function loadAll(){
-  if(!supa) return;
-  toast('Pobieram dane firmy...');
-  const {data,error}=await supa.from('ogloszenia').select('*').order('created_at',{ascending:false}).limit(1000);
-  if(error){ toast(error.message); return; }
-  allRows=data||[];
-  renderKPIs(); renderCharts(); renderLists(); renderFinance(); renderUsers();
-}
-function renderKPIs(){
-  const total=allRows.length;
-  const banned=allRows.filter(r=>r.is_banned).length;
-  const active=total-banned;
-  const views=allRows.reduce((s,r)=>s+(r.views||0),0);
-  const today=new Date().toISOString().slice(0,10);
-  const todayRows=allRows.filter(r=> (r.created_at||'').slice(0,10)===today);
-  const weekAgo=new Date(Date.now()-7*86400000).toISOString().slice(0,10);
-  const weekRows=allRows.filter(r=> (r.created_at||'')>=weekAgo);
-  const prices=allRows.map(r=>r.price||r.cena||0).filter(v=>v>0);
-  const avg=prices.length? Math.round(prices.reduce((a,b)=>a+b,0)/prices.length):0;
-  const totalVal=prices.reduce((a,b)=>a+b,0);
-  const top=allRows.slice().sort((a,b)=>(b.views||0)-(a.views||0))[0];
-  document.getElementById('kTotal').textContent=total;
-  document.getElementById('kTotalSub').textContent=todayRows.length+' dzis';
-  document.getElementById('kActive').textContent=active+' / '+banned;
-  document.getElementById('kBannedSub').textContent=banned+' ban';
-  document.getElementById('kViews').textContent=views.toLocaleString('pl-PL');
-  document.getElementById('kViewsSub').textContent=(views/total||0).toFixed(1)+' avg';
-  document.getElementById('kToday').textContent=todayRows.length+' / '+weekRows.length;
-  document.getElementById('kWeekSub').textContent='7 dni: '+weekRows.length;
-  document.getElementById('kAvgPrice').textContent=avg.toLocaleString('pl-PL');
-  document.getElementById('kTotalValue').textContent=(totalVal/1000000).toFixed(2)+'M';
-  document.getElementById('kNewToday').textContent=todayRows.length;
-  document.getElementById('kTopCtr').textContent=top? (top.views||0)+' views':'-';
-  document.getElementById('kTopCtrSub').textContent=top? (top.marka||top.brand||'')+' '+(top.model||''):'-';
-  document.getElementById('fAvg').textContent=avg.toLocaleString('pl-PL');
-  document.getElementById('fMed').textContent=prices.length? [...prices].sort((a,b)=>a-b)[Math.floor(prices.length/2)].toLocaleString('pl-PL'):'-';
-  document.getElementById('fMinMax').textContent=prices.length? Math.min(...prices).toLocaleString()+' / '+Math.max(...prices).toLocaleString():'-';
-  document.getElementById('fTotalVal').textContent=totalVal.toLocaleString('pl-PL');
-}
-function chart(id,type,labels,datasets){
-  const ctx=document.getElementById(id); if(!ctx) return;
-  if(charts[id]) charts[id].destroy();
-  charts[id]=new Chart(ctx,{type, data:{labels,datasets}, options:{responsive:true,plugins:{legend:{labels:{color:'#8aa0b0',font:{size:11}}}},scales: type==='doughnut'?{}:{x:{ticks:{color:'#64748b',font:{size:10}}},y:{ticks:{color:'#64748b'}}}}});
-}
-function renderCharts(){
-  if(allRows.length===0) return;
-  const days={}; for(let i=29;i>=0;i--){ const d=new Date(Date.now()-i*86400000).toISOString().slice(0,10); days[d]=0; }
-  allRows.forEach(r=>{ const d=(r.created_at||'').slice(0,10); if(days[d]!==undefined) days[d]+=(r.views||0); });
-  const labels=Object.keys(days); const dataViews=Object.values(days);
-  chart('cViews','line',labels,[{label:'Views',data:dataViews,borderColor:'#23e5db',backgroundColor:'rgba(35,229,219,.15)',tension:.3,fill:true}]);
-  const brandMap={}; allRows.forEach(r=>{ const b=(r.marka||r.brand||'Inne'); brandMap[b]=(brandMap[b]||0)+1; });
-  const topBrands=Object.entries(brandMap).sort((a,b)=>b[1]-a[1]).slice(0,10);
-  chart('cBrands','bar',topBrands.map(x=>x[0]),[{label:'Ilosc',data:topBrands.map(x=>x[1]),backgroundColor:'#23e5db'}]);
-  const locMap={Gorzyce:0,Wodzislaw:0,Rybnik:0,Raciborz:0,Inne:0};
-  allRows.forEach(r=>{ const l=(r.location||r.lokalizacja||'').toLowerCase(); if(l.includes('gorzyce')) locMap.Gorzyce++; else if(l.includes('wodzis')) locMap.Wodzislaw++; else if(l.includes('rybnik')) locMap.Rybnik++; else if(l.includes('racib')) locMap.Raciborz++; else locMap.Inne++; });
-  chart('cLoc','doughnut',Object.keys(locMap),[{data:Object.values(locMap),backgroundColor:['#23e5db','#22c55e','#f59e0b','#ef4444','#334155']}]);
-  const fuelMap={}; allRows.forEach(r=>{ const f=r.fuel||'Benzyna'; fuelMap[f]=(fuelMap[f]||0)+1; });
-  chart('cFuel','doughnut',Object.keys(fuelMap),[{data:Object.values(fuelMap),backgroundColor:['#23e5db','#22c55e','#f59e0b','#ef4444','#8b5cf6']}]);
-  const buckets={'<10k':0,'10-20k':0,'20-40k':0,'40-80k':0,'80k+':0};
-  allRows.forEach(r=>{ const p=r.price||r.cena||0; if(p<10000) buckets['<10k']++; else if(p<20000) buckets['10-20k']++; else if(p<40000) buckets['20-40k']++; else if(p<80000) buckets['40-80k']++; else buckets['80k+']++; });
-  chart('cPrice','bar',Object.keys(buckets),[{label:'Ilosc',data:Object.values(buckets),backgroundColor:'#f59e0b'}]);
-  const viewsByBucket={'<10k':[],'10-20k':[],'20-40k':[],'40-80k':[],'80k+':[]};
-  allRows.forEach(r=>{ const p=r.price||0; const key=p<10000?'<10k':p<20000?'10-20k':p<40000?'20-40k':p<80000?'40-80k':'80k+'; viewsByBucket[key].push(r.views||0); });
-  const avgViews=Object.keys(viewsByBucket).map(k=>{ const arr=viewsByBucket[k]; return arr.length? Math.round(arr.reduce((a,b)=>a+b,0)/arr.length):0; });
-  chart('cViewsPrice','line',Object.keys(viewsByBucket),[{label:'Avg views',data:avgViews,borderColor:'#8b5cf6',backgroundColor:'rgba(139,92,246,.2)',tension:.3,fill:true}]);
-}
-function cardMini(r){
-  const img=(r.images&&r.images[0])||'';
-  return `<div class="listCard"><img src="${img}"><div style="flex:1"><div style="font-weight:800;font-size:13px">${r.marka||r.brand||''} ${r.model||''} ${r.year||''}</div><div style="font-size:11px;color:#8aa0b0">${r.location||''} ${(r.price||0).toLocaleString()} PLN ${r.views||0} views</div></div><span class="badge ${r.is_banned?'ban':'ok'}">${r.is_banned?'BAN':'OK'}</span></div>`;
-}
-function renderLists(){
-  const top=allRows.slice().sort((a,b)=>(b.views||0)-(a.views||0)).slice(0,5);
-  const recent=allRows.slice(0,5);
-  const low=allRows.filter(r=>(r.views||0)<10).slice(0,10);
-  document.getElementById('topList').innerHTML=top.map(r=>cardMini(r)).join('');
-  document.getElementById('recentList').innerHTML=recent.map(r=>cardMini(r)).join('');
-  document.getElementById('lowList').innerHTML=low.map(r=>cardMini(r)).join('')||'OK';
-  renderTable(allRows);
-}
-function renderTable(rows){
-  const q=document.getElementById('search').value.toLowerCase();
-  const status=document.getElementById('filterStatus').value;
-  const sort=document.getElementById('sortBy').value;
-  let filtered=rows.filter(r=>{
-    const txt=((r.marka||'')+' '+(r.model||'')+' '+(r.location||'')+' '+(r.phone||'')).toLowerCase();
-    if(q && !txt.includes(q)) return false;
-    if(status==='active' && r.is_banned) return false;
-    if(status==='banned' && !r.is_banned) return false;
-    if(status==='top' && (r.views||0)<100) return false;
-    if(status==='low' && (r.views||0)>=10) return false;
-    return true;
-  });
-  if(sort==='views') filtered.sort((a,b)=>(b.views||0)-(a.views||0));
-  if(sort==='priceAsc') filtered.sort((a,b)=>(a.price||0)-(b.price||0));
-  if(sort==='priceDesc') filtered.sort((a,b)=>(b.price||0)-(a.price||0));
-  if(sort==='new') filtered.sort((a,b)=>new Date(b.created_at)-new Date(a.created_at));
-  document.getElementById('cnt').textContent=filtered.length+' / '+rows.length;
-  document.getElementById('list').innerHTML=filtered.map(r=>`
-    <div class="tableCard" style="display:flex;gap:12px;padding:10px;${r.is_banned?'border-color:#ef4444;background:#1a0a0a':''}">
-      <img src="${(r.images&&r.images[0])||''}" style="width:120px;height:90px;object-fit:cover;border-radius:10px;background:#222">
-      <div style="flex:1">
-        <div style="font-weight:800">${r.marka||r.brand||''} ${r.model||''} ${r.year||''} <span class="badge view">${r.views||0} views</span> ${r.is_banned?'<span class="badge ban">BAN</span>':''}</div>
-        <div style="font-size:11px;color:#8aa0b0;margin-top:4px">${r.location||''} ${(r.price||0).toLocaleString()} PLN ${r.fuel||''} ${r.phone||''}</div>
-        <div style="display:flex;gap:6px;margin-top:8px">
-          <button class="btn bg" onclick="openEdit('${r.id}')">Edytuj</button>
-          <button class="btn ${r.is_banned?'bok':'bd'}" onclick="toggleBan('${r.id}',${!!r.is_banned})">${r.is_banned?'Odbanuj':'Ban'}</button>
-          <button class="btn bg" onclick="delRow('${r.id}')">Usun</button>
-        </div>
-      </div>
-    </div>
-  `).join('');
-}
-function renderFinance(){
-  const brandAvg={};
-  allRows.forEach(r=>{ const b=r.marka||r.brand||'Inne'; if(!brandAvg[b]) brandAvg[b]={sum:0,cnt:0}; brandAvg[b].sum+=(r.price||0); brandAvg[b].cnt++; });
-  const top=Object.entries(brandAvg).map(([k,v])=>({brand:k,avg:Math.round(v.sum/v.cnt),cnt:v.cnt})).sort((a,b)=>b.avg-a.avg).slice(0,10);
-  chart('cAvgBrand','bar',top.map(x=>x.brand),[{label:'Sr cena',data:top.map(x=>x.avg),backgroundColor:'#22c55e'}]);
-  const yearMap={}; allRows.forEach(r=>{ const y=r.year||'Brak'; yearMap[y]=(yearMap[y]||0)+1; });
-  const years=Object.entries(yearMap).sort((a,b)=>a[0]-b[0]).slice(-15);
-  chart('cYear','bar',years.map(x=>x[0]),[{label:'Ilosc',data:years.map(x=>x[1]),backgroundColor:'#23e5db'}]);
-  document.getElementById('financeTable').innerHTML=`<div class="tableHead">Wartosc wg marki</div><table><tr><th>Marka</th><th>Ilosc</th><th>Sr cena</th><th>Wartosc floty</th></tr>${top.map(t=>`<tr><td>${t.brand}</td><td>${t.cnt}</td><td>${t.avg.toLocaleString()} PLN</td><td>${(t.avg*t.cnt).toLocaleString()} PLN</td></tr>`).join('')}</table>`;
-}
-function renderUsers(){
-  const phoneMap={}; allRows.forEach(r=>{ const p=r.phone||r.telefon||'brak'; phoneMap[p]=(phoneMap[p]||0)+1; });
-  const owners=Object.keys(phoneMap).length;
-  const avg=(allRows.length/owners||0).toFixed(2);
-  const top=Object.entries(phoneMap).sort((a,b)=>b[1]-a[1])[0];
-  document.getElementById('uOwners').textContent=owners;
-  document.getElementById('uAvg').textContent=avg;
-  document.getElementById('uTop').textContent=top? top[0]+' ('+top[1]+')':'-';
-  const rows=Object.entries(phoneMap).sort((a,b)=>b[1]-a[1]).slice(0,20);
-  document.getElementById('usersTable').innerHTML=`<div class="tableHead">Top wlasciciele</div><table><tr><th>Telefon</th><th>Ogloszen</th><th>Wartosc</th><th>Views</th></tr>${rows.map(([phone,cnt])=>{
-    const items=allRows.filter(r=>(r.phone||r.telefon)===phone);
-    const val=items.reduce((s,r)=>s+(r.price||0),0);
-    const views=items.reduce((s,r)=>s+(r.views||0),0);
-    return `<tr><td>${phone}</td><td>${cnt}</td><td>${val.toLocaleString()} PLN</td><td>${views}</td></tr>`;
-  }).join('')}</table>`;
-}
-window.openEdit=async function(id){
-  const row=allRows.find(r=>r.id==id); if(!row) return;
-  window.currentEditId=row.id;
-  document.getElementById('editTitle').textContent='Edytuj: '+(row.marka||'')+' '+(row.model||'');
-  document.getElementById('eMarka').value=row.marka||row.brand||'';
-  document.getElementById('eModel').value=row.model||'';
-  document.getElementById('eYear').value=row.year||'';
-  document.getElementById('eMileage').value=row.mileage||'';
-  document.getElementById('ePrice').value=row.price||row.cena||'';
-  document.getElementById('eLoc').value=row.location||row.lokalizacja||'';
-  document.getElementById('eFuel').value=row.fuel||'Benzyna';
-  document.getElementById('eGear').value=row.gear||'Manualna';
-  document.getElementById('ePhone').value=row.phone||row.telefon||'';
-  document.getElementById('eDesc').value=row.description||row.opis||'';
-  document.getElementById('eViews').value=row.views||0;
-  document.getElementById('eBanned').value=row.is_banned?'true':'false';
-  document.getElementById('eBanReason').value=row.banned_reason||'';
-  document.getElementById('eBanReasonWrap').style.display=row.is_banned?'block':'none';
-  document.getElementById('eImages').innerHTML=(row.images||[]).map(src=>`<div style="width:60px;height:60px;border-radius:8px;overflow:hidden;border:1px solid #333"><img src="${src}" style="width:100%;height:100%;object-fit:cover"></div>`).join('');
-  document.getElementById('editModal').classList.add('o');
-}
-window.toggleBan=async function(id,isBanned){
-  const reason=isBanned?'':prompt('Powod bana:','Spam')||'Ban';
-  const {error}=await supa.from('ogloszenia').update({is_banned:!isBanned,banned_reason:reason,banned_at:!isBanned?new Date().toISOString():null}).eq('id',id);
-  if(error) toast(error.message); else { toast(!isBanned?'Ban':'Odbanuj'); loadAll(); }
-}
-window.delRow=async function(id){
-  if(!confirm('Usunac?')) return;
-  const {error}=await supa.from('ogloszenia').delete().eq('id',id);
-  if(error) toast(error.message); else { toast('Usunieto'); loadAll(); }
-}
-async function saveEdit(){
-  const msg=document.getElementById('editMsg'); msg.textContent='Zapisuje...';
-  const payload={
-    marka:document.getElementById('eMarka').value.trim(),
-    brand:document.getElementById('eMarka').value.trim(),
-    model:document.getElementById('eModel').value.trim(),
-    year:parseInt(document.getElementById('eYear').value)||null,
-    mileage:parseInt(document.getElementById('eMileage').value)||null,
-    price:parseInt(document.getElementById('ePrice').value)||0,
-    cena:parseInt(document.getElementById('ePrice').value)||0,
-    location:document.getElementById('eLoc').value.trim(),
-    lokalizacja:document.getElementById('eLoc').value.trim(),
-    fuel:document.getElementById('eFuel').value,
-    gear:document.getElementById('eGear').value,
-    phone:document.getElementById('ePhone').value.trim(),
-    telefon:document.getElementById('ePhone').value.trim(),
-    description:document.getElementById('eDesc').value,
-    opis:document.getElementById('eDesc').value,
-    title:document.getElementById('eMarka').value.trim()+' '+document.getElementById('eModel').value.trim(),
-    views:parseInt(document.getElementById('eViews').value)||0,
-    is_banned:document.getElementById('eBanned').value==='true',
-    banned_reason:document.getElementById('eBanReason').value||null
-  };
-  const {error}=await supa.from('ogloszenia').update(payload).eq('id',window.currentEditId);
-  if(error){ msg.textContent='Blad: '+error.message; } else { msg.textContent='Zapisano PRO'; setTimeout(()=>{document.getElementById('editModal').classList.remove('o'); loadAll();},600); }
-}
-function exportCSV(){
-  const headers=['id','marka','model','year','price','location','fuel','gear','phone','views','banned','created_at'];
-  const rows=allRows.map(r=>[r.id,r.marka||r.brand,r.model,r.year,r.price||r.cena,r.location||r.lokalizacja,r.fuel,r.gear,r.phone||r.telefon,r.views||0,r.is_banned?'1':'0',r.created_at].map(v=>`"${(v||'').toString().replace(/"/g,'""')}"`).join(','));
-  const csv=[headers.join(','),...rows].join('\n');
-  const blob=new Blob([csv],{type:'text/csv'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='wroomer-'+new Date().toISOString().slice(0,10)+'.csv'; a.click();
-}
-async function diagnose(){
-  const logEl=document.getElementById('diagLog'); logEl.textContent='DIAGNOZA FIRMA PRO\n';
-  try{
-    const r=await supa.from('ogloszenia').select('*',{count:'exact'}).limit(1);
-    logEl.textContent+='ogloszenia: '+(r.error?'ERROR '+r.error.message:'OK count='+r.count)+'\n';
-  }catch(e){ logEl.textContent+='ERR: '+e.message; }
-}
-document.getElementById('lb').addEventListener('click',doLogin);
-document.getElementById('eBanned').addEventListener('change',e=>{document.getElementById('eBanReasonWrap').style.display=e.target.value==='true'?'block':'none';});
-document.getElementById('eSave').addEventListener('click',saveEdit);
-document.getElementById('search').addEventListener('input',()=>renderTable(allRows));
-document.getElementById('filterStatus').addEventListener('change',()=>renderTable(allRows));
-document.getElementById('sortBy').addEventListener('change',()=>renderTable(allRows));
-document.getElementById('refresh').addEventListener('click',loadAll);
-document.getElementById('diagBtn').addEventListener('click',diagnose);
-document.getElementById('backupBtn').addEventListener('click',exportCSV);
-document.getElementById('clearAll').addEventListener('click',async()=>{ if(!confirm('Usunac wszystkie?')) return; const {error}=await supa.from('ogloszenia').delete().neq('id','00000000-0000-0000-0000-000000000000'); if(error) toast(error.message); else loadAll(); });
-document.getElementById('logout').addEventListener('click',async()=>{ if(supa?.auth) await supa.auth.signOut(); location.reload(); });
-setupTabs();
-initSupa();
-</script>
-</body></html>
+const U='https://bdpydgsfowtuvjnkyeeg.supabase.co'; const K='sb_publishable_S1qH_mBZaX7-bzmfJ0IVGA_6hxGbJWd';
+let supa=null, allRows=[], filteredRows=[], selected=new Set();
+function toast(m){ const el=document.createElement('div'); el.textContent=m; el.style.cssText='position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:10px 18px;border-radius:999px;z-index:999;font-size:12px;border:1px solid #333'; document.body.appendChild(el); setTimeout(()=>el.remove(),2500); }
+function initSupa(){ const s=document.createElement('script'); s.src='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js'; s.async=true; s.onload=()=>{ supa=window.supabase.createClient(U,K,{auth:{persistSession:true}}); checkAuth(); }; document.head.appendChild(s); }
+async function checkAuth(){ const {data} = await supa.auth.getSession(); if(data.session){ onLogin(data.session.user); } else { document.getElementById('loginBox').style.display='block'; } }
+function onLogin(user){ document.getElementById('loginBox').style.display='none'; document.getElementById('panel').style.display='block'; document.getElementById('u').textContent=user.email; loadAll(); }
+async function doLogin(){ const em=document.getElementById('em').value.trim(); const pw=document.getElementById('pw').value.trim(); const msg=document.getElementById('msg'); if(em==='norbert.nakoneczny@gmail.com' && (pw==='WROOMER-MASTER-2024' || pw==='admin123')){ document.getElementById('loginBox').style.display='none'; document.getElementById('panel').style.display='block'; document.getElementById('u').textContent=em+' (MASTER PRO MAX)'; if(!supa){ initSupa(); setTimeout(loadAll,1200); } else loadAll(); return; } const {data,error}=await supa.auth.signInWithPassword({email:em,password:pw}); if(error){ msg.textContent='Blad: '+error.message; } else { onLogin(data.user); } }
+function setup(){ document.querySelectorAll('.tab').forEach(t=>{ t.addEventListener('click',()=>{ document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active')); t.classList.add('active'); const id=t.dataset.tab; ['dash','all','mod','users','finance','system'].forEach(k=>{ document.getElementById('tab-'+k).style.display=k===id?'block':'none'; }); }); }); document.getElementById('lb').addEventListener('click',doLogin); document.getElementById('logout').addEventListener('click', async()=>{ if(supa?.auth) await supa.auth.signOut(); localStorage.clear(); location.reload(); }); document.getElementById('search').addEventListener('input', renderAllTab); document.getElementById('filterStatus').addEventListener('change', renderAllTab); document.getElementById('sortBy').addEventListener('change', renderAllTab); document.getElementById('perPage').addEventListener('change', renderAllTab); document.getElementById('selAll').addEventListener('change', e=>{ if(e.target.checked){ filteredRows.forEach(r=>selected.add(r.id)); } else { selected.clear(); } renderAllTab(); }); document.getElementById('refresh').addEventListener('click', loadAll); document.getElementById('eSave').addEventListener('click', saveEdit); document.getElementById('eBanned').addEventListener('change', e=>{ document.getElementById('eBanWrap').style.display=e.target.value==='true'?'block':'none'; }); document.getElementById('diagBtn').addEventListener('click', doDiag); document.getElementById('backupBtn').addEventListener('click', exportCSV); }
+async function loadAll(){ if(!supa) return; toast('Pobieram wszystkie ogłoszenia PRO MAX...'); const {data,error}=await supa.from('ogloszenia').select('*').order('created_at',{ascending:false}).limit(2000); if(error){ toast(error.message); return; } allRows=data||[]; renderDash(); renderAllTab(); }
+function renderDash(){ const total=allRows.length; const active=allRows.filter(r=>!r.is_banned).length; const banned=allRows.filter(r=>r.is_banned).length; const views=allRows.reduce((s,r)=>s+(r.views||0),0); const today=new Date().toISOString().slice(0,10); const todayCount=allRows.filter(r=>r.created_at&&r.created_at.slice(0,10)===today).length; const avg=Math.round(allRows.reduce((s,r)=>s+(r.price||0),0)/(total||1)); const val=allRows.reduce((s,r)=>s+(r.price||0),0); document.getElementById('kTotal').textContent=total; document.getElementById('kActive').textContent=active; document.getElementById('kBanned').textContent=banned; document.getElementById('kViews').textContent=views.toLocaleString(); document.getElementById('kToday').textContent=todayCount; document.getElementById('kAvg').textContent=avg.toLocaleString()+' zł'; document.getElementById('kVal').textContent=(val/1000000).toFixed(2)+'M'; const top=allRows.slice().sort((a,b)=>(b.views||0)-(a.views||0)).slice(0,5); document.getElementById('topListDash').innerHTML='<div style="margin-top:10px;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:10px"><b style="font-size:11px">Top 5 views (tylko admin widzi)</b><div style="margin-top:6px">'+top.map(r=>'<div style="display:flex;justify-content:space-between;font-size:12px;padding:4px 0;border-bottom:1px solid #111"><span>'+(r.marka||'')+' '+(r.model||'')+'</span><span>'+(r.views||0)+' 👁️ '+(r.price||0).toLocaleString()+' zł</span></div>').join('')+'</div></div>'; }
+function renderAllTab(){ const q=document.getElementById('search').value.toLowerCase(); const status=document.getElementById('filterStatus').value; const sort=document.getElementById('sortBy').value; const per=parseInt(document.getElementById('perPage').value)||50; filteredRows=allRows.filter(r=>{ const txt=((r.marka||r.brand||'')+' '+(r.model||'')+' '+(r.location||'')+' '+(r.phone||r.telefon||'')+' '+(r.fuel||'')+' '+(r.description||'')).toLowerCase(); if(q && !txt.includes(q)) return false; if(status==='active' && r.is_banned) return false; if(status==='banned' && !r.is_banned) return false; if(status==='noimg' && r.images && r.images.length>0) return false; if(status==='top' && (r.views||0)<100) return false; if(status==='low' && (r.views||0)>=10) return false; return true; }); if(sort==='views') filteredRows.sort((a,b)=>(b.views||0)-(a.views||0)); else if(sort==='priceAsc') filteredRows.sort((a,b)=>(a.price||0)-(b.price||0)); else if(sort==='priceDesc') filteredRows.sort((a,b)=>(b.price||0)-(a.price||0)); else if(sort==='old') filteredRows.sort((a,b)=>new Date(a.created_at)-new Date(b.created_at)); else filteredRows.sort((a,b)=>new Date(b.created_at)-new Date(a.created_at)); document.getElementById('cnt').textContent=filteredRows.length+' / '+allRows.length; const pageRows=filteredRows.slice(0,per); document.getElementById('list').innerHTML=pageRows.map(r=>{ const isSel=selected.has(r.id); const img=(r.images&&r.images[0])||'https://via.placeholder.com/110x82?text=No+Img'; return `<div class="listCard ${r.is_banned?'banned':''}"><input type="checkbox" class="check" ${isSel?'checked':''} onchange="toggleSel('${r.id}',this.checked)"><img src="${img}" loading="lazy"><div style="flex:1;min-width:0"><div style="font-weight:800;font-size:13px;display:flex;gap:6px;flex-wrap:wrap;align-items:center">${r.marka||r.brand||''} ${r.model||''} ${r.year||''} <span class="badge view">${r.views||0} 👁️ tylko admin</span> ${r.is_banned?'<span class="badge ban">BAN</span>':'<span class="badge ok">AKTYWNE</span>'} <span style="font-size:11px;color:#8aa0b0">${(r.price||0).toLocaleString()} zł</span></div><div style="font-size:11px;color:#8aa0b0;margin-top:2px">📍 ${r.location||''} • 📞 ${r.phone||r.telefon||'brak'} • ⛽ ${r.fuel||''} • ⚙️ ${r.gear||''} • 👤 ${r.user_id?r.user_id.slice(0,8):'anon'} • 🕒 ${r.created_at?r.created_at.slice(0,16):''}</div><div style="font-size:11px;color:#64748b;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${(r.description||r.opis||'').slice(0,120)}</div><div class="actions"><button class="btn bg" onclick="openEdit('${r.id}')">✏️ Edytuj wszystkie pola</button><button class="btn ${r.is_banned?'bok':'bd'}" onclick="toggleBan('${r.id}',${!!r.is_banned})">${r.is_banned?'✅ Odbanuj':'🚫 Ban'}</button><button class="btn bg" onclick="delRow('${r.id}')">🗑️ Usuń</button><button class="btn bb" onclick="bumpRow('${r.id}')">⬆️ Podbij na górę</button><button class="btn bg" onclick="copyLink('${r.id}')">🔗 Link</button></div></div></div>`; }).join(''); document.getElementById('selCount').textContent=selected.size+' zaznaczonych'; }
+function toggleSel(id,checked){ if(checked) selected.add(id); else selected.delete(id); document.getElementById('selCount').textContent=selected.size+' zaznaczonych'; }
+async function bulkAction(type){ if(selected.size===0){ toast('Zaznacz'); return; } if(!confirm(type+' '+selected.size+'?')) return; const ids=[...selected]; if(type==='del'){ const {error}=await supa.from('ogloszenia').delete().in('id',ids); if(error) toast(error.message); else { toast('Usunięto '+ids.length); selected.clear(); loadAll(); } } else if(type==='ban'){ const reason=prompt('Powód:','Spam')||'Ban'; const {error}=await supa.from('ogloszenia').update({is_banned:true,banned_reason:reason,banned_at:new Date().toISOString()}).in('id',ids); if(error) toast(error.message); else { toast('Zbanowano '+ids.length); loadAll(); } } else if(type==='unban'){ const {error}=await supa.from('ogloszenia').update({is_banned:false,banned_reason:null,banned_at:null}).in('id',ids); if(error) toast(error.message); else { toast('Odbanowano '+ids.length); loadAll(); } } else if(type==='bump'){ const {error}=await supa.from('ogloszenia').update({created_at:new Date().toISOString()}).in('id',ids); if(error) toast(error.message); else { toast('Podbito '+ids.length); loadAll(); } } }
+window.openEdit=async function(id){ const row=allRows.find(r=>r.id==id); if(!row) return; window.currentEditId=row.id; document.getElementById('editTitle').textContent='Edytuj PRO MAX: '+(row.marka||'')+' '+(row.model||''); document.getElementById('eMarka').value=row.marka||row.brand||''; document.getElementById('eModel').value=row.model||''; document.getElementById('eYear').value=row.year||''; document.getElementById('eMileage').value=row.mileage||''; document.getElementById('ePrice').value=row.price||row.cena||''; document.getElementById('eLoc').value=row.location||row.lokalizacja||''; document.getElementById('eFuel').value=row.fuel||'Benzyna'; document.getElementById('eGear').value=row.gear||'Manualna'; document.getElementById('ePhone').value=row.phone||row.telefon||''; document.getElementById('ePower').value=row.power||''; document.getElementById('eDesc').value=row.description||row.opis||''; document.getElementById('eViews').value=row.views||0; document.getElementById('eBanned').value=row.is_banned?'true':'false'; document.getElementById('eBanReason').value=row.banned_reason||''; document.getElementById('eBanWrap').style.display=row.is_banned?'block':'none'; document.getElementById('eLat').value=row.latitude||''; document.getElementById('eLng').value=row.longitude||''; document.getElementById('eImagesTxt').value=(row.images||[]).join('\n'); document.getElementById('eImages').innerHTML=(row.images||[]).map(src=>`<div style="width:60px;height:60px;border-radius:8px;overflow:hidden;border:1px solid #333"><img src="${src}" style="width:100%;height:100%;object-fit:cover"></div>`).join(''); document.getElementById('editModal').classList.add('o'); }
+window.closeEdit=()=>document.getElementById('editModal').classList.remove('o');
+window.toggleBan=async function(id,isBanned){ const reason=isBanned?'':prompt('Powód:','Spam')||'Ban'; const {error}=await supa.from('ogloszenia').update({is_banned:!isBanned,banned_reason:reason,banned_at:!isBanned?new Date().toISOString():null}).eq('id',id); if(error) toast(error.message); else { toast(!isBanned?'Ban':'Odbanuj'); loadAll(); } }
+window.delRow=async function(id){ if(!confirm('Usunąć?')) return; const {error}=await supa.from('ogloszenia').delete().eq('id',id); if(error) toast(error.message); else { toast('Usunięto'); loadAll(); } }
+window.bumpRow=async function(id){ const {error}=await supa.from('ogloszenia').update({created_at:new Date().toISOString()}).eq('id',id); if(error) toast(error.message); else { toast('Podbito'); loadAll(); } }
+window.copyLink=function(id){ const url=location.origin+'/?id='+id; navigator.clipboard.writeText(url); toast('Link skopiowany'); }
+async function saveEdit(){ const msg=document.getElementById('editMsg'); msg.textContent='Zapisuję...'; const imgs=document.getElementById('eImagesTxt').value.split('\n').map(s=>s.trim()).filter(s=>s.startsWith('https://')); const payload={ marka:document.getElementById('eMarka').value.trim(), brand:document.getElementById('eMarka').value.trim(), model:document.getElementById('eModel').value.trim(), year:parseInt(document.getElementById('eYear').value)||null, mileage:parseInt(document.getElementById('eMileage').value)||null, price:parseInt(document.getElementById('ePrice').value)||0, cena:parseInt(document.getElementById('ePrice').value)||0, location:document.getElementById('eLoc').value.trim(), lokalizacja:document.getElementById('eLoc').value.trim(), fuel:document.getElementById('eFuel').value, gear:document.getElementById('eGear').value, phone:document.getElementById('ePhone').value.trim(), telefon:document.getElementById('ePhone').value.trim(), power:parseInt(document.getElementById('ePower').value)||null, description:document.getElementById('eDesc').value, opis:document.getElementById('eDesc').value, title:document.getElementById('eMarka').value.trim()+' '+document.getElementById('eModel').value.trim(), views:parseInt(document.getElementById('eViews').value)||0, is_banned:document.getElementById('eBanned').value==='true', banned_reason:document.getElementById('eBanReason').value||null, latitude:document.getElementById('eLat').value||null, longitude:document.getElementById('eLng').value||null, images:imgs, zdjecia:imgs }; const {error}=await supa.from('ogloszenia').update(payload).eq('id',window.currentEditId); if(error){ msg.textContent='Blad: '+error.message; } else { msg.textContent='Zapisano PRO MAX ✓'; setTimeout(()=>{closeEdit(); loadAll();},600); } }
+function doDiag(){ const log=document.getElementById('diagLog'); let txt='DIAG PRO MAX\nLiczba: '+allRows.length+'\nBez zdjęć: '+allRows.filter(r=>!r.images||r.images.length===0).length+'\nBan: '+allRows.filter(r=>r.is_banned).length+'\n'; log.textContent=txt; }
+function exportCSV(){ const headers=['id','marka','model','rok','cena','lok','tel','views','ban']; const rows=allRows.map(r=>[r.id,r.marka||r.brand,r.model,r.year,r.price,r.location||r.lokalizacja,r.phone||r.telefon,r.views,r.is_banned?'BAN':'OK']); const csv=[headers.join(';'),...rows.map(r=>r.map(v=>'"'+String(v||'').replace(/"/g,'""')+'"').join(';'))].join('\n'); const blob=new Blob([csv],{type:'text/csv'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='wroomer-pro-max-'+new Date().toISOString().slice(0,10)+'.csv'; a.click(); }
+setup(); initSupa();
+</script></body></html>
