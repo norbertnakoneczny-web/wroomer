@@ -1,25 +1,32 @@
 {
   "version": 2,
-  "cleanUrls": true,
-  "headers": [
+  "builds": [
     {
-      "source": "/(.*)",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=0, must-revalidate"
-        }
-      ]
-    }
-  ],
-  "rewrites": [
-    {
-      "source": "/admin",
-      "destination": "/admin.html"
+      "src": "index.html",
+      "use": "@vercel/static"
     },
     {
-      "source": "/rollback",
-      "destination": "/rollback.html"
+      "src": "admin.html",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "rollback.html",
+      "use": "@vercel/static"
     }
-  ]
+  ],
+  "routes": [
+    {
+      "src": "/admin",
+      "dest": "/admin.html"
+    },
+    {
+      "src": "/rollback",
+      "dest": "/rollback.html"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/$1"
+    }
+  ],
+  "cleanUrls": true
 }
