@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://bdpydgsfowtuvjnkyeeg.supabase.co">
 <meta name="description" content="WROOMER.PL - auta z Twojej okolicy. Gorzyce, Wodzisław Śląski, Rybnik, Racibórz. Szybkie zdjęcia, GPS, promień.">
 <style>
-:root{--nav:#000000;--acc:#ffcc00;--bg:#f2f3f5;--card:#fff;--border:#e5e7eb;--text:#0f172a;--muted:#64748b}
+:root{--nav:#000000;--acc:#ffcc00;--bg:#0f0f0f;--card:#1a1a1a;--border:#2a2a2a;--text:#e2e8f0;--muted:#8aa0b0}
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{font-family:-apple-system,BlinkMacSystemFont,Inter,Segoe UI,sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
@@ -212,24 +212,33 @@ a{color:inherit}
 }
 
 
-/* YELLOW-BLACK OTOMOTO - CALY PORTAL PRO */
-:root{--nav:#000000 !important;--acc:#ffcc00 !important;--card:#1a1a1a;--border:#2a2a2a}
+/* WYSZUKIWARKA Z BOKU + DARK FIX - JAK W PODGLADZIE + OTOMOTO ZOLTO-CZARNY */
+:root{--bg:#0f0f0f !important;--card:#1a1a1a !important;--border:#2a2a2a !important;--text:#e2e8f0 !important;--muted:#8aa0b0 !important;--nav:#000000 !important;--acc:#ffcc00 !important}
+body{background:#0f0f0f !important;color:#e2e8f0 !important}
 .h{background:#000 !important;border-bottom:3px solid #ffcc00 !important}
-.li{background:#ffcc00 !important;color:#000 !important;font-weight:900 !important}
-.lt{color:#fff !important}
-.lt span{color:#ffcc00 !important}
+.logo span{color:#ffcc00 !important}
+.sb{background:#1a1a1a !important;border-color:#2a2a2a !important;color:#e2e8f0 !important;width:320px;flex-shrink:0;border-right:1px solid #2a2a2a !important}
+.sb h3,.sb label{color:#ffcc00 !important}
+.topBar{background:#1a1a1a !important;border-color:#2a2a2a !important}
+.pi2,.sel{background:#0f0f0f !important;color:#e2e8f0 !important;border-color:#2a2a2a !important}
+.pi2:focus,.sel:focus{border-color:#ffcc00 !important;box-shadow:0 0 0 3px rgba(255,204,0,.2) !important}
+.mc{background:#1a1a1a !important;color:#e2e8f0 !important}
+.detailInfoPanel{background:#1a1a1a !important;color:#e2e8f0 !important}
+.olxParam{background:#222 !important;border-color:#2a2a2a !important;color:#e2e8f0 !important}
+.olxContactBox{background:#222 !important;border-color:#2a2a2a !important}
+.cd{background:#1a1a1a !important;border:1px solid #2a2a2a !important}
+.cd:hover{border-color:#ffcc00 !important;transform:translateY(-2px);box-shadow:0 8px 24px rgba(255,204,0,.15) !important}
+#empty{background:#1a1a1a !important;color:#8aa0b0 !important}
+.b.bdark{background:#222 !important;color:#fff !important;border-color:#333 !important}
+.b{background:#1a1a1a !important;color:#e2e8f0 !important;border-color:#2a2a2a !important}
 #ab{background:#ffcc00 !important;color:#000 !important;font-weight:900 !important;border:2px solid #ffcc00 !important}
 #ab:hover{background:#ffd633 !important}
 #authBtn{background:#1a1a1a !important;color:#ffcc00 !important;border:1px solid #333 !important}
-#authBtn:hover{background:#222 !important}
 .btn-show{background:#ffcc00 !important;color:#000 !important;font-weight:900 !important}
-.sel{border-color:#2a2a2a !important}
-.pi2:focus,.sel:focus{border-color:#ffcc00 !important;box-shadow:0 0 0 3px rgba(255,204,0,.2) !important}
 #gpsBtn.active{background:#ffcc00 !important;color:#000 !important}
 .badge.view{background:#ffcc00 !important;color:#000 !important}
-.card:hover{border-color:#ffcc00 !important}
 .fab{background:#ffcc00 !important;color:#000 !important;font-weight:900 !important;box-shadow:0 4px 12px rgba(255,204,0,.4) !important}
-.toast{background:#000 !important;color:#ffcc00 !important;border:1px solid #ffcc00 !important}
+#count{color:#8aa0b0 !important}
 
 </style>
 </head>
@@ -401,7 +410,6 @@ const DEMO=[
 ];
 
 
-
 function toast(m){ const t=$('toast'); t.textContent=m; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2600); }
 function logDebug(m){ const el=$('debug'); if(!el) return; el.style.display='block'; el.textContent+=m+'\\n'; }
 
@@ -549,9 +557,10 @@ function rn(){
   const g=$('gd'), ld=$('ld'), empty=$('empty'), countEl=$('count');
   if(ld) ld.style.display='none';
   // filtruj zbanowane dla zwykłych userów - admin widzi wszystko
-  // na głównej ukrywaj zbanowane - tylko aktywne jak u profesjonalisty
-  filtered = filtered.filter(x=>!x._extra?.is_banned);
-
+  const isAdminView = false; // na głównej zawsze ukrywaj zbanowane
+  if(!isAdminView){
+    filtered = filtered.filter(x=>!x._extra?.is_banned);
+  }
   if(!g) return; g.innerHTML='';
   if(countEl){
     let txt=filtered.length+' ogłoszeń';
@@ -594,10 +603,10 @@ async function loadReal(){
     if(userPos){
       ls.forEach(it=>{ const ex=it._extra; if(ex.latitude && ex.longitude){ it._dist=haversine(userPos.lat,userPos.lng,parseFloat(ex.latitude),parseFloat(ex.longitude)); } });
     }
-    if(ls.length===0 && DEMO.length>0){ ls=[...DEMO]; console.log('Używam DEMO - Supabase puste'); }
+    if(ls.length===0 && DEMO.length>0){ ls=[...DEMO]; console.log('Używam DEMO - Supabase puste lub RLS blokuje'); }
     filtered=[...ls];
     applyFilters();
-  }catch(e){ console.error('Błąd ładowania ogłoszeń:', e); const countEl=document.getElementById('count'); if(countEl) countEl.textContent='Błąd bazy - pokazuję DEMO'; if(DEMO.length>0){ ls=[...DEMO]; filtered=[...ls]; applyFilters(); } }
+  }catch(e){ console.error(e); }
 }
 
 async function checkSession(){
