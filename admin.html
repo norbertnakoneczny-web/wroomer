@@ -4,14 +4,14 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:Inter,-apple-system,Segoe UI,sans-serif;background:#070a0e;color:#e2e8f0;min-height:100vh}
-:root{--nav:#002f34;--acc:#23e5db;--card:#111820;--border:#1a2a32;--muted:#64748b;--ok:#22c55e;--bad:#ef4444;--warn:#f59e0b}
+body{font-family:Inter,-apple-system,Segoe UI,sans-serif;background:#0f0f0f;color:#e2e8f0;min-height:100vh}
+:root{--nav:#0a0a0a;--acc:#ffcc00;--card:#1a1a1a;--border:#2a2a2a;--muted:#64748b;--ok:#22c55e;--bad:#ef4444;--warn:#f59e0b}
 .h{height:60px;background:var(--nav);color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 16px;position:sticky;top:0;z-index:50;border-bottom:1px solid #0a3a3f}
 .logo{font-weight:900;font-size:18px}.logo span{color:var(--acc)}
 .btn{height:36px;padding:0 12px;border-radius:10px;border:none;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-size:12px}
 .bb{background:var(--acc);color:var(--nav)} .bd{background:var(--bad);color:#fff} .bg{background:#1a2a32;color:#fff;border:1px solid #243a46} .bok{background:var(--ok);color:#000} .bw{background:var(--warn);color:#000}
 .wrap{max-width:1700px;margin:0 auto;padding:12px}
-.tabs{display:flex;gap:6px;margin:12px 0;flex-wrap:wrap;position:sticky;top:60px;z-index:40;background:#070a0e;padding:8px 0;border-bottom:1px solid var(--border)}
+.tabs{display:flex;gap:6px;margin:12px 0;flex-wrap:wrap;position:sticky;top:60px;z-index:40;background:#0f0f0f;padding:8px 0;border-bottom:1px solid var(--border)}
 .tab{padding:8px 14px;border-radius:999px;background:#111820;border:1px solid var(--border);cursor:pointer;font-weight:700;font-size:12px;color:#8aa0b0}
 .tab.active{background:var(--acc);color:var(--nav);border-color:var(--acc)}
 .kpiGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin:10px 0}
@@ -20,7 +20,7 @@ body{font-family:Inter,-apple-system,Segoe UI,sans-serif;background:#070a0e;colo
 .kpi span{font-size:22px;font-weight:900;color:#fff}
 .kpi i{font-size:11px;color:#8aa0b0}
 .toolbar{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:10px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:10px 0}
-.toolbar input,.toolbar select{height:38px;background:#0e151c;color:#fff;border:1px solid var(--border);border-radius:10px;padding:0 10px;font-size:12px}
+.toolbar input,.toolbar select{height:38px;background:#1e1e1e;color:#fff;border:1px solid var(--border);border-radius:10px;padding:0 10px;font-size:12px}
 .toolbar input{flex:1;min-width:200px}
 .listCard{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:10px;display:flex;gap:10px;margin:6px 0;align-items:flex-start}
 .listCard.banned{border-color:var(--bad);background:#1a0a0a}
@@ -38,11 +38,24 @@ body{font-family:Inter,-apple-system,Segoe UI,sans-serif;background:#070a0e;colo
 .cl{width:34px;height:34px;border-radius:50%;background:#1a2a32;border:none;color:#fff;cursor:pointer}
 .form{padding:14px;display:flex;flex-direction:column;gap:10px;overflow:auto}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-input.e,select.e,textarea.e{width:100%;height:40px;background:#0e151c;color:#fff;border:1px solid var(--border);border-radius:10px;padding:0 10px;font-size:12px}
+input.e,select.e,textarea.e{width:100%;height:40px;background:#1e1e1e;color:#fff;border:1px solid var(--border);border-radius:10px;padding:0 10px;font-size:12px}
 textarea.e{height:80px;padding:8px}
 .log{background:#000;border:1px solid #111;padding:10px;border-radius:10px;font-family:monospace;font-size:11px;white-space:pre-wrap;color:#0f0;max-height:200px;overflow:auto}
+
+/* YELLOW-BLACK OTOMOTO PRO - bardziej profesjonalny dla motoryzacji */
+.h{background:#000 !important;border-bottom:3px solid #ffcc00 !important}
+.logo span{color:#ffcc00 !important}
+.bb{background:#ffcc00 !important;color:#000 !important;font-weight:900 !important}
+.tab.active{background:#ffcc00 !important;color:#000 !important;border-color:#ffcc00 !important;font-weight:900}
+.kpi{border-left:3px solid #ffcc00 !important}
+.badge.view{background:#ffcc00 !important;color:#000 !important}
+.badge.ok{background:#ffcc00 !important;color:#000 !important}
+.btn.bb:hover{background:#ffd633 !important}
+.chartCard b, .kpi b{color:#ffcc00 !important}
+#u{color:#ffcc00 !important}
+
 </style></head><body>
-<div class="h"><div class="logo">WROOMER<span>.PL</span> <span style="font-size:10px;background:var(--acc);color:var(--nav);padding:2px 6px;border-radius:999px;margin-left:6px">ADMIN PRO MAX - WSZYSTKIE OGLOSZENIA</span></div>
+<div class="h"><div class="logo">WROOMER<span>.PL</span> <span style="font-size:10px;background:var(--acc);color:var(--nav);padding:2px 6px;border-radius:999px;margin-left:6px">ADMIN PRO MAX YELLOW-BLACK OTOMOTO - WSZYSTKIE OGLOSZENIA</span></div>
 <div style="display:flex;gap:6px;align-items:center"><span id="u" style="font-size:11px;color:var(--acc)"></span><button id="logout" class="btn bg">Wyloguj</button><a href="/" class="btn bg">Portal</a></div></div>
 
 <div id="loginBox" class="wrap" style="max-width:420px;margin-top:40px">
