@@ -157,6 +157,23 @@ a{color:inherit}
 /* Professional focus states like big players */
 .pi2:focus, .sel:focus{border-color:var(--nav) !important;box-shadow:0 0 0 3px rgba(0,47,52,.08) !important}
 
+
+/* FIX: po zalogowaniu przycisk Dodaj przesuniety za ekran - usun zielony napis na mobile */
+@media(max-width:768px){
+  #userEmail{display:none !important}
+  .h{padding:0 10px !important;gap:6px !important}
+  .h .logo{flex-shrink:0}
+  #authBtn{font-size:12px !important;padding:0 10px !important;max-width:90px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  #ab{flex-shrink:0;padding:0 14px !important}
+  /* gdy zalogowany, authBtn to Wyloguj - zrob maly */
+  .h div[style*="display:flex;gap:8px"]{gap:6px !important;flex-shrink:0}
+}
+
+@media(max-width:400px){
+  #authBtn{display:none !important} /* na bardzo malym ekranie calkiem ukryj Wyloguj, zostaw tylko + Dodaj - wylogowanie w Moje */
+  .lt{font-size:15px !important}
+}
+
 </style>
 </head>
 <body>
