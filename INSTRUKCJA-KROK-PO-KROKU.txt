@@ -1,0 +1,30 @@
+KROK PO KROKU - WROOMER FIX ZDJECIA + PRZYCISKI
+
+KROK 1 - SUPABASE SQL (2 minuty):
+- Wejdz https://supabase.com -> Twoj projekt bdpydgsfowtuvjnkyeeg -> SQL Editor -> New Query
+- Wklej zawartosc pliku 01-SQL-NAPRAW-WSZYSTKO.sql -> RUN
+- Sprawdz Storage -> ogloszenia -> Policies ma byc 4 (jak na Twoim screenie)
+- Kliknij Dismiss na zoltym warningu (NIE klikaj Remove policy)
+
+KROK 2 - VERCEL / GITHUB (1 minuta):
+- Wejdz na github.com/norbertnakone... / wroomer-test
+- Usun stare pliki: BLEdy_NAPRAWIONE.txt, package.json, rollback.html, vercel.json
+- Wrzuc 2 pliki z tego ZIP: index.html + admin.html (nadpisz)
+- Vercel sam zrobi deploy (1-2 min)
+
+KROK 3 - TEST ZDJEC (1 minuta):
+- Otworz Twoja strone wroomer-test.vercel.app
+- Kliknij + DODAJ OGLOSZENIE
+- Zaloguj sie test@test.pl / 123456 (jesli pyta)
+- Dodaj ogloszenie: Audi A3 2020, cena 50000, 2 zdjecia z telefonu
+- Kliknij Dodaj ogloszenie -> ma byc "✅ Dodano do Supabase!"
+- Wejdz Supabase -> Storage -> ogloszenia -> maja byc 2 pliki jpg
+- Odswiez strone WROOMER -> Audi A3 ma miec miniaturke, po kliknieciu galeria 1/2 dziala
+
+KROK 4 - STARE OGLOSZENIA:
+- Stare ogloszenia bez zdjec (bo bucket byl pusty) - usun je w admin.html lub dodaj ponownie z zdjeciami
+
+JESLI DALEJ NIE DZIALA:
+- F12 -> Console -> zrob screen bledu przy dodawaniu
+- Storage -> ogloszenia -> kliknij w plik jpg -> Get URL -> wklej w przegladarke - czy widac zdjecie?
+- Jesli 403 -> polityki zle - uruchom jeszcze raz 02-SQL-TYLKO-BUCKET.sql

@@ -139,7 +139,7 @@ html,body{background:#000;color:#e2e8f0;font-family:Inter,sans-serif;-webkit-fon
 .cw{position:relative;height:220px;background:#0a0a0a;overflow:hidden}
 /* Striped background when no image or placeholder */
 .cw.striped{background:repeating-linear-gradient(135deg,#111 0 10px,#0e0e0e 10px 20px)}
-.cw img{width:100%;height:100%;object-fit:cover;display:block;position:relative;z-index:1;background:#111}
+.cw img{width:100%;height:100%;object-fit:cover;display:block;position:relative;z-index:1}
 .badge{position:absolute;top:10px;left:10px;z-index:2;background:rgba(0,0,0,.8);color:#8aa0b0;font-size:10px;font-weight:700;padding:5px 10px;border-radius:20px;border:1px solid #222}
 .heart{position:absolute;top:10px;right:10px;z-index:2;width:32px;height:32px;border-radius:50%;background:rgba(0,0,0,.6);border:1px solid #222;display:grid;place-items:center;color:#666;cursor:pointer}
 .heart:hover{color:#ffcc00;border-color:#ffcc00}
@@ -434,7 +434,7 @@ img{content-visibility:auto}
 <div id="detailModal" class="modal"><div class="mc" style="max-width:980px;margin:0 auto;background:#0a0a0a;border-radius:20px;overflow:auto; -webkit-overflow-scrolling:touch"><div style="padding:18px 20px 10px;max-width:900px;margin:0 auto;width:100%;box-sizing:border-box">
 <div id="detailTitle" style="font-size:22px;font-weight:900;color:#ffcc00;text-align:center"></div>
 </div>
-<div style="position:relative"><div class="dm-img-wrap" style="position:relative;background:#000;display:flex;align-items:center;justify-content:center;min-height:400px;max-height:70vh;overflow:hidden"><img id="detailImg" class="detailImg" style="width:100%;height:auto;max-height:70vh;object-fit:contain;display:block;background:#000" width="800" height="600" decoding="async" fetchpriority="high" src=""><button id="galPrev" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;background:rgba(0,0,0,.6);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:22px;cursor:pointer;z-index:5;display:grid;place-items:center">‹</button><button id="galNext" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;background:rgba(0,0,0,.6);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:22px;cursor:pointer;z-index:5;display:grid;place-items:center">›</button><div id="galCounter" style="position:absolute;top:12px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.7);color:#fff;padding:6px 12px;border-radius:999px;font-size:12px;font-weight:700;z-index:5">1 / 1</div><button onclick="document.getElementById('detailModal').classList.remove('o');document.body.style.overflow=''" style="position:absolute;top:12px;right:12px;width:36px;height:36px;border-radius:50%;background:rgba(0,0,0,.7);border:1px solid #333;color:#fff;cursor:pointer;z-index:5">✕</button></div><div id="detailThumbs" style="display:flex;gap:6px;padding:10px;background:#000;overflow:auto;-webkit-overflow-scrolling:touch"></div></div>
+<div style="position:relative"><div class="dm-img-wrap" style="position:relative;background:#000;display:flex;align-items:center;justify-content:center;min-height:400px;max-height:70vh;overflow:hidden"><img id="detailImg" style="width:100%;height:auto;max-height:70vh;object-fit:contain;background:#000" class="detailImg" width="800" height="600" decoding="async" fetchpriority="high" src=""><button id="galPrev" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;background:rgba(0,0,0,.6);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:22px;cursor:pointer;z-index:5;display:grid;place-items:center">‹</button><button id="galNext" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;background:rgba(0,0,0,.6);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:22px;cursor:pointer;z-index:5;display:grid;place-items:center">›</button><div id="galCounter" style="position:absolute;top:12px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.7);color:#fff;padding:6px 12px;border-radius:999px;font-size:12px;font-weight:700;z-index:5">1 / 1</div><button onclick="document.getElementById('detailModal').classList.remove('o');document.body.style.overflow=''" style="position:absolute;top:12px;right:12px;width:36px;height:36px;border-radius:50%;background:rgba(0,0,0,.7);border:1px solid #333;color:#fff;cursor:pointer;z-index:5">✕</button></div><div id="detailThumbs" style="display:flex;gap:6px;padding:10px;background:#000;overflow:auto;-webkit-overflow-scrolling:touch"></div></div>
 <div style="padding:18px 20px;max-width:900px;margin:0 auto;width:100%;box-sizing:border-box">
 <div id="detailPrice" style="font-size:26px;font-weight:900;color:#ffcc00;margin-top:8px;text-align:center"></div>
 <div id="detailMeta" style="font-size:12px;color:#8aa0b0;margin-top:10px;text-align:center"></div>
@@ -490,16 +490,9 @@ async function loadReal(){
     if(r.error){ if(ld) ld.style.display='none'; $('count').textContent='Błąd: '+r.error.message; if(r.error.message.includes('policy')){ emp.style.display='block'; emp.innerHTML='<h2 style=color:#ffcc00>Baza blokuje (RLS)</h2><p style=color:#666>SQL: CREATE POLICY "public read" ON ogloszenia FOR SELECT USING (true);</p>';} return; }
     let data=r.data||[];
     ls=data.filter(x=>!x.is_banned).map(row=>{
-      let imgs=row.images||row.zdjecia||[]; 
-      if(typeof imgs==='string'){try{imgs=JSON.parse(imgs);}catch(e){imgs=[imgs];}} 
-      if(!Array.isArray(imgs)) imgs=[imgs];
-      // FIX ZDJECIA - akceptuj https, http, data:image, /storage, supabase public URL
-      const validImgs=imgs.filter(u=>{
-        if(!u) return false;
-        const s=String(u).trim();
-        return s.length>10 && (s.startsWith('https://') || s.startsWith('http://') || s.startsWith('data:image') || s.includes('supabase') || s.includes('storage') || s.startsWith('/'));
-      });
-      return {id:row.id, md:row.title||((row.marka||'')+' '+(row.model||'')).trim()||'Auto', pr:row.price||row.cena||0, lc:row.location||row.lokalizacja||'', ds:row.description||row.opis||'', im:validImgs, _extra:row, year:row.year||row.rocznik||'', mileage:row.mileage||row.przebieg||'', created_at:row.created_at};
+      let imgs=row.images||row.zdjecia||[]; if(typeof imgs==='string'){try{imgs=JSON.parse(imgs);}catch(e){imgs=[imgs];}} if(!Array.isArray(imgs)) imgs=[imgs];
+      const httpsImgs=imgs.filter(u=>{ if(!u) return false; const s=String(u).trim(); return s.length>10 && (s.startsWith('https://')||s.startsWith('http://')||s.startsWith('data:image')||s.includes('supabase')||s.includes('storage')); });
+      return {id:row.id, md:row.title||((row.marka||'')+' '+(row.model||'')).trim()||'Auto', pr:row.price||row.cena||0, lc:row.location||row.lokalizacja||'', ds:row.description||row.opis||'', im:httpsImgs, _extra:row, year:row.year||row.rocznik||'', mileage:row.mileage||row.przebieg||'', created_at:row.created_at};
     });
     filtered=[...ls]; render();
   }catch(e){ console.error(e); if($('ld')) $('ld').textContent='Błąd: '+e.message; }
@@ -558,43 +551,11 @@ function render(){
 }
 
 function openDetail(item){
-  currentDetailItem=item; 
-  // PROFESJONALNY FIX - filtruj puste i napraw URL-e
-  let rawImgs = item.im && item.im.length ? item.im : [];
-  // Jeśli URL to tylko nazwa pliku bez https, zbuduj public URL
-  const SUPA_URL='https://bdpydgsfowtuvjnkyeeg.supabase.co';
-  rawImgs = rawImgs.map(u=>{
-    let s=String(u).trim();
-    if(!s) return null;
-    // Jeśli to samo nazwa pliku .jpg bez URL, zbuduj URL do bucketa
-    if(!s.startsWith('http') && !s.startsWith('data:') && (s.endsWith('.jpg') || s.endsWith('.jpeg') || s.endsWith('.png') || s.endsWith('.webp'))){
-      return `${SUPA_URL}/storage/v1/object/public/ogloszenia/${s}`;
-    }
-    return s;
-  }).filter(Boolean);
-  galImgs = rawImgs.length ? rawImgs : ['https://via.placeholder.com/800x600?text=Brak+zdjecia'];
-  galIdx=0;
-  $('detailTitle').textContent=item.md; 
-  $('detailPrice').textContent=fmtPrice(item.pr);
-  $('detailMeta').textContent=(item.lc||'')+' • '+(item._extra.fuel||item._extra.paliwo||'')+' • '+(item._extra.gear||item._extra.skrzynia||'') + ' • '+(item._extra.year||item.year||'') + ' • '+(item._extra.mileage||'') ;
-  $('detailDesc').textContent=item.ds||''; 
-  // FIX: ustaw src z cache-bust i error handling
-  const imgEl=$('detailImg');
-  imgEl.style.opacity='0';
-  imgEl.src=galImgs[0];
-  imgEl.onload=()=>{ imgEl.style.opacity='1'; };
-  imgEl.onerror=()=>{
-    console.error('Błąd ładowania zdjęcia', galImgs[0]);
-    // Spróbuj bez cache
-    if(!galImgs[0].includes('?')){
-      imgEl.src=galImgs[0]+'?t='+Date.now();
-    }else{
-      imgEl.style.opacity='1';
-      imgEl.alt='Nie można załadować zdjęcia - sprawdź bucket public';
-    }
-  };
-
-  const thumbs=$('detailThumbs'); thumbs.innerHTML=''; galImgs.forEach((u,i)=>{const im=document.createElement('img'); im.src=u; im.style.cssText='width:60px;height:44px;object-fit:cover;border-radius:8px;border:2px solid '+(i===0?'#ffcc00':'#222')+';cursor:pointer;background:#111;display:block'; im.onclick=()=>{galIdx=i; $('detailImg').src=u; [...thumbs.children].forEach((c,j)=>c.style.borderColor=j===i?'#ffcc00':'#222');}; thumbs.appendChild(im);});
+  currentDetailItem=item; galImgs=item.im && item.im.length? item.im : ['https://via.placeholder.com/800x600?text=Brak+zdjecia']; galIdx=0;
+  $('detailTitle').textContent=item.md; $('detailPrice').textContent=fmtPrice(item.pr);
+  $('detailMeta').textContent=(item.lc||'')+' • '+(item._extra.fuel||'')+' • '+(item._extra.gear||'');
+  $('detailDesc').textContent=item.ds||''; $('detailImg').src=galImgs[0];
+  const thumbs=$('detailThumbs'); thumbs.innerHTML=''; galImgs.forEach((u,i)=>{const im=document.createElement('img'); im.src=u; im.style.cssText='width:60px;height:44px;object-fit:cover;border-radius:8px;border:2px solid '+(i===0?'#ffcc00':'#222')+';cursor:pointer'; im.onclick=()=>{galIdx=i; $('detailImg').src=u; [...thumbs.children].forEach((c,j)=>c.style.borderColor=j===i?'#ffcc00':'#222');}; thumbs.appendChild(im);});
   $('detailPhone').onclick=()=>{alert('Tel: '+(item._extra.phone||item._extra.telefon||'Brak'));};
   $('detailModal').classList.add('o'); document.body.style.overflow='hidden';
 }
@@ -612,12 +573,7 @@ function showGal(idx){
   if(idx>=galImgs.length) idx=0;
   galIdx=idx;
   const imgEl=$('detailImg');
-  if(imgEl){
-    imgEl.style.opacity='0';
-    imgEl.src=galImgs[galIdx]||'';
-    imgEl.onload=()=>{ imgEl.style.opacity='1'; };
-    imgEl.onerror=()=>{ imgEl.style.opacity='1'; console.warn('Błąd galerii', galImgs[galIdx]); };
-  }
+  if(imgEl) imgEl.src=galImgs[galIdx]||'';
   updateGalCounter();
   const thumbs=$('detailThumbs');
   if(thumbs){
@@ -1519,15 +1475,8 @@ if(btnPick){
               const fileName=`${Date.now()}_${i}_${Math.random().toString(36).slice(2)}.jpg`;
               const up=await supa.storage.from('ogloszenia').upload(fileName, blob, {contentType:'image/jpeg'});
               if(!up.error){
-                              try{
                 const pub=supa.storage.from('ogloszenia').getPublicUrl(fileName);
-                const url=pub?.data?.publicUrl || `${U}/storage/v1/object/public/ogloszenia/${fileName}`;
-                console.log('Upload OK, public URL:', url);
-                imageUrls.push(url);
-              }catch(e){
-                console.warn('getPublicUrl error', e);
-                imageUrls.push(`${U}/storage/v1/object/public/ogloszenia/${fileName}`);
-              }
+                imageUrls.push(pub.data.publicUrl);
               }else{
                 imageUrls.push(img.dataUrl);
               }
@@ -1643,6 +1592,32 @@ if(btnPick){
     openAdd(true);
   };
 })();
+</script>
+
+
+<script>
+// FINAL FIX PRZYCISKOW - DODAJ ZAPISZ ANULUJ ZAMKNIJ - KROK PO KROKU
+document.addEventListener('DOMContentLoaded', ()=>{
+  const $=id=>document.getElementById(id);
+  const closeAdd=()=>{ const m=$('addModal'); if(m){ m.classList.remove('on'); m.style.display='none'; document.body.style.overflow=''; } };
+  const closeAuth=()=>{ const m=$('authOverlay'); if(m){ m.classList.remove('on'); m.style.display='none'; document.body.style.overflow=''; } };
+  
+  // 1. ANULUJ / ZAMKNIJ / X - zawsze dziala
+  ['btnAnuluj','btnZamknij','addCloseX'].forEach(id=>{
+    const el=$(id);
+    if(el){
+      el.onclick=(e)=>{ e.preventDefault(); closeAdd(); };
+      el.style.cursor='pointer'; el.style.pointerEvents='auto'; el.style.touchAction='manipulation';
+    }
+  });
+  $('authClose')?.addEventListener('click', (e)=>{ e.preventDefault(); closeAuth(); });
+  
+  // 2. Overlay click
+  $('authOverlay')?.addEventListener('click', e=>{ if(e.target.id==='authOverlay') closeAuth(); });
+  $('addModal')?.addEventListener('click', e=>{ if(e.target.id==='addModal') closeAdd(); });
+  
+  console.log('✅ Przyciski Anuluj/Zamknij naprawione');
+});
 </script>
 
 </body></html>
