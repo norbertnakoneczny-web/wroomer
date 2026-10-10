@@ -1487,26 +1487,40 @@ if(btnPick){
       if(imageUrls.length===0 && $('fImgs').value){
         imageUrls=$('fImgs').value.split(',').filter(Boolean);
       }
-      let payload={
-        title, marka:brand, brand, model,
-        year: parseInt($('fYear').value)||0,
-        mileage: parseInt($('fKm').value)||0,
-        price, cena:price,
-        location: $('fLoc').value, lokalizacja: $('fLoc').value,
-        fuel: $('fFuel').value, paliwo: $('fFuel').value,
-        gear: $('fGear').value, skrzynia: $('fGear').value,
-        description: $('fDesc').value, opis: $('fDesc').value,
-        images: imageUrls, zdjecia: imageUrls,
-        owner_email: currentUser.email,
-        user_id: currentUser.id
+
+      // MINIMAL PAYLOAD - tylko kolumny które na pewno istnieją w starej tabeli
+      let payload = {
+        title,
+        marka: brand,
+        brand,
+        model,
+        price,
+        cena: price,
+        location: $('fLoc').value,
+        lokalizacja: $('fLoc').value,
+        description: $('fDesc').value,
+        opis: $('fDesc').value,
+        owner_email: currentUser.email
       };
-      // GPS opcjonalnie - dodaj tylko jeśli kolumny istnieją, inaczej fallback bez GPS
-      if(window._gpsLat && window._gpsLng){
-        payload.lat = String(window._gpsLat);
-        payload.lng = String(window._gpsLng);
-        payload.latitude = String(window._gpsLat);
-        payload.longitude = String(window._gpsLng);
-      }
+      // Dodaj opcjonalne jeśli są w tabeli - będą usunięte przy błędzie
+      const optional = {
+        year: parseInt($('fYear').value)||0,
+        rocznik: parseInt($('fYear').value)||0,
+        mileage: parseInt($('fKm').value)||0,
+        przebieg: parseInt($('fKm').value)||0,
+        fuel: $('fFuel').value,
+        paliwo: $('fFuel').value,
+        gear: $('fGear').value,
+        skrzynia: $('fGear').value,
+        images: imageUrls,
+        zdjecia: imageUrls,
+        lat: window._gpsLat ? String(window._gpsLat) : null,
+        lng: window._gpsLng ? String(window._gpsLng) : null,
+        latitude: window._gpsLat ? String(window._gpsLat) : null,
+        longitude: window._gpsLng ? String(window._gpsLng) : null
+      };
+      Object.assign(payload, optional);
+
       try{
         let res;
         if(editingId){
@@ -1514,21 +1528,23 @@ if(btnPick){
         }else{
           res=await supa.from('ogloszenia').insert([payload]).select();
         }
-        if(res.error){
-          // Jesli blad o brak kolumny lat/lng - sprobuj bez GPS
-          if(res.error.message && res.error.message.includes('lat')){
-            console.warn('Kolumna lat nie istnieje - retry bez GPS');
-            delete payload.lat; delete payload.lng; delete payload.latitude; delete payload.longitude;
-            if(editingId){
-              res=await supa.from('ogloszenia').update(payload).eq('id', editingId);
-            }else{
-              res=await supa.from('ogloszenia').insert([payload]).select();
-            }
-            if(res.error) throw res.error;
+        // FIX: jeśli brakuje kolumny (paliwo, lat, itd) - usuwaj ją i próbuj ponownie aż zadziała
+        let tries=0;
+        while(res.error && tries<20){
+          const msg=res.error.message||'';
+          const match=msg.match(/Could not find the '([^']+)' column/);
+          if(!match) break;
+          const missingCol=match[1];
+          console.warn('Brak kolumny', missingCol, '- usuwam z payload i retry');
+          delete payload[missingCol];
+          tries++;
+          if(editingId){
+            res=await supa.from('ogloszenia').update(payload).eq('id', editingId);
           }else{
-            throw res.error;
+            res=await supa.from('ogloszenia').insert([payload]).select();
           }
         }
+        if(res.error) throw res.error;
         alert('✅ Dodano do Supabase!');
         closeAdd();
         location.reload();

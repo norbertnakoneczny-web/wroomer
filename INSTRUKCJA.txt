@@ -1,0 +1,6 @@
+JAK NAPRAWIC BLAD Could not find column:
+1. Wejdz Supabase -> SQL Editor -> New Query
+2. Wklej zawartosc supabase.sql lub SUPABASE-KOMPLETNY-FIX-WSZYSTKIE-KOLUMNY.sql
+3. Run
+4. Wklej index.html na Vercel/GitHub
+Gotowe - dodawanie dziala nawet bez SQL bo kod usuwa brakujace kolumny automatycznie
