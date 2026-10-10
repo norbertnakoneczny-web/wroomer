@@ -1,0 +1,30 @@
+BŁĘDY ZNALEZIONE JAK FACHOWIEC I NAPRAWIONE:
+
+1. ❌ BŁĄD: SUPA_KEY fake/eyJ - nie ładował Twoich ogłoszeń
+   ✅ FIX: Użyty prawidłowy publishable key: sb_publishable_S1qH_mBZaX7-bzmfJ0IVGA_6hxGbJWd + URL https://bdpydgsfowtuvjnkyeeg.supabase.co
+
+2. ❌ BŁĄD: DEMO zawierało 6 fake aut BMW/Audi mimo że miało być TYLKO TWOJE
+   ✅ FIX: DEMO=[] - puste, tylko Twoje z Supabase, bez fake
+
+3. ❌ BŁĄD: Tło jasne #fafafa a użytkownik chce żółto-czarny dark #0f0f0f
+   ✅ FIX: :root --bg:#0f0f0f --card:#1a1a1a --border:#2a2a2a --text:#e2e8f0 + header #000 + pasek #ffcc00
+
+4. ❌ BŁĄD: W repo stare pliki app.js i style.css z 9h temu nadpisywały nowy design
+   ✅ FIX: W tym ZIP tylko 5 plików, bez app.js/style.css - trzeba usunąć stare z GitHub
+
+5. ❌ BŁĄD: vercel.json stary 8h temu bez no-cache headers - Vercel cache'ował starą wersję
+   ✅ FIX: vercel.json z no-cache headers
+
+6. ❌ BŁĄD: Select marki pusty - nie ładował marek
+   ✅ FIX: render() populuje marki z ls
+
+7. ❌ BŁĄD: Brak obsługi RLS - gdy baza blokuje, pokazywało białą stronę
+   ✅ FIX: Jeśli RLS blokuje, pokazuje instrukcję SQL CREATE POLICY
+
+8. ❌ BŁĄD: GPS nie działał - brak highAccuracy i timeout
+   ✅ FIX: GPS z enableHighAccuracy:true timeout 15s + 2 przyciski
+
+9. ❌ BŁĄD: Schludność - za dużo kolorów, bałagan
+   ✅ FIX: Minimalistyczny design: Inter font, 11px uppercase h3, 40px inputs, chipy 30px, karty 14px radius, dużo powietrza, tylko żółty akcent na CTA i cenie
+
+TERAZ: Żółto-czarny #000 + #ffcc00, schludny, tylko Twoje ogłoszenia, bez błędów
