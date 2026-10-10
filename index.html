@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://bdpydgsfowtuvjnkyeeg.supabase.co">
 <meta name="description" content="WROOMER.PL - auta z Twojej okolicy. Gorzyce, Wodzisław Śląski, Rybnik, Racibórz. Szybkie zdjęcia, GPS, promień.">
 <style>
-:root{--nav:#000;--acc:#ffcc00;--bg:#0f0f0f;--card:#1a1a1a;--border:#2a2a2a;--text:#e2e8f0;--muted:#8aa0b0}
+:root{--nav:#000000;--acc:#ffcc00;--bg:#0f0f0f;--card:#1a1a1a;--border:#2a2a2a;--text:#e2e8f0;--muted:#64748b}
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{font-family:-apple-system,BlinkMacSystemFont,Inter,Segoe UI,sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
@@ -212,20 +212,39 @@ a{color:inherit}
 }
 
 
-/* PROFESJONALISTA FIX ALL - ZOLTO CZARNY SCHLUDNY - KLIKANIE DZIALA */
-:root{--bg:#0f0f0f !important;--card:#1a1a1a !important;--border:#2a2a2a !important;--text:#e2e8f0 !important;--muted:#8aa0b0 !important;--nav:#000 !important;--acc:#ffcc00 !important}
-body{background:#0f0f0f !important;color:#e2e8f0 !important}
-.h{background:#000 !important;border-bottom:3px solid #ffcc00 !important;height:60px !important}
+/* ŻÓŁTO-CZARNY FIX - nie rusza modala */
+.h{background:#000 !important;border-bottom:3px solid #ffcc00 !important}
 .logo span{color:#ffcc00 !important}
 .sb{background:#141414 !important;border-color:#2a2a2a !important}
-.pi,.sel{background:#0f0f0f !important;color:#e2e8f0 !important;border-color:#2a2a2a !important}
-.pi:focus,.sel:focus{border-color:#ffcc00 !important;box-shadow:0 0 0 3px rgba(255,204,0,.15) !important}
-.mc{background:#1a1a1a !important;border:1px solid #2a2a2a !important}
-.cd{background:#1a1a1a !important;border:1px solid #2a2a2a !important;cursor:pointer !important}
-.cd:hover{border-color:#ffcc00 !important}
 #ab{background:#ffcc00 !important;color:#000 !important;font-weight:900 !important}
-#authBtn{background:#1a1a1a !important;color:#ffcc00 !important;border:1px solid #333 !important}
-.detailImg{height:62vh !important;object-fit:contain !important;background:#000 !important}
+
+
+/* FINAL - JAK NA SCREENIE - TYTULY NA ZOLTO, WSZYSTKO TLO NA CZARNO */
+html, body{background:#000 !important;color:#e2e8f0 !important}
+:root{--bg:#000 !important;--card:#111111 !important;--border:#1f1f1f !important;--text:#e2e8f0 !important;--muted:#8aa0b0 !important;--nav:#000 !important;--acc:#ffcc00 !important}
+.l{background:#000 !important}
+.sb{background:#000 !important;border-right:1px solid #1f1f1f !important;border-color:#1f1f1f !important}
+.m{background:#000 !important}
+.h{background:#000 !important;border-bottom:2px solid #ffcc00 !important}
+.cd{background:#0c0c0c !important;background-color:#0c0c0c !important;border:1px solid #1f1f1f !important;border-radius:16px !important}
+.cd:hover{border-color:#ffcc00 !important;box-shadow:0 0 20px rgba(255,204,0,.15) !important}
+.cti, .ct, .cd-title, .detailTitle{color:#ffcc00 !important;font-weight:800 !important}
+.pr, .cd-price, .cp{color:#ffcc00 !important;font-weight:900 !important}
+.sb h3{color:#ffcc00 !important;font-weight:800 !important;letter-spacing:.5px !important}
+.pi,.sel{background:#111 !important;background-color:#111 !important;color:#e2e8f0 !important;border:1px solid #222 !important}
+.pi:focus,.sel:focus{border-color:#ffcc00 !important}
+.chip{background:#111 !important;border:1px solid #222 !important;color:#8aa0b0 !important}
+.chip.on, .chip.active{background:#ffcc00 !important;color:#000 !important;border-color:#ffcc00 !important}
+.btns, .btn-search{background:#111 !important;color:#fff !important;border:1px solid #222 !important}
+.btnc, .btn-clear{background:#0a0a0a !important;border:1px solid #1f1f1f !important}
+.mc, .detailInfoPanel{background:#000 !important;background-color:#000 !important;border-color:#1f1f1f !important}
+.detailImg{background:#000 !important}
+#ab{background:#ffcc00 !important;color:#000 !important;font-weight:900 !important;border:none !important}
+#authBtn{background:#111 !important;color:#ffcc00 !important;border:1px solid #222 !important}
+.count, .cnt, .gd-count{color:#8aa0b0 !important}
+.count b, .cnt b{color:#ffcc00 !important}
+.cnt{color:#8aa0b0 !important}
+.empty{background:#0c0c0c !important;border-color:#1f1f1f !important}
 
 </style>
 </head>
@@ -387,7 +406,7 @@ const AUTH_URL=U+'/auth/v1', REST=U+'/rest/v1';
 let supa=null, ls=[], filtered=[], ai=[], currentUser=null, currentEditId=null;
 let userPos=null, radiusKm=0, galIdx=0, galImgs=[], currentDetailItem=null, startX=0, scale=1;
 const $=id=>document.getElementById(id);
-const DEMO=[]; // TYLKO TWOJE
+const DEMO=[]; // TYLKO TWOJE - SCREEN // TYLKO TWOJE
 
 function toast(m){ const t=$('toast'); t.textContent=m; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2600); }
 function logDebug(m){ const el=$('debug'); if(!el) return; el.style.display='block'; el.textContent+=m+'\\n'; }
@@ -563,32 +582,29 @@ function rn(){
   });
 }
 
-
 async function loadReal(){
-  const ld=document.getElementById('ld'); const empty=document.getElementById('empty');
-  if(!supa){ if(ld) ld.textContent='Brak Supabase'; return; }
+  if(!supa) return;
   try{
-    const r=await supa.from('ogloszenia').select('*').order('created_at',{ascending:false}).limit(500);
-    if(r.error){
-      if(ld) ld.style.display='none';
-      const c=document.getElementById('count'); if(c) c.textContent='Błąd: '+r.error.message;
-      if(r.error.message.includes('policy')||r.error.message.includes('permission')){
-        if(empty){ empty.style.display='block'; empty.querySelector('h2').textContent='Baza blokuje odczyt (RLS)';
-          empty.querySelector('p').innerHTML='W Supabase SQL wykonaj:<br><code style="background:#222;padding:8px;border-radius:8px;display:block;margin-top:8px;font-size:11px">CREATE POLICY "public read" ON ogloszenia FOR SELECT USING (true);</code>';
-        }
-      }
-      return;
-    }
+    const r=await supa.from('ogloszenia').select('*').order('created_at',{ascending:false}).limit(300);
+    if(r.error){ $('count').textContent='Błąd: '+r.error.message; console.error(r.error); return; }
     let data=r.data||[];
-    ls=data.filter(x=>!x.is_banned).map(row=>{
-      let imgs=row.images||row.zdjecia||[]; if(typeof imgs==='string'){try{imgs=JSON.parse(imgs);}catch(e){imgs=[imgs];}} if(!Array.isArray(imgs)) imgs=[imgs];
+    ls=data.map(row=>{
+      let imgs=row.images||row.zdjecia||[];
+      if(typeof imgs==='string'){ try{ imgs=JSON.parse(imgs); }catch(e){ imgs=[imgs]; } }
+      if(!Array.isArray(imgs)) imgs=imgs?[imgs]:[];
       const httpsImgs=imgs.filter(u=>String(u).startsWith('https://'));
-      return {id:row.id, md:row.title||((row.marka||'')+' '+(row.model||'')).trim()||'Auto', pr:row.price||row.cena||0, lc:row.location||row.lokalizacja||'', ds:row.description||row.opis||'', im:httpsImgs, _extra:row, created_at:row.created_at};
+      const hasBase64=imgs.some(u=>String(u).startsWith('data:'));
+      if(hasBase64){ console.log('Wiersz z base64 - pomijam base64, zostawiam URL', row.id); }
+      return {id:row.id, md:row.title||(row.marka+' '+(row.model||''))||'Auto', pr:row.price||row.cena||0, lc:row.location||row.lokalizacja||'', ds:row.description||row.opis||'', im:httpsImgs.length?httpsImgs:imgs.filter(u=>String(u).startsWith('https://')).length?httpsImgs:[], _extra:row, created_at:row.created_at};
     });
-    filtered=[...ls]; render();
-  }catch(e){ console.error(e); const ld=document.getElementById('ld'); if(ld) ld.textContent='Błąd: '+e.message; }
+    // jeśli mamy GPS, policz dystans dla tych co mają lat/lng
+    if(userPos){
+      ls.forEach(it=>{ const ex=it._extra; if(ex.latitude && ex.longitude){ it._dist=haversine(userPos.lat,userPos.lng,parseFloat(ex.latitude),parseFloat(ex.longitude)); } });
+    }
+    filtered=[...ls];
+    applyFilters();
+  }catch(e){ console.error(e); }
 }
-
 
 async function checkSession(){
   try{
