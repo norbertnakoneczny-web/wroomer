@@ -1,181 +1,102 @@
 <!DOCTYPE html>
 <html lang="pl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<meta name="version" content="FINAL-JAK-DRUGI-SCREEN-TYTULY-ZOLTO-TLO-CZARNO-PRAWIDZLOWE-ZDJECIA">
-<title>WROOMER.PL - Jak Drugi Screen</title>
+<meta name="version" content="FACHOWIEC-ZOLTO-CZARNY-SCHLUDNY-TYLKO-TWOJE-2026-05-13">
+<title>WROOMER.PL - Żółto-Czarny - Tylko Twoje Ogłoszenia</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-html,body{background:#000;color:#e2e8f0;font-family:Inter,sans-serif;-webkit-font-smoothing:antialiased}
-.h{position:sticky;top:0;z-index:50;background:#000;height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;border-bottom:2px solid #ffcc00}
-.logo{font-weight:900;font-size:22px;letter-spacing:-.5px;color:#fff}.logo span{color:#ffcc00}
-.nav{display:flex;gap:24px;margin-left:32px}
-.nav a{color:#8aa0b0;font-size:13px;font-weight:600;text-decoration:none;cursor:pointer}.nav a.active,.nav a:hover{color:#fff}
-.ha{display:flex;gap:10px;align-items:center}
-.btn{height:40px;padding:0 18px;border-radius:20px;border:none;font-weight:800;font-size:12px;cursor:pointer;display:inline-flex;align-items:center;letter-spacing:.3px}
-.bb{background:#ffcc00;color:#000}.bb:hover{background:#ffd633}
-.bg{background:#1a1a1a;color:#ffcc00;border:1px solid #222}
-.l{max-width:1600px;margin:0 auto;display:flex;min-height:calc(100vh - 64px);background:#000}
-.sb{width:280px;flex-shrink:0;background:#000;border-right:1px solid #111;padding:18px 16px;position:sticky;top:64px;height:calc(100vh - 64px);overflow:auto}
-.sb h3{font-size:11px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:#ffcc00;margin:20px 0 10px}
-.sb h3:first-child{margin-top:0}
-.sel{width:100%;height:44px;border:1px solid #222;border-radius:12px;padding:0 14px;font-size:13px;background:#111;color:#fff;outline:none;cursor:pointer}
-.pi{width:100%;height:44px;border:1px solid #222;border-radius:12px;padding:0 14px;font-size:13px;background:#111;color:#fff;outline:none}
-.pi::placeholder{color:#555}
+:root{--nav:#000;--acc:#ffcc00;--acc2:#ffd633;--bg:#0f0f0f;--card:#1a1a1a;--border:#2a2a2a;--text:#e2e8f0;--muted:#8aa0b0;--shadow:0 4px 20px rgba(0,0,0,.4)}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:Inter,sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
+.h{position:sticky;top:0;z-index:50;background:#000;height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;border-bottom:3px solid var(--acc)}
+.logo{font-weight:900;font-size:20px;letter-spacing:-.5px;color:#fff}.logo span{color:var(--acc)}
+.ha{display:flex;gap:8px}
+.btn{height:38px;padding:0 16px;border-radius:10px;border:none;font-weight:700;font-size:12px;cursor:pointer;transition:all .15s;display:inline-flex;align-items:center}
+.bb{background:var(--acc);color:#000;font-weight:900}.bb:hover{background:var(--acc2);transform:translateY(-1px)}
+.bg{background:#1a1a1a;color:var(--acc);border:1px solid #333}.bg:hover{background:#222}
+.l{max-width:1440px;margin:0 auto;display:flex;min-height:calc(100vh - 60px)}
+.sb{width:320px;flex-shrink:0;background:#141414;border-right:1px solid var(--border);padding:20px 16px;position:sticky;top:60px;height:calc(100vh - 60px);overflow:auto}
+.sb h3{font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--acc);margin:18px 0 8px}.sb h3:first-child{margin-top:0}
+.pi{width:100%;height:40px;border:1.5px solid var(--border);border-radius:10px;padding:0 12px;font-size:13px;background:#0f0f0f;color:var(--text);outline:none;transition:all .15s}
+.pi:focus{border-color:var(--acc);box-shadow:0 0 0 3px rgba(255,204,0,.15)}
+.sel{width:100%;height:40px;border:1.5px solid var(--border);border-radius:10px;padding:0 10px;font-size:13px;background:#0f0f0f;color:var(--text);outline:none;cursor:pointer}
 .r2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.chips{display:flex;flex-wrap:wrap;gap:6px}
-.chip{height:34px;padding:0 14px;border-radius:20px;border:1px solid #222;background:#111;color:#8aa0b0;font-size:11px;font-weight:700;cursor:pointer;transition:all .15s;text-transform:uppercase}
-.chip:hover{border-color:#ffcc00;color:#ffcc00}
-.chip.on{background:#ffcc00;color:#000;border-color:#ffcc00}
-.m{flex:1;padding:20px 20px 20px 20px;background:#000;min-width:0}
-.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
-.cnt{font-size:11px;font-weight:800;letter-spacing:1px;color:#666;text-transform:uppercase}
-.cnt b{color:#ffcc00}
-.sort{display:flex;gap:8px;align-items:center}
-.sort label{font-size:11px;color:#666}
-.sort select{height:36px;border:1px solid #222;border-radius:20px;background:#111;color:#fff;padding:0 14px;font-size:12px}
-.gd{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-@media(max-width:1200px){.gd{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:700px){.gd{grid-template-columns:1fr}}
-.cd{background:#0e0e0e;border:1px solid #1a1a1a;border-radius:16px;overflow:hidden;cursor:pointer;transition:all .2s;position:relative}
-.cd:hover{border-color:#ffcc00;transform:translateY(-2px);box-shadow:0 8px 24px rgba(255,204,0,.1)}
-.cw{position:relative;height:220px;background:#0a0a0a;overflow:hidden}
-/* Striped background when no image or placeholder */
-.cw.striped{background:repeating-linear-gradient(135deg,#111 0 10px,#0e0e0e 10px 20px)}
-.cw img{width:100%;height:100%;object-fit:cover;display:block;position:relative;z-index:1}
-.badge{position:absolute;top:10px;left:10px;z-index:2;background:rgba(0,0,0,.8);color:#8aa0b0;font-size:10px;font-weight:700;padding:5px 10px;border-radius:20px;border:1px solid #222}
-.heart{position:absolute;top:10px;right:10px;z-index:2;width:32px;height:32px;border-radius:50%;background:rgba(0,0,0,.6);border:1px solid #222;display:grid;place-items:center;color:#666;cursor:pointer}
-.heart:hover{color:#ffcc00;border-color:#ffcc00}
-.cb{padding:14px 14px 12px;background:#0e0e0e}
-.ct{font-size:15px;font-weight:800;color:#ffcc00;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.cp{font-size:16px;font-weight:900;color:#ffcc00;margin-top:6px}
-.cm{font-size:11px;color:#8aa0b0;margin-top:10px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid #1a1a1a;padding-top:10px}
-#ld{text-align:center;padding:40px;color:#666;font-size:12px}
-.empty{background:#0e0e0e;border:1px dashed #222;border-radius:16px;padding:40px;text-align:center}
-.fab{position:fixed;bottom:20px;right:20px;width:54px;height:54px;border-radius:50%;background:#ffcc00;color:#000;font-weight:900;font-size:24px;border:none;box-shadow:0 6px 20px rgba(255,204,0,.4);cursor:pointer;display:none}
-@media(max-width:900px){.l{flex-direction:column}.sb{width:100%;height:auto;position:static;border-right:none;border-bottom:1px solid #111}.nav{display:none}.fab{display:grid;place-items:center}}
-/* Detail modal */
-.modal{position:fixed;inset:0;z-index:60;background:rgba(0,0,0,.8);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;padding:20px}
-.modal.o{display:flex}
-.mc{background:#0e0e0e;border:1px solid #222;border-radius:20px;max-width:1400px;width:96%;max-height:98vh;overflow:auto;display:flex;flex-direction:column}
-.detailImg{width:100%;height:80vh;object-fit:contain;background:#000;display:block}
-
-/* FIX */
-
-.cd{background:linear-gradient(to bottom, #111 0%, #0a0a0a 100%) !important}
-
-
-/* CZARNE MIEJSCE POD UCIECIEM - gradient od koloru obrazu (jasne) do mocno czarnego na dole */
-.cb{
-  background: linear-gradient(to bottom, 
-    #2a2a2a 0%,
-    #1e1e1e 15%,
-    #141414 40%,
-    #0a0a0a 75%,
-    #000000 100%) !important;
-  border-top: 1px solid rgba(255,255,255,0.06);
-}
-.cd{
-  background: #000 !important;
-  border: 1px solid #1f1f1f;
-}
-.cw{
-  position: relative;
-}
-.cw::after{
-  content:'';
-  position:absolute;
-  left:0;right:0;bottom:0;
-  height: 24px;
-  background: linear-gradient(to bottom, transparent, #2a2a2a);
-  z-index:1;
-  pointer-events:none;
-}
-
+.chips{display:flex;flex-wrap:wrap;gap:6px}.chip{height:30px;padding:0 10px;border-radius:20px;border:1.5px solid var(--border);background:#0f0f0f;color:var(--muted);font-size:11px;font-weight:600;cursor:pointer;transition:all .15s}.chip:hover{border-color:var(--acc);color:var(--acc)}.chip.on{background:var(--acc);color:#000;border-color:var(--acc);font-weight:800}
+.btns{width:100%;height:42px;background:#000;color:#fff;border:1px solid #222;border-radius:10px;font-weight:800;font-size:12px;cursor:pointer;margin-top:16px}.btns:hover{background:#111;border-color:var(--acc);color:var(--acc)}
+.btnc{width:100%;height:38px;background:transparent;color:var(--muted);border:1px solid var(--border);border-radius:10px;font-weight:600;font-size:11px;cursor:pointer;margin-top:8px}
+.m{flex:1;padding:20px;min-width:0}
+.cnt{font-size:12px;color:var(--muted);margin-bottom:14px}.cnt b{color:var(--acc)}
+.gd{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+.cd{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;cursor:pointer;transition:all .2s}.cd:hover{border-color:var(--acc);transform:translateY(-2px);box-shadow:0 8px 24px rgba(255,204,0,.12)}
+.cd img{width:100%;height:190px;object-fit:cover;background:#222;display:block}
+.cb{padding:12px 14px}.ct{font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.cp{font-size:16px;font-weight:900;color:var(--acc);margin-top:4px}.cm{font-size:11px;color:var(--muted);margin-top:6px;display:flex;gap:8px;flex-wrap:wrap}
+.empty{background:var(--card);border:1px dashed var(--border);border-radius:16px;padding:48px 20px;text-align:center;margin-top:20px}
+.empty h2{font-size:18px;font-weight:800;margin-top:10px}.empty p{font-size:12px;color:var(--muted);margin-top:6px}
+#ld{text-align:center;padding:30px;color:var(--muted);font-size:12px}
+.fab{position:fixed;bottom:20px;right:20px;width:54px;height:54px;border-radius:50%;background:var(--acc);color:#000;font-weight:900;font-size:24px;border:none;box-shadow:0 6px 20px rgba(255,204,0,.4);cursor:pointer;display:none}
+@media(max-width:900px){.l{flex-direction:column}.sb{width:100%;height:auto;position:static;border-right:none;border-bottom:1px solid var(--border)}.gd{grid-template-columns:1fr 1fr}.fab{display:grid;place-items:center}}
+@media(max-width:600px){.gd{grid-template-columns:1fr}.h{padding:0 12px;height:56px}.m{padding:12px}}
 </style></head><body>
-<header class="h"><div style="display:flex;align-items:center"><div class="logo">WROOMER<span>.PL</span></div><div class="nav"><a class="active">Ogłoszenia</a><a>Dealerzy</a><a>Części</a></div></div><div class="ha"><button id="authBtn" class="btn bg">ZALOGUJ</button><button id="ab" class="btn bb">+ DODAJ OGŁOSZENIE</button></div></header>
-<div class="l">
-<aside class="sb">
-<h3>Marka</h3><select id="brand" class="sel"><option value="">Wszystkie marki</option></select>
-<h3>Model</h3><input id="model" class="pi" placeholder="Np. Astra, Octavia...">
-<h3>Cena</h3><div class="r2"><div style="position:relative"><span style="position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:10px;font-weight:800;color:#666">OD</span><input id="pf" class="pi" type="number" placeholder="0" style="padding-left:34px"></div><div style="position:relative"><span style="position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:10px;font-weight:800;color:#666">DO</span><input id="pt" class="pi" type="number" placeholder="100 000" style="padding-left:34px"></div></div>
-<h3>Lokalizacja</h3><input id="loc" class="pi" placeholder="📍 Miasto, województwo">
-<h3>Paliwo</h3><div id="fuelBox" class="chips"><button class="chip" data-v="Benzyna">BENZYNA</button><button class="chip" data-v="Diesel">DIESEL</button><button class="chip" data-v="LPG">LPG</button><button class="chip" data-v="Elektryczny">ELEKTRYCZNY</button><button class="chip" data-v="Hybryda">HYBRYDA</button></div>
-<h3>Skrzynia</h3><div class="chips"><button class="chip" data-g="Manualna">MANUALNA</button><button class="chip" data-g="Automatyczna">AUTOMATYCZNA</button></div>
-<div id="count" class="cnt" style="margin-top:20px">Ładowanie...</div>
-</aside>
-<main class="m">
-<div class="top"><div id="found" class="cnt">ZNALEZIONO <b id="foundCount">0</b> OGŁOSZEŃ • TYLKO TWOJE</div><div class="sort"><label>Sortuj:</label><select id="sortSel"><option>Najnowsze</option><option>Najtańsze</option><option>Najdroższe</option></select></div></div>
-<div id="ld">Ładowanie Twoich ogłoszeń...</div><div id="gd" class="gd"></div><div id="empty" class="empty" style="display:none"><h2 style="color:#ffcc00">Brak ogłoszeń</h2><p style="color:#666;font-size:12px;margin-top:6px">Dodaj pierwsze ogłoszenie</p></div>
-</main>
-</div>
-
-<div id="detailModal" class="modal"><div class="mc"><div style="position:relative"><img id="detailImg" class="detailImg" src=""><button onclick="document.getElementById('detailModal').classList.remove('o');document.body.style.overflow=''" style="position:absolute;top:12px;right:12px;width:36px;height:36px;border-radius:50%;background:rgba(0,0,0,.7);border:1px solid #333;color:#fff;cursor:pointer">✕</button><div id="detailThumbs" style="display:flex;gap:6px;padding:10px;background:#000;overflow:auto"></div></div><div style="padding:16px"><div id="detailTitle" style="font-size:18px;font-weight:900;color:#ffcc00"></div><div id="detailPrice" style="font-size:20px;font-weight:900;color:#ffcc00;margin-top:6px"></div><div id="detailMeta" style="font-size:12px;color:#8aa0b0;margin-top:8px"></div><div id="detailDesc" style="font-size:13px;color:#ccc;margin-top:12px;line-height:1.5"></div><button id="detailPhone" class="btn bb" style="margin-top:14px;height:44px;border-radius:12px">📞 Pokaż telefon</button></div></div></div>
-
+<header class="h"><div class="logo">WROOMER<span>.PL</span></div><div class="ha"><button id="authBtn" class="btn bg">Zaloguj</button><button id="ab" class="btn bb">+ Dodaj</button></div></header>
+<div class="l"><aside class="sb">
+<h3>Marka</h3><select id="brand" class="sel"><option value="">Wszystkie</option></select>
+<h3>Model</h3><select id="model" class="sel"><option value="">Wszystkie</option></select>
+<h3>Cena</h3><div class="r2"><input id="pf" class="pi" type="number" placeholder="Od"><input id="pt" class="pi" type="number" placeholder="Do"></div>
+<h3>Lokalizacja</h3><input id="loc" class="pi" placeholder="Miejscowość"><div style="display:flex;gap:6px;margin-top:6px"><button id="gpsBtn" class="btn" style="flex:1;height:32px;background:#0f0f0f;border:1.5px solid #2a2a2a;color:#8aa0b0;font-size:10px;font-weight:700">📍 Moja lokalizacja</button><button id="gpsTown" class="btn" style="flex:1;height:32px;background:#0f0f0f;border:1.5px solid #2a2a2a;color:#8aa0b0;font-size:10px;font-weight:700">🏘️ Z miejscowości</button></div>
+<h3>Paliwo</h3><div id="fuelBox" class="chips"><button class="chip" data-v="Benzyna">Benzyna</button><button class="chip" data-v="Diesel">Diesel</button><button class="chip" data-v="LPG">LPG</button><button class="chip" data-v="Hybryda">Hybryda</button></div>
+<h3>Skrzynia</h3><div class="chips"><button class="chip" data-g="Manualna">Manualna</button><button class="chip" data-g="Automatyczna">Automatyczna</button></div>
+<button id="sbBtn" class="btns">Szukaj</button><button id="clBtn" class="btnc">Wyczyść</button>
+<div id="count" class="cnt" style="margin-top:16px">Ładowanie...</div>
+</aside><main class="m"><div id="ld">Ładowanie Twoich ogłoszeń z bazy Supabase...</div><div id="gd" class="gd"></div><div id="empty" class="empty" style="display:none"><div style="font-size:42px">🚗</div><h2>Brak ogłoszeń w bazie</h2><p id="emptyMsg">Nie masz jeszcze ogłoszeń. Dodaj pierwsze.</p><button class="btn bb" style="margin-top:14px;height:44px;padding:0 22px" onclick="document.getElementById('ab').click()">+ Dodaj pierwsze</button></div></main></div>
+<button class="fab" id="fab">+</button>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 const U='https://bdpydgsfowtuvjnkyeeg.supabase.co'; const K='sb_publishable_S1qH_mBZaX7-bzmfJ0IVGA_6hxGbJWd';
-let supa=null; try{supa=supabase.createClient(U,K,{auth:{persistSession:true}});}catch(e){}
-let ls=[],filtered=[],currentDetailItem=null,galImgs=[],galIdx=0;
-const $=id=>document.getElementById(id);
-
-function fmtPrice(v){return (v||0).toLocaleString('pl-PL')+' zł';}
-
+let supa=null; try{supa=supabase.createClient(U,K,{auth:{persistSession:true}});}catch(e){console.error(e)}
+let ls=[],filtered=[]; const DEMO=[]; // TYLKO TWOJE - BEZ DEMO
+function $(id){return document.getElementById(id)}
 async function loadReal(){
-  const ld=$('ld'); const emp=$('empty');
-  if(!supa){ if(ld) ld.textContent='Brak Supabase'; return; }
+  if(!supa){ $('ld').textContent='Brak Supabase'; return; }
   try{
-    const r=await supa.from('ogloszenia').select('*').order('created_at',{ascending:false}).limit(500);
-    if(r.error){ if(ld) ld.style.display='none'; $('count').textContent='Błąd: '+r.error.message; if(r.error.message.includes('policy')){ emp.style.display='block'; emp.innerHTML='<h2 style=color:#ffcc00>Baza blokuje (RLS)</h2><p style=color:#666>SQL: CREATE POLICY "public read" ON ogloszenia FOR SELECT USING (true);</p>';} return; }
-    let data=r.data||[];
+    const r=await supa.from('ogloszenia').select('*').order('created_at',{ascending:false}).limit(300);
+    if(r.error){
+      $('ld').style.display='none'; $('count').innerHTML='Błąd: '+r.error.message;
+      if(r.error.message.includes('policy')||r.error.message.includes('permission')){
+        $('empty').style.display='block'; $('empty').querySelector('h2').textContent='Baza blokuje odczyt (RLS)'; 
+        $('emptyMsg').innerHTML='W Supabase SQL wykonaj:<br><code style="background:#222;padding:6px;border-radius:6px;display:block;margin-top:8px;font-size:11px">CREATE POLICY "public read" ON ogloszenia FOR SELECT USING (true);<br>ALTER TABLE ogloszenia ENABLE ROW LEVEL SECURITY;</code>';
+      }
+      return;
+    }
+    let data=r.data||[]; 
     ls=data.filter(x=>!x.is_banned).map(row=>{
       let imgs=row.images||row.zdjecia||[]; if(typeof imgs==='string'){try{imgs=JSON.parse(imgs);}catch(e){imgs=[imgs];}} if(!Array.isArray(imgs)) imgs=[imgs];
       const httpsImgs=imgs.filter(u=>String(u).startsWith('https://'));
-      return {id:row.id, md:row.title||((row.marka||'')+' '+(row.model||'')).trim()||'Auto', pr:row.price||row.cena||0, lc:row.location||row.lokalizacja||'', ds:row.description||row.opis||'', im:httpsImgs, _extra:row, year:row.year||row.rocznik||'', mileage:row.mileage||row.przebieg||'', created_at:row.created_at};
+      return {id:row.id, md:row.title||((row.marka||'')+' '+(row.model||'')).trim()||'Auto', pr:row.price||row.cena||0, lc:row.location||row.lokalizacja||'', ds:row.description||row.opis||'', im:httpsImgs, _extra:row, created_at:row.created_at};
     });
     filtered=[...ls]; render();
-  }catch(e){ console.error(e); if($('ld')) $('ld').textContent='Błąd: '+e.message; }
+  }catch(e){ console.error(e); $('ld').textContent='Błąd: '+e.message; }
 }
-
 function render(){
-  const g=$('gd'), ld=$('ld'), emp=$('empty'), cnt=$('count'), fc=$('foundCount');
-  if(ld) ld.style.display='none'; g.innerHTML='';
-  if(fc) fc.textContent=filtered.length; if(cnt) cnt.innerHTML=filtered.length+' ogłoszeń • tylko Twoje • żółto-czarna';
-  if(filtered.length===0){ emp.style.display='block'; return; } emp.style.display='none';
-  // brands
+  const g=$('gd'), ld=$('ld'), emp=$('empty'), cnt=$('count');
+  if(ld) ld.style.display='none'; if(!g) return; g.innerHTML='';
+  if(cnt) cnt.innerHTML=filtered.length>0?`<b>${filtered.length}</b> ogłoszeń • tylko Twoje • żółto-czarny`:`<b>0</b> ogłoszeń`;
+  if(filtered.length===0){ if(emp) emp.style.display='block'; return; } else if(emp) emp.style.display='none';
+  // Populate brands
   const brands=[...new Set(ls.map(x=>x._extra.marka).filter(Boolean))].sort();
   const bSel=$('brand'); if(bSel && bSel.options.length<=1){ brands.forEach(b=>{const o=document.createElement('option'); o.value=b; o.textContent=b; bSel.appendChild(o);}); }
-  filtered.forEach(item=>{
+  filtered.forEach(it=>{
     const d=document.createElement('div'); d.className='cd';
-    const hasImg = item.im[0] && item.im[0].startsWith('https://');
-    const firstImg = hasImg ? item.im[0] : '';
-    const year = item.year || item._extra.year || item._extra.rocznik || '';
-    const mileage = item.mileage || item._extra.mileage || item._extra.przebieg || '';
-    const kmTxt = mileage ? (parseInt(mileage)>1000 ? (parseInt(mileage)/1000).toFixed(0)+'k KM' : mileage+' KM') : '';
-    const badgeTxt = (year?year+' • ':'') + (kmTxt||'');
-    d.innerHTML=`<div class="cw ${hasImg?'':'striped'}">${hasImg?`<img src="${firstImg}" loading="lazy" onerror="this.parentElement.classList.add('striped');this.remove()">`:''}<div class="badge">${badgeTxt||item.im.length+' zdjęć'}</div><div class="heart">♡</div></div><div class="cb"><div class="ct">${item.md}</div><div class="cp">${fmtPrice(item.pr)}</div><div class="cm"><span>📍 ${item.lc||'Brak'}</span><span>⛽ ${item._extra.fuel||item._extra.paliwo||''}</span></div></div>`;
-    d.onclick=()=>openDetail(item);
+    const img = (it.im[0]||'').startsWith('https://') ? it.im[0] : 'https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=600&h=400&fit=crop&auto=format';
+    d.innerHTML=`<img src="${img}" loading="lazy"><div class="cb"><div class="ct">${it.md}</div><div class="cp">${(it.pr||0).toLocaleString('pl-PL')} zł</div><div class="cm"><span>📍 ${it.lc||'Brak'}</span><span>⛽ ${it._extra.fuel||it._extra.paliwo||''}</span></div></div>`;
+    d.onclick=()=>{ if(it._extra.phone||it._extra.telefon) alert(it.md+'\nTel: '+(it._extra.phone||it._extra.telefon)+'\n'+it.ds); };
     g.appendChild(d);
   });
 }
-
-function openDetail(item){
-  currentDetailItem=item; galImgs=item.im && item.im.length? item.im : ['https://via.placeholder.com/800x600?text=Brak+zdjecia']; galIdx=0;
-  $('detailTitle').textContent=item.md; $('detailPrice').textContent=fmtPrice(item.pr);
-  $('detailMeta').textContent=(item.lc||'')+' • '+(item._extra.fuel||'')+' • '+(item._extra.gear||'');
-  $('detailDesc').textContent=item.ds||''; $('detailImg').src=galImgs[0];
-  const thumbs=$('detailThumbs'); thumbs.innerHTML=''; galImgs.forEach((u,i)=>{const im=document.createElement('img'); im.src=u; im.style.cssText='width:60px;height:44px;object-fit:cover;border-radius:8px;border:2px solid '+(i===0?'#ffcc00':'#222')+';cursor:pointer'; im.onclick=()=>{galIdx=i; $('detailImg').src=u; [...thumbs.children].forEach((c,j)=>c.style.borderColor=j===i?'#ffcc00':'#222');}; thumbs.appendChild(im);});
-  $('detailPhone').onclick=()=>{alert('Tel: '+(item._extra.phone||item._extra.telefon||'Brak'));};
-  $('detailModal').classList.add('o'); document.body.style.overflow='hidden';
-}
-
-function apply(){let r=[...ls]; const b=$('brand').value, m=$('model').value.toLowerCase(), pf=$('pf').value, pt=$('pt').value, lc=$('loc').value.toLowerCase(); if(b) r=r.filter(x=>(x._extra.marka||'').toLowerCase()===b.toLowerCase()); if(m) r=r.filter(x=>x.md.toLowerCase().includes(m)); if(pf) r=r.filter(x=>x.pr>=parseInt(pf)); if(pt) r=r.filter(x=>x.pr<=parseInt(pt)); if(lc) r=r.filter(x=>x.lc.toLowerCase().includes(lc)); const fOn=document.querySelector('#fuelBox .chip.on'); if(fOn) r=r.filter(x=>(x._extra.fuel||'').toLowerCase()===fOn.dataset.v.toLowerCase()); filtered=r; render();}
-
-$('brand')?.addEventListener('change',apply); $('model')?.addEventListener('input',apply); $('pf')?.addEventListener('input',apply); $('pt')?.addEventListener('input',apply); $('loc')?.addEventListener('input',apply);
-document.querySelectorAll('.chip').forEach(ch=>{ch.addEventListener('click',()=>{const was=ch.classList.contains('on'); ch.parentElement.querySelectorAll('.chip').forEach(c=>c.classList.remove('on')); if(!was) ch.classList.add('on'); apply();});});
-$('detailModal')?.addEventListener('click',e=>{if(e.target.id==='detailModal'){$('detailModal').classList.remove('o');document.body.style.overflow='';}});
-$('ab')?.addEventListener('click',()=>alert('Dodaj ogłoszenie - pełna wersja w /admin.html'));
-
+function apply(){ let r=[...ls]; const b=$('brand').value, m=$('model').value, pf=$('pf').value, pt=$('pt').value, lc=$('loc').value.toLowerCase(); if(b) r=r.filter(x=>(x._extra.marka||'').toLowerCase()===b.toLowerCase()); if(m) r=r.filter(x=>(x._extra.model||'').toLowerCase().includes(m.toLowerCase())); if(pf) r=r.filter(x=>x.pr>=parseInt(pf)); if(pt) r=r.filter(x=>x.pr<=parseInt(pt)); if(lc) r=r.filter(x=>x.lc.toLowerCase().includes(lc)); const fOn=document.querySelector('#fuelBox .chip.on'); if(fOn) r=r.filter(x=>(x._extra.fuel||'').toLowerCase()===fOn.dataset.v.toLowerCase()); filtered=r; render(); }
+$('sbBtn')?.addEventListener('click', apply); $('clBtn')?.addEventListener('click', ()=>{document.querySelectorAll('.sel,.pi').forEach(e=>e.value=''); document.querySelectorAll('.chip.on').forEach(c=>c.classList.remove('on')); filtered=[...ls]; render();});
+document.querySelectorAll('.chip').forEach(ch=>{ch.addEventListener('click', ()=>{const was=ch.classList.contains('on'); ch.parentElement.querySelectorAll('.chip').forEach(c=>c.classList.remove('on')); if(!was) ch.classList.add('on'); apply();});});
+$('gpsBtn')?.addEventListener('click', ()=>{ if(!navigator.geolocation) return alert('Brak GPS'); $('gpsBtn').textContent='Pobieram...'; navigator.geolocation.getCurrentPosition(p=>{$('gpsBtn').textContent='📍 Pobrano'; console.log(p.coords); alert('GPS: '+p.coords.latitude.toFixed(5)+', '+p.coords.longitude.toFixed(5));}, e=>{$('gpsBtn').textContent='📍 Moja lokalizacja'; alert('Błąd GPS: '+e.message);},{enableHighAccuracy:true,timeout:15000}); });
+$('ab')?.addEventListener('click', ()=>{ alert('Dodaj ogłoszenie - funkcja w pełnej wersji portalu'); });
+$('fab')?.addEventListener('click', ()=>{$('ab').click();});
 loadReal();
 </script>
 </body></html>
