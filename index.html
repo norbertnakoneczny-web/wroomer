@@ -1487,7 +1487,7 @@ if(btnPick){
       if(imageUrls.length===0 && $('fImgs').value){
         imageUrls=$('fImgs').value.split(',').filter(Boolean);
       }
-      const payload={
+      let payload={
         title, marka:brand, brand, model,
         year: parseInt($('fYear').value)||0,
         mileage: parseInt($('fKm').value)||0,
@@ -1497,13 +1497,16 @@ if(btnPick){
         gear: $('fGear').value, skrzynia: $('fGear').value,
         description: $('fDesc').value, opis: $('fDesc').value,
         images: imageUrls, zdjecia: imageUrls,
-        lat: window._gpsLat ? String(window._gpsLat) : null,
-        lng: window._gpsLng ? String(window._gpsLng) : null,
-        latitude: window._gpsLat ? String(window._gpsLat) : null,
-        longitude: window._gpsLng ? String(window._gpsLng) : null,
         owner_email: currentUser.email,
         user_id: currentUser.id
       };
+      // GPS opcjonalnie - dodaj tylko jeśli kolumny istnieją, inaczej fallback bez GPS
+      if(window._gpsLat && window._gpsLng){
+        payload.lat = String(window._gpsLat);
+        payload.lng = String(window._gpsLng);
+        payload.latitude = String(window._gpsLat);
+        payload.longitude = String(window._gpsLng);
+      }
       try{
         let res;
         if(editingId){
@@ -1511,7 +1514,21 @@ if(btnPick){
         }else{
           res=await supa.from('ogloszenia').insert([payload]).select();
         }
-        if(res.error) throw res.error;
+        if(res.error){
+          // Jesli blad o brak kolumny lat/lng - sprobuj bez GPS
+          if(res.error.message && res.error.message.includes('lat')){
+            console.warn('Kolumna lat nie istnieje - retry bez GPS');
+            delete payload.lat; delete payload.lng; delete payload.latitude; delete payload.longitude;
+            if(editingId){
+              res=await supa.from('ogloszenia').update(payload).eq('id', editingId);
+            }else{
+              res=await supa.from('ogloszenia').insert([payload]).select();
+            }
+            if(res.error) throw res.error;
+          }else{
+            throw res.error;
+          }
+        }
         alert('✅ Dodano do Supabase!');
         closeAdd();
         location.reload();
