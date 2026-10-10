@@ -78,6 +78,28 @@ body{background:#0f0f0f}
   .card-meta{font-size:9px !important; gap:4px !important; margin-top:4px !important}
 }
 
+
+/* SMARTFON - WYSZUKIWARKA NAD OGŁOSZENIAMI jak OLX/OTOMOTO */
+@media(max-width:768px){
+  .l{flex-direction:column !important}
+  .sb{width:100% !important; min-width:0 !important; max-width:100% !important; position:relative !important; top:0 !important; height:auto !important; border-right:none !important; border-bottom:2px solid #222 !important; padding:12px !important; order:1 !important}
+  .m{width:100% !important; order:2 !important}
+  .gd{grid-template-columns:1fr 1fr !important; gap:8px !important; padding:10px !important}
+  .sb h3{margin:14px 0 8px !important}
+  /* Tylko najważniejsze widoczne, reszta w rozwijanym */
+  .sb .extraFilters{display:none}
+  .sb .extraFilters.on{display:block}
+  .mobileSearchTop{display:flex;gap:8px;margin-bottom:10px}
+  .mobileSearchTop input{flex:1}
+  .btnMore{width:100%;height:42px;background:#1a1a1a;border:1px solid #333;border-radius:12px;color:#ffcc00;font-weight:800;font-size:12px;cursor:pointer;margin-top:10px}
+  .sb .r2{grid-template-columns:1fr 1fr !important}
+}
+@media(min-width:769px){
+  .mobileSearchTop{display:none !important}
+  .btnMore{display:none !important}
+  .sb .extraFilters{display:block !important}
+}
+
 </style>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -351,6 +373,28 @@ img{content-visibility:auto}
   .card-meta{font-size:9px !important; gap:4px !important; margin-top:4px !important}
 }
 
+
+/* SMARTFON - WYSZUKIWARKA NAD OGŁOSZENIAMI jak OLX/OTOMOTO */
+@media(max-width:768px){
+  .l{flex-direction:column !important}
+  .sb{width:100% !important; min-width:0 !important; max-width:100% !important; position:relative !important; top:0 !important; height:auto !important; border-right:none !important; border-bottom:2px solid #222 !important; padding:12px !important; order:1 !important}
+  .m{width:100% !important; order:2 !important}
+  .gd{grid-template-columns:1fr 1fr !important; gap:8px !important; padding:10px !important}
+  .sb h3{margin:14px 0 8px !important}
+  /* Tylko najważniejsze widoczne, reszta w rozwijanym */
+  .sb .extraFilters{display:none}
+  .sb .extraFilters.on{display:block}
+  .mobileSearchTop{display:flex;gap:8px;margin-bottom:10px}
+  .mobileSearchTop input{flex:1}
+  .btnMore{width:100%;height:42px;background:#1a1a1a;border:1px solid #333;border-radius:12px;color:#ffcc00;font-weight:800;font-size:12px;cursor:pointer;margin-top:10px}
+  .sb .r2{grid-template-columns:1fr 1fr !important}
+}
+@media(min-width:769px){
+  .mobileSearchTop{display:none !important}
+  .btnMore{display:none !important}
+  .sb .extraFilters{display:block !important}
+}
+
 </style></head><body>
 <header class="h"><div style="display:flex;align-items:center"><div class="logo">WROOMER<span>.PL</span></div><div class="nav"><a class="active">Ogłoszenia</a></div></div><div class="ha"><button id="authBtn" class="btn bg">ZALOGUJ</button><button id="ab" class="btn bb">+ DODAJ OGŁOSZENIE</button></div></header>
 <div class="l">
@@ -371,7 +415,15 @@ img{content-visibility:auto}
 <div id="count" class="cnt" style="margin-top:20px">Ładowanie...</div><button id="clearFilters" class="btn bg" style="width:100%;margin-top:12px;height:40px;border-radius:10px;background:#222;color:#fff;border:1px solid #333;font-size:12px;font-weight:800;letter-spacing:.5px">✕ WYCZYŚĆ FILTROWANIE</button>
 </aside>
 <main class="m">
-<div class="top"><div id="found" class="cnt">ZNALEZIONO <b id="foundCount">0</b> OGŁOSZEŃ • TYLKO TWOJE</div><div class="sort"><label>Sortuj:</label><select id="sortSel"><option>Najnowsze</option><option>Najtańsze</option><option>Najdroższe</option></select></div></div>
+<div class="top"><div id="found" class="cnt">ZNALEZIONO <b id="foundCount">0</b> OGŁOSZEŃ • TYLKO TWOJE</div><div class="sort"><label>Sortuj:</label><select id="sortSel">
+<option value="newest">Najnowsze</option>
+<option value="cheapest">Najtańsze</option>
+<option value="expensive">Najdroższe</option>
+<option value="year_desc">Rocznik: najnowsze</option>
+<option value="year_asc">Rocznik: najstarsze</option>
+<option value="mileage_asc">Przebieg: najmniejszy</option>
+<option value="mileage_desc">Przebieg: największy</option>
+</select></div></div>
 <div id="ld">Ładowanie Twoich ogłoszeń...</div><div id="gd" class="gd"></div><div id="empty" class="empty" style="display:none"><h2 style="color:#ffcc00">Brak ogłoszeń</h2><p style="color:#666;font-size:12px;margin-top:6px">Dodaj pierwsze ogłoszenie</p></div>
 </main>
 </div>
@@ -633,9 +685,7 @@ function getItemLatLng(it){
 function apply(){
   let r=[...ls];
   let b=$('brand').value, mRaw=$('model').value; const m=mRaw.toLowerCase(), pf=$('pf').value, pt=$('pt').value, lc=$('loc').value.toLowerCase();
-  // Profesjonalne dopasowanie: model -> marka
   if(mRaw && !b){
-    // znajdź markę dla modelu z MODELS
     for(const [mk, mods] of Object.entries(MODELS)){
       if(mods.some(mm=>mm.toLowerCase()===mRaw.toLowerCase() || mRaw.toLowerCase().includes(mm.toLowerCase()))){
         b=mk; break;
@@ -644,6 +694,15 @@ function apply(){
   }
   if(b) r=r.filter(x=>(x._extra.marka||'').toLowerCase()===b.toLowerCase() || x.md.toLowerCase().includes(b.toLowerCase()));
   if(mRaw) r=r.filter(x=> (x.md.toLowerCase().includes(mRaw.toLowerCase()) || (x._extra.model||'').toLowerCase().includes(mRaw.toLowerCase()) ));
+  // SORTING wg przebiegu, rocznika, ceny, najnowszych
+  const sortVal = $('sortSel')?.value || 'newest';
+  if(sortVal==='cheapest') r.sort((a,b)=> (a.pr||0)-(b.pr||0));
+  else if(sortVal==='expensive') r.sort((a,b)=> (b.pr||0)-(a.pr||0));
+  else if(sortVal==='year_desc') r.sort((a,b)=> (parseInt(b._extra.year||b._extra.rocznik||b.year||0)) - (parseInt(a._extra.year||a._extra.rocznik||a.year||0)));
+  else if(sortVal==='year_asc') r.sort((a,b)=> (parseInt(a._extra.year||a._extra.rocznik||a.year||0)) - (parseInt(b._extra.year||b._extra.rocznik||b.year||0)));
+  else if(sortVal==='mileage_asc') r.sort((a,b)=> (parseInt(a._extra.mileage||a._extra.przebieg||a.mileage||0)) - (parseInt(b._extra.mileage||b._extra.przebieg||b.mileage||0)));
+  else if(sortVal==='mileage_desc') r.sort((a,b)=> (parseInt(b._extra.mileage||b._extra.przebieg||b.mileage||0)) - (parseInt(a._extra.mileage||a._extra.przebieg||a.mileage||0)));
+  // newest is default already ordered by created_at desc from Supabase
 
   if(pf) r=r.filter(x=>x.pr>=parseInt(pf));
   if(pt) r=r.filter(x=>x.pr<=parseInt(pt));
@@ -706,6 +765,8 @@ const handleLoc=()=>{
   });
 };
 $('locBtn2')?.addEventListener('click',handleLoc);
+$('sortSel')?.addEventListener('change', ()=>{ apply(); });
+
 $('mobileClear')?.addEventListener('click',()=>{$('clearFilters')?.click();});
 
 $('radius')?.addEventListener('change',apply);
@@ -1071,15 +1132,47 @@ function loadRealWrapper(){ return loadReal(); }
     };
   }
 
-  // AUTH EVENTS
-  $("authSubmit").onclick = handleAuth;
-  $("authSwitch").onclick = ()=> openAuth(authMode === "login" ? "register" : "login");
-  $("authClose").onclick = closeAuth;
-  $("addCloseX").onclick = closeAdd;
-  $("btnAnuluj").onclick = closeAdd;
-  $("btnZamknij").onclick = closeAdd;
-  overlay.onclick = (e)=>{ if(e.target===overlay) closeAuth(); };
-  addModal.onclick = (e)=>{ if(e.target===addModal) closeAdd(); };
+  // AUTH EVENTS - FIX: działają na smartfonie i komputerze
+  function bindClick(id, fn){
+    const el = $(id);
+    if(!el) return;
+    el.addEventListener('click', fn);
+    el.addEventListener('touchend', (e)=>{ e.preventDefault(); fn(e); }, {passive:false});
+    el.style.cursor='pointer';
+    el.style.touchAction='manipulation';
+    el.style.userSelect='none';
+  }
+  bindClick('authSubmit', handleAuth);
+  bindClick('authSwitch', ()=> openAuth(authMode === 'login' ? 'register' : 'login'));
+  bindClick('authClose', closeAuth);
+  bindClick('addCloseX', closeAdd);
+  bindClick('btnAnuluj', closeAdd);
+  bindClick('btnZamknij', closeAdd);
+  bindClick('btnUsun', async ()=>{
+    if(!editingId) return;
+    if(!confirm('Usunąć ogłoszenie?')) return;
+    try{
+      const r = await supa.from('ogloszenia').delete().eq('id', editingId);
+      if(r.error) throw r.error;
+      alert('Usunięto');
+      closeAdd();
+      location.reload();
+    }catch(e){ alert('Błąd usuwania: '+e.message); }
+  });
+  overlay.addEventListener('click', (e)=>{ if(e.target===overlay) closeAuth(); });
+  addModal.addEventListener('click', (e)=>{ if(e.target===addModal) closeAdd(); });
+  // Close on ESC
+  document.addEventListener('keydown', (e)=>{ if(e.key==='Escape'){ closeAuth(); closeAdd(); } });
+  // Fix auth overlay z-index and pointer events
+  const styleFix = document.createElement('style');
+  styleFix.textContent = `
+    #authOverlay{ z-index:9999 !important; }
+    #authOverlay .authBox{ position:relative; z-index:10000; pointer-events:auto; }
+    #authSubmit, #authSwitch, #authClose, #btnAnuluj, #btnZamknij, #addCloseX{ pointer-events:auto !important; -webkit-tap-highlight-color: transparent; }
+    .authLink span{ display:inline-block; padding:8px 12px; min-height:44px; line-height:44px; }
+  `;
+  document.head.appendChild(styleFix);
+
 
   // EDIT FLOW - only owner or admin
   window.wroomerEdit = function(listing){
@@ -1440,6 +1533,71 @@ document.addEventListener("DOMContentLoaded", ()=>{
       btn.disabled=false;
     }, {enableHighAccuracy:true, timeout:10000});
   };
+})();
+</script>
+
+
+<script>
+// MOBILE - wyszukiwarka nad ogłoszeniami, rozwijane najważniejsze
+(function(){
+  function setupMobileFilters(){
+    const sb = document.querySelector('.sb');
+    if(!sb) return;
+    // If already processed
+    if(sb.querySelector('.extraFilters')) return;
+    const children = Array.from(sb.children);
+    // Keep first 3 sections (marka, model, cena?) visible, rest hidden
+    // Find all h3 and their following elements
+    let sections = [];
+    let current = null;
+    children.forEach(el=>{
+      if(el.tagName==='H3'){
+        current = {h:el, els:[]};
+        sections.push(current);
+      }else if(current){
+        current.els.push(el);
+      }
+    });
+    // First 2 sections = main, rest = extra
+    if(sections.length>2){
+      const extraWrap = document.createElement('div');
+      extraWrap.className='extraFilters';
+      // Move sections[2..] into extraWrap
+      sections.slice(2).forEach(sec=>{
+        extraWrap.appendChild(sec.h);
+        sec.els.forEach(e=>extraWrap.appendChild(e));
+      });
+      sb.appendChild(extraWrap);
+      // Add button
+      const btn = document.createElement('button');
+      btn.className='btnMore';
+      btn.id='btnMoreFilters';
+      btn.textContent='▼ POKAŻ WIĘCEJ FILTRÓW (rocznik, paliwo, skrzynia...)';
+      btn.onclick=()=>{
+        const ex = sb.querySelector('.extraFilters');
+        ex.classList.toggle('on');
+        btn.textContent = ex.classList.contains('on') ? '▲ UKRYJ FILTRY' : '▼ POKAŻ WIĘCEJ FILTRÓW (rocznik, paliwo, skrzynia...)';
+      };
+      // Insert before extraWrap
+      sb.insertBefore(btn, extraWrap);
+    }
+    // Sync mobile search input with main search
+    const mSearch = document.getElementById('mSearch');
+    const mainSearch = document.querySelector('#searchInput, .pi[placeholder*="Szukaj"]');
+    if(mSearch && mainSearch){
+      mSearch.addEventListener('input', ()=>{ mainSearch.value=mSearch.value; mainSearch.dispatchEvent(new Event('input')); });
+    }
+    const mBtn = document.getElementById('mSearchBtn');
+    if(mBtn){
+      mBtn.onclick=()=>{ 
+        const ev = new Event('input'); 
+        document.querySelectorAll('.pi').forEach(i=>i.dispatchEvent(ev)); 
+        window.scrollTo({top:300, behavior:'smooth'});
+      };
+    }
+  }
+  document.addEventListener('DOMContentLoaded', setupMobileFilters);
+  setTimeout(setupMobileFilters, 500);
 })();
 </script>
 
