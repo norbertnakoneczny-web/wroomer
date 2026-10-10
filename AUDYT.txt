@@ -1,0 +1,10 @@
+AUDYT PROFESJONALISTY - FIX ALL
+
+1. OGLOSZENIA NIE WGRYWAJA SIE - key sb_publishable + RLS policy + DEMO=[] tylko Twoje
+2. KLIKANIE NIE DZIALA - naprawiony render() onclick + modal .mc z-index 60 + detailImg 62vh contain
+3. BIALE TLO - :root dark #0f0f0f !important + usun app.js/style.css z repo
+4. WYSZUKIWARKA Z BOKU - sb 320px sticky
+5. GPS - highAccuracy
+6. ZOLTO-CZARNY SCHLUDNY - #000 + #ffcc00
+
+Wgraj 5 plikow, usun app.js/style.css, Redeploy bez cache, Ctrl+Shift+R
