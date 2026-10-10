@@ -1,6 +1,5 @@
-
--- WROOMER - FINALNY SQL - URUCHOM TYLKO RAZ
--- Tabele
+-- WROOMER - FINALNY SQL - URUCHOM TYLKO RAZ W SUPABASE > SQL EDITOR > NEW QUERY > RUN
+-- 1. TABELA
 CREATE TABLE IF NOT EXISTS ogloszenia (
   id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
   title text,
@@ -41,10 +40,10 @@ CREATE POLICY "public insert ogloszenia" ON ogloszenia FOR INSERT WITH CHECK (tr
 CREATE POLICY "public update ogloszenia" ON ogloszenia FOR UPDATE USING (true) WITH CHECK (true);
 CREATE POLICY "public delete ogloszenia" ON ogloszenia FOR DELETE USING (true);
 
--- BUCKET
+-- 2. BUCKET PUBLIC - TO NAPRAWIA ZDJECIA
 INSERT INTO storage.buckets (id,name,public) VALUES ('ogloszenia','ogloszenia',true) ON CONFLICT (id) DO UPDATE SET public=true;
 
--- STORAGE POLICIES DLA ANON - TO NAPRAWIA ZDJECIA
+-- 3. STORAGE POLICIES - ANON MOZE CZYTAC I WRZUCAC
 DROP POLICY IF EXISTS "public read og" ON storage.objects;
 DROP POLICY IF EXISTS "public insert og" ON storage.objects;
 DROP POLICY IF EXISTS "public update og" ON storage.objects;
@@ -58,5 +57,9 @@ CREATE POLICY "public read og" ON storage.objects FOR SELECT TO anon, authentica
 CREATE POLICY "public insert og" ON storage.objects FOR INSERT TO anon, authenticated WITH CHECK (bucket_id='ogloszenia');
 CREATE POLICY "public update og" ON storage.objects FOR UPDATE TO anon, authenticated USING (bucket_id='ogloszenia') WITH CHECK (bucket_id='ogloszenia');
 CREATE POLICY "public delete og" ON storage.objects FOR DELETE TO anon, authenticated USING (bucket_id='ogloszenia');
+
+-- 4. OPCJONALNIE - WYCZYSC STARE OGLOSZENIA Z BASE64 (zostawi tylko https)
+-- ODKOMENTUJ JESLI CHCESZ USUNAC ZEPSUTE:
+-- UPDATE ogloszenia SET images = '[]'::jsonb, zdjecia = '[]'::jsonb WHERE (images::text LIKE '%data:image%');
 
 NOTIFY pgrst, 'reload schema';
