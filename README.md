@@ -1,1 +1,0 @@
-Sortowanie wg przebiegu rocznika + fix auth przyciski rejestracji logowania anuluj
