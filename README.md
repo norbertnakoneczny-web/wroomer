@@ -1,1 +1,1 @@
-# WROOMER - model select + kompresja zdjęć jak duzi gracze
+FIX: dodaj nie przenosi na admin, miniaturki smartphone nie rozciągnięte

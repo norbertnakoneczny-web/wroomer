@@ -62,6 +62,22 @@ body{background:#0f0f0f}
 .btnY2{height:44px;padding:0 20px;border-radius:10px;border:none;background:#ffcc00;color:#000;font-weight:900;font-size:12px;cursor:pointer}
 .btnD{height:44px;padding:0 18px;border-radius:10px;border:none;background:#ff1a1a;color:#fff;font-weight:800;font-size:12px;cursor:pointer}
 
+
+/* FIX MINIATURKI SMARTFON - NIE ROZCIAGNIETE W DOL */
+@media(max-width:640px){
+  .l{flex-direction:row !important}
+  .sb{width:38% !important; min-width:140px !important; max-width:170px !important}
+  .m{width:62% !important}
+  .gd{grid-template-columns:1fr 1fr !important; gap:6px !important; padding:6px !important; align-items:start !important}
+  .cd{border-radius:10px !important; display:flex !important; flex-direction:column !important; height:auto !important}
+  .cw{aspect-ratio:1/1 !important; height:auto !important; min-height:0 !important; max-height:110px !important; flex-shrink:0 !important}
+  .cw img{width:100% !important; height:100% !important; object-fit:cover !important}
+  .cb{padding:6px 8px !important; flex:1 !important}
+  .ct{font-size:11px !important; line-height:1.2 !important; min-height:auto !important; white-space:nowrap !important; overflow:hidden !important; text-overflow:ellipsis !important}
+  .cp{font-size:13px !important; margin-top:2px !important}
+  .card-meta{font-size:9px !important; gap:4px !important; margin-top:4px !important}
+}
+
 </style>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -318,6 +334,22 @@ img{content-visibility:auto}
 .btnG{height:44px;padding:0 18px;border-radius:10px;border:1px solid #333;background:#1a1a1a;color:#fff;font-weight:800;font-size:12px;cursor:pointer}
 .btnY2{height:44px;padding:0 20px;border-radius:10px;border:none;background:#ffcc00;color:#000;font-weight:900;font-size:12px;cursor:pointer}
 .btnD{height:44px;padding:0 18px;border-radius:10px;border:none;background:#ff1a1a;color:#fff;font-weight:800;font-size:12px;cursor:pointer}
+
+
+/* FIX MINIATURKI SMARTFON - NIE ROZCIAGNIETE W DOL */
+@media(max-width:640px){
+  .l{flex-direction:row !important}
+  .sb{width:38% !important; min-width:140px !important; max-width:170px !important}
+  .m{width:62% !important}
+  .gd{grid-template-columns:1fr 1fr !important; gap:6px !important; padding:6px !important; align-items:start !important}
+  .cd{border-radius:10px !important; display:flex !important; flex-direction:column !important; height:auto !important}
+  .cw{aspect-ratio:1/1 !important; height:auto !important; min-height:0 !important; max-height:110px !important; flex-shrink:0 !important}
+  .cw img{width:100% !important; height:100% !important; object-fit:cover !important}
+  .cb{padding:6px 8px !important; flex:1 !important}
+  .ct{font-size:11px !important; line-height:1.2 !important; min-height:auto !important; white-space:nowrap !important; overflow:hidden !important; text-overflow:ellipsis !important}
+  .cp{font-size:13px !important; margin-top:2px !important}
+  .card-meta{font-size:9px !important; gap:4px !important; margin-top:4px !important}
+}
 
 </style></head><body>
 <header class="h"><div style="display:flex;align-items:center"><div class="logo">WROOMER<span>.PL</span></div><div class="nav"><a class="active">Ogłoszenia</a></div></div><div class="ha"><button id="authBtn" class="btn bg">ZALOGUJ</button><button id="ab" class="btn bb">+ DODAJ OGŁOSZENIE</button></div></header>
@@ -808,7 +840,7 @@ window.render=function(){
 $('brand')?.addEventListener('change',apply); $('model')?.addEventListener('input',apply); $('pf')?.addEventListener('input',apply); $('pt')?.addEventListener('input',apply); $('loc')?.addEventListener('input',apply);
 document.querySelectorAll('.chip').forEach(ch=>{ch.addEventListener('click',()=>{const was=ch.classList.contains('on'); ch.parentElement.querySelectorAll('.chip').forEach(c=>c.classList.remove('on')); if(!was) ch.classList.add('on'); apply();});});
 $('detailModal')?.addEventListener('click',e=>{if(e.target.id==='detailModal'){$('detailModal').classList.remove('o');document.body.style.overflow='';}});
-$('ab')?.addEventListener('click',()=>{ location.href='/admin.html'; });
+// removed admin redirect - fixed to login flow
 
 loadReal().then(()=>initProfessionalFilters());
 function loadRealWrapper(){ return loadReal(); }
@@ -1248,6 +1280,31 @@ if(btnPick){
     fFiles.dispatchEvent(new Event("change"));
   };
 }
+</script>
+
+
+<script>
+// OVERRIDE - FIX DODAJ BUTTON - NIE PRZENOSI NA ADMIN
+document.addEventListener("DOMContentLoaded", ()=>{
+  const ab = document.getElementById("ab");
+  if(ab){
+    // remove all previous listeners by cloning
+    const newAb = ab.cloneNode(true);
+    ab.parentNode.replaceChild(newAb, ab);
+    newAb.addEventListener("click", async (e)=>{
+      e.preventDefault();
+      e.stopPropagation();
+      const saved = localStorage.getItem("wroomer_user");
+      let currentUser = null;
+      try{ if(saved) currentUser = JSON.parse(saved); }catch(err){}
+      if(!currentUser){
+        document.getElementById("authOverlay")?.classList.add("on");
+      }else{
+        document.getElementById("addModal")?.classList.add("on");
+      }
+    });
+  }
+});
 </script>
 
 </body></html>
