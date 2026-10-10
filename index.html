@@ -885,10 +885,17 @@ function loadRealWrapper(){ return loadReal(); }
         <div><label class="addLabel">Paliwo</label><select id="fFuel" class="authInput"><option>Benzyna</option><option>Diesel</option><option>LPG</option><option>Benzyna+LPG</option><option>Elektryczny</option><option>Hybryda</option></select></div>
         <div><label class="addLabel">Skrzynia</label><select id="fGear" class="authInput"><option>Manualna</option><option>Automatyczna</option></select></div>
       </div>
+      
       <div class="addRow">
-        <div><label class="addLabel">Lokalizacja</label><input id="fLoc" class="authInput" placeholder="Gorzyce"></div>
+        <div>
+          <label class="addLabel">Lokalizacja</label>
+          <input id="fLoc" class="authInput" placeholder="Gorzyce">
+          <button id="btnGpsForm" type="button" class="btnG" style="width:100%;margin-top:8px;height:40px;background:#111;border:1px solid #ffcc00;color:#ffcc00">📍 UŻYJ MOJEJ LOKALIZACJI GPS</button>
+          <div id="gpsStatus" style="font-size:11px;color:#8aa0b0;margin-top:6px"></div>
+        </div>
         <div><label class="addLabel">Przebieg km</label><input id="fKm" class="authInput" type="number" placeholder="120000"></div>
       </div>
+
       <div>
         <label class="addLabel">Opis</label>
         <textarea id="fDesc" class="authInput" style="height:100px;padding:12px;resize:vertical" placeholder="Opis pojazdu, stan, wyposażenie..."></textarea>
@@ -1072,49 +1079,117 @@ function loadRealWrapper(){ return loadReal(); }
   };
 
   // SAVE
+  
   $("btnZapisz").onclick = async ()=>{
-    const data = {
-      title: $("fTitle").value,
-      price: parseInt($("fPrice").value)||0,
-      year: parseInt($("fYear").value)||0,
-      brand: $("fBrand").value,
-      model: $("fModel").value,
-      fuel: $("fFuel").value,
-      gearbox: $("fGear").value,
-      location: $("fLoc").value,
-      km: parseInt($("fKm").value)||0,
-      description: $("fDesc").value,
-      images: $("fImgs").value.split(",").map(s=>s.trim()).filter(Boolean),
-      params: $("fParams").value,
-      owner_email: currentUser?.email,
-      created_at: new Date().toISOString()
-    };
-    if(!data.title){ alert("Podaj tytuł"); return; }
-    if(!data.price){ alert("Podaj cenę"); return; }
-
-    // Try save to supabase table listings if exists
+    const U='https://bdpydgsfowtuvjnkyeeg.supabase.co'; 
+    const K='sb_publishable_S1qH_mBZaX7-bzmfJ0IVGA_6hxGbJWd';
+    let supa = window.supa || window.supabaseClient;
     try{
-      if(window.supabase){
-        if(editingId){
-          const {error} = await window.supabase.from("listings").update(data).eq("id", editingId);
-          if(error) throw error;
+      if(!supa && window.supabase){ supa = window.supabase.createClient(U,K,{auth:{persistSession:true}}); }
+    }catch(e){ console.warn(e); }
+
+    if(!supa){ alert("Błąd Supabase - odśwież stronę"); return; }
+
+    const title = $("fTitle").value.trim();
+    const price = parseInt($("fPrice").value)||0;
+    const brand = $("fBrand").value;
+    const model = $("fModel").value;
+    const fuel = $("fFuel").value;
+    const gearbox = $("fGear").value;
+    const location = $("fLoc").value.trim();
+    const km = parseInt($("fKm").value)||0;
+    const year = parseInt($("fYear").value)||0;
+    const description = $("fDesc").value;
+    const params = $("fParams").value;
+
+    if(!title){ alert("Podaj tytuł"); return; }
+    if(!price){ alert("Podaj cenę"); return; }
+    if(!brand){ alert("Wybierz markę"); return; }
+    if(!model){ alert("Wybierz model"); return; }
+
+    $("btnZapisz").textContent = "Zapisuję do Supabase...";
+    $("btnZapisz").disabled = true;
+
+    // Upload compressed images to storage bucket 'ogloszenia'
+    let imageUrls = [];
+    const bucket = "ogloszenia";
+    try{
+      for(let i=0;i<compressedImages.length;i++){
+        const img = compressedImages[i];
+        // convert dataUrl to blob
+        const res = await fetch(img.dataUrl);
+        const blob = await res.blob();
+        const fileName = `${Date.now()}_${i}_${Math.random().toString(36).slice(2)}.jpg`;
+        const {data, error} = await supa.storage.from(bucket).upload(fileName, blob, {contentType: "image/jpeg", upsert: false});
+        if(error){ console.warn("storage upload error", error); // fallback keep dataUrl
+          imageUrls.push(img.dataUrl);
         }else{
-          const {error} = await window.supabase.from("listings").insert([data]);
-          if(error) throw error;
+          const {data: pub} = supa.storage.from(bucket).getPublicUrl(fileName);
+          imageUrls.push(pub.publicUrl);
         }
-        alert(editingId ? "Zaktualizowano!" : "Dodano ogłoszenie!");
-        closeAdd();
-        location.reload();
-        return;
       }
-    }catch(err){
-      console.error(err);
-      // fallback local
+    }catch(e){
+      console.warn("img upload fallback", e);
+      imageUrls = compressedImages.map(c=>c.dataUrl);
     }
-    // Local fallback - add to DOM
-    alert((editingId ? "Zapisano zmiany (lokalnie)" : "Dodano ogłoszenie (lokalnie)") + " - podłącz Supabase aby zapisywać trwale");
-    closeAdd();
+
+    // If no images uploaded yet, use any hidden field
+    if(imageUrls.length===0 && $("fImgs").value){
+      imageUrls = $("fImgs").value.split(",").filter(Boolean);
+    }
+
+    const lat = window._gpsLat || null;
+    const lng = window._gpsLng || null;
+
+    const payload = {
+      title: title,
+      marka: brand,
+      brand: brand,
+      model: model,
+      year: year,
+      mileage: km,
+      price: price,
+      cena: price,
+      location: location,
+      lokalizacja: location,
+      fuel: fuel,
+      paliwo: fuel,
+      gear: gearbox,
+      skrzynia: gearbox,
+      description: description,
+      opis: description,
+      images: imageUrls,
+      zdjecia: imageUrls,
+      lat: lat ? String(lat) : null,
+      lng: lng ? String(lng) : null,
+      latitude: lat ? String(lat) : null,
+      longitude: lng ? String(lng) : null,
+      owner_email: currentUser?.email || null,
+      user_id: currentUser?.id || null
+    };
+
+    try{
+      let result;
+      if(editingId){
+        result = await supa.from("ogloszenia").update(payload).eq("id", editingId);
+      }else{
+        result = await supa.from("ogloszenia").insert([payload]).select();
+      }
+      if(result.error) throw result.error;
+      alert(editingId ? "✅ Zaktualizowano w Supabase!" : "✅ Dodano ogłoszenie do Supabase!");
+      closeAdd();
+      location.reload();
+    }catch(err){
+      console.error("Supabase insert error", err);
+      alert("Błąd Supabase: "+ (err.message||err) + "
+
+Sprawdź w Supabase SQL czy RLS jest włączone (public insert). Wklej supabase.sql");
+    }finally{
+      $("btnZapisz").textContent = editingId ? "Zapisz zmiany" : "Dodaj ogłoszenie";
+      $("btnZapisz").disabled = false;
+    }
   };
+
 
   $("btnUsun").onclick = async ()=>{
     if(!confirm("Usunąć ogłoszenie?")) return;
@@ -1305,6 +1380,42 @@ document.addEventListener("DOMContentLoaded", ()=>{
     });
   }
 });
+</script>
+
+
+<script>
+// GPS W FORMULARZU - UŻYJ MOJEJ LOKALIZACJI
+(function(){
+  const btn = document.getElementById("btnGpsForm");
+  const status = document.getElementById("gpsStatus");
+  const locInput = document.getElementById("fLoc");
+  if(!btn) return;
+  btn.onclick = ()=>{
+    if(!navigator.geolocation){ status.textContent="Geolokalizacja nie wspierana"; return; }
+    status.textContent="📍 Pobieram GPS...";
+    btn.disabled=true;
+    navigator.geolocation.getCurrentPosition(async pos=>{
+      const lat = pos.coords.latitude;
+      const lng = pos.coords.longitude;
+      window._gpsLat = lat;
+      window._gpsLng = lng;
+      status.textContent=`✅ GPS: ${lat.toFixed(5)}, ${lng.toFixed(5)}`;
+      // reverse geocode via Nominatim
+      try{
+        const r = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=10&accept-language=pl`);
+        const j = await r.json();
+        const city = j.address?.city || j.address?.town || j.address?.village || j.address?.county || "";
+        const state = j.address?.state || "";
+        if(city) locInput.value = city + (state ? ", "+state : "");
+      }catch(e){}
+      btn.disabled=false;
+      btn.textContent="✅ Lokalizacja pobrana";
+    }, err=>{
+      status.textContent="❌ Błąd GPS: "+err.message+" - wpisz ręcznie";
+      btn.disabled=false;
+    }, {enableHighAccuracy:true, timeout:10000});
+  };
+})();
 </script>
 
 </body></html>
