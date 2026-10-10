@@ -57,8 +57,41 @@ html,body{background:#000;color:#e2e8f0;font-family:Inter,sans-serif;-webkit-fon
 /* Detail modal */
 .modal{position:fixed;inset:0;z-index:60;background:rgba(0,0,0,.8);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;padding:20px}
 .modal.o{display:flex}
-.mc{background:#0e0e0e;border:1px solid #222;border-radius:20px;max-width:1100px;width:100%;max-height:96vh;overflow:auto;display:flex;flex-direction:column}
-.detailImg{width:100%;height:62vh;object-fit:contain;background:#000;display:block}
+.mc{background:#0e0e0e;border:1px solid #222;border-radius:20px;max-width:1400px;width:96%;max-height:98vh;overflow:auto;display:flex;flex-direction:column}
+.detailImg{width:100%;height:80vh;object-fit:contain;background:#000;display:block}
+
+/* FIX */
+
+.cd{background:linear-gradient(to bottom, #111 0%, #0a0a0a 100%) !important}
+
+
+/* CZARNE MIEJSCE POD UCIECIEM - gradient od koloru obrazu (jasne) do mocno czarnego na dole */
+.cb{
+  background: linear-gradient(to bottom, 
+    #2a2a2a 0%,
+    #1e1e1e 15%,
+    #141414 40%,
+    #0a0a0a 75%,
+    #000000 100%) !important;
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+.cd{
+  background: #000 !important;
+  border: 1px solid #1f1f1f;
+}
+.cw{
+  position: relative;
+}
+.cw::after{
+  content:'';
+  position:absolute;
+  left:0;right:0;bottom:0;
+  height: 24px;
+  background: linear-gradient(to bottom, transparent, #2a2a2a);
+  z-index:1;
+  pointer-events:none;
+}
+
 </style></head><body>
 <header class="h"><div style="display:flex;align-items:center"><div class="logo">WROOMER<span>.PL</span></div><div class="nav"><a class="active">Ogłoszenia</a><a>Dealerzy</a><a>Części</a></div></div><div class="ha"><button id="authBtn" class="btn bg">ZALOGUJ</button><button id="ab" class="btn bb">+ DODAJ OGŁOSZENIE</button></div></header>
 <div class="l">
