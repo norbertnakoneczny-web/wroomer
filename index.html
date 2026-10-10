@@ -379,13 +379,15 @@ img{content-visibility:auto}
 
 
 
-<div id="detailModal" class="modal"><div class="mc" style="max-width:980px;margin:0 auto;background:#0a0a0a;border-radius:20px;overflow:auto; -webkit-overflow-scrolling:touch"><div style="position:relative"><div class="dm-img-wrap" style="position:relative"><img id="detailImg" class="detailImg" width="800" height="600" decoding="async" fetchpriority="high" src=""><button id="galPrev" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;background:rgba(0,0,0,.6);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:22px;cursor:pointer;z-index:5;display:grid;place-items:center">‹</button><button id="galNext" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;background:rgba(0,0,0,.6);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:22px;cursor:pointer;z-index:5;display:grid;place-items:center">›</button><div id="galCounter" style="position:absolute;top:12px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.7);color:#fff;padding:6px 12px;border-radius:999px;font-size:12px;font-weight:700;z-index:5">1 / 1</div><button onclick="document.getElementById('detailModal').classList.remove('o');document.body.style.overflow=''" style="position:absolute;top:12px;right:12px;width:36px;height:36px;border-radius:50%;background:rgba(0,0,0,.7);border:1px solid #333;color:#fff;cursor:pointer;z-index:5">✕</button></div><div id="detailThumbs" style="display:flex;gap:6px;padding:10px;background:#000;overflow:auto;-webkit-overflow-scrolling:touch"></div></div>
-<div style="padding:18px 20px;max-width:900px;margin:0 auto;width:100%;box-sizing:border-box">
+<div id="detailModal" class="modal"><div class="mc" style="max-width:980px;margin:0 auto;background:#0a0a0a;border-radius:20px;overflow:auto; -webkit-overflow-scrolling:touch"><div style="padding:18px 20px 10px;max-width:900px;margin:0 auto;width:100%;box-sizing:border-box">
 <div id="detailTitle" style="font-size:22px;font-weight:900;color:#ffcc00;text-align:center"></div>
+</div>
+<div style="position:relative"><div class="dm-img-wrap" style="position:relative"><img id="detailImg" class="detailImg" width="800" height="600" decoding="async" fetchpriority="high" src=""><button id="galPrev" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;background:rgba(0,0,0,.6);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:22px;cursor:pointer;z-index:5;display:grid;place-items:center">‹</button><button id="galNext" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;background:rgba(0,0,0,.6);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:22px;cursor:pointer;z-index:5;display:grid;place-items:center">›</button><div id="galCounter" style="position:absolute;top:12px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.7);color:#fff;padding:6px 12px;border-radius:999px;font-size:12px;font-weight:700;z-index:5">1 / 1</div><button onclick="document.getElementById('detailModal').classList.remove('o');document.body.style.overflow=''" style="position:absolute;top:12px;right:12px;width:36px;height:36px;border-radius:50%;background:rgba(0,0,0,.7);border:1px solid #333;color:#fff;cursor:pointer;z-index:5">✕</button></div><div id="detailThumbs" style="display:flex;gap:6px;padding:10px;background:#000;overflow:auto;-webkit-overflow-scrolling:touch"></div></div>
+<div style="padding:18px 20px;max-width:900px;margin:0 auto;width:100%;box-sizing:border-box">
 <div id="detailPrice" style="font-size:26px;font-weight:900;color:#ffcc00;margin-top:8px;text-align:center"></div>
 <div id="detailMeta" style="font-size:12px;color:#8aa0b0;margin-top:10px;text-align:center"></div>
-<div id="detailGrid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-top:18px"></div>
-<div style="font-size:10px;color:#ffcc00;font-weight:900;letter-spacing:.8px;margin:16px 0 8px">POZOSTAŁE PARAMETRY</div><div id="detailAllInfo" style="margin-top:18px;background:#141414;border:1px solid #222;border-radius:14px;padding:14px"></div>
+<div id="detailGrid" style="display:none"></div>
+<div id="detailAllInfo" style="margin-top:18px;background:#141414;border:1px solid #222;border-radius:14px;padding:14px"></div></div>
 <div id="detailDesc" style="font-size:13px;color:#ccc;margin-top:16px;line-height:1.6;white-space:pre-wrap;text-align:left"></div>
 <div style="display:flex;gap:10px;margin-top:18px;justify-content:center;flex-wrap:wrap">
 <button id="detailPhone" class="btn bb" style="height:44px;border-radius:12px;padding:0 20px">📞 Pokaż telefon</button>
@@ -726,38 +728,61 @@ function renderAllDetails(item){
   $('detailTitle').textContent=item.md||`${ex.marka||''} ${ex.model||''}`.trim();
   $('detailPrice').textContent=fmtPrice(item.pr);
   $('detailMeta').textContent=`${item.lc||''} • ${ex.fuel||ex.paliwo||''} • ${ex.gear||ex.skrzynia||''} • ${item.year||ex.year||ex.rocznik||''} • ${item.mileage||ex.mileage||ex.przebieg||''} km`.replace(/•\s*•/g,'•').replace(/^ •| • $/g,'');
-  // Grid of key facts
+  // UKRYJ cały formularz z kafelkami MARKA/MODEL itd - ma być niewidoczny
   const grid=$('detailGrid');
-  const allPossible=[
-    ['Marka', ex.marka||'—'],
-    ['Model', ex.model||'—'],
-    ['Rocznik', ex.year||ex.rocznik||item.year||'—'],
-    ['Przebieg', (ex.mileage||ex.przebieg||item.mileage) ? `${ex.mileage||ex.przebieg||item.mileage} km` : '—'],
-    ['Cena', fmtPrice(item.pr)],
-    ['Paliwo', ex.fuel||ex.paliwo||'—'],
-    ['Skrzynia', ex.gear||ex.skrzynia||ex.gearbox||'—'],
-    ['Moc', ex.power||ex.moc||ex.power_km||'—'],
-    ['Pojemność', ex.capacity||ex.pojemnosc||ex.engine||ex.cc||'—'],
-    ['Nadwozie', ex.body||ex.nadwozie||'—'],
-    ['Kolor', ex.color||ex.kolor||'—'],
-    ['Stan', ex.state||ex.stan||'—'],
-    ['Drzwi', ex.doors||ex.drzwi||'—'],
-    ['VIN', ex.vin||'—'],
-    ['Rejestr.', ex.first_reg||ex.rejestracja||ex.first_registration||'—'],
-    ['Lokalizacja', item.lc||ex.location||ex.lokalizacja||'—'],
-    ['GPS', (ex.latitude&&ex.longitude) ? `${ex.latitude}, ${ex.longitude}` : (ex.lat&&ex.lng ? `${ex.lat}, ${ex.lng}` : '—')],
-    ['Telefon', ex.phone||ex.telefon||'—'],
-    ['Wyświetlenia', ex.views||0],
-  ];
-  const facts=allPossible;
+  grid.style.display='none';
+  grid.innerHTML='';
 
-  grid.innerHTML=facts.map(f=>`<div style="background:#1a1a1a;border:1px solid #252525;border-radius:10px;padding:10px;text-align:center"><div style="font-size:10px;color:#666;font-weight:800;letter-spacing:.5px">${f[0].toUpperCase()}</div><div style="font-size:13px;color:#ffcc00;font-weight:700;margin-top:4px">${f[1]}</div></div>`).join('');
-  // All info box
+  // TYLKO POZOSTAŁE INFORMACJE - pokaż wszystko co wypełnione
   const allBox=$('detailAllInfo');
-  const ignore=['images','zdjecia','is_banned','id','created_at','title','price','cena','marka','model'];
-  const rows=Object.entries(ex).filter(([k,v])=>v!==null&&v!==''&&!ignore.includes(k)&&typeof v!=='object').map(([k,v])=>`<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #222"><span style="color:#666;font-size:12px">${k}</span><span style="color:#ddd;font-size:12px;font-weight:600;max-width:60%;text-align:right;word-break:break-word">${v}</span></div>`).join('');
-  allBox.innerHTML=`<div style="font-size:11px;color:#888;font-weight:800;letter-spacing:.6px;margin-bottom:8px;text-align:center">WSZYSTKIE INFORMACJE Z OGŁOSZENIA</div>${rows||'<div style="color:#666;font-size:12px;text-align:center">Brak dodatkowych danych</div>'}`;
-  const fullDesc = item.ds || ex.description || ex.opis || ex.desc || ex.details || '';
+  const pozostaleHeader = allBox.previousElementSibling;
+  if(pozostaleHeader && pozostaleHeader.textContent.includes('POZOSTAŁE')) pozostaleHeader.style.display='none';
+
+  const rawData=[
+    ['Marka', ex.marka||ex.brand||''],
+    ['Model', ex.model||''],
+    ['Rocznik', ex.year||ex.rocznik||item.year||''],
+    ['Przebieg', (ex.mileage||ex.przebieg||item.mileage) ? `${ex.mileage||ex.przebieg||item.mileage} km` : ''],
+    ['Cena', fmtPrice(item.pr)],
+    ['Paliwo', ex.fuel||ex.paliwo||''],
+    ['Skrzynia', ex.gear||ex.skrzynia||ex.gearbox||''],
+    ['Moc', ex.power||ex.moc||ex.power_km||''],
+    ['Pojemność', ex.capacity||ex.pojemnosc||ex.engine||ex.cc||''],
+    ['Nadwozie', ex.body||ex.nadwozie||''],
+    ['Kolor', ex.color||ex.kolor||''],
+    ['Stan', ex.state||ex.stan||''],
+    ['Drzwi', ex.doors||ex.drzwi||''],
+    ['VIN', ex.vin||''],
+    ['Rejestr.', ex.first_reg||ex.rejestracja||ex.first_registration||''],
+    ['Lokalizacja', item.lc||ex.location||ex.lokalizacja||''],
+  ];
+  // Dodatkowe pola z ex
+  const ignore=['images','zdjecia','is_banned','id','created_at','title','price','cena','marka','model','brand','year','mileage','location','lokalizacja','fuel','paliwo','gear','skrzynia','rocznik','przebieg','pojemnosc','moc','nadwozie','kolor','stan','drzwi','vin','rejestracja','phone','telefon','views','lat','lng','latitude','longitude','owner_email','user_id','md','pr','lc','im','ds','power','power_km','capacity','engine','cc','body','color','doors','first_reg','first_registration'];
+  const extraRows=Object.entries(ex).filter(([k,v])=>{
+    if(v===null||v===undefined||v===''||v==='—'||v==='-'||String(v).trim().toLowerCase()==='brak') return false;
+    if(ignore.includes(k)) return false;
+    if(typeof v==='object') return false;
+    const sv=String(v).trim();
+    if(!sv || sv==='0' || sv==='0 km') return false;
+    return true;
+  }).map(([k,v])=>[k,v]);
+
+  const allRows = [...rawData, ...extraRows].filter(([k,v])=>{
+    if(v===null||v===undefined) return false;
+    const s=String(v).trim();
+    if(!s || s==='—' || s==='-' || s==='--' || s.toLowerCase()==='brak' || s==='0' || s==='0 km') return false;
+    return true;
+  });
+
+  if(allRows.length>0){
+    allBox.innerHTML=`<div style="font-size:11px;color:#ffcc00;font-weight:900;letter-spacing:.8px;margin-bottom:12px;text-align:center">POZOSTAŁE INFORMACJE</div>` + allRows.map(([k,v])=>`<div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #222"><span style="color:#888;font-size:12px;text-transform:uppercase;font-weight:700">${k}</span><span style="color:#ffcc00;font-size:13px;font-weight:700;max-width:60%;text-align:right">${v}</span></div>`).join('');
+    allBox.style.display='block';
+  }else{
+    allBox.innerHTML=`<div style="font-size:11px;color:#ffcc00;font-weight:900;letter-spacing:.8px;margin-bottom:12px;text-align:center">POZOSTAŁE INFORMACJE</div><div style="color:#666;font-size:12px;text-align:center;padding:20px">Brak dodatkowych informacji</div>`;
+    allBox.style.display='block';
+  }
+
+const fullDesc = item.ds || ex.description || ex.opis || ex.desc || ex.details || '';
   const descEl=$('detailDesc');
   if(fullDesc){
     descEl.innerHTML='<div style="font-size:11px;color:#666;font-weight:800;letter-spacing:.6px;margin-bottom:10px;text-align:center">OPIS OGŁOSZENIA</div><div style="background:#141414;border:1px solid #222;border-radius:14px;padding:16px;white-space:pre-wrap;line-height:1.7;color:#ddd;font-size:14px;text-align:left;max-width:800px;margin:0 auto">'+fullDesc.replace(/</g,'&lt;')+'</div>';
