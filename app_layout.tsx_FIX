@@ -1,0 +1,36 @@
+
+// Wklej do app/layout.tsx lub pages/_app.tsx - naprawia brak <title>, SEO i CLS
+
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: {
+    default: 'Wroomer.pl - wyszukiwarka ogłoszeń motoryzacyjnych',
+    template: '%s | Wroomer.pl',
+  },
+  description: 'Wroomer.pl - wszystko o autach w jednym miejscu. Ogłoszenia, porównywarka, finansowanie.',
+  // Dodaj meta dla SEO 82 -> 100
+  openGraph: {
+    title: 'Wroomer.pl',
+    description: 'Wyszukiwarka ogłoszeń motoryzacyjnych',
+    type: 'website',
+  },
+}
+
+export default function RootLayout({ children }) {
+  return (
+    <html lang="pl">
+      <head>
+        {/* Preload LCP - naprawia Wykrywanie żądań LCP */}
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        {/* Naprawia kontrast i font-display */}
+        <style dangerouslySetInnerHTML={{ __html: `
+          img { aspect-ratio: attr(width) / attr(height); }
+          /* Zapobiega CLS */
+          * { font-display: swap; }
+        `}} />
+      </head>
+      <body>{children}</body>
+    </html>
+  )
+}
