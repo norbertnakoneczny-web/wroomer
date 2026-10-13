@@ -6,82 +6,55 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap" rel="stylesheet">
-<style>body{font-family:Inter;background:#050505;color:#fff} .card{background:#111;border:1px solid #1e1e1e;border-radius:20px} .card:hover{border-color:#2a2a2a} .bg-yellow{background:#facc15;color:#000} .yellow{color:#facc15} ::-webkit-scrollbar{width:6px;height:6px} ::-webkit-scrollbar-thumb{background:#222;border-radius:10px}</style>
+<style>body{font-family:Inter;background:#050505;color:#fff} .card{background:#111;border:1px solid #1e1e1e;border-radius:20px} .bg-yellow{background:#facc15;color:#000} .yellow{color:#facc15}</style>
 </head>
 <body class="p-3 md:p-6">
 <div class="max-w-[1600px] mx-auto">
 <div class="flex flex-wrap justify-between items-center card p-4 mb-6 gap-3">
-  <div class="flex items-center gap-4"><div class="w-12 h-12 bg-yellow rounded-2xl flex items-center justify-center font-black text-black text-xl">W</div><div><div class="font-black text-xl tracking-tight">WROOMER ADMIN PRO</div><div class="text-[11px] text-zinc-500 tracking-widest">PANEL ZARZĄDZANIA • BAN • EDYCJA • STATS</div></div></div>
-  <div class="flex items-center gap-2"><span id="who" class="hidden md:block text-xs text-zinc-500 bg-black px-3 py-2 rounded-full border border-zinc-800"></span><a href="index.html" class="card px-5 py-2.5 text-sm font-bold">← STRONA</a><button id="logoutBtn" class="bg-red-500 hover:bg-red-600 text-white px-5 py-2.5 rounded-xl font-black text-sm transition">WYLOGUJ</button></div>
+  <div class="flex items-center gap-4"><div class="w-12 h-12 bg-yellow rounded-2xl flex items-center justify-center font-black text-black text-xl">W</div><div><div class="font-black text-xl">WROOMER ADMIN PRO</div><div class="text-[11px] text-zinc-500">PRYWATNY • TYLKO ADMIN • BAN • EDYCJA • STATS</div></div></div>
+  <div class="flex items-center gap-2"><span id="who" class="text-xs text-zinc-500 bg-black px-3 py-2 rounded-full border border-zinc-800"></span><a href="index.html" class="card px-5 py-2.5 text-sm font-bold">← STRONA</a><button id="logoutBtn" class="bg-red-500 text-white px-5 py-2.5 rounded-xl font-black text-sm">WYLOGUJ</button></div>
 </div>
-
-<div id="setup" class="hidden card p-6 mb-6 border-yellow-400/30 bg-yellow-400/5">
-  <h2 class="font-black yellow mb-2">🔑 WKLEJ ANON KEY (pierwsze uruchomienie)</h2>
-  <p class="text-xs text-zinc-400 mb-3">Supabase Dashboard → Project Settings → API Keys → anon public → Copy</p>
-  <div class="flex gap-2"><input id="anonInput" placeholder="eyJhbGc..." class="flex-1 bg-black border border-zinc-700 rounded-xl p-3 text-sm"><button id="saveAnon" class="bg-yellow px-6 py-3 rounded-xl font-black">ZAPISZ I ODŚWIEŻ</button></div>
-</div>
-
 <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-  <div class="card p-5 relative overflow-hidden"><div class="absolute -right-6 -top-6 w-20 h-20 bg-yellow/10 rounded-full"></div><div class="text-[11px] tracking-widest text-zinc-500 font-bold">UŻYTKOWNICY</div><div id="sUsers" class="text-3xl font-black mt-2">-</div><div class="text-xs text-zinc-600 mt-1">w tabeli profiles</div></div>
-  <div class="card p-5 relative overflow-hidden"><div class="absolute -right-6 -top-6 w-20 h-20 bg-yellow/10 rounded-full"></div><div class="text-[11px] tracking-widest text-zinc-500 font-bold">OGŁOSZENIA PROD</div><div id="sOgl" class="text-3xl font-black mt-2 yellow">-</div><div class="text-xs text-zinc-600 mt-1">tabela ogloszenia</div></div>
-  <div class="card p-5"><div class="text-[11px] tracking-widest text-zinc-500 font-bold">LISTINGS TEST</div><div id="sList" class="text-3xl font-black mt-2">-</div><div class="text-xs text-zinc-600 mt-1">tabela listings</div></div>
-  <div class="card p-5 border-yellow-400/20"><div class="text-[11px] tracking-widest yellow font-bold">ADMINI</div><div id="sAdmin" class="text-3xl font-black mt-2">-</div><div class="text-xs text-zinc-600 mt-1">role = admin</div></div>
+  <div class="card p-5"><div class="text-[11px] text-zinc-500 font-bold">UŻYTKOWNICY</div><div id="sUsers" class="text-3xl font-black mt-2">-</div></div>
+  <div class="card p-5"><div class="text-[11px] text-zinc-500 font-bold">OGŁOSZENIA PROD</div><div id="sOgl" class="text-3xl font-black mt-2 yellow">-</div></div>
+  <div class="card p-5"><div class="text-[11px] text-zinc-500 font-bold">LISTINGS TEST</div><div id="sList" class="text-3xl font-black mt-2">-</div></div>
+  <div class="card p-5 border-yellow-400/20"><div class="text-[11px] yellow font-bold">ADMINI</div><div id="sAdmin" class="text-3xl font-black mt-2">-</div></div>
 </div>
-
 <div class="grid lg:grid-cols-12 gap-6">
-  <div class="lg:col-span-4 card p-5">
-    <div class="flex justify-between items-center mb-4"><h2 class="font-black tracking-tight">UŻYTKOWNICY</h2><div class="flex gap-2"><button id="rUsers" class="bg-yellow text-black px-3 py-1 rounded-full text-xs font-black">ODŚWIEŻ</button></div></div>
-    <input id="searchU" placeholder="Szukaj email, roli..." class="w-full bg-black border border-zinc-800 rounded-xl p-3 text-sm mb-4">
-    <div id="users" class="space-y-3 max-h-[700px] overflow-auto pr-1">Ładowanie...</div>
-  </div>
-  <div class="lg:col-span-8 card p-5">
-    <div class="flex flex-wrap justify-between items-center gap-3 mb-4"><h2 class="font-black tracking-tight">OGŁOSZENIA</h2><div class="flex gap-2 items-center"><select id="tableSw" class="bg-black border border-zinc-800 rounded-xl px-3 py-2 text-xs"><option value="ogloszenia">ogloszenia (PROD)</option><option value="listings">listings (TEST)</option></select><button id="rOgl" class="bg-yellow text-black px-3 py-1 rounded-full text-xs font-black">ODŚWIEŻ</button></div></div>
-    <input id="searchO" placeholder="Szukaj tytułu, miasta, ceny..." class="w-full bg-black border border-zinc-800 rounded-xl p-3 text-sm mb-4">
-    <div id="ogloszenia" class="grid md:grid-cols-2 gap-3 max-h-[700px] overflow-auto pr-1">Ładowanie...</div>
-  </div>
+  <div class="lg:col-span-4 card p-5"><div class="flex justify-between mb-4"><h2 class="font-black">UŻYTKOWNICY</h2><button id="rUsers" class="bg-yellow text-black px-3 py-1 rounded-full text-xs font-black">ODŚWIEŻ</button></div><input id="searchU" placeholder="Szukaj email..." class="w-full bg-black border border-zinc-800 rounded-xl p-3 text-sm mb-4"><div id="users" class="space-y-3 max-h-[700px] overflow-auto">Ładowanie...</div></div>
+  <div class="lg:col-span-8 card p-5"><div class="flex justify-between mb-4"><h2 class="font-black">OGŁOSZENIA</h2><div class="flex gap-2"><select id="tableSw" class="bg-black border border-zinc-800 rounded-xl px-3 py-2 text-xs"><option value="ogloszenia">ogloszenia (PROD)</option><option value="listings">listings (TEST)</option></select><button id="rOgl" class="bg-yellow text-black px-3 py-1 rounded-full text-xs font-black">ODŚWIEŻ</button></div></div><input id="searchO" placeholder="Szukaj tytułu, miasta..." class="w-full bg-black border border-zinc-800 rounded-xl p-3 text-sm mb-4"><div id="ogloszenia" class="grid md:grid-cols-2 gap-3 max-h-[700px] overflow-auto">Ładowanie...</div></div>
 </div>
 <div id="status" class="mt-6 text-center text-xs text-zinc-600"></div>
 </div>
-
-<div id="editM" class="hidden fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4">
-  <div class="card p-6 w-full max-w-lg border-yellow-400/20"><div class="flex justify-between mb-5"><h3 class="font-black text-lg">EDYTUJ OGŁOSZENIE</h3><button onclick="closeEdit()" class="w-8 h-8 bg-zinc-800 rounded-full">×</button></div><div class="space-y-3"><input id="e_title" class="w-full bg-black border border-zinc-800 rounded-xl p-3 text-sm" placeholder="Tytuł"><div class="grid grid-cols-2 gap-3"><input id="e_price" type="number" class="bg-black border border-zinc-800 rounded-xl p-3 text-sm" placeholder="Cena"><input id="e_loc" class="bg-black border border-zinc-800 rounded-xl p-3 text-sm" placeholder="Lokalizacja"></div><input id="e_img" class="w-full bg-black border border-zinc-800 rounded-xl p-3 text-sm" placeholder="Image URL"><textarea id="e_desc" class="w-full bg-black border border-zinc-800 rounded-xl p-3 text-sm h-24" placeholder="Opis"></textarea><input id="e_id" type="hidden"><input id="e_table" type="hidden"><button id="saveEdit" class="w-full bg-yellow py-3 rounded-xl font-black">ZAPISZ ZMIANY</button></div></div>
-</div>
-
+<div id="editM" class="hidden fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4"><div class="card p-6 w-full max-w-lg"><div class="flex justify-between mb-5"><h3 class="font-black">EDYTUJ</h3><button onclick="closeEdit()" class="w-8 h-8 bg-zinc-800 rounded-full">×</button></div><div class="space-y-3"><input id="e_title" class="w-full bg-black border border-zinc-800 rounded-xl p-3 text-sm"><div class="grid grid-cols-2 gap-3"><input id="e_price" type="number" class="bg-black border border-zinc-800 rounded-xl p-3 text-sm"><input id="e_loc" class="bg-black border border-zinc-800 rounded-xl p-3 text-sm"></div><input id="e_img" class="w-full bg-black border border-zinc-800 rounded-xl p-3 text-sm"><textarea id="e_desc" class="w-full bg-black border border-zinc-800 rounded-xl p-3 text-sm h-24"></textarea><input id="e_id" type="hidden"><input id="e_table" type="hidden"><button id="saveEdit" class="w-full bg-yellow py-3 rounded-xl font-black">ZAPISZ</button></div></div></div>
 <script>
-window.WROOMER_CONFIG = {
-  url: 'https://bdpydgsfowtuvjnkyeeg.supabase.co',
-  anonKey: localStorage.getItem('wroomer_anon_key') || ''
-};
-</script>
-<script>
-const SUPABASE_URL = window.WROOMER_CONFIG.url;
-let ANON = window.WROOMER_CONFIG.anonKey || localStorage.getItem('wroomer_anon_key') || '';
-if(!ANON || ANON.length<20) document.getElementById('setup').classList.remove('hidden');
-let supabase = ANON ? window.supabase.createClient(SUPABASE_URL, ANON) : null;
-document.getElementById('saveAnon').onclick=()=>{ const v=document.getElementById('anonInput').value.trim(); if(v.length<20) return alert('Wklej pełny klucz'); localStorage.setItem('wroomer_anon_key', v); location.reload(); };
+const SUPABASE_URL='https://bdpydgsfowtuvjnkyeeg.supabase.co';
+const SUPABASE_ANON='sb_publishable_S1qH_mBZaX7-bzmfJ0IVGA_6hxGbJWd';
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
 
 async function init(){
-  if(!supabase) return;
-  const {data}=await supabase.auth.getSession(); const u=data.session?.user; document.getElementById('who').innerText=u?u.email:'Niezalogowany';
-  if(!u) document.getElementById('status').innerText='Zaloguj się najpierw na index.html';
+  const {data} = await supabase.auth.getSession();
+  const user = data.session?.user;
+  if(!user){ document.body.innerHTML='<div style="background:#000;color:#facc15;height:100vh;display:flex;align-items:center;justify-content:center;font-family:Inter;font-weight:900">🔒 TYLKO DLA ADMINA - ZALOGUJ SIĘ NA STRONIE GŁÓWNEJ</div>'; return; }
+  const {data:profile} = await supabase.from('profiles').select('role').eq('id', user.id).single();
+  if(!profile || profile.role!=='admin'){ document.body.innerHTML='<div style="background:#000;color:#facc15;height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column;font-family:Inter"><div style="font-weight:900;font-size:24px">⛔ BRAK DOSTĘPU</div><div style="color:#666;font-size:12px;margin-top:8px">Tylko admin • '+user.email+'</div><a href="index.html" style="margin-top:20px;background:#facc15;color:#000;padding:10px 20px;border-radius:999px;text-decoration:none;font-weight:900">WRÓĆ</a></div>'; return; }
+  document.getElementById('who').innerText=user.email;
   loadStats(); loadUsers(); loadOgl();
 }
 async function loadStats(){
-  if(!supabase) return;
-  const {count:a}=await supabase.from('profiles').select('*',{count:'exact',head:true});
-  const {count:b}=await supabase.from('ogloszenia').select('*',{count:'exact',head:true});
-  const {count:c}=await supabase.from('listings').select('*',{count:'exact',head:true});
-  const {count:d}=await supabase.from('profiles').select('*',{count:'exact',head:true}).eq('role','admin');
+  const {count:a} = await supabase.from('profiles').select('*',{count:'exact',head:true});
+  const {count:b} = await supabase.from('ogloszenia').select('*',{count:'exact',head:true});
+  const {count:c} = await supabase.from('listings').select('*',{count:'exact',head:true});
+  const {count:d} = await supabase.from('profiles').select('*',{count:'exact',head:true}).eq('role','admin');
   document.getElementById('sUsers').innerText=a??0; document.getElementById('sOgl').innerText=b??0; document.getElementById('sList').innerText=c??0; document.getElementById('sAdmin').innerText=d??0;
 }
 async function loadUsers(){
-  if(!supabase) return;
-  const {data, error}=await supabase.from('profiles').select('*').order('created_at',{ascending:false}).limit(150);
-  if(error){ document.getElementById('users').innerHTML='<div class="text-red-400 text-sm">'+error.message+'</div>'; return; }
+  const {data, error} = await supabase.from('profiles').select('*').order('created_at',{ascending:false}).limit(150);
+  if(error){ document.getElementById('users').innerHTML=error.message; return; }
   const q=document.getElementById('searchU').value.toLowerCase();
   const f=data.filter(x=> JSON.stringify(x).toLowerCase().includes(q));
   document.getElementById('users').innerHTML=f.map(u=>`
-    <div class="bg-[#0a0a0a] border border-zinc-900 rounded-2xl p-4 hover:border-zinc-700 transition">
+    <div class="bg-[#0a0a0a] border border-zinc-900 rounded-2xl p-4">
       <div class="flex justify-between"><div class="font-bold text-sm truncate">${u.email||u.id.slice(0,8)}</div><span class="text-[10px] px-2 py-1 rounded-full ${u.role==='admin'?'bg-yellow text-black font-black':'bg-zinc-800 text-zinc-400'}">${u.role||'user'}</span></div>
       <div class="text-[11px] text-zinc-500 mt-1">${new Date(u.created_at).toLocaleDateString()} • ${u.id.slice(0,6)} ${u.is_banned?'<span class="text-red-400">• BAN</span>':''}</div>
       <div class="flex flex-wrap gap-1.5 mt-3">
@@ -91,30 +64,29 @@ async function loadUsers(){
         <button onclick="delU('${u.id}')" class="bg-zinc-900 border border-red-900/30 text-red-400 px-3 py-1.5 rounded-full text-xs">USUŃ</button>
       </div>
     </div>
-  `).join('')||'<div class="text-zinc-600 text-sm">Brak</div>';
+  `).join('')||'Brak';
 }
 async function loadOgl(){
-  if(!supabase) return;
   const table=document.getElementById('tableSw').value;
-  const {data, error}=await supabase.from(table).select('*').order('created_at',{ascending:false}).limit(150);
-  if(error){ document.getElementById('ogloszenia').innerHTML='<div class="text-red-400 text-sm">'+error.message+'<br>Uruchom FIX RLS dla '+table+'</div>'; return; }
+  const {data, error} = await supabase.from(table).select('*').order('created_at',{ascending:false}).limit(150);
+  if(error){ document.getElementById('ogloszenia').innerHTML=error.message; return; }
   const q=document.getElementById('searchO').value.toLowerCase();
   const f=data.filter(x=> JSON.stringify(x).toLowerCase().includes(q));
   document.getElementById('ogloszenia').innerHTML=f.map(o=>`
-    <div class="bg-[#0a0a0a] border border-zinc-900 rounded-2xl p-3 flex gap-3 hover:border-zinc-700 transition">
+    <div class="bg-[#0a0a0a] border border-zinc-900 rounded-2xl p-3 flex gap-3">
       <img src="${o.image_url||o.image||o.images?.[0]||'https://picsum.photos/200'}" class="w-20 h-20 object-cover rounded-xl">
-      <div class="flex-1 min-w-0"><div class="font-bold text-sm truncate">${o.title||o.marka+' '+(o.model||'')||'Bez tytułu'}</div><div class="text-[11px] text-zinc-500">${o.location||o.miasto||''} • ${o.price||o.cena||0} zł • ${o.status||'active'}</div><div class="flex gap-1.5 mt-2"><button onclick="openE('${o.id}','${table}')" class="bg-yellow text-black px-3 py-1 rounded-full text-xs font-black">EDYTUJ</button><button onclick="delO('${o.id}','${table}')" class="bg-red-600 text-white px-3 py-1 rounded-full text-xs">USUŃ</button><button onclick="hideO('${o.id}','${table}')" class="bg-zinc-800 px-3 py-1 rounded-full text-xs">UKRYJ</button></div></div>
+      <div class="flex-1"><div class="font-bold text-sm truncate">${o.title||o.marka+' '+(o.model||'')}</div><div class="text-[11px] text-zinc-500">${o.location||o.miasto||''} • ${o.price||o.cena||0} zł</div><div class="flex gap-1.5 mt-2"><button onclick="openE('${o.id}','${table}')" class="bg-yellow text-black px-3 py-1 rounded-full text-xs font-black">EDYTUJ</button><button onclick="delO('${o.id}','${table}')" class="bg-red-600 text-white px-3 py-1 rounded-full text-xs">USUŃ</button><button onclick="hideO('${o.id}','${table}')" class="bg-zinc-800 px-3 py-1 rounded-full text-xs">UKRYJ</button></div></div>
     </div>
-  `).join('')||'<div class="text-zinc-600 text-sm">Brak ogłoszeń w '+table+'</div>';
+  `).join('')||'Brak';
 }
-window.setRole=async(id,role)=>{ const {error}=await supabase.from('profiles').update({role}).eq('id',id); if(error) alert(error.message); else {loadUsers(); loadStats();} };
-window.ban=async(id, isBanned)=>{ let {error}=await supabase.from('profiles').update({is_banned:!isBanned}).eq('id',id); if(error){ const {error:e2}=await supabase.from('profiles').update({role:isBanned?'user':'banned'}).eq('id',id); if(e2) alert(e2.message); } loadUsers(); };
-window.delU=async(id)=>{ if(!confirm('Usunąć profil?')) return; const {error}=await supabase.from('profiles').delete().eq('id',id); if(error) alert(error.message); else loadUsers(); };
-window.delO=async(id,table)=>{ if(!confirm('Usunąć ogłoszenie?')) return; const {error}=await supabase.from(table).delete().eq('id',id); if(error) alert(error.message); else {loadOgl(); loadStats();} };
-window.hideO=async(id,table)=>{ const {error}=await supabase.from(table).update({status:'hidden'}).eq('id',id); if(error) alert(error.message); else loadOgl(); };
-window.openE=async(id,table)=>{ const {data}=await supabase.from(table).select('*').eq('id',id).single(); if(!data) return; document.getElementById('e_id').value=id; document.getElementById('e_table').value=table; document.getElementById('e_title').value=data.title||''; document.getElementById('e_price').value=data.price||data.cena||''; document.getElementById('e_loc').value=data.location||data.miasto||''; document.getElementById('e_img').value=data.image_url||data.image||''; document.getElementById('e_desc').value=data.description||data.opis||''; document.getElementById('editM').classList.remove('hidden'); };
+window.setRole=async(id,role)=>{ const {error} = await supabase.from('profiles').update({role}).eq('id',id); if(error) alert(error.message); else {loadUsers(); loadStats();} };
+window.ban=async(id, isBanned)=>{ let {error} = await supabase.from('profiles').update({is_banned:!isBanned}).eq('id',id); if(error){ const {error:e2} = await supabase.from('profiles').update({role:isBanned?'user':'banned'}).eq('id',id); if(e2) alert(e2.message); } loadUsers(); };
+window.delU=async(id)=>{ if(!confirm('Usunąć profil?')) return; const {error} = await supabase.from('profiles').delete().eq('id',id); if(error) alert(error.message); else loadUsers(); };
+window.delO=async(id,table)=>{ if(!confirm('Usunąć ogłoszenie?')) return; const {error} = await supabase.from(table).delete().eq('id',id); if(error) alert(error.message); else {loadOgl(); loadStats();} };
+window.hideO=async(id,table)=>{ const {error} = await supabase.from(table).update({status:'hidden'}).eq('id',id); if(error) alert(error.message); else loadOgl(); };
+window.openE=async(id,table)=>{ const {data} = await supabase.from(table).select('*').eq('id',id).single(); if(!data) return; document.getElementById('e_id').value=id; document.getElementById('e_table').value=table; document.getElementById('e_title').value=data.title||''; document.getElementById('e_price').value=data.price||data.cena||''; document.getElementById('e_loc').value=data.location||data.miasto||''; document.getElementById('e_img').value=data.image_url||data.image||''; document.getElementById('e_desc').value=data.description||data.opis||''; document.getElementById('editM').classList.remove('hidden'); };
 window.closeEdit=()=>document.getElementById('editM').classList.add('hidden');
-document.getElementById('saveEdit').onclick=async()=>{ const id=document.getElementById('e_id').value; const table=document.getElementById('e_table').value; const payload={}; if(table==='ogloszenia'){ payload.title=document.getElementById('e_title').value; payload.cena=parseInt(document.getElementById('e_price').value)||0; payload.price=payload.cena; payload.miasto=document.getElementById('e_loc').value; payload.location=payload.miasto; payload.image=document.getElementById('e_img').value; payload.image_url=payload.image; payload.opis=document.getElementById('e_desc').value; payload.description=payload.opis; } else { payload.title=document.getElementById('e_title').value; payload.price=parseInt(document.getElementById('e_price').value)||0; payload.location=document.getElementById('e_loc').value; payload.image_url=document.getElementById('e_img').value; payload.description=document.getElementById('e_desc').value; } const {error}=await supabase.from(table).update(payload).eq('id',id); if(error) alert(error.message); else {closeEdit(); loadOgl();} };
+document.getElementById('saveEdit').onclick=async()=>{ const id=document.getElementById('e_id').value; const table=document.getElementById('e_table').value; const payload={ title:document.getElementById('e_title').value, cena:parseInt(document.getElementById('e_price').value)||0, price:parseInt(document.getElementById('e_price').value)||0, miasto:document.getElementById('e_loc').value, location:document.getElementById('e_loc').value, image:document.getElementById('e_img').value, image_url:document.getElementById('e_img').value, opis:document.getElementById('e_desc').value, description:document.getElementById('e_desc').value }; const {error} = await supabase.from(table).update(payload).eq('id',id); if(error) alert(error.message); else {closeEdit(); loadOgl();} };
 document.getElementById('logoutBtn').onclick=async()=>{ await supabase.auth.signOut(); localStorage.removeItem('sb-bdpydgsfowtuvjnkyeeg-auth-token'); location.href='index.html'; };
 document.getElementById('rUsers').onclick=loadUsers; document.getElementById('rOgl').onclick=()=>{loadOgl(); loadStats();}; document.getElementById('searchU').oninput=loadUsers; document.getElementById('searchO').oninput=loadOgl; document.getElementById('tableSw').onchange=loadOgl;
 init();

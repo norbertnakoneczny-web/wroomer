@@ -44,7 +44,7 @@
 </style>
 </head>
 <body>
-<div id="setup" class="setup">
+<div id="setup" class="setup" style="display:none !important">
   <b>🔑 PIERWSZE URUCHOMIENIE - WKLEJ ANON KEY</b><br>
   Supabase → Project Settings → API Keys → anon public → Copy → wklej poniżej → Zapisz. Zapisuje się lokalnie.
   <input id="anonInput" placeholder="eyJhbGc..."><button id="saveAnon" style="margin-top:8px;background:#000;color:#facc15;padding:8px 16px;border-radius:999px;border:none;font-weight:900;cursor:pointer">ZAPISZ</button>
@@ -94,8 +94,10 @@
 
 <script>
 const SUPABASE_URL='https://bdpydgsfowtuvjnkyeeg.supabase.co';
-let ANON = localStorage.getItem('wroomer_anon_key')||'';
-if(!ANON || ANON.length<20) document.getElementById('setup').classList.add('show');
+const SUPABASE_ANON='sb_publishable_S1qH_mBZaX7-bzmfJ0IVGA_6hxGbJWd';
+const OLD_URL='https://bdpydgsfowtuvjnkyeeg.supabase.co';
+let ANON = 'sb_publishable_S1qH_mBZaX7-bzmfJ0IVGA_6hxGbJWd';
+if(!ANON || ANON.length<20) // setup hidden - private;
 let supabaseClient = null;
 function initSupa(){ if(!ANON) return; supabaseClient = window.supabase.createClient(SUPABASE_URL, ANON); initApp(); }
 document.getElementById('saveAnon').onclick=()=>{ const v=document.getElementById('anonInput').value.trim(); if(v.length<20) return alert('Wklej pełny klucz'); localStorage.setItem('wroomer_anon_key',v); location.reload(); };
@@ -103,44 +105,7 @@ document.getElementById('saveAnon').onclick=()=>{ const v=document.getElementByI
 let currentUser=null, ads=[], selF=[], selG=[], editingId=null;
 const FUELS=['BENZYNA','DIESEL','LPG','ELEKTRYCZNY','HYBRYDA'];
 const GEARS=['MANUALNA','AUTOMATYCZNA'];
-
-const BRANDS={
-"Abarth":["500","Punto"],
-"Alfa Romeo":["Giulia","Stelvio","147","159","Mito"],
-"Audi":["A1","A3","A4","A5","A6","A7","A8","Q2","Q3","Q5","Q7","Q8","RS6","RS3","e-tron"],
-"BMW":["Seria 1","Seria 3","Seria 5","Seria 7","X1","X3","X5","X6","M3","M5","i4","iX"],
-"Chevrolet":["Camaro","Cruze","Aveo","Captiva"],
-"Citroen":["C3","C4","C5","Berlingo","C-Elysee"],
-"Cupra":["Formentor","Leon","Ateca"],
-"Dacia":["Duster","Logan","Sandero","Jogger"],
-"Fiat":["500","Panda","Tipo","Doblo","Freemont"],
-"Ford":["Fiesta","Focus","Mondeo","Kuga","Puma","Mustang","Transit"],
-"Honda":["Civic","Accord","CR-V","Jazz","HR-V"],
-"Hyundai":["i20","i30","Tucson","Kona","Santa Fe","Ioniq"],
-"Jaguar":["XE","XF","F-Pace","E-Pace"],
-"Jeep":["Compass","Renegade","Cherokee","Wrangler","Grand Cherokee"],
-"Kia":["Ceed","Sportage","Rio","Stonic","Sorento","Niro"],
-"Land Rover":["Range Rover","Discovery","Evoque","Defender"],
-"Lexus":["IS","ES","RX","NX","UX","LC"],
-"Mazda":["3","6","CX-3","CX-5","CX-30","MX-5"],
-"Mercedes-Benz":["A Klasa","C Klasa","E Klasa","S Klasa","GLA","GLC","GLE","GLS","CLA","AMG GT"],
-"Mini":["Cooper","Countryman","Clubman"],
-"Mitsubishi":["Outlander","ASX","Lancer","Colt"],
-"Nissan":["Qashqai","Juke","X-Trail","Micra","Leaf"],
-"Opel":["Astra","Corsa","Insignia","Mokka","Grandland","Crossland"],
-"Peugeot":["208","308","3008","5008","2008","508"],
-"Porsche":["911","Cayenne","Macan","Panamera","Taycan"],
-"Renault":["Clio","Megane","Kadjar","Captur","Talisman","Scenic"],
-"Seat":["Ibiza","Leon","Arona","Ateca","Tarraco"],
-"Skoda":["Fabia","Octavia","Superb","Kodiaq","Karoq","Kamiq","Scala"],
-"Subaru":["Impreza","Forester","Outback","XV"],
-"Suzuki":["Swift","Vitara","SX4","Jimny","Baleno"],
-"Tesla":["Model 3","Model S","Model X","Model Y"],
-"Toyota":["Corolla","Camry","RAV4","Yaris","Auris","C-HR","Hilux","Land Cruiser","Prius"],
-"Volkswagen":["Golf","Passat","Tiguan","T-Roc","Polo","Arteon","Touareg","ID.3","ID.4"],
-"Volvo":["XC60","XC90","XC40","V60","S60","S90","V90"]
-};
-
+const BRANDS={"Audi":["A3","A4","A6","Q5","Q7","RS6"],"BMW":["Seria 3","Seria 5","X5","M3","M5"],"Mercedes":["C Klasa","E Klasa","S Klasa","GLC"],"VW":["Golf","Passat","Tiguan"],"Toyota":["Corolla","Camry","RAV4"]};
 
 function toast(m){ const t=document.getElementById('toast'); t.textContent=m; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2500); }
 
@@ -225,7 +190,7 @@ function populateBrands(){
   const allBrands = Object.keys(BRANDS);
   const selB=document.getElementById('f-marka');
   const selMB=document.getElementById('m-brand');
-  const mkOptions = ['Wszystkie marki ('+Object.keys(BRANDS).length+')', ...allBrands];
+  const mkOptions = ['Wszystkie marki ('+allBrands.length+')', ...allBrands];
   selB.innerHTML = mkOptions.map(b=>`<option>${b}</option>`).join('');
   selMB.innerHTML = allBrands.map(b=>`<option>${b}</option>`).join('');
   updateModelOptions('f-marka','f-model', true);
