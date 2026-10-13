@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WROOMER.PL - ADMIN</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Inter,Segoe UI,Arial,sans-serif;background:#050505;color:#fff;min-height:100vh}
+.header{height:56px;background:#000;border-bottom:2px solid #facc15;display:flex;align-items:center;justify-content:space-between;padding:0 20px}
+.logo{font-weight:900;font-size:20px;letter-spacing:-0.5px} .logo span{color:#facc15}
+.badge-live{font-size:10px;background:#1a1a1a;border:1px solid #2a2a2a;padding:4px 10px;border-radius:999px;color:#666}
+.wrap{max-width:900px;margin:0 auto;padding:24px 16px;display:flex;flex-direction:column;gap:16px}
+.card{background:#141414;border:1px solid #1e1e1e;border-radius:16px;padding:20px}
+.card h2{font-size:14px;font-weight:900;letter-spacing:1px;margin-bottom:12px} .card h2 span{color:#facc15}
+.label{color:#facc15;font-size:10px;font-weight:800;letter-spacing:1.5px;margin:14px 0 6px;display:block}
+.input{width:100%;height:44px;background:#1a1a1a;border:1px solid #2a2a2a;border-radius:12px;color:#fff;padding:0 14px;font-size:13px;outline:none}
+.input:focus{border-color:#facc15}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.btn{height:44px;border-radius:999px;border:none;font-size:12px;font-weight:900;letter-spacing:0.5px;cursor:pointer}
+.btn-y{background:#facc15;color:#000} .btn-d{background:#1a1a1a;color:#fff;border:1px solid #2a2a2a}
+.btn-sm{height:32px;padding:0 14px;border-radius:999px;font-size:11px;font-weight:800;border:none;cursor:pointer}
+.small{font-size:11px;color:#666;margin-top:8px;line-height:1.4}
+.hidden{display:none}
+.log{background:#0f0f0f;border:1px solid #1e1e1e;border-radius:10px;padding:10px;font-size:11px;color:#0f0;white-space:pre-wrap;margin-top:10px;max-height:120px;overflow:auto}
+.top-info{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+table{width:100%;border-collapse:collapse}
+th{font-size:10px;color:#666;font-weight:800;letter-spacing:1px;text-align:left;padding:12px 8px;border-bottom:1px solid #1e1e1e}
+td{padding:12px 8px;border-bottom:1px solid #151515;font-size:13px}
+.status{padding:4px 10px;border-radius:999px;font-size:10px;font-weight:800}
+.s-pending{background:#332a00;color:#facc15;border:1px solid #4a3d00} .s-active{background:#0a2a12;color:#4ade80;border:1px solid #1a4a25}
+.own{color:#facc15;font-size:11px;font-weight:800}
+</style>
+</head>
+<body>
+<div class="header">
+<div class="logo">WROOMER <span>.PL ADMIN</span></div>
+<div class="badge-live" id="connStatus">● nie połączono</div>
+</div>
+
+<div class="wrap">
+
+<!-- KROK 1 -->
+<div class="card" id="setupCard">
+<h2><span>1.</span> KONFIGURACJA SUPABASE</h2>
+<p class="small">Skopiowane z Twojego projektu: <b>bdpydgsfowtuvjnkyeeg</b>. Wklej tylko ANON KEY.</p>
+<span class="label">PROJECT URL</span>
+<input id="sUrl" class="input" value="https://bdpydgsfowtuvjnkyeeg.supabase.co">
+<span class="label">ANON KEY (publishable)</span>
+<input id="sKey" class="input" placeholder="eyJhbGciOi... wklej tutaj z Supabase -> Settings -> API Keys -> anon">
+<div class="row2" style="margin-top:14px">
+<button class="btn btn-y" onclick="saveConfig()">ZAPISZ I POŁĄCZ</button>
+<button class="btn btn-d" onclick="clearConfig()">WYCZYŚĆ</button>
+</div>
+<div id="log" class="log hidden"></div>
+<p class="small">Gdzie znaleźć KEY: Supabase -> ⚙️ Settings -> API Keys -> skopiuj `anon` / `publishable`</p>
+</div>
+
+<!-- KROK 2 -->
+<div class="card hidden" id="loginCard">
+<h2><span>2.</span> LOGOWANIE</h2>
+<span class="label">EMAIL</span>
+<input id="email" class="input" placeholder="twoj@email.pl">
+<span class="label">HASŁO</span>
+<input id="pass" type="password" class="input" placeholder="••••••••">
+<div class="row2" style="margin-top:14px">
+<button class="btn btn-y" onclick="doLogin()">ZALOGUJ</button>
+<button class="btn btn-d" onclick="doSignup()">ZAREJESTRUJ</button>
+</div>
+<div id="loginMsg" class="small"></div>
+</div>
+
+<!-- PANEL -->
+<div class="hidden" id="adminBox">
+<div class="card">
+<div class="top-info">
+<span>Zalogowany: <b id="userEmail"></b></span>
+<span style="font-size:11px;color:#666">Rola: <b id="userRole" style="color:#fff">user</b></span>
+<button class="btn-sm" style="background:#1a1a1a;color:#fff;border:1px solid #2a2a2a" onclick="doLogout()">Wyloguj</button>
+<button class="btn-sm" style="background:#facc15;color:#000" onclick="loadListings()">Odśwież</button>
+<span id="countInfo" style="font-size:11px;color:#666"></span>
+</div>
+</div>
+
+<div class="card">
+<h2><span>OGŁOSZENIA</span> - KLIKNIJ AKTYWUJ ŻEBY POKAZAŁO SIĘ NA WROOMER.PL</h2>
+<table>
+<thead><tr><th>TYTUŁ</th><th>CENA</th><th>STATUS</th><th>WŁAŚCICIEL</th><th>AKCJA</th></tr></thead>
+<tbody id="tbody"></tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+<script>
+let supa=null, currentUser=null;
+const LS_URL='wroomer_url', LS_KEY='wroomer_key';
+const $=id=>document.getElementById(id);
+function log(t){const l=$('log');l.classList.remove('hidden');l.textContent+=t+'\n'; $('connStatus').textContent='● '+t; }
+function init(){
+ const u=localStorage.getItem(LS_URL), k=localStorage.getItem(LS_KEY);
+ if(u) $('sUrl').value=u;
+ if(k) $('sKey').value=k;
+ if(u&&k) connect(u,k);
+}
+function clearConfig(){localStorage.removeItem(LS_URL);localStorage.removeItem(LS_KEY);location.reload();}
+function saveConfig(){
+ const u=$('sUrl').value.trim(), k=$('sKey').value.trim();
+ if(!u||!k){alert('Wpisz URL i ANON KEY');return;}
+ localStorage.setItem(LS_URL,u); localStorage.setItem(LS_KEY,k);
+ connect(u,k);
+}
+function connect(url,key){
+ try{
+  log('Łączę...');
+  supa=supabase.createClient(url,key);
+  $('setupCard').classList.add('hidden');
+  $('loginCard').classList.remove('hidden');
+  $('connStatus').textContent='● połączono'; $('connStatus').style.color='#4ade80'; $('connStatus').style.borderColor='#1a4a25';
+  log('Połączono OK - zaloguj się');
+  checkSession();
+ }catch(e){log('BŁĄD: '+e.message);}
+}
+async function checkSession(){
+ const {data}=await supa.auth.getSession();
+ if(data.session){currentUser=data.session.user; afterLogin();}
+}
+async function doLogin(){
+ const email=$('email').value.trim(), pass=$('pass').value.trim();
+ if(!email||!pass){$('loginMsg').textContent='Wpisz email i hasło';return;}
+ const {data,error}=await supa.auth.signInWithPassword({email,password:pass});
+ if(error){$('loginMsg').textContent='Błąd: '+error.message; return;}
+ currentUser=data.user; afterLogin();
+}
+async function doSignup(){
+ const email=$('email').value.trim(), pass=$('pass').value.trim();
+ const {data,error}=await supa.auth.signUp({email,password:pass});
+ if(error){$('loginMsg').textContent='Błąd: '+error.message; return;}
+ $('loginMsg').textContent='Konto utworzone! Sprawdź maila (jeśli wymagany) i zaloguj się.';
+}
+async function doLogout(){ await supa.auth.signOut(); location.reload(); }
+async function afterLogin(){
+ $('loginCard').classList.add('hidden');
+ $('adminBox').classList.remove('hidden');
+ $('userEmail').textContent=currentUser.email;
+ try{
+  const {data:prof}=await supa.from('profiles').select('role').eq('id',currentUser.id).single();
+  $('userRole').textContent=prof?.role||'user';
+ }catch{ $('userRole').textContent='user'; }
+ loadListings();
+}
+async function loadListings(){
+ const tbody=$('tbody');
+ tbody.innerHTML='<tr><td colspan=5 style="color:#666">Ładowanie...</td></tr>';
+ const {data,error}=await supa.from('listings').select('*').order('created_at',{ascending:false}).limit(100);
+ if(error){tbody.innerHTML='<tr><td colspan=5 style="color:#f87171">Błąd: '+error.message+'<br><span style="color:#666">Uruchom SQL w Supabase jeśli tabela nie istnieje</span></td></tr>';return;}
+ if(!data||!data.length){tbody.innerHTML='<tr><td colspan=5 style="color:#666">Brak ogłoszeń</td></tr>';$('countInfo').textContent='0 ogłoszeń';return;}
+ $('countInfo').textContent=data.length+' ogłoszeń';
+ tbody.innerHTML='';
+ data.forEach(row=>{
+  const own=row.owner_id===currentUser.id;
+  const tr=document.createElement('tr');
+  tr.innerHTML=`
+   <td><b>${row.title||row.brand||'Bez tytułu'}</b><div style="font-size:11px;color:#666">${row.brand||''} ${row.model||''} ${row.year||''}</div></td>
+   <td style="color:#facc15;font-weight:900">${row.price?row.price.toLocaleString()+' zł':''}</td>
+   <td><span class="status s-${row.status||'pending'}">${row.status||'pending'}</span></td>
+   <td>${own?'<span class="own">TY</span>':(row.owner_id||'').slice(0,6)}<div style="font-size:10px;color:#555">${row.location||''}</div></td>
+   <td>
+    <div style="display:flex;gap:6px">
+     ${row.status!=='active'?`<button class="btn-sm" style="background:#facc15;color:#000" onclick="approve('${row.id}')">AKTYWUJ</button>`:''}
+     <button class="btn-sm" style="background:#1a1a1a;color:#fff;border:1px solid #2a2a2a" onclick="removeAd('${row.id}')">USUŃ</button>
+    </div>
+   </td>`;
+  tbody.appendChild(tr);
+ });
+}
+async function approve(id){
+ const {error}=await supa.from('listings').update({status:'active'}).eq('id',id);
+ if(error)alert(error.message); else loadListings();
+}
+async function removeAd(id){
+ if(!confirm('Usunąć ogłoszenie?'))return;
+ const {error}=await supa.from('listings').delete().eq('id',id);
+ if(error)alert(error.message); else loadListings();
+}
+init();
+</script>
+</body>
+</html>
