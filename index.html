@@ -2,7 +2,8 @@
 <html lang="pl">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>WROOMER.PL - KOPIA ROBOCZA</title>
+<title>WROOMER.PL - TEST</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,Segoe UI,Arial,sans-serif;background:#050505;color:#fff;height:100vh;display:flex;flex-direction:column}
 .header{height:56px;background:#000;border-bottom:2px solid #facc15;display:flex;align-items:center;justify-content:space-between;padding:0 16px;flex-shrink:0}
@@ -39,12 +40,18 @@
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}.modal-foot{display:flex;gap:10px}
 .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#1a1a1a;border:1px solid #facc15;color:#fff;padding:10px 18px;border-radius:999px;font-size:12px;display:none;z-index:100}
 .toast.show{display:block}
+.setup{background:#facc15;color:#000;padding:12px 16px;border-radius:12px;margin:12px 16px;font-size:12px;display:none}.setup.show{display:block}.setup input{width:100%;margin-top:8px;padding:10px;border-radius:8px;border:1px solid #000}
 </style>
 </head>
 <body>
+<div id="setup" class="setup">
+  <b>🔑 PIERWSZE URUCHOMIENIE - WKLEJ ANON KEY</b><br>
+  Supabase → Project Settings → API Keys → anon public → Copy → wklej poniżej → Zapisz. Zapisuje się lokalnie.
+  <input id="anonInput" placeholder="eyJhbGc..."><button id="saveAnon" style="margin-top:8px;background:#000;color:#facc15;padding:8px 16px;border-radius:999px;border:none;font-weight:900;cursor:pointer">ZAPISZ</button>
+</div>
 <div class="header">
 <div style="display:flex;align-items:center"><div class="logo">WROOMER <span>.PL</span></div><div class="nav">Ogłoszenia</div></div>
-<div style="display:flex;gap:8px"><button class="btn-user">AAA (WYLOGUJ)</button><button class="btn-add" id="btn-add">+ DODAJ OGŁOSZENIE</button></div>
+<div style="display:flex;gap:8px;align-items:center"><span id="userEmail" style="font-size:10px;color:#666"></span><button class="btn-user" id="btn-user">ZALOGUJ</button><a href="admin.html" class="btn-user" style="text-decoration:none;background:#facc15;color:#000;border:none">ADMIN</a><button class="btn-add" id="btn-add">+ DODAJ OGŁOSZENIE</button></div>
 </div>
 <div class="wrap">
 <aside class="sidebar">
@@ -56,105 +63,196 @@
 <div><span class="label">SKRZYNIA</span><div class="chips" id="gear-chips"></div></div>
 <div><span class="label">PROMIEŃ WYSZUKIWANIA</span><select class="select" id="radius"><option>Cała Polska</option><option>+5 km</option><option>+25 km</option><option>+50 km</option><option>+100 km</option><option>+200 km</option></select></div>
 <button class="btn-clear" id="btn-clear">WYCZYŚĆ FILTRY</button>
-<div style="font-size:10px;color:#333;text-align:center">KOPIA ROBOCZA – wroomer-test<br>Edycja ogłoszeń działa</div>
+<div style="font-size:10px;color:#333;text-align:center">TEST • wroomer-test<br>Wyloguj działa • Admin PRO</div>
 </aside>
 <main class="main">
-<div class="topbar"><div class="found">ZNALEZIONO <b id="count">0</b> OGŁOSZEŃ • TYLKO TWOJE (KOPIA)</div><div class="sort-wrap"><span>Sortuj:</span><select id="sort"><option>Najnowsze</option><option>Najtańsze</option><option>Najdroższe</option></select></div></div>
+<div class="topbar"><div class="found">ZNALEZIONO <b id="count">0</b> OGŁOSZEŃ • <span id="mode">WSZYSTKIE</span></div><div class="sort-wrap">Sortuj: <select id="sort"><option>Najnowsze</option><option>Najtańsze</option><option>Najdroższe</option></select></div></div>
 <div class="grid" id="grid"></div>
-<div class="empty" id="empty"><h2>Brak ogłoszeń</h2><p>Dodaj pierwsze ogłoszenie – kliknij + DODAJ</p></div>
+<div class="empty" id="empty" style="display:none"><h2>Brak ogłoszeń</h2><p>Dodaj pierwsze ogłoszenie – kliknij + DODAJ<br>Sprawdź też filtry i RLS w Supabase</p></div>
 </main>
 </div>
+
+<!-- MODAL ADD/EDIT -->
 <div class="modal" id="modal">
 <div class="modal-box">
-<div class="modal-head"><span id="modal-title">DODAJ OGŁOSZENIE – KOPIA</span><button id="close" style="background:#1a1a1a;border:none;color:#fff;width:28px;height:28px;border-radius:50%;cursor:pointer">✕</button></div>
+<div class="modal-head"><span id="modal-title">DODAJ OGŁOSZENIE</span><button id="close">×</button></div>
 <div class="modal-body">
-<input id="m-title" placeholder="Tytuł * np. BMW 320d 184KM">
-<div class="row2"><input id="m-price" type="number" placeholder="Cena PLN *"><input id="m-year" type="number" placeholder="Rocznik *"></div>
+<input id="m-title" placeholder="Tytuł np. BMW Seria 3">
+<div class="row2"><input id="m-price" type="number" placeholder="Cena zł *"><input id="m-year" type="number" placeholder="Rok"></div>
 <div class="row2"><select id="m-brand"></select><select id="m-model"></select></div>
-<div class="row2"><input id="m-mileage" type="number" placeholder="Przebieg km *"><select id="m-fuel"><option>BENZYNA</option><option>DIESEL</option><option>LPG</option><option>ELEKTRYCZNY</option><option>HYBRYDA</option></select></div>
-<div class="row2"><select id="m-gear"><option>MANUALNA</option><option>AUTOMATYCZNA</option></select><input id="m-loc" placeholder="Miejscowość * np. Gorzyce"></div>
-<input id="m-phone" placeholder="Telefon * 600123456">
-<input id="m-img" placeholder="Link zdjęcia https://...">
-<textarea id="m-desc" rows="3" placeholder="Opis..."></textarea>
-<div class="modal-foot"><button class="btn-clear" id="cancel" style="flex:1">ANULUJ</button><button class="btn-add" id="submit" style="flex:1;height:42px;border-radius:999px">ZATWIERDŹ</button></div>
-<div style="font-size:10px;color:#333;text-align:center" id="edit-info">Nowe ogłoszenie – zapis lokalny w kopii</div>
+<div class="row2"><input id="m-mileage" type="number" placeholder="Przebieg km"><select id="m-fuel"><option>Benzyna</option><option>Diesel</option><option>LPG</option><option>Elektryczny</option><option>Hybryda</option></select></div>
+<div class="row2"><select id="m-gear"><option>Manualna</option><option>Automatyczna</option></select><input id="m-loc" placeholder="Lokalizacja *"></div>
+<input id="m-phone" placeholder="Telefon *">
+<input id="m-img" placeholder="Link do zdjęcia https://...">
+<textarea id="m-desc" placeholder="Opis"></textarea>
+<div id="edit-info" style="font-size:10px;color:#666"></div>
+<div class="modal-foot"><button class="btn-card d" id="cancel">ANULUJ</button><button class="btn-card y" id="submit">ZATWIERDŹ</button></div>
 </div>
 </div>
 </div>
 <div class="toast" id="toast"></div>
+
 <script>
-const BRANDS=["Audi","BMW","Mercedes-Benz","Volkswagen","Toyota","Skoda","Ford","Opel","Renault","Peugeot","Citroen","Fiat","Hyundai","Kia","Volvo","Seat","Honda","Mazda","Nissan","Suzuki","Dacia","Jeep","Lexus","Porsche","Alfa Romeo","Land Rover","Mitsubishi","Subaru","Tesla","Cupra","Mini"];
-const MODELS={
-"Audi":["A1","A3","A4","A5","A6","Q2","Q3","Q5","Q7","Q8"],
-"BMW":["1","2","3","4","5","7","X1","X3","X5","X6"],
-"Mercedes-Benz":["A Klasa","B Klasa","C Klasa","E Klasa","S Klasa","GLA","GLC","GLE","GLS","CLA"],
-"Volkswagen":["Golf","Passat","Polo","Tiguan","T-Roc","Touareg","Arteon","Touran","Up!","ID.4"],
-"Toyota":["Aygo","Yaris","Corolla","Camry","RAV4","C-HR","Highlander","Hilux","Proace","Supra"],
-"Skoda":["Fabia","Octavia","Superb","Karoq","Kodiaq","Scala","Kamiq","Enyaq","Rapid","Citigo"],
-"Ford":["Fiesta","Focus","Mondeo","Kuga","Puma","EcoSport","S-Max","Galaxy","Mustang","Transit"],
-"Opel":["Corsa","Astra","Insignia","Mokka","Crossland","Grandland","Combo","Vivaro","Zafira"],
-"Renault":["Clio","Megane","Captur","Kadjar","Talisman","Scenic","Kangoo","Master","Twingo"],
-"Peugeot":["108","208","308","508","2008","3008","5008","Rifter","Partner","Traveller"],
-"Citroen":["C1","C3","C4","C5 Aircross","Berlingo","C3 Aircross","Jumpy","Spacetourer"],
-"Fiat":["500","Panda","Tipo","500X","500L","Doblo","Ducato","Punto"],
-"Hyundai":["i10","i20","i30","Tucson","Santa Fe","Kona","Ioniq","Bayon"],
-"Kia":["Picanto","Rio","Ceed","Sportage","Sorento","Niro","Stonic","XCeed"],
-"Volvo":["S60","S90","V60","V90","XC40","XC60","XC90"],
-"Seat":["Ibiza","Leon","Arona","Ateca","Tarraco","Alhambra"],
-"Honda":["Civic","CR-V","Jazz","HR-V","Accord"],
-"Mazda":["2","3","6","CX-3","CX-30","CX-5","MX-5"],
-"Nissan":["Micra","Juke","Qashqai","X-Trail","Leaf","Navara"],
-"Suzuki":["Swift","Vitara","S-Cross","Ignis","Jimny"],
-"Dacia":["Sandero","Duster","Logan","Dokker","Jogger"],
-"Jeep":["Renegade","Compass","Cherokee","Wrangler","Grand Cherokee"],
-"Lexus":["IS","ES","GS","RX","NX","UX","LC"],
-"Porsche":["911","Cayenne","Macan","Panamera","Taycan","Boxster"],
-"Alfa Romeo":["Giulia","Stelvio","Giulietta","Tonale"],
-"Land Rover":["Discovery","Defender","Range Rover","Evoque","Velar"],
-"Mitsubishi":["ASX","Eclipse Cross","Outlander","L200","Space Star"],
-"Subaru":["Impreza","Forester","Outback","XV","WRX"],
+const SUPABASE_URL='https://bdpydgsfowtuvjnkyeeg.supabase.co';
+let ANON = localStorage.getItem('wroomer_anon_key')||'';
+if(!ANON || ANON.length<20) document.getElementById('setup').classList.add('show');
+let supabaseClient = null;
+function initSupa(){ if(!ANON) return; supabaseClient = window.supabase.createClient(SUPABASE_URL, ANON); initApp(); }
+document.getElementById('saveAnon').onclick=()=>{ const v=document.getElementById('anonInput').value.trim(); if(v.length<20) return alert('Wklej pełny klucz'); localStorage.setItem('wroomer_anon_key',v); location.reload(); };
+
+let currentUser=null, ads=[], selF=[], selG=[], editingId=null;
+const FUELS=['BENZYNA','DIESEL','LPG','ELEKTRYCZNY','HYBRYDA'];
+const GEARS=['MANUALNA','AUTOMATYCZNA'];
+
+const BRANDS={
+"Abarth":["500","Punto"],
+"Alfa Romeo":["Giulia","Stelvio","147","159","Mito"],
+"Audi":["A1","A3","A4","A5","A6","A7","A8","Q2","Q3","Q5","Q7","Q8","RS6","RS3","e-tron"],
+"BMW":["Seria 1","Seria 3","Seria 5","Seria 7","X1","X3","X5","X6","M3","M5","i4","iX"],
+"Chevrolet":["Camaro","Cruze","Aveo","Captiva"],
+"Citroen":["C3","C4","C5","Berlingo","C-Elysee"],
+"Cupra":["Formentor","Leon","Ateca"],
+"Dacia":["Duster","Logan","Sandero","Jogger"],
+"Fiat":["500","Panda","Tipo","Doblo","Freemont"],
+"Ford":["Fiesta","Focus","Mondeo","Kuga","Puma","Mustang","Transit"],
+"Honda":["Civic","Accord","CR-V","Jazz","HR-V"],
+"Hyundai":["i20","i30","Tucson","Kona","Santa Fe","Ioniq"],
+"Jaguar":["XE","XF","F-Pace","E-Pace"],
+"Jeep":["Compass","Renegade","Cherokee","Wrangler","Grand Cherokee"],
+"Kia":["Ceed","Sportage","Rio","Stonic","Sorento","Niro"],
+"Land Rover":["Range Rover","Discovery","Evoque","Defender"],
+"Lexus":["IS","ES","RX","NX","UX","LC"],
+"Mazda":["3","6","CX-3","CX-5","CX-30","MX-5"],
+"Mercedes-Benz":["A Klasa","C Klasa","E Klasa","S Klasa","GLA","GLC","GLE","GLS","CLA","AMG GT"],
+"Mini":["Cooper","Countryman","Clubman"],
+"Mitsubishi":["Outlander","ASX","Lancer","Colt"],
+"Nissan":["Qashqai","Juke","X-Trail","Micra","Leaf"],
+"Opel":["Astra","Corsa","Insignia","Mokka","Grandland","Crossland"],
+"Peugeot":["208","308","3008","5008","2008","508"],
+"Porsche":["911","Cayenne","Macan","Panamera","Taycan"],
+"Renault":["Clio","Megane","Kadjar","Captur","Talisman","Scenic"],
+"Seat":["Ibiza","Leon","Arona","Ateca","Tarraco"],
+"Skoda":["Fabia","Octavia","Superb","Kodiaq","Karoq","Kamiq","Scala"],
+"Subaru":["Impreza","Forester","Outback","XV"],
+"Suzuki":["Swift","Vitara","SX4","Jimny","Baleno"],
 "Tesla":["Model 3","Model S","Model X","Model Y"],
-"Cupra":["Formentor","Ateca","Leon","Born"],
-"Mini":["Cooper","Countryman","Clubman","Cabrio"]
+"Toyota":["Corolla","Camry","RAV4","Yaris","Auris","C-HR","Hilux","Land Cruiser","Prius"],
+"Volkswagen":["Golf","Passat","Tiguan","T-Roc","Polo","Arteon","Touareg","ID.3","ID.4"],
+"Volvo":["XC60","XC90","XC40","V60","S60","S90","V90"]
 };
-// count models = ~113? lets count
-let totalModels=0; for(let k in MODELS) totalModels+=MODELS[k].length;
-console.log('models',totalModels);
-const FUELS=["BENZYNA","DIESEL","LPG","ELEKTRYCZNY","HYBRYDA"];
-const GEARS=["MANUALNA","AUTOMATYCZNA"];
-let selF=[],selG=[],editingId=null;
-let ads=JSON.parse(localStorage.getItem('wroomer_kopia_v3')||'[]');
-function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500)}
-function populateBrands(){
-  const bSel=document.getElementById('f-marka');
-  bSel.innerHTML='<option>Wszystkie marki ('+BRANDS.length+')</option>'+BRANDS.map(b=>`<option>${b}</option>`).join('');
-  const mb=document.getElementById('m-brand');
-  mb.innerHTML=BRANDS.map(b=>`<option>${b}</option>`).join('');
-  updateModelOptions('f-marka','f-model',true);
-  updateModelOptions('m-brand','m-model',false);
+
+
+function toast(m){ const t=document.getElementById('toast'); t.textContent=m; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2500); }
+
+async function initApp(){
+  // auth
+  const {data} = await supabaseClient.auth.getSession();
+  currentUser = data.session?.user||null;
+  updateAuthUI();
+  await loadAds();
+  populateBrands();
+  renderChips();
+  render();
 }
-function updateModelOptions(brandId,modelId,includeAll){
-  const brand=document.getElementById(brandId).value;
-  const mSel=document.getElementById(modelId);
-  let opts=[];
-  if(brand.startsWith('Wszystkie')||!MODELS[brand]){ 
-    // all models
-    let all=[]; for(let k in MODELS) all=all.concat(MODELS[k]);
-    opts=includeAll?['Wszystkie modele ('+all.length+')']:all.slice(0,30);
-    if(!includeAll){ mSel.innerHTML=all.map(m=>`<option>${m}</option>`).join(''); return}
-    mSel.innerHTML='<option>'+opts[0]+'</option>'+all.map(m=>`<option>${m}</option>`).join('');
+
+function updateAuthUI(){
+  const btn=document.getElementById('btn-user');
+  const email=document.getElementById('userEmail');
+  if(currentUser){
+    btn.textContent=(currentUser.email.split('@')[0].toUpperCase()+' (WYLOGUJ)').slice(0,20);
+    email.textContent=currentUser.email;
   } else {
-    const list=MODELS[brand];
-    if(includeAll) mSel.innerHTML='<option>Wszystkie modele ('+list.length+')</option>'+list.map(m=>`<option>${m}</option>`).join('');
-    else mSel.innerHTML=list.map(m=>`<option>${m}</option>`).join('');
+    btn.textContent='ZALOGUJ';
+    email.textContent='';
   }
 }
+
+document.getElementById('btn-user').onclick=async()=>{
+  if(currentUser){
+    await supabaseClient.auth.signOut();
+    localStorage.removeItem('sb-bdpydgsfowtuvjnkyeeg-auth-token');
+    toast('Wylogowano');
+    currentUser=null;
+    updateAuthUI();
+    return;
+  }
+  const email=prompt('Email:'); if(!email) return;
+  const pass=prompt('Hasło:'); if(!pass) return;
+  let {data, error} = await supabaseClient.auth.signInWithPassword({email, password:pass});
+  if(error){
+    const {data:sData, error:sErr} = await supabaseClient.auth.signUp({email, password:pass});
+    if(sErr) toast(sErr.message); else toast('Konto założone - zaloguj się');
+  } else {
+    toast('Zalogowano'); location.reload();
+  }
+};
+
+async function loadAds(){
+  // probuj ogloszenia (prod), potem listings (test)
+  let data=null;
+  try{
+    let res = await supabaseClient.from('ogloszenia').select('*').order('created_at',{ascending:false}).limit(100);
+    if(res.error) throw res.error;
+    data=res.data;
+  } catch(e){ console.log('ogloszenia err', e); }
+  if(!data || data.length===0){
+    try{
+      let res2 = await supabaseClient.from('listings').select('*').order('created_at',{ascending:false}).limit(100);
+      if(!res2.error) data=res2.data;
+    } catch(e){}
+  }
+  // map to common format
+  ads = (data||[]).map(o=>({
+    id:o.id,
+    title:o.title||o.marka+' '+(o.model||'')||'Ogłoszenie',
+    price: Number(o.price||o.cena||0),
+    brand: o.brand||o.marka||'Inne',
+    model: o.model||o.model||'Inne',
+    year: o.year||o.rocznik||2020,
+    mileage: o.mileage||o.przebieg||0,
+    fuel: (o.fuel||o.paliwo||'BENZYNA').toUpperCase(),
+    gear: (o.gear||o.skrzynia||'MANUALNA').toUpperCase(),
+    location: o.location||o.miasto||'Polska',
+    phone: o.phone||o.telefon||'',
+    img: o.image_url||o.image||o.images?.[0]||'https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=400',
+    desc: o.description||o.opis||'',
+    ts: new Date(o.created_at).getTime()||Date.now(),
+    raw:o
+  }));
+}
+
+function populateBrands(){
+  const allBrands = Object.keys(BRANDS);
+  const selB=document.getElementById('f-marka');
+  const selMB=document.getElementById('m-brand');
+  const mkOptions = ['Wszystkie marki ('+Object.keys(BRANDS).length+')', ...allBrands];
+  selB.innerHTML = mkOptions.map(b=>`<option>${b}</option>`).join('');
+  selMB.innerHTML = allBrands.map(b=>`<option>${b}</option>`).join('');
+  updateModelOptions('f-marka','f-model', true);
+  updateModelOptions('m-brand','m-model', false);
+}
+
+function updateModelOptions(brandId, modelId, isFilter){
+  const brandSel=document.getElementById(brandId);
+  const modelSel=document.getElementById(modelId);
+  let brand = brandSel.value;
+  if(brand.startsWith('Wszystkie')){ 
+    if(isFilter) modelSel.innerHTML='<option>Wszystkie modele ('+Object.values(BRANDS).flat().length+')</option>';
+    else modelSel.innerHTML=Object.values(BRANDS).flat().map(m=>`<option>${m}</option>`).join('');
+    return;
+  }
+  const models = BRANDS[brand]||[];
+  if(isFilter) modelSel.innerHTML=['Wszystkie modele ('+models.length+')', ...models].map(m=>`<option>${m}</option>`).join('');
+  else modelSel.innerHTML=models.map(m=>`<option>${m}</option>`).join('');
+}
+
 function renderChips(){
   document.getElementById('fuel-chips').innerHTML=FUELS.map(f=>`<button class="chip ${selF.includes(f)?'active':''}" data-f="${f}">${f}</button>`).join('');
   document.getElementById('gear-chips').innerHTML=GEARS.map(g=>`<button class="chip ${selG.includes(g)?'active':''}" data-g="${g}">${g}</button>`).join('');
-  document.querySelectorAll('[data-f]').forEach(b=>b.onclick=()=>{const v=b.dataset.f;selF=selF.includes(v)?selF.filter(x=>x!==v):[...selF,v];renderChips();render()});
-  document.querySelectorAll('[data-g]').forEach(b=>b.onclick=()=>{const v=b.dataset.g;selG=selG.includes(v)?selG.filter(x=>x!==v):[...selG,v];renderChips();render()});
+  document.querySelectorAll('[data-f]').forEach(b=>b.onclick=()=>{const v=b.dataset.f; selF=selF.includes(v)?selF.filter(x=>x!==v):[...selF,v]; renderChips(); render();});
+  document.querySelectorAll('[data-g]').forEach(b=>b.onclick=()=>{const v=b.dataset.g; selG=selG.includes(v)?selG.filter(x=>x!==v):[...selG,v]; renderChips(); render();});
 }
+
 function render(){
   let list=[...ads];
   const b=document.getElementById('f-marka').value;
@@ -169,14 +267,15 @@ function render(){
   const sort=document.getElementById('sort').value; if(sort==='Najnowsze') list.sort((a,b)=>b.ts-a.ts); if(sort==='Najtańsze') list.sort((a,b)=>a.price-b.price); if(sort==='Najdroższe') list.sort((a,b)=>b.price-a.price);
   document.getElementById('count').textContent=list.length;
   const grid=document.getElementById('grid'), empty=document.getElementById('empty');
-  if(!list.length){grid.innerHTML='';empty.style.display='block';return} empty.style.display='none';
-  grid.innerHTML=list.map(a=>`<div class="card" onclick="openEdit('${a.id}')"><img src="${a.img}"><div class="card-body"><div class="card-title">${a.title}</div><div class="card-price">${a.price.toLocaleString()} zł</div><div class="card-meta">${a.brand} ${a.model} • ${a.year} • ${a.mileage.toLocaleString()} km • ${a.fuel} • ${a.gear}</div><div class="card-loc">📍 ${a.location}</div><div class="card-actions"><button class="btn-card y" onclick="event.stopPropagation();openEdit('${a.id}')">EDYTUJ</button><button class="btn-card d" onclick="event.stopPropagation();del('${a.id}')">USUŃ</button></div></div></div>`).join('');
+  if(!list.length){grid.innerHTML=''; empty.style.display='block'; return;} empty.style.display='none';
+  grid.innerHTML=list.map(a=>`<div class="card" onclick="openEdit('${a.id}')"><img src="${a.img}"><div class="card-body"><div class="card-title">${a.title}</div><div class="card-price">${a.price.toLocaleString()} zł</div><div class="card-meta">${a.brand} ${a.model} • ${a.year} • ${a.mileage.toLocaleString()} km • ${a.fuel} • ${a.gear}</div><div class="card-loc">📍 ${a.location}</div><div class="card-actions"><button class="btn-card y" onclick="event.stopPropagation();openEdit('${a.id}')">EDYTUJ</button><button class="btn-card d" onclick="event.stopPropagation();delAd('${a.id}')">USUŃ</button></div></div></div>`).join('');
 }
-function openEdit(id){
+
+window.openEdit=async(id)=>{
   const a=ads.find(x=>x.id===id); if(!a) return;
   editingId=id;
-  document.getElementById('modal-title').textContent='EDYTUJ OGŁOSZENIE – KOPIA';
-  document.getElementById('edit-info').textContent='Edytujesz: '+a.title+' – zapis w kopii';
+  document.getElementById('modal-title').textContent='EDYTUJ OGŁOSZENIE';
+  document.getElementById('edit-info').textContent='Edytujesz: '+a.title;
   document.getElementById('m-title').value=a.title;
   document.getElementById('m-price').value=a.price;
   document.getElementById('m-year').value=a.year;
@@ -184,45 +283,62 @@ function openEdit(id){
   updateModelOptions('m-brand','m-model',false);
   document.getElementById('m-model').value=a.model;
   document.getElementById('m-mileage').value=a.mileage;
-  document.getElementById('m-fuel').value=a.fuel;
-  document.getElementById('m-gear').value=a.gear;
+  document.getElementById('m-fuel').value=a.fuel.charAt(0)+a.fuel.slice(1).toLowerCase();
+  // fix case
+  document.getElementById('m-fuel').value=a.raw.fuel||a.raw.paliwo||'Benzyna';
+  document.getElementById('m-gear').value=a.raw.gear||a.raw.skrzynia||'Manualna';
   document.getElementById('m-loc').value=a.location;
   document.getElementById('m-phone').value=a.phone;
   document.getElementById('m-img').value=a.img;
-  document.getElementById('m-desc').value=a.desc||'';
+  document.getElementById('m-desc').value=a.desc;
   document.getElementById('submit').textContent='ZAPISZ ZMIANY';
   document.getElementById('modal').classList.add('open');
-}
+};
+
+window.delAd=async(id)=>{
+  if(!confirm('Usunąć ogłoszenie?')) return;
+  // sprobuj obie tabele
+  let err=null;
+  let res = await supabaseClient.from('ogloszenia').delete().eq('id',id);
+  if(res.error){
+    res = await supabaseClient.from('listings').delete().eq('id',id);
+    err=res.error;
+  }
+  if(err) toast('Błąd: '+err.message); else { toast('Usunięto'); ads=ads.filter(a=>a.id!==id); render(); }
+};
+
 function openAdd(){
   editingId=null;
-  document.getElementById('modal-title').textContent='DODAJ OGŁOSZENIE – KOPIA';
-  document.getElementById('edit-info').textContent='Nowe ogłoszenie – zapis lokalny w kopii';
-  document.getElementById('submit').textContent='ZATWIERDŹ';
-  ['m-title','m-price','m-year','m-model','m-mileage','m-loc','m-phone','m-img','m-desc'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('modal-title').textContent='DODAJ OGŁOSZENIE';
+  document.getElementById('edit-info').textContent='Nowe ogłoszenie';
+  document.getElementById('submit').textContent='DODAJ';
+  ['m-title','m-price','m-year','m-mileage','m-loc','m-phone','m-img','m-desc'].forEach(i=>document.getElementById(i).value='');
   document.getElementById('modal').classList.add('open');
 }
-function del(id){if(!confirm('Usunąć ogłoszenie z kopii?'))return;ads=ads.filter(a=>a.id!==id);localStorage.setItem('wroomer_kopia_v3',JSON.stringify(ads));render();toast('Usunięto')}
+
 document.getElementById('btn-add').onclick=openAdd;
 document.getElementById('close').onclick=document.getElementById('cancel').onclick=()=>document.getElementById('modal').classList.remove('open');
-document.getElementById('btn-gps').onclick=()=>{if(!navigator.geolocation)return toast('Brak GPS');navigator.geolocation.getCurrentPosition(p=>{const c=`${p.coords.latitude.toFixed(4)}, ${p.coords.longitude.toFixed(4)}`;document.getElementById('loc').value=c;document.getElementById('m-loc').value=c;toast('GPS: '+c)},()=>toast('GPS błąd'))};
-document.getElementById('btn-clear').onclick=()=>{document.getElementById('f-marka').selectedIndex=0;updateModelOptions('f-marka','f-model',true);document.getElementById('price-from').value='';document.getElementById('price-to').value='';document.getElementById('loc').value='';selF=[];selG=[];renderChips();render();toast('Wyczyszczono')};
-document.getElementById('submit').onclick=()=>{
-  const t=document.getElementById('m-title').value.trim(),p=+document.getElementById('m-price').value,y=+document.getElementById('m-year').value,br=document.getElementById('m-brand').value,mo=document.getElementById('m-model').value,mi=+document.getElementById('m-mileage').value,f=document.getElementById('m-fuel').value,g=document.getElementById('m-gear').value,loc=document.getElementById('m-loc').value.trim(),ph=document.getElementById('m-phone').value.trim(),img=document.getElementById('m-img').value||'https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=400',desc=document.getElementById('m-desc').value;
-  if(!t||!p||!loc||!ph){toast('Uzupełnij *');return}
+document.getElementById('btn-gps').onclick=()=>{ if(!navigator.geolocation) return toast('Brak GPS'); navigator.geolocation.getCurrentPosition(p=>{ const c=`${p.coords.latitude.toFixed(4)}, ${p.coords.longitude.toFixed(4)}`; document.getElementById('loc').value=c; document.getElementById('m-loc').value=c; toast('GPS: '+c); },()=>toast('GPS błąd')); };
+document.getElementById('btn-clear').onclick=()=>{ document.getElementById('f-marka').selectedIndex=0; updateModelOptions('f-marka','f-model',true); document.getElementById('price-from').value=''; document.getElementById('price-to').value=''; document.getElementById('loc').value=''; selF=[]; selG=[]; renderChips(); render(); toast('Wyczyszczono'); };
+document.getElementById('submit').onclick=async()=>{
+  const t=document.getElementById('m-title').value.trim(), p=+document.getElementById('m-price').value, y=+document.getElementById('m-year').value, br=document.getElementById('m-brand').value, mo=document.getElementById('m-model').value, mi=+document.getElementById('m-mileage').value, f=document.getElementById('m-fuel').value, g=document.getElementById('m-gear').value, loc=document.getElementById('m-loc').value.trim(), ph=document.getElementById('m-phone').value.trim(), img=document.getElementById('m-img').value||'https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=400', desc=document.getElementById('m-desc').value;
+  if(!t||!p||!loc||!ph){ toast('Uzupełnij *'); return; }
+  const payload={ title:t, marka:br, model:mo, cena:p, price:p, rok:y||2020, year:y||2020, przebieg:mi||0, mileage:mi||0, paliwo:f, fuel:f, skrzynia:g, gear:g, miasto:loc, location:loc, telefon:ph, phone:ph, image:img, image_url:img, opis:desc, description:desc, user_id: currentUser?.id, status:'active' };
   if(editingId){
-    const idx=ads.findIndex(a=>a.id===editingId);
-    if(idx>=0){ads[idx]={...ads[idx],title:t,price:p,brand:br,model:mo,year:y||2020,mileage:mi||0,fuel:f,gear:g,location:loc,phone:ph,img,desc}; toast('Zapisano zmiany w kopii')}
+    let res=await supabaseClient.from('ogloszenia').update(payload).eq('id',editingId);
+    if(res.error) res=await supabaseClient.from('listings').update({title:t, price:p, location:loc, image_url:img, description:desc}).eq('id',editingId);
+    if(res.error) toast('Błąd: '+res.error.message); else { toast('Zapisano'); document.getElementById('modal').classList.remove('open'); await loadAds(); render(); }
   } else {
-    ads.unshift({id:Date.now().toString(),title:t,price:p,brand:br,model:mo,year:y||2020,mileage:mi||0,fuel:f,gear:g,location:loc,phone:ph,img,desc,ts:Date.now()}); toast('Dodano do kopii')
+    let res=await supabaseClient.from('ogloszenia').insert(payload);
+    if(res.error) res=await supabaseClient.from('listings').insert({title:t, price:p, location:loc, image_url:img, description:desc, user_id:payload.user_id, status:'active'});
+    if(res.error) toast('Błąd: '+res.error.message); else { toast('Dodano'); document.getElementById('modal').classList.remove('open'); await loadAds(); render(); }
   }
-  localStorage.setItem('wroomer_kopia_v3',JSON.stringify(ads));
-  document.getElementById('modal').classList.remove('open');render();
 };
-document.getElementById('f-marka').addEventListener('change',()=>{updateModelOptions('f-marka','f-model',true);render()});
+document.getElementById('f-marka').addEventListener('change',()=>{updateModelOptions('f-marka','f-model',true); render();});
 document.getElementById('m-brand').addEventListener('change',()=>updateModelOptions('m-brand','m-model',false));
-['f-model','price-from','price-to','loc','sort'].forEach(id=>document.getElementById(id).addEventListener('input',render));
-document.getElementById('sort').addEventListener('change',render);
-populateBrands();renderChips();render();
+['f-model','price-from','price-to','loc','sort'].forEach(id=>document.getElementById(id).addEventListener('input', render));
+document.getElementById('sort').addEventListener('change', render);
+initSupa();
 </script>
 </body>
 </html>

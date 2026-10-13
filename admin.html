@@ -1,190 +1,122 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>WROOMER.PL - ADMIN</title>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ADMIN PRO - WROOMER</title>
+<script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:Inter,Segoe UI,Arial,sans-serif;background:#050505;color:#fff;min-height:100vh}
-.header{height:56px;background:#000;border-bottom:2px solid #facc15;display:flex;align-items:center;justify-content:space-between;padding:0 20px}
-.logo{font-weight:900;font-size:20px;letter-spacing:-0.5px} .logo span{color:#facc15}
-.badge-live{font-size:10px;background:#1a1a1a;border:1px solid #2a2a2a;padding:4px 10px;border-radius:999px;color:#666}
-.wrap{max-width:900px;margin:0 auto;padding:24px 16px;display:flex;flex-direction:column;gap:16px}
-.card{background:#141414;border:1px solid #1e1e1e;border-radius:16px;padding:20px}
-.card h2{font-size:14px;font-weight:900;letter-spacing:1px;margin-bottom:12px} .card h2 span{color:#facc15}
-.label{color:#facc15;font-size:10px;font-weight:800;letter-spacing:1.5px;margin:14px 0 6px;display:block}
-.input{width:100%;height:44px;background:#1a1a1a;border:1px solid #2a2a2a;border-radius:12px;color:#fff;padding:0 14px;font-size:13px;outline:none}
-.input:focus{border-color:#facc15}
-.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.btn{height:44px;border-radius:999px;border:none;font-size:12px;font-weight:900;letter-spacing:0.5px;cursor:pointer}
-.btn-y{background:#facc15;color:#000} .btn-d{background:#1a1a1a;color:#fff;border:1px solid #2a2a2a}
-.btn-sm{height:32px;padding:0 14px;border-radius:999px;font-size:11px;font-weight:800;border:none;cursor:pointer}
-.small{font-size:11px;color:#666;margin-top:8px;line-height:1.4}
-.hidden{display:none}
-.log{background:#0f0f0f;border:1px solid #1e1e1e;border-radius:10px;padding:10px;font-size:11px;color:#0f0;white-space:pre-wrap;margin-top:10px;max-height:120px;overflow:auto}
-.top-info{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-table{width:100%;border-collapse:collapse}
-th{font-size:10px;color:#666;font-weight:800;letter-spacing:1px;text-align:left;padding:12px 8px;border-bottom:1px solid #1e1e1e}
-td{padding:12px 8px;border-bottom:1px solid #151515;font-size:13px}
-.status{padding:4px 10px;border-radius:999px;font-size:10px;font-weight:800}
-.s-pending{background:#332a00;color:#facc15;border:1px solid #4a3d00} .s-active{background:#0a2a12;color:#4ade80;border:1px solid #1a4a25}
-.own{color:#facc15;font-size:11px;font-weight:800}
-</style>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap" rel="stylesheet">
+<style>body{font-family:Inter;background:#050505;color:#fff} .card{background:#111;border:1px solid #1e1e1e;border-radius:20px} .card:hover{border-color:#2a2a2a} .bg-yellow{background:#facc15;color:#000} .yellow{color:#facc15} ::-webkit-scrollbar{width:6px;height:6px} ::-webkit-scrollbar-thumb{background:#222;border-radius:10px}</style>
 </head>
-<body>
-<div class="header">
-<div class="logo">WROOMER <span>.PL ADMIN</span></div>
-<div class="badge-live" id="connStatus">● nie połączono</div>
+<body class="p-3 md:p-6">
+<div class="max-w-[1600px] mx-auto">
+<div class="flex flex-wrap justify-between items-center card p-4 mb-6 gap-3">
+  <div class="flex items-center gap-4"><div class="w-12 h-12 bg-yellow rounded-2xl flex items-center justify-center font-black text-black text-xl">W</div><div><div class="font-black text-xl tracking-tight">WROOMER ADMIN PRO</div><div class="text-[11px] text-zinc-500 tracking-widest">PANEL ZARZĄDZANIA • BAN • EDYCJA • STATS</div></div></div>
+  <div class="flex items-center gap-2"><span id="who" class="hidden md:block text-xs text-zinc-500 bg-black px-3 py-2 rounded-full border border-zinc-800"></span><a href="index.html" class="card px-5 py-2.5 text-sm font-bold">← STRONA</a><button id="logoutBtn" class="bg-red-500 hover:bg-red-600 text-white px-5 py-2.5 rounded-xl font-black text-sm transition">WYLOGUJ</button></div>
 </div>
 
-<div class="wrap">
-
-<!-- KROK 1 -->
-<div class="card" id="setupCard">
-<h2><span>1.</span> KONFIGURACJA SUPABASE</h2>
-<p class="small">Skopiowane z Twojego projektu: <b>bdpydgsfowtuvjnkyeeg</b>. Wklej tylko ANON KEY.</p>
-<span class="label">PROJECT URL</span>
-<input id="sUrl" class="input" value="https://bdpydgsfowtuvjnkyeeg.supabase.co">
-<span class="label">ANON KEY (publishable)</span>
-<input id="sKey" class="input" placeholder="eyJhbGciOi... wklej tutaj z Supabase -> Settings -> API Keys -> anon">
-<div class="row2" style="margin-top:14px">
-<button class="btn btn-y" onclick="saveConfig()">ZAPISZ I POŁĄCZ</button>
-<button class="btn btn-d" onclick="clearConfig()">WYCZYŚĆ</button>
-</div>
-<div id="log" class="log hidden"></div>
-<p class="small">Gdzie znaleźć KEY: Supabase -> ⚙️ Settings -> API Keys -> skopiuj `anon` / `publishable`</p>
+<div id="setup" class="hidden card p-6 mb-6 border-yellow-400/30 bg-yellow-400/5">
+  <h2 class="font-black yellow mb-2">🔑 WKLEJ ANON KEY (pierwsze uruchomienie)</h2>
+  <p class="text-xs text-zinc-400 mb-3">Supabase Dashboard → Project Settings → API Keys → anon public → Copy</p>
+  <div class="flex gap-2"><input id="anonInput" placeholder="eyJhbGc..." class="flex-1 bg-black border border-zinc-700 rounded-xl p-3 text-sm"><button id="saveAnon" class="bg-yellow px-6 py-3 rounded-xl font-black">ZAPISZ I ODŚWIEŻ</button></div>
 </div>
 
-<!-- KROK 2 -->
-<div class="card hidden" id="loginCard">
-<h2><span>2.</span> LOGOWANIE</h2>
-<span class="label">EMAIL</span>
-<input id="email" class="input" placeholder="twoj@email.pl">
-<span class="label">HASŁO</span>
-<input id="pass" type="password" class="input" placeholder="••••••••">
-<div class="row2" style="margin-top:14px">
-<button class="btn btn-y" onclick="doLogin()">ZALOGUJ</button>
-<button class="btn btn-d" onclick="doSignup()">ZAREJESTRUJ</button>
-</div>
-<div id="loginMsg" class="small"></div>
+<div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+  <div class="card p-5 relative overflow-hidden"><div class="absolute -right-6 -top-6 w-20 h-20 bg-yellow/10 rounded-full"></div><div class="text-[11px] tracking-widest text-zinc-500 font-bold">UŻYTKOWNICY</div><div id="sUsers" class="text-3xl font-black mt-2">-</div><div class="text-xs text-zinc-600 mt-1">w tabeli profiles</div></div>
+  <div class="card p-5 relative overflow-hidden"><div class="absolute -right-6 -top-6 w-20 h-20 bg-yellow/10 rounded-full"></div><div class="text-[11px] tracking-widest text-zinc-500 font-bold">OGŁOSZENIA PROD</div><div id="sOgl" class="text-3xl font-black mt-2 yellow">-</div><div class="text-xs text-zinc-600 mt-1">tabela ogloszenia</div></div>
+  <div class="card p-5"><div class="text-[11px] tracking-widest text-zinc-500 font-bold">LISTINGS TEST</div><div id="sList" class="text-3xl font-black mt-2">-</div><div class="text-xs text-zinc-600 mt-1">tabela listings</div></div>
+  <div class="card p-5 border-yellow-400/20"><div class="text-[11px] tracking-widest yellow font-bold">ADMINI</div><div id="sAdmin" class="text-3xl font-black mt-2">-</div><div class="text-xs text-zinc-600 mt-1">role = admin</div></div>
 </div>
 
-<!-- PANEL -->
-<div class="hidden" id="adminBox">
-<div class="card">
-<div class="top-info">
-<span>Zalogowany: <b id="userEmail"></b></span>
-<span style="font-size:11px;color:#666">Rola: <b id="userRole" style="color:#fff">user</b></span>
-<button class="btn-sm" style="background:#1a1a1a;color:#fff;border:1px solid #2a2a2a" onclick="doLogout()">Wyloguj</button>
-<button class="btn-sm" style="background:#facc15;color:#000" onclick="loadListings()">Odśwież</button>
-<span id="countInfo" style="font-size:11px;color:#666"></span>
+<div class="grid lg:grid-cols-12 gap-6">
+  <div class="lg:col-span-4 card p-5">
+    <div class="flex justify-between items-center mb-4"><h2 class="font-black tracking-tight">UŻYTKOWNICY</h2><div class="flex gap-2"><button id="rUsers" class="bg-yellow text-black px-3 py-1 rounded-full text-xs font-black">ODŚWIEŻ</button></div></div>
+    <input id="searchU" placeholder="Szukaj email, roli..." class="w-full bg-black border border-zinc-800 rounded-xl p-3 text-sm mb-4">
+    <div id="users" class="space-y-3 max-h-[700px] overflow-auto pr-1">Ładowanie...</div>
+  </div>
+  <div class="lg:col-span-8 card p-5">
+    <div class="flex flex-wrap justify-between items-center gap-3 mb-4"><h2 class="font-black tracking-tight">OGŁOSZENIA</h2><div class="flex gap-2 items-center"><select id="tableSw" class="bg-black border border-zinc-800 rounded-xl px-3 py-2 text-xs"><option value="ogloszenia">ogloszenia (PROD)</option><option value="listings">listings (TEST)</option></select><button id="rOgl" class="bg-yellow text-black px-3 py-1 rounded-full text-xs font-black">ODŚWIEŻ</button></div></div>
+    <input id="searchO" placeholder="Szukaj tytułu, miasta, ceny..." class="w-full bg-black border border-zinc-800 rounded-xl p-3 text-sm mb-4">
+    <div id="ogloszenia" class="grid md:grid-cols-2 gap-3 max-h-[700px] overflow-auto pr-1">Ładowanie...</div>
+  </div>
 </div>
-</div>
-
-<div class="card">
-<h2><span>OGŁOSZENIA</span> - KLIKNIJ AKTYWUJ ŻEBY POKAZAŁO SIĘ NA WROOMER.PL</h2>
-<table>
-<thead><tr><th>TYTUŁ</th><th>CENA</th><th>STATUS</th><th>WŁAŚCICIEL</th><th>AKCJA</th></tr></thead>
-<tbody id="tbody"></tbody>
-</table>
-</div>
+<div id="status" class="mt-6 text-center text-xs text-zinc-600"></div>
 </div>
 
+<div id="editM" class="hidden fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4">
+  <div class="card p-6 w-full max-w-lg border-yellow-400/20"><div class="flex justify-between mb-5"><h3 class="font-black text-lg">EDYTUJ OGŁOSZENIE</h3><button onclick="closeEdit()" class="w-8 h-8 bg-zinc-800 rounded-full">×</button></div><div class="space-y-3"><input id="e_title" class="w-full bg-black border border-zinc-800 rounded-xl p-3 text-sm" placeholder="Tytuł"><div class="grid grid-cols-2 gap-3"><input id="e_price" type="number" class="bg-black border border-zinc-800 rounded-xl p-3 text-sm" placeholder="Cena"><input id="e_loc" class="bg-black border border-zinc-800 rounded-xl p-3 text-sm" placeholder="Lokalizacja"></div><input id="e_img" class="w-full bg-black border border-zinc-800 rounded-xl p-3 text-sm" placeholder="Image URL"><textarea id="e_desc" class="w-full bg-black border border-zinc-800 rounded-xl p-3 text-sm h-24" placeholder="Opis"></textarea><input id="e_id" type="hidden"><input id="e_table" type="hidden"><button id="saveEdit" class="w-full bg-yellow py-3 rounded-xl font-black">ZAPISZ ZMIANY</button></div></div>
 </div>
 
 <script>
-let supa=null, currentUser=null;
-const LS_URL='wroomer_url', LS_KEY='wroomer_key';
-const $=id=>document.getElementById(id);
-function log(t){const l=$('log');l.classList.remove('hidden');l.textContent+=t+'\n'; $('connStatus').textContent='● '+t; }
-function init(){
- const u=localStorage.getItem(LS_URL), k=localStorage.getItem(LS_KEY);
- if(u) $('sUrl').value=u;
- if(k) $('sKey').value=k;
- if(u&&k) connect(u,k);
+window.WROOMER_CONFIG = {
+  url: 'https://bdpydgsfowtuvjnkyeeg.supabase.co',
+  anonKey: localStorage.getItem('wroomer_anon_key') || ''
+};
+</script>
+<script>
+const SUPABASE_URL = window.WROOMER_CONFIG.url;
+let ANON = window.WROOMER_CONFIG.anonKey || localStorage.getItem('wroomer_anon_key') || '';
+if(!ANON || ANON.length<20) document.getElementById('setup').classList.remove('hidden');
+let supabase = ANON ? window.supabase.createClient(SUPABASE_URL, ANON) : null;
+document.getElementById('saveAnon').onclick=()=>{ const v=document.getElementById('anonInput').value.trim(); if(v.length<20) return alert('Wklej pełny klucz'); localStorage.setItem('wroomer_anon_key', v); location.reload(); };
+
+async function init(){
+  if(!supabase) return;
+  const {data}=await supabase.auth.getSession(); const u=data.session?.user; document.getElementById('who').innerText=u?u.email:'Niezalogowany';
+  if(!u) document.getElementById('status').innerText='Zaloguj się najpierw na index.html';
+  loadStats(); loadUsers(); loadOgl();
 }
-function clearConfig(){localStorage.removeItem(LS_URL);localStorage.removeItem(LS_KEY);location.reload();}
-function saveConfig(){
- const u=$('sUrl').value.trim(), k=$('sKey').value.trim();
- if(!u||!k){alert('Wpisz URL i ANON KEY');return;}
- localStorage.setItem(LS_URL,u); localStorage.setItem(LS_KEY,k);
- connect(u,k);
+async function loadStats(){
+  if(!supabase) return;
+  const {count:a}=await supabase.from('profiles').select('*',{count:'exact',head:true});
+  const {count:b}=await supabase.from('ogloszenia').select('*',{count:'exact',head:true});
+  const {count:c}=await supabase.from('listings').select('*',{count:'exact',head:true});
+  const {count:d}=await supabase.from('profiles').select('*',{count:'exact',head:true}).eq('role','admin');
+  document.getElementById('sUsers').innerText=a??0; document.getElementById('sOgl').innerText=b??0; document.getElementById('sList').innerText=c??0; document.getElementById('sAdmin').innerText=d??0;
 }
-function connect(url,key){
- try{
-  log('Łączę...');
-  supa=supabase.createClient(url,key);
-  $('setupCard').classList.add('hidden');
-  $('loginCard').classList.remove('hidden');
-  $('connStatus').textContent='● połączono'; $('connStatus').style.color='#4ade80'; $('connStatus').style.borderColor='#1a4a25';
-  log('Połączono OK - zaloguj się');
-  checkSession();
- }catch(e){log('BŁĄD: '+e.message);}
-}
-async function checkSession(){
- const {data}=await supa.auth.getSession();
- if(data.session){currentUser=data.session.user; afterLogin();}
-}
-async function doLogin(){
- const email=$('email').value.trim(), pass=$('pass').value.trim();
- if(!email||!pass){$('loginMsg').textContent='Wpisz email i hasło';return;}
- const {data,error}=await supa.auth.signInWithPassword({email,password:pass});
- if(error){$('loginMsg').textContent='Błąd: '+error.message; return;}
- currentUser=data.user; afterLogin();
-}
-async function doSignup(){
- const email=$('email').value.trim(), pass=$('pass').value.trim();
- const {data,error}=await supa.auth.signUp({email,password:pass});
- if(error){$('loginMsg').textContent='Błąd: '+error.message; return;}
- $('loginMsg').textContent='Konto utworzone! Sprawdź maila (jeśli wymagany) i zaloguj się.';
-}
-async function doLogout(){ await supa.auth.signOut(); location.reload(); }
-async function afterLogin(){
- $('loginCard').classList.add('hidden');
- $('adminBox').classList.remove('hidden');
- $('userEmail').textContent=currentUser.email;
- try{
-  const {data:prof}=await supa.from('profiles').select('role').eq('id',currentUser.id).single();
-  $('userRole').textContent=prof?.role||'user';
- }catch{ $('userRole').textContent='user'; }
- loadListings();
-}
-async function loadListings(){
- const tbody=$('tbody');
- tbody.innerHTML='<tr><td colspan=5 style="color:#666">Ładowanie...</td></tr>';
- const {data,error}=await supa.from('listings').select('*').order('created_at',{ascending:false}).limit(100);
- if(error){tbody.innerHTML='<tr><td colspan=5 style="color:#f87171">Błąd: '+error.message+'<br><span style="color:#666">Uruchom SQL w Supabase jeśli tabela nie istnieje</span></td></tr>';return;}
- if(!data||!data.length){tbody.innerHTML='<tr><td colspan=5 style="color:#666">Brak ogłoszeń</td></tr>';$('countInfo').textContent='0 ogłoszeń';return;}
- $('countInfo').textContent=data.length+' ogłoszeń';
- tbody.innerHTML='';
- data.forEach(row=>{
-  const own=row.owner_id===currentUser.id;
-  const tr=document.createElement('tr');
-  tr.innerHTML=`
-   <td><b>${row.title||row.brand||'Bez tytułu'}</b><div style="font-size:11px;color:#666">${row.brand||''} ${row.model||''} ${row.year||''}</div></td>
-   <td style="color:#facc15;font-weight:900">${row.price?row.price.toLocaleString()+' zł':''}</td>
-   <td><span class="status s-${row.status||'pending'}">${row.status||'pending'}</span></td>
-   <td>${own?'<span class="own">TY</span>':(row.owner_id||'').slice(0,6)}<div style="font-size:10px;color:#555">${row.location||''}</div></td>
-   <td>
-    <div style="display:flex;gap:6px">
-     ${row.status!=='active'?`<button class="btn-sm" style="background:#facc15;color:#000" onclick="approve('${row.id}')">AKTYWUJ</button>`:''}
-     <button class="btn-sm" style="background:#1a1a1a;color:#fff;border:1px solid #2a2a2a" onclick="removeAd('${row.id}')">USUŃ</button>
+async function loadUsers(){
+  if(!supabase) return;
+  const {data, error}=await supabase.from('profiles').select('*').order('created_at',{ascending:false}).limit(150);
+  if(error){ document.getElementById('users').innerHTML='<div class="text-red-400 text-sm">'+error.message+'</div>'; return; }
+  const q=document.getElementById('searchU').value.toLowerCase();
+  const f=data.filter(x=> JSON.stringify(x).toLowerCase().includes(q));
+  document.getElementById('users').innerHTML=f.map(u=>`
+    <div class="bg-[#0a0a0a] border border-zinc-900 rounded-2xl p-4 hover:border-zinc-700 transition">
+      <div class="flex justify-between"><div class="font-bold text-sm truncate">${u.email||u.id.slice(0,8)}</div><span class="text-[10px] px-2 py-1 rounded-full ${u.role==='admin'?'bg-yellow text-black font-black':'bg-zinc-800 text-zinc-400'}">${u.role||'user'}</span></div>
+      <div class="text-[11px] text-zinc-500 mt-1">${new Date(u.created_at).toLocaleDateString()} • ${u.id.slice(0,6)} ${u.is_banned?'<span class="text-red-400">• BAN</span>':''}</div>
+      <div class="flex flex-wrap gap-1.5 mt-3">
+        <button onclick="setRole('${u.id}','admin')" class="bg-yellow text-black px-3 py-1.5 rounded-full text-xs font-black">ADMIN</button>
+        <button onclick="setRole('${u.id}','user')" class="bg-zinc-800 px-3 py-1.5 rounded-full text-xs">USER</button>
+        <button onclick="ban('${u.id}',${!!u.is_banned})" class="${u.is_banned?'bg-green-600':'bg-red-600'} text-white px-3 py-1.5 rounded-full text-xs font-bold">${u.is_banned?'ODBANUJ':'BAN'}</button>
+        <button onclick="delU('${u.id}')" class="bg-zinc-900 border border-red-900/30 text-red-400 px-3 py-1.5 rounded-full text-xs">USUŃ</button>
+      </div>
     </div>
-   </td>`;
-  tbody.appendChild(tr);
- });
+  `).join('')||'<div class="text-zinc-600 text-sm">Brak</div>';
 }
-async function approve(id){
- const {error}=await supa.from('listings').update({status:'active'}).eq('id',id);
- if(error)alert(error.message); else loadListings();
+async function loadOgl(){
+  if(!supabase) return;
+  const table=document.getElementById('tableSw').value;
+  const {data, error}=await supabase.from(table).select('*').order('created_at',{ascending:false}).limit(150);
+  if(error){ document.getElementById('ogloszenia').innerHTML='<div class="text-red-400 text-sm">'+error.message+'<br>Uruchom FIX RLS dla '+table+'</div>'; return; }
+  const q=document.getElementById('searchO').value.toLowerCase();
+  const f=data.filter(x=> JSON.stringify(x).toLowerCase().includes(q));
+  document.getElementById('ogloszenia').innerHTML=f.map(o=>`
+    <div class="bg-[#0a0a0a] border border-zinc-900 rounded-2xl p-3 flex gap-3 hover:border-zinc-700 transition">
+      <img src="${o.image_url||o.image||o.images?.[0]||'https://picsum.photos/200'}" class="w-20 h-20 object-cover rounded-xl">
+      <div class="flex-1 min-w-0"><div class="font-bold text-sm truncate">${o.title||o.marka+' '+(o.model||'')||'Bez tytułu'}</div><div class="text-[11px] text-zinc-500">${o.location||o.miasto||''} • ${o.price||o.cena||0} zł • ${o.status||'active'}</div><div class="flex gap-1.5 mt-2"><button onclick="openE('${o.id}','${table}')" class="bg-yellow text-black px-3 py-1 rounded-full text-xs font-black">EDYTUJ</button><button onclick="delO('${o.id}','${table}')" class="bg-red-600 text-white px-3 py-1 rounded-full text-xs">USUŃ</button><button onclick="hideO('${o.id}','${table}')" class="bg-zinc-800 px-3 py-1 rounded-full text-xs">UKRYJ</button></div></div>
+    </div>
+  `).join('')||'<div class="text-zinc-600 text-sm">Brak ogłoszeń w '+table+'</div>';
 }
-async function removeAd(id){
- if(!confirm('Usunąć ogłoszenie?'))return;
- const {error}=await supa.from('listings').delete().eq('id',id);
- if(error)alert(error.message); else loadListings();
-}
+window.setRole=async(id,role)=>{ const {error}=await supabase.from('profiles').update({role}).eq('id',id); if(error) alert(error.message); else {loadUsers(); loadStats();} };
+window.ban=async(id, isBanned)=>{ let {error}=await supabase.from('profiles').update({is_banned:!isBanned}).eq('id',id); if(error){ const {error:e2}=await supabase.from('profiles').update({role:isBanned?'user':'banned'}).eq('id',id); if(e2) alert(e2.message); } loadUsers(); };
+window.delU=async(id)=>{ if(!confirm('Usunąć profil?')) return; const {error}=await supabase.from('profiles').delete().eq('id',id); if(error) alert(error.message); else loadUsers(); };
+window.delO=async(id,table)=>{ if(!confirm('Usunąć ogłoszenie?')) return; const {error}=await supabase.from(table).delete().eq('id',id); if(error) alert(error.message); else {loadOgl(); loadStats();} };
+window.hideO=async(id,table)=>{ const {error}=await supabase.from(table).update({status:'hidden'}).eq('id',id); if(error) alert(error.message); else loadOgl(); };
+window.openE=async(id,table)=>{ const {data}=await supabase.from(table).select('*').eq('id',id).single(); if(!data) return; document.getElementById('e_id').value=id; document.getElementById('e_table').value=table; document.getElementById('e_title').value=data.title||''; document.getElementById('e_price').value=data.price||data.cena||''; document.getElementById('e_loc').value=data.location||data.miasto||''; document.getElementById('e_img').value=data.image_url||data.image||''; document.getElementById('e_desc').value=data.description||data.opis||''; document.getElementById('editM').classList.remove('hidden'); };
+window.closeEdit=()=>document.getElementById('editM').classList.add('hidden');
+document.getElementById('saveEdit').onclick=async()=>{ const id=document.getElementById('e_id').value; const table=document.getElementById('e_table').value; const payload={}; if(table==='ogloszenia'){ payload.title=document.getElementById('e_title').value; payload.cena=parseInt(document.getElementById('e_price').value)||0; payload.price=payload.cena; payload.miasto=document.getElementById('e_loc').value; payload.location=payload.miasto; payload.image=document.getElementById('e_img').value; payload.image_url=payload.image; payload.opis=document.getElementById('e_desc').value; payload.description=payload.opis; } else { payload.title=document.getElementById('e_title').value; payload.price=parseInt(document.getElementById('e_price').value)||0; payload.location=document.getElementById('e_loc').value; payload.image_url=document.getElementById('e_img').value; payload.description=document.getElementById('e_desc').value; } const {error}=await supabase.from(table).update(payload).eq('id',id); if(error) alert(error.message); else {closeEdit(); loadOgl();} };
+document.getElementById('logoutBtn').onclick=async()=>{ await supabase.auth.signOut(); localStorage.removeItem('sb-bdpydgsfowtuvjnkyeeg-auth-token'); location.href='index.html'; };
+document.getElementById('rUsers').onclick=loadUsers; document.getElementById('rOgl').onclick=()=>{loadOgl(); loadStats();}; document.getElementById('searchU').oninput=loadUsers; document.getElementById('searchO').oninput=loadOgl; document.getElementById('tableSw').onchange=loadOgl;
 init();
 </script>
 </body>
