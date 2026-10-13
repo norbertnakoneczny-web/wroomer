@@ -5,7 +5,6 @@
 <title>WROOMER.PL - TEST</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-
 *{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,Segoe UI,Arial,sans-serif;background:#050505;color:#fff;height:100vh;display:flex;flex-direction:column}
 .header{height:56px;background:#000;border-bottom:2px solid #facc15;display:flex;align-items:center;justify-content:space-between;padding:0 16px;flex-shrink:0}
 .logo{font-weight:900;font-size:20px}.logo span{color:#facc15}.nav{margin-left:20px;font-size:13px;font-weight:600}
@@ -41,40 +40,13 @@
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}.modal-foot{display:flex;gap:10px}
 .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#1a1a1a;border:1px solid #facc15;color:#fff;padding:10px 18px;border-radius:999px;font-size:12px;display:none;z-index:100}
 .toast.show{display:block}
-/* MOBILE PRO - POZIOME FILTRY ROZWIJANE + 2 KOLUMNY OGŁOSZEŃ */
-.mobile-top{display:none}
-@media (max-width:900px){
-  .wrap{flex-direction:column;overflow:auto}
-  .header .nav{display:none}
-  .mobile-top{display:flex;flex-direction:column;background:#0f0f0f;border-bottom:1px solid #1a1a1a;flex-shrink:0}
-  .mobile-search-row{display:flex;gap:8px;padding:10px 12px;align-items:center}
-  .mobile-search-input{flex:1;height:40px;background:#1a1a1a;border:1px solid #2a2a2a;border-radius:999px;padding:0 14px;color:#fff;font-size:14px;outline:none}
-  .mobile-filter-toggle{height:40px;padding:0 16px;background:#facc15;color:#000;border:none;border-radius:999px;font-size:11px;font-weight:900;cursor:pointer;white-space:nowrap;display:flex;align-items:center;gap:6px}
-  .sidebar{width:100%;border-right:none;border-bottom:none;max-height:0;overflow:hidden;transition:max-height .35s ease, padding .35s ease;padding:0 12px;background:#0f0f0f}
-  .sidebar.open{max-height:600px;padding:12px;overflow-y:auto;border-bottom:1px solid #1a1a1a}
-  /* poziome filtry wewnątrz */
-  .sidebar .label{margin-bottom:6px}
-  .sidebar > div{margin-bottom:0}
-  .filter-horizontal{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding-bottom:4px}
-  .filter-horizontal::-webkit-scrollbar{display:none}
-  .filter-row-2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-  .main{padding:8px}
-  .grid{grid-template-columns:1fr 1fr;gap:8px}
-  .card{border-radius:12px}
-  .card img{height:120px}
-  .card-body{padding:8px}
-  .card-title{font-size:12px}
-  .card-price{font-size:14px}
-  .card-meta{font-size:9px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;white-space:normal}
-  .card-loc{font-size:10px}
-  .card-actions{display:none}
-  .topbar{padding:0 4px}
+/* MOBILE SUPER - nie rusza filtrowania */
+@media (max-width:768px){
+  .wrap{flex-direction:column}
+  .sidebar{width:100%;max-height:45vh;border-right:none;border-bottom:1px solid #1a1a1a}
+  .main{padding:10px}
+  .grid{grid-template-columns:1fr}
 }
-@media (max-width:380px){
-  .grid{grid-template-columns:1fr 1fr;gap:6px}
-  .card img{height:110px}
-}
-
 </style>
 </head>
 <body>
@@ -82,15 +54,7 @@
 <div style="display:flex;align-items:center"><div class="logo">WROOMER <span>.PL</span></div><div class="nav">Ogłoszenia</div></div>
 <div style="display:flex;gap:8px;align-items:center"><span id="userEmail" style="font-size:10px;color:#666;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></span><button class="btn-user" id="btn-user">ZALOGUJ</button><button class="btn-add" id="btn-add">+ DODAJ OGŁOSZENIE</button></div>
 </div>
-
-<div class="mobile-top" id="mobile-top">
-  <div class="mobile-search-row">
-    <input class="mobile-search-input" id="mobile-search" placeholder="Szukaj marki, modelu...">
-    <button class="mobile-filter-toggle" id="mobile-filter-toggle">☰ FILTRY <span id="mobile-count" style="background:#000;color:#facc15;padding:2px 6px;border-radius:999px">0</span></button>
-  </div>
-</div>
 <div class="wrap">
-
 <aside class="sidebar" id="sidebar">
 <div><span class="label">MARKA</span><select class="select" id="f-marka"></select></div>
 <div><span class="label">MODEL</span><select class="select" id="f-model"></select></div>
@@ -112,13 +76,19 @@
 <div class="modal-box">
 <div class="modal-head"><span id="modal-title">DODAJ OGŁOSZENIE</span><button id="close" style="background:#1a1a1a;border:none;color:#fff;width:28px;height:28px;border-radius:50%;cursor:pointer">✕</button></div>
 <div class="modal-body">
-<input id="m-title" placeholder="Tytuł * np. BMW 320d 184KM">
+<input id="m-title" placeholder="Tytuł * np. Volvo V50 2.0D 136KM">
 <div class="row2"><input id="m-price" type="number" placeholder="Cena PLN *"><input id="m-year" type="number" placeholder="Rocznik *"></div>
 <div class="row2"><select id="m-brand"></select><select id="m-model"></select></div>
 <div class="row2"><input id="m-mileage" type="number" placeholder="Przebieg km *"><select id="m-fuel"><option>BENZYNA</option><option>DIESEL</option><option>LPG</option><option>ELEKTRYCZNY</option><option>HYBRYDA</option></select></div>
 <div class="row2"><select id="m-gear"><option>MANUALNA</option><option>AUTOMATYCZNA</option></select><input id="m-loc" placeholder="Miejscowość * np. Gorzyce"></div>
 <input id="m-phone" placeholder="Telefon * 600123456">
-<input id="m-img" placeholder="Link zdjęcia https://...">
+<div style="background:#1a1a1a;border:1px dashed #2a2a2a;border-radius:12px;padding:12px">
+  <div style="font-size:11px;color:#facc15;font-weight:800;margin-bottom:8px">📸 ZDJĘCIA - KOMPRESJA AUTOMATYCZNA PRO</div>
+  <input type="file" id="m-files" accept="image/*" multiple style="width:100%;color:#888;font-size:12px">
+  <div id="preview" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:10px"></div>
+  <div id="upload-status" style="font-size:10px;color:#666;margin-top:6px">Wybierz zdjęcia - skompresujemy jak OLX/Allegro (max 1024px, ~150KB)</div>
+  <input id="m-img" type="hidden">
+</div>
 <textarea id="m-desc" rows="3" placeholder="Opis..."></textarea>
 <div class="modal-foot"><button class="btn-clear" id="cancel" style="flex:1">ANULUJ</button><button class="btn-add" id="submit" style="flex:1;height:42px;border-radius:999px">ZATWIERDŹ</button></div>
 <div style="font-size:10px;color:#333;text-align:center" id="edit-info">Nowe ogłoszenie – zapis do Supabase</div>
@@ -131,40 +101,51 @@ const SUPABASE_URL='https://bdpydgsfowtuvjnkyeeg.supabase.co';
 const SUPABASE_ANON='sb_publishable_S1qH_mBZaX7-bzmfJ0IVGA_6hxGbJWd';
 const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
 
-const BRANDS=["Audi","BMW","Mercedes-Benz","Volkswagen","Toyota","Skoda","Ford","Opel","Renault","Peugeot","Citroen","Fiat","Hyundai","Kia","Volvo","Seat","Honda","Mazda","Nissan","Suzuki","Dacia","Jeep","Lexus","Porsche","Alfa Romeo","Land Rover","Mitsubishi","Subaru","Tesla","Cupra","Mini"];
+
+const BRANDS=["Abarth","Alfa Romeo","Audi","BMW","Chevrolet","Citroen","Cupra","Dacia","Fiat","Ford","Honda","Hyundai","Jaguar","Jeep","Kia","Land Rover","Lexus","Mazda","Mercedes-Benz","Mini","Mitsubishi","Nissan","Opel","Peugeot","Porsche","Renault","Seat","Skoda","Subaru","Suzuki","Tesla","Toyota","Volkswagen","Volvo","Aston Martin","Bentley","Ferrari","Lamborghini","Maserati","Rolls-Royce"];
 const MODELS={
-"Audi":["A1","A3","A4","A5","A6","Q2","Q3","Q5","Q7","Q8"],
-"BMW":["1","2","3","4","5","7","X1","X3","X5","X6"],
-"Mercedes-Benz":["A Klasa","B Klasa","C Klasa","E Klasa","S Klasa","GLA","GLC","GLE","GLS","CLA"],
-"Volkswagen":["Golf","Passat","Polo","Tiguan","T-Roc","Touareg","Arteon","Touran","Up!","ID.4"],
-"Toyota":["Aygo","Yaris","Corolla","Camry","RAV4","C-HR","Highlander","Hilux","Proace","Supra"],
-"Skoda":["Fabia","Octavia","Superb","Karoq","Kodiaq","Scala","Kamiq","Enyaq","Rapid","Citigo"],
-"Ford":["Fiesta","Focus","Mondeo","Kuga","Puma","EcoSport","S-Max","Galaxy","Mustang","Transit"],
-"Opel":["Corsa","Astra","Insignia","Mokka","Crossland","Grandland","Combo","Vivaro","Zafira"],
-"Renault":["Clio","Megane","Captur","Kadjar","Talisman","Scenic","Kangoo","Master","Twingo"],
-"Peugeot":["108","208","308","508","2008","3008","5008","Rifter","Partner","Traveller"],
-"Citroen":["C1","C3","C4","C5 Aircross","Berlingo","C3 Aircross","Jumpy","Spacetourer"],
-"Fiat":["500","Panda","Tipo","500X","500L","Doblo","Ducato","Punto"],
-"Hyundai":["i10","i20","i30","Tucson","Santa Fe","Kona","Ioniq","Bayon"],
-"Kia":["Picanto","Rio","Ceed","Sportage","Sorento","Niro","Stonic","XCeed"],
-"Volvo":["S60","S90","V60","V90","XC40","XC60","XC90"],
-"Seat":["Ibiza","Leon","Arona","Ateca","Tarraco","Alhambra"],
-"Honda":["Civic","CR-V","Jazz","HR-V","Accord"],
-"Mazda":["2","3","6","CX-3","CX-30","CX-5","MX-5"],
-"Nissan":["Micra","Juke","Qashqai","X-Trail","Leaf","Navara"],
-"Suzuki":["Swift","Vitara","S-Cross","Ignis","Jimny"],
-"Dacia":["Sandero","Duster","Logan","Dokker","Jogger"],
-"Jeep":["Renegade","Compass","Cherokee","Wrangler","Grand Cherokee"],
-"Lexus":["IS","ES","GS","RX","NX","UX","LC"],
-"Porsche":["911","Cayenne","Macan","Panamera","Taycan","Boxster"],
-"Alfa Romeo":["Giulia","Stelvio","Giulietta","Tonale"],
-"Land Rover":["Discovery","Defender","Range Rover","Evoque","Velar"],
-"Mitsubishi":["ASX","Eclipse Cross","Outlander","L200","Space Star"],
-"Subaru":["Impreza","Forester","Outback","XV","WRX"],
-"Tesla":["Model 3","Model S","Model X","Model Y"],
-"Cupra":["Formentor","Ateca","Leon","Born"],
-"Mini":["Cooper","Countryman","Clubman","Cabrio"]
+"Abarth":["500","500C","595","695","Punto"],
+"Alfa Romeo":["Giulia","Stelvio","147","156","159","Mito","Giulietta","Tonale","Brera","4C"],
+"Audi":["A1","A2","A3","A4","A5","A6","A7","A8","Q2","Q3","Q5","Q7","Q8","e-tron","RS3","RS4","RS6","TT","R8","A4 Allroad"],
+"BMW":["1","2","3","4","5","6","7","8","X1","X2","X3","X4","X5","X6","X7","Z4","M2","M3","M4","M5","i3","i4","iX","iX3"],
+"Chevrolet":["Aveo","Captiva","Cruze","Orlando","Spark","Camaro","Corvette","Trax","Malibu"],
+"Citroen":["C1","C2","C3","C4","C5","C3 Aircross","C4 Cactus","C5 Aircross","Berlingo","Jumpy","Spacetourer","DS3","DS4"],
+"Cupra":["Ateca","Formentor","Leon","Born","Tavascan"],
+"Dacia":["Dokker","Duster","Jogger","Lodgy","Logan","Sandero","Spring"],
+"Fiat":["500","500X","500L","Panda","Tipo","Doblo","Ducato","Freemont","Punto","Bravo"],
+"Ford":["B-Max","C-Max","EcoSport","Edge","Fiesta","Focus","Galaxy","Ka","Kuga","Mondeo","Mustang","Puma","Ranger","S-Max","Tourneo","Transit","Explorer"],
+"Honda":["Accord","Civic","CR-V","FR-V","HR-V","Jazz","Insight","Legend","NSX","Odyssey"],
+"Hyundai":["Accent","Atos","Bayon","Elantra","Getz","i10","i20","i30","i40","Ioniq","Kona","Santa Fe","Tucson","Veloster"],
+"Jaguar":["E-Pace","F-Pace","F-Type","I-Pace","XE","XF","XJ","XK"],
+"Jeep":["Avenger","Cherokee","Compass","Grand Cherokee","Renegade","Wrangler","Gladiator"],
+"Kia":["Carens","Ceed","Cerato","Niro","Optima","Picanto","Rio","Sorento","Soul","Sportage","Stonic","Venga","XCeed","EV6"],
+"Land Rover":["Defender","Discovery","Discovery Sport","Freelander","Range Rover","Range Rover Evoque","Range Rover Sport","Range Rover Velar"],
+"Lexus":["CT","ES","GS","IS","LC","LS","LX","NX","RX","UX","RC","SC"],
+"Mazda":["2","3","5","6","CX-3","CX-30","CX-5","CX-7","CX-9","MX-5","MX-30","RX-8"],
+"Mercedes-Benz":["A Klasa","B Klasa","C Klasa","CL","CLA","CLC","CLK","CLS","E Klasa","G Klasa","GLA","GLB","GLC","GLE","GLK","GLS","M Klasa","R Klasa","S Klasa","SL","SLK","Vito","Viano","Sprinter","AMG GT","EQC"],
+"Mini":["Cabrio","Clubman","Cooper","Countryman","One","Paceman","Roadster"],
+"Mitsubishi":["ASX","Carisma","Colt","Eclipse Cross","Galant","L200","Lancer","Outlander","Pajero","Space Star"],
+"Nissan":["Almera","Juke","Leaf","Micra","Murano","Navara","Note","Pathfinder","Patrol","Primera","Qashqai","X-Trail","370Z","GT-R"],
+"Opel":["Adam","Agila","Ampera","Antara","Astra","Cascada","Combo","Corsa","Crossland","Grandland","Insignia","Karl","Mokka","Meriva","Vivaro","Zafira"],
+"Peugeot":["1007","107","108","2008","206","207","208","3008","301","307","308","4007","4008","407","5008","508","607","807","Bipper","Partner","Rifter","Traveller","RCZ"],
+"Porsche":["911","Boxster","Cayenne","Cayman","Macan","Panamera","Taycan","911 GT3"],
+"Renault":["Alaskan","Avantime","Captur","Clio","Espace","Express","Fluence","Kadjar","Kangoo","Koleos","Laguna","Latitude","Master","Megane","Modus","Scenic","Talisman","Trafic","Twingo","Vel Satis","Zoe","Arkana","Austral"],
+"Seat":["Alhambra","Altea","Arona","Ateca","Cordoba","Exeo","Ibiza","Leon","Mii","Tarraco","Toledo"],
+"Skoda":["Citigo","Fabia","Felicia","Karoq","Kodiaq","Octavia","Rapid","Roomster","Scala","Superb","Yeti","Enyaq","Kamiq"],
+"Subaru":["BRZ","Forester","Impreza","Justy","Legacy","Levorg","Outback","Tribeca","WRX","XV"],
+"Suzuki":["Alto","Baleno","Celerio","Grand Vitara","Ignis","Jimny","Kizashi","Liana","Splash","Swift","SX4","Vitara","S-Cross","Across"],
+"Tesla":["Model S","Model 3","Model X","Model Y","Roadster"],
+"Toyota":["Auris","Avensis","Aygo","C-HR","Camry","Corolla","Corolla Verso","Hilux","Land Cruiser","Prius","RAV4","Urban Cruiser","Verso","Yaris","Supra","Highlander","Proace","GT86","bZ4X"],
+"Volkswagen":["Amarok","Arteon","Beetle","Bora","Caddy","CC","Crafter","Eos","Fox","Golf","ID.3","ID.4","ID.5","Jetta","Lupo","Passat","Phaeton","Polo","Scirocco","Sharan","T-Cross","T-Roc","Tiguan","Touareg","Touran","Transporter","Up!","T7"],
+"Volvo":["C30","C70","S40","S60","S70","S80","S90","V40","V50","V60","V70","V90","XC40","XC60","XC70","XC90","850","940"],
+"Aston Martin":["DB9","DB11","Vantage","DBX","Rapide"],
+"Bentley":["Continental","Bentayga","Flying Spur","Mulsanne"],
+"Ferrari":["488","F8","Roma","Portofino","SF90","812","California"],
+"Lamborghini":["Aventador","Huracan","Urus","Gallardo","Murcielago"],
+"Maserati":["Ghibli","Levante","Quattroporte","GranTurismo","MC20"],
+"Rolls-Royce":["Ghost","Phantom","Wraith","Cullinan","Dawn"]
 };
+
 const FUELS=["BENZYNA","DIESEL","LPG","ELEKTRYCZNY","HYBRYDA"];
 const GEARS=["MANUALNA","AUTOMATYCZNA"];
 let selF=[],selG=[],editingId=null;
@@ -174,34 +155,81 @@ let currentUser=null;
 function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500)}
 
 
-// MOBILE POZIOME ROZWIJANE FILTRY
-const mobileToggle = document.getElementById('mobile-filter-toggle');
-const mobileTop = document.getElementById('mobile-top');
-const sidebarEl = document.getElementById('sidebar');
-const mobileSearch = document.getElementById('mobile-search');
-const desktopSearch = document.getElementById('loc'); // reuse loc as search? actually we have loc filter, but use it for search
-const mobileCount = document.getElementById('mobile-count');
+// ===== KOMPRESJA ZDJĘĆ PRO JAK OLX =====
+let uploadedImageUrls = [];
 
-function openMobileFilters(){
-  sidebarEl.classList.toggle('open');
-  const isOpen = sidebarEl.classList.contains('open');
-  if(mobileToggle) mobileToggle.innerHTML = isOpen ? '✕ ZAMKNIJ <span id="mobile-count" style="background:#000;color:#facc15;padding:2px 6px;border-radius:999px">'+(document.getElementById('count')?.textContent||'0')+'</span>' : '☰ FILTRY <span id="mobile-count" style="background:#000;color:#facc15;padding:2px 6px;border-radius:999px">'+(document.getElementById('count')?.textContent||'0')+'</span>';
-}
-if(mobileToggle) mobileToggle.onclick = openMobileFilters;
-
-// sync mobile search with loc filter and title search
-if(mobileSearch){
-  mobileSearch.addEventListener('input', ()=>{
-    const v = mobileSearch.value.toLowerCase();
-    // filter by title/brand/model/location
-    // we override render to use this
-    window.mobileSearchValue = v;
-    render();
+async function compressImage(file){
+  return new Promise((resolve)=>{
+    const reader = new FileReader();
+    reader.onload = (e)=>{
+      const img = new Image();
+      img.onload = ()=>{
+        const canvas = document.createElement('canvas');
+        let w = img.width, h = img.height;
+        const max = 1024;
+        if(w>h){ if(w>max){ h*=max/w; w=max; } } else { if(h>max){ w*=max/h; h=max; } }
+        canvas.width=w; canvas.height=h;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img,0,0,w,h);
+        canvas.toBlob((blob)=>{
+          resolve(blob);
+        }, 'image/webp', 0.7);
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
   });
 }
 
-// Override render to include mobile search
-const _origRender = render;
+document.getElementById('m-files')?.addEventListener('change', async (e)=>{
+  const files = Array.from(e.target.files).slice(0,8);
+  const preview = document.getElementById('preview');
+  const status = document.getElementById('upload-status');
+  preview.innerHTML='';
+  uploadedImageUrls=[];
+  status.textContent = `Kompresuję ${files.length} zdjęć...`;
+  for(let i=0;i<files.length;i++){
+    const blob = await compressImage(files[i]);
+    const url = URL.createObjectURL(blob);
+    preview.innerHTML += `<div style="position:relative"><img src="${url}" style="width:70px;height:70px;object-fit:cover;border-radius:8px;border:1px solid #333"><div style="position:absolute;bottom:2px;right:2px;background:#000;color:#facc15;font-size:9px;padding:2px 4px;border-radius:4px">${(blob.size/1024).toFixed(0)}KB</div></div>`;
+    // upload to supabase storage
+    try{
+      const fileName = `${Date.now()}_${i}.webp`;
+      const {data, error} = await supabaseClient.storage.from('ogloszenia-images').upload(fileName, blob, {contentType:'image/webp'});
+      if(error){
+        // if bucket not exists, try 'images' bucket or fallback
+        const {data:d2, error:e2} = await supabaseClient.storage.from('images').upload(fileName, blob, {contentType:'image/webp'});
+        if(e2){
+          console.log('storage error', error, e2);
+          status.textContent = 'Bucket nie istnieje - utwórz bucket ogloszenia-images w Supabase Storage (public). Tymczasowo zapisujemy lokalnie.';
+          // fallback: convert to base64 and keep
+          uploadedImageUrls.push(url);
+        } else {
+          const {data:pub} = supabaseClient.storage.from('images').getPublicUrl(fileName);
+          uploadedImageUrls.push(pub.publicUrl);
+        }
+      } else {
+        const {data:pub} = supabaseClient.storage.from('ogloszenia-images').getPublicUrl(fileName);
+        uploadedImageUrls.push(pub.publicUrl);
+      }
+    }catch(err){ console.log(err); }
+  }
+  if(uploadedImageUrls.length>0){
+    document.getElementById('m-img').value = uploadedImageUrls[0];
+    status.textContent = `✅ Gotowe: ${uploadedImageUrls.length} zdjęć skompresowanych ~${(files[0]?.size/1024||0).toFixed(0)}KB → ~150KB`;
+  }
+});
+
+// ===== OWNER EDIT LOGIC =====
+let userRole = null;
+async function checkRole(){
+  if(!currentUser) return;
+  const {data} = await supabaseClient.from('profiles').select('role').eq('id', currentUser.id).single();
+  userRole = data?.role||'user';
+}
+
+// Override render to show EDYTUJ only for owner
+const _origRender2 = render;
 render = function(){
   let list=[...ads];
   const b=document.getElementById('f-marka').value;
@@ -211,17 +239,18 @@ render = function(){
   const pf=document.getElementById('price-from').value; if(pf) list=list.filter(a=>a.price>=+pf);
   const pt=document.getElementById('price-to').value; if(pt) list=list.filter(a=>a.price<=+pt);
   const loc=document.getElementById('loc').value.toLowerCase(); if(loc) list=list.filter(a=>a.location.toLowerCase().includes(loc));
-  // mobile search
-  const mob = (window.mobileSearchValue||'').toLowerCase();
-  if(mob) list=list.filter(a=> (a.title+' '+a.brand+' '+a.model+' '+a.location).toLowerCase().includes(mob));
   if(selF.length) list=list.filter(a=>selF.includes(a.fuel));
   if(selG.length) list=list.filter(a=>selG.includes(a.gear));
   const sort=document.getElementById('sort').value; if(sort==='Najnowsze') list.sort((a,b)=>b.ts-a.ts); if(sort==='Najtańsze') list.sort((a,b)=>a.price-b.price); if(sort==='Najdroższe') list.sort((a,b)=>b.price-a.price);
   document.getElementById('count').textContent=list.length;
-  const mc=document.getElementById('mobile-count'); if(mc) mc.textContent=list.length;
   const grid=document.getElementById('grid'), empty=document.getElementById('empty');
   if(!list.length){grid.innerHTML='';empty.style.display='block';return} empty.style.display='none';
-  grid.innerHTML=list.map(a=>`<div class="card" onclick="openEdit('${a.id}')"><img src="${a.img}" loading="lazy"><div class="card-body"><div class="card-title">${a.title}</div><div class="card-price">${a.price.toLocaleString()} zł</div><div class="card-meta">${a.brand} ${a.model} • ${a.year}</div><div class="card-loc">📍 ${a.location}</div></div></div>`).join('');
+  grid.innerHTML=list.map(a=>{
+    const isOwner = currentUser && (a.raw?.user_id===currentUser.id || a.raw?.user_id==currentUser.id);
+    const isAdmin = userRole==='admin';
+    const canEdit = isOwner || isAdmin;
+    return `<div class="card"><img src="${a.img}" loading="lazy"><div class="card-body"><div class="card-title">${a.title}</div><div class="card-price">${a.price.toLocaleString()} zł</div><div class="card-meta">${a.brand} ${a.model} • ${a.year} • ${a.mileage.toLocaleString()} km • ${a.fuel} • ${a.gear}</div><div class="card-loc">📍 ${a.location}</div>${canEdit?`<div class="card-actions"><button class="btn-card y" onclick="openEdit('${a.id}')">EDYTUJ</button><button class="btn-card d" onclick="del('${a.id}')">USUŃ</button></div>`: `<div style="font-size:9px;color:#333;margin-top:6px">${isOwner?'Twoje ogłoszenie':''}</div>`}</div></div>`;
+  }).join('');
 };
 
 async function init(){
@@ -230,6 +259,7 @@ async function init(){
   currentUser = data.session?.user||null;
   updateAuthUI();
   await loadAds();
+  await checkRole();
   populateBrands();
   renderChips();
   render();
@@ -395,7 +425,8 @@ document.getElementById('btn-clear').onclick=()=>{document.getElementById('f-mar
 document.getElementById('submit').onclick=async()=>{
   const t=document.getElementById('m-title').value.trim(),p=+document.getElementById('m-price').value,y=+document.getElementById('m-year').value,br=document.getElementById('m-brand').value,mo=document.getElementById('m-model').value,mi=+document.getElementById('m-mileage').value,f=document.getElementById('m-fuel').value,g=document.getElementById('m-gear').value,loc=document.getElementById('m-loc').value.trim(),ph=document.getElementById('m-phone').value.trim(),img=document.getElementById('m-img').value||'https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=400',desc=document.getElementById('m-desc').value;
   if(!t||!p||!loc||!ph){toast('Uzupełnij *');return}
-  const payload={ title:t, marka:br, model:mo, cena:p, price:p, rocznik:y||2020, year:y||2020, przebieg:mi||0, mileage:mi||0, paliwo:f, fuel:f, skrzynia:g, gear:g, miasto:loc, location:loc, telefon:ph, phone:ph, image:img, image_url:img, opis:desc, description:desc, user_id: currentUser?.id, status:'active' };
+  const finalImg = uploadedImageUrls[0] || img;
+  const payload={ title:t, marka:br, model:mo, cena:p, price:p, rocznik:y||2020, year:y||2020, przebieg:mi||0, mileage:mi||0, paliwo:f, fuel:f, skrzynia:g, gear:g, miasto:loc, location:loc, telefon:ph, phone:ph, image:finalImg, image_url:finalImg, images:uploadedImageUrls, opis:desc, description:desc, user_id: currentUser?.id, status:'active' };
   let res;
   if(editingId){
     res = await supabaseClient.from('ogloszenia').update(payload).eq('id',editingId);
@@ -405,7 +436,8 @@ document.getElementById('submit').onclick=async()=>{
     if(res.error) res = await supabaseClient.from('listings').insert({title:t, price:p, location:loc, image_url:img, description:desc, user_id:payload.user_id, status:'active'});
   }
   if(res.error) toast('Błąd: '+res.error.message);
-  else { toast(editingId?'Zapisano':'Dodano'); document.getElementById('modal').classList.remove('open'); await loadAds(); render(); }
+  else { toast(editingId?'Zapisano':'Dodano'); document.getElementById('modal').classList.remove('open'); await loadAds();
+  await checkRole(); render(); }
 };
 document.getElementById('f-marka').addEventListener('change',()=>{updateModelOptions('f-marka','f-model',true);render()});
 document.getElementById('m-brand').addEventListener('change',()=>updateModelOptions('m-brand','m-model',false));
