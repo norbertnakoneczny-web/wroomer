@@ -1,3 +1,0 @@
-# WROOMER FIX 81 MAREK - zawiera Volvo
-
-Abarth, Acura, Aiways, Alfa Romeo, Alpine, Aston Martin, Audi, Bentley, BMW, BYD, Cadillac, Chery, Chevrolet, Chrysler, Citroen, Cupra, Dacia, Daewoo, Daihatsu, Dodge, DS Automobiles, Ferrari, Fiat, Ford, Forthing, Foton, Genesis, GMC, Great Wall, Honda, Hummer, Hyundai, Ineos, Infiniti, Isuzu, Iveco, Jaguar, Jeep, KGM, Kia, Lada, Lamborghini, Lancia, Land Rover, Lexus, Lincoln, Lotus, Lynk & Co, Maserati, Maybach, Mazda, McLaren, Mercedes-Benz, MG, Mini, Mitsubishi, Morgan, Nio, Nissan, Opel, Peugeot, Polestar, Pontiac, Porsche, Ram, Renault, Rolls-Royce, Rover, Saab, Seat, Skoda, Smart, SsangYong, Subaru, Suzuki, Tesla, Toyota, Volkswagen, Volvo, Xpeng, Zastava
