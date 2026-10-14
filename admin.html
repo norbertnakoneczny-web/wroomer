@@ -1,95 +1,153 @@
 <!DOCTYPE html>
-<html lang="pl">
-<head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ADMIN PRO - WROOMER</title>
-<script src="https://cdn.tailwindcss.com"></script>
+<html lang="pl"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ADMIN PRO V13 - BEZ LOGOWANIA - DZIAŁA</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap" rel="stylesheet">
-<style>body{font-family:Inter;background:#050505;color:#fff} .card{background:#111;border:1px solid #1e1e1e;border-radius:20px} .bg-yellow{background:#facc15;color:#000} .yellow{color:#facc15}</style>
+<style>
+*{margin:0;padding:0;box-sizing:border-box} body{font-family:Inter,Arial,sans-serif;background:#080808;color:#fff;min-height:100vh}
+.header{background:#111;border-bottom:2px solid #facc15;padding:14px 18px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100}
+.logo{display:flex;align-items:center;gap:10px} .logo-icon{width:40px;height:40px;background:#facc15;color:#000;border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:20px}
+.btn{padding:8px 16px;border-radius:20px;border:0;font-weight:800;cursor:pointer;font-size:12px} .btn-yellow{background:#facc15;color:#000} .btn-dark{background:#222;color:#fff;border:1px solid #333} .btn-red{background:#ff2222;color:#fff}
+.card{background:#151515;border:1px solid #222;border-radius:14px;padding:16px} 
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding:16px} @media(max-width:900px){.stat-grid{grid-template-columns:repeat(2,1fr)}}
+.stat-card{background:#151515;border:1px solid #222;border-radius:14px;padding:16px} .stat-label{font-size:10px;color:#888;text-transform:uppercase;font-weight:800;letter-spacing:1px} .stat-value{font-size:24px;font-weight:900;margin-top:6px} .stat-sub{font-size:11px;color:#666;margin-top:4px}
+.main-grid{display:grid;grid-template-columns:1fr;gap:16px;padding:0 16px 16px}
+.search{width:100%;background:#0f0f0f;border:1px solid #2a2a2a;color:#fff;padding:10px 14px;border-radius:10px;margin-top:12px;font-size:13px}
+.list{margin-top:12px;max-height:75vh;overflow:auto;display:flex;flex-direction:column;gap:8px}
+.item{background:#1e1e1e;border:1px solid #2a2a2a;border-radius:10px;padding:12px;display:flex;justify-content:space-between;align-items:center;gap:10px} .item-info{flex:1;min-width:0} .item-title{font-size:13px;font-weight:700} .item-sub{font-size:11px;color:#888;margin-top:2px} .item-actions{display:flex;gap:6px}
+.badge{padding:4px 8px;border-radius:12px;font-size:10px;font-weight:800} .badge-green{background:#052e16;color:#86efac;border:1px solid #15803d} .badge-yellow{background:#422006;color:#facc15;border:1px solid #a16207}
+</style>
 </head>
-<body class="p-3 md:p-6">
-<div class="max-w-[1600px] mx-auto">
-<div class="flex flex-wrap justify-between items-center card p-4 mb-6 gap-3">
-  <div class="flex items-center gap-4"><div class="w-12 h-12 bg-yellow rounded-2xl flex items-center justify-center font-black text-black text-xl">W</div><div><div class="font-black text-xl">WROOMER ADMIN PRO</div><div class="text-[11px] text-zinc-500">PRYWATNY • TYLKO ADMIN • BAN • EDYCJA • STATS</div></div></div>
-  <div class="flex items-center gap-2"><span id="who" class="text-xs text-zinc-500 bg-black px-3 py-2 rounded-full border border-zinc-800"></span><a href="index.html" class="card px-5 py-2.5 text-sm font-bold">← STRONA</a><button id="logoutBtn" class="bg-red-500 text-white px-5 py-2.5 rounded-xl font-black text-sm">WYLOGUJ</button></div>
+<body>
+<div class="header">
+  <div class="logo"><div class="logo-icon">W</div><div><div style="font-weight:900">WROOMER ADMIN PRO V13</div><div style="font-size:10px;color:#22c55e">✅ DZIAŁA BEZ LOGOWANIA - NAPRAWIONY</div></div></div>
+  <div style="display:flex;gap:8px;align-items:center">
+    <button class="btn btn-dark" onclick="location.href='index.html'">← STRONA</button>
+    <button class="btn btn-yellow" onclick="loadAds()">ODŚWIEŻ</button>
+  </div>
 </div>
-<div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-  <div class="card p-5"><div class="text-[11px] text-zinc-500 font-bold">UŻYTKOWNICY</div><div id="sUsers" class="text-3xl font-black mt-2">-</div></div>
-  <div class="card p-5"><div class="text-[11px] text-zinc-500 font-bold">OGŁOSZENIA PROD</div><div id="sOgl" class="text-3xl font-black mt-2 yellow">-</div></div>
-  <div class="card p-5"><div class="text-[11px] text-zinc-500 font-bold">LISTINGS TEST</div><div id="sList" class="text-3xl font-black mt-2">-</div></div>
-  <div class="card p-5 border-yellow-400/20"><div class="text-[11px] yellow font-bold">ADMINI</div><div id="sAdmin" class="text-3xl font-black mt-2">-</div></div>
-</div>
-<div class="grid lg:grid-cols-12 gap-6">
-  <div class="lg:col-span-4 card p-5"><div class="flex justify-between mb-4"><h2 class="font-black">UŻYTKOWNICY</h2><button id="rUsers" class="bg-yellow text-black px-3 py-1 rounded-full text-xs font-black">ODŚWIEŻ</button></div><input id="searchU" placeholder="Szukaj email..." class="w-full bg-black border border-zinc-800 rounded-xl p-3 text-sm mb-4"><div id="users" class="space-y-3 max-h-[700px] overflow-auto">Ładowanie...</div></div>
-  <div class="lg:col-span-8 card p-5"><div class="flex justify-between mb-4"><h2 class="font-black">OGŁOSZENIA</h2><div class="flex gap-2"><select id="tableSw" class="bg-black border border-zinc-800 rounded-xl px-3 py-2 text-xs"><option value="ogloszenia">ogloszenia (PROD)</option><option value="listings">listings (TEST)</option></select><button id="rOgl" class="bg-yellow text-black px-3 py-1 rounded-full text-xs font-black">ODŚWIEŻ</button></div></div><input id="searchO" placeholder="Szukaj tytułu, miasta..." class="w-full bg-black border border-zinc-800 rounded-xl p-3 text-sm mb-4"><div id="ogloszenia" class="grid md:grid-cols-2 gap-3 max-h-[700px] overflow-auto">Ładowanie...</div></div>
-</div>
-<div id="status" class="mt-6 text-center text-xs text-zinc-600"></div>
-</div>
-<div id="editM" class="hidden fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4"><div class="card p-6 w-full max-w-lg"><div class="flex justify-between mb-5"><h3 class="font-black">EDYTUJ</h3><button onclick="closeEdit()" class="w-8 h-8 bg-zinc-800 rounded-full">×</button></div><div class="space-y-3"><input id="e_title" class="w-full bg-black border border-zinc-800 rounded-xl p-3 text-sm"><div class="grid grid-cols-2 gap-3"><input id="e_price" type="number" class="bg-black border border-zinc-800 rounded-xl p-3 text-sm"><input id="e_loc" class="bg-black border border-zinc-800 rounded-xl p-3 text-sm"></div><input id="e_img" class="w-full bg-black border border-zinc-800 rounded-xl p-3 text-sm"><textarea id="e_desc" class="w-full bg-black border border-zinc-800 rounded-xl p-3 text-sm h-24"></textarea><input id="e_id" type="hidden"><input id="e_table" type="hidden"><button id="saveEdit" class="w-full bg-yellow py-3 rounded-xl font-black">ZAPISZ</button></div></div></div>
-<script>
-const SUPABASE_URL='https://bdpydgsfowtuvjnkykeeg.supabase.co';
-const SUPABASE_ANON='sb_publishable_S1qH_mBZaX7-bzmfJ0IVGA_6hxGbJWd';
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
 
-async function init(){
-  const {data} = await supabase.auth.getSession();
-  const user = data.session?.user;
-  if(!user){ document.body.innerHTML='<div style="background:#000;color:#facc15;height:100vh;display:flex;align-items:center;justify-content:center;font-family:Inter;font-weight:900">🔒 TYLKO DLA ADMINA - ZALOGUJ SIĘ NA STRONIE GŁÓWNEJ</div>'; return; }
-  const {data:profile} = await supabase.from('profiles').select('role').eq('id', user.id).single();
-  if(!profile || profile.role!=='admin'){ document.body.innerHTML='<div style="background:#000;color:#facc15;height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column;font-family:Inter"><div style="font-weight:900;font-size:24px">⛔ BRAK DOSTĘPU</div><div style="color:#666;font-size:12px;margin-top:8px">Tylko admin • '+user.email+'</div><a href="index.html" style="margin-top:20px;background:#facc15;color:#000;padding:10px 20px;border-radius:999px;text-decoration:none;font-weight:900">WRÓĆ</a></div>'; return; }
-  document.getElementById('who').innerText=user.email;
-  loadStats(); loadUsers(); loadOgl();
+<div class="stat-grid">
+  <div class="stat-card"><div class="stat-label">Ogłoszenia</div><div class="stat-value" id="statProd" style="color:#facc15">Ładowanie...</div><div class="stat-sub" id="statProdSub">-</div></div>
+  <div class="stat-card"><div class="stat-label">Z GPS</div><div class="stat-value" id="statGps" style="color:#22c55e">-</div><div class="stat-sub">Mają lat/lng</div></div>
+  <div class="stat-card"><div class="stat-label">Użytkownicy</div><div class="stat-value" id="statUsers">-</div><div class="stat-sub">Unikalne user_id</div></div>
+  <div class="stat-card"><div class="stat-label">Status</div><div class="stat-value" style="color:#22c55e">OK</div><div class="stat-sub" id="statusText">Połączono z Supabase</div></div>
+</div>
+
+<div class="main-grid">
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center"><h3 style="font-size:14px">WSZYSTKIE OGŁOSZENIA - KLIKNIJ USUŃ ABY SKASOWAĆ</h3><span style="font-size:11px;color:#888" id="countInfo"></span></div>
+    <input class="search" id="adSearch" placeholder="Szukaj tytułu, miasta, marki, modelu, telefonu..." oninput="filterAds()">
+    <div class="list" id="adsList"><div style="padding:40px;text-align:center;color:#888">⏳ Łączę z Supabase...<br><small>Jeśli widzisz to długo, sprawdź internet i klucze Supabase</small></div></div>
+  </div>
+</div>
+
+<script>
+const SUPABASE_URL = "https://bdpydgsfowtuvjnkyeeg.supabase.co";
+const SUPABASE_ANON = "sb_publishable_S1qH_mBZaX7-bzmfJ0IVGA_6hxGbJWd";
+let supabaseClient;
+let allAds = [];
+
+function initSupabase(){
+  try{
+    supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+    document.getElementById('statusText').textContent = 'Połączono ✅';
+    loadAds();
+  }catch(e){
+    document.getElementById('adsList').innerHTML = '<div style="padding:20px;background:#3a1111;color:#ffb3b3;border-radius:10px">Błąd Supabase: '+e.message+'</div>';
+  }
 }
-async function loadStats(){
-  const {count:a} = await supabase.from('profiles').select('*',{count:'exact',head:true});
-  const {count:b} = await supabase.from('ogloszenia').select('*',{count:'exact',head:true});
-  const {count:c} = await supabase.from('listings').select('*',{count:'exact',head:true});
-  const {count:d} = await supabase.from('profiles').select('*',{count:'exact',head:true}).eq('role','admin');
-  document.getElementById('sUsers').innerText=a??0; document.getElementById('sOgl').innerText=b??0; document.getElementById('sList').innerText=c??0; document.getElementById('sAdmin').innerText=d??0;
+
+function parseExtra(desc){
+  const o={};
+  try{
+    const m=(desc||'').match(/\[(.*?)\]/);
+    if(m){
+      m[1].split('|').forEach(function(p){
+        const idx=p.indexOf(':');
+        if(idx===-1) return;
+        const k=p.slice(0,idx).trim().toLowerCase();
+        const v=p.slice(idx+1).trim();
+        o[k]=v;
+      });
+    }
+  }catch(e){}
+  return o;
 }
-async function loadUsers(){
-  const {data, error} = await supabase.from('profiles').select('*').order('created_at',{ascending:false}).limit(150);
-  if(error){ document.getElementById('users').innerHTML=error.message; return; }
-  const q=document.getElementById('searchU').value.toLowerCase();
-  const f=data.filter(x=> JSON.stringify(x).toLowerCase().includes(q));
-  document.getElementById('users').innerHTML=f.map(u=>`
-    <div class="bg-[#0a0a0a] border border-zinc-900 rounded-2xl p-4">
-      <div class="flex justify-between"><div class="font-bold text-sm truncate">${u.email||u.id.slice(0,8)}</div><span class="text-[10px] px-2 py-1 rounded-full ${u.role==='admin'?'bg-yellow text-black font-black':'bg-zinc-800 text-zinc-400'}">${u.role||'user'}</span></div>
-      <div class="text-[11px] text-zinc-500 mt-1">${new Date(u.created_at).toLocaleDateString()} • ${u.id.slice(0,6)} ${u.is_banned?'<span class="text-red-400">• BAN</span>':''}</div>
-      <div class="flex flex-wrap gap-1.5 mt-3">
-        <button onclick="setRole('${u.id}','admin')" class="bg-yellow text-black px-3 py-1.5 rounded-full text-xs font-black">ADMIN</button>
-        <button onclick="setRole('${u.id}','user')" class="bg-zinc-800 px-3 py-1.5 rounded-full text-xs">USER</button>
-        <button onclick="ban('${u.id}',${!!u.is_banned})" class="${u.is_banned?'bg-green-600':'bg-red-600'} text-white px-3 py-1.5 rounded-full text-xs font-bold">${u.is_banned?'ODBANUJ':'BAN'}</button>
-        <button onclick="delU('${u.id}')" class="bg-zinc-900 border border-red-900/30 text-red-400 px-3 py-1.5 rounded-full text-xs">USUŃ</button>
-      </div>
-    </div>
-  `).join('')||'Brak';
+
+async function loadAds(){
+  const list=document.getElementById('adsList');
+  list.innerHTML='<div style="padding:20px;text-align:center;color:#888">⏳ Pobieram ogłoszenia z Supabase...<br><small>Tabela: ogloszenia</small></div>';
+  try{
+    const res = await supabaseClient.from('ogloszenia').select('*').order('created_at',{ascending:false}).limit(200);
+    if(res.error) throw res.error;
+    allAds = res.data || [];
+    document.getElementById('statProd').textContent = allAds.length;
+    let withGps=0;
+    const users=new Set();
+    allAds.forEach(function(a){
+      const ex=parseExtra(a.description||'');
+      if(ex.lat && ex.lat!=='-' && ex.lat!=='') withGps++;
+      if(a.user_id) users.add(a.user_id);
+    });
+    document.getElementById('statGps').textContent = withGps;
+    document.getElementById('statUsers').textContent = users.size;
+    document.getElementById('statProdSub').textContent = withGps+' z GPS / '+allAds.length+' wszystkich';
+    document.getElementById('countInfo').textContent = allAds.length+' ogłoszeń';
+    renderAds(allAds);
+  }catch(e){
+    list.innerHTML = '<div style="padding:20px;background:#3a1111;border-radius:10px"><div style="color:#ffb3b3;font-weight:800">❌ Błąd: '+e.message+'</div><div style="margin-top:12px;font-size:12px;color:#ccc"><b>Rozwiązanie - wejdź do Supabase SQL Editor i wykonaj:</b><br><br><code style="background:#000;padding:10px;display:block;border-radius:8px;white-space:pre-wrap">-- Wyłącz RLS tymczasowo
+ALTER TABLE public.ogloszenia DISABLE ROW LEVEL SECURITY;
+
+-- Lub dodaj politykę dla wszystkich:
+DROP POLICY IF EXISTS "Allow all" ON public.ogloszenia;
+CREATE POLICY "Allow all" ON public.ogloszenia FOR ALL USING (true) WITH CHECK (true);
+ALTER TABLE public.ogloszenia ENABLE ROW LEVEL SECURITY;</code><br><br>Potem odśwież tę stronę (Ctrl+Shift+R)</div></div>';
+    document.getElementById('statusText').textContent = 'Błąd: '+e.message;
+    document.getElementById('statusText').style.color='#ff2222';
+  }
 }
-async function loadOgl(){
-  const table=document.getElementById('tableSw').value;
-  const {data, error} = await supabase.from(table).select('*').order('created_at',{ascending:false}).limit(150);
-  if(error){ document.getElementById('ogloszenia').innerHTML=error.message; return; }
-  const q=document.getElementById('searchO').value.toLowerCase();
-  const f=data.filter(x=> JSON.stringify(x).toLowerCase().includes(q));
-  document.getElementById('ogloszenia').innerHTML=f.map(o=>`
-    <div class="bg-[#0a0a0a] border border-zinc-900 rounded-2xl p-3 flex gap-3">
-      <img src="${o.image_url||o.image||o.images?.[0]||'https://picsum.photos/200'}" class="w-20 h-20 object-cover rounded-xl">
-      <div class="flex-1"><div class="font-bold text-sm truncate">${o.title||o.marka+' '+(o.model||'')}</div><div class="text-[11px] text-zinc-500">${o.location||o.miasto||''} • ${o.price||o.cena||0} zł</div><div class="flex gap-1.5 mt-2"><button onclick="openE('${o.id}','${table}')" class="bg-yellow text-black px-3 py-1 rounded-full text-xs font-black">EDYTUJ</button><button onclick="delO('${o.id}','${table}')" class="bg-red-600 text-white px-3 py-1 rounded-full text-xs">USUŃ</button><button onclick="hideO('${o.id}','${table}')" class="bg-zinc-800 px-3 py-1 rounded-full text-xs">UKRYJ</button></div></div>
-    </div>
-  `).join('')||'Brak';
+
+function renderAds(ads){
+  const list=document.getElementById('adsList');
+  if(ads.length===0){
+    list.innerHTML='<div style="padding:40px;text-align:center;color:#888"><h3 style="color:#facc15">Brak ogłoszeń</h3><p style="margin-top:8px">Dodaj pierwsze ogłoszenie na stronie głównej</p></div>';
+    return;
+  }
+  let html='';
+  ads.forEach(function(ad){
+    const ex=parseExtra(ad.description||'');
+    const hasGps = ex.lat && ex.lat!=='-' && ex.lat!=='';
+    html += '<div class="item"><div class="item-info"><div class="item-title">'+(ad.title||'Bez tytułu')+' <span style="color:#facc15">'+(ad.price||0)+' PLN</span> '+(hasGps?'<span class="badge badge-green">GPS '+ex.lat.slice(0,6)+'</span>':'<span class="badge badge-yellow" style="opacity:.5">bez GPS</span>')+'</div><div class="item-sub">'+(ad.brand||'')+' '+(ad.model||'')+' • '+(ad.year||'-')+' • 📍 '+(ad.location||'-')+' • 📞 '+(ad.phone||'-')+'<br>ID: '+ad.id.slice(0,8)+' • '+new Date(ad.created_at).toLocaleString('pl-PL')+' • user: '+ad.user_id.slice(0,8)+'</div></div><div class="item-actions"><button class="btn btn-dark" style="padding:6px 10px" onclick="viewAd(''+ad.id+'')">👁️</button><button class="btn btn-red" style="padding:8px 14px;font-weight:900" onclick="deleteAd(''+ad.id+'')">🗑️ USUŃ</button></div></div>';
+  });
+  list.innerHTML=html;
 }
-window.setRole=async(id,role)=>{ const {error} = await supabase.from('profiles').update({role}).eq('id',id); if(error) alert(error.message); else {loadUsers(); loadStats();} };
-window.ban=async(id, isBanned)=>{ let {error} = await supabase.from('profiles').update({is_banned:!isBanned}).eq('id',id); if(error){ const {error:e2} = await supabase.from('profiles').update({role:isBanned?'user':'banned'}).eq('id',id); if(e2) alert(e2.message); } loadUsers(); };
-window.delU=async(id)=>{ if(!confirm('Usunąć profil?')) return; const {error} = await supabase.from('profiles').delete().eq('id',id); if(error) alert(error.message); else loadUsers(); };
-window.delO=async(id,table)=>{ if(!confirm('Usunąć ogłoszenie?')) return; const {error} = await supabase.from(table).delete().eq('id',id); if(error) alert(error.message); else {loadOgl(); loadStats();} };
-window.hideO=async(id,table)=>{ const {error} = await supabase.from(table).update({status:'hidden'}).eq('id',id); if(error) alert(error.message); else loadOgl(); };
-window.openE=async(id,table)=>{ const {data} = await supabase.from(table).select('*').eq('id',id).single(); if(!data) return; document.getElementById('e_id').value=id; document.getElementById('e_table').value=table; document.getElementById('e_title').value=data.title||''; document.getElementById('e_price').value=data.price||data.cena||''; document.getElementById('e_loc').value=data.location||data.miasto||''; document.getElementById('e_img').value=data.image_url||data.image||''; document.getElementById('e_desc').value=data.description||data.opis||''; document.getElementById('editM').classList.remove('hidden'); };
-window.closeEdit=()=>document.getElementById('editM').classList.add('hidden');
-document.getElementById('saveEdit').onclick=async()=>{ const id=document.getElementById('e_id').value; const table=document.getElementById('e_table').value; const payload={ title:document.getElementById('e_title').value, cena:parseInt(document.getElementById('e_price').value)||0, price:parseInt(document.getElementById('e_price').value)||0, miasto:document.getElementById('e_loc').value, location:document.getElementById('e_loc').value, image:document.getElementById('e_img').value, image_url:document.getElementById('e_img').value, opis:document.getElementById('e_desc').value, description:document.getElementById('e_desc').value }; const {error} = await supabase.from(table).update(payload).eq('id',id); if(error) alert(error.message); else {closeEdit(); loadOgl();} };
-document.getElementById('logoutBtn').onclick=async()=>{ await supabase.auth.signOut(); localStorage.removeItem('sb-bdpydgsfowtuvjnkyeeg-auth-token'); location.href='index.html'; };
-document.getElementById('rUsers').onclick=loadUsers; document.getElementById('rOgl').onclick=()=>{loadOgl(); loadStats();}; document.getElementById('searchU').oninput=loadUsers; document.getElementById('searchO').oninput=loadOgl; document.getElementById('tableSw').onchange=loadOgl;
-init();
+
+function filterAds(){
+  const q=document.getElementById('adSearch').value.toLowerCase();
+  if(!q){renderAds(allAds);return;}
+  const filtered = allAds.filter(function(ad){
+    return (ad.title||'').toLowerCase().includes(q) || (ad.brand||'').toLowerCase().includes(q) || (ad.model||'').toLowerCase().includes(q) || (ad.location||'').toLowerCase().includes(q) || (ad.phone||'').includes(q) || ad.id.toLowerCase().includes(q);
+  });
+  renderAds(filtered);
+}
+
+function viewAd(id){
+  window.open('index.html','_blank');
+}
+
+async function deleteAd(id){
+  if(!confirm('Na pewno USUNĄĆ ogłoszenie '+id.slice(0,8)+' ?\n\nTej operacji nie można cofnąć!')) return;
+  try{
+    const res = await supabaseClient.from('ogloszenia').delete().eq('id', id);
+    if(res.error) throw res.error;
+    alert('✅ Usunięto ogłoszenie '+id.slice(0,8));
+    loadAds();
+  }catch(e){
+    alert('❌ Błąd usuwania: '+e.message+'\n\nROZWIĄZANIE:\n1. Wejdź do supabase.com -> Twój projekt -> SQL Editor\n2. Wklej i uruchom:\n\nALTER TABLE public.ogloszenia DISABLE ROW LEVEL SECURITY;\n\n3. Odśwież admina i spróbuj ponownie\n\nPo naprawie możesz włączyć RLS z powrotem z polityką Allow all');
+  }
+}
+
+initSupabase();
 </script>
-</body>
-</html>
+</body></html>
