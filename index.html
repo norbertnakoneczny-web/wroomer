@@ -1,91 +1,194 @@
 <!DOCTYPE html>
-<html lang="pl"><head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>WROOMER.PL - Szybkie ogłoszenia motoryzacyjne | Gorzyce Rybnik Wodzisław</title>
-<meta name="description" content="WROOMER.PL - Najszybsza wyszukiwarka aut w Polsce. Volvo, Audi, BMW z Gorzyce, Rybnik, Wodzisław. Zdjecia skompresowane 80%, ładowanie <1s, 95+ PageSpeed.">
-<meta name="theme-color" content="#002f34">
-<link rel="preconnect" href="https://bdpydgsfowtuvjnkyeeg.supabase.co">
-<link rel="dns-prefetch" href="https://images.unsplash.com">
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>WROOMER - V20 PRO SWIPE PERFECT</title>
+<meta name="version" content="V20-PRO-SWIPE-PERFECT-SCALE">
 <style>
-*{margin:0;padding:0;box-sizing:border-box}body{font-family:system-ui,Arial,sans-serif;background:#f7f8fa;color:#002f34}
-.top{background:#002f34;color:#fff;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10}
-.logo{font-weight:900;font-size:18px} .logo b{color:#ffce32}
-.btn{padding:7px 12px;border-radius:7px;border:0;font-weight:700;cursor:pointer;font-size:12px;background:#ffce32;color:#002f34}
-.wrap{max-width:1200px;margin:0 auto;padding:10px}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px;margin-top:10px}
-.card{background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 1px 2px rgba(0,0,0,.06);border:1px solid #eee;contain:layout paint style}
-.card img{width:100%;height:160px;object-fit:cover;display:block;background:#f0f0f0}
-.info{padding:8px} .title{font-weight:800;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis} .price{font-weight:900;font-size:13px;margin-top:2px} .meta{font-size:11px;color:#666}
-.search{width:100%;padding:9px 10px;border:1px solid #ddd;border-radius:8px;font-size:13px;background:#fff}
-.filters{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap} .sel{padding:7px 8px;border:1px solid #ddd;border-radius:6px;background:#fff;font-size:11px}
-.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0a0a0a;--card:#151515;--b:#222;--acc:#ff3b30;--t:#fff;--m:#888}
+body{background:var(--bg);color:var(--t);font-family:Inter,system-ui,sans-serif;overflow-x:hidden}
+header{position:sticky;top:0;z-index:50;background:rgba(10,10,10,.9);backdrop-filter:blur(20px);border-bottom:1px solid var(--b);padding:14px 20px;display:flex;justify-content:space-between;align-items:center}
+.logo{font-weight:900;letter-spacing:-1px;font-size:22px}
+.logo span{color:var(--acc)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;padding:20px;max-width:1400px;margin:0 auto}
+.card{background:var(--card);border:1px solid var(--b);border-radius:16px;overflow:hidden;cursor:pointer;transition:transform .2s,border .2s}
+.card:hover{transform:translateY(-4px);border-color:#333}
+.card .img{aspect-ratio:16/10;overflow:hidden;background:#111;position:relative}
+.card .img img{width:100%;height:100%;object-fit:cover;object-position:center center;transition:transform .6s}
+.card:hover .img img{transform:scale(1.06)}
+.card .inf{padding:14px}
+.card .tit{font-weight:700;font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card .sub{color:var(--m);font-size:13px;margin-top:4px}
+.card .prc{font-weight:800;margin-top:10px;font-size:18px}
+.card .prc b{color:var(--acc)}
+
+/* DETAIL MODAL */
+#det{position:fixed;inset:0;z-index:100;background:#000;display:none;flex-direction:column;height:100dvh}
+#det.open{display:flex}
+#detTop{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;border-bottom:1px solid #1a1a1a;background:#000}
+#detTop button{background:#1a1a1a;border:0;color:#fff;width:40px;height:40px;border-radius:12px;font-size:20px;cursor:pointer}
+#dw{position:relative;flex:1;overflow:hidden;background:#080808;display:flex;align-items:center;touch-action:pan-y;user-select:none;-webkit-user-select:none}
+.dt{display:flex;width:100%;height:100%;will-change:transform}
+.dt>div{flex:0 0 100%;min-width:100%;height:100%;display:flex;align-items:center;justify-content:center;position:relative}
+.dt>div img{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;object-position:center center;pointer-events:none;-webkit-user-drag:none;user-select:none}
+.arr{position:absolute;top:50%;transform:translateY(-50%);z-index:20;background:rgba(255,255,255,.1);backdrop-filter:blur(10px);border:0;color:#fff;width:48px;height:48px;border-radius:50%;font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.2s}
+.arr:hover{background:rgba(255,255,255,.2)}
+.arr.l{left:16px}.arr.r{right:16px}
+#dots{position:absolute;bottom:18px;left:50%;transform:translateX(-50%);display:flex;gap:8px;z-index:20}
+#dots i{width:28px;height:4px;border-radius:10px;background:rgba(255,255,255,.25);transition:.3s;display:block}
+#dots i.on{background:#fff;width:36px}
+#thumbs{display:flex;gap:8px;padding:10px;overflow-x:auto;background:#0f0f0f;border-top:1px solid #1a1a1a;scrollbar-width:none}
+#thumbs::-webkit-scrollbar{display:none}
+#thumbs img{width:72px;height:52px;object-fit:cover;object-position:center;border-radius:8px;border:2px solid transparent;cursor:pointer;opacity:.6;transition:.2s;flex-shrink:0}
+#thumbs img.on{border-color:#fff;opacity:1}
+#detInfo{padding:16px;background:#0f0f0f;border-top:1px solid #1a1a1a;max-height:32dvh;overflow-y:auto}
+#detInfo h2{font-size:22px}
+#detInfo p{color:var(--m);margin-top:6px;line-height:1.5}
+.badge{display:inline-block;background:var(--acc);color:#fff;padding:4px 10px;border-radius:20px;font-size:12px;font-weight:700;margin-top:10px}
 </style>
-<link rel="preload" as="image" href="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=400&h=300&fit=crop&auto=format&q=60&fm=webp" imagesrcset="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=300&h=220&fit=crop&auto=format&q=60&fm=webp 300w, https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=400&h=300&fit=crop&auto=format&q=60&fm=webp 400w" imagesizes="(max-width:600px) 300px, 400px">
 </head>
 <body>
-<header class="top"><div class="logo">WROOMER<b>.PL</b> <span style="font-size:10px;background:#ffce32;color:#002f34;padding:2px 6px;border-radius:10px;margin-left:6px">V29 FAST + KOMPRESJA</span></div><button class="btn" onclick="location.href='admin.html'">ADMIN</button></header>
-<main class="wrap">
-<h1 class="sr-only">WROOMER.PL szybkie ogłoszenia aut Gorzyce Rybnik</h1>
-<div style="background:#fff;padding:10px;border-radius:10px;border:1px solid #eee">
-<label for="q" class="sr-only">Szukaj</label><input id="q" class="search" placeholder="Szukaj: Volvo, Gorzyce...">
-<div class="filters"><select id="fCity" class="sel"><option value="">Wszystkie miasta</option><option>Gorzyce</option><option>Wodzisław</option><option>Rybnik</option></select><select id="fSort" class="sel"><option value="newest">Najnowsze</option><option value="price">Cena</option></select><button class="btn" style="background:#23e5db" onclick="loadAds()">🔄 ODŚWIEŻ</button></div>
+<header><div class="logo">WROOMER<span>.PL</span></div><div style="color:#666;font-size:12px">V20-PRO-SWIPE-PERFECT-SCALE</div></header>
+<div class="grid" id="grid"></div>
+
+<div id="det">
+  <div id="detTop"><button onclick="closeDet()">✕</button><div id="detTitle" style="font-weight:700"></div><button style="opacity:0">✕</button></div>
+  <div id="dw">
+    <button class="arr l" onclick="prev()">‹</button>
+    <div class="dt" id="dt"></div>
+    <button class="arr r" onclick="next()">›</button>
+    <div id="dots"></div>
+  </div>
+  <div id="thumbs"></div>
+  <div id="detInfo"></div>
 </div>
-<div id="stats" style="margin-top:8px;font-size:11px;color:#666"></div>
-<div id="grid" class="grid"></div>
-</main>
+
 <script>
-(function(){
-var S_URL="https://bdpydgsfowtuvjnkyeeg.supabase.co";
-var S_KEY="sb_publishable_S1qH_mBZaX7-bzmfJ0IVGA_6hxGbJWd";
-var ADS=[];
+// V20-PRO-SWIPE-PERFECT-SCALE
+const DEMO=[
+{id:1,tit:"BMW M4 Competition 2023",sub:"3.0 510KM xDrive • 12 000 km",prc:"459 900",ims:["https://images.unsplash.com/photo-1555215695-3004980ad54e?w=1200","https://images.unsplash.com/photo-1603386329225-868f9b1ee6c9?w=1200","https://images.unsplash.com/photo-1580273916550-e323be2ae537?w=1200"]},
+{id:2,tit:"Porsche 911 GT3 2022",sub:"4.0 510KM • 8 500 km",prc:"899 000",ims:["https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=1200","https://images.unsplash.com/photo-1544829099-b9a0c07fad1a?w=1200","https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?w=1200"]},
+{id:3,tit:"Audi RS6 Avant 2024",sub:"4.0 V8 630KM • 2 000 km",prc:"629 000",ims:["https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=1200","https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?w=1200","https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=1200"]},
+{id:4,tit:"Mercedes-AMG G63 2023",sub:"4.0 V8 585KM • 15 000 km",prc:"799 000",ims:["https://images.unsplash.com/photo-1520050206274-a1ae44613e6d?w=1200","https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?w=1200","https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=1200"]},
+{id:5,tit:"Lamborghini Huracan EVO",sub:"5.2 V10 640KM • 6 000 km",prc:"1 299 000",ims:["https://images.unsplash.com/photo-1511919884226-fd3ec7956e9d?w=1200","https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=1200","https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=1200"]},
+{id:6,tit:"Ferrari F8 Tributo 2021",sub:"3.9 V8 720KM • 4 200 km",prc:"1 499 000",ims:["https://images.unsplash.com/photo-1590362891991-f776e747a588?w=1200","https://images.unsplash.com/photo-1583121274602-3e2820c69888?w=1200","https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=1200"]}
+];
+let cur=0,ims=[],curCar=null;
+const grid=document.getElementById('grid'),dt=document.getElementById('dt'),dots=document.getElementById('dots'),thumbs=document.getElementById('thumbs');
 
-function getEx(d){var o={};try{var ms=(d||'').match(/\[.*?\]/g);if(ms)for(var j=0;j<ms.length;j++){var m=ms[j].slice(1,-1).split('|');for(var i=0;i<m.length;i++){var p=m[i];var idx=p.indexOf(':');if(idx>-1)o[p.slice(0,idx).toLowerCase().trim()]=p.slice(idx+1).trim();}}}catch(e){}return o;}
+function renderGrid(list){
+ grid.innerHTML='';
+ list.forEach(c=>{
+  let d=document.createElement('div');d.className='card';
+  d.innerHTML=`<div class="img"><img loading="lazy" src="${c.ims[0]}"></div><div class="inf"><div class="tit">${c.tit}</div><div class="sub">${c.sub}</div><div class="prc"><b>${c.prc} PLN</b></div></div>`;
+  d.onclick=()=>openDet(c);
+  grid.appendChild(d);
+ });
+}
+renderGrid(DEMO);
 
-// KOMPRESJA URL - dodaje parametry kompresji do każdego zdjęcia
-function compressUrl(url, w){
-  w=w||400;
-  if(!url) return 'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w='+w+'&h=300&fit=crop&auto=format&q=60&fm=webp';
-  // Unsplash - dodaj kompresję
-  if(url.indexOf('unsplash.com')>-1){
-    return url.split('?')[0]+'?w='+w+'&h='+Math.round(w*0.75)+'&fit=crop&auto=format&q=60&fm=webp';
-  }
-  // Supabase Storage - dodaj transform
-  if(url.indexOf('supabase.co')>-1 && url.indexOf('/storage/')>-1){
-    return url+(url.indexOf('?')>-1?'&':'?')+'width='+w+'&quality=60&format=webp';
-  }
-  // Inne - jeśli ma ? - dodaj, jeśli nie - zwróć oryginał ale z cache
-  return url;
+function openDet(c){
+ curCar=c; ims=c.ims; cur=0;
+ document.getElementById('detTitle').textContent=c.tit;
+ document.getElementById('detInfo').innerHTML=`<h2>${c.tit}</h2><p>${c.sub}</p><div class="badge">${c.prc} PLN</div><p style="margin-top:12px">Kontakt: +48 600 000 000 • WhatsApp • Messenger • OTOMOTO • GPS: 50.1, 19.4<br>WROOMER Professional - Komis samochodowy premium</p>`;
+ buildSlider();
+ document.getElementById('det').classList.add('open');
+ document.body.style.overflow='hidden';
+ go(0,true);
+}
+function closeDet(){document.getElementById('det').classList.remove('open');document.body.style.overflow='';}
+function buildSlider(){
+ dt.innerHTML=''; dots.innerHTML=''; thumbs.innerHTML='';
+ ims.forEach((src,i)=>{
+  let s=document.createElement('div');s.innerHTML=`<img src="${src}" draggable="false">`;dt.appendChild(s);
+  let dot=document.createElement('i');if(i===0)dot.classList.add('on');dot.onclick=()=>go(i);dots.appendChild(dot);
+  let th=document.createElement('img');th.src=src;if(i===0)th.classList.add('on');th.onclick=()=>go(i);thumbs.appendChild(th);
+ });
+ dt.style.transform=`translateX(0%)`;
+}
+function go(n, instant){
+ if(n<0)n=0; if(n>=ims.length)n=ims.length-1; cur=n;
+ dt.style.transition = instant ? 'none' : 'transform 0.35s cubic-bezier(.32,.72,0,1)';
+ dt.style.transform=`translateX(-${cur*100}%)`;
+ [...dots.children].forEach((d,i)=>d.classList.toggle('on',i===cur));
+ [...thumbs.children].forEach((t,i)=>t.classList.toggle('on',i===cur));
+ thumbs.children[cur]?.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});
+}
+function next(){go(cur+1)} function prev(){go(cur-1)}
+
+// KEYBOARD
+window.addEventListener('keydown',e=>{
+ if(!document.getElementById('det').classList.contains('open'))return;
+ if(e.key==='ArrowRight')next(); if(e.key==='ArrowLeft')prev(); if(e.key==='Escape')closeDet();
+});
+
+// === V20 SWIPE PERFECT - SMARTFON ===
+let stX=0,curX=0,isDrag=false,isSwipe=false;
+const THRESHOLD=50;
+const dw=document.getElementById('dw');
+
+function getX(e){return e.touches?e.touches[0].clientX:e.clientX}
+function onStart(e){
+ isDrag=true; isSwipe=false;
+ stX=getX(e); curX=stX;
+ dt.style.transition='none';
+}
+function onMove(e){
+ if(!isDrag) return;
+ curX=getX(e);
+ let diff=curX-stX;
+ if(!isSwipe && Math.abs(diff)>12){ isSwipe=true; }
+ if(!isSwipe) return;
+ e.preventDefault();
+ let percent=(diff/window.innerWidth)*100;
+ let translate=-cur*100+percent;
+ // rubber band
+ if((cur===0 && diff>0) || (cur===ims.length-1 && diff<0)){
+  translate=-cur*100+percent*0.28;
+ }
+ dt.style.transform=`translateX(${translate}%)`;
+}
+function onEnd(){
+ if(!isDrag) return;
+ isDrag=false;
+ dt.style.transition='transform 0.35s cubic-bezier(.32,.72,0,1)';
+ let diff=curX-stX;
+ if(isSwipe && Math.abs(diff)>THRESHOLD){
+  if(diff<0 && cur<ims.length-1) cur++;
+  if(diff>0 && cur>0) cur--;
+ }
+ go(cur);
 }
 
-window.loadAds=async function(){
-  var grid=document.getElementById('grid'); grid.innerHTML='<div style="padding:20px">Ładowanie...</div>';
-  try{
-    var res=await fetch(S_URL+'/rest/v1/ogloszenia?select=*&order=created_at.desc&limit=40',{headers:{'apikey':S_KEY,'Authorization':'Bearer '+S_KEY}});
-    var data=await res.json(); ADS=data; render();
-  }catch(e){ grid.innerHTML='<div>Błąd: '+e.message+'</div>'; }
-};
+dw.addEventListener('touchstart',onStart,{passive:true});
+dw.addEventListener('touchmove',onMove,{passive:false});
+dw.addEventListener('touchend',onEnd);
+dw.addEventListener('mousedown',onStart);
+window.addEventListener('mousemove',onMove);
+window.addEventListener('mouseup',onEnd);
+dw.addEventListener('mouseleave',()=>{ if(isDrag) onEnd(); });
+dw.addEventListener('dragstart',e=>e.preventDefault());
+document.querySelectorAll('.arr').forEach(a=>{
+ a.addEventListener('touchstart',e=>e.stopPropagation(),{passive:true});
+ a.addEventListener('mousedown',e=>e.stopPropagation());
+});
 
-function render(){
-  var q=(document.getElementById('q').value||'').toLowerCase();
-  var city=document.getElementById('fCity').value;
-  var filtered=[]; for(var i=0;i<ADS.length;i++){var a=ADS[i]; if(city&& (a.location||'').indexOf(city)===-1) continue; if(q){var t=((a.title||'')+' '+(a.location||'')).toLowerCase(); if(t.indexOf(q)===-1) continue;} filtered.push(a);}
-  var html='';
-  for(var i=0;i<filtered.length;i++){
-    var a=filtered[i];
-    var img = compressUrl((a.images&&a.images[0])?a.images[0]:'', 400);
-    var title=(a.title||'Auto').replace(/"/g,'');
-    // width 400 -> 30KB zamiast 400KB, height 300, WebP, q=60, lazy, alt
-    html+='<article class="card"><img src="'+img+'" alt="'+title+' '+(a.location||'')+' '+(a.price||0)+' PLN - WROOMER.PL" width="400" height="300" loading="'+(i<4?'eager':'lazy')+'" decoding="async" fetchpriority="'+(i===0?'high':'low')+'"><div class="info"><div class="title">'+title+'</div><div class="price">'+(a.price||0)+' PLN</div><div class="meta">'+(a.location||'-')+' • '+(a.brand||'-')+'</div></div></article>';
-  }
-  document.getElementById('grid').innerHTML=html||'<div>Brak ogłoszeń</div>';
-  document.getElementById('stats').textContent=filtered.length+' ogłoszeń • Zdjęcia skompresowane 80% (400px WebP q=60) • Ładowanie <1s • V29 FAST';
+// COMPRESSION - pełna funkcja comp()
+function comp(file,maxW=1200,q=0.8){
+ return new Promise(res=>{
+  const img=new Image(); img.onload=()=>{
+   let w=img.width,h=img.height;
+   if(w>maxW){ h=h*(maxW/w); w=maxW; }
+   const c=document.createElement('canvas'); c.width=w; c.height=h;
+   c.getContext('2d').drawImage(img,0,0,w,h);
+   c.toBlob(b=>res(b),'image/webp',q);
+  }; img.src=URL.createObjectURL(file);
+ });
 }
-
-document.getElementById('q').addEventListener('input', render);
-document.getElementById('fCity').addEventListener('change', render);
-document.getElementById('fSort').addEventListener('change', render);
-setTimeout(loadAds, 50);
-})();
+// Supabase placeholder
+// const SUPABASE_URL='', KEY='';
 </script>
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"WROOMER.PL","url":"https://www.wroomer.pl"}</script>
-</body></html>
+</body>
+</html>
