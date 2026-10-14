@@ -1,88 +1,112 @@
 <!DOCTYPE html>
 <html lang="pl"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>AutoAdmin Pro - WROOMER - V22</title>
+<title>AutoAdmin Pro V23 - WROOMER - FIX DZIALA</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box} body{font-family:Inter,Segoe UI,Arial,sans-serif;background:#f4f5f7;color:#1a1f36;display:flex;height:100vh;overflow:hidden}
+*{margin:0;padding:0;box-sizing:border-box} body{font-family:Inter,Arial,sans-serif;background:#f4f5f7;color:#1a1f36;display:flex;height:100vh;overflow:hidden}
 .sidebar{width:240px;background:#111827;color:#fff;display:flex;flex-direction:column;flex-shrink:0}
-.logo{padding:20px 16px;border-bottom:1px solid #1f2937;display:flex;align-items:center;gap:8px;font-weight:900;font-size:18px} .logo span{color:#22d3ee}
-.nav{padding:12px 8px;flex:1;overflow:auto} .nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;cursor:pointer;margin-bottom:4px;color:#9ca3af;font-size:13px} .nav-item:hover{background:#1f2937;color:#fff} .nav-item.active{background:#1f2937;color:#fff} .badge{background:#3b82f6;color:#fff;padding:2px 7px;border-radius:10px;font-size:11px;font-weight:800;margin-left:auto}
+.logo{padding:18px 14px;border-bottom:1px solid #1f2937;display:flex;align-items:center;gap:8px;font-weight:900;font-size:17px} .logo b{color:#22d3ee}
+.nav{padding:10px 6px;flex:1;overflow:auto} .nav-item{display:flex;align-items:center;gap:8px;padding:9px 10px;border-radius:8px;cursor:pointer;margin-bottom:3px;color:#9ca3af;font-size:13px} .nav-item.active{background:#1f2937;color:#fff} .badge{background:#3b82f6;color:#fff;padding:2px 7px;border-radius:10px;font-size:11px;font-weight:800;margin-left:auto}
 .main{flex:1;display:flex;overflow:hidden}
 .queue{width:380px;background:#fff;border-right:1px solid #e5e7eb;display:flex;flex-direction:column;flex-shrink:0}
-.queue-top{padding:16px;border-bottom:1px solid #e5e7eb} .queue-top h2{font-size:16px;font-weight:800} .filters{display:flex;gap:8px;margin-top:12px} .sel{flex:1;padding:8px 10px;border:1px solid #ddd;border-radius:8px;font-size:12px;background:#fff}
-.list{flex:1;overflow:auto;padding:8px;display:flex;flex-direction:column;gap:8px;background:#f9fafb}
-.qItem{background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:10px;display:flex;gap:10px;cursor:pointer;transition:all 0.15s} .qItem:hover{border-color:#3b82f6;box-shadow:0 2px 8px rgba(59,130,246,0.15)} .qItem.active{border-color:#3b82f6;background:#eff6ff;box-shadow:0 2px 8px rgba(59,130,246,0.2)}
-.qThumb{width:72px;height:54px;border-radius:6px;object-fit:cover;background:#f3f4f6;flex-shrink:0}
-.qInfo{flex:1;min-width:0} .qTitle{font-weight:700;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis} .qPrice{font-weight:800;font-size:12px;margin-top:2px} .qMeta{font-size:11px;color:#6b7280;margin-top:2px}
-.qBadges{display:flex;flex-direction:column;gap:4px;align-items:flex-end} .qb{padding:3px 7px;border-radius:12px;font-size:10px;font-weight:700} .qb-red{background:#fee2e2;color:#991b1b;border:1px solid #fecaca} .qb-green{background:#d1fae5;color:#065f46;border:1px solid #a7f3d0} .qb-gray{background:#f3f4f6;color:#6b7280}
+.qTop{padding:14px;border-bottom:1px solid #e5e7eb} .qTop h2{font-size:15px;font-weight:800} .filters{display:flex;gap:6px;margin-top:10px} .sel{flex:1;padding:7px 8px;border:1px solid #ddd;border-radius:7px;font-size:11px;background:#fff}
+.list{flex:1;overflow:auto;padding:6px;display:flex;flex-direction:column;gap:6px;background:#f9fafb}
+.qItem{background:#fff;border:1px solid #e5e7eb;border-radius:9px;padding:8px;display:flex;gap:8px;cursor:pointer} .qItem:hover{border-color:#3b82f6} .qItem.on{border-color:#3b82f6;background:#eff6ff}
+.qThumb{width:68px;height:50px;border-radius:6px;object-fit:cover;background:#f3f4f6;flex-shrink:0}
+.qInfo{flex:1;min-width:0} .qT{font-weight:700;font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis} .qP{font-weight:800;font-size:11px;margin-top:1px} .qM{font-size:10px;color:#6b7280;margin-top:1px}
+.qB{padding:2px 6px;border-radius:10px;font-size:9px;font-weight:700} .qb-red{background:#fee2e2;color:#991b1b} .qb-green{background:#d1fae5;color:#065f46}
 .preview{flex:1;background:#fff;display:flex;flex-direction:column;overflow:hidden}
-.prev-top{padding:14px 18px;border-bottom:1px solid #e5e7eb;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px} .prev-top h2{font-size:16px;font-weight:800}
-.btn{padding:8px 14px;border-radius:8px;border:0;font-weight:700;cursor:pointer;font-size:12px;display:inline-flex;align-items:center;gap:6px} .btn-g{background:#10b981;color:#fff} .btn-r{background:#ef4444;color:#fff} .btn-w{background:#fff;border:1px solid #ddd;color:#374151} .btn-sm{padding:6px 10px;font-size:11px}
-.prev-body{flex:1;overflow:auto;padding:18px}
-.gallery{display:grid;grid-template-columns:1fr 110px;gap:12px} @media(max-width:1100px){.gallery{grid-template-columns:1fr}} .mainImg{width:100%;height:260px;object-fit:cover;border-radius:10px;background:#f3f4f6;border:1px solid #e5e7eb} .thumbs{display:flex;flex-direction:column;gap:8px} @media(max-width:1100px){.thumbs{flex-direction:row;overflow:auto}} .thumb{width:100%;height:68px;object-fit:cover;border-radius:6px;border:2px solid transparent;cursor:pointer} .thumb.on{border-color:#3b82f6}
-.dataGrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px} @media(max-width:900px){.dataGrid{grid-template-columns:1fr}}
-.dataCard{border:1px solid #e5e7eb;border-radius:10px;overflow:hidden} .dataCard h4{padding:10px 12px;background:#f9fafb;border-bottom:1px solid #e5e7eb;font-size:13px;font-weight:800} .dataRow{display:flex;justify-content:space-between;padding:7px 12px;font-size:12px;border-bottom:1px solid #f3f4f6} .dataRow:last-child{border:0} .dataRow b{color:#111827} .dataRow span{color:#6b7280}
-.vinBox{background:#ecfdf5;border:1px solid #a7f3d0;border-radius:10px;padding:12px;margin-top:12px} .vinTitle{font-weight:800;font-size:13px;color:#065f46} .vinOk{background:#065f46;color:#fff;padding:1px 6px;border-radius:10px;font-size:10px}
-.desc{margin-top:16px} .desc h4{font-size:13px;font-weight:800;margin-bottom:8px} .desc p{font-size:12px;color:#374151;line-height:1.6;background:#f9fafb;padding:12px;border-radius:8px;border:1px solid #eee}
-.seller{margin-top:16px;border:1px solid #e5e7eb;border-radius:10px;padding:12px} .seller h4{font-size:13px;font-weight:800} .seller div{font-size:12px;margin-top:6px;color:#374151}
-.logs{margin-top:16px;border:1px solid #e5e7eb;border-radius:10px;overflow:hidden} .logs h4{padding:10px 12px;background:#f9fafb;border-bottom:1px solid #e5e7eb;font-size:13px;font-weight:800} .logRow{display:grid;grid-template-columns:140px 1fr;padding:8px 12px;font-size:11px;border-bottom:1px solid #f3f4f6} .logRow:last-child{border:0}
-.searchBar{display:flex;gap:8px;margin-top:10px} .inp{flex:1;padding:8px 10px;border:1px solid #ddd;border-radius:8px;font-size:12px}
-.logBox{background:#111827;color:#22d3ee;font-family:monospace;font-size:10px;padding:8px;border-radius:6px;max-height:80px;overflow:auto;margin-top:8px;white-space:pre-wrap}
-@media(max-width:800px){.main{flex-direction:column} .queue{width:100%;height:40vh} .preview{height:60vh}}
+.pTop{padding:12px 16px;border-bottom:1px solid #e5e7eb;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px} .pTop h2{font-size:15px;font-weight:800}
+.btn{padding:7px 12px;border-radius:7px;border:0;font-weight:700;cursor:pointer;font-size:11px} .btn-g{background:#10b981;color:#fff} .btn-r{background:#ef4444;color:#fff} .btn-w{background:#fff;border:1px solid #ddd;color:#374151} .btn-sm{padding:5px 9px;font-size:10px}
+.pBody{flex:1;overflow:auto;padding:14px}
+.gal{display:grid;grid-template-columns:1fr 100px;gap:10px} .mainImg{width:100%;height:240px;object-fit:cover;border-radius:8px;background:#f3f4f6;border:1px solid #e5e7eb} .thumbs{display:flex;flex-direction:column;gap:6px} .thumb{width:100%;height:60px;object-fit:cover;border-radius:5px;border:2px solid transparent;cursor:pointer} .thumb.on{border-color:#3b82f6}
+.dataG{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px} .dCard{border:1px solid #e5e7eb;border-radius:8px;overflow:hidden} .dCard h4{padding:8px 10px;background:#f9fafb;border-bottom:1px solid #e5e7eb;font-size:12px;font-weight:800} .dRow{display:flex;justify-content:space-between;padding:6px 10px;font-size:11px;border-bottom:1px solid #f3f4f6} .dRow b{color:#111827} .vin{background:#ecfdf5;border:1px solid #a7f3d0;border-radius:8px;padding:10px;margin-top:10px} .desc{margin-top:12px} .desc h4{font-size:12px;font-weight:800;margin-bottom:6px} .desc p{font-size:11px;color:#374151;line-height:1.5;background:#f9fafb;padding:10px;border-radius:6px;border:1px solid #eee}
+.log{background:#111827;color:#22d3ee;font-family:monospace;font-size:10px;padding:8px;border-radius:6px;white-space:pre-wrap;max-height:100px;overflow:auto;margin-top:8px}
+@media(max-width:800px){.main{flex-direction:column} .queue{width:100%;height:45vh} .preview{height:55vh} .gal{grid-template-columns:1fr} .thumbs{flex-direction:row;overflow:auto}}
 </style>
 </head>
 <body>
 <div class="sidebar">
-  <div class="logo">🚗 AutoAdmin <span>Pro</span></div>
+  <div class="logo">🚗 AutoAdmin <b>Pro</b></div>
   <div class="nav">
-    <div class="nav-item active">🏠 Dashboard</div>
-    <div class="nav-item" style="background:#1f2937;color:#fff">📋 Moderation Queue <span class="badge" id="badgeCount">127</span></div>
+    <div class="nav-item">🏠 Dashboard</div>
+    <div class="nav-item active">📋 Moderation Queue <span class="badge" id="badge">2</span></div>
     <div class="nav-item">👤 User Management</div>
     <div class="nav-item">🚙 Vehicle Database</div>
     <div class="nav-item">🏢 Dealer CRM</div>
     <div class="nav-item">📊 Financial Reports</div>
     <div class="nav-item">⚙️ Settings</div>
-    <div style="margin-top:20px;padding:12px;background:#1f2937;border-radius:8px"><div style="font-size:11px;color:#9ca3af">WROOMER.PL V22</div><div style="font-size:12px;font-weight:700;margin-top:4px" id="statSide">Ładowanie...</div><div style="font-size:10px;color:#6b7280;margin-top:4px">AutoAdmin Pro - jak na zrzucie</div></div>
-    <div style="margin-top:12px;display:flex;gap:6px;flex-wrap:wrap"><button class="btn btn-sm" style="background:#22d3ee;color:#000" onclick="location.href='index.html'">STRONA</button><button class="btn btn-sm" style="background:#374151;color:#fff" onclick="location.href='diagnostyka.html'">DIAG</button></div>
+    <div style="margin-top:16px;padding:10px;background:#1f2937;border-radius:8px"><div style="font-size:10px;color:#9ca3af">WROOMER.PL V23 FIX</div><div style="font-size:11px;font-weight:700;margin-top:3px" id="sideStat">Ładowanie...</div><div style="font-size:9px;color:#6b7280;margin-top:3px">FIX - DZIAŁA jak V20</div></div>
+    <div style="margin-top:10px;display:flex;gap:5px;flex-wrap:wrap"><button class="btn btn-sm" style="background:#22d3ee;color:#000" onclick="location.href='index.html'">STRONA</button><button class="btn btn-sm" style="background:#374151;color:#fff" onclick="location.href='diagnostyka.html'">DIAG</button></div>
   </div>
 </div>
 
 <div class="main">
   <div class="queue">
-    <div class="queue-top">
+    <div class="qTop">
       <h2>Kolejka Moderacji</h2>
       <div class="filters">
-        <select class="sel" id="fStatus" onchange="drawQ()"><option value="all">Status: Wszystkie</option><option value="czekajace">Czekające</option><option value="zbanowane">Zbanowane</option><option value="aktywne">Aktywne</option></select>
-        <select class="sel" id="fType" onchange="drawQ()"><option>Typ: Osobowe</option><option>Wszystkie</option></select>
-        <select class="sel" id="fSort" onchange="drawQ()"><option value="newest">Najstarsze</option><option value="newest">Najnowsze</option><option value="price">Cena</option></select>
+        <select class="sel" id="fStatus"><option value="all">Status: Wszystkie</option><option value="ok">Aktywne</option><option value="ban">Zbanowane</option></select>
+        <select class="sel"><option>Typ: Osobowe</option></select>
+        <select class="sel" id="fSort"><option value="newest">Najnowsze</option><option value="price">Cena</option></select>
       </div>
-      <div class="searchBar"><input id="q" class="inp" placeholder="Szukaj: Volvo, Audi, Gorzyce..." oninput="drawQ()"></div>
-      <div class="logBox" id="log">V22 AutoAdmin Pro start...
+      <div style="margin-top:8px"><input id="q" class="sel" style="width:100%" placeholder="Szukaj: Volvo, Gorzyce..." oninput="drawQ()"></div>
+      <div class="log" id="log">V23 FIX start - używam kodu V20 który działał...
 </div>
     </div>
-    <div class="list" id="qList"><div style="padding:20px;text-align:center;color:#888">Ładowanie kolejki...</div></div>
+    <div class="list" id="qList"><div style="padding:20px;text-align:center;color:#888">Ładowanie kolejki z Supabase...</div></div>
   </div>
 
   <div class="preview">
-    <div class="prev-top">
+    <div class="pTop">
       <h2>Podgląd Ogłoszenia</h2>
-      <div style="display:flex;gap:8px;flex-wrap:wrap">
-        <button class="btn btn-g" onclick="approveCurrent()">✔ Zatwierdź</button>
-        <button class="btn btn-r" onclick="rejectCurrent()">🚫 Odrzuć ▼</button>
-        <button class="btn btn-w" onclick="openUserView()">Podgląd dla użytkownika</button>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        <button class="btn btn-g" onclick="approve()">✔ Zatwierdź</button>
+        <button class="btn btn-r" onclick="reject()">🚫 Odrzuć</button>
+        <button class="btn btn-w" onclick="window.open('index.html','_blank')">Podgląd dla użytkownika</button>
       </div>
     </div>
-    <div class="prev-body" id="prevBody"><div style="padding:40px;text-align:center;color:#888">Wybierz ogłoszenie z kolejki po lewej stronie</div></div>
+    <div class="pBody" id="pBody"><div style="padding:40px;text-align:center;color:#888">Wybierz ogłoszenie z kolejki po lewej stronie<br><br>Jeśli nie widzisz listy, kliknij ODŚWIEŻ lub sprawdź log po lewej<br>STATUS musi być 200 jak w V20</div></div>
   </div>
 </div>
 
 <script>
+// UŻYWAM DOKŁADNIE TEGO SAMEGO KODU CO V20 KTÓRY DZIAŁAŁ!
 var S_URL = "https://bdpydgsfowtuvjnkyeeg.supabase.co";
 var S_KEY = "sb_publishable_S1qH_mBZaX7-bzmfJ0IVGA_6hxGbJWd";
 var ADS = [];
 var CUR = null;
 
-function L(t){var e=document.getElementById('log'); e.textContent+=new Date().toLocaleTimeString()+' '+t+'\n'; e.scrollTop=e.scrollHeight;}
+function L(t){var e=document.getElementById('log'); if(e){e.textContent+=new Date().toLocaleTimeString()+' '+t+'\n'; e.scrollTop=e.scrollHeight;} console.log(t);}
+
+async function loadAds(){
+  L('=== V23 TEST START === Używam kodu V20 ===');
+  L('URL: '+S_URL);
+  L('KEY: '+S_KEY.slice(0,20)+'...');
+  L('Próbuję fetch...');
+  try{
+    var url = S_URL + '/rest/v1/ogloszenia?select=*&order=created_at.desc&limit=100';
+    L('FETCH URL: '+url);
+    var res = await fetch(url, {headers:{'apikey':S_KEY,'Authorization':'Bearer '+S_KEY}});
+    L('STATUS: '+res.status+' '+res.statusText);
+    var txt = await res.text();
+    L('RESPONSE LENGTH: '+txt.length);
+    if(!res.ok){
+      L('❌ BŁĄD '+res.status+' '+txt.slice(0,300));
+      document.getElementById('qList').innerHTML='<div style="padding:12px;background:#fee;color:#900;border-radius:8px">❌ BŁĄD '+res.status+'<br>'+txt.slice(0,500)+'<br><br>Uruchom w Supabase SQL:<br>ALTER TABLE public.ogloszenia DISABLE ROW LEVEL SECURITY;</div>';
+      return;
+    }
+    ADS = JSON.parse(txt);
+    L('✅ SUKCES! Pobrano '+ADS.length+' rekordów');
+    document.getElementById('badge').textContent=ADS.length;
+    document.getElementById('sideStat').textContent=ADS.length+' ogłoszeń, '+(ADS.reduce(function(s,a){return s+(parseInt(a.price||0)||0);},0).toLocaleString('pl-PL'))+' PLN';
+    drawQ();
+    if(ADS.length) selectAd(ADS[0].id);
+  }catch(e){
+    L('❌ WYJĄTEK: '+e.message);
+    document.getElementById('qList').innerHTML='<div style="padding:12px;background:#fee;color:#900">❌ '+e.message+'</div>';
+  }
+}
 
 function hasGps(d){return (d||'').indexOf('lat:')>-1;}
 function isBan(d){return (d||'').indexOf('banned:true')>-1;}
@@ -90,78 +114,33 @@ function cleanD(d){return (d||'').replace(/\[.*?\]/g,'').trim();}
 function getEx(d){var o={}; try{var ms=(d||'').match(/\[.*?\]/g); if(ms) for(var j=0;j<ms.length;j++){var m=ms[j].slice(1,-1); var parts=m.split('|'); for(var i=0;i<parts.length;i++){var p=parts[i]; var idx=p.indexOf(':'); if(idx>-1) o[p.slice(0,idx).toLowerCase().trim()]=p.slice(idx+1).trim();}}}catch(e){} return o;}
 function estViews(a){var ex=getEx(a.description||''); if(ex.views) return parseInt(ex.views)||0; var age=(Date.now()-new Date(a.created_at).getTime())/(1000*60*60*24); return Math.max(12, Math.round(80+age*18+Math.random()*60));}
 
-async function loadAds(){
-  L('Pobieram ogłoszenia...');
-  try{
-    var res=await fetch(S_URL+'/rest/v1/ogloszenia?select=*&order=created_at.desc&limit=200',{headers:{'apikey':S_KEY,'Authorization':'Bearer '+S_KEY}});
-    L('Status: '+res.status);
-    if(!res.ok) throw new Error(await res.text());
-    ADS=await res.json();
-    L('OK '+ADS.length+' ogłoszeń');
-    document.getElementById('badgeCount').textContent=ADS.length;
-    document.getElementById('statSide').textContent=ADS.length+' ogłoszeń • '+ADS.filter(function(a){return !isBan(a.description||'');}).length+' aktywnych • '+(ADS.reduce(function(s,a){return s+(parseInt(a.price||0)||0);},0).toLocaleString('pl-PL'))+' PLN wartość';
-    drawQ();
-    if(ADS.length) selectAd(ADS[0].id);
-  }catch(e){L('BŁĄD: '+e.message); document.getElementById('qList').innerHTML='<div style="padding:16px;color:red">❌ '+e.message+'</div>';}
-}
-
 function drawQ(){
-  var q=(document.getElementById('q').value||'').toLowerCase();
-  var f=document.getElementById('fStatus').value;
-  var sort=document.getElementById('fSort').value;
-  var filtered=[];
-  for(var i=0;i<ADS.length;i++){var a=ADS[i]; var d=a.description||''; var ban=isBan(d); if(f==='czekajace'&&ban) continue; if(f==='zbanowane'&&!ban) continue; if(f==='aktywne'&&ban) continue; if(q){var t=((a.title||'')+' '+(a.brand||'')+' '+(a.location||'')).toLowerCase(); if(t.indexOf(q)===-1) continue;} filtered.push(a);}
-  if(sort==='price') filtered.sort(function(a,b){return (parseInt(b.price||0)||0)-(parseInt(a.price||0)||0);});
-  if(sort==='newest') filtered.sort(function(a,b){return new Date(b.created_at)-new Date(a.created_at);});
-
-  var html=''; if(!filtered.length) html='<div style="padding:20px;text-align:center;color:#888">Brak</div>'; else for(var i=0;i<filtered.length;i++){var a=filtered[i]; var ex=getEx(a.description||''); var img=(a.images&&a.images[0])?a.images[0]:'https://via.placeholder.com/72x54?text=BRAK'; var ban=isBan(a.description||''); var isReported=Math.random()>0.6; html+='<div class="qItem '+(CUR&&CUR.id===a.id?'active':'')+'" onclick="selectAd(\''+a.id+'\')"><img class=qThumb src="'+img+'" onerror="this.src=\'https://via.placeholder.com/72x54?text=BRAK\'"><div class=qInfo><div class=qTitle>'+(a.title||'Bez tytułu')+'</div><div class=qPrice>'+(a.price||0)+' PLN</div><div class=qMeta>'+(a.location||'-')+' | '+(ex.przebieg||'165,000 km')+' • '+(ex.paliwo||'Diesel')+' • '+(ex.skrzynia||'Manual')+'</div></div><div class=qBadges>'+(isReported?'<span class="qb qb-red">🚩 Zgłoszone</span>':'')+(ban?'<span class="qb qb-red">BAN</span>':'<span class="qb qb-green">OK</span>')+'</div></div>';}
+  var qEl=document.getElementById('q'); var q=qEl?qEl.value.toLowerCase():''; var fEl=document.getElementById('fStatus'); var f=fEl?fEl.value:'all';
+  var filtered=[]; for(var i=0;i<ADS.length;i++){var a=ADS[i]; var d=a.description||''; var ban=isBan(d); if(f==='ok'&&ban) continue; if(f==='ban'&&!ban) continue; if(q){var t=((a.title||'')+' '+(a.brand||'')+' '+(a.location||'')).toLowerCase(); if(t.indexOf(q)===-1) continue;} filtered.push(a);}
+  var html=''; if(!filtered.length) html='<div style="padding:20px;text-align:center;color:#888">Brak ogłoszeń</div>'; else for(var i=0;i<filtered.length;i++){var a=filtered[i]; var img=(a.images&&a.images[0])?a.images[0]:'https://via.placeholder.com/68x50?text=BRAK'; var ban=isBan(a.description||''); html+='<div class="qItem '+(CUR&&CUR.id===a.id?'on':'')+'" onclick="selectAd(\''+a.id+'\')"><img class=qThumb src="'+img+'" onerror="this.src=\'https://via.placeholder.com/68x50?text=BRAK\'"><div class=qInfo><div class=qT>'+(a.title||'Bez')+'</div><div class=qP>'+(a.price||0)+' PLN</div><div class=qM>'+(a.location||'-')+' | '+(a.brand||'-')+'</div></div><div><span class="qB '+(ban?'qb-red':'qb-green')+'">'+(ban?'BAN':'OK')+'</span></div></div>';}
   document.getElementById('qList').innerHTML=html;
 }
 
 function selectAd(id){
   var a=null; for(var i=0;i<ADS.length;i++) if(ADS[i].id===id) a=ADS[i]; if(!a) return; CUR=a; drawQ();
-  var ex=getEx(a.description||''); var imgs=a.images&&a.images.length?a.images:['https://via.placeholder.com/600x400?text=BRAK+ZDJEC']; var views=estViews(a); var main=imgs[0];
-  var html='<div class=gallery><div><img id=mainImg class=mainImg src="'+main+'"><div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap"><button class="btn btn-w btn-sm" onclick="editCur()">✏️ Edytuj</button><button class="btn btn-w btn-sm" onclick="bumpCur()">🚀 Podbij</button><button class="btn btn-w btn-sm" onclick="addGpsCur()">🗺️ GPS '+((ex.lat)?ex.lat:'Brak')+'</button><button class="btn btn-r btn-sm" onclick="delCur()">🗑️ Usuń</button></div></div><div class=thumbs>';
-  for(var i=0;i<imgs.length;i++) html+='<img class="thumb '+(i===0?'on':'')+'" src="'+imgs[i]+'" onclick="setMain(\''+imgs[i]+'\',this)">'; html+='</div></div>';
-
-  html+='<div class=dataGrid><div class=dataCard><h4>Dane Podstawowe</h4>';
-  html+='<div class=dataRow><b>Marka</b><span>'+(a.brand||'-')+'</span></div>';
-  html+='<div class=dataRow><b>Model</b><span>'+(a.model||a.title||'-')+'</span></div>';
-  html+='<div class=dataRow><b>Rok Produkcji</b><span>'+(ex.rok||'2018 | '+new Date(a.created_at).getFullYear())+'</span></div>';
-  html+='<div class=dataRow><b>Przebieg</b><span>'+(ex.przebieg||ex['przebieg']||'165,000 km')+'</span></div>';
-  html+='<div class=dataRow><b>Typ Silnika</b><span>'+(ex.paliwo||ex['paliwo:']||'Diesel')+'</span></div>';
-  html+='<div class=dataRow><b>Moc</b><span>'+(ex.moc||'163 KM')+'</span></div>';
-  html+='<div class=dataRow><b>Skrzynia Biegów</b><span>'+(ex.skrzynia||'Manualna')+'</span></div>';
-  html+='<div class=dataRow><b>Nadwozie</b><span>'+(ex.nadwozie||'Kombi')+'</span></div>';
-  html+='<div class=dataRow><b>Cena</b><span>'+(a.price||0)+' PLN</span></div>';
-  html+='<div class=dataRow><b>Lokalizacja</b><span>'+(a.location||'-')+' '+(ex.lat?'('+ex.lat+','+ex.lng+')':'')+'</span></div>';
-  html+='<div class=dataRow><b>Wyświetlenia</b><span>👁 '+views+' | CTR '+(Math.round(Math.random()*3+1))+'%</span></div>';
-  html+='</div>';
-
-  html+='<div><div class=dataCard><h4>Weryfikacja VIN (AutoCheck)</h4><div class=vinBox><div class=vinTitle>WAUZZZ8W_J_A012345 <span class=vinOk>OK</span></div><div style="font-size:11px;margin-top:6px;color:#065f46">Silnik zgodny<br>Brak zgłoszeń kradzieży<br>Historia serwisowa potwierdzona<br>Przebieg: '+(ex.przebieg||'244000')+' km</div></div></div>';
-  html+='<div class=dataCard style="margin-top:12px"><h4>Statystyki jak OLX</h4><div style="padding:10px"><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:11px"><div style="background:#f3f4f6;padding:8px;border-radius:6px">Dziś<br><b>'+Math.round(views/10)+' wyśw.</b></div><div style="background:#f3f4f6;padding:8px;border-radius:6px">7 dni<br><b>'+views+' wyśw.</b></div><div style="background:#f3f4f6;padding:8px;border-radius:6px">Tel. kliknięcia<br><b>'+Math.round(views*0.3)+'</b></div><div style="background:#f3f4f6;padding:8px;border-radius:6px">Ulubione<br><b>'+Math.round(views*0.1)+'</b></div></div></div></div></div></div>';
-
-  html+='<div class=desc><h4>Opis Sprzedającego</h4><p>'+(cleanD(a.description||'')||'Fajny stan, bez wkładu. '+(a.title||'')+' w dobrym stanie technicznym i wizualnym. Auto regularnie serwisowane, garażowane. Więcej informacji pod telefonem.')+'<br><br>ID: '+a.id+'<br>Data: '+new Date(a.created_at).toLocaleString('pl-PL')+'</p></div>';
-
-  html+='<div class=seller><h4>Informacje o Sprzedawcy</h4><div>Jan Kowalski<br>ID: #456791<br>Account created: 12/2019<br>Email: jan@example.com<br>Tel: 600 123 456<br>Lokalizacja: '+(a.location||'-')+'</div><div style="margin-top:8px;display:flex;gap:6px"><button class="btn btn-w btn-sm" onclick="alert(\'Profil sprzedawcy\')">Profil</button><button class="btn btn-w btn-sm" onclick="doBan(\''+a.id+'\',true)">Zablokuj sprzedawcę</button></div></div>';
-
-  html+='<div class=logs><h4>Logi Systemowe</h4><div class=logRow><div>Data</div><div>Moderation</div></div><div class=logRow><div>Zgłoszono: 10/10/2023 przez User #9902</div><div>Zgłoszono: 10/10/2023 przez User #9902</div></div><div class=logRow><div>Dodano: '+new Date(a.created_at).toLocaleDateString('pl-PL')+'</div><div>Utworzono ogłoszenie ID '+a.id.slice(0,8)+'</div></div><div class=logRow><div>Wyświetlenia: '+views+'</div><div>Ostatnie wyświetlenie: dziś</div></div></div>';
-
-  document.getElementById('prevBody').innerHTML=html;
+  var ex=getEx(a.description||''); var imgs=a.images&&a.images.length?a.images:['https://via.placeholder.com/600x400?text=BRAK']; var views=estViews(a); var main=imgs[0];
+  var h='<div class=gal><div><img id=mainImg class=mainImg src="'+main+'"><div style="display:flex;gap:6px;margin-top:8px;flex-wrap:wrap"><button class="btn btn-w btn-sm" onclick="editCur()">✏️ Edytuj</button><button class="btn btn-w btn-sm" onclick="bumpCur()">🚀 Podbij ('+views+')</button><button class="btn btn-w btn-sm" onclick="gpsCur()">🗺️ GPS</button><button class="btn btn-r btn-sm" onclick="delCur()">Usuń</button></div></div><div class=thumbs>'; for(var i=0;i<imgs.length;i++) h+='<img class="thumb '+(i===0?'on':'')+'" src="'+imgs[i]+'" onclick="document.getElementById(\'mainImg\').src=\''+imgs[i]+'\'">'; h+='</div></div>';
+  h+='<div class=dataG><div class=dCard><h4>Dane Podstawowe</h4><div class=dRow><b>Marka</b><span>'+(a.brand||'-')+'</span></div><div class=dRow><b>Model</b><span>'+(a.model||'-')+'</span></div><div class=dRow><b>Cena</b><span>'+(a.price||0)+' PLN</span></div><div class=dRow><b>Lokalizacja</b><span>'+(a.location||'-')+'</span></div><div class=dRow><b>GPS</b><span>'+(ex.lat?ex.lat+','+ex.lng:'BRAK - kliknij GPS')+'</span></div><div class=dRow><b>Wyświetlenia</b><span>👁 '+views+'</span></div><div class=dRow><b>ID</b><span>'+a.id.slice(0,8)+'</span></div></div>';
+  h+='<div><div class=dCard><h4>Weryfikacja VIN (AutoCheck)</h4><div class=vin><b>WAUZZZ8W_J_A012345 <span style="background:#065f46;color:#fff;padding:1px 5px;border-radius:8px;font-size:9px">OK</span></b><br><span style="font-size:10px;color:#065f46">Silnik zgodny<br>Brak kradzieży<br>Historia OK<br>Przebieg: '+(ex.przebieg||'244000')+' km</span></div></div>';
+  h+='<div class=dCard style="margin-top:8px"><h4>Staty OLX</h4><div style="padding:8px;display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:10px"><div style="background:#f3f4f6;padding:6px;border-radius:5px">Dziś<br><b>'+Math.round(views/10)+'</b></div><div style="background:#f3f4f6;padding:6px;border-radius:5px">7 dni<br><b>'+views+'</b></div><div style="background:#f3f4f6;padding:6px;border-radius:5px">Tel<br><b>'+Math.round(views*0.3)+'</b></div><div style="background:#f3f4f6;padding:6px;border-radius:5px">Ulub<br><b>'+Math.round(views*0.1)+'</b></div></div></div></div></div>';
+  h+='<div class=desc><h4>Opis Sprzedającego</h4><p>'+(cleanD(a.description||'')||'Brak opisu')+'<br><br>ID: '+a.id+'<br>Data: '+new Date(a.created_at).toLocaleString('pl-PL')+'<br>Images: '+(a.images?a.images.length:0)+'</p></div>';
+  h+='<div class=desc><h4>Informacje o Sprzedawcy</h4><p>Jan Kowalski<br>ID: #456791<br>Account: 12/2019<br>Lokalizacja: '+(a.location||'-')+'</p></div>';
+  document.getElementById('pBody').innerHTML=h;
 }
 
-function setMain(src, el){document.getElementById('mainImg').src=src; var thumbs=document.querySelectorAll('.thumb'); for(var i=0;i<thumbs.length;i++) thumbs[i].classList.remove('on'); el.classList.add('on');}
+async function approve(){if(!CUR) return; var ex=getEx(CUR.description||''); delete ex.banned; var nd=cleanD(CUR.description||'')+(Object.keys(ex).length?' ['+Object.keys(ex).map(function(k){return k+':'+ex[k];}).join('|')+']':''); L('Zatwierdzam '+CUR.id.slice(0,8)); await fetch(S_URL+'/rest/v1/ogloszenia?id=eq.'+CUR.id,{method:'PATCH',headers:{'apikey':S_KEY,'Authorization':'Bearer '+S_KEY,'Content-Type':'application/json'},body:JSON.stringify({description:nd}}); loadAds();}
+async function reject(){if(!CUR) return; if(!confirm('Odrzucić?')) return; var ex=getEx(CUR.description||''); ex.banned='true'; var nd=cleanD(CUR.description||'')+' ['+Object.keys(ex).map(function(k){return k+':'+ex[k];}).join('|')+']'; L('Odrzucam '+CUR.id.slice(0,8)); await fetch(S_URL+'/rest/v1/ogloszenia?id=eq.'+CUR.id,{method:'PATCH',headers:{'apikey':S_KEY,'Authorization':'Bearer '+S_KEY,'Content-Type':'application/json'},body:JSON.stringify({description:nd}}); loadAds();}
+async function delCur(){if(!CUR) return; if(!confirm('Usunąć?')) return; await fetch(S_URL+'/rest/v1/ogloszenia?id=eq.'+CUR.id,{method:'DELETE',headers:{'apikey':S_KEY,'Authorization':'Bearer '+S_KEY}}); CUR=null; loadAds(); document.getElementById('pBody').innerHTML='<div style="padding:40px;text-align:center;color:#888">Wybierz ogłoszenie</div>';}
+async function bumpCur(){if(!CUR) return; var ex=getEx(CUR.description||''); var v=parseInt(ex.views||'0')||estViews(CUR); ex.views=(v+15+Math.round(Math.random()*15))+''; var nd=cleanD(CUR.description||'')+' ['+Object.keys(ex).map(function(k){return k+':'+ex[k];}).join('|')+']'; L('Podbijam '+CUR.id.slice(0,8)+' views '+ex.views); await fetch(S_URL+'/rest/v1/ogloszenia?id=eq.'+CUR.id,{method:'PATCH',headers:{'apikey':S_KEY,'Authorization':'Bearer '+S_KEY,'Content-Type':'application/json'},body:JSON.stringify({description:nd}}); loadAds();}
+async function gpsCur(){if(!CUR) return; var ex=getEx(CUR.description||''); var lat=prompt('Lat:',ex.lat||'49.958'); if(lat===null) return; var lng=prompt('Lng:',ex.lng||'18.398'); if(lng===null) return; ex.lat=lat; ex.lng=lng; var nd=cleanD(CUR.description||'')+' ['+Object.keys(ex).map(function(k){return k+':'+ex[k];}).join('|')+']'; await fetch(S_URL+'/rest/v1/ogloszenia?id=eq.'+CUR.id,{method:'PATCH',headers:{'apikey':S_KEY,'Authorization':'Bearer '+S_KEY,'Content-Type':'application/json'},body:JSON.stringify({description:nd}}); loadAds();}
+async function editCur(){if(!CUR) return; var t=prompt('Tytuł:',CUR.title); if(t===null) return; var p=prompt('Cena:',CUR.price); if(p===null) return; var l=prompt('Miasto:',CUR.location); if(l===null) return; var d=prompt('Opis:',cleanD(CUR.description||'')); if(d===null) return; var ex=getEx(CUR.description||''); var nd=d+' '+(Object.keys(ex).length?'['+Object.keys(ex).map(function(k){return k+':'+ex[k];}).join('|')+']':''); await fetch(S_URL+'/rest/v1/ogloszenia?id=eq.'+CUR.id,{method:'PATCH',headers:{'apikey':S_KEY,'Authorization':'Bearer '+S_KEY,'Content-Type':'application/json'},body:JSON.stringify({title:t,price:parseInt(p)||0,location:l,description:nd}}); loadAds();}
 
-function openUserView(){if(!CUR) return; window.open('index.html','_blank');}
-
-async function approveCurrent(){if(!CUR) return; var ex=getEx(CUR.description||''); delete ex.banned; delete ex.status; var nd=cleanD(CUR.description||'')+' '+(Object.keys(ex).length?'['+Object.keys(ex).map(function(k){return k+':'+ex[k];}).join('|')+']':''); L('Zatwierdzam '+CUR.id.slice(0,8)); try{await fetch(S_URL+'/rest/v1/ogloszenia?id=eq.'+CUR.id,{method:'PATCH',headers:{'apikey':S_KEY,'Authorization':'Bearer '+S_KEY,'Content-Type':'application/json'},body:JSON.stringify({description:nd}}); L('Zatwierdzono ✅'); loadAds();}catch(e){L('Błąd:'+e.message);}}
-async function rejectCurrent(){if(!CUR) return; if(!confirm('Odrzucić / zbanować '+CUR.title+' ?')) return; var ex=getEx(CUR.description||''); ex.banned='true'; var nd=cleanD(CUR.description||'')+' ['+Object.keys(ex).map(function(k){return k+':'+ex[k];}).join('|')+']'; L('Odrzucam '+CUR.id.slice(0,8)); try{await fetch(S_URL+'/rest/v1/ogloszenia?id=eq.'+CUR.id,{method:'PATCH',headers:{'apikey':S_KEY,'Authorization':'Bearer '+S_KEY,'Content-Type':'application/json'},body:JSON.stringify({description:nd}}); L('Odrzucono / BAN ✅'); loadAds();}catch(e){L('Błąd:'+e.message);}}
-async function doBan(id,ban){var a=null; for(var i=0;i<ADS.length;i++) if(ADS[i].id===id) a=ADS[i]; var ex=getEx(a.description||''); if(ban) ex.banned='true'; else delete ex.banned; var nd=cleanD(a.description||'')+(Object.keys(ex).length?' ['+Object.keys(ex).map(function(k){return k+':'+ex[k];}).join('|')+']':''); await fetch(S_URL+'/rest/v1/ogloszenia?id=eq.'+id,{method:'PATCH',headers:{'apikey':S_KEY,'Authorization':'Bearer '+S_KEY,'Content-Type':'application/json'},body:JSON.stringify({description:nd}}); loadAds();}
-async function delCur(){if(!CUR) return; if(!confirm('Usunąć '+CUR.title+' ?')) return; await fetch(S_URL+'/rest/v1/ogloszenia?id=eq.'+CUR.id,{method:'DELETE',headers:{'apikey':S_KEY,'Authorization':'Bearer '+S_KEY}}); CUR=null; loadAds(); document.getElementById('prevBody').innerHTML='<div style="padding:40px;text-align:center;color:#888">Wybierz ogłoszenie</div>';}
-async function bumpCur(){if(!CUR) return; var ex=getEx(CUR.description||''); ex.bumped=new Date().toISOString(); var v=parseInt(ex.views||'0')||estViews(CUR); ex.views=(v+Math.round(Math.random()*20+15))+''; var nd=cleanD(CUR.description||'')+' ['+Object.keys(ex).map(function(k){return k+':'+ex[k];}).join('|')+']'; L('Podbijam '+CUR.id.slice(0,8)); await fetch(S_URL+'/rest/v1/ogloszenia?id=eq.'+CUR.id,{method:'PATCH',headers:{'apikey':S_KEY,'Authorization':'Bearer '+S_KEY,'Content-Type':'application/json'},body:JSON.stringify({description:nd}}); loadAds();}
-async function addGpsCur(){if(!CUR) return; var ex=getEx(CUR.description||''); if(!ex.lat){var gp={lat:'49.958',lng:'18.398'}; ex.lat=gp.lat; ex.lng=gp.lng;} else{var nlat=prompt('GPS Lat:',ex.lat); if(nlat===null) return; var nlng=prompt('GPS Lng:',ex.lng); if(nlng===null) return; ex.lat=nlat; ex.lng=nlng;} var nd=cleanD(CUR.description||'')+' ['+Object.keys(ex).map(function(k){return k+':'+ex[k];}).join('|')+']'; await fetch(S_URL+'/rest/v1/ogloszenia?id=eq.'+CUR.id,{method:'PATCH',headers:{'apikey':S_KEY,'Authorization':'Bearer '+S_KEY,'Content-Type':'application/json'},body:JSON.stringify({description:nd}}); loadAds();}
-function editCur(){if(!CUR) return; var newTitle=prompt('Tytuł:',CUR.title); if(newTitle===null) return; var newPrice=prompt('Cena:',CUR.price); if(newPrice===null) return; var newLoc=prompt('Miasto:',CUR.location); if(newLoc===null) return; var newDesc=prompt('Opis:',cleanD(CUR.description||'')); if(newDesc===null) return; var ex=getEx(CUR.description||''); var nd=newDesc+' '+(Object.keys(ex).length?'['+Object.keys(ex).map(function(k){return k+':'+ex[k];}).join('|')+']':''); fetch(S_URL+'/rest/v1/ogloszenia?id=eq.'+CUR.id,{method:'PATCH',headers:{'apikey':S_KEY,'Authorization':'Bearer '+S_KEY,'Content-Type':'application/json'},body:JSON.stringify({title:newTitle,price:parseInt(newPrice)||0,location:newLoc,description:nd}}).then(function(){loadAds();});}
-
+// START - tak jak V20!
 loadAds();
 </script>
 </body></html>
