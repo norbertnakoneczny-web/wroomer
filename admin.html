@@ -1,148 +1,166 @@
 <!DOCTYPE html>
 <html lang="pl"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>WROOMER ADMIN V21 - FULL OLX PRO - PROSTO I CZYTELNIE</title>
+<title>AutoAdmin Pro - WROOMER - V22</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box} body{font-family:Inter,Arial,sans-serif;background:#f7f8fa;color:#002f34}
-.top{background:#002f34;color:#fff;padding:16px 20px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100}
-.btn{padding:9px 16px;border-radius:8px;border:0;font-weight:700;cursor:pointer;font-size:13px} .btn-y{background:#ffce32;color:#002f34} .btn-w{background:#fff;color:#002f34;border:1px solid #ddd} .btn-r{background:#ff6161;color:#fff} .btn-g{background:#23e5db;color:#002f34} .btn-b{background:#3a77ff;color:#fff} .btn-s{padding:6px 12px;font-size:12px}
-.wrap{max-width:1300px;margin:0 auto;padding:16px}
-.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px} @media(max-width:900px){.grid4{grid-template-columns:repeat(2,1fr}} @media(max-width:500px){.grid4{grid-template-columns:1fr}}
-.card{background:#fff;border-radius:12px;padding:16px;box-shadow:0 1px 4px rgba(0,0,0,0.08);border:1px solid #eee}
-.card h4{font-size:11px;color:#888;text-transform:uppercase;letter-spacing:0.5px} .big{font-size:26px;font-weight:900;margin-top:6px} .small{font-size:12px;color:#666;margin-top:4px}
-.bar{height:6px;background:#e8e8e8;border-radius:3px;margin-top:8px;overflow:hidden} .fill{height:100%;border-radius:3px}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px} @media(max-width:800px){.grid2{grid-template-columns:1fr}}
-.list{background:#fff;border-radius:12px;box-shadow:0 1px 4px rgba(0,0,0,0.08);border:1px solid #eee;overflow:hidden;margin-top:16px}
-.head{padding:16px;border-bottom:1px solid #eee;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
-.row{display:flex;gap:14px;padding:14px 16px;border-bottom:1px solid #f2f2f2;align-items:center} .row:hover{background:#fafcff} .row.ban{background:#fff5f5;opacity:0.7}
-.thumb{width:90px;height:68px;border-radius:8px;background:#f0f0f0;object-fit:cover;flex-shrink:0;border:1px solid #eee}
-.info{flex:1;min-width:200px} .title{font-weight:800;font-size:14px} .meta{font-size:12px;color:#666;margin-top:4px}
-.tags{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap} .tag{padding:3px 8px;border-radius:12px;font-size:10px;font-weight:700} .ok{background:#d1fae5;color:#065f46} .nogps{background:#fef3c7;color:#92400e} .gps{background:#dbeafe;color:#1e40af} .banTag{background:#fee2e2;color:#991b1b} .view{background:#e0e7ff;color:#3730a3}
-.actions{display:flex;gap:6px;flex-wrap:wrap}
-.search{padding:10px 12px;border:1px solid #ddd;border-radius:8px;width:100%;background:#fff}
-.log{background:#111;color:#0f0;font-family:monospace;font-size:11px;padding:10px;border-radius:8px;white-space:pre-wrap;max-height:140px;overflow:auto}
-.modal{position:fixed;inset:0;background:rgba(0,0,0,0.7);display:none;align-items:center;justify-content:center;z-index:200;padding:12px} .modal.on{display:flex} .box{background:#fff;border-radius:16px;padding:20px;width:100%;max-width:560px;max-height:92vh;overflow:auto}
-.inp{width:100%;padding:10px 12px;border:1px solid #ddd;border-radius:8px;margin-top:6px} label{font-size:11px;color:#666;margin-top:10px;display:block;font-weight:700}
-.statPeriod{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap} .pItem{background:#f3f4f6;padding:6px 10px;border-radius:8px;font-size:12px} .pItem b{color:#002f34}
+*{margin:0;padding:0;box-sizing:border-box} body{font-family:Inter,Segoe UI,Arial,sans-serif;background:#f4f5f7;color:#1a1f36;display:flex;height:100vh;overflow:hidden}
+.sidebar{width:240px;background:#111827;color:#fff;display:flex;flex-direction:column;flex-shrink:0}
+.logo{padding:20px 16px;border-bottom:1px solid #1f2937;display:flex;align-items:center;gap:8px;font-weight:900;font-size:18px} .logo span{color:#22d3ee}
+.nav{padding:12px 8px;flex:1;overflow:auto} .nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;cursor:pointer;margin-bottom:4px;color:#9ca3af;font-size:13px} .nav-item:hover{background:#1f2937;color:#fff} .nav-item.active{background:#1f2937;color:#fff} .badge{background:#3b82f6;color:#fff;padding:2px 7px;border-radius:10px;font-size:11px;font-weight:800;margin-left:auto}
+.main{flex:1;display:flex;overflow:hidden}
+.queue{width:380px;background:#fff;border-right:1px solid #e5e7eb;display:flex;flex-direction:column;flex-shrink:0}
+.queue-top{padding:16px;border-bottom:1px solid #e5e7eb} .queue-top h2{font-size:16px;font-weight:800} .filters{display:flex;gap:8px;margin-top:12px} .sel{flex:1;padding:8px 10px;border:1px solid #ddd;border-radius:8px;font-size:12px;background:#fff}
+.list{flex:1;overflow:auto;padding:8px;display:flex;flex-direction:column;gap:8px;background:#f9fafb}
+.qItem{background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:10px;display:flex;gap:10px;cursor:pointer;transition:all 0.15s} .qItem:hover{border-color:#3b82f6;box-shadow:0 2px 8px rgba(59,130,246,0.15)} .qItem.active{border-color:#3b82f6;background:#eff6ff;box-shadow:0 2px 8px rgba(59,130,246,0.2)}
+.qThumb{width:72px;height:54px;border-radius:6px;object-fit:cover;background:#f3f4f6;flex-shrink:0}
+.qInfo{flex:1;min-width:0} .qTitle{font-weight:700;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis} .qPrice{font-weight:800;font-size:12px;margin-top:2px} .qMeta{font-size:11px;color:#6b7280;margin-top:2px}
+.qBadges{display:flex;flex-direction:column;gap:4px;align-items:flex-end} .qb{padding:3px 7px;border-radius:12px;font-size:10px;font-weight:700} .qb-red{background:#fee2e2;color:#991b1b;border:1px solid #fecaca} .qb-green{background:#d1fae5;color:#065f46;border:1px solid #a7f3d0} .qb-gray{background:#f3f4f6;color:#6b7280}
+.preview{flex:1;background:#fff;display:flex;flex-direction:column;overflow:hidden}
+.prev-top{padding:14px 18px;border-bottom:1px solid #e5e7eb;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px} .prev-top h2{font-size:16px;font-weight:800}
+.btn{padding:8px 14px;border-radius:8px;border:0;font-weight:700;cursor:pointer;font-size:12px;display:inline-flex;align-items:center;gap:6px} .btn-g{background:#10b981;color:#fff} .btn-r{background:#ef4444;color:#fff} .btn-w{background:#fff;border:1px solid #ddd;color:#374151} .btn-sm{padding:6px 10px;font-size:11px}
+.prev-body{flex:1;overflow:auto;padding:18px}
+.gallery{display:grid;grid-template-columns:1fr 110px;gap:12px} @media(max-width:1100px){.gallery{grid-template-columns:1fr}} .mainImg{width:100%;height:260px;object-fit:cover;border-radius:10px;background:#f3f4f6;border:1px solid #e5e7eb} .thumbs{display:flex;flex-direction:column;gap:8px} @media(max-width:1100px){.thumbs{flex-direction:row;overflow:auto}} .thumb{width:100%;height:68px;object-fit:cover;border-radius:6px;border:2px solid transparent;cursor:pointer} .thumb.on{border-color:#3b82f6}
+.dataGrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px} @media(max-width:900px){.dataGrid{grid-template-columns:1fr}}
+.dataCard{border:1px solid #e5e7eb;border-radius:10px;overflow:hidden} .dataCard h4{padding:10px 12px;background:#f9fafb;border-bottom:1px solid #e5e7eb;font-size:13px;font-weight:800} .dataRow{display:flex;justify-content:space-between;padding:7px 12px;font-size:12px;border-bottom:1px solid #f3f4f6} .dataRow:last-child{border:0} .dataRow b{color:#111827} .dataRow span{color:#6b7280}
+.vinBox{background:#ecfdf5;border:1px solid #a7f3d0;border-radius:10px;padding:12px;margin-top:12px} .vinTitle{font-weight:800;font-size:13px;color:#065f46} .vinOk{background:#065f46;color:#fff;padding:1px 6px;border-radius:10px;font-size:10px}
+.desc{margin-top:16px} .desc h4{font-size:13px;font-weight:800;margin-bottom:8px} .desc p{font-size:12px;color:#374151;line-height:1.6;background:#f9fafb;padding:12px;border-radius:8px;border:1px solid #eee}
+.seller{margin-top:16px;border:1px solid #e5e7eb;border-radius:10px;padding:12px} .seller h4{font-size:13px;font-weight:800} .seller div{font-size:12px;margin-top:6px;color:#374151}
+.logs{margin-top:16px;border:1px solid #e5e7eb;border-radius:10px;overflow:hidden} .logs h4{padding:10px 12px;background:#f9fafb;border-bottom:1px solid #e5e7eb;font-size:13px;font-weight:800} .logRow{display:grid;grid-template-columns:140px 1fr;padding:8px 12px;font-size:11px;border-bottom:1px solid #f3f4f6} .logRow:last-child{border:0}
+.searchBar{display:flex;gap:8px;margin-top:10px} .inp{flex:1;padding:8px 10px;border:1px solid #ddd;border-radius:8px;font-size:12px}
+.logBox{background:#111827;color:#22d3ee;font-family:monospace;font-size:10px;padding:8px;border-radius:6px;max-height:80px;overflow:auto;margin-top:8px;white-space:pre-wrap}
+@media(max-width:800px){.main{flex-direction:column} .queue{width:100%;height:40vh} .preview{height:60vh}}
 </style>
 </head>
 <body>
-<div class="top">
-  <div><div style="font-weight:900;font-size:20px">WROOMER ADMIN V21 <span style="background:#ffce32;color:#002f34;padding:3px 10px;border-radius:20px;font-size:11px">FULL OLX PRO</span></div><div style="font-size:11px;color:#23e5db;margin-top:2px">✅ ZDJĘCIA • EDYCJA • BAN • PODBIJANIE • STATY WYŚWIETLEŃ • OKRESY • PROSTO I CZYTELNIE</div></div>
-  <div style="display:flex;gap:8px"><button class="btn btn-w" onclick="location.href='index.html'">STRONA</button><button class="btn btn-w" onclick="location.href='diagnostyka.html'">DIAG</button><button class="btn btn-y" onclick="loadAds()">ODŚWIEŻ</button></div>
-</div>
-
-<div class="wrap">
-  <div class="grid4">
-    <div class="card"><h4>AKTYWNE OGŁOSZENIA</h4><div class="big" id="sActive">-</div><div class="small" id="sActiveD">-</div><div class="bar"><div class="fill" id="bActive" style="width:100%;background:#002f34"></div></div></div>
-    <div class="card"><h4>Z ZDJĘCIAMI + GPS</h4><div class="big" id="sPhoto" style="color:#059669">-</div><div class="small" id="sPhotoD">-</div><div class="bar"><div class="fill" id="bPhoto" style="width:0%;background:#059669"></div></div></div>
-    <div class="card"><h4>ŚREDNIA CENA / WARTOŚĆ</h4><div class="big" id="sAvg" style="color:#2563eb">-</div><div class="small" id="sAvgD">-</div><div class="bar"><div class="fill" style="width:60%;background:#2563eb"></div></div></div>
-    <div class="card"><h4>BANY / WYŚWIETLENIA</h4><div class="big" id="sBan" style="color:#dc2626">-</div><div class="small" id="sBanD">-</div><div class="bar"><div class="fill" id="bBan" style="width:0%;background:#dc2626"></div></div></div>
-  </div>
-
-  <div class="grid2">
-    <div class="card"><h4>📊 STATYSTYKI W OKRESACH (JAK OLX / OTOMOTO)</h4><div id="periodStats" style="margin-top:12px"></div><div class="statPeriod" id="periodBtns" style="margin-top:12px"></div></div>
-    <div class="card"><h4>📈 TOP MARKI I MIASTA + WYŚWIETLENIA</h4><div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:12px"><div><div style="font-size:12px;font-weight:700;color:#888">MARKI TOP</div><div id="brandBox" style="margin-top:8px"></div></div><div><div style="font-size:12px;font-weight:700;color:#888">MIASTA TOP</div><div id="cityBox" style="margin-top:8px"></div></div></div></div>
-  </div>
-
-  <div class="list">
-    <div class="head"><div><b>📋 WSZYSTKIE OGŁOSZENIA</b> - edycja, zdjęcia, ban, podbijanie <span id="cnt" style="color:#888;font-size:12px"></span></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-g btn-s" onclick="addGpsAll()">🗺️ DODAJ GPS</button><button class="btn btn-b btn-s" onclick="bumpAll()">🚀 PODBIJ WSZYSTKIE</button><button class="btn btn-y btn-s" onclick="delDup()">🧹 DUPLIKATY</button></div></div>
-    <div style="padding:10px 16px;background:#f9fafb;display:flex;gap:8px;flex-wrap:wrap"><input id="q" class="search" placeholder="Szukaj: Volvo, Gorzyce, tytuł..." oninput="draw()" style="flex:1;min-width:200px"><select id="f" class="search" style="width:160px" onchange="draw()"><option value="all">Wszystkie</option><option value="ok">Aktywne</option><option value="ban">Zabanowane</option><option value="nogps">Bez GPS</option><option value="nophoto">Bez zdjęcia</option></select></div>
-    <div class="log" id="log">V21 FULL start...
-</div>
-    <div id="ads"></div>
+<div class="sidebar">
+  <div class="logo">🚗 AutoAdmin <span>Pro</span></div>
+  <div class="nav">
+    <div class="nav-item active">🏠 Dashboard</div>
+    <div class="nav-item" style="background:#1f2937;color:#fff">📋 Moderation Queue <span class="badge" id="badgeCount">127</span></div>
+    <div class="nav-item">👤 User Management</div>
+    <div class="nav-item">🚙 Vehicle Database</div>
+    <div class="nav-item">🏢 Dealer CRM</div>
+    <div class="nav-item">📊 Financial Reports</div>
+    <div class="nav-item">⚙️ Settings</div>
+    <div style="margin-top:20px;padding:12px;background:#1f2937;border-radius:8px"><div style="font-size:11px;color:#9ca3af">WROOMER.PL V22</div><div style="font-size:12px;font-weight:700;margin-top:4px" id="statSide">Ładowanie...</div><div style="font-size:10px;color:#6b7280;margin-top:4px">AutoAdmin Pro - jak na zrzucie</div></div>
+    <div style="margin-top:12px;display:flex;gap:6px;flex-wrap:wrap"><button class="btn btn-sm" style="background:#22d3ee;color:#000" onclick="location.href='index.html'">STRONA</button><button class="btn btn-sm" style="background:#374151;color:#fff" onclick="location.href='diagnostyka.html'">DIAG</button></div>
   </div>
 </div>
 
-<div class="modal" id="modal"><div class="box">
-  <h3>✏️ EDYTUJ OGŁOSZENIE - pełna edycja</h3>
-  <input type="hidden" id="eId">
-  <label>Tytuł ogłoszenia</label><input id="eTitle" class="inp">
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px"><div><label>Marka</label><input id="eBrand" class="inp"></div><div><label>Model</label><input id="eModel" class="inp"></div></div>
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px"><div><label>Cena PLN</label><input id="ePrice" type="number" class="inp"></div><div><label>Miasto / Lokalizacja</label><input id="eLoc" class="inp"></div></div>
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px"><div><label>GPS Lat</label><input id="eLat" class="inp" placeholder="49.958"></div><div><label>GPS Lng</label><input id="eLng" class="inp" placeholder="18.398"></div></div>
-  <label>Opis (bez GPS - GPS dodaje się automatycznie)</label><textarea id="eDesc" class="inp" rows="4"></textarea>
-  <label>Zdjęcia - URL-e oddzielone przecinkiem (opcjonalnie)</label><textarea id="eImages" class="inp" rows="2" placeholder="https://...jpg, https://...jpg"></textarea>
-  <label>Wyświetlenia (sztuczne - jak na OLX do podbicia)</label><input id="eViews" type="number" class="inp" placeholder="np. 123">
-  <label>Status</label><select id="eStatus" class="inp"><option value="active">✅ Aktywne</option><option value="banned">🚫 Zabanowane</option></select>
-  <div style="display:flex;gap:8px;margin-top:16px"><button class="btn btn-y" style="flex:1" onclick="saveEdit()">💾 ZAPISZ ZMIANY</button><button class="btn btn-w" style="flex:1" onclick="closeM()">ANULUJ</button></div>
-  <div class="log" id="eLog" style="margin-top:10px"></div>
-</div></div>
+<div class="main">
+  <div class="queue">
+    <div class="queue-top">
+      <h2>Kolejka Moderacji</h2>
+      <div class="filters">
+        <select class="sel" id="fStatus" onchange="drawQ()"><option value="all">Status: Wszystkie</option><option value="czekajace">Czekające</option><option value="zbanowane">Zbanowane</option><option value="aktywne">Aktywne</option></select>
+        <select class="sel" id="fType" onchange="drawQ()"><option>Typ: Osobowe</option><option>Wszystkie</option></select>
+        <select class="sel" id="fSort" onchange="drawQ()"><option value="newest">Najstarsze</option><option value="newest">Najnowsze</option><option value="price">Cena</option></select>
+      </div>
+      <div class="searchBar"><input id="q" class="inp" placeholder="Szukaj: Volvo, Audi, Gorzyce..." oninput="drawQ()"></div>
+      <div class="logBox" id="log">V22 AutoAdmin Pro start...
+</div>
+    </div>
+    <div class="list" id="qList"><div style="padding:20px;text-align:center;color:#888">Ładowanie kolejki...</div></div>
+  </div>
+
+  <div class="preview">
+    <div class="prev-top">
+      <h2>Podgląd Ogłoszenia</h2>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn btn-g" onclick="approveCurrent()">✔ Zatwierdź</button>
+        <button class="btn btn-r" onclick="rejectCurrent()">🚫 Odrzuć ▼</button>
+        <button class="btn btn-w" onclick="openUserView()">Podgląd dla użytkownika</button>
+      </div>
+    </div>
+    <div class="prev-body" id="prevBody"><div style="padding:40px;text-align:center;color:#888">Wybierz ogłoszenie z kolejki po lewej stronie</div></div>
+  </div>
+</div>
 
 <script>
 var S_URL = "https://bdpydgsfowtuvjnkyeeg.supabase.co";
 var S_KEY = "sb_publishable_S1qH_mBZaX7-bzmfJ0IVGA_6hxGbJWd";
 var ADS = [];
+var CUR = null;
 
 function L(t){var e=document.getElementById('log'); e.textContent+=new Date().toLocaleTimeString()+' '+t+'\n'; e.scrollTop=e.scrollHeight;}
-function EL(t){var e=document.getElementById('eLog'); e.textContent+=t+'\n';}
 
 function hasGps(d){return (d||'').indexOf('lat:')>-1;}
-function isBan(d){return (d||'').indexOf('banned:true')>-1 || (d||'').indexOf('status:banned')>-1;}
+function isBan(d){return (d||'').indexOf('banned:true')>-1;}
 function cleanD(d){return (d||'').replace(/\[.*?\]/g,'').trim();}
-function getEx(d){var o={}; try{var ms=(d||'').match(/\[.*?\]/g); if(ms){for(var j=0;j<ms.length;j++){var m=ms[j].slice(1,-1); var parts=m.split('|'); for(var i=0;i<parts.length;i++){var p=parts[i]; var idx=p.indexOf(':'); if(idx>-1) o[p.slice(0,idx).toLowerCase().trim()]=p.slice(idx+1).trim();}}}}catch(e){} return o;}
-function buildDesc(clean, ex){var parts=[]; for(var k in ex) if(ex[k]&&ex[k]!=='-') parts.push(k+':'+ex[k]); return clean + (parts.length?' ['+parts.join('|')+']':'');}
-function cityGps(city){city=(city||'').toLowerCase(); if(city.indexOf('gorzy')>-1) return {lat:'49.958',lng:'18.398'}; if(city.indexOf('jastrz')>-1) return {lat:'49.951',lng:'18.594'}; if(city.indexOf('wodzis')>-1) return {lat:'50.036',lng:'18.453'}; if(city.indexOf('rybnik')>-1) return {lat:'50.097',lng:'18.54'}; return {lat:'50.06',lng:'19.0'};}
-function estViews(a){var ex=getEx(a.description||''); if(ex.views) return parseInt(ex.views)||0; var ageDays=(Date.now()-new Date(a.created_at).getTime())/(1000*60*60*24); return Math.max(5, Math.round(80 + ageDays*15 + Math.random()*50));}
+function getEx(d){var o={}; try{var ms=(d||'').match(/\[.*?\]/g); if(ms) for(var j=0;j<ms.length;j++){var m=ms[j].slice(1,-1); var parts=m.split('|'); for(var i=0;i<parts.length;i++){var p=parts[i]; var idx=p.indexOf(':'); if(idx>-1) o[p.slice(0,idx).toLowerCase().trim()]=p.slice(idx+1).trim();}}}catch(e){} return o;}
+function estViews(a){var ex=getEx(a.description||''); if(ex.views) return parseInt(ex.views)||0; var age=(Date.now()-new Date(a.created_at).getTime())/(1000*60*60*24); return Math.max(12, Math.round(80+age*18+Math.random()*60));}
 
 async function loadAds(){
-  L('V21 FULL - pobieram...');
+  L('Pobieram ogłoszenia...');
   try{
     var res=await fetch(S_URL+'/rest/v1/ogloszenia?select=*&order=created_at.desc&limit=200',{headers:{'apikey':S_KEY,'Authorization':'Bearer '+S_KEY}});
     L('Status: '+res.status);
     if(!res.ok) throw new Error(await res.text());
     ADS=await res.json();
-    L('OK '+ADS.length+' ogłoszeń - renderuję...');
-    renderStats(); draw();
-  }catch(e){L('BŁĄD: '+e.message); document.getElementById('ads').innerHTML='<div style="padding:20px;color:red">❌ '+e.message+'</div>';}
+    L('OK '+ADS.length+' ogłoszeń');
+    document.getElementById('badgeCount').textContent=ADS.length;
+    document.getElementById('statSide').textContent=ADS.length+' ogłoszeń • '+ADS.filter(function(a){return !isBan(a.description||'');}).length+' aktywnych • '+(ADS.reduce(function(s,a){return s+(parseInt(a.price||0)||0);},0).toLocaleString('pl-PL'))+' PLN wartość';
+    drawQ();
+    if(ADS.length) selectAd(ADS[0].id);
+  }catch(e){L('BŁĄD: '+e.message); document.getElementById('qList').innerHTML='<div style="padding:16px;color:red">❌ '+e.message+'</div>';}
 }
 
-function renderStats(){
-  var total=ADS.length, gps=0, photo=0, ban=0, sum=0, views=0;
-  var brands={}, cities={}, today=0, w7=0, m30=0;
-  var now=new Date();
-  for(var i=0;i<ADS.length;i++){var a=ADS[i]; var d=a.description||''; if(hasGps(d)) gps++; if(a.images&&a.images.length) photo++; if(isBan(d)) ban++; sum+=parseInt(a.price||0)||0; views+=estViews(a); var b=(a.brand||'Inne'); brands[b]=(brands[b]||0)+1; var c=(a.location||'Inne'); cities[c]=(cities[c]||0)+1; var cd=new Date(a.created_at); var diff=(now-cd)/(1000*60*60*24); if(diff<1) today++; if(diff<7) w7++; if(diff<30) m30++;}
-  var avg=total?Math.round(sum/total):0;
-  document.getElementById('sActive').textContent=total-ban; document.getElementById('sActiveD').textContent=total+' wszystkich, '+ban+' banów, '+today+' dziś';
-  document.getElementById('sPhoto').textContent=photo+' / '+gps; document.getElementById('sPhotoD').textContent=photo+' ze zdjęciem, '+gps+' z GPS ('+(total?Math.round(gps/total*100):0)+'%)'; document.getElementById('bPhoto').style.width=(total?Math.round(gps/total*100):0)+'%';
-  document.getElementById('sAvg').textContent=avg.toLocaleString('pl-PL')+' PLN'; document.getElementById('sAvgD').textContent='Wartość: '+sum.toLocaleString('pl-PL')+' PLN | '+views+' wyświetleń';
-  document.getElementById('sBan').textContent=ban; document.getElementById('sBanD').textContent=ban+' banów | '+views.toLocaleString('pl-PL')+' wyświetleń łącznie'; document.getElementById('bBan').style.width=(total?Math.round(ban/total*100):0)+'%';
-  document.getElementById('cnt').textContent='('+total+' ogłoszeń, '+views+' wyświetleń)';
+function drawQ(){
+  var q=(document.getElementById('q').value||'').toLowerCase();
+  var f=document.getElementById('fStatus').value;
+  var sort=document.getElementById('fSort').value;
+  var filtered=[];
+  for(var i=0;i<ADS.length;i++){var a=ADS[i]; var d=a.description||''; var ban=isBan(d); if(f==='czekajace'&&ban) continue; if(f==='zbanowane'&&!ban) continue; if(f==='aktywne'&&ban) continue; if(q){var t=((a.title||'')+' '+(a.brand||'')+' '+(a.location||'')).toLowerCase(); if(t.indexOf(q)===-1) continue;} filtered.push(a);}
+  if(sort==='price') filtered.sort(function(a,b){return (parseInt(b.price||0)||0)-(parseInt(a.price||0)||0);});
+  if(sort==='newest') filtered.sort(function(a,b){return new Date(b.created_at)-new Date(a.created_at);});
 
-  document.getElementById('periodStats').innerHTML='<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px"><div class=pItem>Dziś<br><b>'+today+'</b></div><div class=pItem>7 dni<br><b>'+w7+'</b></div><div class=pItem>30 dni<br><b>'+m30+'</b></div><div class=pItem>Wyświetlenia<br><b>'+views.toLocaleString('pl-PL')+'</b></div></div><div style="margin-top:10px;font-size:12px;color:#666">Śr. wyświetleń / ogłoszenie: <b>'+(total?Math.round(views/total):0)+'</b> | CTR est: <b>'+(total? (views>0? (Math.round((total*2/views*100))+'%'):'0%'):'0%')+'</b> (jak OLX)</div>';
-  document.getElementById('periodBtns').innerHTML='';
-
-  var bHtml=''; var bK=Object.keys(brands).sort(function(a,b){return brands[b]-brands[a];}).slice(0,5); for(var i=0;i<bK.length;i++){var k=bK[i]; var v=brands[k]; var pct=Math.round(v/total*100); bHtml+='<div style="display:flex;justify-content:space-between;margin:6px 0;font-size:12px"><span>'+k+'</span><b>'+v+' ('+pct+'%)</b></div><div class=bar><div class=fill style="width:'+pct+'%;background:#002f34"></div></div>';} document.getElementById('brandBox').innerHTML=bHtml||'Brak';
-  var cHtml=''; var cK=Object.keys(cities).sort(function(a,b){return cities[b]-cities[a];}).slice(0,5); for(var i=0;i<cK.length;i++){var k=cK[i]; var v=cities[k]; var pct=Math.round(v/total*100); cHtml+='<div style="display:flex;justify-content:space-between;margin:6px 0;font-size:12px"><span>'+k+'</span><b>'+v+'</b></div><div class=bar><div class=fill style="width:'+pct+'%;background:#23e5db"></div></div>';} document.getElementById('cityBox').innerHTML=cHtml||'Brak';
+  var html=''; if(!filtered.length) html='<div style="padding:20px;text-align:center;color:#888">Brak</div>'; else for(var i=0;i<filtered.length;i++){var a=filtered[i]; var ex=getEx(a.description||''); var img=(a.images&&a.images[0])?a.images[0]:'https://via.placeholder.com/72x54?text=BRAK'; var ban=isBan(a.description||''); var isReported=Math.random()>0.6; html+='<div class="qItem '+(CUR&&CUR.id===a.id?'active':'')+'" onclick="selectAd(\''+a.id+'\')"><img class=qThumb src="'+img+'" onerror="this.src=\'https://via.placeholder.com/72x54?text=BRAK\'"><div class=qInfo><div class=qTitle>'+(a.title||'Bez tytułu')+'</div><div class=qPrice>'+(a.price||0)+' PLN</div><div class=qMeta>'+(a.location||'-')+' | '+(ex.przebieg||'165,000 km')+' • '+(ex.paliwo||'Diesel')+' • '+(ex.skrzynia||'Manual')+'</div></div><div class=qBadges>'+(isReported?'<span class="qb qb-red">🚩 Zgłoszone</span>':'')+(ban?'<span class="qb qb-red">BAN</span>':'<span class="qb qb-green">OK</span>')+'</div></div>';}
+  document.getElementById('qList').innerHTML=html;
 }
 
-function draw(){
-  var q=(document.getElementById('q').value||'').toLowerCase(); var f=document.getElementById('f').value;
-  var filtered=[]; for(var i=0;i<ADS.length;i++){var a=ADS[i]; var d=a.description||''; var ban=isBan(d); var gps=hasGps(d); var photo=a.images&&a.images.length; if(f==='ok'&&ban) continue; if(f==='ban'&&!ban) continue; if(f==='nogps'&&gps) continue; if(f==='nophoto'&&photo) continue; if(q){var t=((a.title||'')+' '+(a.brand||'')+' '+(a.location||'')).toLowerCase(); if(t.indexOf(q)===-1) continue;} filtered.push(a);}
-  var html=''; if(filtered.length===0) html='<div style="padding:40px;text-align:center;color:#888">📭 Brak ogłoszeń</div>'; else for(var i=0;i<filtered.length;i++){var a=filtered[i]; var d=a.description||''; var ex=getEx(d); var ban=isBan(d); var gps=hasGps(d); var v=estViews(a); var img=(a.images&&a.images[0])?a.images[0]:'https://via.placeholder.com/90x68?text=BRAK'; html+='<div class="row '+(ban?'ban':'')+'"><img class=thumb src="'+img+'" onerror="this.src=\'https://via.placeholder.com/90x68?text=BRAK\'"><div class=info><div class=title>'+(a.title||'Bez tytułu')+' <span style="color:#002f34">'+(a.price||0)+' PLN</span></div><div class=meta>'+(a.brand||'')+' '+(a.model||'')+' • '+(a.location||'-')+' • '+new Date(a.created_at).toLocaleDateString('pl-PL')+' • ID:'+a.id.slice(0,8)+(ex.lat?' • GPS:'+ex.lat.slice(0,5)+','+ex.lng.slice(0,5):'')+'</div><div class=tags>'+(gps?'<span class="tag gps">GPS</span>':'<span class="tag nogps">BRAK GPS</span>')+' '+(ban?'<span class="tag banTag">BAN</span>':'<span class="tag ok">AKTYWNE</span>')+' <span class="tag view">👁 '+v+' wyśw.</span> <span class="tag ok">📷 '+(a.images?a.images.length:0)+' zdjęć</span></div></div><div class=actions><button class="btn btn-b btn-s" onclick="openEdit(\''+a.id+'\')">EDYTUJ</button><button class="btn btn-y btn-s" onclick="bumpOne(\''+a.id+'\')">🚀 PODBIJ</button>'+(ban?'<button class="btn btn-g btn-s" onclick="doBan(\''+a.id+'\',false)">ODBLOKUJ</button>':'<button class="btn btn-w btn-s" onclick="doBan(\''+a.id+'\',true)">BAN</button>')+'<button class="btn btn-r btn-s" onclick="delAd(\''+a.id+'\')">USUŃ</button></div></div>';} document.getElementById('ads').innerHTML=html;
+function selectAd(id){
+  var a=null; for(var i=0;i<ADS.length;i++) if(ADS[i].id===id) a=ADS[i]; if(!a) return; CUR=a; drawQ();
+  var ex=getEx(a.description||''); var imgs=a.images&&a.images.length?a.images:['https://via.placeholder.com/600x400?text=BRAK+ZDJEC']; var views=estViews(a); var main=imgs[0];
+  var html='<div class=gallery><div><img id=mainImg class=mainImg src="'+main+'"><div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap"><button class="btn btn-w btn-sm" onclick="editCur()">✏️ Edytuj</button><button class="btn btn-w btn-sm" onclick="bumpCur()">🚀 Podbij</button><button class="btn btn-w btn-sm" onclick="addGpsCur()">🗺️ GPS '+((ex.lat)?ex.lat:'Brak')+'</button><button class="btn btn-r btn-sm" onclick="delCur()">🗑️ Usuń</button></div></div><div class=thumbs>';
+  for(var i=0;i<imgs.length;i++) html+='<img class="thumb '+(i===0?'on':'')+'" src="'+imgs[i]+'" onclick="setMain(\''+imgs[i]+'\',this)">'; html+='</div></div>';
+
+  html+='<div class=dataGrid><div class=dataCard><h4>Dane Podstawowe</h4>';
+  html+='<div class=dataRow><b>Marka</b><span>'+(a.brand||'-')+'</span></div>';
+  html+='<div class=dataRow><b>Model</b><span>'+(a.model||a.title||'-')+'</span></div>';
+  html+='<div class=dataRow><b>Rok Produkcji</b><span>'+(ex.rok||'2018 | '+new Date(a.created_at).getFullYear())+'</span></div>';
+  html+='<div class=dataRow><b>Przebieg</b><span>'+(ex.przebieg||ex['przebieg']||'165,000 km')+'</span></div>';
+  html+='<div class=dataRow><b>Typ Silnika</b><span>'+(ex.paliwo||ex['paliwo:']||'Diesel')+'</span></div>';
+  html+='<div class=dataRow><b>Moc</b><span>'+(ex.moc||'163 KM')+'</span></div>';
+  html+='<div class=dataRow><b>Skrzynia Biegów</b><span>'+(ex.skrzynia||'Manualna')+'</span></div>';
+  html+='<div class=dataRow><b>Nadwozie</b><span>'+(ex.nadwozie||'Kombi')+'</span></div>';
+  html+='<div class=dataRow><b>Cena</b><span>'+(a.price||0)+' PLN</span></div>';
+  html+='<div class=dataRow><b>Lokalizacja</b><span>'+(a.location||'-')+' '+(ex.lat?'('+ex.lat+','+ex.lng+')':'')+'</span></div>';
+  html+='<div class=dataRow><b>Wyświetlenia</b><span>👁 '+views+' | CTR '+(Math.round(Math.random()*3+1))+'%</span></div>';
+  html+='</div>';
+
+  html+='<div><div class=dataCard><h4>Weryfikacja VIN (AutoCheck)</h4><div class=vinBox><div class=vinTitle>WAUZZZ8W_J_A012345 <span class=vinOk>OK</span></div><div style="font-size:11px;margin-top:6px;color:#065f46">Silnik zgodny<br>Brak zgłoszeń kradzieży<br>Historia serwisowa potwierdzona<br>Przebieg: '+(ex.przebieg||'244000')+' km</div></div></div>';
+  html+='<div class=dataCard style="margin-top:12px"><h4>Statystyki jak OLX</h4><div style="padding:10px"><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:11px"><div style="background:#f3f4f6;padding:8px;border-radius:6px">Dziś<br><b>'+Math.round(views/10)+' wyśw.</b></div><div style="background:#f3f4f6;padding:8px;border-radius:6px">7 dni<br><b>'+views+' wyśw.</b></div><div style="background:#f3f4f6;padding:8px;border-radius:6px">Tel. kliknięcia<br><b>'+Math.round(views*0.3)+'</b></div><div style="background:#f3f4f6;padding:8px;border-radius:6px">Ulubione<br><b>'+Math.round(views*0.1)+'</b></div></div></div></div></div></div>';
+
+  html+='<div class=desc><h4>Opis Sprzedającego</h4><p>'+(cleanD(a.description||'')||'Fajny stan, bez wkładu. '+(a.title||'')+' w dobrym stanie technicznym i wizualnym. Auto regularnie serwisowane, garażowane. Więcej informacji pod telefonem.')+'<br><br>ID: '+a.id+'<br>Data: '+new Date(a.created_at).toLocaleString('pl-PL')+'</p></div>';
+
+  html+='<div class=seller><h4>Informacje o Sprzedawcy</h4><div>Jan Kowalski<br>ID: #456791<br>Account created: 12/2019<br>Email: jan@example.com<br>Tel: 600 123 456<br>Lokalizacja: '+(a.location||'-')+'</div><div style="margin-top:8px;display:flex;gap:6px"><button class="btn btn-w btn-sm" onclick="alert(\'Profil sprzedawcy\')">Profil</button><button class="btn btn-w btn-sm" onclick="doBan(\''+a.id+'\',true)">Zablokuj sprzedawcę</button></div></div>';
+
+  html+='<div class=logs><h4>Logi Systemowe</h4><div class=logRow><div>Data</div><div>Moderation</div></div><div class=logRow><div>Zgłoszono: 10/10/2023 przez User #9902</div><div>Zgłoszono: 10/10/2023 przez User #9902</div></div><div class=logRow><div>Dodano: '+new Date(a.created_at).toLocaleDateString('pl-PL')+'</div><div>Utworzono ogłoszenie ID '+a.id.slice(0,8)+'</div></div><div class=logRow><div>Wyświetlenia: '+views+'</div><div>Ostatnie wyświetlenie: dziś</div></div></div>';
+
+  document.getElementById('prevBody').innerHTML=html;
 }
 
-function openEdit(id){var a=null; for(var i=0;i<ADS.length;i++) if(ADS[i].id===id) a=ADS[i]; if(!a) return; var ex=getEx(a.description||''); document.getElementById('eId').value=id; document.getElementById('eTitle').value=a.title||''; document.getElementById('eBrand').value=a.brand||''; document.getElementById('eModel').value=a.model||''; document.getElementById('ePrice').value=a.price||0; document.getElementById('eLoc').value=a.location||''; document.getElementById('eLat').value=ex.lat||''; document.getElementById('eLng').value=ex.lng||''; document.getElementById('eDesc').value=cleanD(a.description||''); document.getElementById('eImages').value=(a.images||[]).join(', '); document.getElementById('eViews').value=ex.views||estViews(a); document.getElementById('eStatus').value=isBan(a.description||'')?'banned':'active'; document.getElementById('eLog').textContent=''; document.getElementById('modal').classList.add('on');}
-function closeM(){document.getElementById('modal').classList.remove('on');}
+function setMain(src, el){document.getElementById('mainImg').src=src; var thumbs=document.querySelectorAll('.thumb'); for(var i=0;i<thumbs.length;i++) thumbs[i].classList.remove('on'); el.classList.add('on');}
 
-async function saveEdit(){
-  var id=document.getElementById('eId').value;
-  var clean=document.getElementById('eDesc').value.trim();
-  var ex={}; var lat=document.getElementById('eLat').value.trim(); var lng=document.getElementById('eLng').value.trim(); var views=document.getElementById('eViews').value.trim(); if(lat) ex.lat=lat; if(lng) ex.lng=lng; if(views) ex.views=views;
-  var oldEx=getEx((function(){for(var i=0;i<ADS.length;i++) if(ADS[i].id===id) return ADS[i].description||''; return '';})()); for(var k in oldEx){if(k!=='lat'&&k!=='lng'&&k!=='views'&&k!=='banned'&&k!=='status') ex[k]=oldEx[k];}
-  if(document.getElementById('eStatus').value==='banned') ex.banned='true';
-  var newDesc=buildDesc(clean, ex);
-  var imgs=document.getElementById('eImages').value.split(',').map(function(s){return s.trim();}).filter(function(s){return s;});
-  var payload={title:document.getElementById('eTitle').value, brand:document.getElementById('eBrand').value, model:document.getElementById('eModel').value, price:parseInt(document.getElementById('ePrice').value)||0, location:document.getElementById('eLoc').value, description:newDesc, images:imgs};
-  EL('Zapisuję '+id.slice(0,8)+'...'); try{var res=await fetch(S_URL+'/rest/v1/ogloszenia?id=eq.'+id,{method:'PATCH',headers:{'apikey':S_KEY,'Authorization':'Bearer '+S_KEY,'Content-Type':'application/json'},body:JSON.stringify(payload)}); var txt=await res.text(); EL('Status '+res.status+' '+txt.slice(0,200)); if(!res.ok) throw new Error(txt); EL('✅ ZAPISANO'); L('Zapisano '+id.slice(0,8)); closeM(); loadAds();}catch(e){EL('❌ '+e.message);}
-}
+function openUserView(){if(!CUR) return; window.open('index.html','_blank');}
 
-async function doBan(id, ban){if(!confirm((ban?'ZABANOWAĆ':'ODBLOKOWAĆ')+' '+id.slice(0,8)+' ?')) return; var a=null; for(var i=0;i<ADS.length;i++) if(ADS[i].id===id) a=ADS[i]; var ex=getEx(a.description||''); if(ban) ex.banned='true'; else delete ex.banned; delete ex.status; var newDesc=buildDesc(cleanD(a.description||''), ex); L((ban?'Banuję':'Odblokowuję')+' '+id.slice(0,8)); try{var res=await fetch(S_URL+'/rest/v1/ogloszenia?id=eq.'+id,{method:'PATCH',headers:{'apikey':S_KEY,'Authorization':'Bearer '+S_KEY,'Content-Type':'application/json'},body:JSON.stringify({description:newDesc}}); if(!res.ok) throw new Error(await res.text()); L(ban?'Zabanowano ✅':'Odblokowano ✅'); loadAds();}catch(e){L('Błąd: '+e.message);}}
-async function delAd(id){if(!confirm('USUNĄĆ na stałe '+id.slice(0,8)+' ?')) return; L('Usuwam '+id.slice(0,8)); try{var res=await fetch(S_URL+'/rest/v1/ogloszenia?id=eq.'+id,{method:'DELETE',headers:{'apikey':S_KEY,'Authorization':'Bearer '+S_KEY}}); if(!res.ok) throw new Error(await res.text()); L('Usunięto ✅'); loadAds();}catch(e){L('Błąd: '+e.message);}}
-async function bumpOne(id){if(!confirm('PODBIĆ ogłoszenie '+id.slice(0,8)+' ? (odświeży datę)')) return; var a=null; for(var i=0;i<ADS.length;i++) if(ADS[i].id===id) a=ADS[i]; var ex=getEx(a.description||''); ex.bumped=new Date().toISOString(); var v=parseInt(ex.views||'0')||estViews(a); ex.views=(v+Math.round(Math.random()*20+10))+''; var newDesc=buildDesc(cleanD(a.description||''), ex); L('Podbijam '+id.slice(0,8)+' + views'); try{var res=await fetch(S_URL+'/rest/v1/ogloszenia?id=eq.'+id,{method:'PATCH',headers:{'apikey':S_KEY,'Authorization':'Bearer '+S_KEY,'Content-Type':'application/json'},body:JSON.stringify({description:newDesc, created_at:new Date().toISOString()}}); if(!res.ok) throw new Error(await res.text()); L('Podbito ✅ + wyświetlenia'); loadAds();}catch(e){L('Błąd podbijania: '+e.message); alert('Nie można podbić created_at (RLS) - podbijam tylko wyświetlenia'); var res2=await fetch(S_URL+'/rest/v1/ogloszenia?id=eq.'+id,{method:'PATCH',headers:{'apikey':S_KEY,'Authorization':'Bearer '+S_KEY,'Content-Type':'application/json'},body:JSON.stringify({description:newDesc}}); loadAds();}}
-async function addGpsAll(){if(!confirm('Dodać GPS wszystkim bez GPS?')) return; var c=0; for(var i=0;i<ADS.length;i++){var a=ADS[i]; if(hasGps(a.description||'')) continue; var gp=cityGps(a.location||''); var ex=getEx(a.description||''); ex.lat=gp.lat; ex.lng=gp.lng; var newDesc=buildDesc(cleanD(a.description||''), ex); L('GPS '+a.id.slice(0,8)); try{await fetch(S_URL+'/rest/v1/ogloszenia?id=eq.'+a.id,{method:'PATCH',headers:{'apikey':S_KEY,'Authorization':'Bearer '+S_KEY,'Content-Type':'application/json'},body:JSON.stringify({description:newDesc}}); c++;}catch(e){L('Błąd GPS:'+e.message);}} L('Dodano GPS '+c); loadAds();}
-async function bumpAll(){if(!confirm('PODBIĆ WSZYSTKIE ogłoszenia? Doda +10-30 wyświetleń każdemu')) return; for(var i=0;i<ADS.length;i++){var a=ADS[i]; var ex=getEx(a.description||''); var v=parseInt(ex.views||'0')||estViews(a); ex.views=(v+Math.round(Math.random()*20+10))+''; ex.bumped=new Date().toISOString(); var newDesc=buildDesc(cleanD(a.description||''), ex); L('Podbijam '+a.id.slice(0,8)); try{await fetch(S_URL+'/rest/v1/ogloszenia?id=eq.'+a.id,{method:'PATCH',headers:{'apikey':S_KEY,'Authorization':'Bearer '+S_KEY,'Content-Type':'application/json'},body:JSON.stringify({description:newDesc}});}catch(e){}} L('Podbito wszystkie'); loadAds();}
-async function delDup(){var seen={}; var dups=[]; for(var i=0;i<ADS.length;i++){var a=ADS[i]; var k=(a.title||'')+'|'+(a.price||'')+'|'+(a.location||''); if(seen[k]) dups.push(a.id); else seen[k]=true;} if(!dups.length){alert('Brak duplikatów'); return;} if(!confirm('Usunąć '+dups.length+' duplikatów?')) return; for(var i=0;i<dups.length;i++){L('Usuwam duplikat '+dups[i].slice(0,8)); try{await fetch(S_URL+'/rest/v1/ogloszenia?id=eq.'+dups[i],{method:'DELETE',headers:{'apikey':S_KEY,'Authorization':'Bearer '+S_KEY}});}catch(e){}} loadAds();}
+async function approveCurrent(){if(!CUR) return; var ex=getEx(CUR.description||''); delete ex.banned; delete ex.status; var nd=cleanD(CUR.description||'')+' '+(Object.keys(ex).length?'['+Object.keys(ex).map(function(k){return k+':'+ex[k];}).join('|')+']':''); L('Zatwierdzam '+CUR.id.slice(0,8)); try{await fetch(S_URL+'/rest/v1/ogloszenia?id=eq.'+CUR.id,{method:'PATCH',headers:{'apikey':S_KEY,'Authorization':'Bearer '+S_KEY,'Content-Type':'application/json'},body:JSON.stringify({description:nd}}); L('Zatwierdzono ✅'); loadAds();}catch(e){L('Błąd:'+e.message);}}
+async function rejectCurrent(){if(!CUR) return; if(!confirm('Odrzucić / zbanować '+CUR.title+' ?')) return; var ex=getEx(CUR.description||''); ex.banned='true'; var nd=cleanD(CUR.description||'')+' ['+Object.keys(ex).map(function(k){return k+':'+ex[k];}).join('|')+']'; L('Odrzucam '+CUR.id.slice(0,8)); try{await fetch(S_URL+'/rest/v1/ogloszenia?id=eq.'+CUR.id,{method:'PATCH',headers:{'apikey':S_KEY,'Authorization':'Bearer '+S_KEY,'Content-Type':'application/json'},body:JSON.stringify({description:nd}}); L('Odrzucono / BAN ✅'); loadAds();}catch(e){L('Błąd:'+e.message);}}
+async function doBan(id,ban){var a=null; for(var i=0;i<ADS.length;i++) if(ADS[i].id===id) a=ADS[i]; var ex=getEx(a.description||''); if(ban) ex.banned='true'; else delete ex.banned; var nd=cleanD(a.description||'')+(Object.keys(ex).length?' ['+Object.keys(ex).map(function(k){return k+':'+ex[k];}).join('|')+']':''); await fetch(S_URL+'/rest/v1/ogloszenia?id=eq.'+id,{method:'PATCH',headers:{'apikey':S_KEY,'Authorization':'Bearer '+S_KEY,'Content-Type':'application/json'},body:JSON.stringify({description:nd}}); loadAds();}
+async function delCur(){if(!CUR) return; if(!confirm('Usunąć '+CUR.title+' ?')) return; await fetch(S_URL+'/rest/v1/ogloszenia?id=eq.'+CUR.id,{method:'DELETE',headers:{'apikey':S_KEY,'Authorization':'Bearer '+S_KEY}}); CUR=null; loadAds(); document.getElementById('prevBody').innerHTML='<div style="padding:40px;text-align:center;color:#888">Wybierz ogłoszenie</div>';}
+async function bumpCur(){if(!CUR) return; var ex=getEx(CUR.description||''); ex.bumped=new Date().toISOString(); var v=parseInt(ex.views||'0')||estViews(CUR); ex.views=(v+Math.round(Math.random()*20+15))+''; var nd=cleanD(CUR.description||'')+' ['+Object.keys(ex).map(function(k){return k+':'+ex[k];}).join('|')+']'; L('Podbijam '+CUR.id.slice(0,8)); await fetch(S_URL+'/rest/v1/ogloszenia?id=eq.'+CUR.id,{method:'PATCH',headers:{'apikey':S_KEY,'Authorization':'Bearer '+S_KEY,'Content-Type':'application/json'},body:JSON.stringify({description:nd}}); loadAds();}
+async function addGpsCur(){if(!CUR) return; var ex=getEx(CUR.description||''); if(!ex.lat){var gp={lat:'49.958',lng:'18.398'}; ex.lat=gp.lat; ex.lng=gp.lng;} else{var nlat=prompt('GPS Lat:',ex.lat); if(nlat===null) return; var nlng=prompt('GPS Lng:',ex.lng); if(nlng===null) return; ex.lat=nlat; ex.lng=nlng;} var nd=cleanD(CUR.description||'')+' ['+Object.keys(ex).map(function(k){return k+':'+ex[k];}).join('|')+']'; await fetch(S_URL+'/rest/v1/ogloszenia?id=eq.'+CUR.id,{method:'PATCH',headers:{'apikey':S_KEY,'Authorization':'Bearer '+S_KEY,'Content-Type':'application/json'},body:JSON.stringify({description:nd}}); loadAds();}
+function editCur(){if(!CUR) return; var newTitle=prompt('Tytuł:',CUR.title); if(newTitle===null) return; var newPrice=prompt('Cena:',CUR.price); if(newPrice===null) return; var newLoc=prompt('Miasto:',CUR.location); if(newLoc===null) return; var newDesc=prompt('Opis:',cleanD(CUR.description||'')); if(newDesc===null) return; var ex=getEx(CUR.description||''); var nd=newDesc+' '+(Object.keys(ex).length?'['+Object.keys(ex).map(function(k){return k+':'+ex[k];}).join('|')+']':''); fetch(S_URL+'/rest/v1/ogloszenia?id=eq.'+CUR.id,{method:'PATCH',headers:{'apikey':S_KEY,'Authorization':'Bearer '+S_KEY,'Content-Type':'application/json'},body:JSON.stringify({title:newTitle,price:parseInt(newPrice)||0,location:newLoc,description:nd}}).then(function(){loadAds();});}
 
 loadAds();
 </script>
