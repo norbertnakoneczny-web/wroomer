@@ -1,134 +1,149 @@
 <!DOCTYPE html>
 <html lang="pl"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>WROOMER ADMIN V18.1 - OLX PRO FIX</title>
+<title>WROOMER ADMIN V19 - SIMPLE OLX</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box} body{font-family:Inter,Arial;background:#080808;color:#fff}
-.header{background:#111;border-bottom:2px solid #facc15;padding:14px 18px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100}
-.logo{display:flex;align-items:center;gap:10px} .logo-icon{width:44px;height:44px;background:#facc15;color:#000;border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:22px}
-.btn{padding:8px 16px;border-radius:20px;border:0;font-weight:800;cursor:pointer;font-size:12px} .btn-yellow{background:#facc15;color:#000} .btn-dark{background:#222;color:#fff;border:1px solid #333} .btn-red{background:#ff2222;color:#fff} .btn-green{background:#22c55e;color:#000} .btn-blue{background:#3b82f6;color:#fff} .btn-small{padding:6px 12px;font-size:11px}
-.card{background:#151515;border:1px solid #222;border-radius:14px;padding:16px;margin:12px} 
-.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding:12px} @media(max-width:900px){.stat-grid{grid-template-columns:repeat(2,1fr}} 
-.stat-card{background:#151515;border:1px solid #222;border-radius:14px;padding:16px} .stat-num{font-size:26px;font-weight:900} .stat-label{font-size:10px;color:#888;text-transform:uppercase} .stat-sub{font-size:11px;color:#666;margin-top:4px}
-.chart-bar{height:8px;background:#222;border-radius:4px;overflow:hidden;margin-top:6px} .chart-fill{height:100%;border-radius:4px}
-.list{display:flex;flex-direction:column;gap:8px;max-height:65vh;overflow:auto}
-.item{background:#1e1e1e;border:1px solid #2a2a2a;border-radius:12px;padding:14px;display:flex;justify-content:space-between;align-items:center;gap:12px} .item.banned{opacity:0.5;background:#2a1111;border-color:#5a2222}
-.badge{padding:3px 8px;border-radius:10px;font-size:9px;font-weight:800} .badge-green{background:#052e16;color:#86efac} .badge-yellow{background:#422006;color:#facc15} .badge-red{background:#450a0a;color:#fca5a5}
-.modal{position:fixed;inset:0;background:rgba(0,0,0,0.85);display:none;align-items:center;justify-content:center;z-index:200;padding:16px} .modal.active{display:flex} .modal-box{background:#151515;border:1px solid #333;border-radius:16px;padding:20px;width:100%;max-width:520px;max-height:90vh;overflow:auto}
-.input{width:100%;background:#0f0f0f;border:1px solid #2a2a2a;color:#fff;padding:10px 12px;border-radius:10px;margin-top:6px} label{font-size:11px;color:#888;margin-top:10px;display:block}
-.log{background:#000;color:#0f0;font-family:monospace;font-size:10px;padding:8px;border-radius:6px;max-height:120px;overflow:auto;white-space:pre-wrap;margin-top:8px}
+body{font-family:Arial,sans-serif;background:#f5f5f5;color:#222;margin:0}
+.top{background:#002f34;color:#fff;padding:16px 20px;display:flex;justify-content:space-between;align-items:center}
+.top h1{margin:0;font-size:20px} .top small{color:#7ed957}
+.btn{padding:10px 18px;border-radius:8px;border:0;font-weight:700;cursor:pointer} .btn-yellow{background:#ffce32;color:#002f34} .btn-dark{background:#fff;color:#002f34;border:1px solid #ddd} .btn-red{background:#ff4444;color:#fff} .btn-green{background:#23e5db;color:#002f34} .btn-blue{background:#3a77ff;color:#fff}
+.wrap{max-width:1200px;margin:0 auto;padding:16px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:16px 0} @media(max-width:800px){.stats{grid-template-columns:repeat(2,1fr}} @media(max-width:500px){.stats{grid-template-columns:1fr}}
+.card{background:#fff;border-radius:12px;padding:18px;box-shadow:0 2px 8px rgba(0,0,0,0.08)} 
+.card h3{margin:0 0 6px 0;font-size:12px;color:#888;text-transform:uppercase} .big{font-size:28px;font-weight:900;color:#002f34} .small{font-size:13px;color:#666;margin-top:4px}
+.list-card{background:#fff;border-radius:12px;padding:0;box-shadow:0 2px 8px rgba(0,0,0,0.08);overflow:hidden;margin-top:16px}
+.list-head{padding:16px 18px;border-bottom:1px solid #eee;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+.row{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;border-bottom:1px solid #f0f0f0;gap:12px} .row:hover{background:#fafafa} .row.ban{background:#fff1f1}
+.tag{padding:4px 10px;border-radius:12px;font-size:11px;font-weight:700;display:inline-block} .tag-ok{background:#d1fae5;color:#065f46} .tag-gps{background:#dbeafe;color:#1e40af} .tag-nogps{background:#fef3c7;color:#92400e} .tag-ban{background:#fee2e2;color:#991b1b}
+.search{padding:10px 12px;border:1px solid #ddd;border-radius:8px;width:100%}
+.log{background:#002f34;color:#23e5db;font-family:monospace;font-size:11px;padding:10px;border-radius:8px;white-space:pre-wrap;max-height:120px;overflow:auto;margin-top:12px}
 </style>
 </head>
 <body>
-<div class="header">
-  <div class="logo"><div class="logo-icon">W</div><div><div style="font-weight:900">WROOMER ADMIN V18.1 <span style="background:#facc15;color:#000;padding:2px 8px;border-radius:10px;font-size:10px">OLX PRO FIX</span></div><div style="font-size:10px;color:#22c55e">✅ V18.1 FIX - DZIAŁA - EDYCJA BAN STATY GPS</div></div></div>
-  <div style="display:flex;gap:6px"><button class="btn btn-dark" onclick="location.href='index.html'">STRONA</button><button class="btn btn-dark" onclick="location.href='diagnostyka.html'">DIAG</button><button class="btn btn-yellow" onclick="loadAll()">ODŚWIEŻ</button></div>
+<div class="top">
+  <div><h1>WROOMER ADMIN V19 <span style="background:#ffce32;color:#002f34;padding:2px 10px;border-radius:20px;font-size:12px">SIMPLE OLX</span></h1><small>✅ Prosty • Czytelny • Statystyki jak OLX • Edycja • Ban • GPS</small></div>
+  <div style="display:flex;gap:8px"><button class="btn btn-dark" onclick="location.href='index.html'">STRONA</button><button class="btn btn-yellow" onclick="loadAds()">ODŚWIEŻ</button></div>
 </div>
 
-<div class="stat-grid">
-  <div class="stat-card" style="border-top:3px solid #facc15"><div class="stat-label">OGŁOSZENIA AKTYWNE</div><div class="stat-num" id="statTotal" style="color:#facc15">-</div><div class="stat-sub" id="statTotalSub">-</div><div class="chart-bar"><div class="chart-fill" id="barTotal" style="width:100%;background:#facc15"></div></div></div>
-  <div class="stat-card" style="border-top:3px solid #22c55e"><div class="stat-label">Z GPS (MAPA)</div><div class="stat-num" id="statGps" style="color:#22c55e">-</div><div class="stat-sub" id="statGpsSub">-</div><div class="chart-bar"><div class="chart-fill" id="barGps" style="width:0%;background:#22c55e"></div></div></div>
-  <div class="stat-card" style="border-top:3px solid #3b82f6"><div class="stat-label">ŚREDNIA CENA</div><div class="stat-num" id="statAvg" style="color:#3b82f6">-</div><div class="stat-sub" id="statAvgSub">-</div><div class="chart-bar"><div class="chart-fill" id="barAvg" style="width:50%;background:#3b82f6"></div></div></div>
-  <div class="stat-card" style="border-top:3px solid #ff4444"><div class="stat-label">ZABANOWANE / WARTOŚĆ</div><div class="stat-num" id="statBanned" style="color:#ff4444">-</div><div class="stat-sub" id="statBannedSub">-</div><div class="chart-bar"><div class="chart-fill" id="barBanned" style="width:0%;background:#ff4444"></div></div></div>
-</div>
-
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 12px">
-  <div class="card"><h4 style="font-size:12px;color:#888">📊 MARKI - TOP (JAK OLX)</h4><div id="brandStats" style="margin-top:10px"></div></div>
-  <div class="card"><h4 style="font-size:12px;color:#888">📍 LOKALIZACJE - TOP</h4><div id="locStats" style="margin-top:10px"></div></div>
-</div>
-
-<div class="card">
-  <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
-    <h3>📋 OGŁOSZENIA - EDYCJA + BAN (OLX STYLE) V18.1 FIX</h3>
-    <div style="display:flex;gap:6px"><button class="btn btn-green btn-small" onclick="autoAddGps()">🗺️ DODAJ GPS AUTO</button><button class="btn btn-yellow btn-small" onclick="removeDuplicates()">🧹 USUŃ DUPLIKATY</button></div>
+<div class="wrap">
+  <div class="stats">
+    <div class="card"><h3>AKTYWNE OGŁOSZENIA</h3><div class="big" id="s1">-</div><div class="small" id="s1d">Ładowanie...</div></div>
+    <div class="card"><h3>Z GPS (NA MAPIE)</h3><div class="big" id="s2" style="color:#059669">-</div><div class="small" id="s2d">-</div></div>
+    <div class="card"><h3>ŚREDNIA CENA</h3><div class="big" id="s3" style="color:#2563eb">-</div><div class="small" id="s3d">-</div></div>
+    <div class="card"><h3>WARTOŚĆ + BANY</h3><div class="big" id="s4" style="color:#dc2626">-</div><div class="small" id="s4d">-</div></div>
   </div>
-  <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap"><input id="search" placeholder="Szukaj marka, miasto, tytuł..." class="input" style="flex:1;min-width:200px;margin-top:0" oninput="filterAds()"><select id="filterStatus" class="input" style="width:150px;margin-top:0" onchange="filterAds()"><option value="all">Wszystkie</option><option value="active">Aktywne</option><option value="banned">Zabanowane</option><option value="noGps">Bez GPS</option></select></div>
-  <div class="log" id="logBox">Log V18.1 FIX start - czekam na dane...
-</div>
-  <div class="list" id="adsList" style="margin-top:12px"><div style="padding:20px;text-align:center;color:#888">Ładowanie ogłoszeń...</div></div>
-</div>
 
-<div class="modal" id="editModal"><div class="modal-box">
-  <h3>✏️ EDYTUJ OGŁOSZENIE - jak OLX</h3>
-  <input type="hidden" id="editId">
-  <label>Tytuł</label><input id="editTitle" class="input">
-  <label>Marka</label><input id="editBrand" class="input">
-  <label>Model</label><input id="editModel" class="input">
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px"><div><label>Cena PLN</label><input id="editPrice" type="number" class="input"></div><div><label>Lokalizacja</label><input id="editLocation" class="input"></div></div>
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px"><div><label>GPS Lat</label><input id="editLat" class="input" placeholder="49.96"></div><div><label>GPS Lng</label><input id="editLng" class="input" placeholder="18.39"></div></div>
-  <label>Opis (bez GPS)</label><textarea id="editDesc" class="input" rows="3"></textarea>
-  <label>Status</label><select id="editStatus" class="input"><option value="active">✅ Aktywne</option><option value="banned">🚫 Zabanowane</option></select>
-  <div style="display:flex;gap:8px;margin-top:16px"><button class="btn btn-yellow" style="flex:1" onclick="saveEdit()">💾 ZAPISZ</button><button class="btn btn-dark" style="flex:1" onclick="closeModal()">ANULUJ</button></div>
-  <div class="log" id="editLog" style="margin-top:10px"></div>
-</div></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+    <div class="card"><h3>📊 MARKI - TOP (JAK OLX)</h3><div id="brandBox" style="margin-top:12px"></div></div>
+    <div class="card"><h3>📍 MIASTA - TOP (JAK OLX)</h3><div id="cityBox" style="margin-top:12px"></div></div>
+  </div>
+
+  <div class="list-card">
+    <div class="list-head">
+      <div><strong>📋 OGŁOSZENIA</strong> <span id="countInfo" style="color:#888;font-size:13px"></span></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn btn-green" onclick="addGps()">🗺️ DODAJ GPS WSZYSTKIM</button>
+        <button class="btn btn-yellow" onclick="cleanDup()">🧹 USUŃ DUPLIKATY</button>
+      </div>
+    </div>
+    <div style="padding:12px 18px;display:flex;gap:8px;flex-wrap:wrap;background:#fafafa">
+      <input id="q" class="search" placeholder="Szukaj: Volvo, Gorzyce..." oninput="draw()" style="flex:1;min-width:200px">
+      <select id="f" class="search" style="width:160px" onchange="draw()"><option value="all">Wszystkie</option><option value="ok">Aktywne</option><option value="ban">Zabanowane</option><option value="nogps">Bez GPS</option></select>
+    </div>
+    <div class="log" id="log">START V19 SIMPLE...
+</div>
+    <div id="list"><div style="padding:40px;text-align:center;color:#888">Ładowanie ogłoszeń z Supabase...</div></div>
+  </div>
+</div>
 
 <script>
-const SUPA_URL="https://bdpydgsfowtuvjnkyeeg.supabase.co";
-const SUPA_KEY="sb_publishable_S1qH_mBZaX7-bzmfJ0IVGA_6hxGbJWd";
-let allAds=[], filteredAds=[];
+var S_URL = "https://bdpydgsfowtuvjnkyeeg.supabase.co";
+var S_KEY = "sb_publishable_S1qH_mBZaX7-bzmfJ0IVGA_6hxGbJWd";
+var ADS = [];
 
-function log(m){const b=document.getElementById('logBox'); b.textContent+=new Date().toLocaleTimeString()+' '+m+'\n'; b.scrollTop=b.scrollHeight; console.log(m);}
-function editLog(m){document.getElementById('editLog').textContent+=m+'\n';}
-function parseExtra(desc){const o={}; const clean=(desc||'').replace(/\[.*?\]/,'').trim(); try{const m=(desc||'').match(/\[(.*?)\]/); if(m) m[1].split('|').forEach(function(p){const i=p.indexOf(':'); if(i!==-1) o[p.slice(0,i).trim().toLowerCase()]=p.slice(i+1).trim();});}catch(e){} return {extra:o,clean:clean};}
-function buildDesc(clean, extra){const parts=[]; for(const k in extra) if(extra[k]&&extra[k]!=='-') parts.push(k+':'+extra[k]); return clean + (parts.length ? ' ['+parts.join('|')+']' : '');}
-function getCityCoords(city){const map={'gorzyce':{lat:'49.958',lng:'18.398'},'jastrzebie':{lat:'49.951',lng:'18.594'},'wodzislaw':{lat:'50.036',lng:'18.453'},'rybnik':{lat:'50.097',lng:'18.54'},'raciborz':{lat:'50.09',lng:'18.22'},'katowice':{lat:'50.264',lng:'19.023'},'default':{lat:'50.06',lng:'19.0'}}; const k=(city||'').toLowerCase(); for(const key in map) if(k.includes(key)) return map[key]; return map['default'];}
+function L(t){var e=document.getElementById('log'); e.textContent += new Date().toLocaleTimeString() + ' ' + t + '\n'; e.scrollTop = e.scrollHeight; console.log(t);}
 
-async function loadAll(){
-  log('=== LOAD V18.1 FIX === SUPA_URL='+SUPA_URL);
+function hasGps(d){return (d||'').indexOf('lat:')>-1;}
+function isBan(d){return (d||'').indexOf('banned:true')>-1 || (d||'').indexOf('status:banned')>-1;}
+function cleanDesc(d){return (d||'').replace(/\[.*\]/,'').trim();}
+function getExtra(d){var o={}; try{var m=(d||'').match(/\[(.*?)\]/); if(m){var parts=m[1].split('|'); for(var i=0;i<parts.length;i++){var p=parts[i]; var idx=p.indexOf(':'); if(idx>-1) o[p.slice(0,idx).toLowerCase()]=p.slice(idx+1);}}}catch(e){} return o;}
+
+function cityToGps(city){city=(city||'').toLowerCase(); if(city.indexOf('gorzy')>-1) return {lat:'49.958',lng:'18.398'}; if(city.indexOf('jastrz')>-1) return {lat:'49.951',lng:'18.594'}; if(city.indexOf('wodzis')>-1) return {lat:'50.036',lng:'18.453'}; if(city.indexOf('rybnik')>-1) return {lat:'50.097',lng:'18.54'}; if(city.indexOf('racib')>-1) return {lat:'50.09',lng:'18.22'}; return {lat:'50.06',lng:'19.0'};}
+
+async function loadAds(){
+  L('Pobieram z ' + S_URL);
   try{
-    const url=SUPA_URL+'/rest/v1/ogloszenia?select=*&order=created_at.desc&limit=200';
-    log('FETCH '+url);
-    const res=await fetch(url,{headers:{'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY}});
-    log('Status ogloszenia: '+res.status);
-    if(!res.ok){const t=await res.text(); throw new Error(t);}
-    allAds=await res.json();
-    log('OK '+allAds.length+' rekordów');
+    var res = await fetch(S_URL + '/rest/v1/ogloszenia?select=*&order=created_at.desc&limit=200', {headers:{'apikey':S_KEY,'Authorization':'Bearer '+S_KEY}});
+    L('Status: ' + res.status);
+    if(!res.ok){var txt=await res.text(); throw new Error(txt);}
+    ADS = await res.json();
+    L('Pobrano ' + ADS.length + ' ogłoszeń OK');
     renderStats();
-    filterAds();
-  }catch(e){log('BŁĄD: '+e.message); document.getElementById('adsList').innerHTML='<div style="padding:20px;background:#3a1111;border-radius:12px">❌ '+e.message+'<br>Sprawdź czy RLS wyłączone</div>';}
+    draw();
+  }catch(e){L('BŁĄD: ' + e.message); document.getElementById('list').innerHTML='<div style="padding:20px;background:#fee;color:#900">❌ '+e.message+'<br>Uruchom w Supabase SQL:<br><code>ALTER TABLE public.ogloszenia DISABLE ROW LEVEL SECURITY;</code></div>';}
 }
 
 function renderStats(){
-  const total=allAds.length; let withGps=0,banned=0,sum=0,brands={},locs={};
-  allAds.forEach(function(a){const p=parseExtra(a.description||''); if(p.extra.lat && p.extra.lat!=='-') withGps++; if(p.extra.banned==='true'||p.extra.status==='banned') banned++; const price=parseInt(a.price||0)||0; sum+=price; const b=(a.brand||'Inne').trim()||'Inne'; brands[b]=(brands[b]||0)+1; const l=(a.location||'Nieznane').trim()||'Nieznane'; locs[l]=(locs[l]||0)+1;});
-  const avg=total?Math.round(sum/total):0;
-  document.getElementById('statTotal').textContent=total-banned;
-  document.getElementById('statTotalSub').textContent=total+' wszystkich / '+banned+' banów';
-  document.getElementById('statGps').textContent=withGps;
-  document.getElementById('statGpsSub').textContent=Math.round(total?withGps/total*100:0)+'% ma GPS / '+(total-withGps)+' bez';
-  document.getElementById('statAvg').textContent=avg.toLocaleString('pl-PL')+' PLN';
-  document.getElementById('statAvgSub').textContent='Wartość: '+sum.toLocaleString('pl-PL')+' PLN';
-  document.getElementById('statBanned').textContent=banned;
-  document.getElementById('statBannedSub').textContent=banned+' zabanowanych / '+(total-banned)+' aktywnych';
-  document.getElementById('barGps').style.width=(total?withGps/total*100:0)+'%';
-  document.getElementById('barBanned').style.width=(total?banned/total*100:0)+'%';
-  let bHtml=''; Object.entries(brands).sort(function(a,b){return b[1]-a[1];}).slice(0,5).forEach(function(kv){const k=kv[0],v=kv[1]; const pct=Math.round(v/total*100); bHtml+='<div style="display:flex;justify-content:space-between;font-size:11px;margin-top:6px"><span>'+k+'</span><span style="color:#facc15">'+v+' ('+pct+'%)</span></div><div class="chart-bar"><div class="chart-fill" style="width:'+pct+'%;background:#facc15"></div></div>';}); document.getElementById('brandStats').innerHTML=bHtml||'<small>Brak</small>';
-  let lHtml=''; Object.entries(locs).sort(function(a,b){return b[1]-a[1];}).slice(0,5).forEach(function(kv){const k=kv[0],v=kv[1]; const pct=Math.round(v/total*100); lHtml+='<div style="display:flex;justify-content:space-between;font-size:11px;margin-top:6px"><span>'+k+'</span><span style="color:#22c55e">'+v+'</span></div><div class="chart-bar"><div class="chart-fill" style="width:'+pct+'%;background:#22c55e"></div></div>';}); document.getElementById('locStats').innerHTML=lHtml||'<small>Brak</small>';
+  var total=ADS.length, gps=0, ban=0, sum=0;
+  var brands={}, cities={};
+  for(var i=0;i<ADS.length;i++){var a=ADS[i]; var d=a.description||''; if(hasGps(d)) gps++; if(isBan(d)) ban++; sum+=parseInt(a.price||0)||0; var b=(a.brand||'Inne'); brands[b]=(brands[b]||0)+1; var c=(a.location||'Inne'); cities[c]=(cities[c]||0)+1;}
+  var avg = total? Math.round(sum/total):0;
+  document.getElementById('s1').textContent = (total-ban);
+  document.getElementById('s1d').textContent = total + ' wszystkich, ' + ban + ' banów';
+  document.getElementById('s2').textContent = gps;
+  document.getElementById('s2d').textContent = (total? Math.round(gps/total*100):0) + '% ma GPS, ' + (total-gps) + ' bez';
+  document.getElementById('s3').textContent = avg.toLocaleString('pl-PL') + ' PLN';
+  document.getElementById('s3d').textContent = 'Suma: ' + sum.toLocaleString('pl-PL') + ' PLN';
+  document.getElementById('s4').textContent = ban;
+  document.getElementById('s4d').textContent = ban + ' banów / ' + (total-ban) + ' aktywnych';
+  document.getElementById('countInfo').textContent = '('+total+' ogłoszeń)';
+
+  var bHtml=''; var bKeys=Object.keys(brands).sort(function(a,b){return brands[b]-brands[a];}).slice(0,5); for(var i=0;i<bKeys.length;i++){var k=bKeys[i]; var v=brands[k]; var pct=Math.round(v/total*100); bHtml+='<div style="display:flex;justify-content:space-between;margin:8px 0;font-size:13px"><span>'+k+'</span><b>'+v+' ('+pct+'%)</b></div><div style="height:6px;background:#eee;border-radius:3px"><div style="height:6px;width:'+pct+'%;background:#002f34;border-radius:3px"></div></div>';} document.getElementById('brandBox').innerHTML=bHtml||'Brak';
+  var cHtml=''; var cKeys=Object.keys(cities).sort(function(a,b){return cities[b]-cities[a];}).slice(0,5); for(var i=0;i<cKeys.length;i++){var k=cKeys[i]; var v=cities[k]; var pct=Math.round(v/total*100); cHtml+='<div style="display:flex;justify-content:space-between;margin:8px 0;font-size:13px"><span>'+k+'</span><b>'+v+'</b></div><div style="height:6px;background:#eee;border-radius:3px"><div style="height:6px;width:'+pct+'%;background:#23e5db;border-radius:3px"></div></div>';} document.getElementById('cityBox').innerHTML=cHtml||'Brak';
 }
 
-function filterAds(){
-  const q=(document.getElementById('search').value||'').toLowerCase(); const f=document.getElementById('filterStatus').value;
-  filteredAds=allAds.filter(function(a){const p=parseExtra(a.description||''); const isBanned=p.extra.banned==='true'||p.extra.status==='banned'; const hasGps=p.extra.lat && p.extra.lat!=='-'; if(f==='active'&&isBanned) return false; if(f==='banned'&&!isBanned) return false; if(f==='noGps'&&hasGps) return false; if(!q) return true; return (a.title||'').toLowerCase().includes(q)||(a.brand||'').toLowerCase().includes(q)||(a.location||'').toLowerCase().includes(q);});
-  renderList(filteredAds);
+function draw(){
+  var q=(document.getElementById('q').value||'').toLowerCase();
+  var f=document.getElementById('f').value;
+  var filtered=[];
+  for(var i=0;i<ADS.length;i++){var a=ADS[i]; var d=a.description||''; var ban=isBan(d); var gps=hasGps(d); if(f==='ok'&&ban) continue; if(f==='ban'&&!ban) continue; if(f==='nogps'&&gps) continue; if(q){var t=((a.title||'')+' '+(a.brand||'')+' '+(a.location||'')).toLowerCase(); if(t.indexOf(q)===-1) continue;} filtered.push(a);}
+  var html='';
+  if(filtered.length===0){html='<div style="padding:40px;text-align:center;color:#888">📭 Brak ogłoszeń</div>';}
+  else{for(var i=0;i<filtered.length;i++){var a=filtered[i]; var d=a.description||''; var ex=getExtra(d); var ban=isBan(d); var gps=hasGps(d); html+='<div class="row '+(ban?'ban':'')+'"><div style="flex:1"><div style="font-weight:800;font-size:14px">'+(a.title||'Bez tytułu')+' <span style="color:#002f34">'+(a.price||0)+' PLN</span></div><div style="font-size:12px;color:#666;margin-top:4px">'+(a.brand||'')+' '+(a.model||'')+' • '+(a.location||'-')+' • '+new Date(a.created_at).toLocaleDateString('pl-PL')+' • ID:'+a.id.slice(0,8)+(ex.lat?' • GPS:'+ex.lat+','+ex.lng:'')+'</div><div style="margin-top:6px">'+(gps?'<span class="tag tag-gps">GPS</span>':'<span class="tag tag-nogps">BRAK GPS</span>')+' '+(ban?'<span class="tag tag-ban">BAN</span>':'<span class="tag tag-ok">AKTYWNE</span>')+'</div></div><div style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn btn-blue" style="padding:6px 12px;font-size:12px" onclick="editAd(\''+a.id+'\')">EDYTUJ</button>'+(ban?'<button class="btn btn-green" style="padding:6px 12px;font-size:12px" onclick="doBan(\''+a.id+'\',false)">ODBLOKUJ</button>':'<button class="btn btn-dark" style="padding:6px 12px;font-size:12px" onclick="doBan(\''+a.id+'\',true)">BAN</button>')+'<button class="btn btn-red" style="padding:6px 12px;font-size:12px" onclick="delAd(\''+a.id+'\')">USUŃ</button></div></div>';}}
+  document.getElementById('list').innerHTML=html;
 }
 
-function renderList(ads){
-  const list=document.getElementById('adsList');
-  if(ads.length===0){list.innerHTML='<div style="padding:30px;text-align:center;color:#888">📭 Brak ogłoszeń</div>';return;}
-  let h=''; ads.forEach(function(ad){const p=parseExtra(ad.description||''); const hasGps=p.extra.lat&&p.extra.lat!=='-'; const isBanned=p.extra.banned==='true'||p.extra.status==='banned'; h+='<div class="item '+(isBanned?'banned':'')+'"><div style="flex:1"><div style="font-weight:800;display:flex;gap:6px;flex-wrap:wrap">'+
-  '<span>'+(ad.title||'Bez')+'</span><span style="color:#facc15">'+(ad.price||0)+' PLN</span>'+(hasGps?'<span class="badge badge-green">GPS</span>':'<span class="badge badge-yellow">BRAK GPS</span>')+(isBanned?'<span class="badge badge-red">BAN</span>':'<span class="badge badge-green">AKTYWNE</span>')+
-  '</div><div style="font-size:11px;color:#888;margin-top:4px">'+(ad.brand||'')+' '+(ad.model||'')+' • '+(ad.location||'-')+' • ID:'+ad.id.slice(0,8)+' • '+new Date(ad.created_at).toLocaleDateString('pl-PL')+(p.extra.lat?' • GPS:'+p.extra.lat.slice(0,5)+','+p.extra.lng.slice(0,5):'')+'</div></div>'+
-  '<div style="display:flex;gap:4px"><button class="btn btn-blue btn-small" onclick="openEdit(\''+ad.id+'\')">EDYTUJ</button>'+(isBanned?'<button class="btn btn-green btn-small" onclick="toggleBan(\''+ad.id+'\',false)">ODBLOKUJ</button>':'<button class="btn btn-yellow btn-small" onclick="toggleBan(\''+ad.id+'\',true)">BAN</button>')+'<button class="btn btn-red btn-small" onclick="delAd(\''+ad.id+'\')">USUŃ</button></div></div>';}); list.innerHTML=h;
+async function editAd(id){
+  var a=null; for(var i=0;i<ADS.length;i++) if(ADS[i].id===id) a=ADS[i];
+  if(!a) return;
+  var newTitle=prompt('Tytuł:', a.title||''); if(newTitle===null) return;
+  var newBrand=prompt('Marka:', a.brand||''); if(newBrand===null) return;
+  var newModel=prompt('Model:', a.model||''); if(newModel===null) return;
+  var newPrice=prompt('Cena PLN:', a.price||0); if(newPrice===null) return;
+  var newLoc=prompt('Miasto:', a.location||''); if(newLoc===null) return;
+  var ex=getExtra(a.description||'');
+  var newLat=prompt('GPS Lat (np 49.958):', ex.lat||''); if(newLat===null) return;
+  var newLng=prompt('GPS Lng (np 18.398):', ex.lng||''); if(newLng===null) return;
+  var newDesc=prompt('Opis:', cleanDesc(a.description||'')); if(newDesc===null) return;
+
+  var extra=''; if(newLat&&newLng) extra=' [lat:'+newLat+'|lng:'+newLng+']';
+  var fullDesc=newDesc+extra;
+  // zachowaj ban jeśli był
+  if(isBan(a.description)) fullDesc+=' [banned:true]';
+
+  L('Zapisuję edycję '+id.slice(0,8));
+  try{
+    var res=await fetch(S_URL+'/rest/v1/ogloszenia?id=eq.'+id,{method:'PATCH',headers:{'apikey':S_KEY,'Authorization':'Bearer '+S_KEY,'Content-Type':'application/json'},body:JSON.stringify({title:newTitle,brand:newBrand,model:newModel,price:parseInt(newPrice)||0,location:newLoc,description:fullDesc}});
+    if(!res.ok) throw new Error(await res.text());
+    L('Zapisano ✅'); loadAds();
+  }catch(e){L('Błąd zapisu: '+e.message); alert(e.message);}
 }
 
-function openEdit(id){const ad=allAds.find(function(a){return a.id===id;}); if(!ad) return; const p=parseExtra(ad.description||''); document.getElementById('editId').value=id; document.getElementById('editTitle').value=ad.title||''; document.getElementById('editBrand').value=ad.brand||''; document.getElementById('editModel').value=ad.model||''; document.getElementById('editPrice').value=ad.price||0; document.getElementById('editLocation').value=ad.location||''; document.getElementById('editLat').value=p.extra.lat||''; document.getElementById('editLng').value=p.extra.lng||''; document.getElementById('editDesc').value=p.clean||''; document.getElementById('editStatus').value=(p.extra.banned==='true'?'banned':'active'); document.getElementById('editLog').textContent=''; document.getElementById('editModal').classList.add('active');}
-function closeModal(){document.getElementById('editModal').classList.remove('active');}
-async function saveEdit(){const id=document.getElementById('editId').value; const clean=document.getElementById('editDesc').value.trim(); const extra={}; const lat=document.getElementById('editLat').value.trim(); const lng=document.getElementById('editLng').value.trim(); if(lat) extra.lat=lat; if(lng) extra.lng=lng; const status=document.getElementById('editStatus').value; if(status==='banned') extra.banned='true'; const oldAd=allAds.find(function(a){return a.id===id;}); const oldP=parseExtra(oldAd.description||''); for(const k in oldP.extra){if(k!=='lat'&&k!=='lng'&&k!=='banned'&&k!=='status') extra[k]=oldP.extra[k];} const newDesc=clean + (Object.keys(extra).length ? ' ['+Object.entries(extra).map(function(kv){return kv[0]+':'+kv[1];}).join('|')+']' : ''); const payload={title:document.getElementById('editTitle').value, brand:document.getElementById('editBrand').value, model:document.getElementById('editModel').value, price:parseInt(document.getElementById('editPrice').value)||0, location:document.getElementById('editLocation').value, description:newDesc}; editLog('Zapisuję...'); try{const res=await fetch(SUPA_URL+'/rest/v1/ogloszenia?id=eq.'+id,{method:'PATCH',headers:{'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY,'Content-Type':'application/json','Prefer':'return=representation'},body:JSON.stringify(payload)}); const txt=await res.text(); editLog('Status:'+res.status+' '+txt.slice(0,200)); if(!res.ok) throw new Error(txt); editLog('✅ ZAPISANO'); log('Zapisano '+id.slice(0,8)); closeModal(); loadAll();}catch(e){editLog('❌ '+e.message);}}
-async function toggleBan(id,ban){if(!confirm((ban?'ZABANOWAĆ':'ODBLOKOWAĆ')+' '+id.slice(0,8)+' ?')) return; const ad=allAds.find(function(a){return a.id===id;}); const p=parseExtra(ad.description||''); const extra=p.extra; if(ban){extra.banned='true'; extra.status='banned';} else {delete extra.banned; delete extra.status;} const newDesc=p.clean + (Object.keys(extra).length ? ' ['+Object.entries(extra).map(function(kv){return kv[0]+':'+kv[1];}).join('|')+']' : ''); log((ban?'Banuję':'Odblokowuję')+' '+id.slice(0,8)); try{const res=await fetch(SUPA_URL+'/rest/v1/ogloszenia?id=eq.'+id,{method:'PATCH',headers:{'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY,'Content-Type':'application/json'},body:JSON.stringify({description:newDesc}}); if(!res.ok){const t=await res.text(); throw new Error(t);} log((ban?'Zabanowano ✅':'Odblokowano ✅')); loadAll();}catch(e){log('Błąd bana:'+e.message); alert(e.message);}}
-async function delAd(id){if(!confirm('USUNĄĆ '+id.slice(0,8)+' ?')) return; log('Usuwam '+id); try{const res=await fetch(SUPA_URL+'/rest/v1/ogloszenia?id=eq.'+id,{method:'DELETE',headers:{'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY}}); if(!res.ok){const t=await res.text(); throw new Error(t);} log('Usunięto ✅'); loadAll();}catch(e){log('Błąd:'+e.message);}}
-async function autoAddGps(){if(!confirm('Dodać GPS auto do wszystkich bez GPS?')) return; let count=0; for(const ad of allAds){const p=parseExtra(ad.description||''); if(p.extra.lat&&p.extra.lat!=='-') continue; const coords=getCityCoords(ad.location||''); const extra=p.extra; extra.lat=coords.lat; extra.lng=coords.lng; const newDesc=p.clean + ' ['+Object.entries(extra).map(function(kv){return kv[0]+':'+kv[1];}).join('|')+']'; log('GPS '+ad.id.slice(0,8)+' -> '+coords.lat); try{await fetch(SUPA_URL+'/rest/v1/ogloszenia?id=eq.'+ad.id,{method:'PATCH',headers:{'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY,'Content-Type':'application/json'},body:JSON.stringify({description:newDesc}}); count++;}catch(e){log('Błąd GPS:'+e.message);}} log('Dodano GPS '+count); alert('Dodano GPS '+count); loadAll();}
-async function removeDuplicates(){const seen={}; let dupIds=[]; allAds.forEach(function(a){const key=(a.title||'')+'|'+(a.price||'')+'|'+(a.location||''); if(seen[key]) dupIds.push(a.id); else seen[key]=true;}); if(dupIds.length===0){alert('Brak duplikatów!'); return;} if(!confirm('Usunąć '+dupIds.length+' duplikatów?')) return; for(const id of dupIds){log('Usuwam duplikat '+id.slice(0,8)); try{await fetch(SUPA_URL+'/rest/v1/ogloszenia?id=eq.'+id,{method:'DELETE',headers:{'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY}});}catch(e){log('Błąd:'+e.message);}} log('Usunięto duplikaty'); loadAll();}
+async function doBan(id, ban){if(!confirm((ban?'ZABANOWAĆ':'ODBLOKOWAĆ')+' '+id.slice(0,8)+' ?')) return; var a=null; for(var i=0;i<ADS.length;i++) if(ADS[i].id===id) a=ADS[i]; var d=a.description||''; var clean=cleanDesc(d); var ex=getExtra(d); if(ban) ex.banned='true'; else delete ex.banned; var extraStr=''; var keys=Object.keys(ex); if(keys.length){var parts=[]; for(var i=0;i<keys.length;i++) parts.push(keys[i]+':'+ex[keys[i]]); extraStr=' ['+parts.join('|')+']';} var newDesc=clean+extraStr; L((ban?'Banuję':'Odblokowuję')+' '+id.slice(0,8)); try{var res=await fetch(S_URL+'/rest/v1/ogloszenia?id=eq.'+id,{method:'PATCH',headers:{'apikey':S_KEY,'Authorization':'Bearer '+S_KEY,'Content-Type':'application/json'},body:JSON.stringify({description:newDesc}}); if(!res.ok) throw new Error(await res.text()); L((ban?'Zabanowano ✅':'Odblokowano ✅')); loadAds();}catch(e){L('Błąd bana:'+e.message);}}
+async function delAd(id){if(!confirm('USUNĄĆ na stałe '+id.slice(0,8)+' ?')) return; L('Usuwam '+id.slice(0,8)); try{var res=await fetch(S_URL+'/rest/v1/ogloszenia?id=eq.'+id,{method:'DELETE',headers:{'apikey':S_KEY,'Authorization':'Bearer '+S_KEY}}); if(!res.ok) throw new Error(await res.text()); L('Usunięto ✅'); loadAds();}catch(e){L('Błąd usuwania:'+e.message);}}
+async function addGps(){if(!confirm('Dodać GPS automatycznie do wszystkich bez GPS?')) return; var cnt=0; for(var i=0;i<ADS.length;i++){var a=ADS[i]; if(hasGps(a.description||'')) continue; var c=cityToGps(a.location||''); var clean=cleanDesc(a.description||''); var ex=getExtra(a.description||''); ex.lat=c.lat; ex.lng=c.lng; var parts=[]; var keys=Object.keys(ex); for(var k=0;k<keys.length;k++) parts.push(keys[k]+':'+ex[keys[k]]); var newDesc=clean+' ['+parts.join('|')+']'; L('GPS '+a.id.slice(0,8)+' -> '+c.lat); try{await fetch(S_URL+'/rest/v1/ogloszenia?id=eq.'+a.id,{method:'PATCH',headers:{'apikey':S_KEY,'Authorization':'Bearer '+S_KEY,'Content-Type':'application/json'},body:JSON.stringify({description:newDesc}}); cnt++;}catch(e){L('Błąd GPS:'+e.message);}} L('Dodano GPS '+cnt); alert('Dodano GPS do '+cnt+' ogłoszeń'); loadAds();}
+async function cleanDup(){var seen={}; var dups=[]; for(var i=0;i<ADS.length;i++){var a=ADS[i]; var key=(a.title||'')+'|'+(a.price||'')+'|'+(a.location||''); if(seen[key]) dups.push(a.id); else seen[key]=true;} if(dups.length===0){alert('Brak duplikatów!'); return;} if(!confirm('Usunąć '+dups.length+' duplikatów?')) return; for(var i=0;i<dups.length;i++){L('Usuwam duplikat '+dups[i].slice(0,8)); try{await fetch(S_URL+'/rest/v1/ogloszenia?id=eq.'+dups[i],{method:'DELETE',headers:{'apikey':S_KEY,'Authorization':'Bearer '+S_KEY}});}catch(e){L('Błąd:'+e.message);}} L('Duplikaty usunięte'); loadAds();}
 
-loadAll();
+loadAds();
 </script>
 </body></html>
