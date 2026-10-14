@@ -1,153 +1,183 @@
 <!DOCTYPE html>
 <html lang="pl"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>ADMIN PRO V13 - BEZ LOGOWANIA - DZIAŁA</title>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<title>WROOMER ADMIN V17 - GITHUB PAGES - FINAL</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box} body{font-family:Inter,Arial,sans-serif;background:#080808;color:#fff;min-height:100vh}
-.header{background:#111;border-bottom:2px solid #facc15;padding:14px 18px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100}
-.logo{display:flex;align-items:center;gap:10px} .logo-icon{width:40px;height:40px;background:#facc15;color:#000;border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:20px}
-.btn{padding:8px 16px;border-radius:20px;border:0;font-weight:800;cursor:pointer;font-size:12px} .btn-yellow{background:#facc15;color:#000} .btn-dark{background:#222;color:#fff;border:1px solid #333} .btn-red{background:#ff2222;color:#fff}
-.card{background:#151515;border:1px solid #222;border-radius:14px;padding:16px} 
-.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding:16px} @media(max-width:900px){.stat-grid{grid-template-columns:repeat(2,1fr)}}
-.stat-card{background:#151515;border:1px solid #222;border-radius:14px;padding:16px} .stat-label{font-size:10px;color:#888;text-transform:uppercase;font-weight:800;letter-spacing:1px} .stat-value{font-size:24px;font-weight:900;margin-top:6px} .stat-sub{font-size:11px;color:#666;margin-top:4px}
-.main-grid{display:grid;grid-template-columns:1fr;gap:16px;padding:0 16px 16px}
-.search{width:100%;background:#0f0f0f;border:1px solid #2a2a2a;color:#fff;padding:10px 14px;border-radius:10px;margin-top:12px;font-size:13px}
-.list{margin-top:12px;max-height:75vh;overflow:auto;display:flex;flex-direction:column;gap:8px}
-.item{background:#1e1e1e;border:1px solid #2a2a2a;border-radius:10px;padding:12px;display:flex;justify-content:space-between;align-items:center;gap:10px} .item-info{flex:1;min-width:0} .item-title{font-size:13px;font-weight:700} .item-sub{font-size:11px;color:#888;margin-top:2px} .item-actions{display:flex;gap:6px}
-.badge{padding:4px 8px;border-radius:12px;font-size:10px;font-weight:800} .badge-green{background:#052e16;color:#86efac;border:1px solid #15803d} .badge-yellow{background:#422006;color:#facc15;border:1px solid #a16207}
+.header{background:#111;border-bottom:2px solid #facc15;padding:14px 18px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0}
+.logo{display:flex;align-items:center;gap:10px} .logo-icon{width:44px;height:44px;background:#facc15;color:#000;border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:22px}
+.btn{padding:10px 18px;border-radius:20px;border:0;font-weight:800;cursor:pointer} .btn-yellow{background:#facc15;color:#000} .btn-dark{background:#222;color:#fff;border:1px solid #333} .btn-red{background:#ff2222;color:#fff}
+.card{background:#151515;border:1px solid #222;border-radius:14px;padding:16px;margin:16px}
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding:16px} @media(max-width:900px){.stat-grid{grid-template-columns:repeat(2,1fr}} @media(max-width:500px){.stat-grid{grid-template-columns:1fr}}
+.stat-card{background:#151515;border:1px solid #222;border-radius:14px;padding:16px}
+.list{margin-top:12px;display:flex;flex-direction:column;gap:8px;max-height:70vh;overflow:auto}
+.item{background:#1e1e1e;border:1px solid #2a2a2a;border-radius:12px;padding:14px;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.badge{padding:4px 10px;border-radius:12px;font-size:10px;font-weight:800} .badge-green{background:#052e16;color:#86efac;border:1px solid #15803d}
+.log{background:#000;color:#0f0;font-family:monospace;font-size:11px;padding:10px;border-radius:8px;margin-top:10px;max-height:150px;overflow:auto;white-space:pre-wrap}
+.sql-box{background:#000;border:1px solid #facc15;padding:12px;border-radius:8px;margin-top:12px;font-family:monospace;font-size:11px;color:#86efac;white-space:pre-wrap}
 </style>
 </head>
 <body>
 <div class="header">
-  <div class="logo"><div class="logo-icon">W</div><div><div style="font-weight:900">WROOMER ADMIN PRO V13</div><div style="font-size:10px;color:#22c55e">✅ DZIAŁA BEZ LOGOWANIA - NAPRAWIONY</div></div></div>
-  <div style="display:flex;gap:8px;align-items:center">
-    <button class="btn btn-dark" onclick="location.href='index.html'">← STRONA</button>
-    <button class="btn btn-yellow" onclick="loadAds()">ODŚWIEŻ</button>
-  </div>
+  <div class="logo"><div class="logo-icon">W</div><div><div style="font-weight:900">WROOMER ADMIN V17</div><div style="font-size:11px;color:#22c55e">✅ GITHUB PAGES • BEZ LOGOWANIA • REST API</div></div></div>
+  <div style="display:flex;gap:8px"><button class="btn btn-dark" onclick="location.href='index.html'">STRONA</button><button class="btn btn-yellow" onclick="loadAll()">ODŚWIEŻ</button></div>
+</div>
+
+<div style="background:#111;padding:10px 16px;border-bottom:1px solid #222;display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+  <span style="background:#052e16;color:#86efac;border:1px solid #15803d;padding:4px 10px;border-radius:20px;font-size:10px;font-weight:800">✅ GITHUB PAGES</span>
+  <span style="font-size:11px;color:#888">Działa bez Vercel, bez logowania, prosto z GitHub. Jeśli widzisz Ładowanie, wykonaj SQL poniżej.</span>
 </div>
 
 <div class="stat-grid">
-  <div class="stat-card"><div class="stat-label">Ogłoszenia</div><div class="stat-value" id="statProd" style="color:#facc15">Ładowanie...</div><div class="stat-sub" id="statProdSub">-</div></div>
-  <div class="stat-card"><div class="stat-label">Z GPS</div><div class="stat-value" id="statGps" style="color:#22c55e">-</div><div class="stat-sub">Mają lat/lng</div></div>
-  <div class="stat-card"><div class="stat-label">Użytkownicy</div><div class="stat-value" id="statUsers">-</div><div class="stat-sub">Unikalne user_id</div></div>
-  <div class="stat-card"><div class="stat-label">Status</div><div class="stat-value" style="color:#22c55e">OK</div><div class="stat-sub" id="statusText">Połączono z Supabase</div></div>
+  <div class="stat-card"><div style="font-size:10px;color:#888">OGŁOSZENIA</div><div id="statProd" style="font-size:28px;font-weight:900;color:#facc15">-</div><div style="font-size:11px;color:#666" id="statProdSub">tabela: ogloszenia</div></div>
+  <div class="stat-card"><div style="font-size:10px;color:#888">Z GPS</div><div id="statGps" style="font-size:28px;font-weight:900;color:#22c55e">-</div><div style="font-size:11px;color:#666">lat/lng</div></div>
+  <div class="stat-card"><div style="font-size:10px;color:#888">LISTINGS TEST</div><div id="statList" style="font-size:28px;font-weight:900;color:#888">-</div><div style="font-size:11px;color:#666">tabela: listings</div></div>
+  <div class="stat-card"><div style="font-size:10px;color:#888">STATUS</div><div id="statusText" style="font-size:16px;font-weight:900;color:#facc15">Start</div><div style="font-size:11px;color:#666" id="statusSub">REST API</div></div>
 </div>
 
-<div class="main-grid">
-  <div class="card">
-    <div style="display:flex;justify-content:space-between;align-items:center"><h3 style="font-size:14px">WSZYSTKIE OGŁOSZENIA - KLIKNIJ USUŃ ABY SKASOWAĆ</h3><span style="font-size:11px;color:#888" id="countInfo"></span></div>
-    <input class="search" id="adSearch" placeholder="Szukaj tytułu, miasta, marki, modelu, telefonu..." oninput="filterAds()">
-    <div class="list" id="adsList"><div style="padding:40px;text-align:center;color:#888">⏳ Łączę z Supabase...<br><small>Jeśli widzisz to długo, sprawdź internet i klucze Supabase</small></div></div>
-  </div>
+<div class="card" id="fixBox" style="display:none;border-color:#ff2222;background:#1a1111">
+  <div style="font-weight:900;color:#ff8888">❌ BLOKADA RLS - WYKONAJ TO W SUPABASE:</div>
+  <div class="sql-box" id="sqlFix">ALTER TABLE public.ogloszenia DISABLE ROW LEVEL SECURITY;
+ALTER TABLE public.listings DISABLE ROW LEVEL SECURITY;
+ALTER TABLE public.ogloszenia_prod DISABLE ROW LEVEL SECURITY;
+ALTER TABLE public.profiles DISABLE ROW LEVEL SECURITY;</div>
+  <button class="btn btn-yellow" style="margin-top:10px" onclick="navigator.clipboard.writeText(document.getElementById('sqlFix').textContent);alert('Skopiowano SQL! Wklej w Supabase SQL Editor i Run')">📋 KOPIUJ SQL</button>
+  <div style="font-size:11px;color:#888;margin-top:8px">Supabase -> SQL Editor -> New query -> Wklej -> Run -> Odśwież tę stronę Ctrl+Shift+R</div>
+</div>
+
+<div class="card">
+  <div style="display:flex;justify-content:space-between;align-items:center"><h3>📋 OGŁOSZENIA - OGLOSZENIA (PROD)</h3><span id="countInfo" style="font-size:11px;color:#888"></span></div>
+  <input id="search" placeholder="Szukaj marka, miasto, tytuł..." style="width:100%;background:#0f0f0f;border:1px solid #2a2a2a;color:#fff;padding:12px;border-radius:12px;margin-top:12px" oninput="filterAds()">
+  <div class="log" id="logBox">Log:
+</div>
+  <div class="list" id="adsList"><div style="padding:20px;text-align:center;color:#888">Ładowanie...</div></div>
 </div>
 
 <script>
-const SUPABASE_URL = "https://bdpydgsfowtuvjnkyeeg.supabase.co";
-const SUPABASE_ANON = "sb_publishable_S1qH_mBZaX7-bzmfJ0IVGA_6hxGbJWd";
-let supabaseClient;
-let allAds = [];
+const URL = "https://bdpydgsfowtuvjnkyeeg.supabase.co";
+const KEY = "sb_publishable_S1qH_mBZaX7-bzmfJ0IVGA_6hxGbJWd";
+let allAds=[];
 
-function initSupabase(){
-  try{
-    supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
-    document.getElementById('statusText').textContent = 'Połączono ✅';
-    loadAds();
-  }catch(e){
-    document.getElementById('adsList').innerHTML = '<div style="padding:20px;background:#3a1111;color:#ffb3b3;border-radius:10px">Błąd Supabase: '+e.message+'</div>';
-  }
+function log(m){
+  const b=document.getElementById('logBox');
+  b.textContent += new Date().toLocaleTimeString()+' '+m+'\n';
+  b.scrollTop=b.scrollHeight;
+  console.log(m);
 }
 
-function parseExtra(desc){
+function parseExtra(d){
   const o={};
   try{
-    const m=(desc||'').match(/\[(.*?)\]/);
-    if(m){
-      m[1].split('|').forEach(function(p){
-        const idx=p.indexOf(':');
-        if(idx===-1) return;
-        const k=p.slice(0,idx).trim().toLowerCase();
-        const v=p.slice(idx+1).trim();
-        o[k]=v;
-      });
-    }
+    const m=(d||'').match(/\[(.*?)\]/);
+    if(m) m[1].split('|').forEach(function(p){
+      const i=p.indexOf(':');
+      if(i!==-1) o[p.slice(0,i).trim().toLowerCase()]=p.slice(i+1).trim();
+    });
   }catch(e){}
   return o;
 }
 
-async function loadAds(){
-  const list=document.getElementById('adsList');
-  list.innerHTML='<div style="padding:20px;text-align:center;color:#888">⏳ Pobieram ogłoszenia z Supabase...<br><small>Tabela: ogloszenia</small></div>';
-  try{
-    const res = await supabaseClient.from('ogloszenia').select('*').order('created_at',{ascending:false}).limit(200);
-    if(res.error) throw res.error;
-    allAds = res.data || [];
-    document.getElementById('statProd').textContent = allAds.length;
-    let withGps=0;
-    const users=new Set();
-    allAds.forEach(function(a){
-      const ex=parseExtra(a.description||'');
-      if(ex.lat && ex.lat!=='-' && ex.lat!=='') withGps++;
-      if(a.user_id) users.add(a.user_id);
-    });
-    document.getElementById('statGps').textContent = withGps;
-    document.getElementById('statUsers').textContent = users.size;
-    document.getElementById('statProdSub').textContent = withGps+' z GPS / '+allAds.length+' wszystkich';
-    document.getElementById('countInfo').textContent = allAds.length+' ogłoszeń';
-    renderAds(allAds);
-  }catch(e){
-    list.innerHTML = '<div style="padding:20px;background:#3a1111;border-radius:10px"><div style="color:#ffb3b3;font-weight:800">❌ Błąd: '+e.message+'</div><div style="margin-top:12px;font-size:12px;color:#ccc"><b>Rozwiązanie - wejdź do Supabase SQL Editor i wykonaj:</b><br><br><code style="background:#000;padding:10px;display:block;border-radius:8px;white-space:pre-wrap">-- Wyłącz RLS tymczasowo
-ALTER TABLE public.ogloszenia DISABLE ROW LEVEL SECURITY;
+async function fetchTable(table){
+  const url = URL + '/rest/v1/' + table + '?select=*&order=created_at.desc&limit=200';
+  log('FETCH '+table+' -> '+url);
+  const res = await fetch(url, {headers:{'apikey':KEY,'Authorization':'Bearer '+KEY}});
+  log('Status '+table+': '+res.status);
+  if(!res.ok){
+    const txt=await res.text();
+    log('Error '+table+': '+txt.slice(0,200));
+    throw new Error(table+': '+res.status+' '+txt.slice(0,150));
+  }
+  const data=await res.json();
+  log('OK '+table+': '+data.length+' rekordów');
+  return data;
+}
 
--- Lub dodaj politykę dla wszystkich:
-DROP POLICY IF EXISTS "Allow all" ON public.ogloszenia;
-CREATE POLICY "Allow all" ON public.ogloszenia FOR ALL USING (true) WITH CHECK (true);
-ALTER TABLE public.ogloszenia ENABLE ROW LEVEL SECURITY;</code><br><br>Potem odśwież tę stronę (Ctrl+Shift+R)</div></div>';
-    document.getElementById('statusText').textContent = 'Błąd: '+e.message;
+async function loadAll(){
+  document.getElementById('statusText').textContent='Pobieram...';
+  document.getElementById('fixBox').style.display='none';
+  log('=== START LOAD ALL ===');
+  
+  try{
+    // Próbuj ogloszenia
+    let ogloszenia=[];
+    try{
+      ogloszenia = await fetchTable('ogloszenia');
+      document.getElementById('statProd').textContent=ogloszenia.length;
+      let gps=0;
+      ogloszenia.forEach(function(a){
+        const ex=parseExtra(a.description||'');
+        if(ex.lat && ex.lat!=='-') gps++;
+      });
+      document.getElementById('statGps').textContent=gps;
+      document.getElementById('statProdSub').textContent=gps+' z GPS / '+ogloszenia.length;
+    }catch(e){
+      log('❌ ogloszenia błąd: '+e.message);
+      document.getElementById('statProd').textContent='BŁĄD';
+      document.getElementById('statProdSub').textContent=e.message.slice(0,40);
+      document.getElementById('fixBox').style.display='block';
+    }
+    
+    // Próbuj listings
+    try{
+      const listings = await fetchTable('listings');
+      document.getElementById('statList').textContent=listings.length;
+    }catch(e){
+      log('listings błąd (może nie istnieje): '+e.message);
+      document.getElementById('statList').textContent='-';
+    }
+    
+    allAds = ogloszenia;
+    document.getElementById('countInfo').textContent=allAds.length+' ogłoszeń';
+    document.getElementById('statusText').textContent='OK ✅ '+allAds.length;
+    document.getElementById('statusSub').textContent='GitHub Pages + REST API działa';
+    render(allAds);
+    
+  }catch(e){
+    log('❌ GŁÓWNY BŁĄD: '+e.message);
+    document.getElementById('statusText').textContent='BŁĄD RLS ❌';
     document.getElementById('statusText').style.color='#ff2222';
+    document.getElementById('fixBox').style.display='block';
+    document.getElementById('adsList').innerHTML='<div style="padding:20px;background:#3a1111;border-radius:12px;color:#ffb3b3">❌ '+e.message+'<br><br>Zobacz czerwony box na górze z SQL do naprawy!</div>';
   }
 }
 
-function renderAds(ads){
+function render(ads){
   const list=document.getElementById('adsList');
   if(ads.length===0){
-    list.innerHTML='<div style="padding:40px;text-align:center;color:#888"><h3 style="color:#facc15">Brak ogłoszeń</h3><p style="margin-top:8px">Dodaj pierwsze ogłoszenie na stronie głównej</p></div>';
+    list.innerHTML='<div style="padding:30px;text-align:center;color:#888">📭 Brak ogłoszeń w tabeli ogloszenia<br><small>Sprawdź w Supabase SQL: SELECT COUNT(*) FROM public.ogloszenia;</small></div>';
     return;
   }
-  let html='';
+  let h='';
   ads.forEach(function(ad){
     const ex=parseExtra(ad.description||'');
-    const hasGps = ex.lat && ex.lat!=='-' && ex.lat!=='';
-    html += '<div class="item"><div class="item-info"><div class="item-title">'+(ad.title||'Bez tytułu')+' <span style="color:#facc15">'+(ad.price||0)+' PLN</span> '+(hasGps?'<span class="badge badge-green">GPS '+ex.lat.slice(0,6)+'</span>':'<span class="badge badge-yellow" style="opacity:.5">bez GPS</span>')+'</div><div class="item-sub">'+(ad.brand||'')+' '+(ad.model||'')+' • '+(ad.year||'-')+' • 📍 '+(ad.location||'-')+' • 📞 '+(ad.phone||'-')+'<br>ID: '+ad.id.slice(0,8)+' • '+new Date(ad.created_at).toLocaleString('pl-PL')+' • user: '+ad.user_id.slice(0,8)+'</div></div><div class="item-actions"><button class="btn btn-dark" style="padding:6px 10px" onclick="viewAd(''+ad.id+'')">👁️</button><button class="btn btn-red" style="padding:8px 14px;font-weight:900" onclick="deleteAd(''+ad.id+'')">🗑️ USUŃ</button></div></div>';
+    const gps = ex.lat && ex.lat!=='-';
+    h+='<div class="item"><div style="flex:1"><div style="font-weight:800">'+(ad.title||'Bez tytułu')+' <span style="color:#facc15">'+(ad.price||0)+' PLN</span> '+(gps?'<span class="badge badge-green">GPS</span>':'')+'</div><div style="font-size:11px;color:#888;margin-top:4px">'+(ad.brand||'')+' '+(ad.model||'')+' • '+(ad.location||'-')+' • ID:'+ad.id.slice(0,8)+' • '+new Date(ad.created_at).toLocaleDateString('pl-PL')+'</div></div><button class="btn btn-red" style="padding:8px 14px" onclick="del(\''+ad.id+'\')">USUŃ</button></div>';
   });
-  list.innerHTML=html;
+  list.innerHTML=h;
 }
 
 function filterAds(){
-  const q=document.getElementById('adSearch').value.toLowerCase();
-  if(!q){renderAds(allAds);return;}
-  const filtered = allAds.filter(function(ad){
-    return (ad.title||'').toLowerCase().includes(q) || (ad.brand||'').toLowerCase().includes(q) || (ad.model||'').toLowerCase().includes(q) || (ad.location||'').toLowerCase().includes(q) || (ad.phone||'').includes(q) || ad.id.toLowerCase().includes(q);
-  });
-  renderAds(filtered);
+  const q=document.getElementById('search').value.toLowerCase();
+  if(!q) return render(allAds);
+  const f=allAds.filter(function(a){return (a.title||'').toLowerCase().includes(q) || (a.brand||'').toLowerCase().includes(q) || (a.location||'').toLowerCase().includes(q);});
+  render(f);
 }
 
-function viewAd(id){
-  window.open('index.html','_blank');
-}
-
-async function deleteAd(id){
-  if(!confirm('Na pewno USUNĄĆ ogłoszenie '+id.slice(0,8)+' ?\n\nTej operacji nie można cofnąć!')) return;
+async function del(id){
+  if(!confirm('Usunąć '+id.slice(0,8)+' ?')) return;
+  log('DELETE '+id);
   try{
-    const res = await supabaseClient.from('ogloszenia').delete().eq('id', id);
-    if(res.error) throw res.error;
-    alert('✅ Usunięto ogłoszenie '+id.slice(0,8));
-    loadAds();
+    const res=await fetch(URL+'/rest/v1/ogloszenia?id=eq.'+id,{method:'DELETE',headers:{'apikey':KEY,'Authorization':'Bearer '+KEY}});
+    if(!res.ok){const t=await res.text(); throw new Error(t);}
+    log('Usunięto ✅');
+    alert('Usunięto ✅');
+    loadAll();
   }catch(e){
-    alert('❌ Błąd usuwania: '+e.message+'\n\nROZWIĄZANIE:\n1. Wejdź do supabase.com -> Twój projekt -> SQL Editor\n2. Wklej i uruchom:\n\nALTER TABLE public.ogloszenia DISABLE ROW LEVEL SECURITY;\n\n3. Odśwież admina i spróbuj ponownie\n\nPo naprawie możesz włączyć RLS z powrotem z polityką Allow all');
+    log('Błąd usuwania: '+e.message);
+    alert('Błąd: '+e.message+'\n\nWykonaj SQL: ALTER TABLE public.ogloszenia DISABLE ROW LEVEL SECURITY;');
   }
 }
 
-initSupabase();
+loadAll();
 </script>
 </body></html>
