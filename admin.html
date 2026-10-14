@@ -1,149 +1,47 @@
 <!DOCTYPE html>
-<html lang="pl"><head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>WROOMER ADMIN V19 - SIMPLE OLX</title>
-<style>
-body{font-family:Arial,sans-serif;background:#f5f5f5;color:#222;margin:0}
-.top{background:#002f34;color:#fff;padding:16px 20px;display:flex;justify-content:space-between;align-items:center}
-.top h1{margin:0;font-size:20px} .top small{color:#7ed957}
-.btn{padding:10px 18px;border-radius:8px;border:0;font-weight:700;cursor:pointer} .btn-yellow{background:#ffce32;color:#002f34} .btn-dark{background:#fff;color:#002f34;border:1px solid #ddd} .btn-red{background:#ff4444;color:#fff} .btn-green{background:#23e5db;color:#002f34} .btn-blue{background:#3a77ff;color:#fff}
-.wrap{max-width:1200px;margin:0 auto;padding:16px}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:16px 0} @media(max-width:800px){.stats{grid-template-columns:repeat(2,1fr}} @media(max-width:500px){.stats{grid-template-columns:1fr}}
-.card{background:#fff;border-radius:12px;padding:18px;box-shadow:0 2px 8px rgba(0,0,0,0.08)} 
-.card h3{margin:0 0 6px 0;font-size:12px;color:#888;text-transform:uppercase} .big{font-size:28px;font-weight:900;color:#002f34} .small{font-size:13px;color:#666;margin-top:4px}
-.list-card{background:#fff;border-radius:12px;padding:0;box-shadow:0 2px 8px rgba(0,0,0,0.08);overflow:hidden;margin-top:16px}
-.list-head{padding:16px 18px;border-bottom:1px solid #eee;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
-.row{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;border-bottom:1px solid #f0f0f0;gap:12px} .row:hover{background:#fafafa} .row.ban{background:#fff1f1}
-.tag{padding:4px 10px;border-radius:12px;font-size:11px;font-weight:700;display:inline-block} .tag-ok{background:#d1fae5;color:#065f46} .tag-gps{background:#dbeafe;color:#1e40af} .tag-nogps{background:#fef3c7;color:#92400e} .tag-ban{background:#fee2e2;color:#991b1b}
-.search{padding:10px 12px;border:1px solid #ddd;border-radius:8px;width:100%}
-.log{background:#002f34;color:#23e5db;font-family:monospace;font-size:11px;padding:10px;border-radius:8px;white-space:pre-wrap;max-height:120px;overflow:auto;margin-top:12px}
-</style>
-</head>
-<body>
-<div class="top">
-  <div><h1>WROOMER ADMIN V19 <span style="background:#ffce32;color:#002f34;padding:2px 10px;border-radius:20px;font-size:12px">SIMPLE OLX</span></h1><small>✅ Prosty • Czytelny • Statystyki jak OLX • Edycja • Ban • GPS</small></div>
-  <div style="display:flex;gap:8px"><button class="btn btn-dark" onclick="location.href='index.html'">STRONA</button><button class="btn btn-yellow" onclick="loadAds()">ODŚWIEŻ</button></div>
+<html lang="pl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>WROOMER ADMIN V20 - MINIMAL TEST</title>
+<style>body{font-family:Arial;background:#fff;color:#000;padding:20px} .ok{background:#d1fae5;padding:12px;border-radius:8px} .err{background:#fee2e2;padding:12px;border-radius:8px} .card{border:1px solid #ddd;padding:12px;border-radius:8px;margin:10px 0} button{padding:10px 16px;background:#002f34;color:#fff;border:0;border-radius:8px;cursor:pointer;font-weight:700}</style>
+</head><body>
+<h1>WROOMER ADMIN V20 - MINIMAL TEST - TYLKO FETCH</h1>
+<p>Ten plik tylko testuje połączenie z Supabase - zero statystyk, zero bajerów!</p>
+<button onclick="test()">🔄 TESTUJ POŁĄCZENIE</button>
+<button onclick="location.href='diagnostyka.html'">DIAGNOSTYKA</button>
+<div id="log" style="margin-top:16px;font-family:monospace;background:#111;color:#0f0;padding:12px;border-radius:8px;white-space:pre-wrap;min-height:200px">Kliknij TESTUJ...
 </div>
-
-<div class="wrap">
-  <div class="stats">
-    <div class="card"><h3>AKTYWNE OGŁOSZENIA</h3><div class="big" id="s1">-</div><div class="small" id="s1d">Ładowanie...</div></div>
-    <div class="card"><h3>Z GPS (NA MAPIE)</h3><div class="big" id="s2" style="color:#059669">-</div><div class="small" id="s2d">-</div></div>
-    <div class="card"><h3>ŚREDNIA CENA</h3><div class="big" id="s3" style="color:#2563eb">-</div><div class="small" id="s3d">-</div></div>
-    <div class="card"><h3>WARTOŚĆ + BANY</h3><div class="big" id="s4" style="color:#dc2626">-</div><div class="small" id="s4d">-</div></div>
-  </div>
-
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-    <div class="card"><h3>📊 MARKI - TOP (JAK OLX)</h3><div id="brandBox" style="margin-top:12px"></div></div>
-    <div class="card"><h3>📍 MIASTA - TOP (JAK OLX)</h3><div id="cityBox" style="margin-top:12px"></div></div>
-  </div>
-
-  <div class="list-card">
-    <div class="list-head">
-      <div><strong>📋 OGŁOSZENIA</strong> <span id="countInfo" style="color:#888;font-size:13px"></span></div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap">
-        <button class="btn btn-green" onclick="addGps()">🗺️ DODAJ GPS WSZYSTKIM</button>
-        <button class="btn btn-yellow" onclick="cleanDup()">🧹 USUŃ DUPLIKATY</button>
-      </div>
-    </div>
-    <div style="padding:12px 18px;display:flex;gap:8px;flex-wrap:wrap;background:#fafafa">
-      <input id="q" class="search" placeholder="Szukaj: Volvo, Gorzyce..." oninput="draw()" style="flex:1;min-width:200px">
-      <select id="f" class="search" style="width:160px" onchange="draw()"><option value="all">Wszystkie</option><option value="ok">Aktywne</option><option value="ban">Zabanowane</option><option value="nogps">Bez GPS</option></select>
-    </div>
-    <div class="log" id="log">START V19 SIMPLE...
-</div>
-    <div id="list"><div style="padding:40px;text-align:center;color:#888">Ładowanie ogłoszeń z Supabase...</div></div>
-  </div>
-</div>
+<div id="list"></div>
 
 <script>
 var S_URL = "https://bdpydgsfowtuvjnkyeeg.supabase.co";
 var S_KEY = "sb_publishable_S1qH_mBZaX7-bzmfJ0IVGA_6hxGbJWd";
-var ADS = [];
+function log(t){var e=document.getElementById('log'); e.textContent+=t+'\n'; console.log(t);}
 
-function L(t){var e=document.getElementById('log'); e.textContent += new Date().toLocaleTimeString() + ' ' + t + '\n'; e.scrollTop = e.scrollHeight; console.log(t);}
-
-function hasGps(d){return (d||'').indexOf('lat:')>-1;}
-function isBan(d){return (d||'').indexOf('banned:true')>-1 || (d||'').indexOf('status:banned')>-1;}
-function cleanDesc(d){return (d||'').replace(/\[.*\]/,'').trim();}
-function getExtra(d){var o={}; try{var m=(d||'').match(/\[(.*?)\]/); if(m){var parts=m[1].split('|'); for(var i=0;i<parts.length;i++){var p=parts[i]; var idx=p.indexOf(':'); if(idx>-1) o[p.slice(0,idx).toLowerCase()]=p.slice(idx+1);}}}catch(e){} return o;}
-
-function cityToGps(city){city=(city||'').toLowerCase(); if(city.indexOf('gorzy')>-1) return {lat:'49.958',lng:'18.398'}; if(city.indexOf('jastrz')>-1) return {lat:'49.951',lng:'18.594'}; if(city.indexOf('wodzis')>-1) return {lat:'50.036',lng:'18.453'}; if(city.indexOf('rybnik')>-1) return {lat:'50.097',lng:'18.54'}; if(city.indexOf('racib')>-1) return {lat:'50.09',lng:'18.22'}; return {lat:'50.06',lng:'19.0'};}
-
-async function loadAds(){
-  L('Pobieram z ' + S_URL);
+async function test(){
+  document.getElementById('log').textContent='';
+  log('=== V20 MINIMAL TEST START ===');
+  log('URL: '+S_URL);
+  log('KEY: '+S_KEY.slice(0,20)+'...');
+  log('Próbuję fetch ogloszenia...');
   try{
-    var res = await fetch(S_URL + '/rest/v1/ogloszenia?select=*&order=created_at.desc&limit=200', {headers:{'apikey':S_KEY,'Authorization':'Bearer '+S_KEY}});
-    L('Status: ' + res.status);
-    if(!res.ok){var txt=await res.text(); throw new Error(txt);}
-    ADS = await res.json();
-    L('Pobrano ' + ADS.length + ' ogłoszeń OK');
-    renderStats();
-    draw();
-  }catch(e){L('BŁĄD: ' + e.message); document.getElementById('list').innerHTML='<div style="padding:20px;background:#fee;color:#900">❌ '+e.message+'<br>Uruchom w Supabase SQL:<br><code>ALTER TABLE public.ogloszenia DISABLE ROW LEVEL SECURITY;</code></div>';}
+    var url = S_URL + '/rest/v1/ogloszenia?select=*&limit=5';
+    log('FETCH URL: '+url);
+    var res = await fetch(url, {headers:{'apikey':S_KEY,'Authorization':'Bearer '+S_KEY}});
+    log('STATUS: '+res.status+' '+res.statusText);
+    var txt = await res.text();
+    log('RESPONSE LENGTH: '+txt.length);
+    log('RESPONSE (first 500): '+txt.slice(0,500));
+    if(!res.ok){ 
+      log('❌ BŁĄD - RLS lub CORS!');
+      document.getElementById('list').innerHTML='<div class=err><h3>❌ BŁĄD '+res.status+'</h3><p>Response: '+txt.slice(0,1000)+'</p><h4>ROZWIĄZANIE - uruchom w Supabase SQL:</h4><pre>ALTER TABLE public.ogloszenia DISABLE ROW LEVEL SECURITY;\nALTER TABLE public.listings DISABLE ROW LEVEL SECURITY;</pre></div>';
+      return;
+    }
+    var data = JSON.parse(txt);
+    log('✅ SUKCES! Pobrano '+data.length+' rekordów');
+    var html='<div class=ok><h3>✅ DZIAŁA! Masz '+data.length+' ogłoszeń</h3></div>';
+    for(var i=0;i<data.length;i++){var a=data[i]; html+='<div class=card><b>'+(a.title||'Bez tytułu')+'</b> - '+(a.price||0)+' PLN - '+(a.location||'-')+'<br><small>ID:'+a.id+' | '+a.created_at+'</small><br><small>Desc: '+(a.description||'').slice(0,100)+'</small></div>';}
+    document.getElementById('list').innerHTML=html;
+    log('Teraz mogę zrobić V21 SIMPLE z edycją!');
+  }catch(e){log('❌ WYJĄTEK: '+e.message+'\n'+e.stack); document.getElementById('list').innerHTML='<div class=err>❌ Wyjątek: '+e.message+'<br>Sprawdź konsolę F12</div>';}
 }
-
-function renderStats(){
-  var total=ADS.length, gps=0, ban=0, sum=0;
-  var brands={}, cities={};
-  for(var i=0;i<ADS.length;i++){var a=ADS[i]; var d=a.description||''; if(hasGps(d)) gps++; if(isBan(d)) ban++; sum+=parseInt(a.price||0)||0; var b=(a.brand||'Inne'); brands[b]=(brands[b]||0)+1; var c=(a.location||'Inne'); cities[c]=(cities[c]||0)+1;}
-  var avg = total? Math.round(sum/total):0;
-  document.getElementById('s1').textContent = (total-ban);
-  document.getElementById('s1d').textContent = total + ' wszystkich, ' + ban + ' banów';
-  document.getElementById('s2').textContent = gps;
-  document.getElementById('s2d').textContent = (total? Math.round(gps/total*100):0) + '% ma GPS, ' + (total-gps) + ' bez';
-  document.getElementById('s3').textContent = avg.toLocaleString('pl-PL') + ' PLN';
-  document.getElementById('s3d').textContent = 'Suma: ' + sum.toLocaleString('pl-PL') + ' PLN';
-  document.getElementById('s4').textContent = ban;
-  document.getElementById('s4d').textContent = ban + ' banów / ' + (total-ban) + ' aktywnych';
-  document.getElementById('countInfo').textContent = '('+total+' ogłoszeń)';
-
-  var bHtml=''; var bKeys=Object.keys(brands).sort(function(a,b){return brands[b]-brands[a];}).slice(0,5); for(var i=0;i<bKeys.length;i++){var k=bKeys[i]; var v=brands[k]; var pct=Math.round(v/total*100); bHtml+='<div style="display:flex;justify-content:space-between;margin:8px 0;font-size:13px"><span>'+k+'</span><b>'+v+' ('+pct+'%)</b></div><div style="height:6px;background:#eee;border-radius:3px"><div style="height:6px;width:'+pct+'%;background:#002f34;border-radius:3px"></div></div>';} document.getElementById('brandBox').innerHTML=bHtml||'Brak';
-  var cHtml=''; var cKeys=Object.keys(cities).sort(function(a,b){return cities[b]-cities[a];}).slice(0,5); for(var i=0;i<cKeys.length;i++){var k=cKeys[i]; var v=cities[k]; var pct=Math.round(v/total*100); cHtml+='<div style="display:flex;justify-content:space-between;margin:8px 0;font-size:13px"><span>'+k+'</span><b>'+v+'</b></div><div style="height:6px;background:#eee;border-radius:3px"><div style="height:6px;width:'+pct+'%;background:#23e5db;border-radius:3px"></div></div>';} document.getElementById('cityBox').innerHTML=cHtml||'Brak';
-}
-
-function draw(){
-  var q=(document.getElementById('q').value||'').toLowerCase();
-  var f=document.getElementById('f').value;
-  var filtered=[];
-  for(var i=0;i<ADS.length;i++){var a=ADS[i]; var d=a.description||''; var ban=isBan(d); var gps=hasGps(d); if(f==='ok'&&ban) continue; if(f==='ban'&&!ban) continue; if(f==='nogps'&&gps) continue; if(q){var t=((a.title||'')+' '+(a.brand||'')+' '+(a.location||'')).toLowerCase(); if(t.indexOf(q)===-1) continue;} filtered.push(a);}
-  var html='';
-  if(filtered.length===0){html='<div style="padding:40px;text-align:center;color:#888">📭 Brak ogłoszeń</div>';}
-  else{for(var i=0;i<filtered.length;i++){var a=filtered[i]; var d=a.description||''; var ex=getExtra(d); var ban=isBan(d); var gps=hasGps(d); html+='<div class="row '+(ban?'ban':'')+'"><div style="flex:1"><div style="font-weight:800;font-size:14px">'+(a.title||'Bez tytułu')+' <span style="color:#002f34">'+(a.price||0)+' PLN</span></div><div style="font-size:12px;color:#666;margin-top:4px">'+(a.brand||'')+' '+(a.model||'')+' • '+(a.location||'-')+' • '+new Date(a.created_at).toLocaleDateString('pl-PL')+' • ID:'+a.id.slice(0,8)+(ex.lat?' • GPS:'+ex.lat+','+ex.lng:'')+'</div><div style="margin-top:6px">'+(gps?'<span class="tag tag-gps">GPS</span>':'<span class="tag tag-nogps">BRAK GPS</span>')+' '+(ban?'<span class="tag tag-ban">BAN</span>':'<span class="tag tag-ok">AKTYWNE</span>')+'</div></div><div style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn btn-blue" style="padding:6px 12px;font-size:12px" onclick="editAd(\''+a.id+'\')">EDYTUJ</button>'+(ban?'<button class="btn btn-green" style="padding:6px 12px;font-size:12px" onclick="doBan(\''+a.id+'\',false)">ODBLOKUJ</button>':'<button class="btn btn-dark" style="padding:6px 12px;font-size:12px" onclick="doBan(\''+a.id+'\',true)">BAN</button>')+'<button class="btn btn-red" style="padding:6px 12px;font-size:12px" onclick="delAd(\''+a.id+'\')">USUŃ</button></div></div>';}}
-  document.getElementById('list').innerHTML=html;
-}
-
-async function editAd(id){
-  var a=null; for(var i=0;i<ADS.length;i++) if(ADS[i].id===id) a=ADS[i];
-  if(!a) return;
-  var newTitle=prompt('Tytuł:', a.title||''); if(newTitle===null) return;
-  var newBrand=prompt('Marka:', a.brand||''); if(newBrand===null) return;
-  var newModel=prompt('Model:', a.model||''); if(newModel===null) return;
-  var newPrice=prompt('Cena PLN:', a.price||0); if(newPrice===null) return;
-  var newLoc=prompt('Miasto:', a.location||''); if(newLoc===null) return;
-  var ex=getExtra(a.description||'');
-  var newLat=prompt('GPS Lat (np 49.958):', ex.lat||''); if(newLat===null) return;
-  var newLng=prompt('GPS Lng (np 18.398):', ex.lng||''); if(newLng===null) return;
-  var newDesc=prompt('Opis:', cleanDesc(a.description||'')); if(newDesc===null) return;
-
-  var extra=''; if(newLat&&newLng) extra=' [lat:'+newLat+'|lng:'+newLng+']';
-  var fullDesc=newDesc+extra;
-  // zachowaj ban jeśli był
-  if(isBan(a.description)) fullDesc+=' [banned:true]';
-
-  L('Zapisuję edycję '+id.slice(0,8));
-  try{
-    var res=await fetch(S_URL+'/rest/v1/ogloszenia?id=eq.'+id,{method:'PATCH',headers:{'apikey':S_KEY,'Authorization':'Bearer '+S_KEY,'Content-Type':'application/json'},body:JSON.stringify({title:newTitle,brand:newBrand,model:newModel,price:parseInt(newPrice)||0,location:newLoc,description:fullDesc}});
-    if(!res.ok) throw new Error(await res.text());
-    L('Zapisano ✅'); loadAds();
-  }catch(e){L('Błąd zapisu: '+e.message); alert(e.message);}
-}
-
-async function doBan(id, ban){if(!confirm((ban?'ZABANOWAĆ':'ODBLOKOWAĆ')+' '+id.slice(0,8)+' ?')) return; var a=null; for(var i=0;i<ADS.length;i++) if(ADS[i].id===id) a=ADS[i]; var d=a.description||''; var clean=cleanDesc(d); var ex=getExtra(d); if(ban) ex.banned='true'; else delete ex.banned; var extraStr=''; var keys=Object.keys(ex); if(keys.length){var parts=[]; for(var i=0;i<keys.length;i++) parts.push(keys[i]+':'+ex[keys[i]]); extraStr=' ['+parts.join('|')+']';} var newDesc=clean+extraStr; L((ban?'Banuję':'Odblokowuję')+' '+id.slice(0,8)); try{var res=await fetch(S_URL+'/rest/v1/ogloszenia?id=eq.'+id,{method:'PATCH',headers:{'apikey':S_KEY,'Authorization':'Bearer '+S_KEY,'Content-Type':'application/json'},body:JSON.stringify({description:newDesc}}); if(!res.ok) throw new Error(await res.text()); L((ban?'Zabanowano ✅':'Odblokowano ✅')); loadAds();}catch(e){L('Błąd bana:'+e.message);}}
-async function delAd(id){if(!confirm('USUNĄĆ na stałe '+id.slice(0,8)+' ?')) return; L('Usuwam '+id.slice(0,8)); try{var res=await fetch(S_URL+'/rest/v1/ogloszenia?id=eq.'+id,{method:'DELETE',headers:{'apikey':S_KEY,'Authorization':'Bearer '+S_KEY}}); if(!res.ok) throw new Error(await res.text()); L('Usunięto ✅'); loadAds();}catch(e){L('Błąd usuwania:'+e.message);}}
-async function addGps(){if(!confirm('Dodać GPS automatycznie do wszystkich bez GPS?')) return; var cnt=0; for(var i=0;i<ADS.length;i++){var a=ADS[i]; if(hasGps(a.description||'')) continue; var c=cityToGps(a.location||''); var clean=cleanDesc(a.description||''); var ex=getExtra(a.description||''); ex.lat=c.lat; ex.lng=c.lng; var parts=[]; var keys=Object.keys(ex); for(var k=0;k<keys.length;k++) parts.push(keys[k]+':'+ex[keys[k]]); var newDesc=clean+' ['+parts.join('|')+']'; L('GPS '+a.id.slice(0,8)+' -> '+c.lat); try{await fetch(S_URL+'/rest/v1/ogloszenia?id=eq.'+a.id,{method:'PATCH',headers:{'apikey':S_KEY,'Authorization':'Bearer '+S_KEY,'Content-Type':'application/json'},body:JSON.stringify({description:newDesc}}); cnt++;}catch(e){L('Błąd GPS:'+e.message);}} L('Dodano GPS '+cnt); alert('Dodano GPS do '+cnt+' ogłoszeń'); loadAds();}
-async function cleanDup(){var seen={}; var dups=[]; for(var i=0;i<ADS.length;i++){var a=ADS[i]; var key=(a.title||'')+'|'+(a.price||'')+'|'+(a.location||''); if(seen[key]) dups.push(a.id); else seen[key]=true;} if(dups.length===0){alert('Brak duplikatów!'); return;} if(!confirm('Usunąć '+dups.length+' duplikatów?')) return; for(var i=0;i<dups.length;i++){L('Usuwam duplikat '+dups[i].slice(0,8)); try{await fetch(S_URL+'/rest/v1/ogloszenia?id=eq.'+dups[i],{method:'DELETE',headers:{'apikey':S_KEY,'Authorization':'Bearer '+S_KEY}});}catch(e){L('Błąd:'+e.message);}} L('Duplikaty usunięte'); loadAds();}
-
-loadAds();
+test();
 </script>
 </body></html>
