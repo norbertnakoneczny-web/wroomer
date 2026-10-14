@@ -25,10 +25,23 @@
 .modal-body{padding:16px;overflow-y:auto;max-height:70vh}.field{margin-bottom:10px}.field label{font-size:11px;color:#facc15;font-weight:800;display:block;margin-bottom:4px}
 .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#facc15;color:#000;padding:12px 20px;border-radius:999px;font-weight:900;font-size:13px;display:none;z-index:200}.toast.show{display:block}
 #debug{background:#1a1a1a;border:1px solid #333;padding:10px;border-radius:10px;font-size:11px;margin-bottom:12px;white-space:pre-wrap}
+
+.mobile-filter-btn{display:none;align-items:center;gap:6px;background:#facc15;color:#000;border:none;border-radius:999px;padding:8px 14px;font-size:11px;font-weight:900;cursor:pointer}
+.drawer-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:40;backdrop-filter:blur(2px)}
+.drawer-overlay.show{display:block}
+@media (max-width:768px){
+  .main{flex-direction:column}
+  .sidebar{position:fixed;left:-100%;top:56px;bottom:0;width:85%;max-width:340px;z-index:50;transition:left .3s ease;box-shadow:20px 0 60px rgba(0,0,0,.8);overflow-y:auto;padding-bottom:100px}
+  .sidebar.open{left:0}
+  .mobile-filter-btn{display:flex}
+  .content{padding:10px}
+  .grid{grid-template-columns:1fr}
+}
+
 </style>
 </head><body>
 <div class="header"><div style="display:flex;align-items:center"><div class="logo">WROOMER<span>.PL</span></div><div class="nav">Ogłoszenia</div></div><div style="display:flex;gap:8px;align-items:center"><span id="user-email" style="font-size:11px;color:#666"></span><button class="btn-user" id="btn-auth" onclick="toggleAuth()">ZALOGUJ</button><button class="btn-add" onclick="openAdd()">+ DODAJ OGŁOSZENIE</button></div></div>
-<div id="debug" style="display:none;background:#0a0a0a;border-bottom:1px solid #222;padding:8px 16px;font-size:11px;color:#666"></div>
+<div id="debug" style="display:none"></div>
 <div class="main">
 <div class="sidebar">
 <div class="label">MARKA</div><select class="select" id="f-marka"><option>Wszystkie marki</option></select>
@@ -394,6 +407,17 @@ document.getElementById('submit').onclick=async()=>{
   btn.textContent='ZATWIERDŹ'; btn.disabled=false;
   await loadAds();
 };
+
+
+// Mobile drawer - only show/hide, no filter logic
+document.getElementById('mobile-filter-btn')?.addEventListener('click', ()=>{
+  document.querySelector('.sidebar')?.classList.toggle('open');
+  document.getElementById('drawer-overlay')?.classList.toggle('show');
+});
+document.getElementById('drawer-overlay')?.addEventListener('click', ()=>{
+  document.querySelector('.sidebar')?.classList.remove('open');
+  document.getElementById('drawer-overlay')?.classList.remove('show');
+});
 
 initFilters();
 checkAuth();
