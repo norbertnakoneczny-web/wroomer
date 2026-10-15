@@ -41,7 +41,7 @@
 .row{display:flex;gap:8px} .row> *{flex:1} .error{background:#3a1111;border:1px solid #a33;color:#ffb3b3;padding:10px;border-radius:8px;margin:8px 12px;font-size:12px} .success{background:#112a11;border:1px solid #3a3;color:#b3ffb3;padding:10px;border-radius:8px;margin:8px 12px} .file-label{background:#222;border:1px dashed #444;padding:18px;text-align:center;border-radius:10px;cursor:pointer;display:block;margin:10px 12px;font-size:12px} #preview{display:flex;gap:6px;flex-wrap:wrap;margin:8px 12px} #preview .p{position:relative} #preview img{width:60px;height:60px;object-fit:cover;border-radius:6px} #preview .x{position:absolute;top:-5px;right:-5px;background:#facc15;color:#000;border-radius:50%;width:16px;height:16px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:900;cursor:pointer}
 h4{font-size:10px;font-weight:800;letter-spacing:1px;margin:14px 0 6px;color:#facc15;opacity:.8}
 label.small{font-size:9px;opacity:.7;display:block;margin:8px 12px 2px;text-transform:uppercase;font-weight:700;letter-spacing:.5px}
-.other-input{display:none;margin:0 12px;width:calc(100% - 24px);background:#222;border:1px solid #facc15;color:#fff;padding:10px;border-radius:8px;font-size:13px} .other-input.show{display:block}
+.other-input{display:none;margin:0 12px;width:calc(100% - 24px);background:#222;border:1px solid #facc15;color:#fff;padding:10px;border-radius:8px;font-size:13px} .other-input{display:none} .other-input.show{display:block !important; background:#222; border:2px solid #facc15 !important} .other-input{margin:8px 12px; width:calc(100% - 24px)}
 </style>
 </head>
 <body>
@@ -62,8 +62,8 @@ label.small{font-size:9px;opacity:.7;display:block;margin:8px 12px 2px;text-tran
 <h4>LOKALIZACJA (tekst)</h4><input class="input" id="fLokD" placeholder="Gorzyce">
 <h4>SORT</h4><select class="select" id="fSortD"><option value="newest">Najnowsze</option><option value="price_asc">Cena ↑</option><option value="price_desc">Cena ↓</option><option value="distance">Odległość</option></select>
 <button class="btn btn-yellow" style="width:100%;margin-top:12px;padding:12px" onclick="loadAds()">Szukaj</button>
-<button class="btn btn-yellow" style="width:100%;margin-top:10px;padding:14px;font-weight:900;font-size:14px;border:2px solid #000" onclick="resetFilters()">🧹 Wyczyść filtry</button>
-<div style="margin-top:10px;padding:8px;background:#181818;border-radius:8px;font-size:11px" id="countD"></div><button class="btn btn-yellow" style="width:100%;margin-top:10px;padding:12px;font-weight:900" onclick="resetFilters()">🧹 Wyczyść filtry</button>
+<button class="btn btn-dark" style="width:100%;margin-top:6px" onclick="resetFilters()">Wyczyść</button>
+<div style="margin-top:10px;padding:8px;background:#181818;border-radius:8px;font-size:11px" id="countD"></div>
 </div>
 <div class="mobile-drawer" id="mobileDrawer"><div class="mobile-drawer-header"><h3>🔍 Filtry + 📍 Promień</h3><button class="btn btn-yellow" onclick="toggleMobileFilters()">✕ Schowaj</button></div>
 <h4>📍 SZUKAJ W PROMIENIU</h4>
@@ -79,7 +79,7 @@ label.small{font-size:9px;opacity:.7;display:block;margin:8px 12px 2px;text-tran
 <h4>SORT</h4><select class="select" id="fSortM"><option value="newest">Najnowsze</option><option value="price_asc">Cena ↑</option><option value="price_desc">Cena ↓</option><option value="distance">Odległość</option></select>
 <button class="btn btn-yellow" style="width:100%;margin-top:16px;padding:14px;font-size:15px;font-weight:900" onclick="applyMobileAndHide()">✓ POKAŻ WYNIKI I SCHOWAJ</button>
 <button class="btn btn-dark" style="width:100%;margin-top:8px" onclick="toggleMobileFilters()">✕ Anuluj</button>
-<div style="margin-top:12px;padding:8px;background:#181818;border-radius:8px;font-size:11px" id="countM"></div><button class="btn btn-yellow" style="width:100%;margin-top:12px;padding:14px;font-weight:900" onclick="resetFilters(); toggleMobileFilters()">🧹 Wyczyść filtry</button><div style="height:80px"></div></div>
+<div style="margin-top:12px;padding:8px;background:#181818;border-radius:8px;font-size:11px" id="countM"></div><div style="height:80px"></div></div>
 <div class="grid" id="grid"></div>
 </div>
 
@@ -89,7 +89,8 @@ label.small{font-size:9px;opacity:.7;display:block;margin:8px 12px 2px;text-tran
 <div class="modal" id="addModal"><div class="modal-box"><div class="modal-header"><h3 id="addModalTitle">Dodaj ogłoszenie - GPS</h3><button class="btn btn-dark" onclick="closeModals()">✕</button></div><div id="addError"></div>
 <label class="small" style="color:#facc15">Tytuł *</label><input class="input" id="aTitle" placeholder="np. Fiat Stilo 1.9 JTD" style="margin:0 12px;width:calc(100% - 24px)">
 <div class="row" style="padding:0 12px;margin-top:6px"><div><label class="small">Marka *</label><select class="select" id="aBrand"><option value="">Wybierz</option><option value="Abarth">Abarth</option><option value="Alfa Romeo">Alfa Romeo</option><option value="Audi">Audi</option><option value="BMW">BMW</option><option value="Citroen">Citroen</option><option value="Dacia">Dacia</option><option value="Fiat">Fiat</option><option value="Ford">Ford</option><option value="Hyundai">Hyundai</option><option value="Kia">Kia</option><option value="Mazda">Mazda</option><option value="Mercedes-Benz">Mercedes-Benz</option><option value="Opel">Opel</option><option value="Peugeot">Peugeot</option><option value="Renault">Renault</option><option value="Skoda">Skoda</option><option value="Toyota">Toyota</option><option value="Volkswagen">Volkswagen</option><option value="Volvo">Volvo</option></select></div><div><label class="small">Model * (+Inne)</label><select class="select" id="aModelIn"><option value="">Najpierw marka</option></select></div></div>
-<input class="other-input" id="aModelOther" placeholder="Wpisz model jeśli nie ma, np. Stilo Abarth">
+<input class="other-input" id="aModelOther" placeholder="Wpisz model jeśli nie ma, np. 508, Stilo Abarth">
+<div id="otherHint" style="display:none; margin:0 12px 8px; padding:8px; background:#1a1a00; border:1px solid #facc15; border-radius:6px; font-size:11px; color:#facc15">👇 Wpisz tutaj model (np. <b>508</b>, <b>508 SW</b>, <b>Stilo Abarth</b>) i kliknij <b>Zapisz / Dodaj</b>. Nie musisz wybierać nic więcej.</div>
 <div class="row" style="padding:0 12px"><div><label class="small">Rok *</label><input class="input" id="aYear" type="number" placeholder="2005"></div><div><label class="small">Cena PLN *</label><input class="input" id="aPrice" type="number" placeholder="8500"></div></div>
 <div class="row" style="padding:0 12px"><div><label class="small">Przebieg km</label><input class="input" id="aMileage" type="number" placeholder="250000"></div><div><label class="small">Paliwo</label><select class="select" id="aFuel"><option value="">Wybierz</option><option>Benzyna</option><option>Diesel</option><option>Benzyna+LPG</option><option>LPG</option><option>Hybryda</option><option>Elektryczny</option></select></div></div>
 <div class="row" style="padding:0 12px"><div><label class="small">Skrzynia</label><select class="select" id="aGear"><option value="">Wybierz</option><option>Manualna</option><option>Automatyczna</option></select></div><div><label class="small">Moc KM</label><input class="input" id="aPower" type="number" placeholder="140"></div></div>
@@ -112,25 +113,25 @@ const SUPABASE_URL='https://bdpydgsfowtuvjnkyeeg.supabase.co';
 const SUPABASE_ANON='sb_publishable_S1qH_mBZaX7-bzmfJ0IVGA_6hxGbJWd';
 const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON, {auth:{persistSession:true}});
 const BRAND_MODELS = {
-"Abarth": ["500","500C","595","695","124 Spider","Punto Evo","Grande Punto"],
-"Alfa Romeo": ["145","146","147","156","159","Giulia","Giulietta","Mito","Stelvio","Tonale","Brera","GT","Spider","166","159 Sportwagon","Stelvio Quadrifoglio","Giulia Quadrifoglio","4C"],
-"Audi": ["80","90","100","A1","A2","A3","A3 Sportback","A4","A4 Avant","A5","A5 Sportback","A6","A6 Avant","A7","A8","Q2","Q3","Q3 Sportback","Q5","Q5 Sportback","Q7","Q8","e-tron","e-tron GT","TT","R8","RS3","RS4","RS5","RS6","RS7","S3","S4","S5"],
-"BMW": ["1","1M","2","2 Active Tourer","3","3 GT","4","4 Gran Coupe","5","5 GT","6","6 Gran Coupe","7","8","X1","X2","X3","X4","X5","X6","X7","Z3","Z4","i3","i4","iX","iX3","M2","M3","M4","M5","Seria 1","Seria 2","Seria 3","Seria 4","Seria 5"],
-"Citroen": ["AX","Saxo","ZX","Xsara","Xsara Picasso","C1","C2","C3","C3 Aircross","C3 Picasso","C4","C4 Cactus","C4 Picasso","C4 Grand Picasso","C5","C5 Aircross","C5 X","C6","C8","Berlingo","Jumpy","Jumper","DS3","DS4","DS5","Evasion"],
-"Dacia": ["Logan","Logan MCV","Sandero","Sandero Stepway","Duster","Dokker","Lodgy","Spring","Jogger","Duster 4x4","1300","1310"],
-"Fiat": ["126p","126","500","500C","500L","500X","Panda","Panda 4x4","Punto","Grande Punto","Punto Evo","Bravo","Brava","Marea","Stilo","Stilo Multiwagon","Tipo","Tipo Cross","Doblo","Fiorino","Qubo","Linea","Croma","Freemont","Ulysse","Seicento","Cinquecento","Palio","Siena","Idea","Multipla","Barchetta","Coupe","Ducato"],
-"Ford": ["Ka","Fiesta","Fusion","Focus","Focus ST","C-Max","Grand C-Max","Mondeo","Mondeo ST","S-Max","Galaxy","Kuga","Puma","EcoSport","Edge","Explorer","Mustang","Ranger","Transit","Transit Connect","Tourneo","Escort","Sierra","Puma ST","B-Max","Fiesta ST"],
-"Hyundai": ["Atos","Getz","i10","i20","i30","i30 Fastback","i40","Elantra","Accent","Tucson","Santa Fe","Kona","Kona Electric","Bayon","iX20","iX35","Matrix","Coupe","Veloster","Ioniq","Ioniq 5","Ioniq 6","Santa Fe","Staria","Tucson Hybrid"],
-"Kia": ["Picanto","Rio","Ceed","Ceed SW","ProCeed","Stonic","Venga","Soul","Niro","Sportage","Sorento","Seltos","XCeed","Optima","Stinger","Carens","Carnival","Sorrento","EV6","EV9","Rio","Cerato"],
-"Mazda": ["2","3","3 MPS","5","6","6 MPS","CX-3","CX-30","CX-5","CX-60","CX-7","CX-9","MX-5","MX-30","RX-8","Premacy","323","626","MPV","BT-50"],
-"Mercedes-Benz": ["A-Klasa","B-Klasa","C-Klasa","CL","CLA","CLC","CLK","CLS","E-Klasa","G-Klasa","GL","GLA","GLB","GLC","GLE","GLK","GLS","M-Klasa","S-Klasa","SL","SLK","SLC","V-Klasa","Vito","Sprinter","Citan","EQC","EQA","EQB","EQE","EQS","AMG GT","190","W124","W210"],
-"Opel": ["Corsa","Corsa-e","Astra","Astra GTC","Astra OPC","Insignia","Insignia OPC","Mokka","Mokka-e","Crossland","Grandland","Zafira","Zafira Tourer","Meriva","Adam","Karl","Agila","Vectra","Signum","Omega","Calibra","Tigra","GT","Ampera","Combo","Vivaro","Movano"],
-"Peugeot": ["106","107","108","206","206 CC","207","208","208 GTI","2008","3008","301","306","307","308","308 CC","4007","4008","407","408","5008","508","Partner","Expert","Boxer","Rifter","Traveller","RCZ","iOn"],
-"Renault": ["Twingo","Clio","Clio RS","Modus","Captur","Arkana","Megane","Megane CC","Megane RS","Scenic","Grand Scenic","Laguna","Latitude","Fluence","Talisman","Kadjar","Koleos","Espace","Kangoo","Trafic","Master","Zoe","Twizy","19","21","Clio Sport","Thalia","Thalia II","Symbol","Wind"],
-"Skoda": ["Citigo","Fabia","Fabia Combi","Rapid","Rapid Spaceback","Octavia","Octavia Combi","Octavia RS","Superb","Superb Combi","Kodiaq","Karoq","Kamiq","Yeti","Roomster","Scala","Enyaq","Enyaq Coupe","Felicia","Favorit","Fabia RS","Octavia Scout","Superb Scout"],
-"Toyota": ["Aygo","Aygo X","Yaris","Yaris Cross","Corolla","Corolla Verso","Corolla Cross","Auris","Avensis","Camry","C-HR","RAV4","Highlander","Land Cruiser","Hilux","Proace","Proace City","Prius","Prius+","GT86","Supra","Corolla GR","Yaris GR","BZ4X","Verso","Verso-S","IQ","Urban Cruiser"],
-"Volkswagen": ["Up!","Fox","Polo","Polo Cross","Golf","Golf Plus","Golf Sportsvan","Golf Cabrio","Golf GTI","Golf R","Jetta","Bora","Passat","Passat CC","CC","Arteon","Beetle","T-Roc","T-Cross","Tiguan","Tiguan Allspace","Touareg","Touran","Sharan","Caddy","Crafter","Transporter","Caravelle","ID.3","ID.4","ID.5","ID.Buzz","Scirocco","Eos","Phaeton","Lupo"],
-"Volvo": ["440","460","480","S40","V40","V40 Cross Country","S60","V60","V60 Cross Country","S80","V70","XC70","S90","V90","V90 Cross Country","XC40","XC60","XC90","C30","C70","EX30","EX90","XC40 Recharge","C40","850","940","960"]
+"Abarth": ["500","500C","595","695","124 Spider","Punto","Grande Punto","Punto Evo"],
+"Alfa Romeo": ["MiTo","Giulietta","Giulia","Stelvio","Tonale","159","Brera","GT","147","156","166","4C","Spider","Giulietta QV"],
+"Audi": ["A1","A1 Sportback","A3","A3 Sportback","A3 Sedan","A4","A4 Avant","A5","A5 Sportback","A6","A6 Avant","A7","A8","Q2","Q3","Q3 Sportback","Q5","Q5 Sportback","Q7","Q8","e-tron","TT","R8","RS3","RS4","RS5","RS6","RS7","S3","S4","S5","A2","80","100"],
+"BMW": ["1","2","2 Active Tourer","3","3 GT","4","4 Gran Coupe","5","5 GT","6","7","8","X1","X2","X3","X4","X5","X6","X7","Z3","Z4","i3","i4","iX","iX3","M2","M3","M4","M5","X5M","X6M","Seria 1","Seria 3","Seria 5"],
+"Citroen": ["C1","C2","C3","C3 Aircross","C3 Picasso","C4","C4 Cactus","C4 Picasso","C4 Grand Picasso","C5","C5 Aircross","C5 X","C6","C8","Berlingo","Jumpy","Jumper","Saxo","Xsara","Xsara Picasso","DS3","DS4","DS5"],
+"Dacia": ["Duster","Sandero","Sandero Stepway","Logan","Logan MCV","Dokker","Lodgy","Jogger","Spring","Duster 4x4","1300","1310","1310 Pickup"],
+"Fiat": ["126p","500","500C","500L","500X","Panda","Punto","Grande Punto","Punto Evo","Bravo","Brava","Marea","Stilo","Stilo Multiwagon","Tipo","Tipo Cross","Doblo","Fiorino","Qubo","Linea","Croma","Freemont","Seicento","Cinquecento","Palio","Siena","Idea","Multipla","Barchetta","Ducato","126","Uno"],
+"Ford": ["Ka","Fiesta","Fusion","Focus","Focus ST","Focus RS","C-Max","Grand C-Max","Mondeo","Mondeo ST","S-Max","Galaxy","Kuga","Puma","EcoSport","Edge","Explorer","Mustang","Ranger","Transit","Transit Connect","Tourneo","Escort","Sierra","B-Max","Fiesta ST","Puma ST"],
+"Hyundai": ["Atos","Getz","i10","i20","i30","i30 Fastback","i40","Elantra","Accent","Tucson","Santa Fe","Kona","Bayon","iX20","iX35","Matrix","Coupe","Veloster","Ioniq","Ioniq 5","Ioniq 6","Staria","Kona Electric"],
+"Kia": ["Picanto","Rio","Ceed","Ceed SW","ProCeed","Stonic","Venga","Soul","Niro","Sportage","Sorento","Seltos","XCeed","Optima","Stinger","Carens","Carnival","EV6","EV9","Cerato","Cee'd"],
+"Mazda": ["2","3","3 MPS","5","6","6 MPS","CX-3","CX-30","CX-5","CX-60","CX-7","CX-9","MX-5","MX-30","RX-8","Premacy","323","626","MPV","CX-3","CX-30"],
+"Mercedes-Benz": ["A-Klasa","B-Klasa","C-Klasa","CLA","CLS","E-Klasa","G-Klasa","GLA","GLB","GLC","GLE","GLK","GLS","M-Klasa","S-Klasa","SL","SLK","V-Klasa","Vito","Sprinter","Citan","190","W124","W210","W211","W212","A","B","C","E","S","ML","GL"],
+"Opel": ["Corsa","Astra","Astra GTC","Insignia","Mokka","Crossland","Grandland","Zafira","Meriva","Adam","Karl","Agila","Vectra","Omega","Calibra","Tigra","Combo","Vivaro","Movano","Astra OPC","Corsa OPC"],
+"Peugeot": ["106","107","108","206","206 CC","206 SW","207","207 CC","208","208 GTI","2008","3008","3008 GT","301","306","307","307 CC","307 SW","308","308 CC","308 SW","308 GT","4007","4008","407","407 SW","408","5008","508","508 SW","508 GT","508 RXH","Partner","Expert","Boxer","Rifter","RCZ","508 PSE","208 PSE"],
+"Renault": ["Twingo","Clio","Clio RS","Modus","Captur","Arkana","Megane","Megane CC","Megane RS","Megane Grandtour","Scenic","Grand Scenic","Laguna","Laguna Coupe","Latitude","Fluence","Talisman","Kadjar","Koleos","Espace","Kangoo","Trafic","Master","Zoe","19","21","Thalia","Symbol","Clio Sport","Wind","Megane Conquest"],
+"Skoda": ["Citigo","Fabia","Fabia Combi","Rapid","Rapid Spaceback","Octavia","Octavia Combi","Octavia RS","Octavia Scout","Superb","Superb Combi","Superb Scout","Kodiaq","Karoq","Kamiq","Yeti","Roomster","Scala","Enyaq","Felicia","Favorit","Fabia RS","Octavia RS","Citigo-e","Enyaq Coupe"],
+"Toyota": ["Aygo","Aygo X","Yaris","Yaris Cross","Corolla","Corolla Verso","Corolla Cross","Auris","Avensis","Camry","C-HR","RAV4","Highlander","Land Cruiser","Hilux","Proace","Prius","GT86","Supra","Corolla GR","Yaris GR","bZ4X","Verso","IQ","Urban Cruiser","Corolla Hybrid","Yaris Hybrid"],
+"Volkswagen": ["Up!","Fox","Polo","Polo Cross","Golf","Golf Plus","Golf Sportsvan","Golf GTI","Golf R","Jetta","Bora","Passat","Passat CC","CC","Arteon","Beetle","T-Roc","T-Cross","Tiguan","Tiguan Allspace","Touareg","Touran","Sharan","Caddy","Crafter","Transporter","Caravelle","ID.3","ID.4","ID.5","Scirocco","Eos","Phaeton","Lupo","Golf Variant","Passat Variant"],
+"Volvo": ["S40","V40","V40 Cross Country","S60","V60","V60 Cross Country","S80","V70","XC70","S90","V90","V90 Cross Country","XC40","XC60","XC90","C30","C70","EX30","EX90","C40","850","940","960","V50","XC40 Recharge"]
 };
 let currentUser=null, selectedFiles=[], editingId=null, allAds=[], galleryImages=[], galleryIndex=0, mobileFiltersOpen=false;
 let addLat=null, addLng=null, searchLat=null, searchLng=null;
@@ -158,7 +159,7 @@ function populateModelSelect(brandId, modelId, selectedModel=null){
   const modelSel=document.getElementById(modelId); 
   if(!modelSel) return; 
   const models=BRAND_MODELS[brand]||[]; 
-  modelSel.innerHTML='<option value="">Wybierz model (lub Inne)</option>'; 
+  modelSel.innerHTML='<option value="">Wybierz model</option>'; 
   models.forEach(m=>{
     const o=document.createElement('option'); 
     o.value=m; 
@@ -168,53 +169,34 @@ function populateModelSelect(brandId, modelId, selectedModel=null){
   }); 
   const otherOpt=document.createElement('option'); 
   otherOpt.value='__OTHER__'; 
-  otherOpt.textContent='🔧 Inne / Wpisz ręcznie (np. Stilo Abarth)'; 
+  otherOpt.textContent='🔧 Inne - WPISZ PONIŻEJ (np. 508, Stilo Abarth)'; 
   otherOpt.style.fontWeight='900'; 
   otherOpt.style.background='#facc15'; 
   otherOpt.style.color='#000'; 
   modelSel.appendChild(otherOpt); 
-  if(selectedModel && !models.includes(selectedModel) && selectedModel!=='__OTHER__'){
+  if(selectedModel && !models.includes(selectedModel) && selectedModel!=='__OTHER__' && selectedModel!==''){
     const o=document.createElement('option'); 
     o.value=selectedModel; 
-    o.textContent=selectedModel+' (wpisany ręcznie)'; 
+    o.textContent=selectedModel+' (twój wpis)'; 
     o.selected=true; 
     modelSel.appendChild(o);
-    // auto show other input with value
-    if(brandId==='aBrand'){
-      const otherIn=document.getElementById('aModelOther');
-      if(otherIn){ otherIn.value=selectedModel; otherIn.classList.add('show'); }
-    }
-  } 
-  modelSel.onchange=()=>{
-    const otherId = brandId==='aBrand' ? 'aModelOther' : 'fModelOther'+brandId.slice(-1);
-    let otherInput = document.getElementById(otherId) || document.getElementById('aModelOther') || document.getElementById('fModelOther');
-    // For add modal
     if(brandId==='aBrand'){
       const ai=document.getElementById('aModelOther');
+      if(ai){ ai.value=selectedModel; ai.classList.add('show'); }
+    }
+  }
+  modelSel.onchange=()=>{
+    if(brandId==='aBrand'){
+      const ai=document.getElementById('aModelOther');
+      const hint=document.getElementById('otherHint');
       if(modelSel.value==='__OTHER__'){
         ai.classList.add('show'); 
-        ai.focus(); 
-        ai.placeholder='Wpisz model, np. Stilo Abarth - ZATWIERDŹ ENTER lub kliknij Dodaj';
+        ai.focus();
+        ai.placeholder='WPISZ MODEL: np. 508, 508 SW, Stilo Abarth, itp. - potem kliknij Zapisz';
+        if(hint) hint.style.display='block';
       } else {
         ai.classList.remove('show');
-      }
-    } else {
-      // For filters - show custom text input if Inne selected
-      const filterOther = document.getElementById('fModelCustom'+brandId.slice(-1));
-      if(modelSel.value==='__OTHER__'){
-        if(filterOther) filterOther.style.display='block';
-        else {
-          const inp=document.createElement('input');
-          inp.id='fModelCustom'+brandId.slice(-1);
-          inp.className='input';
-          inp.placeholder='Wpisz model ręcznie, np. Stilo';
-          inp.style.marginTop='6px';
-          modelSel.parentNode.appendChild(inp);
-          inp.addEventListener('input', ()=>{ loadAds(); });
-        }
-      } else {
-        const fo=document.getElementById('fModelCustom'+brandId.slice(-1));
-        if(fo) fo.style.display='none';
+        if(hint) hint.style.display='none';
       }
     }
   };
@@ -225,71 +207,12 @@ function getSelectedModel(brandId, modelId, otherId){
   if(!ms) return '';
   if(ms.value==='__OTHER__'){
     const v = other ? other.value.trim() : '';
-    if(!v){
-      // jeśli wybrano Inne ale nie wpisano, poproś o wpisanie
-      if(other){ other.style.border='2px solid #facc15'; other.focus(); }
-      return '';
-    }
-    return v;
+    return v || ''; // zwróć wpisane, jeśli puste to puste - walidacja dalej pokaże błąd
   }
   return ms.value;
 }
-// DODATKOWO: pozwól zatwierdzić Enterem w polu Inne
-document.addEventListener('DOMContentLoaded', ()=>{
-  const otherIn=document.getElementById('aModelOther');
-  if(otherIn){
-    otherIn.addEventListener('keydown', (e)=>{
-      if(e.key==='Enter'){
-        e.preventDefault();
-        const brand=document.getElementById('aBrand').value;
-        if(brand && otherIn.value.trim()){
-          // automatycznie ustaw model na wpisany i schowaj info
-          const sel=document.getElementById('aModelIn');
-          // dodaj opcję jeśli nie ma
-          let exists=false;
-          for(let o of sel.options){ if(o.value===otherIn.value.trim()) exists=true; }
-          if(!exists){
-            const o=document.createElement('option');
-            o.value=otherIn.value.trim();
-            o.textContent=otherIn.value.trim()+' (wpisany)';
-            o.selected=true;
-            sel.appendChild(o);
-          } else {
-            sel.value=otherIn.value.trim();
-          }
-          // nie chowaj, zostaw widoczne
-        }
-      }
-    });
-  }
-});
 
-(function(){
-  const wrap = document.querySelector('.gallery-main-wrap');
-  if(!wrap) return;
-  wrap.addEventListener('touchstart', (e)=>{
-    touchStartX = e.changedTouches[0].screenX;
-    touchStartY = e.changedTouches[0].screenY;
-  }, {passive:true});
-  wrap.addEventListener('touchend', (e)=>{
-    touchEndX = e.changedTouches[0].screenX;
-    window._lastTouchY = e.changedTouches[0].screenY;
-    handleGallerySwipe();
-  }, {passive:true});
-  // Też dla myszki przeciąganie na desktop
-  let isDragging=false, startX=0;
-  wrap.addEventListener('mousedown', (e)=>{isDragging=true; startX=e.screenX; wrap.style.cursor='grabbing';});
-  wrap.addEventListener('mouseup', (e)=>{if(!isDragging) return; isDragging=false; wrap.style.cursor='grab'; touchStartX=startX; touchEndX=e.screenX; handleGallerySwipe();});
-  wrap.addEventListener('mouseleave', ()=>{isDragging=false;});
-  // strzałki klawiatury też
-  document.addEventListener('keydown', (e)=>{
-    const modal=document.getElementById('galleryModal');
-    if(!modal.classList.contains('open')) return;
-    if(e.key==='ArrowLeft') galleryPrev();
-    if(e.key==='ArrowRight') galleryNext();
-    if(e.key==='Escape') closeGallery();
-  });
-})();
+)();
 
 document.addEventListener('DOMContentLoaded',()=>{const d=document.getElementById('mobileDrawer'); if(d) d.classList.remove('open'); mobileFiltersOpen=false;});
 checkUser(); loadAds();
