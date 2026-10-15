@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="pl"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<link rel="preconnect" href="https://www.googletagmanager.com">
 <link rel="preconnect" href="https://cdn.jsdelivr.net">
 <link rel="preconnect" href="https://bdpydgsfowtuvjnkyeeg.supabase.co">
 <link rel="dns-prefetch" href="https://bdpydgsfowtuvjnkyeeg.supabase.co">
+<link rel="dns-prefetch" href="https://www.googletagmanager.com">
 <title>WROOMER.PL - Ogłoszenia Motoryzacyjne | Kup, Sprzedaj, Zamień Auto</title>
 <meta name="description" content="Ogólnopolska darmowa giełda aut. Wystaw auto za darmo bez limitów, kup bez prowizji i ukrytych opłat, zamień. Tysiące ogłoszeń z całej Polski!">
 <link rel="canonical" href="https://www.wroomer.pl/">
@@ -44,7 +44,7 @@ label.small{font-size:9px;opacity:.7;display:block;margin:8px 12px 2px;text-tran
 <body>
 <div class="header"><div class="logo">WROOMER<span>.PL</span> <span style="font-size:9px;background:#facc15;color:#000;padding:2px 6px;border-radius:10px">v10 GPS+RADIUS</span></div><div style="display:flex;gap:6px;align-items:center"><span id="userEmail" style="font-size:11px;opacity:.6;display:none"></span><button class="btn btn-dark" id="btnLogin">Zaloguj</button><button class="btn btn-dark" id="btnLogout" style="display:none">Wyloguj</button><button class="btn btn-yellow" id="btnAdd">+ Dodaj</button></div></div>
 <div class="top-chips"><div class="chip active" onclick="quickFilter('')">Wszystkie</div><div class="chip" onclick="quickFilter('Fiat')">Fiat</div><div class="chip" onclick="quickFilter('Volvo')">Volvo</div><div class="chip" onclick="quickFilter('Audi')">Audi</div><div class="chip" onclick="quickFilter('BMW')">BMW</div></div>
-<div class="mobile-top-bar"><button class="btn btn-dark" style="flex:1;padding:12px;background:#fff;color:#000;font-weight:900" onclick="toggleMobileFilters()">🔍 Filtry</button><button class="btn btn-dark" style="flex:1;padding:12px" onclick="toggleMobileFilters()">📍 Promień</button></div>
+<div class="mobile-top-bar"><button class="btn btn-dark" style="flex:1;padding:12px;background:#fff;color:#000;font-weight:900" onclick="toggleMobileFilters()" aria-label="Filtry">🔍 Filtry</button><button class="btn btn-dark" style="flex:1;padding:12px" onclick="toggleMobileFilters()">📍 Promień</button></div>
 <div class="layout">
 <div class="sidebar-desktop">
 <h4>📍 SZUKAJ W PROMIENIU</h4>
@@ -371,7 +371,7 @@ async function loadAds(){
    grid.innerHTML=filtered.map(o=>{
      const img=o.image_url||(o.images&&o.images[0])||'data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='200' viewBox='0 0 300 200'%3E%3Crect width='300' height='200' fill='%23181818'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23555' font-size='14'%3EBrak zdj%C4%99cia%3C/text%3E%3C/svg%3E'; const cnt=(o.images&&o.images.length>0)?o.images.length:(o.image_url?1:0); const isOwner=currentUser && currentUser.id===o.user_id;
      const distText=o._dist!==null?`<div class="card-distance">📍 ${o._dist.toFixed(1)} km od Ciebie</div>`:(o._ex.lat && o._ex.lat!=='-'?`<div class="card-distance" style="color:#888">📍 GPS</div>`:'');
-     return `<div class="card" onclick="openGallery(allAds.find(a=>a.id==='${o.id}'))"><div class="card-img-wrap"><img src="${img}" loading="lazy"><div class="card-img-count">📷 ${cnt}</div></div><div class="card-body"><div class="card-title">${o.title}</div><div class="card-price">${o.price} PLN</div><div class="card-location">${o.location||''} • ${o.year||''}</div>${distText}</div>${isOwner?`<div class="owner-actions" onclick="event.stopPropagation()"><button class="edit" onclick="openAddModal(allAds.find(a=>a.id==='${o.id}'))">EDYTUJ</button><button class="del" onclick="deleteAd('${o.id}')">X</button></div>`:''}</div>`;
+     return `<div class="card" onclick="openGallery(allAds.find(a=>a.id==='${o.id}'))"><div class="card-img-wrap"><img src="${img}" loading="lazy" decoding="async" alt="${o.title}" width="300" height="200"><div class="card-img-count">📷 ${cnt}</div></div><div class="card-body"><div class="card-title">${o.title}</div><div class="card-price">${o.price} PLN</div><div class="card-location">${o.location||''} • ${o.year||''}</div>${distText}</div>${isOwner?`<div class="owner-actions" onclick="event.stopPropagation()"><button class="edit" onclick="openAddModal(allAds.find(a=>a.id==='${o.id}'))">EDYTUJ</button><button class="del" onclick="deleteAd('${o.id}')">X</button></div>`:''}</div>`;
    }).join('');
  }catch(e){grid.innerHTML='<div style="grid-column:1/-1;padding:20px;background:#3a1111">Błąd: '+(e.message||e)+'</div>';}
 }
@@ -392,6 +392,23 @@ window.addEventListener('load', function(){
     gtag('config', 'G-34L1GMG3GK');
   };
   document.head.appendChild(s);
+});
+</script>
+
+
+<script>
+// Defer GTAG to after LCP for PageSpeed 95+
+window.addEventListener('load', function(){
+  setTimeout(function(){
+    var s=document.createElement('script');
+    s.src='https://www.googletagmanager.com/gtag/js?id=G-34L1GMG3GK';
+    s.async=true;
+    document.head.appendChild(s);
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-34L1GMG3GK');
+  }, 2500);
 });
 </script>
 
