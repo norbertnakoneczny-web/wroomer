@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+
+# Blokuj strony systemowe Vercela jeśli jakieś są
+Disallow: /api/
+Disallow: /_vercel/
+
+# Mapa strony
+Sitemap: https://www.wroomer.pl/sitemap.xml
+Sitemap: https://www.wroomer.pl/sitemap.xml
