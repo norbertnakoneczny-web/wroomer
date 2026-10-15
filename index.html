@@ -79,8 +79,7 @@ label.small{font-size:9px;opacity:.7;display:block;margin:8px 12px 2px;text-tran
 <div class="grid" id="grid"></div>
 </div>
 
-<div class="modal gallery-modal" id="galleryModal"><div class="modal-box"><div class="modal-header"><h3 id="galleryTitle" style="font-size:14px"></h3><button class="btn btn-dark" onclick="closeGallery()">✕</button></div><div class="gallery-main-wrap"><button class="gallery-nav prev" onclick="galleryPrev()">‹</button><img id="galleryMain" class="gallery-main" src=""><button class="gallery-nav next" onclick="galleryNext()">›</button></div><div id="galleryThumbs" class="gallery-thumbs"></div><div id="galleryInfo" class="gallery-info"></div></div></div>
-<div class="modal" id="loginModal"><div class="modal-box"><div class="modal-header"><h3>Zaloguj</h3><button class="btn btn-dark" onclick="closeModals()">✕</button></div><div id="loginError"></div><input class="input" id="loginEmail" placeholder="Email" style="margin:10px 12px 0;width:calc(100% - 24px)"><input class="input" id="loginPass" type="password" placeholder="Hasło" style="margin:0 12px;width:calc(100% - 24px)"><div class="row" style="padding:12px"><button class="btn btn-yellow" style="flex:1;padding:11px" onclick="doLogin()">Zaloguj</button><button class="btn btn-dark" style="flex:1;padding:11px" onclick="doSignup()">Załóż</button></div></div></div>
+<div class="modal gallery-modal" id="galleryModal"><div class="modal-box"><div class="modal-header"><h3 id="galleryTitle" style="font-size:14px"></h3><button class="btn btn-dark" onclick="closeGallery()">✕</button></div><div class="gallery-main-wrap"><button class="gallery-nav prev" onclick="galleryPrev()">‹</button><img id="galleryMain" class="gallery-main" src="" alt="Zdjęcie auta"><button class="gallery-nav next" onclick="galleryNext()">›</button></div><div id="galleryThumbs" class="gallery-thumbs"></div><div id="galleryInfo" class="gallery-info"></div></div></div><div class="modal" id="loginModal"><div class="modal-box"><div class="modal-header"><h3>Zaloguj</h3><button class="btn btn-dark" onclick="closeModals()">✕</button></div><div id="loginError"></div><input class="input" id="loginEmail" placeholder="Email" style="margin:10px 12px 0;width:calc(100% - 24px)"><input class="input" id="loginPass" type="password" placeholder="Hasło" style="margin:0 12px;width:calc(100% - 24px)"><div class="row" style="padding:12px"><button class="btn btn-yellow" style="flex:1;padding:11px" onclick="doLogin()">Zaloguj</button><button class="btn btn-dark" style="flex:1;padding:11px" onclick="doSignup()">Załóż</button></div></div></div>
 
 <div class="modal" id="addModal"><div class="modal-box"><div class="modal-header"><h3 id="addModalTitle">Dodaj ogłoszenie - GPS</h3><button class="btn btn-dark" onclick="closeModals()">✕</button></div><div id="addError"></div>
 <label class="small" style="color:#facc15">Tytuł *</label><input class="input" id="aTitle" placeholder="np. Fiat Stilo 1.9 JTD" style="margin:0 12px;width:calc(100% - 24px)">
@@ -343,6 +342,34 @@ function openGallery(ad){
  }
  modal.classList.add('open');
 }
+
+let touchStartX = 0;
+let touchEndX = 0;
+function handleGallerySwipe(){
+  const diff = touchStartX - touchEndX;
+  if(Math.abs(diff) > 50){
+    if(diff > 0) galleryNext();
+    else galleryPrev();
+  }
+}
+document.addEventListener('DOMContentLoaded', function(){
+  const gm = document.getElementById('galleryMain');
+  if(gm){
+    gm.addEventListener('touchstart', e=>{ touchStartX = e.changedTouches[0].screenX; }, {passive:true});
+    gm.addEventListener('touchend', e=>{ touchEndX = e.changedTouches[0].screenX; handleGallerySwipe(); }, {passive:true});
+    // Mouse drag for desktop
+    let mouseDown = false;
+    let mouseStartX = 0;
+    gm.addEventListener('mousedown', e=>{ mouseDown=true; mouseStartX=e.screenX; });
+    gm.addEventListener('mouseup', e=>{ if(mouseDown){ touchStartX=mouseStartX; touchEndX=e.screenX; handleGallerySwipe(); } mouseDown=false; });
+  }
+  const wrap = document.querySelector('.gallery-main-wrap');
+  if(wrap){
+    wrap.addEventListener('touchstart', e=>{ touchStartX = e.changedTouches[0].screenX; }, {passive:true});
+    wrap.addEventListener('touchend', e=>{ touchEndX = e.changedTouches[0].screenX; handleGallerySwipe(); }, {passive:true});
+  }
+});
+
 function updateGallery(){document.getElementById('galleryMain').src=galleryImages[galleryIndex]; document.getElementById('galleryThumbs').querySelectorAll('img').forEach((im,i)=>{im.classList.toggle('active', i===galleryIndex);});}
 function galleryPrev(){galleryIndex=(galleryIndex-1+galleryImages.length)%galleryImages.length; updateGallery();}
 function galleryNext(){galleryIndex=(galleryIndex+1)%galleryImages.length; updateGallery();}
