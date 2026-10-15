@@ -273,14 +273,36 @@ async function doSignup(){const e=document.getElementById('loginEmail').value.tr
 function renderPreview(){const preview=document.getElementById('preview'); preview.innerHTML=''; selectedFiles.forEach((f,i)=>{const r=new FileReader(); r.onload=ev=>{const div=document.createElement('div'); div.className='p'; div.innerHTML='<img src="'+ev.target.result+'"><div class="x" onclick="removeFile('+i+')">×</div>'; preview.appendChild(div);}; r.readAsDataURL(f);}); document.getElementById('fileLabelText').textContent=selectedFiles.length>0?'Wybrano '+selectedFiles.length+' zdjęć':'📷 Wybierz zdjęcia';}
 function removeFile(i){selectedFiles.splice(i,1); renderPreview();}
 document.getElementById('aFiles').onchange=(e)=>{selectedFiles=[...selectedFiles, ...Array.from(e.target.files)].slice(0,10); renderPreview();};
-function compressImage(file, maxW=1280, q=0.75){return new Promise(resolve=>{const img=new Image(); const reader=new FileReader(); reader.onload=e=>{img.onload=()=>{const c=document.createElement('canvas'); let w=img.width,h=img.height; if(w>maxW){h=h*(maxW/w);w=maxW;} c.width=w;c.height=h; c.getContext('2d').drawImage(img,0,0,w,h); c.toBlob(b=>resolve(b),'image/jpeg',q);}; img.src=e.target.result;}; reader.readAsDataURL(file);});}
+function compressImage(file, maxW=800, q=0.70){
+  return new Promise(resolve=>{
+    const img=new Image(); 
+    const reader=new FileReader(); 
+    reader.onload=e=>{
+      img.onload=()=>{
+        const c=document.createElement('canvas'); 
+        let w=img.width,h=img.height; 
+        if(w>maxW){h=h*(maxW/w);w=maxW;} 
+        if(h>maxW){w=w*(maxW/h);h=maxW;}
+        c.width=w;c.height=h; 
+        const ctx=c.getContext('2d');
+        ctx.drawImage(img,0,0,w,h); 
+        c.toBlob(b=>{
+          console.log('KOMPRESJA: '+file.name+' '+(file.size/1024).toFixed(0)+'KB -> '+(b.size/1024).toFixed(0)+'KB WebP');
+          resolve(b);
+        },'image/webp',q);
+      }; 
+      img.src=e.target.result;
+    }; 
+    reader.readAsDataURL(file);
+  });
+}
 document.getElementById('btnSave').onclick=async()=>{
  const title=document.getElementById('aTitle').value.trim(); const brand=document.getElementById('aBrand').value.trim(); const modelVal=getSelectedModel('aBrand','aModelIn','aModelOther'); const price=parseInt(document.getElementById('aPrice').value)||0;
  if(!title||!brand||!modelVal){showError('addError','Tytuł, marka i model wymagane (Inne -> wpisz)');return;} if(!price){showError('addError','Podaj cenę');return;}
  const btn=document.getElementById('btnSave'); btn.textContent='WYSYŁANIE...'; btn.disabled=true;
  try{
    let imageUrls = []; if(editingId){ const ex=allAds.find(a=>a.id===editingId); imageUrls=ex?.images||[]; if(ex?.image_url && !imageUrls.includes(ex.image_url)) imageUrls.unshift(ex.image_url); }
-   for(let i=0;i<selectedFiles.length;i++){const blob=await compressImage(selectedFiles[i]); const fname=Date.now()+'_'+i+'.jpg'; const path=currentUser.id+'/'+fname; const up=await supabaseClient.storage.from('ogloszenia').upload(path, blob, {contentType:'image/jpeg'}); if(up.error) throw up.error; const pub=supabaseClient.storage.from('ogloszenia').getPublicUrl(path); imageUrls.push(pub.data.publicUrl);}
+   for(let i=0;i<selectedFiles.length;i++){const blob=await compressImage(selectedFiles[i]); const fname=Date.now()+'_'+i+'.webp'; const path=currentUser.id+'/'+fname; const up=await supabaseClient.storage.from('ogloszenia').upload(path, blob, {contentType:'image/webp'}); if(up.error) throw up.error; const pub=supabaseClient.storage.from('ogloszenia').getPublicUrl(path); imageUrls.push(pub.data.publicUrl);}
    if(imageUrls.length>10) imageUrls=imageUrls.slice(0,10);
    const latVal=document.getElementById('aLat').value|| (addLat?addLat.toString():'');
    const lngVal=document.getElementById('aLng').value|| (addLng?addLng.toString():'');
