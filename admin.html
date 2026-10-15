@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="pl"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>AutoAdmin Pro V24 - FINAL FIX</title>
+<title>AutoAdmin Pro V24 - FIX + KOMPRESJA</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box} body{font-family:Arial,sans-serif;background:#f4f5f7;color:#1a1f36;display:flex;height:100vh;overflow:hidden}
 .sidebar{width:240px;background:#111827;color:#fff;display:flex;flex-direction:column;flex-shrink:0}
@@ -17,7 +17,7 @@
 .qB{padding:2px 6px;border-radius:10px;font-size:9px;font-weight:700} .qb-red{background:#fee2e2;color:#991b1b} .qb-green{background:#d1fae5;color:#065f46}
 .preview{flex:1;background:#fff;display:flex;flex-direction:column;overflow:hidden}
 .pTop{padding:12px 16px;border-bottom:1px solid #e5e7eb;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px} .pTop h2{font-size:15px;font-weight:800}
-.btn{padding:7px 12px;border-radius:7px;border:0;font-weight:700;cursor:pointer;font-size:11px} .btn-g{background:#10b981;color:#fff} .btn-r{background:#ef4444;color:#fff} .btn-w{background:#fff;border:1px solid #ddd;color:#374151} .btn-sm{padding:5px 9px;font-size:10px}
+.btn{padding:7px 12px;border-radius:7px;border:0;font-weight:700;cursor:pointer;font-size:11px} .btn-g{background:#10b981;color:#fff} .btn-r{background:#ef4444;color:#fff} .btn-w{background:#fff;border:1px solid #ddd;color:#374151} .btn-sm{padding:5px 9px;font-size:10px} .btn-blue{background:#3b82f6;color:#fff}
 .pBody{flex:1;overflow:auto;padding:14px}
 .gal{display:grid;grid-template-columns:1fr 100px;gap:10px} .mainImg{width:100%;height:240px;object-fit:cover;border-radius:8px;background:#f3f4f6;border:1px solid #e5e7eb} .thumbs{display:flex;flex-direction:column;gap:6px} .thumb{width:100%;height:60px;object-fit:cover;border-radius:5px;border:2px solid transparent;cursor:pointer} .thumb.on{border-color:#3b82f6}
 .dataG{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px} .dCard{border:1px solid #e5e7eb;border-radius:8px;overflow:hidden} .dCard h4{padding:8px 10px;background:#f9fafb;border-bottom:1px solid #e5e7eb;font-size:12px;font-weight:800} .dRow{display:flex;justify-content:space-between;padding:6px 10px;font-size:11px;border-bottom:1px solid #f3f4f6}
@@ -35,8 +35,12 @@
     <div class="nav-item">🏢 Dealer CRM</div>
     <div class="nav-item">📊 Financial Reports</div>
     <div class="nav-item">⚙️ Settings</div>
-    <div style="margin-top:16px;padding:10px;background:#1f2937;border-radius:8px"><div style="font-size:10px;color:#9ca3af">WROOMER.PL V24 FIX</div><div style="font-size:11px;font-weight:700;margin-top:3px" id="sideStat">Ładowanie...</div></div>
-    <div style="margin-top:10px;display:flex;gap:5px"><button class="btn btn-sm" style="background:#22d3ee;color:#000" onclick="location.href='index.html'">STRONA</button><button class="btn btn-sm" style="background:#374151;color:#fff" onclick="location.href='diagnostyka.html'">DIAG</button></div>
+    <div style="margin-top:16px;padding:10px;background:#1f2937;border-radius:8px"><div style="font-size:10px;color:#9ca3af">WROOMER.PL V24 FIX + KOMPRESJA</div><div style="font-size:11px;font-weight:700;margin-top:3px" id="sideStat">Ładowanie...</div></div>
+    <div style="margin-top:10px;display:flex;gap:5px;flex-wrap:wrap">
+      <button class="btn btn-sm" style="background:#22d3ee;color:#000" onclick="location.href='index.html'">STRONA</button>
+      <button class="btn btn-sm" style="background:#374151;color:#fff" onclick="location.href='diagnostyka.html'">DIAG</button>
+      <button class="btn btn-sm btn-r" onclick="deleteAllAds()">🗑️ USUŃ WSZYSTKIE</button>
+    </div>
   </div>
 </div>
 
@@ -46,7 +50,7 @@
       <h2>Kolejka Moderacji</h2>
       <div style="display:flex;gap:6px;margin-top:8px"><select class="sel" id="fStatus" onchange="drawQ()"><option value="all">Status: Wszystkie</option><option value="ok">Aktywne</option><option value="ban">Zbanowane</option></select><select class="sel" id="fSort" onchange="drawQ()"><option value="newest">Najnowsze</option><option value="price">Cena</option></select></div>
       <div style="margin-top:8px"><input id="q" class="sel" style="width:100%" placeholder="Szukaj: Volvo, Gorzyce..." oninput="drawQ()"></div>
-      <div class="log" id="log">V24 FINAL FIX start...
+      <div class="log" id="log">V24 FINAL FIX + KOMPRESJA start...
 </div>
     </div>
     <div class="list" id="qList"><div style="padding:20px;text-align:center;color:#888">Ładowanie kolejki...</div></div>
@@ -73,8 +77,72 @@ var CUR = null;
 
 function L(t){var e=document.getElementById('log'); if(e){e.textContent+=new Date().toLocaleTimeString()+' '+t+'\n'; e.scrollTop=e.scrollHeight;} console.log(t);}
 
+// === NOWA FUNKCJA: AUTO-KOMPRESJA ZDJĘĆ ===
+async function compressImage(file){
+  L('🖼️ Kompresuję: '+file.name+' '+Math.round(file.size/1024)+'KB');
+  try{
+    const bitmap = await createImageBitmap(file);
+    const canvas = document.createElement('canvas');
+    const MAX = 800;
+    let w = bitmap.width, h = bitmap.height;
+    if(w > MAX){
+      const scale = MAX / w;
+      w = MAX;
+      h = h * scale;
+    }
+    canvas.width = w;
+    canvas.height = h;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(bitmap, 0, 0, w, h);
+    const blob = await new Promise(r => canvas.toBlob(r, 'image/webp', 0.75));
+    const newFile = new File([blob], file.name.replace(/\.[^/.]+$/, '.webp'), {type: 'image/webp'});
+    L('✅ Po kompresji: '+Math.round(blob.size/1024)+'KB -> '+newFile.name);
+    return newFile;
+  }catch(err){
+    L('❌ Błąd kompresji: '+err);
+    return file;
+  }
+}
+
+// === NOWA FUNKCJA: UPLOAD Z KOMPRESJĄ ===
+async function uploadCompressed(file){
+  const compressed = await compressImage(file);
+  // TU PODMIEŃ NAZWĘ BUCKETA JEŚLI MASZ INNY - sprawdź w Supabase Storage
+  const bucket = 'auta'; // lub 'images' lub 'ogloszenia'
+  const path = Date.now()+'_'+compressed.name;
+  L('⬆️ Upload do bucket: '+bucket+'/'+path);
+  const res = await fetch(S_URL+'/storage/v1/object/'+bucket+'/'+path, {
+    method: 'POST',
+    headers: {'apikey': S_KEY, 'Authorization': 'Bearer '+S_KEY, 'Content-Type': compressed.type},
+    body: compressed
+  });
+  if(!res.ok){
+    const t = await res.text();
+    L('❌ Upload błąd: '+t);
+    return null;
+  }
+  const publicUrl = S_URL+'/storage/v1/object/public/'+bucket+'/'+path;
+  L('✅ Upload OK: '+publicUrl);
+  return publicUrl;
+}
+
+// === NOWA FUNKCJA: USUŃ WSZYSTKIE OGŁOSZENIA ===
+async function deleteAllAds(){
+  if(!ADS.length){ alert('Brak ogłoszeń'); return; }
+  if(!confirm('USUNĄĆ WSZYSTKIE '+ADS.length+' ogłoszeń? Tego nie da się cofnąć!')) return;
+  L('🗑️ Kasuję wszystkie '+ADS.length+' ogłoszeń...');
+  for(let i=0;i<ADS.length;i++){
+    let ad = ADS[i];
+    L('Usuwam '+(i+1)+'/'+ADS.length+': '+ad.id.slice(0,8));
+    await fetch(S_URL+'/rest/v1/ogloszenia?id=eq.'+ad.id,{method:'DELETE',headers:{'apikey':S_KEY,'Authorization':'Bearer '+S_KEY}});
+  }
+  L('✅ Wszystkie skasowane');
+  loadAds();
+  document.getElementById('pBody').innerHTML='<div style="padding:40px;text-align:center;color:green;font-weight:800">Wszystkie ogłoszenia skasowane!</div>';
+}
+
 async function loadAds(){
-  L('=== V24 FINAL FIX === START');
+  L('=== V24 FINAL FIX + KOMPRESJA === START');
   L('URL: '+S_URL);
   L('Pobieram ogloszenia...');
   try{
@@ -87,34 +155,30 @@ async function loadAds(){
     L('FIRST 200: '+txt.slice(0,200));
     if(!res.ok){
       L('BLAD: '+txt.slice(0,500));
-      document.getElementById('qList').innerHTML='<div style="padding:12px;background:#fee;color:#900">BLAD '+res.status+'<br>'+txt.slice(0,500)+'</div>';
       return;
     }
     ADS = JSON.parse(txt);
-    L('SUKCES! '+ADS.length+' rekordow');
-    document.getElementById('badge').textContent=ADS.length;
-    var totalVal = 0; for(var i=0;i<ADS.length;i++) totalVal+=parseInt(ADS[i].price||0)||0;
-    document.getElementById('sideStat').textContent=ADS.length+' ogloszen, '+totalVal.toLocaleString('pl-PL')+' PLN wartosc';
+    L('SUKCES! '+ADS.length+' rekordów');
     drawQ();
-    if(ADS.length>0) selectAd(ADS[0].id);
-  }catch(e){
-    L('WYJATEK: '+e.message);
-    document.getElementById('qList').innerHTML='<div style="padding:12px;background:#fee;color:#900">WYJATEK: '+e.message+'</div>';
-  }
+    document.getElementById('badge').textContent = ADS.length;
+    document.getElementById('sideStat').textContent = ADS.length+' ogłoszeń';
+  }catch(e){ L('WYJATEK: '+e); }
 }
 
-function hasGps(d){return (d||'').indexOf('lat:')>-1;}
-function isBan(d){return (d||'').indexOf('banned:true')>-1;}
-function cleanD(d){return (d||'').replace(/\[.*?\]/g,'').trim();}
-function getEx(d){var o={}; try{var ms=(d||'').match(/\[.*?\]/g); if(ms){for(var j=0;j<ms.length;j++){var m=ms[j].slice(1,-1); var parts=m.split('|'); for(var i=0;i<parts.length;i++){var p=parts[i]; var idx=p.indexOf(':'); if(idx>-1) o[p.slice(0,idx).toLowerCase().trim()]=p.slice(idx+1).trim();}}}}catch(e){} return o;}
-function estViews(a){var ex=getEx(a.description||''); if(ex.views) return parseInt(ex.views)||0; var age=(Date.now()-new Date(a.created_at).getTime())/(1000*60*60*24); return Math.max(12, Math.round(80+age*18+Math.random()*60));}
+function getEx(s){var ex={}; var m=s.match(/\[(.*?)\]/); if(!m) return ex; var parts=m[1].split('|'); for(var i=0;i<parts.length;i++){var kv=parts[i].split(':'); if(kv.length>=2){var k=kv[0]; var v=kv.slice(1).join(':'); ex[k]=v;}} return ex;}
+function cleanD(s){return s.replace(/\[.*?\]/g,'').trim();}
+function estViews(a){var ex=getEx(a.description||''); if(ex.views) return parseInt(ex.views); var d=new Date(a.created_at); var diff=Math.floor((Date.now()-d)/86400000); return 20+diff*5+Math.round(Math.random()*20);}
 
 function drawQ(){
-  var qEl=document.getElementById('q'); var q=qEl?qEl.value.toLowerCase():''; var fEl=document.getElementById('fStatus'); var f=fEl?fEl.value:'all'; var sEl=document.getElementById('fSort'); var s=sEl?sEl.value:'newest';
-  var filtered=[]; for(var i=0;i<ADS.length;i++){var a=ADS[i]; var d=a.description||''; var ban=isBan(d); if(f==='ok'&&ban) continue; if(f==='ban'&&!ban) continue; if(q){var t=((a.title||'')+' '+(a.brand||'')+' '+(a.location||'')).toLowerCase(); if(t.indexOf(q)===-1) continue;} filtered.push(a);}
-  if(s==='price') filtered.sort(function(a,b){return (parseInt(b.price||0)||0)-(parseInt(a.price||0)||0);});
-  if(s==='newest') filtered.sort(function(a,b){return new Date(b.created_at)-new Date(a.created_at);});
-  var html=''; if(!filtered.length) html='<div style="padding:20px;text-align:center;color:#888">Brak ogloszen</div>'; else for(var i=0;i<filtered.length;i++){var a=filtered[i]; var img=(a.images&&a.images[0])?a.images[0]:'https://via.placeholder.com/68x50?text=BRAK'; var ban=isBan(a.description||''); html+='<div class="qItem '+(CUR&&CUR.id===a.id?'on':'')+'" onclick="selectAd(\''+a.id+'\')"><img class=qThumb src="'+img+'" onerror="this.src=\'https://via.placeholder.com/68x50?text=BRAK\'"><div class=qInfo><div class=qT>'+(a.title||'Bez')+'</div><div class=qP>'+(a.price||0)+' PLN</div><div class=qM>'+(a.location||'-')+' | '+(a.brand||'-')+'</div></div><div><span class="qB '+(ban?'qb-red':'qb-green')+'">'+(ban?'BAN':'OK')+'</span></div></div>';}
+  var fS=document.getElementById('fStatus').value; var fSort=document.getElementById('fSort').value; var q=document.getElementById('q').value.toLowerCase();
+  var arr=ADS.slice();
+  if(fS==='ok') arr=arr.filter(function(a){ var ex=getEx(a.description||''); return !ex.banned; });
+  if(fS==='ban') arr=arr.filter(function(a){ var ex=getEx(a.description||''); return ex.banned; });
+  if(q) arr=arr.filter(function(a){ return (a.title||'').toLowerCase().includes(q) || (a.brand||'').toLowerCase().includes(q) || (a.location||'').toLowerCase().includes(q); });
+  if(fSort==='price') arr.sort(function(a,b){ return (b.price||0)-(a.price||0); });
+  else arr.sort(function(a,b){ return new Date(b.created_at)-new Date(a.created_at); });
+  var html=''; for(var i=0;i<arr.length;i++){var a=arr[i]; var ex=getEx(a.description||''); var banned=ex.banned; var thumb=(a.images&&a.images[0])?a.images[0]:'https://via.placeholder.com/68x50?text=BRAK'; var on=(CUR&&CUR.id===a.id)?' on':''; html+='<div class="qItem'+on+'" onclick="selectAd(\''+a.id+'\')"><img class=qThumb src="'+thumb+'"><div class=qInfo><div class=qT>'+(a.title||'Bez tytułu')+'</div><div class=qP>'+(a.price||0)+' PLN</div><div class=qM>'+(a.location||'-')+' | '+(a.brand||'-')+'</div></div><span class="qB '+(banned?'qb-red':'qb-green')+'">'+(banned?'BAN':'OK')+'</span></div>';}
+  if(!html) html='<div style="padding:20px;text-align:center;color:#888">Brak ogłoszeń<br>Gotowe do dodawania nowych!</div>';
   document.getElementById('qList').innerHTML=html;
 }
 
