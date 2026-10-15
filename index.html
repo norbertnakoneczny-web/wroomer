@@ -1,24 +1,19 @@
 <!DOCTYPE html>
 <html lang="pl"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>WROOMER.PL - Ogłoszenia Motoryzacyjne | Kup, Sprzedaj, Zamień Pojazd Auto</title>
+<link rel="preconnect" href="https://www.googletagmanager.com">
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link rel="preconnect" href="https://bdpydgsfowtuvjnkyeeg.supabase.co">
+<link rel="dns-prefetch" href="https://bdpydgsfowtuvjnkyeeg.supabase.co">
+<title>WROOMER.PL - Ogłoszenia Motoryzacyjne | Kup, Sprzedaj, Zamień Auto</title>
 <meta name="description" content="Ogólnopolska darmowa giełda aut. Wystaw auto za darmo bez limitów, kup bez prowizji i ukrytych opłat, zamień. Tysiące ogłoszeń z całej Polski!">
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-34L1GMG3GK"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-34L1GMG3GK');
-</script>
 <link rel="canonical" href="https://www.wroomer.pl/">
 <meta property="og:title" content="WROOMER.PL - Ogólnopolska darmowa giełda aut">
 <meta property="og:description" content="Wystaw auto za darmo, kup bez prowizji, zamień. Darmowa giełda aut z całej Polski.">
 <meta property="og:url" content="https://www.wroomer.pl/">
 <meta property="og:type" content="website">
 <meta name="robots" content="index, follow">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.min.js" defer></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box} body{font-family:Inter,Arial,sans-serif;background:#080808;color:#fff}
 .header{height:54px;background:#000;border-bottom:2px solid #facc15;display:flex;align-items:center;justify-content:space-between;padding:0 14px;position:sticky;top:0;z-index:9999}
@@ -374,7 +369,7 @@ async function loadAds(){
    if(cd) cd.textContent=filtered.length+' ogłoszeń'+radiusText+gpsText; if(cm) cm.textContent=filtered.length+' ogłoszeń'+radiusText;
    if(filtered.length===0){grid.innerHTML=`<div style="grid-column:1/-1;padding:40px;text-align:center;background:#181818;border-radius:12px"><h3 style="color:#facc15">Brak ogłoszeń${radius?' w '+radius+'km od Ciebie':''}</h3><p style="font-size:12px;opacity:.5;margin-top:8px">${searchLat?'Spróbuj zwiększyć promień lub wyczyść filtry':'Kliknij Zlokalizuj mnie i wybierz promień'}</p></div>`; return;}
    grid.innerHTML=filtered.map(o=>{
-     const img=o.image_url||(o.images&&o.images[0])||'https://via.placeholder.com/300x200?text=Brak'; const cnt=(o.images&&o.images.length>0)?o.images.length:(o.image_url?1:0); const isOwner=currentUser && currentUser.id===o.user_id;
+     const img=o.image_url||(o.images&&o.images[0])||'data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='200' viewBox='0 0 300 200'%3E%3Crect width='300' height='200' fill='%23181818'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23555' font-size='14'%3EBrak zdj%C4%99cia%3C/text%3E%3C/svg%3E'; const cnt=(o.images&&o.images.length>0)?o.images.length:(o.image_url?1:0); const isOwner=currentUser && currentUser.id===o.user_id;
      const distText=o._dist!==null?`<div class="card-distance">📍 ${o._dist.toFixed(1)} km od Ciebie</div>`:(o._ex.lat && o._ex.lat!=='-'?`<div class="card-distance" style="color:#888">📍 GPS</div>`:'');
      return `<div class="card" onclick="openGallery(allAds.find(a=>a.id==='${o.id}'))"><div class="card-img-wrap"><img src="${img}" loading="lazy"><div class="card-img-count">📷 ${cnt}</div></div><div class="card-body"><div class="card-title">${o.title}</div><div class="card-price">${o.price} PLN</div><div class="card-location">${o.location||''} • ${o.year||''}</div>${distText}</div>${isOwner?`<div class="owner-actions" onclick="event.stopPropagation()"><button class="edit" onclick="openAddModal(allAds.find(a=>a.id==='${o.id}'))">EDYTUJ</button><button class="del" onclick="deleteAd('${o.id}')">X</button></div>`:''}</div>`;
    }).join('');
@@ -384,4 +379,20 @@ function resetFilters(){searchLat=null; searchLng=null; ['D','M'].forEach(p=>{['
 document.addEventListener('DOMContentLoaded',()=>{const d=document.getElementById('mobileDrawer'); if(d) d.classList.remove('open'); mobileFiltersOpen=false;});
 checkUser(); loadAds();
 </script>
+
+<script>
+window.addEventListener('load', function(){
+  var s=document.createElement('script');
+  s.src='https://www.googletagmanager.com/gtag/js?id=G-34L1GMG3GK';
+  s.async=true;
+  s.onload=function(){
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-34L1GMG3GK');
+  };
+  document.head.appendChild(s);
+});
+</script>
+
 </body></html>
