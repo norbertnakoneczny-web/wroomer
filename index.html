@@ -382,4 +382,32 @@ function resetRodo(){
 })();
 </script>
 
+
+<script>
+// FIX: Jeśli otwierasz plik lokalnie file:// to Supabase nie działa - info
+if (location.protocol === 'file:') {
+  document.addEventListener('DOMContentLoaded', ()=>{
+    const grid = document.getElementById('grid');
+    if(grid) grid.innerHTML = '<div style="grid-column:1/-1;padding:30px;background:#331111;border:1px solid #661111;border-radius:12px;text-align:center"><h3 style="color:#facc15">⚠️ Otwierasz plik lokalnie</h3><p style="font-size:13px;color:#ccc;margin-top:8px">Ogłoszenia ładują się tylko przez https:// (Vercel / serwer). Kliknij prawym na plik i wybierz "Open with Live Server" w VS Code, albo wrzuć na Vercel. Na file:// przeglądarka blokuje Supabase.</p></div>';
+  });
+}
+// FIX: Reset filtrów przy starcie jeśli GPS z poprzedniej sesji blokuje wyniki
+(function(){
+  const origLoad = window.loadAds;
+  document.addEventListener('DOMContentLoaded', ()=>{
+    // jeśli masz ustawiony promień ale nie masz GPS, wyczyść
+    setTimeout(()=>{
+      const radiusD = document.getElementById('fRadiusD');
+      const radiusM = document.getElementById('fRadiusM');
+      if((radiusD && radiusD.value && !window.searchLat) || (radiusM && radiusM.value && !window.searchLat)){
+        console.log('Reset filtra radius bo brak GPS');
+        if(radiusD) radiusD.value='';
+        if(radiusM) radiusM.value='';
+        loadAds();
+      }
+    }, 500);
+  });
+})();
+</script>
+
 </body></html>
