@@ -86,7 +86,7 @@ label.small{font-size:10px;opacity:.7;display:block;margin:8px 12px 2px;text-tra
 <!-- FIX: USUNIĘTY span id="userEmail" - NIE MA aaa@o2.pl -->
 <div class="header"><div class="logo">WROOMER<span>.PL</span> <span style="font-size:10px;background:#facc15;color:#000;padding:2px 6px;border-radius:10px">v10 GPS+RADIUS</span></div><div style="display:flex;gap:6px;align-items:center"><button class="btn btn-dark" id="btnLogin">Zaloguj</button><button class="btn btn-dark" id="btnLogout" style="display:none">Wyloguj</button><button class="btn btn-yellow" id="btnAdd">+ Dodaj</button></div></div>
 <div class="top-chips"><div class="chip active" onclick="quickFilter('')">Wszystkie</div><div class="chip" onclick="quickFilter('Fiat')">Fiat</div><div class="chip" onclick="quickFilter('Volvo')">Volvo</div><div class="chip" onclick="quickFilter('Audi')">Audi</div><div class="chip" onclick="quickFilter('BMW')">BMW</div></div>
-<div class="mobile-top-bar"><button class="btn btn-dark" style="flex:1;padding:12px;background:#fff;color:#000;font-weight:900" onclick="toggleMobileFilters()">🔍 Filtry</button><button class="btn btn-dark" style="flex:1;padding:12px" onclick="toggleMobileFilters()">📍 Promień</button></div>
+<div class="mobile-top-bar"><button class="btn btn-dark" style="flex:1;padding:12px;background:#fff;color:#000;font-weight:900" onclick="toggleMobileFilters()">🔍 Filtry</button><button class="btn btn-dark" style="flex:1;padding:12px" onclick="toggleMobileFilters()">📍 GPS twoja lokalizacja</button></div>
 <div class="layout">
 <div class="sidebar-desktop">
 <h4>📍 SZUKAJ W PROMIENIU</h4>
@@ -270,6 +270,7 @@ checkUser(); loadAds();
   <button onclick="openLegal('regulamin')">Regulamin</button>
   <button onclick="openLegal('rodo')">RODO / Obowiązek informacyjny</button>
   <button onclick="resetRodo()" style="font-weight:800;color:#facc15">Ustawienia Cookies</button>
+  <button onclick="resetGpsConsent()" style="font-weight:800;color:#93c5fd">Ustawienia GPS</button>
   <span style="margin-left:auto;color:#555">Administrator: WROOMER.PL Norbert Nakoneczny, ul. Klonowa 3, 44-350 Gorzyce • kontakt@wroomer.pl • RODO: rodo@wroomer.pl</span>
 </footer>
 
@@ -408,6 +409,84 @@ if (location.protocol === 'file:') {
     }, 500);
   });
 })();
+</script>
+
+
+<!-- MODAL ZGODY GPS - RODO -->
+<div id="gpsConsentModal" class="legal-modal" onclick="if(event.target===this)closeGpsConsent()">
+  <div class="legal-box" style="max-width:480px;text-align:center">
+    <h2 style="color:#facc15">📍 Zgoda na lokalizację GPS</h2>
+    <p style="font-size:13px;line-height:1.6;color:#bbb;margin:12px 0">
+      Aby pokazać ogłoszenia w promieniu od Ciebie (np. 5km, 10km, 50km), musimy pobrać Twoją lokalizację GPS z przeglądarki.
+      <br><br>
+      <b style="color:#fff">Co się dzieje z Twoimi danymi GPS?</b><br>
+      • Lokalizacja jest używana TYLKO lokalnie w Twojej przeglądarce do obliczenia odległości<br>
+      • Nie zapisujemy Twojej dokładnej lokalizacji na serwerze (zapisujemy tylko miasto jeśli je wpiszesz)<br>
+      • Możesz w każdej chwili wycofać zgodę w ustawieniach przeglądarki lub klikając "Wyczyść"<br>
+      • Podstawa: art.6 ust.1 lit. a RODO - Twoja zgoda
+    </p>
+    <div style="display:flex;gap:8px;margin-top:16px">
+      <button onclick="denyGpsConsent()" class="rodo-btn rodo-btn-dark" style="flex:1">Nie wyrażam zgody</button>
+      <button onclick="acceptGpsConsent()" class="rodo-btn rodo-btn-primary" style="flex:1">✅ Wyrażam zgodę na GPS</button>
+    </div>
+    <p style="font-size:11px;color:#666;margin-top:10px">Możesz też wpisać miasto ręcznie w pole "LOKALIZACJA (tekst)" bez używania GPS</p>
+  </div>
+</div>
+<script>
+let pendingGpsPrefix = null;
+function openGpsConsent(prefix){
+  pendingGpsPrefix = prefix;
+  document.getElementById('gpsConsentModal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeGpsConsent(){
+  document.getElementById('gpsConsentModal').classList.remove('open');
+  document.body.style.overflow='';
+  pendingGpsPrefix = null;
+}
+function acceptGpsConsent(){
+  localStorage.setItem('wroomer-gps-consent','granted');
+  localStorage.setItem('wroomer-gps-consent-date', new Date().toISOString());
+  document.getElementById('gpsConsentModal').classList.remove('open');
+  document.body.style.overflow='';
+  if(pendingGpsPrefix){
+    const p = pendingGpsPrefix;
+    pendingGpsPrefix = null;
+    // wywołaj oryginalne locate
+    _realLocateForSearch(p);
+  }
+}
+function denyGpsConsent(){
+  localStorage.setItem('wroomer-gps-consent','denied');
+  closeGpsConsent();
+  alert('Nie wyraziles zgody na GPS. Możesz szukać wpisując miasto ręcznie w polu LOKALIZACJA.');
+}
+
+// Wrapper na locateForSearch z zgodą RODO
+const _realLocateForSearch = window.locateForSearch || locateForSearch;
+window.locateForSearch = function(prefix){
+  const consent = localStorage.getItem('wroomer-gps-consent');
+  if(consent === 'granted'){
+    _realLocateForSearch(prefix);
+  } else if(consent === 'denied'){
+    // zapytaj ponownie czy chce zmienic zdanie
+    if(confirm('Wcześniej nie wyraziłeś zgody na GPS. Czy chcesz teraz wyrazić zgodę i pokazać auta w promieniu?')){
+      openGpsConsent(prefix);
+    }
+  } else {
+    // pierwsze użycie - pokaż modal zgody
+    openGpsConsent(prefix);
+  }
+};
+
+// Funkcja do resetu zgody GPS (do stopki)
+function resetGpsConsent(){
+  localStorage.removeItem('wroomer-gps-consent');
+  localStorage.removeItem('wroomer-gps-consent-date');
+  alert('Zgoda na GPS została wycofana. Przy następnym kliknięciu GPS zapytamy ponownie.');
+  // wyczysc tez aktualna lokalizacje
+  if(typeof resetFilters === 'function'){ resetFilters(); }
+}
 </script>
 
 </body></html>
