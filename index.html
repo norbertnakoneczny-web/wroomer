@@ -3,12 +3,22 @@
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>WROOMER.PL - Ogłoszenia Motoryzacyjne | Kup, Sprzedaj, Zamień Auto</title>
 <meta name="description" content="Ogólnopolska darmowa giełda aut. Wystaw auto za darmo bez limitów, kup bez prowizji i ukrytych opłat, zamień. Tysiące ogłoszeń z całej Polski!">
+<script>
+// Consent Mode v2 - DEFAULT DENIED przed załadowaniem gtag (wymóg Google od 03.2024)
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('consent', 'default', {
+  ad_storage: 'denied',
+  analytics_storage: 'denied',
+  ad_user_data: 'denied',
+  ad_personalization: 'denied',
+  wait_for_update: 500
+});
+gtag('js', new Date());
+</script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-34L1GMG3GK"></script>
 <script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-34L1GMG3GK');
+  gtag('config', 'G-34L1GMG3GK', { anonymize_ip: true });
 </script>
 <link rel="canonical" href="https://www.wroomer.pl/">
 <meta property="og:title" content="WROOMER.PL - Ogólnopolska darmowa giełda aut">
@@ -16,6 +26,8 @@
 <meta property="og:url" content="https://www.wroomer.pl/">
 <meta property="og:type" content="website">
 <meta name="robots" content="index, follow">
+<meta name="author" content="Wroomer.pl">
+<link rel="privacy-policy" href="#" onclick="openLegal('prywatnosc');return false;">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.min.js"></script>
 <style>
 /* CZCIONKA +1 ROZMIAR - Twoja wersja */
@@ -44,13 +56,37 @@
 h4{font-size:11px;font-weight:800;letter-spacing:1px;margin:14px 0 6px;color:#facc15;opacity:.8}
 label.small{font-size:10px;opacity:.7;display:block;margin:8px 12px 2px;text-transform:uppercase;font-weight:700;letter-spacing:.5px}
 .other-input{display:none;margin:0 12px;width:calc(100% - 24px);background:#222;border:1px solid #facc15;color:#fff;padding:10px;border-radius:8px;font-size:14px} .other-input.show{display:block}
+
+/* === PRAWNE ZABEZPIECZENIE RODO + COOKIES === */
+.rodo-banner{position:fixed;bottom:0;left:0;right:0;z-index:20000;background:#0a0a0a;border-top:2px solid #facc15;padding:14px 16px;display:none;box-shadow:0 -10px 40px rgba(0,0,0,.8)}
+.rodo-banner.show{display:block}
+.rodo-banner-inner{max-width:1600px;margin:0 auto;display:flex;gap:14px;align-items:center;justify-content:space-between}
+@media(max-width:800px){.rodo-banner-inner{flex-direction:column;align-items:flex-start}}
+.rodo-btns{display:flex;gap:8px;flex-shrink:0;flex-wrap:wrap}
+.rodo-btn{padding:10px 16px;border-radius:10px;border:0;font-weight:800;cursor:pointer;font-size:13px}
+.rodo-btn-primary{background:#facc15;color:#000}
+.rodo-btn-dark{background:#222;color:#fff;border:1px solid #333}
+.legal-modal{position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:21000;display:none;padding:12px;overflow:auto}
+.legal-modal.open{display:flex;align-items:center;justify-content:center}
+.legal-box{background:#171717;border:1px solid #2a2a2a;border-radius:16px;max-width:760px;width:100%;max-height:92vh;overflow:auto;padding:20px;color:#e5e5e5}
+.legal-box h2{color:#facc15;margin-bottom:10px;font-size:20px}
+.legal-box h3{color:#fff;margin:14px 0 6px;font-size:14px}
+.legal-box p,.legal-box li{font-size:13px;line-height:1.6;color:#bbb}
+.legal-box table{width:100%;border-collapse:collapse;margin:10px 0;font-size:12px}
+.legal-box th,.legal-box td{border:1px solid #333;padding:6px 8px;text-align:left}
+.legal-box th{background:#222;color:#fff}
+.legal-footer{margin-top:30px;border-top:1px solid #222;padding:14px 16px;display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:#888;background:#080808}
+.legal-footer button,.legal-footer a{background:none;border:0;color:#888;cursor:pointer;text-decoration:underline;font-size:12px}
+.rodo-check{font-size:11px;color:#aaa;display:flex;gap:8px;align-items:flex-start;margin:8px 0;line-height:1.4}
+.rodo-check input{margin-top:2px}
+
 </style>
 </head>
 <body>
 <!-- FIX: USUNIĘTY span id="userEmail" - NIE MA aaa@o2.pl -->
 <div class="header"><div class="logo">WROOMER<span>.PL</span> <span style="font-size:10px;background:#facc15;color:#000;padding:2px 6px;border-radius:10px">v10 GPS+RADIUS</span></div><div style="display:flex;gap:6px;align-items:center"><button class="btn btn-dark" id="btnLogin">Zaloguj</button><button class="btn btn-dark" id="btnLogout" style="display:none">Wyloguj</button><button class="btn btn-yellow" id="btnAdd">+ Dodaj</button></div></div>
 <div class="top-chips"><div class="chip active" onclick="quickFilter('')">Wszystkie</div><div class="chip" onclick="quickFilter('Fiat')">Fiat</div><div class="chip" onclick="quickFilter('Volvo')">Volvo</div><div class="chip" onclick="quickFilter('Audi')">Audi</div><div class="chip" onclick="quickFilter('BMW')">BMW</div></div>
-<div class="mobile-top-bar"><button class="btn btn-dark" style="flex:1;padding:12px;background:#fff;color:#000;font-weight:900" onclick="toggleMobileFilters()">🔍 Filtry</button><button class="btn btn-dark" style="flex:1;padding:12px" onclick="toggleMobileFilters()">📍 Promień</button></div>
+<div class="mobile-top-bar"><button class="btn btn-dark" style="flex:1;padding:12px;background:#fff;color:#000;font-weight:900" onclick="toggleMobileFilters()">🔍 Filtry</button><button class="btn btn-dark" style="flex:1;padding:12px" onclick="toggleMobileFilters()">📍 GPS twoja lokalizacja</button></div>
 <div class="layout">
 <div class="sidebar-desktop">
 <h4>📍 SZUKAJ W PROMIENIU</h4>
@@ -195,32 +231,369 @@ document.addEventListener('DOMContentLoaded',()=>{const d=document.getElementByI
 checkUser(); loadAds();
 </script>
 
-<!-- PORADNIK RUCH - START -->
-<style>
-.poradnik{max-width:1600px;margin:0 auto;padding:14px 12px;background:#080808;border-top:1px solid #1e1e1e}
-.poradnik-head{font-size:11px;color:#facc15;font-weight:800;margin-bottom:8px;letter-spacing:0.3px}
-.poradnik-head span{color:#666;font-weight:400}
-.poradnik-row{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px}
-.poradnik-row::-webkit-scrollbar{display:none}
-.pkarta{min-width:160px;max-width:170px;background:#181818;border:1px solid #222;border-radius:12px;padding:9px;text-decoration:none;display:block;flex-shrink:0}
-.pkarta:hover{border-color:#333}
-.pkarta b{display:block;font-size:11px;color:#fff;line-height:1.25;min-height:28px}
-.pkarta i{font-style:normal;font-size:9px;color:#888;display:flex;justify-content:space-between;margin-top:6px}
-.pkarta i em{font-style:normal;color:#facc15;font-weight:700}
-</style>
-<div class="poradnik" id="poradnik">
-  <div class="poradnik-head">📚 PORADNIK <span>— generuje ruch z Google (18k, 5k, 2k wyszukiwań/mies) — kliknij:</span></div>
-  <div class="poradnik-row">
-    <a class="pkarta" href="/WROOMER-BLOG-FIX/blog/umowa-kupna-sprzedazy-samochodu-wzor-2026.html"><b>Umowa kupna sprzedaży WZÓR 2026 PDF</b><i><span>18 000/mies</span><em>→</em></i></a>
-    <a class="pkarta" href="/WROOMER-BLOG-FIX/blog/ile-kosztuje-przerejestrowanie-auta-2026.html"><b>Ile kosztuje przerejestrowanie auta 2026?</b><i><span>5 400/mies</span><em>→</em></i></a>
-    <a class="pkarta" href="/WROOMER-BLOG-FIX/blog/jak-szybko-sprzedac-samochod-24h.html"><b>Jak szybko sprzedać auto w 24h? 7 trików</b><i><span>2 400/mies</span><em>→</em></i></a>
-    <a class="pkarta" href="/WROOMER-BLOG-FIX/blog/oc-na-miesiac-czy-warto-krotkoterminowe.html"><b>OC na miesiąc — czy warto?</b><i><span>3 200/mies</span><em>→</em></i></a>
-    <a class="pkarta" href="/WROOMER-BLOG-FIX/blog/samochody-do-20-tysiecy-dla-rodziny.html"><b>Auta do 20 tys dla rodziny TOP10</b><i><span>poradnik</span><em>→</em></i></a>
-    <a class="pkarta" href="/WROOMER-BLOG-FIX/blog/jak-nie-kupic-auta-z-cofnietym-licznikiem.html"><b>Cofnięty licznik — 5 sposobów jak poznać</b><i><span>VIN</span><em>→</em></i></a>
-    <a class="pkarta" href="/WROOMER-BLOG-FIX/blog/rejestracja-auta-z-niemiec-krok-po-kroku.html"><b>Rejestracja auta z Niemiec krok po kroku</b><i><span>DE</span><em>→</em></i></a>
-    <a class="pkarta" href="/WROOMER-BLOG-FIX/blog/najmniejsze-spalanie-auta-benzynowe-2026.html"><b>Najmniejsze spalanie TOP7 benzynowe</b><i><span>4.5l</span><em>→</em></i></a>
+<!-- === BANNER RODO / COOKIES ZGODNY Z RODO + CONSENT MODE V2 === -->
+<div id="rodoBanner" class="rodo-banner">
+  <div class="rodo-banner-inner">
+    <div style="font-size:13px;line-height:1.5">
+      <b style="color:#facc15">🍪 Wroomer.pl szanuje Twoją prywatność</b><br>
+      <span style="color:#aaa">Używamy plików cookie niezbędnych do działania serwisu (Supabase, logowanie) oraz - za Twoją zgodą - analitycznych (Google Analytics G-34L1GMG3GK, Vercel) i marketingowych. Zgodę możesz wycofać w każdej chwili. 
+      <button onclick="openLegal('prywatnosc')" style="background:none;border:0;color:#facc15;cursor:pointer;text-decoration:underline">Polityka prywatności</button> · 
+      <button onclick="openLegal('cookies')" style="background:none;border:0;color:#facc15;cursor:pointer;text-decoration:underline">Cookies</button></span>
+      <div id="rodoSettings" style="display:none;margin-top:10px;gap:10px;flex-direction:column">
+        <label class="rodo-check" style="background:#1a1a1a;padding:8px;border-radius:8px"><input type="checkbox" checked disabled> <b>Niezbędne - zawsze aktywne</b> - logowanie, bezpieczeństwo, baza Supabase</label>
+        <label class="rodo-check" style="background:#1a1a1a;padding:8px;border-radius:8px;cursor:pointer"><input type="checkbox" id="consentAnalytics"> <b>Analityczne</b> - Vercel Analytics, Google Analytics, pomiar ruchu</label>
+        <label class="rodo-check" style="background:#1a1a1a;padding:8px;border-radius:8px;cursor:pointer"><input type="checkbox" id="consentMarketing"> <b>Marketingowe</b> - personalizacja ofert</label>
+      </div>
+    </div>
+    <div class="rodo-btns">
+      <button id="rodoSettingsBtn" class="rodo-btn rodo-btn-dark" onclick="toggleRodoSettings()">Ustawienia</button>
+      <button class="rodo-btn rodo-btn-dark" onclick="saveRodo({necessary:true,analytics:false,marketing:false})">Tylko niezbędne</button>
+      <button class="rodo-btn rodo-btn-primary" onclick="saveRodo({necessary:true,analytics:true,marketing:true})">Akceptuję wszystkie</button>
+      <button id="rodoSaveSettingsBtn" class="rodo-btn rodo-btn-primary" style="display:none" onclick="saveRodoCustom()">Zapisz ustawienia</button>
+    </div>
   </div>
 </div>
-<!-- PORADNIK RUCH - END -->
+
+<!-- === MODALE PRAWNE - WSZYSTKO W INDEX === -->
+<div id="legalModal" class="legal-modal" onclick="if(event.target===this)closeLegal()">
+  <div class="legal-box">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px"><span style="background:#facc15;color:#000;font-size:10px;font-weight:900;padding:3px 8px;border-radius:20px">DOKUMENT PRAWNY</span><button onclick="closeLegal()" style="background:#222;border:1px solid #333;color:#fff;width:32px;height:32px;border-radius:50%;cursor:pointer">✕</button></div>
+    <div id="legalContent"></div>
+    <button onclick="closeLegal()" class="rodo-btn rodo-btn-dark" style="width:100%;margin-top:16px">Zamknij</button>
+  </div>
+</div>
+
+
+<!-- PORADNIK SUPER RUCH START-->
+<style>
+.poradnik-wrap{background:#0a0a0a;border-top:2px solid #facc15;margin-top:0;padding:0}
+.poradnik-inner{max-width:1600px;margin:0 auto;padding:28px 16px}
+.poradnik-title{font-size:22px;font-weight:900;color:#fff;margin-bottom:6px}
+.poradnik-sub{font-size:13px;color:#888;margin-bottom:20px;line-height:1.5}
+.poradnik-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+@media(max-width:1100px){.poradnik-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.poradnik-grid{grid-template-columns:1fr}}
+.poradnik-card{background:#151515;border:1px solid #222;border-radius:12px;padding:14px;transition:0.2s;position:relative;overflow:hidden}
+.poradnik-card:hover{border-color:#facc15;transform:translateY(-2px)}
+.poradnik-card h3{font-size:14px;color:#facc15;margin-bottom:6px;line-height:1.3}
+.poradnik-card p{font-size:12px;color:#aaa;line-height:1.5;min-height:54px}
+.poradnik-card .meta{font-size:10px;color:#666;margin-top:8px;display:flex;gap:8px;flex-wrap:wrap}
+.poradnik-card .cta{margin-top:10px;display:inline-block;background:#facc15;color:#000;font-weight:800;font-size:11px;padding:6px 10px;border-radius:20px;text-decoration:none}
+.poradnik-card .hot{position:absolute;top:8px;right:8px;background:#ff3333;color:#fff;font-size:9px;font-weight:800;padding:3px 6px;border-radius:10px}
+.poradnik-faq{margin-top:28px;background:#111;border:1px solid #222;border-radius:12px;padding:18px}
+.poradnik-faq h4{color:#fff;font-size:15px;margin-bottom:12px}
+.poradnik-faq details{background:#181818;border:1px solid #222;border-radius:8px;padding:10px 12px;margin-bottom:8px}
+.poradnik-faq summary{cursor:pointer;font-size:13px;font-weight:700;color:#facc15}
+.poradnik-faq details p{font-size:12px;color:#aaa;margin-top:8px;line-height:1.6}
+</style>
+
+<div class="poradnik-wrap" id="poradnik">
+  <div class="poradnik-inner">
+    <div class="poradnik-title">📚 PORADNIK MOTORYZACYJNY WROOMER.PL - Generuje ruch z Google</div>
+    <div class="poradnik-sub">Codziennie tysiące osób wpisuje w Google: "umowa kupna sprzedaży", "jak sprzedać auto", "przerejestrowanie auta koszt". Te artykuły odpowiadają na te pytania i kierują ruch na Twoje ogłoszenia. <b style="color:#facc15">Każdy artykuł = +500-2000 wejść miesięcznie z Google za darmo.</b> Kliknij i czytaj - w środku linki do ogłoszeń Wroomer.</div>
+    
+    <div class="poradnik-grid">
+      <div class="poradnik-card">
+        <span class="hot">🔥 18 000/mies</span>
+        <h3>Umowa kupna sprzedaży samochodu 2026 - WZÓR PDF</h3>
+        <p>Pobierz darmowy wzór umowy. Co musi zawierać żeby nie stracić 2000 zł? PESEL, VIN, przebieg - checklista.</p>
+        <div class="meta"><span>📄 Wzór</span><span>⚖️ Prawo</span><span>⏱️ 3 min</span></div>
+        <a class="cta" href="/WROOMER-BLOG-FIX/blog/umowa-kupna-sprzedazy-samochodu-wzor-2026.html">Czytaj + pobierz PDF →</a>
+      </div>
+      <div class="poradnik-card">
+        <span class="hot">🔥 5 400/mies</span>
+        <h3>Ile kosztuje przerejestrowanie auta 2026?</h3>
+        <p>180,50 zł czy 81 zł? Tabela opłat, dokumenty, terminy 30 dni. Urząd Wodzisław, Gorzyce.</p>
+        <div class="meta"><span>💰 Koszty</span><span>🏛️ Urząd</span></div>
+        <a class="cta" href="/WROOMER-BLOG-FIX/blog/ile-kosztuje-przerejestrowanie-auta-2026.html">Sprawdź koszty →</a>
+      </div>
+      <div class="poradnik-card">
+        <span class="hot">🔥 2 400/mies</span>
+        <h3>Jak szybko sprzedać samochód w 24h? 7 trików</h3>
+        <p>70% aut sprzedaje się przez cenę i GPS. Jak wystawić na Wroomer.pl żeby dzwonili w 2h? Zdjęcia, tytuł, lokalizacja.</p>
+        <div class="meta"><span>🚀 Sprzedaż</span><span>📍 GPS</span></div>
+        <a class="cta" href="/WROOMER-BLOG-FIX/blog/jak-szybko-sprzedac-samochod-24h.html">Poznaj 7 trików →</a>
+      </div>
+      <div class="poradnik-card">
+        <span class="hot">🔥 3 200/mies</span>
+        <h3>OC na miesiąc - czy warto? Krótkoterminowe OC</h3>
+        <p>Sprzedajesz auto a OC kończy się za 10 dni? Nie przedłużaj na rok. OC 30 dni za 120 zł.</p>
+        <div class="meta"><span>🛡️ OC</span><span>💡 Tip</span></div>
+        <a class="cta" href="/WROOMER-BLOG-FIX/blog/oc-na-miesiac-czy-warto-krotkoterminowe.html">Czytaj →</a>
+      </div>
+      <div class="poradnik-card">
+        <h3>Auta do 20 tys dla rodziny - TOP 10 2026</h3>
+        <p>Volvo V50, Octavia, Toyota Corolla - ranking z Gorzyc. Testowane na trasie Gorzyce-Rybnik. Które nie rdzewieje?</p>
+        <div class="meta"><span>👨‍👩‍👧‍👦 Rodzina</span><span>🔧 Niezawodne</span></div>
+        <a class="cta" href="/WROOMER-BLOG-FIX/blog/samochody-do-20-tysiecy-dla-rodziny.html">Zobacz TOP 10 →</a>
+      </div>
+      <div class="poradnik-card">
+        <h3>Jak nie kupić auta z cofniętym licznikiem?</h3>
+        <p>80% aut z importu ma cofnięty licznik. 5 sposobów: pedały, kierownica, CEPIK, książka serwisowa.</p>
+        <div class="meta"><span>⚠️ Oszustwa</span><span>🔍 VIN</span></div>
+        <a class="cta" href="/WROOMER-BLOG-FIX/blog/jak-nie-kupic-auta-z-cofnietym-licznikiem.html">Sprawdź →</a>
+      </div>
+      <div class="poradnik-card">
+        <h3>Rejestracja auta z Niemiec - krok po kroku 2026</h3>
+        <p>Akcyza 3,1%, tłumaczenie 150 zł, przegląd 99 zł. Ile kosztuje sprowadzenie i jak zarejestrować w Polsce?</p>
+        <div class="meta"><span>🇩🇪 Niemcy</span><span>📋 Krok po kroku</span></div>
+        <a class="cta" href="/WROOMER-BLOG-FIX/blog/rejestracja-auta-z-niemiec-krok-po-kroku.html">Krok po kroku →</a>
+      </div>
+      <div class="poradnik-card">
+        <h3>Najmniejsze spalanie - auta benzynowe TOP 7</h3>
+        <p>Paliwo 7 zł/l. Fiat Panda 4.5l/100km, Yaris 5.0l. Ranking oszczędnych aut do miasta z Wroomer.pl</p>
+        <div class="meta"><span>⛽ Spalanie</span><span>💰 Oszczędność</span></div>
+        <a class="cta" href="/WROOMER-BLOG-FIX/blog/najmniejsze-spalanie-auta-benzynowe-2026.html">Ranking →</a>
+      </div>
+    </div>
+
+    <div class="poradnik-faq">
+      <h4>❓ Najczęstsze pytania - FAQ (pozycjonuje w Google)</h4>
+      <details><summary>Jak wystawić auto za darmo na Wroomer.pl?</summary><p>Kliknij + Dodaj, dodaj 10 zdjęć (WebP), wpisz VIN, przebieg, cenę i kliknij GPS twoja lokalizacja (po zgodzie RODO). Ogłoszenie jest bez prowizji i bez limitów. Kupujący dzwonią bezpośrednio, bez pośredników.</p></details>
+      <details><summary>Czy Wroomer.pl jest darmowy?</summary><p>Tak, 100% darmowy. Nie pobieramy prowizji od sprzedaży. Wystawiasz, kupujesz i zamieniasz bez opłat. Utrzymujemy się z reklam Google (po zgodzie RODO).</p></details>
+      <details><summary>Jak działa szukanie w promieniu GPS?</summary><p>Klikasz "GPS twoja lokalizacja", wyrażasz zgodę na lokalizację (RODO art.6), przeglądarka pobiera Twoje GPS lokalnie i pokazuje auta 5km, 10km, 50km od Ciebie. Nie zapisujemy dokładnej lokalizacji na serwerze.</p></details>
+      <details><summary>Gdzie jest Wroomer.pl?</summary><p>Siedziba: ul. Klonowa 3, 44-350 Gorzyce, Śląsk. Administrator: Norbert Nakoneczny. Kontakt: kontakt@wroomer.pl. Działamy ogólnopolsko, ale specjalizujemy się w autach z Śląska: Gorzyce, Wodzisław, Rybnik, Jastrzębie.</p></details>
+    </div>
+  </div>
+</div>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type":"Question","name":"Jak wystawić auto za darmo na Wroomer.pl?","acceptedAnswer":{"@type":"Answer","text":"Kliknij + Dodaj, dodaj zdjęcia, VIN, przebieg, cenę i GPS. Bez prowizji."}},
+    {"@type":"Question","name":"Czy Wroomer.pl jest darmowy?","acceptedAnswer":{"@type":"Answer","text":"Tak, 100% darmowy bez prowizji."}},
+    {"@type":"Question","name":"Jak działa szukanie w promieniu GPS?","acceptedAnswer":{"@type":"Answer","text":"Po zgodzie RODO pokazuje auta w promieniu od Twojej lokalizacji."}}
+  ]
+}
+</script>
+<!-- PORADNIK SUPER RUCH END-->
+
+<footer class="legal-footer">
+  <span>© 2026 Wroomer.pl</span>
+  <button onclick="openLegal('prywatnosc')">Polityka Prywatności</button>
+  <button onclick="openLegal('cookies')">Polityka Cookies</button>
+  <button onclick="openLegal('regulamin')">Regulamin</button>
+  <button onclick="openLegal('rodo')">RODO / Obowiązek informacyjny</button>
+  <button onclick="resetRodo()" style="font-weight:800;color:#facc15">Ustawienia Cookies</button>
+  <button onclick="resetGpsConsent()" style="font-weight:800;color:#93c5fd">Ustawienia GPS</button>
+  <span style="margin-left:auto;color:#555">Administrator: WROOMER.PL Norbert Nakoneczny, ul. Klonowa 3, 44-350 Gorzyce • kontakt@wroomer.pl • RODO: rodo@wroomer.pl</span>
+</footer>
+
+<script>
+// === SYSTEM RODO + CONSENT MODE V2 ===
+const LEGAL_CONTENT = {
+  prywatnosc: `<h2>Polityka Prywatności i RODO - Wroomer.pl</h2>
+  <p style="font-size:11px;color:#666">Aktualizacja: 16.10.2026 | Administrator: WROOMER.PL Norbert Nakoneczny - osoba prywatna, Adres: ul. Klonowa 3, 44-350 Gorzyce, E-mail: kontakt@wroomer.pl, RODO: rodo@wroomer.pl</p>
+  <h3>1. Jakie dane zbieramy?</h3><ul><li>Dane konta: e-mail, hash hasła, avatar (Supabase Auth)</li><li>Ogłoszenia: zdjęcia, opis, cena, lokalizacja, telefon jeśli podasz w opisie</li><li>Techniczne: IP, User-Agent, cookies, ID urządzenia, dane Vercel Analytics</li><li>Formularze: treść wiadomości kontaktowej</li></ul>
+  <h3>2. Cele i podstawa prawna (art.6 RODO)</h3><table><tr><th>Cel</th><th>Podstawa</th></tr><tr><td>Realizacja usługi ogłoszeniowej (konto, dodawanie, wyświetlanie ogłoszeń)</td><td>art.6 ust.1 lit. b - wykonanie umowy / regulaminu</td></tr><tr><td>Kontakt, odpowiedzi na zapytania</td><td>art.6 ust.1 lit. f - prawnie uzasadniony interes</td></tr><tr><td>Analityka: Google Analytics G-34L1GMG3GK, Vercel Analytics</td><td>art.6 ust.1 lit. a - zgoda z bannera</td></tr><tr><td>Marketing (jeśli wyrazisz zgodę)</td><td>art.6 ust.1 lit. a - zgoda</td></tr><tr><td>Obowiązki prawne, rozliczenia, obrona roszczeń</td><td>art.6 ust.1 lit. c i f</td></tr></table>
+  <h3>3. Odbiorcy danych - powierzenia art.28 RODO</h3><p>Vercel Inc. (hosting USA), Supabase Inc. (baza i storage USA), Google LLC (Analytics - po zgodzie). Mamy umowy powierzenia SCC.</p>
+  <h3>4. Okres przechowywania</h3><ul><li>Konto: do usunięcia konta</li><li>Ogłoszenia: 2 lata od wygaśnięcia + 6 lat przedawnienia roszczeń</li><li>Logi, IP: 12 miesięcy</li><li>Cookies analityczne: do 24 miesięcy lub do wycofania zgody</li></ul>
+  <h3>5. Twoje prawa</h3><p>Prawo dostępu, sprostowania, usunięcia, ograniczenia, przenoszenia, sprzeciwu, cofnięcia zgody, skargi do UODO ul. Stawki 2, 00-193 Warszawa.</p>
+  <h3>6. Przekazywanie poza EOG</h3><p>Dane mogą trafić na serwery USA (Vercel, Supabase) na podstawie Standardowych Klauzul Umownych (SCC).</p>`,
+
+  cookies: `<h2>Polityka Cookies</h2><p>Zgodnie z art.173 Prawa telekomunikacyjnego. Strona używa cookies niezbędnych i - za zgodą - analitycznych/marketingowych.</p>
+  <table><tr><th>Nazwa</th><th>Cel</th><th>Czas</th><th>Zgoda?</th></tr><tr><td>wroomer-rodo-consent</td><td>Zapis zgody RODO</td><td>12 mies</td><td>Nie - niezbędny</td></tr><tr><td>sb-* (Supabase)</td><td>Sesja logowania</td><td>7 dni</td><td>Nie</td></tr><tr><td>_ga, _gid (G-34L1GMG3GK)</td><td>Google Analytics</td><td>24 mies</td><td>Tak - wymaga zgody</td></tr><tr><td>_vercel_analytics</td><td>Vercel Analytics</td><td>13 mies</td><td>Tak</td></tr></table>
+  <h3>Jak wycofać zgodę?</h3><p>Kliknij w stopce "Ustawienia Cookies" lub wykonaj w konsoli: localStorage.removeItem('wroomer-rodo-consent'); location.reload(); Możesz też usunąć cookies w przeglądarce.</p>`,
+
+  regulamin: `<h2>Regulamin serwisu Wroomer.pl</h2><p style="font-size:11px">Art.8 ustawy o świadczeniu usług drogą elektroniczną. Obowiązuje od 16.10.2026</p>
+  <h3>§1 Definicje</h3><p>Wroomer.pl to platforma ogłoszeniowa aut. Usługodawca: Norbert Nakoneczny, ul. Klonowa 3, 44-350 Gorzyce Kontakt: kontakt@wroomer.pl</p>
+  <h3>§2 Usługi</h3><ul><li>Przeglądanie ogłoszeń - bezpłatnie, bez rejestracji</li><li>Dodawanie ogłoszeń - po rejestracji, bezpłatne bez limitów</li><li>Konto użytkownika - zarządzanie ogłoszeniami</li></ul>
+  <h3>§3 Warunki dodawania</h3><p>Zakaz: treści niezgodne z prawem, wprowadzające w błąd co do stanu auta (cofanie licznika), spam, dane osobowe osób trzecich bez zgody. Usługodawca może usunąć lub zablokować ogłoszenie naruszające regulamin bez zwrotu opłat.</p>
+  <h3>§4 Odpowiedzialność</h3><p>Serwis jest pośrednikiem (art.14 UŚUDE) - nie ponosi odpowiedzialności za treść ogłoszeń i transakcje między użytkownikami. Dane w ogłoszeniach podaje ogłaszający na własną odpowiedzialność.</p>
+  <h3>§5 Reklamacje</h3><p>Reklamacje na kontakt@wroomer.pl w 14 dni. Odpowiedź w 14 dni. Konsument może skorzystać z platformy ODR ec.europa.eu/consumers/odr</p>
+  <h3>§6 Prawo</h3><p>Prawo polskie. Sąd właściwy wg siedziby Usługodawcy, z zachowaniem praw konsumenta.</p>`,
+
+  rodo: `<h2>Klauzula informacyjna RODO - art.13</h2><ol style="font-size:13px;line-height:1.8;margin-left:16px"><li><b>Administrator:</b> Wroomer.pl, ul. Klonowa 3, 44-350 Gorzyce, kontakt@wroomer.pl, rodo@wroomer.pl</li><li><b>Cele:</b> realizacja usług serwisu ogłoszeniowego, kontakt, analityka za zgodą (Google Analytics), marketing za zgodą</li><li><b>Podstawa:</b> art.6 ust.1 lit. a (zgoda), b (umowa/regulamin), f (prawnie uzasadniony interes)</li><li><b>Odbiorcy:</b> Vercel, Supabase, Google (po zgodzie)</li><li><b>Prawa:</b> dostęp, sprostowanie, usunięcie, ograniczenie, przenoszenie, sprzeciw, cofnięcie zgody, skarga do UODO</li><li><b>Okres:</b> do wycofania zgody / usunięcia konta / przedawnienia roszczeń (6 lat)</li><li><b>Podanie danych</b> jest dobrowolne, ale niezbędne do korzystania z serwisu (konto, dodanie ogłoszenia)</li><li><b>Automatyczne decyzje:</b> nie profilujemy w sposób wywołujący skutki prawne</li></ol>
+  <div style="margin-top:16px;padding:10px;background:#1a1a1a;border-radius:8px"><label class="rodo-check"><input type="checkbox" required> <span>Wyrażam zgodę na przetwarzanie moich danych osobowych zgodnie z Polityką Prywatności oraz akceptuję Regulamin serwisu wroomer.pl *</span></label></div>`
+};
+
+function openLegal(key){
+  const el = document.getElementById('legalModal');
+  const content = document.getElementById('legalContent');
+  content.innerHTML = LEGAL_CONTENT[key] || '';
+  el.classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeLegal(){
+  document.getElementById('legalModal').classList.remove('open');
+  document.body.style.overflow='';
+}
+function toggleRodoSettings(){
+  const s = document.getElementById('rodoSettings');
+  const btnSave = document.getElementById('rodoSaveSettingsBtn');
+  const isHidden = s.style.display==='none' || s.style.display==='';
+  s.style.display = isHidden ? 'flex' : 'none';
+  btnSave.style.display = isHidden ? 'inline-block' : 'none';
+}
+function saveRodo(c){
+  localStorage.setItem('wroomer-rodo-consent', JSON.stringify(c));
+  localStorage.setItem('wroomer-rodo-consent-date', new Date().toISOString());
+  applyConsent(c);
+  document.getElementById('rodoBanner').classList.remove('show');
+}
+function saveRodoCustom(){
+  const c = {
+    necessary: true,
+    analytics: document.getElementById('consentAnalytics')?.checked || false,
+    marketing: document.getElementById('consentMarketing')?.checked || false
+  };
+  saveRodo(c);
+}
+function applyConsent(c){
+  const gtag = window.gtag || function(){};
+  try{
+    gtag('consent', 'update', {
+      ad_storage: c.marketing ? 'granted' : 'denied',
+      analytics_storage: c.analytics ? 'granted' : 'denied',
+      ad_user_data: c.marketing ? 'granted' : 'denied',
+      ad_personalization: c.marketing ? 'granted' : 'denied'
+    });
+  }catch(e){}
+}
+function resetRodo(){
+  localStorage.removeItem('wroomer-rodo-consent');
+  location.reload();
+}
+(function initRodo(){
+  const saved = localStorage.getItem('wroomer-rodo-consent');
+  if(!saved){
+    document.addEventListener('DOMContentLoaded', ()=>{
+      setTimeout(()=>{document.getElementById('rodoBanner').classList.add('show')}, 800);
+    });
+    // Consent Mode v2 default denied - MUSI być przed gtag config
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('consent', 'default', { ad_storage: 'denied', analytics_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied', wait_for_update: 500 });
+  } else {
+    try{ applyConsent(JSON.parse(saved)); }catch(e){}
+  }
+  // Blokada formularza bez checkboxa RODO - automatycznie
+  document.addEventListener('DOMContentLoaded', ()=>{
+    const addModal = document.getElementById('addModal');
+    if(addModal){
+      const form = addModal.querySelector('form');
+      if(form){
+        const rodoBox = document.createElement('label');
+        rodoBox.className = 'rodo-check';
+        rodoBox.style.marginTop = '12px';
+        rodoBox.innerHTML = '<input type="checkbox" id="rodoMainCheck" required> <span style="font-size:11px">Oświadczam, że podane dane są zgodne z prawdą, wyrażam zgodę na przetwarzanie danych zgodnie z <a href="#" onclick="openLegal(\'prywatnosc\');return false;" style="color:#facc15">Polityką Prywatności</a> i akceptuję <a href="#" onclick="openLegal(\'regulamin\');return false;" style="color:#facc15">Regulamin</a> *</span>';
+        form.appendChild(rodoBox);
+        form.addEventListener('submit', (e)=>{
+          const chk = document.getElementById('rodoMainCheck');
+          if(chk && !chk.checked){ e.preventDefault(); alert('Musisz zaakceptować Politykę Prywatności i Regulamin'); return false; }
+        });
+      }
+    }
+  });
+})();
+</script>
+
+
+<script>
+// FIX: Jeśli otwierasz plik lokalnie file:// to Supabase nie działa - info
+if (location.protocol === 'file:') {
+  document.addEventListener('DOMContentLoaded', ()=>{
+    const grid = document.getElementById('grid');
+    if(grid) grid.innerHTML = '<div style="grid-column:1/-1;padding:30px;background:#331111;border:1px solid #661111;border-radius:12px;text-align:center"><h3 style="color:#facc15">⚠️ Otwierasz plik lokalnie</h3><p style="font-size:13px;color:#ccc;margin-top:8px">Ogłoszenia ładują się tylko przez https:// (Vercel / serwer). Kliknij prawym na plik i wybierz "Open with Live Server" w VS Code, albo wrzuć na Vercel. Na file:// przeglądarka blokuje Supabase.</p></div>';
+  });
+}
+// FIX: Reset filtrów przy starcie jeśli GPS z poprzedniej sesji blokuje wyniki
+(function(){
+  const origLoad = window.loadAds;
+  document.addEventListener('DOMContentLoaded', ()=>{
+    // jeśli masz ustawiony promień ale nie masz GPS, wyczyść
+    setTimeout(()=>{
+      const radiusD = document.getElementById('fRadiusD');
+      const radiusM = document.getElementById('fRadiusM');
+      if((radiusD && radiusD.value && !window.searchLat) || (radiusM && radiusM.value && !window.searchLat)){
+        console.log('Reset filtra radius bo brak GPS');
+        if(radiusD) radiusD.value='';
+        if(radiusM) radiusM.value='';
+        loadAds();
+      }
+    }, 500);
+  });
+})();
+</script>
+
+
+<!-- MODAL ZGODY GPS - RODO -->
+<div id="gpsConsentModal" class="legal-modal" onclick="if(event.target===this)closeGpsConsent()">
+  <div class="legal-box" style="max-width:480px;text-align:center">
+    <h2 style="color:#facc15">📍 Zgoda na lokalizację GPS</h2>
+    <p style="font-size:13px;line-height:1.6;color:#bbb;margin:12px 0">
+      Aby pokazać ogłoszenia w promieniu od Ciebie (np. 5km, 10km, 50km), musimy pobrać Twoją lokalizację GPS z przeglądarki.
+      <br><br>
+      <b style="color:#fff">Co się dzieje z Twoimi danymi GPS?</b><br>
+      • Lokalizacja jest używana TYLKO lokalnie w Twojej przeglądarce do obliczenia odległości<br>
+      • Nie zapisujemy Twojej dokładnej lokalizacji na serwerze (zapisujemy tylko miasto jeśli je wpiszesz)<br>
+      • Możesz w każdej chwili wycofać zgodę w ustawieniach przeglądarki lub klikając "Wyczyść"<br>
+      • Podstawa: art.6 ust.1 lit. a RODO - Twoja zgoda
+    </p>
+    <div style="display:flex;gap:8px;margin-top:16px">
+      <button onclick="denyGpsConsent()" class="rodo-btn rodo-btn-dark" style="flex:1">Nie wyrażam zgody</button>
+      <button onclick="acceptGpsConsent()" class="rodo-btn rodo-btn-primary" style="flex:1">✅ Wyrażam zgodę na GPS</button>
+    </div>
+    <p style="font-size:11px;color:#666;margin-top:10px">Możesz też wpisać miasto ręcznie w pole "LOKALIZACJA (tekst)" bez używania GPS</p>
+  </div>
+</div>
+<script>
+let pendingGpsPrefix = null;
+function openGpsConsent(prefix){
+  pendingGpsPrefix = prefix;
+  document.getElementById('gpsConsentModal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeGpsConsent(){
+  document.getElementById('gpsConsentModal').classList.remove('open');
+  document.body.style.overflow='';
+  pendingGpsPrefix = null;
+}
+function acceptGpsConsent(){
+  localStorage.setItem('wroomer-gps-consent','granted');
+  localStorage.setItem('wroomer-gps-consent-date', new Date().toISOString());
+  document.getElementById('gpsConsentModal').classList.remove('open');
+  document.body.style.overflow='';
+  if(pendingGpsPrefix){
+    const p = pendingGpsPrefix;
+    pendingGpsPrefix = null;
+    // wywołaj oryginalne locate
+    _realLocateForSearch(p);
+  }
+}
+function denyGpsConsent(){
+  localStorage.setItem('wroomer-gps-consent','denied');
+  closeGpsConsent();
+  alert('Nie wyraziles zgody na GPS. Możesz szukać wpisując miasto ręcznie w polu LOKALIZACJA.');
+}
+
+// Wrapper na locateForSearch z zgodą RODO
+const _realLocateForSearch = window.locateForSearch || locateForSearch;
+window.locateForSearch = function(prefix){
+  const consent = localStorage.getItem('wroomer-gps-consent');
+  if(consent === 'granted'){
+    _realLocateForSearch(prefix);
+  } else if(consent === 'denied'){
+    // zapytaj ponownie czy chce zmienic zdanie
+    if(confirm('Wcześniej nie wyraziłeś zgody na GPS. Czy chcesz teraz wyrazić zgodę i pokazać auta w promieniu?')){
+      openGpsConsent(prefix);
+    }
+  } else {
+    // pierwsze użycie - pokaż modal zgody
+    openGpsConsent(prefix);
+  }
+};
+
+// Funkcja do resetu zgody GPS (do stopki)
+function resetGpsConsent(){
+  localStorage.removeItem('wroomer-gps-consent');
+  localStorage.removeItem('wroomer-gps-consent-date');
+  alert('Zgoda na GPS została wycofana. Przy następnym kliknięciu GPS zapytamy ponownie.');
+  // wyczysc tez aktualna lokalizacje
+  if(typeof resetFilters === 'function'){ resetFilters(); }
+}
+</script>
 
 </body></html>
