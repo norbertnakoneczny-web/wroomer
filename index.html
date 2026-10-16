@@ -3,12 +3,22 @@
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>WROOMER.PL - Ogłoszenia Motoryzacyjne | Kup, Sprzedaj, Zamień Auto</title>
 <meta name="description" content="Ogólnopolska darmowa giełda aut. Wystaw auto za darmo bez limitów, kup bez prowizji i ukrytych opłat, zamień. Tysiące ogłoszeń z całej Polski!">
+<script>
+// Consent Mode v2 - DEFAULT DENIED przed załadowaniem gtag (wymóg Google od 03.2024)
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('consent', 'default', {
+  ad_storage: 'denied',
+  analytics_storage: 'denied',
+  ad_user_data: 'denied',
+  ad_personalization: 'denied',
+  wait_for_update: 500
+});
+gtag('js', new Date());
+</script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-34L1GMG3GK"></script>
 <script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-34L1GMG3GK');
+  gtag('config', 'G-34L1GMG3GK', { anonymize_ip: true });
 </script>
 <link rel="canonical" href="https://www.wroomer.pl/">
 <meta property="og:title" content="WROOMER.PL - Ogólnopolska darmowa giełda aut">
@@ -16,6 +26,8 @@
 <meta property="og:url" content="https://www.wroomer.pl/">
 <meta property="og:type" content="website">
 <meta name="robots" content="index, follow">
+<meta name="author" content="Wroomer.pl">
+<link rel="privacy-policy" href="#" onclick="openLegal('prywatnosc');return false;">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.min.js"></script>
 <style>
 /* CZCIONKA +1 ROZMIAR - Twoja wersja */
@@ -44,6 +56,30 @@
 h4{font-size:11px;font-weight:800;letter-spacing:1px;margin:14px 0 6px;color:#facc15;opacity:.8}
 label.small{font-size:10px;opacity:.7;display:block;margin:8px 12px 2px;text-transform:uppercase;font-weight:700;letter-spacing:.5px}
 .other-input{display:none;margin:0 12px;width:calc(100% - 24px);background:#222;border:1px solid #facc15;color:#fff;padding:10px;border-radius:8px;font-size:14px} .other-input.show{display:block}
+
+/* === PRAWNE ZABEZPIECZENIE RODO + COOKIES === */
+.rodo-banner{position:fixed;bottom:0;left:0;right:0;z-index:20000;background:#0a0a0a;border-top:2px solid #facc15;padding:14px 16px;display:none;box-shadow:0 -10px 40px rgba(0,0,0,.8)}
+.rodo-banner.show{display:block}
+.rodo-banner-inner{max-width:1600px;margin:0 auto;display:flex;gap:14px;align-items:center;justify-content:space-between}
+@media(max-width:800px){.rodo-banner-inner{flex-direction:column;align-items:flex-start}}
+.rodo-btns{display:flex;gap:8px;flex-shrink:0;flex-wrap:wrap}
+.rodo-btn{padding:10px 16px;border-radius:10px;border:0;font-weight:800;cursor:pointer;font-size:13px}
+.rodo-btn-primary{background:#facc15;color:#000}
+.rodo-btn-dark{background:#222;color:#fff;border:1px solid #333}
+.legal-modal{position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:21000;display:none;padding:12px;overflow:auto}
+.legal-modal.open{display:flex;align-items:center;justify-content:center}
+.legal-box{background:#171717;border:1px solid #2a2a2a;border-radius:16px;max-width:760px;width:100%;max-height:92vh;overflow:auto;padding:20px;color:#e5e5e5}
+.legal-box h2{color:#facc15;margin-bottom:10px;font-size:20px}
+.legal-box h3{color:#fff;margin:14px 0 6px;font-size:14px}
+.legal-box p,.legal-box li{font-size:13px;line-height:1.6;color:#bbb}
+.legal-box table{width:100%;border-collapse:collapse;margin:10px 0;font-size:12px}
+.legal-box th,.legal-box td{border:1px solid #333;padding:6px 8px;text-align:left}
+.legal-box th{background:#222;color:#fff}
+.legal-footer{margin-top:30px;border-top:1px solid #222;padding:14px 16px;display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:#888;background:#080808}
+.legal-footer button,.legal-footer a{background:none;border:0;color:#888;cursor:pointer;text-decoration:underline;font-size:12px}
+.rodo-check{font-size:11px;color:#aaa;display:flex;gap:8px;align-items:flex-start;margin:8px 0;line-height:1.4}
+.rodo-check input{margin-top:2px}
+
 </style>
 </head>
 <body>
@@ -194,4 +230,156 @@ function handleGallerySwipe(){
 document.addEventListener('DOMContentLoaded',()=>{const d=document.getElementById('mobileDrawer'); if(d) d.classList.remove('open'); mobileFiltersOpen=false;});
 checkUser(); loadAds();
 </script>
+
+<!-- === BANNER RODO / COOKIES ZGODNY Z RODO + CONSENT MODE V2 === -->
+<div id="rodoBanner" class="rodo-banner">
+  <div class="rodo-banner-inner">
+    <div style="font-size:13px;line-height:1.5">
+      <b style="color:#facc15">🍪 Wroomer.pl szanuje Twoją prywatność</b><br>
+      <span style="color:#aaa">Używamy plików cookie niezbędnych do działania serwisu (Supabase, logowanie) oraz - za Twoją zgodą - analitycznych (Google Analytics G-34L1GMG3GK, Vercel) i marketingowych. Zgodę możesz wycofać w każdej chwili. 
+      <button onclick="openLegal('prywatnosc')" style="background:none;border:0;color:#facc15;cursor:pointer;text-decoration:underline">Polityka prywatności</button> · 
+      <button onclick="openLegal('cookies')" style="background:none;border:0;color:#facc15;cursor:pointer;text-decoration:underline">Cookies</button></span>
+      <div id="rodoSettings" style="display:none;margin-top:10px;gap:10px;flex-direction:column">
+        <label class="rodo-check" style="background:#1a1a1a;padding:8px;border-radius:8px"><input type="checkbox" checked disabled> <b>Niezbędne - zawsze aktywne</b> - logowanie, bezpieczeństwo, baza Supabase</label>
+        <label class="rodo-check" style="background:#1a1a1a;padding:8px;border-radius:8px;cursor:pointer"><input type="checkbox" id="consentAnalytics"> <b>Analityczne</b> - Vercel Analytics, Google Analytics, pomiar ruchu</label>
+        <label class="rodo-check" style="background:#1a1a1a;padding:8px;border-radius:8px;cursor:pointer"><input type="checkbox" id="consentMarketing"> <b>Marketingowe</b> - personalizacja ofert</label>
+      </div>
+    </div>
+    <div class="rodo-btns">
+      <button id="rodoSettingsBtn" class="rodo-btn rodo-btn-dark" onclick="toggleRodoSettings()">Ustawienia</button>
+      <button class="rodo-btn rodo-btn-dark" onclick="saveRodo({necessary:true,analytics:false,marketing:false})">Tylko niezbędne</button>
+      <button class="rodo-btn rodo-btn-primary" onclick="saveRodo({necessary:true,analytics:true,marketing:true})">Akceptuję wszystkie</button>
+      <button id="rodoSaveSettingsBtn" class="rodo-btn rodo-btn-primary" style="display:none" onclick="saveRodoCustom()">Zapisz ustawienia</button>
+    </div>
+  </div>
+</div>
+
+<!-- === MODALE PRAWNE - WSZYSTKO W INDEX === -->
+<div id="legalModal" class="legal-modal" onclick="if(event.target===this)closeLegal()">
+  <div class="legal-box">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px"><span style="background:#facc15;color:#000;font-size:10px;font-weight:900;padding:3px 8px;border-radius:20px">DOKUMENT PRAWNY</span><button onclick="closeLegal()" style="background:#222;border:1px solid #333;color:#fff;width:32px;height:32px;border-radius:50%;cursor:pointer">✕</button></div>
+    <div id="legalContent"></div>
+    <button onclick="closeLegal()" class="rodo-btn rodo-btn-dark" style="width:100%;margin-top:16px">Zamknij</button>
+  </div>
+</div>
+
+<footer class="legal-footer">
+  <span>© 2026 Wroomer.pl</span>
+  <button onclick="openLegal('prywatnosc')">Polityka Prywatności</button>
+  <button onclick="openLegal('cookies')">Polityka Cookies</button>
+  <button onclick="openLegal('regulamin')">Regulamin</button>
+  <button onclick="openLegal('rodo')">RODO / Obowiązek informacyjny</button>
+  <button onclick="resetRodo()" style="font-weight:800;color:#facc15">Ustawienia Cookies</button>
+  <span style="margin-left:auto;color:#555">Administrator: WROOMER.PL Norbert Nakoneczny, ul. Klonowa 3, 44-350 Gorzyce • kontakt@wroomer.pl • RODO: rodo@wroomer.pl</span>
+</footer>
+
+<script>
+// === SYSTEM RODO + CONSENT MODE V2 ===
+const LEGAL_CONTENT = {
+  prywatnosc: `<h2>Polityka Prywatności i RODO - Wroomer.pl</h2>
+  <p style="font-size:11px;color:#666">Aktualizacja: 16.10.2026 | Administrator: WROOMER.PL Norbert Nakoneczny - osoba prywatna, Adres: ul. Klonowa 3, 44-350 Gorzyce, E-mail: kontakt@wroomer.pl, RODO: rodo@wroomer.pl</p>
+  <h3>1. Jakie dane zbieramy?</h3><ul><li>Dane konta: e-mail, hash hasła, avatar (Supabase Auth)</li><li>Ogłoszenia: zdjęcia, opis, cena, lokalizacja, telefon jeśli podasz w opisie</li><li>Techniczne: IP, User-Agent, cookies, ID urządzenia, dane Vercel Analytics</li><li>Formularze: treść wiadomości kontaktowej</li></ul>
+  <h3>2. Cele i podstawa prawna (art.6 RODO)</h3><table><tr><th>Cel</th><th>Podstawa</th></tr><tr><td>Realizacja usługi ogłoszeniowej (konto, dodawanie, wyświetlanie ogłoszeń)</td><td>art.6 ust.1 lit. b - wykonanie umowy / regulaminu</td></tr><tr><td>Kontakt, odpowiedzi na zapytania</td><td>art.6 ust.1 lit. f - prawnie uzasadniony interes</td></tr><tr><td>Analityka: Google Analytics G-34L1GMG3GK, Vercel Analytics</td><td>art.6 ust.1 lit. a - zgoda z bannera</td></tr><tr><td>Marketing (jeśli wyrazisz zgodę)</td><td>art.6 ust.1 lit. a - zgoda</td></tr><tr><td>Obowiązki prawne, rozliczenia, obrona roszczeń</td><td>art.6 ust.1 lit. c i f</td></tr></table>
+  <h3>3. Odbiorcy danych - powierzenia art.28 RODO</h3><p>Vercel Inc. (hosting USA), Supabase Inc. (baza i storage USA), Google LLC (Analytics - po zgodzie). Mamy umowy powierzenia SCC.</p>
+  <h3>4. Okres przechowywania</h3><ul><li>Konto: do usunięcia konta</li><li>Ogłoszenia: 2 lata od wygaśnięcia + 6 lat przedawnienia roszczeń</li><li>Logi, IP: 12 miesięcy</li><li>Cookies analityczne: do 24 miesięcy lub do wycofania zgody</li></ul>
+  <h3>5. Twoje prawa</h3><p>Prawo dostępu, sprostowania, usunięcia, ograniczenia, przenoszenia, sprzeciwu, cofnięcia zgody, skargi do UODO ul. Stawki 2, 00-193 Warszawa.</p>
+  <h3>6. Przekazywanie poza EOG</h3><p>Dane mogą trafić na serwery USA (Vercel, Supabase) na podstawie Standardowych Klauzul Umownych (SCC).</p>`,
+
+  cookies: `<h2>Polityka Cookies</h2><p>Zgodnie z art.173 Prawa telekomunikacyjnego. Strona używa cookies niezbędnych i - za zgodą - analitycznych/marketingowych.</p>
+  <table><tr><th>Nazwa</th><th>Cel</th><th>Czas</th><th>Zgoda?</th></tr><tr><td>wroomer-rodo-consent</td><td>Zapis zgody RODO</td><td>12 mies</td><td>Nie - niezbędny</td></tr><tr><td>sb-* (Supabase)</td><td>Sesja logowania</td><td>7 dni</td><td>Nie</td></tr><tr><td>_ga, _gid (G-34L1GMG3GK)</td><td>Google Analytics</td><td>24 mies</td><td>Tak - wymaga zgody</td></tr><tr><td>_vercel_analytics</td><td>Vercel Analytics</td><td>13 mies</td><td>Tak</td></tr></table>
+  <h3>Jak wycofać zgodę?</h3><p>Kliknij w stopce "Ustawienia Cookies" lub wykonaj w konsoli: localStorage.removeItem('wroomer-rodo-consent'); location.reload(); Możesz też usunąć cookies w przeglądarce.</p>`,
+
+  regulamin: `<h2>Regulamin serwisu Wroomer.pl</h2><p style="font-size:11px">Art.8 ustawy o świadczeniu usług drogą elektroniczną. Obowiązuje od 16.10.2026</p>
+  <h3>§1 Definicje</h3><p>Wroomer.pl to platforma ogłoszeniowa aut. Usługodawca: Norbert Nakoneczny, ul. Klonowa 3, 44-350 Gorzyce Kontakt: kontakt@wroomer.pl</p>
+  <h3>§2 Usługi</h3><ul><li>Przeglądanie ogłoszeń - bezpłatnie, bez rejestracji</li><li>Dodawanie ogłoszeń - po rejestracji, bezpłatne bez limitów</li><li>Konto użytkownika - zarządzanie ogłoszeniami</li></ul>
+  <h3>§3 Warunki dodawania</h3><p>Zakaz: treści niezgodne z prawem, wprowadzające w błąd co do stanu auta (cofanie licznika), spam, dane osobowe osób trzecich bez zgody. Usługodawca może usunąć lub zablokować ogłoszenie naruszające regulamin bez zwrotu opłat.</p>
+  <h3>§4 Odpowiedzialność</h3><p>Serwis jest pośrednikiem (art.14 UŚUDE) - nie ponosi odpowiedzialności za treść ogłoszeń i transakcje między użytkownikami. Dane w ogłoszeniach podaje ogłaszający na własną odpowiedzialność.</p>
+  <h3>§5 Reklamacje</h3><p>Reklamacje na kontakt@wroomer.pl w 14 dni. Odpowiedź w 14 dni. Konsument może skorzystać z platformy ODR ec.europa.eu/consumers/odr</p>
+  <h3>§6 Prawo</h3><p>Prawo polskie. Sąd właściwy wg siedziby Usługodawcy, z zachowaniem praw konsumenta.</p>`,
+
+  rodo: `<h2>Klauzula informacyjna RODO - art.13</h2><ol style="font-size:13px;line-height:1.8;margin-left:16px"><li><b>Administrator:</b> Wroomer.pl, ul. Klonowa 3, 44-350 Gorzyce, kontakt@wroomer.pl, rodo@wroomer.pl</li><li><b>Cele:</b> realizacja usług serwisu ogłoszeniowego, kontakt, analityka za zgodą (Google Analytics), marketing za zgodą</li><li><b>Podstawa:</b> art.6 ust.1 lit. a (zgoda), b (umowa/regulamin), f (prawnie uzasadniony interes)</li><li><b>Odbiorcy:</b> Vercel, Supabase, Google (po zgodzie)</li><li><b>Prawa:</b> dostęp, sprostowanie, usunięcie, ograniczenie, przenoszenie, sprzeciw, cofnięcie zgody, skarga do UODO</li><li><b>Okres:</b> do wycofania zgody / usunięcia konta / przedawnienia roszczeń (6 lat)</li><li><b>Podanie danych</b> jest dobrowolne, ale niezbędne do korzystania z serwisu (konto, dodanie ogłoszenia)</li><li><b>Automatyczne decyzje:</b> nie profilujemy w sposób wywołujący skutki prawne</li></ol>
+  <div style="margin-top:16px;padding:10px;background:#1a1a1a;border-radius:8px"><label class="rodo-check"><input type="checkbox" required> <span>Wyrażam zgodę na przetwarzanie moich danych osobowych zgodnie z Polityką Prywatności oraz akceptuję Regulamin serwisu wroomer.pl *</span></label></div>`
+};
+
+function openLegal(key){
+  const el = document.getElementById('legalModal');
+  const content = document.getElementById('legalContent');
+  content.innerHTML = LEGAL_CONTENT[key] || '';
+  el.classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeLegal(){
+  document.getElementById('legalModal').classList.remove('open');
+  document.body.style.overflow='';
+}
+function toggleRodoSettings(){
+  const s = document.getElementById('rodoSettings');
+  const btnSave = document.getElementById('rodoSaveSettingsBtn');
+  const isHidden = s.style.display==='none' || s.style.display==='';
+  s.style.display = isHidden ? 'flex' : 'none';
+  btnSave.style.display = isHidden ? 'inline-block' : 'none';
+}
+function saveRodo(c){
+  localStorage.setItem('wroomer-rodo-consent', JSON.stringify(c));
+  localStorage.setItem('wroomer-rodo-consent-date', new Date().toISOString());
+  applyConsent(c);
+  document.getElementById('rodoBanner').classList.remove('show');
+}
+function saveRodoCustom(){
+  const c = {
+    necessary: true,
+    analytics: document.getElementById('consentAnalytics')?.checked || false,
+    marketing: document.getElementById('consentMarketing')?.checked || false
+  };
+  saveRodo(c);
+}
+function applyConsent(c){
+  const gtag = window.gtag || function(){};
+  try{
+    gtag('consent', 'update', {
+      ad_storage: c.marketing ? 'granted' : 'denied',
+      analytics_storage: c.analytics ? 'granted' : 'denied',
+      ad_user_data: c.marketing ? 'granted' : 'denied',
+      ad_personalization: c.marketing ? 'granted' : 'denied'
+    });
+  }catch(e){}
+}
+function resetRodo(){
+  localStorage.removeItem('wroomer-rodo-consent');
+  location.reload();
+}
+(function initRodo(){
+  const saved = localStorage.getItem('wroomer-rodo-consent');
+  if(!saved){
+    document.addEventListener('DOMContentLoaded', ()=>{
+      setTimeout(()=>{document.getElementById('rodoBanner').classList.add('show')}, 800);
+    });
+    // Consent Mode v2 default denied - MUSI być przed gtag config
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('consent', 'default', { ad_storage: 'denied', analytics_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied', wait_for_update: 500 });
+  } else {
+    try{ applyConsent(JSON.parse(saved)); }catch(e){}
+  }
+  // Blokada formularza bez checkboxa RODO - automatycznie
+  document.addEventListener('DOMContentLoaded', ()=>{
+    const addModal = document.getElementById('addModal');
+    if(addModal){
+      const form = addModal.querySelector('form');
+      if(form){
+        const rodoBox = document.createElement('label');
+        rodoBox.className = 'rodo-check';
+        rodoBox.style.marginTop = '12px';
+        rodoBox.innerHTML = '<input type="checkbox" id="rodoMainCheck" required> <span style="font-size:11px">Oświadczam, że podane dane są zgodne z prawdą, wyrażam zgodę na przetwarzanie danych zgodnie z <a href="#" onclick="openLegal(\'prywatnosc\');return false;" style="color:#facc15">Polityką Prywatności</a> i akceptuję <a href="#" onclick="openLegal(\'regulamin\');return false;" style="color:#facc15">Regulamin</a> *</span>';
+        form.appendChild(rodoBox);
+        form.addEventListener('submit', (e)=>{
+          const chk = document.getElementById('rodoMainCheck');
+          if(chk && !chk.checked){ e.preventDefault(); alert('Musisz zaakceptować Politykę Prywatności i Regulamin'); return false; }
+        });
+      }
+    }
+  });
+})();
+</script>
+
 </body></html>
