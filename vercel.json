@@ -12,6 +12,10 @@
     {
       "source": "/sitemap.xml",
       "destination": "/api/sitemap"
+    },
+    {
+      "source": "/auto/:slug",
+      "destination": "/auto.html"
     }
   ]
 }
