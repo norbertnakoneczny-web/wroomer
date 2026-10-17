@@ -1,63 +1,21 @@
-<!DOCTYPE html>
-<html lang="pl">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Ładowanie ogłoszenia - Wroomer.pl</title>
-<style>
-body{font-family:system-ui; background:#0f0f0f; color:#fff; margin:0; padding:20px}
-.container{max-width:900px; margin:0 auto}
-.card{background:#1a1a1a; border-radius:16px; padding:24px}
-h1{margin:0 0 10px}
-.price{font-size:28px; color:#22c55e; font-weight:700; margin:10px 0}
-.meta{color:#888; margin-bottom:20px}
-.desc{line-height:1.6; white-space:pre-wrap}
-a{color:#22c55e}
-img{max-width:100%; border-radius:12px; margin-top:15px}
-</style>
-</head>
-<body>
-<div class="container">
-  <a href="/">← Wróć do Wroomer.pl</a>
-  <div id="content" class="card" style="margin-top:20px">Ładowanie...</div>
-</div>
-
-<script>
-// --- PODMIEŃ NA SWOJE DANE Z SUPABASE ---
-// Wejdź na supabase.com -> Twój projekt -> Settings -> API -> skopiuj URL i anon key
-const SUPABASE_URL = "https://TWOJ_PROJEKT.supabase.co";
-const SUPABASE_ANON = "TWOJ_ANON_KEY_TUTAJ";
-
-async function load() {
-  const slug = window.location.pathname.split('/').pop();
-  const el = document.getElementById('content');
-  
-  if(!slug || slug === 'auto.html'){ el.innerHTML='Brak sluga'; return; }
-
-  try {
-    // jeśli masz klucze w Vercel, możesz użyć /api/auto?slug= - na razie najprostszy fetch
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/ogloszenia?slug=eq.${slug}&select=*`, {
-      headers: { apikey: SUPABASE_ANON, Authorization: `Bearer ${SUPABASE_ANON}` }
-    });
-    const data = await res.json();
-    const car = data[0];
-    
-    if(!car){ el.innerHTML = `<h1>Nie znaleziono: ${slug}</h1><p>Sprawdź <a href="/">stronę główną</a></p>`; return; }
-
-    document.title = car.title + " - Wroomer.pl";
-    el.innerHTML = `
-      <h1>${car.title}</h1>
-      <div class="meta">${car.brand || ''} ${car.model || ''} • ${car.location || ''}</div>
-      <div class="price">${car.price ? car.price + ' PLN' : ''}</div>
-      <div class="desc">${car.description || ''}</div>
-      ${car.image_url ? `<img src="${car.image_url}">` : ''}
-      <p style="margin-top:30px"><a href="/">← Zobacz inne auta</a></p>
-    `;
-  } catch(e){
-    el.innerHTML = 'Błąd: ' + e.message + '<br>Sprawdź czy wpisałeś SUPABASE_URL i ANON KEY w auto.html';
-  }
+{
+  "cleanUrls": false,
+  "rewrites": [
+    {
+      "source": "/WROOMER-BLOG-FIX/blog/(.*)",
+      "destination": "/WROOMER-BLOG-FIX/blog/$1"
+    },
+    {
+      "source": "/blog/(.*)",
+      "destination": "/WROOMER-BLOG-FIX/blog/$1"
+    },
+    {
+      "source": "/sitemap.xml",
+      "destination": "/api/sitemap"
+    },
+    {
+      "source": "/auto/:slug",
+      "destination": "/auto.html"
+    }
+  ]
 }
-load();
-</script>
-</body>
-</html>
