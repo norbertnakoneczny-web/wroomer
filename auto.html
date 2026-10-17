@@ -2,22 +2,22 @@
 <html lang="pl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
 <title>Wroomer</title>
 <style>
-*{box-sizing:border-box}
-body{font-family:system-ui;background:#080808;color:#fff;margin:0}
-.header{padding:14px 20px;border-bottom:1px solid #222;position:sticky;top:0;background:#0a0a0a;z-index:10;display:flex;justify-content:space-between;align-items:center}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;overflow-x:hidden}
+body{font-family:system-ui;background:#080808;color:#fff}
+.header{padding:14px 20px;border-bottom:1px solid #222;position:sticky;top:0;background:#0a0a0a;z-index:10;display:flex;justify-content:space-between;align-items:center;width:100%}
 .header a{color:#22c55e;text-decoration:none;font-weight:800}
-.header .count{color:#666;font-size:14px}
-.container{max-width:1100px;margin:0 auto;padding:12px}
-.card{background:#151515;border:1px solid #222;border-radius:20px;overflow:hidden}
-.gallery-main{position:relative;background:#000;height:520px;cursor:zoom-in}
-.gallery-main img{width:100%;height:100%;object-fit:contain;background:#000}
-.gallery-main .nav{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,.6);border:1px solid #333;color:#fff;width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:22px;user-select:none}
+.container{max-width:1100px;margin:0 auto;padding:12px;width:100%}
+.card{background:#151515;border:1px solid #222;border-radius:20px;overflow:hidden;width:100%}
+.gallery-main{position:relative;background:#000;height:520px;cursor:zoom-in;width:100%}
+.gallery-main img{width:100%;height:100%;object-fit:contain;background:#000;display:block}
+.gallery-main .nav{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,.6);border:1px solid #333;color:#fff;width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:22px}
 .gallery-main .prev{left:12px}.gallery-main .next{right:12px}
 .gallery-main .counter{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.7);padding:6px 12px;border-radius:20px;font-size:13px}
-.thumbs{display:flex;gap:8px;overflow-x:auto;padding:10px;background:#0f0f0f;scrollbar-width:none}
+.thumbs{display:flex;gap:8px;overflow-x:auto;padding:10px;background:#0f0f0f}
 .thumbs::-webkit-scrollbar{display:none}
 .thumbs img{width:90px;height:70px;object-fit:cover;border-radius:8px;cursor:pointer;border:2px solid transparent;flex-shrink:0;opacity:.6}
 .thumbs img.active{border-color:#22c55e;opacity:1}
@@ -25,34 +25,34 @@ body{font-family:system-ui;background:#080808;color:#fff;margin:0}
 h1{margin:0;font-size:30px}.meta{color:#888;margin:8px 0}.price{font-size:36px;color:#22c55e;font-weight:900;margin:12px 0}
 .desc{line-height:1.7;white-space:pre-wrap;color:#ddd;margin-top:20px}
 .btn{display:inline-block;margin-top:20px;background:#22c55e;color:#000;padding:14px 22px;border-radius:12px;font-weight:800;text-decoration:none}
-#lightbox{position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:9999;display:none;align-items:center;justify-content:center}
+#lightbox{position:fixed;inset:0;background:#000;z-index:9999;display:none;align-items:center;justify-content:center}
 #lightbox.open{display:flex}
-#lightbox img{max-width:95vw;max-height:90vh;object-fit:contain}
-#lightbox .close{position:absolute;top:14px;right:16px;font-size:32px;cursor:pointer;color:#fff}
-#lightbox .nav{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.1);width:50px;height:50px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;cursor:pointer}
+#lightbox img{max-width:100vw;max-height:100vh;object-fit:contain;width:100vw}
+#lightbox .close{position:absolute;top:14px;right:16px;font-size:32px;cursor:pointer;color:#fff;z-index:10}
+#lightbox .nav{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.15);width:50px;height:50px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;cursor:pointer;z-index:10}
 #lightbox .prev{left:14px}#lightbox .next{right:14px}
 #lightbox .counter{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.6);padding:8px 14px;border-radius:20px}
 
-/* === FIX FULL WIDTH NA SMARTFONIE === */
+/* === FULL WIDTH 100% NA TELEFONIE - BEZ MARGINESÓW === */
 @media(max-width:768px){
-  .container{max-width:100%;padding:0;margin:0}
-  .card{border-radius:0;border-left:0;border-right:0;border-top:0;background:#0f0f0f}
-  .gallery-main{height:58vw;min-height:300px;max-height:480px;border-radius:0}
-  .gallery-main img{object-fit:contain}
-  .gallery-main .nav{width:36px;height:36px;font-size:20px;background:rgba(0,0,0,.5)}
-  .thumbs{padding:8px;background:#000;gap:6px}
-  .thumbs img{width:78px;height:58px}
-  .info{padding:16px 14px 24px 14px}
-  h1{font-size:22px}
-  .price{font-size:30px}
+  html,body{padding:0;margin:0;width:100%}
+  .header{padding:12px 14px;width:100vw;left:0;right:0}
+  .container{max-width:100vw!important;width:100vw!important;padding:0!important;margin:0!important}
+  .card{width:100vw!important;max-width:100vw!important;border-radius:0!important;border:0!important;margin:0!important;background:#000}
+  .gallery-main{width:100vw!important;height:68vw!important;min-height:300px;max-height:75vh!important;border-radius:0!important;margin:0!important}
+  .gallery-main img{width:100vw!important;object-fit:cover} /* cover żeby wypełniało całą szerokość */
+  .thumbs{width:100vw!important;padding:8px 6px;background:#000;margin:0}
+  .info{width:100vw!important;padding:16px 14px 30px 14px!important;background:#111;margin:0;box-sizing:border-box}
+  h1{font-size:20px;line-height:1.2}
+  .price{font-size:28px}
   .desc{font-size:15px}
-  .btn{width:100%;text-align:center;padding:16px;border-radius:12px}
+  .btn{width:100%;text-align:center;padding:16px;margin-top:16px}
 }
 </style>
 </head>
 <body>
 <div class="header"><a href="/">← WROOMER.PL</a><span class="count" id="hcount"></span></div>
-<div class="container"><div id="content" class="card" style="padding:60px;text-align:center;color:#666">Ładowanie...</div></div>
+<div class="container"><div id="content" class="card">Ładowanie...</div></div>
 <div id="lightbox">
   <span class="close" onclick="closeLB()">×</span>
   <span class="nav prev" onclick="prevImg()">‹</span>
@@ -74,9 +74,9 @@ function getImages(car){
 function render(){
   const mainImg = document.getElementById('mainImg');
   if(mainImg) mainImg.src = imgs[cur];
-  document.getElementById('mainCounter').innerText = `${cur+1} / ${imgs.length}`;
-  document.getElementById('hcount').innerText = `${imgs.length} zdjęć`;
-  document.getElementById('lbcounter').innerText = `${cur+1} / ${imgs.length}`;
+  const mc=document.getElementById('mainCounter'); if(mc) mc.innerText = `${cur+1} / ${imgs.length}`;
+  const hc=document.getElementById('hcount'); if(hc) hc.innerText = `${imgs.length} zdjęć`;
+  const lbc=document.getElementById('lbcounter'); if(lbc) lbc.innerText = `${cur+1} / ${imgs.length}`;
   document.querySelectorAll('.thumbs img').forEach((el,i)=>el.classList.toggle('active', i===cur));
 }
 function openLB(i){ cur=i; document.getElementById('lbimg').src=imgs[cur]; document.getElementById('lightbox').classList.add('open'); render(); }
@@ -121,12 +121,6 @@ async function load(){
     lb.addEventListener('touchend', e=>{
       const dx=e.changedTouches[0].clientX-startX;
       if(Math.abs(dx)>50){ dx<0?nextImg():prevImg(); }
-    });
-    document.addEventListener('keydown', e=>{
-      if(!document.getElementById('lightbox').classList.contains('open')) return;
-      if(e.key==='ArrowRight') nextImg();
-      if(e.key==='ArrowLeft') prevImg();
-      if(e.key==='Escape') closeLB();
     });
   }catch(e){ el.innerHTML='Błąd: '+e.message; }
 }
