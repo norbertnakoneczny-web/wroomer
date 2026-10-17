@@ -25,8 +25,6 @@ body{font-family:system-ui;background:#0a0a0a;color:#fff;margin:0}
 h1{margin:0;font-size:30px}.meta{color:#888;margin:8px 0}.price{font-size:36px;color:#22c55e;font-weight:900;margin:12px 0}
 .desc{line-height:1.7;white-space:pre-wrap;color:#ddd;margin-top:20px}
 .btn{display:inline-block;margin-top:20px;background:#22c55e;color:#000;padding:14px 22px;border-radius:12px;font-weight:800;text-decoration:none}
-
-/* LIGHTBOX */
 #lightbox{position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:9999;display:none;align-items:center;justify-content:center}
 #lightbox.open{display:flex}
 #lightbox img{max-width:95vw;max-height:90vh;object-fit:contain}
@@ -40,7 +38,6 @@ h1{margin:0;font-size:30px}.meta{color:#888;margin:8px 0}.price{font-size:36px;c
 <body>
 <div class="header"><a href="/">← WROOMER.PL</a><span class="count" id="hcount"></span></div>
 <div class="container"><div id="content" class="card" style="padding:60px;text-align:center;color:#666">Ładowanie...</div></div>
-
 <div id="lightbox">
   <span class="close" onclick="closeLB()">×</span>
   <span class="nav prev" onclick="prevImg()">‹</span>
@@ -48,12 +45,10 @@ h1{margin:0;font-size:30px}.meta{color:#888;margin:8px 0}.price{font-size:36px;c
   <span class="nav next" onclick="nextImg()">›</span>
   <div class="counter" id="lbcounter"></div>
 </div>
-
 <script>
 const SUPABASE_URL="https://bdpydgsfowtuvjnkyeeg.supabase.co";
 const SUPABASE_KEY="sb_publishable_S1qH_mBZaX7-bzmfJ0IVGA_6hxGbJWd";
 let imgs=[], cur=0, startX=0;
-
 function getImages(car){
   let a=[];
   if(Array.isArray(car.images)) a=car.images;
@@ -61,7 +56,6 @@ function getImages(car){
   if(car.image_url) a.unshift(car.image_url);
   return [...new Set(a.filter(Boolean).map(s=>String(s).trim()))].slice(0,20);
 }
-
 function render(){
   const mainImg = document.getElementById('mainImg');
   if(mainImg) mainImg.src = imgs[cur];
@@ -70,12 +64,10 @@ function render(){
   document.getElementById('lbcounter').innerText = `${cur+1} / ${imgs.length}`;
   document.querySelectorAll('.thumbs img').forEach((el,i)=>el.classList.toggle('active', i===cur));
 }
-
 function openLB(i){ cur=i; document.getElementById('lbimg').src=imgs[cur]; document.getElementById('lightbox').classList.add('open'); render(); }
 function closeLB(){ document.getElementById('lightbox').classList.remove('open'); }
 function nextImg(){ cur=(cur+1)%imgs.length; document.getElementById('mainImg').src=imgs[cur]; document.getElementById('lbimg').src=imgs[cur]; render(); }
 function prevImg(){ cur=(cur-1+imgs.length)%imgs.length; document.getElementById('mainImg').src=imgs[cur]; document.getElementById('lbimg').src=imgs[cur]; render(); }
-
 async function load(){
   const slug=location.pathname.split('/').pop().split('?')[0];
   const el=document.getElementById('content');
@@ -86,10 +78,9 @@ async function load(){
     document.title=car.title+" - Wroomer.pl";
     imgs=getImages(car);
     if(imgs.length===0) imgs=['https://via.placeholder.com/800x600/151515/666?text=Brak+zdjec'];
-    
     el.innerHTML=`
       <div class="gallery-main" id="galleryMain">
-        <img id="mainImg" src="${imgs[0]}" onclick="openLB(${0})">
+        <img id="mainImg" src="${imgs[0]}" onclick="openLB(0)">
         <span class="nav prev" onclick="event.stopPropagation(); prevImg()">‹</span>
         <span class="nav next" onclick="event.stopPropagation(); nextImg()">›</span>
         <span class="counter" id="mainCounter">1 / ${imgs.length}</span>
@@ -104,14 +95,12 @@ async function load(){
         <div style="margin-top:20px"><a href="/" style="color:#666;text-decoration:none">← Wróć</a></div>
       </div>
     `;
-    // swipe na mobile dla głównego zdjęcia
     const gm=document.getElementById('galleryMain');
     gm.addEventListener('touchstart', e=>startX=e.touches[0].clientX, {passive:true});
     gm.addEventListener('touchend', e=>{
       const dx=e.changedTouches[0].clientX-startX;
       if(Math.abs(dx)>50){ dx<0?nextImg():prevImg(); }
     });
-    // swipe dla lightbox
     const lb=document.getElementById('lightbox');
     lb.addEventListener('touchstart', e=>startX=e.touches[0].clientX, {passive:true});
     lb.addEventListener('touchend', e=>{
