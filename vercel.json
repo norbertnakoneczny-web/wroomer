@@ -1,1 +1,3 @@
-{"cleanUrls": false, "rewrites": [{"source": "/WROOMER-BLOG-FIX/blog/(.*)", "destination": "/WROOMER-BLOG-FIX/blog/$1"}, {"source": "/blog/(.*)", "destination": "/WROOMER-BLOG-FIX/blog/$1"}]}
+{
+  "cleanUrls": true
+}
