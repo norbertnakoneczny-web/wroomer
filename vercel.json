@@ -1,3 +1,21 @@
 {
-  "cleanUrls": true
+  "cleanUrls": false,
+  "rewrites": [
+    {
+      "source": "/WROOMER-BLOG-FIX/blog/(.*)",
+      "destination": "/WROOMER-BLOG-FIX/blog/$1"
+    },
+    {
+      "source": "/blog/(.*)",
+      "destination": "/WROOMER-BLOG-FIX/blog/$1"
+    },
+    {
+      "source": "/sitemap.xml",
+      "destination": "/api/sitemap"
+    },
+    {
+      "source": "/auto/:slug",
+      "destination": "/auto.html"
+    }
+  ]
 }
