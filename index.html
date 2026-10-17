@@ -289,9 +289,7 @@ checkUser(); loadAds();
 
 <div class="poradnik-wrap" id="poradnik">
   <div class="poradnik-inner">
-    <div class="poradnik-title">📚 PORADNIK MOTORYZACYJNY WROOMER.PL - Generuje ruch z Google</div>
-    <div class="poradnik-sub">Codziennie tysiące osób wpisuje w Google: "umowa kupna sprzedaży", "jak sprzedać auto", "przerejestrowanie auta koszt". Te artykuły odpowiadają na te pytania i kierują ruch na Twoje ogłoszenia. <b style="color:#facc15">Każdy artykuł = +500-2000 wejść miesięcznie z Google za darmo.</b> Kliknij i czytaj - w środku linki do ogłoszeń Wroomer.</div>
-    
+    <div class="poradnik-title">📚 PORADNIK MOTORYZACYJNY WROOMER.PL</div>
     <div class="poradnik-grid">
       <div class="poradnik-card">
         <span class="hot">🔥 18 000/mies</span>
@@ -352,7 +350,7 @@ checkUser(); loadAds();
       <details><summary>Jak wystawić auto za darmo na Wroomer.pl?</summary><p>Kliknij + Dodaj, dodaj 10 zdjęć (WebP), wpisz VIN, przebieg, cenę i kliknij GPS twoja lokalizacja (po zgodzie RODO). Ogłoszenie jest bez prowizji i bez limitów. Kupujący dzwonią bezpośrednio, bez pośredników.</p></details>
       <details><summary>Czy Wroomer.pl jest darmowy?</summary><p>Tak, 100% darmowy. Nie pobieramy prowizji od sprzedaży. Wystawiasz, kupujesz i zamieniasz bez opłat. Utrzymujemy się z reklam Google (po zgodzie RODO).</p></details>
       <details><summary>Jak działa szukanie w promieniu GPS?</summary><p>Klikasz "GPS twoja lokalizacja", wyrażasz zgodę na lokalizację (RODO art.6), przeglądarka pobiera Twoje GPS lokalnie i pokazuje auta 5km, 10km, 50km od Ciebie. Nie zapisujemy dokładnej lokalizacji na serwerze.</p></details>
-      <details><summary>Gdzie jest Wroomer.pl?</summary><p>Siedziba: ul. Klonowa 3, 44-350 Gorzyce, Śląsk. Administrator: Norbert Nakoneczny. Kontakt: kontakt@wroomer.pl. Działamy ogólnopolsko, ale specjalizujemy się w autach z Śląska: Gorzyce, Wodzisław, Rybnik, Jastrzębie.</p></details>
+      <details><summary>Gdzie jest Wroomer.pl?</summary><p>Administrator: WROOMER.PL. Kontakt: kontakt@wroomer.pl. Kontakt: kontakt@wroomer.pl. Działamy ogólnopolsko, ale specjalizujemy się w autach z Śląska: Gorzyce, Wodzisław, Rybnik, Jastrzębie.</p></details>
     </div>
   </div>
 </div>
@@ -378,14 +376,14 @@ checkUser(); loadAds();
   <button onclick="openLegal('rodo')">RODO / Obowiązek informacyjny</button>
   <button onclick="resetRodo()" style="font-weight:800;color:#facc15">Ustawienia Cookies</button>
   <button onclick="resetGpsConsent()" style="font-weight:800;color:#93c5fd">Ustawienia GPS</button>
-  <span style="margin-left:auto;color:#555">Administrator: WROOMER.PL Norbert Nakoneczny, ul. Klonowa 3, 44-350 Gorzyce • kontakt@wroomer.pl • RODO: rodo@wroomer.pl</span>
+  <span style="margin-left:auto;color:#555">Administrator: WROOMER.PL • kontakt@wroomer.pl • RODO: rodo@wroomer.pl</span>
 </footer>
 
 <script>
 // === SYSTEM RODO + CONSENT MODE V2 ===
 const LEGAL_CONTENT = {
   prywatnosc: `<h2>Polityka Prywatności i RODO - Wroomer.pl</h2>
-  <p style="font-size:11px;color:#666">Aktualizacja: 16.10.2026 | Administrator: WROOMER.PL Norbert Nakoneczny - osoba prywatna, Adres: ul. Klonowa 3, 44-350 Gorzyce, E-mail: kontakt@wroomer.pl, RODO: rodo@wroomer.pl</p>
+  <p style="font-size:11px;color:#666">Aktualizacja: 16.10.2026 | Administrator: WROOMER.PL, E-mail: kontakt@wroomer.pl, RODO: rodo@wroomer.pl</p>
   <h3>1. Jakie dane zbieramy?</h3><ul><li>Dane konta: e-mail, hash hasła, avatar (Supabase Auth)</li><li>Ogłoszenia: zdjęcia, opis, cena, lokalizacja, telefon jeśli podasz w opisie</li><li>Techniczne: IP, User-Agent, cookies, ID urządzenia, dane Vercel Analytics</li><li>Formularze: treść wiadomości kontaktowej</li></ul>
   <h3>2. Cele i podstawa prawna (art.6 RODO)</h3><table><tr><th>Cel</th><th>Podstawa</th></tr><tr><td>Realizacja usługi ogłoszeniowej (konto, dodawanie, wyświetlanie ogłoszeń)</td><td>art.6 ust.1 lit. b - wykonanie umowy / regulaminu</td></tr><tr><td>Kontakt, odpowiedzi na zapytania</td><td>art.6 ust.1 lit. f - prawnie uzasadniony interes</td></tr><tr><td>Analityka: Google Analytics G-34L1GMG3GK, Vercel Analytics</td><td>art.6 ust.1 lit. a - zgoda z bannera</td></tr><tr><td>Marketing (jeśli wyrazisz zgodę)</td><td>art.6 ust.1 lit. a - zgoda</td></tr><tr><td>Obowiązki prawne, rozliczenia, obrona roszczeń</td><td>art.6 ust.1 lit. c i f</td></tr></table>
   <h3>3. Odbiorcy danych - powierzenia art.28 RODO</h3><p>Vercel Inc. (hosting USA), Supabase Inc. (baza i storage USA), Google LLC (Analytics - po zgodzie). Mamy umowy powierzenia SCC.</p>
@@ -398,14 +396,14 @@ const LEGAL_CONTENT = {
   <h3>Jak wycofać zgodę?</h3><p>Kliknij w stopce "Ustawienia Cookies" lub wykonaj w konsoli: localStorage.removeItem('wroomer-rodo-consent'); location.reload(); Możesz też usunąć cookies w przeglądarce.</p>`,
 
   regulamin: `<h2>Regulamin serwisu Wroomer.pl</h2><p style="font-size:11px">Art.8 ustawy o świadczeniu usług drogą elektroniczną. Obowiązuje od 16.10.2026</p>
-  <h3>§1 Definicje</h3><p>Wroomer.pl to platforma ogłoszeniowa aut. Usługodawca: Norbert Nakoneczny, ul. Klonowa 3, 44-350 Gorzyce Kontakt: kontakt@wroomer.pl</p>
+  <h3>§1 Definicje</h3><p>Wroomer.pl to platforma ogłoszeniowa aut. Usługodawca: WROOMER.PL Kontakt: kontakt@wroomer.pl</p>
   <h3>§2 Usługi</h3><ul><li>Przeglądanie ogłoszeń - bezpłatnie, bez rejestracji</li><li>Dodawanie ogłoszeń - po rejestracji, bezpłatne bez limitów</li><li>Konto użytkownika - zarządzanie ogłoszeniami</li></ul>
   <h3>§3 Warunki dodawania</h3><p>Zakaz: treści niezgodne z prawem, wprowadzające w błąd co do stanu auta (cofanie licznika), spam, dane osobowe osób trzecich bez zgody. Usługodawca może usunąć lub zablokować ogłoszenie naruszające regulamin bez zwrotu opłat.</p>
   <h3>§4 Odpowiedzialność</h3><p>Serwis jest pośrednikiem (art.14 UŚUDE) - nie ponosi odpowiedzialności za treść ogłoszeń i transakcje między użytkownikami. Dane w ogłoszeniach podaje ogłaszający na własną odpowiedzialność.</p>
   <h3>§5 Reklamacje</h3><p>Reklamacje na kontakt@wroomer.pl w 14 dni. Odpowiedź w 14 dni. Konsument może skorzystać z platformy ODR ec.europa.eu/consumers/odr</p>
   <h3>§6 Prawo</h3><p>Prawo polskie. Sąd właściwy wg siedziby Usługodawcy, z zachowaniem praw konsumenta.</p>`,
 
-  rodo: `<h2>Klauzula informacyjna RODO - art.13</h2><ol style="font-size:13px;line-height:1.8;margin-left:16px"><li><b>Administrator:</b> Wroomer.pl, ul. Klonowa 3, 44-350 Gorzyce, kontakt@wroomer.pl, rodo@wroomer.pl</li><li><b>Cele:</b> realizacja usług serwisu ogłoszeniowego, kontakt, analityka za zgodą (Google Analytics), marketing za zgodą</li><li><b>Podstawa:</b> art.6 ust.1 lit. a (zgoda), b (umowa/regulamin), f (prawnie uzasadniony interes)</li><li><b>Odbiorcy:</b> Vercel, Supabase, Google (po zgodzie)</li><li><b>Prawa:</b> dostęp, sprostowanie, usunięcie, ograniczenie, przenoszenie, sprzeciw, cofnięcie zgody, skarga do UODO</li><li><b>Okres:</b> do wycofania zgody / usunięcia konta / przedawnienia roszczeń (6 lat)</li><li><b>Podanie danych</b> jest dobrowolne, ale niezbędne do korzystania z serwisu (konto, dodanie ogłoszenia)</li><li><b>Automatyczne decyzje:</b> nie profilujemy w sposób wywołujący skutki prawne</li></ol>
+  rodo: `<h2>Klauzula informacyjna RODO - art.13</h2><ol style="font-size:13px;line-height:1.8;margin-left:16px"><li><b>Administrator:</b> Wroomer.pl, kontakt@wroomer.pl, rodo@wroomer.pl</li><li><b>Cele:</b> realizacja usług serwisu ogłoszeniowego, kontakt, analityka za zgodą (Google Analytics), marketing za zgodą</li><li><b>Podstawa:</b> art.6 ust.1 lit. a (zgoda), b (umowa/regulamin), f (prawnie uzasadniony interes)</li><li><b>Odbiorcy:</b> Vercel, Supabase, Google (po zgodzie)</li><li><b>Prawa:</b> dostęp, sprostowanie, usunięcie, ograniczenie, przenoszenie, sprzeciw, cofnięcie zgody, skarga do UODO</li><li><b>Okres:</b> do wycofania zgody / usunięcia konta / przedawnienia roszczeń (6 lat)</li><li><b>Podanie danych</b> jest dobrowolne, ale niezbędne do korzystania z serwisu (konto, dodanie ogłoszenia)</li><li><b>Automatyczne decyzje:</b> nie profilujemy w sposób wywołujący skutki prawne</li></ol>
   <div style="margin-top:16px;padding:10px;background:#1a1a1a;border-radius:8px"><label class="rodo-check"><input type="checkbox" required> <span>Wyrażam zgodę na przetwarzanie moich danych osobowych zgodnie z Polityką Prywatności oraz akceptuję Regulamin serwisu wroomer.pl *</span></label></div>`
 };
 
