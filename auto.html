@@ -2,62 +2,129 @@
 <html lang="pl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Wroomer - Szczegóły</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>Wroomer</title>
 <style>
+*{box-sizing:border-box}
 body{font-family:system-ui;background:#0a0a0a;color:#fff;margin:0}
-.header{padding:16px 20px;border-bottom:1px solid #222;position:sticky;top:0;background:#0a0a0a;z-index:10}
+.header{padding:14px 20px;border-bottom:1px solid #222;position:sticky;top:0;background:#0a0a0a;z-index:10;display:flex;justify-content:space-between;align-items:center}
 .header a{color:#22c55e;text-decoration:none;font-weight:800}
-.container{max-width:1100px;margin:0 auto;padding:20px}
+.header .count{color:#666;font-size:14px}
+.container{max-width:1100px;margin:0 auto;padding:12px}
 .card{background:#151515;border:1px solid #222;border-radius:20px;overflow:hidden}
-.gallery{display:grid;grid-template-columns:2fr 1fr;gap:8px;padding:8px;background:#000}
-.gallery .main{grid-row:span 2;height:500px}
-.gallery img{width:100%;height:246px;object-fit:cover;border-radius:12px;background:#111;cursor:pointer}
-.gallery img.main{height:500px}
-.info{padding:28px}
-h1{margin:0;font-size:32px}
-.meta{color:#888;margin:8px 0 16px}
-.price{font-size:38px;color:#22c55e;font-weight:900;margin:10px 0}
-.desc{line-height:1.8;white-space:pre-wrap;color:#ddd;margin-top:24px;font-size:16px}
-.btn{display:inline-block;margin-top:20px;background:#22c55e;color:#000;padding:12px 20px;border-radius:10px;font-weight:700;text-decoration:none}
-@media(max-width:700px){.gallery{grid-template-columns:1fr}.gallery .main{grid-row:auto;height:300px}.gallery img{height:220px}}
+.gallery-main{position:relative;background:#000;height:520px;cursor:zoom-in}
+.gallery-main img{width:100%;height:100%;object-fit:contain;background:#000}
+.gallery-main .nav{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,.6);border:1px solid #333;color:#fff;width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:22px;user-select:none}
+.gallery-main .prev{left:12px}.gallery-main .next{right:12px}
+.gallery-main .counter{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.7);padding:6px 12px;border-radius:20px;font-size:13px}
+.thumbs{display:flex;gap:8px;overflow-x:auto;padding:10px;background:#0f0f0f;scrollbar-width:none}
+.thumbs::-webkit-scrollbar{display:none}
+.thumbs img{width:90px;height:70px;object-fit:cover;border-radius:8px;cursor:pointer;border:2px solid transparent;flex-shrink:0;opacity:.6}
+.thumbs img.active{border-color:#22c55e;opacity:1}
+.info{padding:24px}
+h1{margin:0;font-size:30px}.meta{color:#888;margin:8px 0}.price{font-size:36px;color:#22c55e;font-weight:900;margin:12px 0}
+.desc{line-height:1.7;white-space:pre-wrap;color:#ddd;margin-top:20px}
+.btn{display:inline-block;margin-top:20px;background:#22c55e;color:#000;padding:14px 22px;border-radius:12px;font-weight:800;text-decoration:none}
+
+/* LIGHTBOX */
+#lightbox{position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:9999;display:none;align-items:center;justify-content:center}
+#lightbox.open{display:flex}
+#lightbox img{max-width:95vw;max-height:90vh;object-fit:contain}
+#lightbox .close{position:absolute;top:14px;right:16px;font-size:32px;cursor:pointer;color:#fff}
+#lightbox .nav{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.1);width:50px;height:50px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;cursor:pointer}
+#lightbox .prev{left:14px}#lightbox .next{right:14px}
+#lightbox .counter{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.6);padding:8px 14px;border-radius:20px}
+@media(max-width:700px){.gallery-main{height:340px}.gallery-main .nav{width:38px;height:38px}}
 </style>
 </head>
 <body>
-<div class="header"><a href="/">← WROOMER.PL</a></div>
-<div class="container"><div id="content" class="card" style="padding:40px;text-align:center;color:#888">Ładowanie ogłoszenia...</div></div>
+<div class="header"><a href="/">← WROOMER.PL</a><span class="count" id="hcount"></span></div>
+<div class="container"><div id="content" class="card" style="padding:60px;text-align:center;color:#666">Ładowanie...</div></div>
+
+<div id="lightbox">
+  <span class="close" onclick="closeLB()">×</span>
+  <span class="nav prev" onclick="prevImg()">‹</span>
+  <img id="lbimg" src="">
+  <span class="nav next" onclick="nextImg()">›</span>
+  <div class="counter" id="lbcounter"></div>
+</div>
+
 <script>
 const SUPABASE_URL="https://bdpydgsfowtuvjnkyeeg.supabase.co";
 const SUPABASE_KEY="sb_publishable_S1qH_mBZaX7-bzmfJ0IVGA_6hxGbJWd";
+let imgs=[], cur=0, startX=0;
+
+function getImages(car){
+  let a=[];
+  if(Array.isArray(car.images)) a=car.images;
+  else if(typeof car.images==='string'){ try{a=JSON.parse(car.images)}catch{a=[car.images]} }
+  if(car.image_url) a.unshift(car.image_url);
+  return [...new Set(a.filter(Boolean).map(s=>String(s).trim()))].slice(0,20);
+}
+
+function render(){
+  const mainImg = document.getElementById('mainImg');
+  if(mainImg) mainImg.src = imgs[cur];
+  document.getElementById('mainCounter').innerText = `${cur+1} / ${imgs.length}`;
+  document.getElementById('hcount').innerText = `${imgs.length} zdjęć`;
+  document.getElementById('lbcounter').innerText = `${cur+1} / ${imgs.length}`;
+  document.querySelectorAll('.thumbs img').forEach((el,i)=>el.classList.toggle('active', i===cur));
+}
+
+function openLB(i){ cur=i; document.getElementById('lbimg').src=imgs[cur]; document.getElementById('lightbox').classList.add('open'); render(); }
+function closeLB(){ document.getElementById('lightbox').classList.remove('open'); }
+function nextImg(){ cur=(cur+1)%imgs.length; document.getElementById('mainImg').src=imgs[cur]; document.getElementById('lbimg').src=imgs[cur]; render(); }
+function prevImg(){ cur=(cur-1+imgs.length)%imgs.length; document.getElementById('mainImg').src=imgs[cur]; document.getElementById('lbimg').src=imgs[cur]; render(); }
+
 async function load(){
   const slug=location.pathname.split('/').pop().split('?')[0];
   const el=document.getElementById('content');
   try{
     const r=await fetch(`${SUPABASE_URL}/rest/v1/ogloszenia?slug=eq.${slug}&select=*`,{headers:{apikey:SUPABASE_KEY,Authorization:`Bearer ${SUPABASE_KEY}`}});
     const [car]=await r.json();
-    if(!car){ el.innerHTML=`<div style="padding:40px"><h1>Nie znaleziono: ${slug}</h1></div>`; return; }
+    if(!car){ el.innerHTML=`<div style="padding:40px"><h1>Nie znaleziono</h1></div>`; return; }
     document.title=car.title+" - Wroomer.pl";
-    // zdjęcia - images to JSON array, image_url to główne
-    let imgs = [];
-    if(Array.isArray(car.images)) imgs = car.images;
-    else if(typeof car.images==='string'){ try{imgs=JSON.parse(car.images)}catch{imgs=[car.images]} }
-    if(car.image_url) imgs.unshift(car.image_url);
-    imgs=[...new Set(imgs.filter(Boolean).map(s=>String(s).trim()))];
-    
-    const gallery = imgs.length ? `<div class="gallery">${imgs.slice(0,5).map((src,i)=>`<img src="${src}" class="${i===0?'main':''}" onclick="window.open('${src}','_blank')" onerror="this.style.display='none'">`).join('')}</div>` : '';
+    imgs=getImages(car);
+    if(imgs.length===0) imgs=['https://via.placeholder.com/800x600/151515/666?text=Brak+zdjec'];
     
     el.innerHTML=`
-      ${gallery}
+      <div class="gallery-main" id="galleryMain">
+        <img id="mainImg" src="${imgs[0]}" onclick="openLB(${0})">
+        <span class="nav prev" onclick="event.stopPropagation(); prevImg()">‹</span>
+        <span class="nav next" onclick="event.stopPropagation(); nextImg()">›</span>
+        <span class="counter" id="mainCounter">1 / ${imgs.length}</span>
+      </div>
+      <div class="thumbs">${imgs.map((s,i)=>`<img src="${s}" class="${i===0?'active':''}" onclick="cur=${i}; document.getElementById('mainImg').src=imgs[${i}]; render()" loading="lazy">`).join('')}</div>
       <div class="info">
         <h1>${car.title||''}</h1>
         <div class="meta">${car.brand||''} ${car.model||''} • ${car.location||''} • ${car.year||car.rocznik||''}r</div>
         <div class="price">${car.price?Number(car.price).toLocaleString('pl-PL')+' PLN':''}</div>
         <div class="desc">${car.description||''}</div>
-        <a class="btn" href="tel:${car.phone||car.telefon||'501705817'}">📞 Zadzwoń: ${car.phone||car.telefon||'501705817'}</a>
-        <div style="margin-top:30px"><a href="/" style="color:#666;text-decoration:none">← Wróć do listy</a></div>
+        <a class="btn" href="tel:${car.phone||'501705817'}">📞 ${car.phone||'501705817'}</a>
+        <div style="margin-top:20px"><a href="/" style="color:#666;text-decoration:none">← Wróć</a></div>
       </div>
     `;
-  }catch(e){ el.innerHTML='Błąd: '+e.message; console.error(e); }
+    // swipe na mobile dla głównego zdjęcia
+    const gm=document.getElementById('galleryMain');
+    gm.addEventListener('touchstart', e=>startX=e.touches[0].clientX, {passive:true});
+    gm.addEventListener('touchend', e=>{
+      const dx=e.changedTouches[0].clientX-startX;
+      if(Math.abs(dx)>50){ dx<0?nextImg():prevImg(); }
+    });
+    // swipe dla lightbox
+    const lb=document.getElementById('lightbox');
+    lb.addEventListener('touchstart', e=>startX=e.touches[0].clientX, {passive:true});
+    lb.addEventListener('touchend', e=>{
+      const dx=e.changedTouches[0].clientX-startX;
+      if(Math.abs(dx)>50){ dx<0?nextImg():prevImg(); }
+    });
+    document.addEventListener('keydown', e=>{
+      if(!document.getElementById('lightbox').classList.contains('open')) return;
+      if(e.key==='ArrowRight') nextImg();
+      if(e.key==='ArrowLeft') prevImg();
+      if(e.key==='Escape') closeLB();
+    });
+  }catch(e){ el.innerHTML='Błąd: '+e.message; }
 }
 load();
 </script>
