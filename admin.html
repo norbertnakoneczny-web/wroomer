@@ -118,6 +118,21 @@ label.small{font-size:10px;opacity:.7;display:block;margin:8px 12px 2px;text-tra
 <div class="row" style="padding:0 12px"><div><label class="small">Telefon</label><input class="input" id="aPhone" placeholder="600 123 456"></div><div><label class="small">Kolor</label><select class="select" id="aColor"><option value="">Wybierz</option><option>Czarny</option><option>Biały</option><option>Srebrny</option><option>Szary</option><option>Niebieski</option><option>Czerwony</option><option>Zielony</option></select></div></div>
 <label class="small">Opis</label><textarea class="input" id="aDesc" rows="3" placeholder="Stan, wyposażenie..." style="margin:0 12px;width:calc(100% - 24px)"></textarea>
 <label class="small" style="color:#facc15">Zdjęcia (max 20 - przeciągnij by zmienić kolejność)</label><label class="file-label"><span id="fileLabelText">📷 Wybierz zdjęcia</span><input type="file" id="aFiles" multiple accept="image/*" style="display:none"></label><div id="previewCount"></div><div id="preview"></div><div style="margin:0 12px 8px;font-size:11px;color:#666">💡 Wskazówka: złap miniaturkę i przeciągnij żeby zmienić kolejność. Pierwsze zdjęcie = główne na liście.</div>
+
+<div class="rodo-checkbox-group" id="rodoCheckboxes">
+  <div style="font-weight:900;color:#facc15;font-size:12px;margin-bottom:8px">🔒 WYMAGANE ZGODY RODO - OPCJA A+B (ogólnopolska giełda)</div>
+  <label><input type="checkbox" id="rodo1"> <span><span class="req">* OBOWIĄZKOWE</span> Oświadczam że zapoznałem się z <a href="/regulamin.html" target="_blank">Regulaminem</a> i <a href="/polityka-prywatnosci.html" target="_blank">Polityką Prywatności</a> i akceptuję je. Jestem właścicielem pojazdu i mam prawo do publikacji zdjęć wraz z tablicami rej. Mam prawo do publikacji wizerunku auta. (art. 6 ust.1 lit. b RODO)</span></label>
+  <label><input type="checkbox" id="rodo2"> <span><span class="req">* OBOWIĄZKOWE</span> Wyrażam zgodę na publiczne wyświetlanie moich danych: nr telefonu, email, lokalizacja (miasto) oraz zdjęć (w tym tablic jeśli nie zamazane) w ogłoszeniu w celu kontaktu kupujących. Rozumiem że dane będą widoczne dla wszystkich (art. 6 ust.1 lit. a RODO)</span></label>
+  <label><input type="checkbox" id="rodo3"> <span><span class="opt">DOBROWOLNE</span> Chcę otrzymywać newsletter WROOMER.PL z nowymi ofertami i promocjami (art. 6 ust.1 lit. a RODO). Mogę wypisać się w każdej chwili.</span></label>
+  <label><input type="checkbox" id="rodo4"> <span><span class="opt">OPCJA B - AUTO-BLUR</span> Chcę automatycznie zamazać tablice rej. na zdjęciach (zalecane dla ogólnopolskiej giełdy - chroni prywatność). System rozmyje dolne partie zdjęć gdzie zwykle są tablice. Możesz też ręcznie zaznaczyć obszar do zamazania.</span></label>
+</div>
+<div class="plate-blur-toolbar" id="plateBlurToolbar" style="display:none">
+  <span style="font-size:12px;font-weight:800;color:#93c5fd">🎯 OPCJA B - BLUR TABLIC:</span>
+  <button class="btn-blur" id="btnAutoBlur" onclick="window.applyAutoBlur()">✨ Auto-rozmyj tablice (1 klik)</button>
+  <button class="btn-unblur" onclick="window.clearBlur()">Cofnij blur</button>
+  <span style="font-size:11px;color:#888">Zaznacz na zdjęciu obszar do zamazania (kliknij i przeciągnij) lub użyj auto-blur</span>
+</div>
+
 <div class="row" style="padding:12px"><button class="btn btn-yellow" style="flex:1;padding:12px;font-weight:900" id="btnSave">Zatwierdź z GPS</button><button class="btn btn-dark" style="flex:1" onclick="closeModals()">Anuluj</button></div>
 </div></div>
 
@@ -369,6 +384,47 @@ document.addEventListener('DOMContentLoaded',()=>{const d=document.getElementByI
 checkUser(); loadAds();
 </script>
 
+
+<!-- WROOMER.PL RODO PRO PACK - START -->
+<link rel="stylesheet" href="/rodo-styles.css">
+<script src="/consent.js"></script>
+<script src="/plate-blur.js"></script>
+
+<!-- COOKIE BANNER RODO -->
+<div id="cookieBanner" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:20000;background:#0f0f0f;border-top:2px solid #facc15;padding:16px 14px;flex-direction:column;gap:12px;box-shadow:0 -10px 40px rgba(0,0,0,.8)">
+  <div style="max-width:1200px;margin:0 auto;width:100%;display:flex;flex-direction:column;gap:12px">
+    <div style="display:flex;gap:12px;align-items:flex-start">
+      <div style="font-size:22px">🍪</div>
+      <div style="flex:1">
+        <div style="font-weight:800;font-size:14px;color:#fff">WROOMER.PL używa cookies - Twoja prywatność</div>
+        <div style="font-size:12px;color:#aaa;margin-top:4px;line-height:1.5">Używamy plików cookies niezbędnych do działania strony oraz - za Twoją zgodą - analitycznych (Google Analytics 4) i marketingowych. Możesz zaakceptować wszystkie lub odrzucić nie-niezbędne. Szczegóły w <a href="/polityka-cookies.html" style="color:#facc15">Polityce Cookies</a> i <a href="/polityka-prywatnosci.html" style="color:#facc15">Polityce Prywatności</a>. Tablice rejestracyjne w ogłoszeniach są daną osobową - możesz je zamazać (OPCJA B).</div>
+      </div>
+    </div>
+    <div id="cookieCustom" style="display:none;background:#181818;border:1px solid #222;border-radius:12px;padding:12px;gap:10px">
+      <label style="display:flex;gap:8px;align-items:center;font-size:13px"><input type="checkbox" checked disabled> Niezbędne (zawsze aktywne) - logowanie, sesja</label>
+      <label style="display:flex;gap:8px;align-items:center;font-size:13px"><input type="checkbox" id="cAnalytics"> Analityczne - GA4 G-34L1GMG3GK (anonimowe statystyki)</label>
+      <label style="display:flex;gap:8px;align-items:center;font-size:13px"><input type="checkbox" id="cMarketing"> Marketingowe - reklamy, konwersje</label>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button onclick="acceptAllCookies()" style="background:#facc15;color:#000;border:0;padding:10px 18px;border-radius:20px;font-weight:800;font-size:13px;cursor:pointer">Akceptuję wszystkie</button>
+      <button onclick="rejectAllCookies()" style="background:#222;color:#fff;border:1px solid #333;padding:10px 18px;border-radius:20px;font-weight:800;font-size:13px;cursor:pointer">Odrzuć nie-niezbędne</button>
+      <button onclick="document.getElementById('cookieCustom').style.display = document.getElementById('cookieCustom').style.display==='none' ? 'flex' : 'none'; document.getElementById('cookieCustom').style.flexDirection='column'" style="background:transparent;color:#aaa;border:0;padding:10px;font-size:13px;cursor:pointer">Ustawienia</button>
+      <button onclick="saveCustomCookies()" style="background:#333;color:#fff;border:0;padding:10px 18px;border-radius:20px;font-weight:700;font-size:13px;cursor:pointer;display:none" id="btnSaveCustom">Zapisz wybór</button>
+    </div>
+  </div>
+</div>
+
+<!-- STOPKA RODO -->
+<footer style="background:#000;border-top:2px solid #1a1a1a;padding:24px 14px;margin-top:20px">
+  <div style="max-width:1600px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;font-size:12px">
+    <div><div style="font-weight:900;font-size:16px;color:#fff">WROOMER.PL <span style="color:#facc15">v11 AUTO-PAGES</span></div><div style="color:#888;margin-top:6px">Ogólnopolska darmowa giełda aut. Wystaw za darmo bez limitów.</div><div style="margin-top:12px;color:#555">© 2026 WROOMER.PL - Wszystkie prawa zastrzeżone</div></div>
+    <div><div style="font-weight:800;color:#facc15;margin-bottom:8px">DOKUMENTY RODO</div><a href="/polityka-prywatnosci.html" style="color:#aaa;display:block;margin:4px 0;text-decoration:none">Polityka Prywatności</a><a href="/regulamin.html" style="color:#aaa;display:block;margin:4px 0;text-decoration:none">Regulamin (DSA)</a><a href="/polityka-cookies.html" style="color:#aaa;display:block;margin:4px 0;text-decoration:none">Polityka Cookies</a><a href="/rodo.html" style="color:#aaa;display:block;margin:4px 0;text-decoration:none">RODO / Zgłoszenia / Prawo do bycia zapomnianym</a></div>
+    <div><div style="font-weight:800;color:#facc15;margin-bottom:8px">KONTAKT RODO</div><div style="color:#aaa">RODO: rodo@wroomer.pl</div><div style="color:#aaa">Zgłoszenia DSA: zglos@wroomer.pl (24h)</div><div style="color:#aaa">Kontakt: kontakt@wroomer.pl</div><div style="margin-top:8px"><a href="#" onclick="openCookieSettings(); return false;" style="color:#facc15">Ustawienia cookies</a></div></div>
+    <div><div style="font-weight:800;color:#facc15;margin-bottom:8px">BEZPIECZEŃSTWO TABLIC</div><div style="color:#aaa;line-height:1.5">Tablica rej. to dana osobowa (UODO). Stosujemy OPCJĘ A+B: checkbox oświadczenia + auto-blur tablic w edytorze zdjęć. Możesz zamazać tablice jednym kliknięciem przed publikacją.</div></div>
+  </div>
+</footer>
+<!-- WROOMER RODO PRO PACK - END -->
+
 <!-- PORADNIK RUCH - START -->
 <style>
 .poradnik{max-width:1600px;margin:0 auto;padding:14px 12px;background:#080808;border-top:1px solid #1e1e1e}
@@ -396,5 +452,84 @@ checkUser(); loadAds();
   </div>
 </div>
 <!-- PORADNIK RUCH - END -->
+
+
+<script>
+// PLATE BLUR LOGIC - OPCJA B
+window.blurredImageList = [];
+window.applyAutoBlur = async function(){
+  if(imageList.length===0){ alert('Dodaj zdjęcia najpierw'); return; }
+  const blurEnabled = document.getElementById('rodo4')?.checked;
+  if(!blurEnabled){ alert('Zaznacz checkbox OPCJA B - auto-blur'); document.getElementById('rodo4').checked=true; }
+  const btn = document.getElementById('btnAutoBlur');
+  btn.textContent='Rozmywam...'; btn.disabled=true;
+  for(let i=0;i<imageList.length;i++){
+    const item = imageList[i];
+    if(item.type!=='new') continue;
+    // Use canvas blur
+    const img = new Image();
+    img.src = item.preview;
+    await new Promise(res=>{
+      img.onload = ()=>{
+        const c = document.createElement('canvas');
+        c.width = img.width; c.height = img.height;
+        const ctx = c.getContext('2d');
+        ctx.drawImage(img,0,0);
+        // blur bottom 30% - typical plate area
+        const y = c.height*0.65;
+        const h = c.height*0.35;
+        const x = 0;
+        const w = c.width;
+        // cut, blur, paste
+        const temp = document.createElement('canvas');
+        temp.width = w; temp.height = h;
+        const tctx = temp.getContext('2d');
+        tctx.drawImage(c, x, y, w, h, 0,0,w,h);
+        tctx.filter = 'blur(22px)';
+        tctx.drawImage(temp,0,0);
+        ctx.drawImage(temp,0,0,w,h, x,y,w,h);
+        c.toBlob(blob=>{
+          const newUrl = URL.createObjectURL(blob);
+          if(item.preview.startsWith('blob:')) URL.revokeObjectURL(item.preview);
+          item.preview = newUrl;
+          item.file = new File([blob], item.file.name.replace(/\.[^/.]+$/, '')+'_blurred.webp', {type:'image/webp'});
+          res();
+        }, 'image/webp', 0.85);
+      };
+    });
+  }
+  renderPreview();
+  btn.textContent='✅ Zamazane!'; 
+  setTimeout(()=>{btn.textContent='✨ Auto-rozmyj tablice (1 klik)'; btn.disabled=false;},2000);
+}
+window.clearBlur = function(){
+  alert('Cofnięcie blur - załaduj zdjęcia ponownie z dysku (oryginały nie są modyfikowane na dysku, tylko podgląd).');
+}
+
+// VALIDATION - OPCJA A
+const originalBtnSave = document.getElementById('btnSave')?.onclick;
+document.getElementById('btnSave')?.addEventListener('click', function(e){
+  const r1 = document.getElementById('rodo1')?.checked;
+  const r2 = document.getElementById('rodo2')?.checked;
+  if(!r1 || !r2){
+    e.preventDefault(); e.stopPropagation();
+    alert('Musisz zaznaczyć 2 obowiązkowe zgody RODO (Regulamin i publikacja danych). To wymóg dla ogólnopolskiej giełdy.');
+    document.getElementById('rodoCheckboxes').style.border='2px solid #ff4444';
+    setTimeout(()=>{document.getElementById('rodoCheckboxes').style.border='1px solid #222'},3000);
+    return false;
+  }
+}, true);
+
+// Show blur toolbar when files added
+const origRenderPreview = window.renderPreview;
+const observer = new MutationObserver(()=>{
+  const tb = document.getElementById('plateBlurToolbar');
+  if(tb && imageList && imageList.length>0){ tb.style.display='flex'; } else if(tb){ tb.style.display='none'; }
+});
+document.addEventListener('DOMContentLoaded', ()=>{
+  const preview = document.getElementById('preview');
+  if(preview) observer.observe(preview, {childList:true});
+});
+</script>
 
 </body></html>

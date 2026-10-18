@@ -152,4 +152,45 @@ grid.innerHTML=filtered.map(o=>{
 function resetFilters(){searchLat=null; searchLng=null; ['D','M'].forEach(p=>{['fMarka','fModel','fCenaOd','fCenaDo','fRokOd','fRokDo','fPaliwo','fLok','fRadius'].forEach(k=>{const el=document.getElementById(k+p); if(el) el.value='';});}); loadAds();}
 checkUser(); loadAds();
 </script>
+
+<!-- WROOMER.PL RODO PRO PACK - START -->
+<link rel="stylesheet" href="/rodo-styles.css">
+<script src="/consent.js"></script>
+<script src="/plate-blur.js"></script>
+
+<!-- COOKIE BANNER RODO -->
+<div id="cookieBanner" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:20000;background:#0f0f0f;border-top:2px solid #facc15;padding:16px 14px;flex-direction:column;gap:12px;box-shadow:0 -10px 40px rgba(0,0,0,.8)">
+  <div style="max-width:1200px;margin:0 auto;width:100%;display:flex;flex-direction:column;gap:12px">
+    <div style="display:flex;gap:12px;align-items:flex-start">
+      <div style="font-size:22px">🍪</div>
+      <div style="flex:1">
+        <div style="font-weight:800;font-size:14px;color:#fff">WROOMER.PL używa cookies - Twoja prywatność</div>
+        <div style="font-size:12px;color:#aaa;margin-top:4px;line-height:1.5">Używamy plików cookies niezbędnych do działania strony oraz - za Twoją zgodą - analitycznych (Google Analytics 4) i marketingowych. Możesz zaakceptować wszystkie lub odrzucić nie-niezbędne. Szczegóły w <a href="/polityka-cookies.html" style="color:#facc15">Polityce Cookies</a> i <a href="/polityka-prywatnosci.html" style="color:#facc15">Polityce Prywatności</a>. Tablice rejestracyjne w ogłoszeniach są daną osobową - możesz je zamazać (OPCJA B).</div>
+      </div>
+    </div>
+    <div id="cookieCustom" style="display:none;background:#181818;border:1px solid #222;border-radius:12px;padding:12px;gap:10px">
+      <label style="display:flex;gap:8px;align-items:center;font-size:13px"><input type="checkbox" checked disabled> Niezbędne (zawsze aktywne) - logowanie, sesja</label>
+      <label style="display:flex;gap:8px;align-items:center;font-size:13px"><input type="checkbox" id="cAnalytics"> Analityczne - GA4 G-34L1GMG3GK (anonimowe statystyki)</label>
+      <label style="display:flex;gap:8px;align-items:center;font-size:13px"><input type="checkbox" id="cMarketing"> Marketingowe - reklamy, konwersje</label>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button onclick="acceptAllCookies()" style="background:#facc15;color:#000;border:0;padding:10px 18px;border-radius:20px;font-weight:800;font-size:13px;cursor:pointer">Akceptuję wszystkie</button>
+      <button onclick="rejectAllCookies()" style="background:#222;color:#fff;border:1px solid #333;padding:10px 18px;border-radius:20px;font-weight:800;font-size:13px;cursor:pointer">Odrzuć nie-niezbędne</button>
+      <button onclick="document.getElementById('cookieCustom').style.display = document.getElementById('cookieCustom').style.display==='none' ? 'flex' : 'none'; document.getElementById('cookieCustom').style.flexDirection='column'" style="background:transparent;color:#aaa;border:0;padding:10px;font-size:13px;cursor:pointer">Ustawienia</button>
+      <button onclick="saveCustomCookies()" style="background:#333;color:#fff;border:0;padding:10px 18px;border-radius:20px;font-weight:700;font-size:13px;cursor:pointer;display:none" id="btnSaveCustom">Zapisz wybór</button>
+    </div>
+  </div>
+</div>
+
+<!-- STOPKA RODO -->
+<footer style="background:#000;border-top:2px solid #1a1a1a;padding:24px 14px;margin-top:20px">
+  <div style="max-width:1600px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;font-size:12px">
+    <div><div style="font-weight:900;font-size:16px;color:#fff">WROOMER.PL <span style="color:#facc15">v11 AUTO-PAGES</span></div><div style="color:#888;margin-top:6px">Ogólnopolska darmowa giełda aut. Wystaw za darmo bez limitów.</div><div style="margin-top:12px;color:#555">© 2026 WROOMER.PL - Wszystkie prawa zastrzeżone</div></div>
+    <div><div style="font-weight:800;color:#facc15;margin-bottom:8px">DOKUMENTY RODO</div><a href="/polityka-prywatnosci.html" style="color:#aaa;display:block;margin:4px 0;text-decoration:none">Polityka Prywatności</a><a href="/regulamin.html" style="color:#aaa;display:block;margin:4px 0;text-decoration:none">Regulamin (DSA)</a><a href="/polityka-cookies.html" style="color:#aaa;display:block;margin:4px 0;text-decoration:none">Polityka Cookies</a><a href="/rodo.html" style="color:#aaa;display:block;margin:4px 0;text-decoration:none">RODO / Zgłoszenia / Prawo do bycia zapomnianym</a></div>
+    <div><div style="font-weight:800;color:#facc15;margin-bottom:8px">KONTAKT RODO</div><div style="color:#aaa">RODO: rodo@wroomer.pl</div><div style="color:#aaa">Zgłoszenia DSA: zglos@wroomer.pl (24h)</div><div style="color:#aaa">Kontakt: kontakt@wroomer.pl</div><div style="margin-top:8px"><a href="#" onclick="openCookieSettings(); return false;" style="color:#facc15">Ustawienia cookies</a></div></div>
+    <div><div style="font-weight:800;color:#facc15;margin-bottom:8px">BEZPIECZEŃSTWO TABLIC</div><div style="color:#aaa;line-height:1.5">Tablica rej. to dana osobowa (UODO). Stosujemy OPCJĘ A+B: checkbox oświadczenia + auto-blur tablic w edytorze zdjęć. Możesz zamazać tablice jednym kliknięciem przed publikacją.</div></div>
+  </div>
+</footer>
+<!-- WROOMER RODO PRO PACK - END -->
+
 </body></html>
