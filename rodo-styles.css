@@ -1,0 +1,11 @@
+
+/* RODO PRO */
+#cookieBanner a:hover{text-decoration:underline}
+.rodo-checkbox-group{background:#111;border:1px solid #222;border-radius:12px;padding:12px;margin:10px 12px}
+.rodo-checkbox-group label{display:flex;gap:10px;align-items:flex-start;font-size:12px;line-height:1.5;margin:8px 0;cursor:pointer}
+.rodo-checkbox-group input[type=checkbox]{margin-top:3px;accent-color:#facc15;width:16px;height:16px;flex-shrink:0}
+.rodo-checkbox-group .req{color:#ff4444;font-weight:800}
+.rodo-checkbox-group .opt{color:#888}
+.plate-blur-toolbar{background:#0f172a;border:1px solid #1e40af;border-radius:12px;padding:10px;margin:10px 12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.plate-blur-toolbar button{padding:8px 12px;border-radius:20px;border:0;font-weight:800;font-size:12px;cursor:pointer}
+.btn-blur{background:#facc15;color:#000} .btn-blur.active{background:#22c55e} .btn-unblur{background:#222;color:#fff;border:1px solid #333 !important}

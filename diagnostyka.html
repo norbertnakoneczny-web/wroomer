@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="pl"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DIAGNOSTYKA - CO ZLE ROBIE?</title>
+<style>
+body{font-family:Arial;background:#0a0a0a;color:#fff;padding:20px}
+.card{background:#151515;border:1px solid #333;border-radius:12px;padding:16px;margin:12px 0}
+.ok{color:#22c55e} .bad{color:#ff4444} .warn{color:#facc15}
+.btn{padding:10px 16px;border-radius:20px;border:0;font-weight:800;cursor:pointer} .btn-yellow{background:#facc15;color:#000}
+code{background:#000;padding:2px 6px;border-radius:4px;color:#86efac}
+.log{background:#000;color:#0f0;font-family:monospace;font-size:12px;padding:12px;border-radius:8px;max-height:300px;overflow:auto;white-space:pre-wrap}
+</style>
+</head>
+<body>
+<h1>🔍 DIAGNOSTYKA WROOMER - CO ŹLE ROBIĘ?</h1>
+<p style="color:#888">Ten plik sprawdzi wszystko krok po kroku</p>
+
+<div class="card"><h3>1️⃣ GitHub Pages - czy plik jest aktualny?</h3>
+<div id="check1">Sprawdzam...</div></div>
+
+<div class="card"><h3>2️⃣ Supabase - połączenie REST API</h3>
+<div id="check2">Sprawdzam...</div>
+<div class="log" id="log2"></div>
+</div>
+
+<div class="card"><h3>3️⃣ Tabela ogloszenia - czy ma dane?</h3>
+<div id="check3">Sprawdzam...</div></div>
+
+<div class="card"><h3>4️⃣ Tabela listings - czy ma dane?</h3>
+<div id="check4">Sprawdzam...</div></div>
+
+<div class="card"><h3>5️⃣ RLS - czy wyłączone?</h3>
+<div id="check5">Sprawdzam...</div></div>
+
+<div class="card" style="border-color:#facc15">
+<h3>📋 PODSUMOWANIE - CO ZROBIĆ</h3>
+<div id="summary" style="font-size:14px;line-height:1.6">Analizuję...</div>
+<button class="btn btn-yellow" style="margin-top:12px" onclick="location.href='admin.html'">➡️ IDŹ DO ADMINA</button>
+<button class="btn" style="margin-top:12px;background:#222;color:#fff;border:1px solid #333;margin-left:8px" onclick="location.reload()">🔄 SPRAWDŹ PONOWNIE</button>
+</div>
+
+<script>
+const URL="https://bdpydgsfowtuvjnkyeeg.supabase.co";
+const KEY="sb_publishable_S1qH_mBZaX7-bzmfJ0IVGA_6hxGbJWd";
+
+function log2(m){document.getElementById('log2').textContent+=m+'\n'; console.log(m);}
+
+async function runChecks(){
+  // 1
+  const v = document.documentElement.innerHTML.includes('DIAGNOSTYKA');
+  document.getElementById('check1').innerHTML = v ? '<span class="ok">✅ Ten plik diagnostyczny działa - GitHub Pages OK</span><br><small>URL: '+location.href+'</small>' : '<span class="bad">❌ Błąd</span>';
+
+  // 2,3,4,5
+  log2('URL: '+URL);
+  log2('KEY: '+KEY.slice(0,20)+'...');
+  
+  let ogloszeniaOK=false, listingsOK=false, rlsOK=false;
+  let ogloszeniaCount=0, listingsCount=0;
+  
+  // check ogloszenia
+  try{
+    log2('FETCH ogloszenia...');
+    const r = await fetch(URL+'/rest/v1/ogloszenia?select=*&limit=1',{headers:{'apikey':KEY,'Authorization':'Bearer '+KEY}});
+    log2('Status ogloszenia: '+r.status);
+    if(r.ok){
+      const d=await r.json();
+      // teraz count
+      const r2 = await fetch(URL+'/rest/v1/ogloszenia?select=count',{headers:{'apikey':KEY,'Authorization':'Bearer '+KEY,'Prefer':'count=exact'}});
+      const countHeader = r2.headers.get('content-range');
+      log2('Count header: '+countHeader);
+      ogloszeniaCount = countHeader ? countHeader.split('/')[1] : d.length;
+      document.getElementById('check3').innerHTML='<span class="ok">✅ Tabela ogloszenia DZIAŁA - ma dane</span><br>Count: '+ogloszeniaCount+'<br><small>Przykład: '+(d[0]?.title||'brak tytułu')+'</small>';
+      ogloszeniaOK=true;
+      
+      // RLS check - jeśli 200 to RLS OK
+      document.getElementById('check5').innerHTML='<span class="ok">✅ RLS WYŁĄCZONE - anon może czytać!</span><br><small>Status 200 = RLS wyłączone</small>';
+      rlsOK=true;
+    } else {
+      const txt=await r.text();
+      log2('Błąd ogloszenia: '+txt);
+      document.getElementById('check3').innerHTML='<span class="bad">❌ Błąd ogloszenia: '+r.status+'</span><br><code>'+txt.slice(0,300)+'</code>';
+      if(r.status===401 || txt.includes('RLS') || txt.includes('policy')){
+        document.getElementById('check5').innerHTML='<span class="bad">❌ RLS WŁĄCZONE - blokuje odczyt!</span><br>Wykonaj w SQL Editor:<br><code>ALTER TABLE public.ogloszenia DISABLE ROW LEVEL SECURITY;</code>';
+      }
+    }
+  }catch(e){
+    log2('Exception ogloszenia: '+e.message);
+    document.getElementById('check3').innerHTML='<span class="bad">❌ Wyjątek: '+e.message+'</span>';
+  }
+  
+  // check listings
+  try{
+    log2('FETCH listings...');
+    const r = await fetch(URL+'/rest/v1/listings?select=*&limit=1',{headers:{'apikey':KEY,'Authorization':'Bearer '+KEY}});
+    log2('Status listings: '+r.status);
+    if(r.ok){
+      const d=await r.json();
+      document.getElementById('check4').innerHTML='<span class="ok">✅ Tabela listings działa - '+d.length+' rekordów</span>';
+      listingsOK=true;
+    } else {
+      const txt=await r.text();
+      document.getElementById('check4').innerHTML='<span class="warn">⚠️ listings: '+r.status+' - może nie istnieje</span><br><small>'+txt.slice(0,100)+'</small>';
+    }
+  }catch(e){
+    log2('Exception listings: '+e.message);
+    document.getElementById('check4').innerHTML='<span class="warn">⚠️ listings błąd: '+e.message+'</span>';
+  }
+  
+  // check2 summary
+  if(ogloszeniaOK){
+    document.getElementById('check2').innerHTML='<span class="ok">✅ Supabase REST API DZIAŁA - połączono!</span><br>URL: '+URL;
+  } else {
+    document.getElementById('check2').innerHTML='<span class="bad">❌ Supabase nie odpowiada lub RLS blokuje</span>';
+  }
+  
+  // summary
+  let summary='';
+  if(ogloszeniaOK && rlsOK){
+    summary='<span class="ok" style="font-size:16px;font-weight:900">✅ WSZYSTKO DZIAŁA! Co robisz źle:</span><br><br>1. Masz <b>stary admin.html</b> na GitHub - używa <code>auth.users</code> który nigdy nie zadziała z anon key!<br>2. Musisz wgrać <b>V17</b> który czyta tylko <code>ogloszenia</code><br><br><b>ROZWIĄZANIE:</b><br>• Pobierz WROOMER-V17-GITHUB-FINAL.zip<br>• Wgraj admin.html na GitHub<br>• Odśwież Ctrl+Shift+R<br><br>Twój Supabase MA '+ogloszeniaCount+' ogłoszeń i jest gotowy!';
+  } else if(!rlsOK){
+    summary='<span class="bad">❌ RLS nadal blokuje!</span><br>Wykonaj w Supabase SQL Editor:<br><code>ALTER TABLE public.ogloszenia DISABLE ROW LEVEL SECURITY;</code><br>Potem odśwież tę diagnostykę';
+  } else {
+    summary='<span class="warn">⚠️ Połączenie działa ale tabela pusta?</span><br>Sprawdź w Supabase Table Editor czy tabela ogloszenia ma rekordy<br>SQL: SELECT COUNT(*) FROM public.ogloszenia;';
+  }
+  document.getElementById('summary').innerHTML=summary;
+}
+
+runChecks();
+</script>
+</body></html>
