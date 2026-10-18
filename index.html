@@ -187,62 +187,27 @@ checkUser(); loadAds();
   <div style="max-width:1600px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;font-size:12px">
     <div><div style="font-weight:900;font-size:16px;color:#fff">WROOMER.PL <span style="color:#facc15">v11 AUTO-PAGES</span></div><div style="color:#888;margin-top:6px">Ogólnopolska darmowa giełda aut. Wystaw za darmo bez limitów.</div><div style="margin-top:12px;color:#555">© 2026 WROOMER.PL - Wszystkie prawa zastrzeżone</div></div>
     <div><div style="font-weight:800;color:#facc15;margin-bottom:8px">DOKUMENTY RODO</div><a href="/polityka-prywatnosci.html" style="color:#aaa;display:block;margin:4px 0;text-decoration:none">Polityka Prywatności</a><a href="/regulamin.html" style="color:#aaa;display:block;margin:4px 0;text-decoration:none">Regulamin (DSA)</a><a href="/polityka-cookies.html" style="color:#aaa;display:block;margin:4px 0;text-decoration:none">Polityka Cookies</a><a href="/rodo.html" style="color:#aaa;display:block;margin:4px 0;text-decoration:none">RODO / Zgłoszenia / Prawo do bycia zapomnianym</a></div>
-    <div><div style="font-weight:800;color:#facc15;margin-bottom:8px">KONTAKT RODO</div><div style="color:#aaa">RODO: rodo@wroomer.pl</div><div style="color:#aaa">Zgłoszenia DSA: <a href="mailto:zglos@wroomer.pl?subject=Zgłoszenie%20DSA" class="zglos-link">zglos@wroomer.pl</a> (24h) (24h)</div><div style="color:#aaa">Kontakt: kontakt@wroomer.pl</div><div style="margin-top:8px"><a href="#" onclick="openCookieSettings(); return false;" style="color:#facc15">Ustawienia cookies</a></div></div>
+    <div><div style="font-weight:800;color:#facc15;margin-bottom:8px">KONTAKT RODO</div><div style="color:#aaa">RODO: rodo@wroomer.pl</div><div style="color:#aaa">Zgłoszenia DSA: <a href="mailto:zglos@wroomer.pl?subject=Zgłoszenie%20DSA" style="color:#facc15;text-decoration:underline">zglos@wroomer.pl</a> (24h)</div><div style="color:#aaa">Kontakt: kontakt@wroomer.pl</div><div style="margin-top:8px"><a href="#" onclick="openCookieSettings(); return false;" style="color:#facc15">Ustawienia cookies</a></div></div>
   </div>
 </footer>
 <!-- WROOMER RODO PRO PACK - END -->
 
 
-<!-- ZGLOS@WROOMER.PL LINK - Wyślij zgłoszenie (demo) powiązane z mailem -->
+<!-- FIX: Wyślij zgłoszenie (demo) -> <a href="mailto:zglos@wroomer.pl?subject=Zgłoszenie%20DSA" style="color:#facc15;text-decoration:underline">zglos@wroomer.pl</a> + FIX 404 -->
 <script>
 document.addEventListener('DOMContentLoaded', function(){
-  function linkToZglos(el){
-    el.href = 'mailto:zglos@wroomer.pl?subject=Zgłoszenie%20DSA%20WROOMER.PL&body=Witam,%0A%0AChciałbym zgłosić:%0A%0A[opis]%0A%0ALink do ogłoszenia:%0A';
-    el.target = '_blank';
-    el.addEventListener('click', function(e){
-      // fallback - if mailto blocked, show info
-      setTimeout(function(){
-        if(!document.hidden){ /* mail client may not open */ }
-      }, 500);
-    });
-  }
-  // znajdź wszystkie przyciski/link z tekstem Wyślij zgłoszenie (demo)
-  document.querySelectorAll('button,a').forEach(function(b){
-    var t = (b.textContent||'').toLowerCase();
-    if(t.includes('wyślij zgłoszenie') || t.includes('wyslij zgloszenie') || t.includes('zgłoszenie (demo)') || t.includes('zgloszenie (demo)')){
-      if(b.tagName==='BUTTON'){
-        var a = document.createElement('a');
-        a.textContent = b.textContent;
-        a.className = b.className;
-        a.style.cssText = b.style.cssText + ';display:inline-block;text-decoration:none;text-align:center';
-        b.parentNode.replaceChild(a, b);
-        linkToZglos(a);
-      } else {
-        linkToZglos(b);
-      }
-    }
-  });
-  // dodatkowo jeśli masz formularz demo - przechwyć submit
-  var forms = document.querySelectorAll('form');
-  forms.forEach(function(f){
-    var btn = f.querySelector('button');
-    if(btn && btn.textContent.toLowerCase().includes('demo')){
-      f.addEventListener('submit', function(e){
-        e.preventDefault();
-        var fd = new FormData(f);
-        var body = 'Zgłoszenie z formularza WROOMER.PL\n\n';
-        for(var pair of fd.entries()){ body += pair[0]+': '+pair[1]+'\n'; }
-        window.location.href = 'mailto:zglos@wroomer.pl?subject=Zgłoszenie DSA - WROOMER.PL&body='+encodeURIComponent(body);
+  document.querySelectorAll('a,button').forEach(function(el){
+    var t=(el.textContent||'').toLowerCase();
+    if(t.includes('wyślij zgłoszenie')||t.includes('wyslij zgloszenie')||t.includes('zgloszenie (demo)')){
+      el.setAttribute('href','mailto:<a href="mailto:zglos@wroomer.pl?subject=Zgłoszenie%20DSA" style="color:#facc15;text-decoration:underline">zglos@wroomer.pl</a>?subject=Zgłoszenie%20DSA%20WROOMER.PL&body=Witam,%0AChciałbym%20zgłosić:%0A%0A[opis]%0ALink:%0A');
+      el.style.cursor='pointer';
+      el.addEventListener('click', function(e){
+        if(el.tagName==='BUTTON'){ e.preventDefault(); window.location.href='mailto:<a href="mailto:zglos@wroomer.pl?subject=Zgłoszenie%20DSA" style="color:#facc15;text-decoration:underline">zglos@wroomer.pl</a>?subject=Zgłoszenie%20DSA&body=Zgłoszenie%20z%20WROOMER.PL'; }
       });
     }
   });
 });
-function sendZgloszenieDemo(){
-  window.location.href = 'mailto:zglos@wroomer.pl?subject=Zgłoszenie DSA WROOMER.PL&body=Witam,%0A%0AChciałbym zgłosić:%0A%0A[opis zgłoszenia]%0A%0ALink do treści / ogłoszenia:%0A%0ADziękuję';
-}
+function sendZgloszenieDemo(){ window.location.href='mailto:<a href="mailto:zglos@wroomer.pl?subject=Zgłoszenie%20DSA" style="color:#facc15;text-decoration:underline">zglos@wroomer.pl</a>?subject=Zgłoszenie%20DSA%20WROOMER.PL'; }
 </script>
-<style>
-.zglos-link{color:#facc15 !important;text-decoration:underline !important;font-weight:800}
-</style>
 
 </body></html>
