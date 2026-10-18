@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WROOMER.PL v10 GPS+RADIUS - Ogólnopolska darmowa giełda aut</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#0a0a0a;color:#fff;font-family:Inter,system-ui}
+.header{background:#000;border-bottom:2px solid #FFC107;padding:12px 16px;display:flex;justify-content:space-between;align-items:center}
+.logo{font-weight:900;font-size:20px}.logo .badge{background:#FFC107;color:#000;font-size:11px;padding:3px 8px;border-radius:999px;margin-left:8px}
+.btn{border:0;border-radius:999px;padding:8px 14px;font-weight:800}.btn-yellow{background:#FFC107;color:#000}.btn-dark{background:#222;color:#fff}
+.filters{display:flex;gap:8px;padding:12px 16px;background:#000;border-bottom:1px solid #222}
+.pill{padding:7px 14px;border-radius:999px;background:#1a1a1a;color:#ccc;border:1px solid #222;font-size:13px}.pill.active{background:#FFC107;color:#000;font-weight:800}
+.layout{display:flex;gap:16px;padding:16px}
+.sidebar{width:280px;flex-shrink:0}.sidebar .card{background:#161616;border-radius:12px;padding:12px}
+.label{color:#FFC107;font-size:11px;font-weight:800;margin:6px 0 8px 0}
+select,input{width:100%;background:#0f0f0f;border:1px solid #222;color:#fff;border-radius:8px;padding:9px 10px;font-size:13px;margin-bottom:8px}
+.blue-btn{width:100%;background:#0ea5e9;color:#fff;border:0;border-radius:10px;padding:11px;font-weight:800}
+.grid{flex:1;display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.car{background:#161616;border-radius:12px;overflow:hidden;border:1px solid #222}
+.car img{width:100%;height:140px;object-fit:cover;background:#222;display:block}
+.car-body{padding:10px}.car-title{font-size:13px}.car-price{color:#FFC107;font-weight:900;margin-top:8px}.car-meta{color:#888;font-size:11px}
+.poradnik{padding:28px 16px;background:#000;border-top:2px solid #1a1a1a}
+.poradnik h2{margin:0 0 18px 0;font-size:20px;font-weight:900}
+.poradnik-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.blog-card{background:#161616;border:1px solid #222;border-radius:12px;padding:14px;position:relative;min-height:190px;display:flex;flex-direction:column}
+.blog-card h3{margin:0;font-size:14px;color:#FFC107}.blog-card p{margin:8px 0 0 0;color:#aaa;font-size:12.5px;flex:1}
+.badge-top{position:absolute;top:-8px;right:10px;background:#ef4444;color:#fff;font-size:10px;font-weight:800;padding:3px 8px;border-radius:999px}
+.blog-btn{margin-top:12px;background:#FFC107;color:#000;border:0;border-radius:999px;padding:7px 12px;font-weight:800;font-size:12px;text-decoration:none;display:inline-block}
+.faq{margin-top:28px;background:#0f0f0f;border:1px solid #1a1a1a;border-radius:12px;padding:14px}
+.faq-item{background:#161616;border:1px solid #222;border-radius:8px;margin-bottom:8px}
+.faq-item summary{padding:10px 12px;color:#FFC107;font-weight:700;cursor:pointer}
+.footer{border-top:1px solid #1a1a1a;background:#000;padding:10px 16px;display:flex;justify-content:space-between;font-size:11px;color:#777;flex-wrap:wrap}
+.footer a{color:#777;text-decoration:none;margin-right:10px}.footer a.yellow{color:#FFC107;font-weight:800;text-decoration:underline}
+@media(max-width:1200px){.grid,.poradnik-grid{grid-template-columns:repeat(2,1fr)}.layout{flex-direction:column}.sidebar{width:100%}}
+</style>
+</head>
+<body>
+<div class="header"><div class="logo">WROOMER.PL <span class="badge">v10 GPS+RADIUS</span></div><div><button class="btn btn-dark">Zaloguj</button> <button class="btn btn-yellow">+ Dodaj</button></div></div>
+<div class="filters"><div class="pill active">Wszystkie</div><div class="pill">Fiat</div><div class="pill">Volvo</div><div class="pill">Audi</div><div class="pill">BMW</div></div>
+
+<div class="layout">
+  <aside class="sidebar"><div class="card">
+    <button class="blue-btn">📍 Zlokalizuj mnie</button>
+    <div class="label">PROMIEŃ (KM)</div><select><option>Dowolny</option></select>
+    <div class="label">MARKA / MODELE (19/83+Inne)</div><select><option>Wszystkie marki</option></select><select><option>Wszystkie modele</option></select>
+    <div class="label">CENA</div><input placeholder="OD"><input placeholder="DO">
+    <div class="label">ROK</div><input placeholder="OD"><input placeholder="DO">
+    <div class="label">PALIWO</div><select><option>Wszystkie</option></select>
+    <div class="label">LOKALIZACJA (tekst)</div><input value="Gorzyce">
+    <div class="label">SORT</div><select><option>Najnowsze</option></select>
+    <button class="btn btn-yellow" style="width:100%;margin-top:12px;padding:12px">Szukaj</button>
+  </div></aside>
+
+  <!-- TWOJE PRAWDZIWE OGŁOSZENIA - podmień na swój dynamiczny JS, tu jest placeholder z Twoich screenów -->
+  <div class="grid" id="ogloszenia">
+    <div class="car"><img src="https://picsum.photos/seed/bmwx1real/400/300"><div class="car-body"><div class="car-title">BMW X1 2013</div><div class="car-price">32900 PLN</div><div class="car-meta">Gorzyce • 2013 GPS</div></div></div>
+    <div class="car"><img src="https://picsum.photos/seed/bmw218real/400/300"><div class="car-body"><div class="car-title">BMW 218 2014</div><div class="car-price">38800 PLN</div><div class="car-meta">Gorzyce • 2014 GPS</div></div></div>
+    <div class="car"><img src="https://picsum.photos/seed/opel2021/400/300"><div class="car-body"><div class="car-title">Opel Insignia 2021 kombi</div><div class="car-price">62500 PLN</div><div class="car-meta">Gorzyce • 2021 GPS</div></div></div>
+    <div class="car"><img src="https://picsum.photos/seed/bmw5old/400/300"><div class="car-body"><div class="car-title">2005 BMW Series 5</div><div class="car-price">17500 PLN</div><div class="car-meta">Gorzyce • 2005 GPS</div></div></div>
+    <div class="car"><img src="https://picsum.photos/seed/bmw5b/400/300"><div class="car-body"><div class="car-title">2005 BMW Series 5</div><div class="car-price">17500 PLN</div><div class="car-meta">Gorzyce • 2005 GPS</div></div></div>
+    <div class="car"><img src="https://picsum.photos/seed/volvo50/400/300"><div class="car-body"><div class="car-title">Volvo V50</div><div class="car-price">8500 PLN</div><div class="car-meta">Kłonowa 3 • 2006 GPS</div></div></div>
+    <div class="car"><img src="https://picsum.photos/seed/peugeot508/400/300"><div class="car-body"><div class="car-title">Peugeot 508 2.0 hdi</div><div class="car-price">3500 PLN</div><div class="car-meta">Gorzyce • 2006 GPS</div></div></div>
+    <div class="car"><img src="https://picsum.photos/seed/fiatstilo/400/300"><div class="car-body"><div class="car-title">Fiat Stilo 1.4 LPG 2006</div><div class="car-price">4000 PLN</div><div class="car-meta">Gorzyce • 2006 GPS</div></div></div>
+  </div>
+</div>
+
+<div class="poradnik">
+  <h2>📚 PORADNIK MOTORYZACYJNY WROOMER.PL</h2>
+  <div class="poradnik-grid">
+    <div class="blog-card"><span class="badge-top">🔥 18 000/mies</span><h3>Umowa kupna sprzedaży samochodu 2026 WZÓR PDF</h3><p>Pobierz darmowy wzór umowy. Co musi zawierać żeby nie stracić 2000 zł? PESEL, VIN, przebieg - checklista.</p><a class="blog-btn" href="WROOMER-BLOG-FIX/blog/umowa-kupna-sprzedazy-samochodu-wzor-pdf.html">Czytaj + pobierz PDF →</a></div>
+    <div class="blog-card"><span class="badge-top">🔥 5 400/mies</span><h3>Ile kosztuje przerejestrowanie auta 2026?</h3><p>180,50 zł czy 81 zł? Tabela opłat, dokumenty, terminy 30 dni. Urząd Wodzisław, Gorzyce.</p><a class="blog-btn" href="WROOMER-BLOG-FIX/blog/ile-kosztuje-przerejestrowanie-auta-2026.html">Sprawdź koszty →</a></div>
+    <div class="blog-card"><span class="badge-top">🔥 2 400/mies</span><h3>Jak szybko sprzedać samochód w 24h? 7 trików</h3><p>70% aut sprzedaje się przez cenę i GPS. Jak wystawić na Wroomer.pl żeby dzwonili w 2h?</p><a class="blog-btn" href="WROOMER-BLOG-FIX/blog/jak-szybko-sprzedac-samochod-24h.html">Poznaj 7 trików →</a></div>
+    <div class="blog-card"><span class="badge-top">🔥 3 200/mies</span><h3>OC na miesiąc - czy warto? Krótkoterminowe</h3><p>Sprzedajesz auto a OC kończy się za 10 dni? Nie przedłużaj na rok. OC 30 dni za 120 zł.</p><a class="blog-btn" href="WROOMER-BLOG-FIX/blog/oc-na-miesiac-krotkoterminowe.html">Czytaj →</a></div>
+    <div class="blog-card"><h3>Auta do 20 tys dla rodziny - TOP 10 2026</h3><p>Volvo V50, Octavia, Toyota Corolla - ranking z Gorzyc.</p><a class="blog-btn" href="WROOMER-BLOG-FIX/blog/auta-do-20-tys-rodzina-top-10-2026.html">Zobacz TOP 10 →</a></div>
+    <div class="blog-card"><h3>Jak nie kupić auta z cofniętym licznikiem?</h3><p>80% aut z importu ma cofnięty licznik. 5 sposobów: pedały, kierownica, CEPIK.</p><a class="blog-btn" href="WROOMER-BLOG-FIX/blog/jak-nie-kupic-auta-cofniety-licznik.html">Sprawdź →</a></div>
+    <div class="blog-card"><h3>Rejestracja auta z Niemiec - krok po kroku 2026</h3><p>Akcyza 3,1%, tłumaczenie 150 zł, przegląd 99 zł. Ile kosztuje sprowadzenie?</p><a class="blog-btn" href="WROOMER-BLOG-FIX/blog/rejestracja-auta-z-niemiec-krok-po-kroku.html">Krok po kroku →</a></div>
+    <div class="blog-card"><h3>Najmniejsze spalanie - auta benzynowe TOP 7</h3><p>Paliwo 7 zł/l. Fiat Panda 4.5l/100km, Yaris 5.0l. Ranking oszczędnych.</p><a class="blog-btn" href="WROOMER-BLOG-FIX/blog/najmniejsze-spalanie-benzyna-top-7.html">Ranking →</a></div>
+  </div>
+  <div class="faq">
+    <h3>❓ Najczęstsze pytania - FAQ (pozycjonuje w Google)</h3>
+    <details class="faq-item"><summary>▶ Jak wystawić auto za darmo na Wroomer.pl?</summary><div>Wejdź i kliknij + Dodaj. Bez rejestracji.</div></details>
+    <details class="faq-item"><summary>▶ Czy Wroomer.pl jest darmowy?</summary><div>Tak, 100% darmowy.</div></details>
+    <details class="faq-item"><summary>▶ Jak działa szukanie w promieniu GPS?</summary><div>Kliknij Zlokalizuj mnie.</div></details>
+    <details class="faq-item"><summary>▶ Gdzie jest Wroomer.pl?</summary><div>Gorzyce, Śląskie.</div></details>
+  </div>
+</div>
+<div class="footer"><div>© 2026 Wroomer.pl <a href="#">Polityka Prywatności</a> <a href="#">Regulamin</a> <a class="yellow" href="#">Ustawienia Cookies</a> <a class="yellow" href="#">Ustawienia GPS</a></div><div>Administrator: WROOMER.PL • kontakt@wroomer.pl • RODO: rodo@wroomer.pl</div></div>
+</body>
+</html>
