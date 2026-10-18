@@ -1,0 +1,11 @@
+PROBLEM: Stara strona się wgrywa bo masz 2 index.html i Vercel bierze root (stary 14 min).
+
+ROZWIAZANIE:
+1. Na GitHub wejdź w plik /index.html (root) -> kliknij ikonę kosza DELETE -> Commit
+2. Teraz masz tylko /wroomer/index.html - to jest nowy z blogami
+3. Wgraj na nowo ten CLEAN zip - nadpisz wszystko
+4. Po tym Vercel weźmie /index.html który jest identyczny z /wroomer/index.html - nowy z małymi blogami
+
+Albo prościej: wgraj ten ZIP i zaznacz "Replace" - nadpisze root index.html nowym.
+
+Po deployu: Ctrl+Shift+R na Vercelu.
