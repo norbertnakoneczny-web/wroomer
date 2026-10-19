@@ -1,11 +1,229 @@
-<!DOCTYPE html><html lang="pl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Jak nie kupić auta z cofniętym licznikiem - 5 sposobów | Wroomer.pl Poradnik</title>
-<style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,Arial;background:#080808;color:#fff;padding:20px;max-width:800px;margin:0 auto}
-a{color:#facc15} .back{display:inline-block;background:#181818;border:1px solid #222;border-radius:8px;padding:8px 14px;margin-bottom:16px;text-decoration:none;color:#fff}
-h1{color:#facc15;font-size:24px;margin-bottom:12px} h2{font-size:16px;margin:14px 0 6px;color:#fff} p,li{font-size:14px;line-height:1.6;color:#ccc;margin-bottom:8px} ul,ol{margin-left:18px}</style>
-</head><body>
-<a class="back" href="/">← Wróć na Wroomer.pl</a>
-<h1>5 sposobów jak poznać cofnięty licznik</h1><ol><li>Historia VIN na historiapojazdu.gov.pl</li><li>Kierownica, pedały, fotel</li><li>Książka serwisowa - czy pieczątki nie ksero</li><li>Przebieg vs rok - 15k/rok średnio</li></ol>
-<hr style="margin:20px 0;border:0;border-top:1px solid #222">
-<p style="font-size:12px;color:#666">© Wroomer.pl | Artykuł poradnikowy generujący ruch - tag: VIN | <a href="/">Szukaj aut w promieniu GPS</a></p>
-</body></html>
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Jak nie kupić auta z cofniętym licznikiem - 5 sposobów | WROOMER.PL</title>
+<meta name="description" content="Jak nie kupić auta z cofniętym licznikiem? Sprawdź 5 skutecznych sposobów: VIN, CEPiK, carVertical, stan wnętrza i dokumenty. Koszty, kary w 2026 i triki handlarzy. Poradnik WROOMER.PL">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
+<meta property="og:title" content="Jak nie kupić auta z cofniętym licznikiem - 5 sposobów">
+<meta property="og:description" content="5 trików handlarzy i jak je wykryć w 10 minut. VIN, CEPiK, raporty, stan wnętrza i prawo w 2026.">
+<meta property="og:type" content="article">
+<style>
+:root{--bg:#080808;--card:#181818;--card2:#121212;--yellow:#facc15;--text:#fff;--muted:#9ca3af;--border:#232323}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--yellow);text-decoration:none}
+header{position:sticky;top:0;z-index:50;background:#000;border-bottom:1px solid var(--yellow);display:flex;justify-content:space-between;align-items:center;padding:12px 16px}
+.logo{font-weight:900;font-size:20px;letter-spacing:-0.5px} .logo span{color:var(--yellow)} .logo-badge{background:var(--yellow);color:#000;font-size:10px;font-weight:900;padding:3px 8px;border-radius:20px;margin-left:8px;vertical-align:middle}
+.btn-back{border:1px solid #333;background:#181818;color:#fff;padding:8px 14px;border-radius:20px;font-size:12px;font-weight:800}
+.btn-back:hover{border-color:var(--yellow)}
+.container{max-width:860px;margin:0 auto;padding:18px 16px 0}
+.breadcrumb{font-size:12px;color:#666;margin:10px 0 18px} .breadcrumb a{color:#aaa}
+.hero{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden}
+.hero-img{height:280px;background:linear-gradient(120deg,#111,#222);position:relative}
+.hero-img img{width:100%;height:100%;object-fit:cover;opacity:0.85}
+.hero-badge{position:absolute;top:14px;left:14px;background:var(--yellow);color:#000;font-weight:900;font-size:11px;padding:6px 12px;border-radius:20px}
+.hero-body{padding:22px}
+.h1{font-size:32px;font-weight:900;line-height:1.1;letter-spacing:-1px}
+@media(max-width:600px){.h1{font-size:26px}}
+.meta{display:flex;gap:12px;flex-wrap:wrap;margin-top:12px;font-size:12px;color:var(--muted)}
+.meta span{background:#121212;border:1px solid #222;padding:4px 10px;border-radius:20px}
+.tldr{background:#111;border:1px dashed #333;border-radius:12px;padding:14px;margin-top:16px;font-size:13px;color:#ccc}
+.tldr b{color:var(--yellow)}
+.content{margin-top:18px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;margin:18px 0}
+h2{font-size:22px;font-weight:900;margin:0 0 10px;letter-spacing:-0.5px}
+h2 span{color:var(--yellow)}
+h3{font-size:16px;font-weight:800;margin:14px 0 8px;color:#fff}
+p{color:#d1d5db;font-size:15px;margin:8px 0}
+ul,ol{padding-left:20px;color:#cbd5e1;font-size:14px} li{margin:6px 0}
+.check li::marker{content:""}
+.check{list-style:none;padding:0} .check li{padding-left:26px;position:relative} .check li::before{content:"✓";position:absolute;left:0;color:var(--yellow);font-weight:900}
+.table-wrap{overflow:auto;border-radius:10px;border:1px solid #222;margin:12px 0}
+table{width:100%;border-collapse:collapse;font-size:13px} th{background:#111;color:var(--yellow);text-align:left;padding:10px} td{padding:10px;border-top:1px solid #222;color:#ccc}
+.alert{background:#1a1800;border:1px solid #665d00;border-radius:10px;padding:12px;font-size:13px;color:#fde68a;margin:12px 0}
+.kpi{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:14px 0}
+.kpi>div{background:#121212;border:1px solid #222;border-radius:10px;padding:12px;text-align:center}
+.kpi b{display:block;font-size:20px;color:var(--yellow)} .kpi span{font-size:11px;color:#888}
+.tip{background:linear-gradient(90deg,#facc15 0%,#fde047 100%);color:#000;border-radius:12px;padding:14px;font-size:13px;font-weight:600;margin:14px 0}
+.faq dt{font-weight:800;color:#fff;margin-top:14px;font-size:14px} .faq dd{color:#9ca3af;font-size:13px;margin-top:4px}
+.cta{background:radial-gradient(120% 120% at 0% 0%,#facc15 0%,#eab308 100%);border-radius:16px;padding:22px;text-align:center;margin:28px 0;color:#000}
+.cta a{display:inline-block;background:#000;color:var(--yellow);padding:12px 20px;border-radius:30px;font-weight:900;margin-top:12px;font-size:14px}
+footer{background:#000;border-top:2px solid #1a1a1a;padding:24px 14px;margin-top:30px}
+.footer-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;font-size:12px}
+.f-title{font-weight:800;color:var(--yellow);margin-bottom:8px}
+.f-link{color:#aaa;display:block;margin:4px 0}
+</style>
+<script type="application/ld+json">
+{
+"@context":"https://schema.org","@type":"BlogPosting",
+"headline":"Jak nie kupić auta z cofniętym licznikiem - 5 sposobów",
+"description":"5 trików handlarzy i jak sprawdzić auto przed zakupem w 2026",
+"author":{"@type":"Organization","name":"WROOMER.PL"},
+"datePublished":"2026-05-10",
+"keywords":"jak nie kupić auta z cofniętym licznikiem, cofnięty licznik, VIN, CEPiK, carVertical"
+}
+</script>
+</head>
+<body>
+<header>
+<div class="logo">WROOMER.PL <span>v11 AUTO-PAGES</span><span class="logo-badge">BLOG PRO</span></div>
+<a class="btn-back" href="/blog/">← /blog/</a>
+</header>
+
+<div class="container">
+<div class="breadcrumb"><a href="/">Strona główna</a> / <a href="/blog/">Blog</a> / Jak nie kupić auta z cofniętym licznikiem</div>
+
+<div class="hero">
+<div class="hero-img">
+<img src="https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?w=900" alt="licznik samochodowy przebieg">
+<div class="hero-badge">MUSISZ PRZECZYTAĆ • 7 MIN</div>
+</div>
+<div class="hero-body">
+<h1 class="h1">Jak nie kupić auta z cofniętym licznikiem – 5 sposobów [2026]</h1>
+<div class="meta">
+<span>📅 Aktualizacja: maj 2026</span><span>⏱ 7 min czytania</span><span>🛡 Prawo, CEPiK 2.0</span><span>💰 Oszczędność 15 000 zł</span>
+</div>
+<div class="tldr"><b>TL;DR:</b> W Polsce 32% aut używanych ma cofnięty licznik wg. UOKiK 2024. Średnie cofnięcie to 75 000 km. Sprawdź: 1) Historia przebiegu w CEPiK + historiapojazdu.gov.pl 2) VIN + CarVertical/AutoDNA 3) Zużycie wnętrza (kierownica, pedały, fotel) 4) Książka + faktury serwisowe 5) Test komputerem OBD. Poniżej konkrety, koszty i 5 trików handlarzy.</div>
+</div>
+</div>
+
+<div class="content">
+
+<div class="card">
+<h2>1. <span>CEPiK i historia pojazdu</span> – darmowe 30 sekund, które ratuje budżet</h2>
+<p>Od 2020 roku każdy stan licznika z przeglądu rocznego trafia do CEPiK. Od 2024 diagnosta ma obowiązek zdjęciowego potwierdzenia licznika. Jeśli widzisz spadek przebiegu rok do roku – to przestępstwo z art. 306a KK (3-5 lat więzienia).</p>
+<h3>Jak sprawdzić:</h3>
+<ul class="check">
+<li><b>historiapojazdu.gov.pl</b> – wpisz VIN + nr rej. + data pierwszej rejestracji. Dostajesz oś czasu przebiegu od 2014.</li>
+<li><b>mObywatel → Moje pojazdy</b> – sprawdzisz od 2023 każdy odczyt przy OC i przeglądzie.</li>
+<li><b>Bezpłatny Raport WROOMER</b> – porównujemy przebieg z ogłoszeniami historycznymi.</li>
+</ul>
+<div class="kpi">
+<div><b>0 zł</b><span>historiapojazdu.gov.pl</span></div>
+<div><b>65 000 km</b><span>średnie cofnięcie w Passacie B8 TDI</span></div>
+<div><b>3 lata</b><span>kara dla handlarza</span></div>
+</div>
+<p><b>Przykład:</b> BMW 520d F10 2012 – w ogłoszeniu 195 000 km, a w CEPiK w 2022 już 283 000 km. Różnica 88 tys. Cena do negocjacji spada o ~7 000 zł.</p>
+</div>
+
+<div class="card">
+<h2>2. <span>VIN i raporty płatne</span> – CarVertical vs AutoDNA 2026</h2>
+<p>CEPiK nie widzi historii zagranicznej. 70% aut sprowadzanych trafia z Niemiec, Belgii, Holandii gdzie nie ma centralnego rejestru przebiegu, ale przebieg wpada w łańcuszek serwisowy.</p>
+<div class="table-wrap">
+<table>
+<tr><th>Raport</th><th>Cena 2026</th><th>Co wykrywa</th><th>Skuteczność</th></tr>
+<tr><td>CEPiK</td><td>0 zł</td><td>tylko PL od 2014</td><td>~40%</td></tr>
+<tr><td>CarVertical</td><td>89-129 zł</td><td>UE, USA, przebiegi serwisowe, szkody, foto</td><td>~85%</td></tr>
+<tr><td>AutoDNA</td><td>49-89 zł</td><td>PL + DE, archiwa aukcji, rejestr kradzieży</td><td>~72%</td></tr>
+<tr><td>ASO + OBD</td><td>150-300 zł</td><td>moduły: ECU, ABS, skrzynia</td><td>~95%</td></tr>
+</table>
+</div>
+<div class="alert">⚠️ Trik: handlarz wymienia licznik zamiast cofać. W raporcie VIN nadal 220 000 km, ale na zegarach 160 000 km. Sprawdź datę produkcji licznika w ISTA / VCDS – nie może być nowsza niż auto.</div>
+<h3>Co sprawdzić w raporcie:</h3>
+<ul>
+<li>Oś przebiegu vs odczyty – skoki >20k/rok w dieslu normalne, spadek = alarm.</li>
+<li>Zdjęcia z aukcji – np. Copart w USA pokazuje przebieg na foto.</li>
+<li>Liczba właścicieli – 5 właścicieli w 3 lata + 120k = taksówka/uber.</li>
+</ul>
+</div>
+
+<div class="card">
+<h2>3. <span>Stan wnętrza</span> – fizyka nie kłamie</h2>
+<p>Kierownica, pedały i fotel kierowcy zużywają się proporcjonalnie do km. Przy 100k km fabryczna kierownica skórzana ma przetarcia na godz. 10 i 2, przy 200k + jest gładka jak plastik.</p>
+<h3>Checklista 10 minut:</h3>
+<ul class="check">
+<li><b>Kierownica:</b> logo wypolerowane? Przy 80k jeszcze matowe. Koszt obszycia 350 zł – handlarze to robią.</li>
+<li><b>Pedały:</b> guma hamulca – przy 150k ma wyraźny dołek. Nowa nakładka 29 zł – sprawdź od spodu ślady.</li>
+<li><b>Fotel boczny:</b> siadane boczki – zapadnięte przy 180k w Passacie, 120k w Fiacie. Przeszycia?</li>
+<li><b>Gałka biegów + przyciski start:</b> wytarty nadruk przy >130k.</li>
+<li><b>Naklejki na progach i pasy:</b> data produkcji pasów = rok auta. Nowsze = po wypadku.</li>
+</ul>
+<div class="tip">💡 Przykład z komisu: Audi A4 B9 2017, 129 000 km na zegarach. Kierownica nowa (rachunek 2025), pedały nowe, ale fotel kierowcy przetarty do gąbki. Po VIN: 279 000 km ostatni serwis 2023 w DE. Oszczędność klienta: 18 000 zł + dwumasa.</div>
+</div>
+
+<div class="card">
+<h2>4. <span>Dokumenty i książka serwisowa</span> – gdzie fałszerze się sypią</h2>
+<p>Od 2024 fałszowanie książki serwisowej to też art. 270 KK. Ale 90% „książek” to wydruk z Allegro za 25 zł.</p>
+<ul>
+<li><b>Pieczątki:</b> sprawdź NIP warsztatu, zadzwoń. Oryginalne faktury mają nr części – np. olej 5W30 LL 5L faktura 2022 489 zł, nie 19 zł.</li>
+<li><b>VIN na fakturach:</b> musi się zgadzać, często handlarz kopiuje jeden VIN na różne faktury.</li>
+<li><b>Rozrząd:</b> przy 150-180k w 2.0 TDI CR wymiana paska. Jeśli auto ma 110k a pasek już wymieniony – było 250k.</li>
+<li><b>Tabliczka znamionowa + naklejka serwisowa olejowa</b> pod maską – ma przebieg i datę następnej wymiany, często zapominana przez handlarza.</li>
+</ul>
+<div class="kpi">
+<div><b>25-50 zł</b><span>koszt fałszywej książki</span></div>
+<div><b>200-400 zł</b><span>weryfikacja w ASO</span></div>
+<div><b>100%</b><span>faktur z VAT da się zweryfikować</span></div>
+</div>
+</div>
+
+<div class="card">
+<h2>5. <span>Diagnostyka komputerowa OBD + zgłoszenie</span></h2>
+<p>Licznik można cofnąć za 150-300 zł w 10 minut. Ale przebieg zapisany jest w 5-10 modułach.</p>
+<h3>Jak:</h3>
+<ol>
+<li>Podłącz ELM327 + Carista / OBDeleven / VCDS. Sprawdź: ECU silnika, ABS, skrzynia automat, moduł komfortu, licznik – wartości muszą być +/- 2%.</li>
+<li>W BMW F-series: CAS + DME + EGS. W VAG: 17-Instrument + 01-Engine + 03-ABS.</li>
+<li>Test serwisowy 1h w ASO 150-350 zł daje protokół – podstawa do odstąpienia od umowy.</li>
+</ol>
+<p><b>Jak zgłosić przestępstwo (2026):</b></p>
+<ul>
+<li>Zachowaj umowę (art. 556 KC wada prawna), zrób protokół z diagnostyki.</li>
+<li>Zgłoszenie na policję: art. 306a KK „zmiana wskazań drogomierza”. Policja zabezpiecza auto, biegły.</li>
+<li>Wniosek do UOKiK – baza cofniętych liczników, kara dla firmy do 5% obrotu.</li>
+<li>Odstąpienie od umowy do 14 dni jeśli handlarz – rękojmia 1 rok, zwrot kasy + koszty rejestracji 256,50 zł.</li>
+</ul>
+</div>
+
+<div class="card">
+<h2>5 trików <span>handlarzy 2026</span> – jak Cię łapią</h2>
+<div class="table-wrap">
+<table>
+<tr><th>#</th><th>Trik</th><th>Jak wykryć</th></tr>
+<tr><td>1</td><td>Wymiana całego licznika na używany 120k</td><td>Data produkcji licznika > auta, inny nr seryjny niż w raporcie</td></tr>
+<tr><td>2</td><td>„Anglik” – przelicznik mil jako km (120k mil = 193k km, sprzedają jako 120k km)</td><td>Jednostki na zegarach, historia MOT UK</td></tr>
+<tr><td>3</td><td>Nakładki na pedały + obszycie kierownicy 2 dni przed sprzedażą</td><td>Nowa skóra pachnie klejem, nitka inna niż OEM</td></tr>
+<tr><td>4</td><td>Brak przeglądów 2 lata – tłumaczenie „stało w garażu”</td><td>Korozja tarcz, data DOT opon 2019, przebieg 80k niemożliwy</td></tr>
+<tr><td>5</td><td>Faktura VAT marża – brak odpowiedzialności „stan licznika nieznany”</td><td>Dopisek nieważny – art. 306a ściga mimo zapisu</td></tr>
+</table>
+</div>
+<div class="alert">🚨 W 2026 diagnosta zgłasza automatycznie podejrzane cofnięcie do UFG. Jeśli kupiłeś takie auto, masz darmowy dowód w CEPiK.</div>
+</div>
+
+<div class="card faq">
+<h2>FAQ – <span>cofnięty licznik</span></h2>
+<dl>
+<dt>1. Ile kosztuje sprawdzenie VIN w 2026?</dt>
+<dd>0 zł na historiapojazdu.gov.pl (przebiegi PL). 49-129 zł raport pełny CarVertical/AutoDNA. ASO 150-350 zł z protokołem, warto dla aut >30 000 zł jak Audi A6, BMW 5, Passat, Insignia.</dd>
+<dt>2. Czy mogę zwrócić auto z cofniętym licznikiem?</dt>
+<dd>Tak. Od firmy masz 12 miesięcy rękojmi. Cofnięcie >1% to wada istotna. Możesz żądać obniżenia ceny o 30-50% lub odstąpienia i zwrotu całej kwoty + koszty rejestracji, OC i diagnostyki. Zgłoszenie na policję art. 306a.</dd>
+<dt>3. Jaki przebieg jest podejrzany?</dt>
+<dd>W dieslu 2.0 TDI poniżej 20 000 km/rok przy wieku 5+ lat (np. 2018 i 80k) – 95% cofnięte. W benzynie miejskiej 1.2-1.4 średnia 10-12k rocznie. Sprawdź opony: data DOT. Opona 4 letnia i 30k km? Niemożliwe.</dd>
+<dt>4. Czy WROOMER.PL weryfikuje przebieg?</dt>
+<dd>Tak. Każde ogłoszenie z tagiem GPS ma weryfikację przebiegu z CEPiK gdy VIN podany. Promujemy ogłoszenia prywatne z historią faktur. Filtruj auta z raportem i unikaj „okazji” 30% poniżej rynku.</dd>
+</dl>
+</div>
+
+<div class="cta">
+<h2 style="color:#000">Nie daj się naciągnąć na 15 000 zł</h2>
+<p style="color:#000;font-size:14px;margin-top:6px">Sprawdź auta w pobliżu, porównaj przebiegi i zadzwoń z raportem VIN w ręku.</p>
+<a href="/">Szukaj aut w promieniu GPS na WROOMER.PL →</a>
+<div style="margin-top:10px"><a href="/blog/" style="background:transparent;border:1px solid #000;color:#000;font-size:12px">← Wróć do Bloga</a></div>
+</div>
+
+</div>
+</div>
+
+<footer>
+<div class="footer-inner">
+<div><div style="font-weight:900;font-size:16px;color:#fff">WROOMER.PL <span style="color:var(--yellow)">v11 AUTO-PAGES</span></div><div style="color:#888;margin-top:6px">Ogólnopolska darmowa giełda aut. Wystaw za darmo bez limitów. Promień GPS, weryfikacja VIN.</div><div style="margin-top:12px;color:#555">© 2026 WROOMER.PL - Wszystkie prawa zastrzeżone</div></div>
+<div><div class="f-title">DOKUMENTY RODO</div><a class="f-link" href="/polityka-prywatnosci.html">Polityka Prywatności</a><a class="f-link" href="/regulamin.html">Regulamin (DSA)</a><a class="f-link" href="/polityka-cookies.html">Polityka Cookies</a><a class="f-link" href="/rodo.html">RODO / Zgłoszenia / Prawo do bycia zapomnianym</a></div>
+<div><div class="f-title">KONTAKT RODO</div><div style="color:#aaa">RODO: rodo@wroomer.pl</div><div style="color:#aaa">Zgłoszenia DSA: zglos@wroomer.pl (24h)</div><div style="color:#aaa">Kontakt: kontakt@wroomer.pl</div><div style="margin-top:8px"><a href="#" onclick="openCookieSettings&&openCookieSettings(); return false;" style="color:var(--yellow)">Ustawienia cookies</a></div></div>
+</div>
+</footer>
+
+</body>
+</html>
