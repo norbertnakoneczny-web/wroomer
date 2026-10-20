@@ -46,19 +46,19 @@ h1{color:#fff;line-height:1.2;font-size:26px} h1 span{color:#facc15}
 .qr-box{
   background:#fff;
   border-radius:14px;
-  padding:12px 12px 10px 12px;
+  padding:14px 14px 12px 14px;
   text-align:center;
-  min-width:220px;
-  max-width:240px;
+  min-width:240px;
+  max-width:260px;
   display:flex;
   flex-direction:column;
   align-items:center;
   justify-content:center;
   flex-shrink:0;
-  box-shadow:0 4px 20px rgba(0,0,0,0.4);
+  box-shadow:0 4px 24px rgba(0,0,0,0.5);
 }
-.qr-box img{width:200px;height:200px;display:block;margin:0 auto}
-.qr-box p{color:#000;font-weight:800;margin:8px 0 0 0;font-size:11px;line-height:1.2;text-align:center}
+.qr-box img{width:220px;height:220px;display:block;margin:0 auto}
+.qr-box p{color:#000;font-weight:800;margin:10px 0 0 0;font-size:12px;line-height:1.2;text-align:center}
 @media(max-width:700px){
   .yellow-box{flex-direction:column;align-items:stretch}
   .left-actions{justify-content:center}
@@ -68,10 +68,10 @@ h1{color:#fff;line-height:1.2;font-size:26px} h1 span{color:#facc15}
 <script>
 function goBack(e){
   e.preventDefault();
-  if(document.referrer && history.length>1){
+  if (history.length > 1) {
     history.back();
   } else {
-    window.location.href='/';
+    window.location.href = '/';
   }
 }
 </script>
@@ -80,14 +80,14 @@ function goBack(e){
 <div class="top">
   <div class="logo">WROOMER.PL<span>BETA</span></div>
   <div style="display:flex;gap:12px;align-items:center">
-    <a href="/" onclick="goBack(event)" style="color:#aaa;text-decoration:none;font-size:14px">← Blog</a>
+    <a href="/" onclick="goBack(event)" style="color:#aaa;text-decoration:none;font-size:14px;border:1px solid #444;padding:6px 12px;border-radius:8px">← Blog</a>
     <a href="/" style="background:#facc15;color:#000;padding:8px 14px;border-radius:999px;font-weight:800;text-decoration:none">Szukaj aut</a>
   </div>
 </div>
 <div class="wrap">
 <div class="card">
 <h1>Umowa kupna sprzedaży samochodu <span>wzór 2026 PDF</span> - gotowiec do pobrania</h1>
-<p style="color:#999;font-size:14px">Aktualny, zgodny z 2026 rok. 2 egzemplarze, RODO, klauzule o wadach, VIN, PCC. Pobierz, wydrukuj i podpisz w 5 minut.</p>
+<p style="color:#999;font-size:14px">Aktualny, zgodny z 2026 rok. 2 egzemplarze, RODO, klauzula o wadach, VIN, PCC. Pobierz, wydrukuj i podpisz w 5 minut.</p>
 
 <div class="yellow-box">
   <div class="left-actions">
@@ -101,6 +101,13 @@ function goBack(e){
 </div>
 
 <p style="font-size:11px;color:#555;margin-top:12px">Wzór dla: Volkswagen Golf 2019, Toyota Corolla 2020, BMW 5 2015...</p>
+
+<!-- TU ZACHOWAJ SWÓJ DALSZY TEKST O UMOWIE - RODO, PCC, co zawiera itd -->
+<div style="margin-top:32px;color:#bbb;line-height:1.6;font-size:14px">
+<h2 style="color:#fff">Co powinna zawierać umowa?</h2>
+<p>Dane sprzedającego i kupującego, dane pojazdu VIN, przebieg, cena, data, miejsce, oświadczenia o wadach, RODO...</p>
+</div>
+
 </div>
 </div>
 </body>
