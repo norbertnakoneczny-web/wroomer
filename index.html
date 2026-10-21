@@ -138,11 +138,11 @@ label.small{font-size:10px;opacity:.7;display:block;margin:8px 12px 2px;text-tra
       <img class="blog-img" src="https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=400&h=200&fit=crop" alt="OC na miesiąc">
       <div class="blog-body"><div class="blog-card-title">OC na miesiąc - czy warto?</div><div class="blog-meta"><span>🕒 4 min</span></div></div>
     </div>
-    <div class="blog-card" onclick="location.href='/blog/jak-szybko-sprzedac-samochod-w-24h.html'">
+    <div class="blog-card" onclick="openBlog('/blog/jak-szybko-sprzedac-samochod-24h.html','/blog/jak-szybko-sprzedac-samochod-w-24h.html')">
       <img class="blog-img" src="https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=400&h=200&fit=crop" alt="Szybka sprzedaż">
       <div class="blog-body"><div class="blog-card-title">Jak szybko sprzedać samochód w 24h</div><div class="blog-meta"><span>🕒 5 min</span></div></div>
     </div>
-    <div class="blog-card" onclick="location.href='/blog/umowa-kupna-sprzedazy-wzor-2026-pdf.html'">
+    <div class="blog-card" onclick="openBlog('/blog/umowa-kupna-sprzedazy-wzor-2026.html','/blog/umowa-kupna-sprzedazy-wzor-2026-pdf.html')">
       <img class="blog-img" src="https://images.unsplash.com/photo-1589829085413-56de8ae18c73?w=400&h=200&fit=crop" alt="Umowa wzór">
       <div class="blog-body"><div class="blog-card-title">Umowa kupna-sprzedaży wzór 2026 PDF</div><div class="blog-meta"><span>🕒 3 min • WZÓR</span></div></div>
     </div>
@@ -343,4 +343,19 @@ function handleGallerySwipe(){
 document.addEventListener('DOMContentLoaded',()=>{const d=document.getElementById('mobileDrawer'); if(d) d.classList.remove('open'); mobileFiltersOpen=false;});
 checkUser(); loadAds();
 </script>
+
+<script>
+function openBlog(primary, fallback){
+  // Spróbuj primary, jak 404 to fallback
+  fetch(primary, {method:'HEAD'}).then(r=>{
+    if(r.ok) location.href=primary;
+    else if(fallback) location.href=fallback;
+    else location.href=primary;
+  }).catch(()=>{
+    // Jak fetch zablokowany CORS, po prostu przejdź do primary
+    location.href=primary;
+  });
+}
+</script>
+
 </body></html>
