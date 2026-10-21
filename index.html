@@ -221,17 +221,9 @@ function closeModals(){
   if(addM){ addM.classList.remove('open'); addM.style.display='none'; }
   closeGallery();
 }
-function closeGallery(){ 
-  const m=document.getElementById('galleryModal'); 
-  if(m){ m.classList.remove('open'); m.style.display='none'; }
-  document.body.style.overflow=''; 
-  document.body.style.overflowY='auto'; 
-  document.documentElement.style.overflow=''; 
-  document.documentElement.style.overflowY='auto';
-  document.body.style.position='';
-  document.body.style.height='';
-}
-
+function closeGallery(){
+  const g=document.getElementById('galleryModal');
+  if(g){ g.classList.remove('open'); g.style.display='none'; }
 }
 
 function haversine(lat1, lon1, lat2, lon2){const R=6371; const dLat=(lat2-lat1)*Math.PI/180; const dLon=(lon2-lon1)*Math.PI/180; const a=Math.sin(dLat/2)*Math.sin(dLat/2)+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)*Math.sin(dLon/2); const c=2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a)); return R*c;}
