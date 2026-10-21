@@ -1,32 +1,20 @@
-
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
-
-import { createClient } from '@/lib/supabase'
-import OgłoszenieClient from './client'
+import { createClient } from '@supabase/supabase-js'
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
+  const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!)
   
-  const supabase = createClient()
+  const { data } = await supabase.from('ogloszenia').select('*').eq('id', id).single()
   
-  const { data, error } = await supabase
-    .from('ogloszenia')
-    .select('*')
-    .eq('id', id)
-    .single()
+  if (!data) return <div>Nie ma ogłoszenia {id} - <a href="/">wróć</a></div>
 
-  if (error || !data) {
-    console.error('Błąd ogłoszenia:', error)
-    return (
-      <div className="p-10 text-center">
-        <h1 className="text-2xl font-bold">Nie znaleziono ogłoszenia</h1>
-        <p>ID: {id}</p>
-        <p className="text-sm text-gray-500 mt-2">{error?.message}</p>
-        <a href="/" className="mt-4 inline-block underline">Wróć na główną</a>
-      </div>
-    )
-  }
-
-  return <OgłoszenieClient data={data} />
+  return (
+    <div className="p-6 max-w-4xl mx-auto">
+      <h1 className="text-3xl font-bold">{data.tytul}</h1>
+      <p>{data.opis}</p>
+      <p className="mt-4 font-bold">{data.cena} zł</p>
+    </div>
+  )
 }
