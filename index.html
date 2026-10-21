@@ -85,6 +85,90 @@ label.small{font-size:10px;opacity:.7;display:block;margin:8px 12px 2px;text-tra
 <div class="grid" id="grid"></div>
 </div>
 
+
+<!-- BLOG WROOMER - PORADNIK KIEROWCY - ZACHOWANE Z v11 -->
+<style>
+.blog-section{padding:20px 12px;background:#0a0a0a;border-top:1px solid #1e1e1e;margin-top:20px}
+.blog-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;padding:0 4px}
+.blog-title{font-size:13px;font-weight:900;letter-spacing:1px;color:#fff}
+.blog-title span{color:#facc15}
+.blog-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+@media(max-width:1100px){.blog-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.blog-grid{grid-template-columns:1fr}}
+.blog-card{background:#181818;border:1px solid #222;border-radius:12px;overflow:hidden;cursor:pointer;transition:transform .2s}
+.blog-card:hover{transform:translateY(-2px);border-color:#333}
+.blog-img{width:100%;height:120px;object-fit:cover;background:#111}
+.blog-body{padding:10px 12px}
+.blog-card-title{font-size:13px;font-weight:700;line-height:1.3;min-height:36px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;color:#fff}
+.blog-meta{font-size:10px;color:#777;margin-top:6px;display:flex;gap:8px}
+.blog-footer{padding:20px 12px;background:#080808;border-top:1px solid #1e1e1e;margin-top:20px;display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:20px}
+@media(max-width:800px){.blog-footer{grid-template-columns:1fr}}
+.blog-footer h4{font-size:11px;font-weight:900;color:#facc15;margin-bottom:8px;letter-spacing:.5px}
+.blog-footer p, .blog-footer a{font-size:12px;color:#aaa;line-height:1.6;text-decoration:none}
+.blog-footer a:hover{color:#facc15}
+</style>
+
+<div class="blog-section">
+  <div class="blog-header">
+    <div class="blog-title">BLOG <span>WROOMER</span> • PORADNIK KIEROWCY</div>
+    <a href="/blog" style="font-size:11px;color:#aaa;text-decoration:none;border:1px solid #333;padding:6px 12px;border-radius:20px">Zobacz wszystkie →</a>
+  </div>
+  <div class="blog-grid">
+    <div class="blog-card" onclick="location.href='/blog/najmniejsze-spalanie-auta-benzynowe-2026.html'">
+      <img class="blog-img" src="https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=400&h=200&fit=crop" alt="Najmniejsze spalanie">
+      <div class="blog-body"><div class="blog-card-title">Najmniejsze spalanie auta benzynowe 2026</div><div class="blog-meta"><span>🕒 5 min • TOP 2026</span></div></div>
+    </div>
+    <div class="blog-card" onclick="location.href='/blog/samochody-do-20-tysiecy-dla-rodziny.html'">
+      <img class="blog-img" src="https://images.unsplash.com/photo-1550355291-bbee04a92027?w=400&h=200&fit=crop" alt="Samochody do 20 tys">
+      <div class="blog-body"><div class="blog-card-title">Samochody do 20 tysięcy dla rodziny</div><div class="blog-meta"><span>🕒 6 min</span></div></div>
+    </div>
+    <div class="blog-card" onclick="location.href='/blog/jak-nie-kupic-auta-z-cofnietym-licznikiem.html'">
+      <img class="blog-img" src="https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?w=400&h=200&fit=crop" alt="Cofnięty licznik">
+      <div class="blog-body"><div class="blog-card-title">Jak nie kupić auta z cofniętym licznikiem</div><div class="blog-meta"><span>🕒 7 min • WAŻNE</span></div></div>
+    </div>
+    <div class="blog-card" onclick="location.href='/blog/ile-kosztuje-przerejestrowanie-auta-2026.html'">
+      <img class="blog-img" src="https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=400&h=200&fit=crop" alt="Przerejestrowanie">
+      <div class="blog-body"><div class="blog-card-title">Ile kosztuje przerejestrowanie auta 2026</div><div class="blog-meta"><span>🕒 4 min</span></div></div>
+    </div>
+    <div class="blog-card" onclick="location.href='/blog/rejestracja-auta-z-niemiec-krok-po-kroku.html'">
+      <img class="blog-img" src="https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=400&h=200&fit=crop" alt="Rejestracja z Niemiec">
+      <div class="blog-body"><div class="blog-card-title">Rejestracja auta z Niemiec krok po kroku</div><div class="blog-meta"><span>🕒 8 min</span></div></div>
+    </div>
+    <div class="blog-card" onclick="location.href='/blog/oc-na-miesiac-czy-warto-krotkoterminowe.html'">
+      <img class="blog-img" src="https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=400&h=200&fit=crop" alt="OC na miesiąc">
+      <div class="blog-body"><div class="blog-card-title">OC na miesiąc - czy warto?</div><div class="blog-meta"><span>🕒 4 min</span></div></div>
+    </div>
+    <div class="blog-card" onclick="location.href='/blog/jak-szybko-sprzedac-samochod-w-24h.html'">
+      <img class="blog-img" src="https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=400&h=200&fit=crop" alt="Szybka sprzedaż">
+      <div class="blog-body"><div class="blog-card-title">Jak szybko sprzedać samochód w 24h</div><div class="blog-meta"><span>🕒 5 min</span></div></div>
+    </div>
+    <div class="blog-card" onclick="location.href='/blog/umowa-kupna-sprzedazy-wzor-2026-pdf.html'">
+      <img class="blog-img" src="https://images.unsplash.com/photo-1589829085413-56de8ae18c73?w=400&h=200&fit=crop" alt="Umowa wzór">
+      <div class="blog-body"><div class="blog-card-title">Umowa kupna-sprzedaży wzór 2026 PDF</div><div class="blog-meta"><span>🕒 3 min • WZÓR</span></div></div>
+    </div>
+  </div>
+</div>
+
+<div class="blog-footer">
+  <div>
+    <div style="font-weight:900;font-size:15px">WROOMER.PL <span style="color:#facc15">v11 AUTO-PAGES</span></div>
+    <p style="margin-top:6px">Ogólnopolska darmowa giełda aut. Wystaw za darmo bez limitów.</p>
+    <p style="margin-top:8px;font-size:11px;color:#666">© 2026 WROOMER.PL - Wszystkie prawa zastrzeżone</p>
+  </div>
+  <div>
+    <h4>DOKUMENTY RODO</h4>
+    <a href="/polityka-prywatnosci.html">Polityka Prywatności</a><br>
+    <a href="/regulamin.html">Regulamin (DSA)</a><br>
+    <a href="/polityka-cookies.html">Polityka Cookies</a><br>
+    <a href="/rodo.html">RODO / Zgłoszenia / Prawo do bycia zapomnianym</a>
+  </div>
+  <div>
+    <h4>KONTAKT RODO</h4>
+    <p>RODO: rodo@wroomer.pl<br>Zgłoszenia DSA: zglos@wroomer.pl (24h)<br>Kontakt: kontakt@wroomer.pl</p>
+    <a href="#" onclick="alert('Ustawienia cookies');return false;" style="color:#facc15;text-decoration:underline">Ustawienia cookies</a>
+  </div>
+</div>
+
 <div class="modal gallery-modal" id="galleryModal"><div class="modal-box"><div class="modal-header"><h3 id="galleryTitle" style="font-size:15px"></h3><button class="btn btn-dark" onclick="closeGallery()">✕</button></div><div class="gallery-main-wrap"><button class="gallery-nav prev" onclick="galleryPrev()">‹</button><img id="galleryMain" class="gallery-main" src=""><button class="gallery-nav next" onclick="galleryNext()">›</button></div><div id="galleryThumbs" class="gallery-thumbs"></div><div id="galleryInfo" class="gallery-info"></div></div></div>
 <div class="modal" id="loginModal"><div class="modal-box"><div class="modal-header"><h3>Zaloguj</h3><button class="btn btn-dark" onclick="closeModals()">✕</button></div><div id="loginError"></div><input class="input" id="loginEmail" placeholder="Email" style="margin:10px 12px 0;width:calc(100% - 24px)"><input class="input" id="loginPass" type="password" placeholder="Hasło" style="margin:0 12px;width:calc(100% - 24px)"><div class="row" style="padding:12px"><button class="btn btn-yellow" style="flex:1;padding:11px" onclick="doLogin()">Zaloguj</button><button class="btn btn-dark" style="flex:1;padding:11px" onclick="doSignup()">Załóż</button></div></div></div>
 
@@ -130,8 +214,18 @@ document.getElementById('btnLogout').onclick=async()=>{await supabaseClient.auth
 document.getElementById('btnAdd').onclick=()=>{ if(!currentUser){ document.getElementById('loginModal').classList.add('open'); return; } openAddModal(); };
 // FIX: Dodatkowy listener żeby przycisk zawsze działał nawet jak JS wcześniej się wywalił
 setTimeout(()=>{ const b=document.getElementById('btnAdd'); if(b){ b.addEventListener('click', (e)=>{ e.stopPropagation(); if(currentUser) openAddModal(); }); } }, 500);
-function closeModals(){document.getElementById('loginModal').classList.remove('open');document.getElementById('addModal').classList.remove('open');closeGallery();}
-function closeGallery(){document.getElementById('galleryModal').classList.remove('open');}
+function closeModals(){
+  const loginM=document.getElementById('loginModal');
+  const addM=document.getElementById('addModal');
+  if(loginM){ loginM.classList.remove('open'); loginM.style.display='none'; }
+  if(addM){ addM.classList.remove('open'); addM.style.display='none'; }
+  closeGallery();
+}
+function closeGallery(){
+  const g=document.getElementById('galleryModal');
+  if(g){ g.classList.remove('open'); g.style.display='none'; }
+}
+
 function haversine(lat1, lon1, lat2, lon2){const R=6371; const dLat=(lat2-lat1)*Math.PI/180; const dLon=(lon2-lon1)*Math.PI/180; const a=Math.sin(dLat/2)*Math.sin(dLat/2)+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)*Math.sin(dLon/2); const c=2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a)); return R*c;}
 function parseExtra(desc){const o={mileage:'',fuel:'',gear:'',power:'',capacity:'',body:'',color:'',lat:'',lng:''}; try{const m=(desc||'').match(/\[(.*?)\]/); if(m){m[1].split('|').forEach(p=>{const parts=p.split(':'); if(parts.length<2) return; const k=parts[0].trim(); const v=parts.slice(1).join(':').trim(); const kl=k.toLowerCase(); if(kl.includes('przebieg')) o.mileage=v; else if(kl.includes('paliwo')) o.fuel=v; else if(kl.includes('skrzynia')) o.gear=v; else if(kl.includes('moc') && !kl.includes('pochodzenia')) o.power=v; else if(kl.includes('pojem')) o.capacity=v; else if(kl.includes('nadwozia')) o.body=v; else if(kl.includes('kolor')) o.color=v; else if(kl==='lat') o.lat=v; else if(kl==='lng' || kl==='lon') o.lng=v;});}}catch(e){} return o;}
 function locateForAdd(){const btn=document.getElementById('gpsAddBtn'); const info=document.getElementById('gpsAddInfo'); if(!navigator.geolocation){alert('Twoja przeglądarka nie wspiera GPS'); return;} btn.textContent='📡 Pobieram lokalizację...'; btn.disabled=true; info.style.display='block'; info.textContent='Proszę zezwól na lokalizację w przeglądarce...'; info.className='gps-info show'; navigator.geolocation.getCurrentPosition(async (pos)=>{addLat=pos.coords.latitude; addLng=pos.coords.longitude; document.getElementById('aLat').value=addLat.toFixed(6); document.getElementById('aLng').value=addLng.toFixed(6); btn.textContent='✅ GPS Pobrany!'; btn.classList.add('active'); btn.disabled=false; info.textContent=`✅ GPS: ${addLat.toFixed(5)}, ${addLng.toFixed(5)} (dokładność ${Math.round(pos.coords.accuracy)}m) - teraz pobieram adres...`; info.className='gps-info show success'; try{const res=await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${addLat}&lon=${addLng}&zoom=10&addressdetails=1`); const data=await res.json(); const city=data.address?.city||data.address?.town||data.address?.village||data.address?.county||data.display_name||''; if(city){document.getElementById('aLocation').value=city.split(',')[0]; info.textContent+=`\n📍 Adres: ${city}`;}}catch(e){console.log('reverse geocode error', e);}}, (err)=>{btn.textContent='📍 Zlokalizuj GPS'; btn.disabled=false; info.textContent='❌ Błąd GPS: '+err.message+' - wpisz lokalizację ręcznie'; info.className='gps-info show'; info.style.background='#3a1111';}, {enableHighAccuracy:true, timeout:10000, maximumAge:0});}
