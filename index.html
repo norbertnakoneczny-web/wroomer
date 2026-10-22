@@ -62,36 +62,85 @@ label.small{font-size:10px;opacity:.7;display:block;margin:8px 12px 2px;text-tra
 .blog-footer a:hover{color:#facc15}
 </style>
 
-<style id="remove-photoDesc">
-#photoDesc, div#photoDesc { display:none !important; visibility:hidden !important; height:0 !important; width:0 !important; padding:0 !important; margin:0 !important; border:0 !important; }
-.gallery-main-wrap { display:flex !important; flex-direction:column !important; width:100% !important; background:#000 !important; align-items:center !important; justify-content:center !important; }
-#galleryMain { width:100% !important; max-width:100% !important; max-height:68vh !important; object-fit:contain !important; background:#000 !important; display:block !important; }
+<style id="photodesc-fix">
+#photoDesc, div#photoDesc { 
+  display:block !important; 
+  width:100% !important; 
+  background:#111 !important; 
+  border-top:1px solid #222 !important; 
+  padding:10px 14px !important; 
+  font-size:13px !important; 
+  color:#ccc !important; 
+  text-align:center !important; 
+  order:2 !important;
+  flex-shrink:0 !important;
+}
+.gallery-main-wrap { 
+  display:flex !important; 
+  flex-direction:column !important; 
+  width:100% !important; 
+  background:#000 !important; 
+  align-items:stretch !important;
+}
+#galleryMain { 
+  width:100% !important; 
+  max-height:65vh !important; 
+  object-fit:contain !important; 
+  background:#000 !important; 
+  order:1 !important;
+}
 #galleryModal { overflow-y:auto !important; }
-#galleryModal .modal-box, .modal-box { overflow-y:auto !important; max-height:100vh !important; }
-#galleryInfo { overflow-y:visible !important; max-height:none !important; padding-bottom:80px !important; }
+#galleryModal .modal-box { overflow-y:auto !important; max-height:100vh !important; }
+#galleryInfo { padding-bottom:80px !important; }
 </style>
 <script>
-// Usuń photoDesc na zawsze
+const photoLabels = ["Przód - zdjęcie główne","Tył / Bok","Wnętrze - bagażnik","Wnętrze - podsufitka","Szyberdach / Dach","Licznik - deska","Kokpit - środek","Zegary","Kokpit - kierownica","Wnętrze - drzwi"];
 (function(){
-  function killPhotoDesc(){
-    const el = document.getElementById('photoDesc');
-    if(el) el.remove();
-    document.querySelectorAll('#photoDesc, [id=photoDesc]').forEach(e=>e.remove());
+  function ensurePhotoDesc(ad){
+    let pd = document.getElementById('photoDesc');
+    const wrap = document.querySelector('.gallery-main-wrap');
+    if(!pd && wrap){
+      pd = document.createElement('div');
+      pd.id = 'photoDesc';
+      wrap.appendChild(pd);
+    }
+    return pd;
   }
   const origOpen = window.openGallery;
-  if(origOpen){
-    window.openGallery = function(ad){
-      killPhotoDesc();
-      const r = origOpen(ad);
-      setTimeout(()=>{ killPhotoDesc(); 
-        const modal = document.getElementById('galleryModal');
-        if(modal){ modal.style.display='flex'; modal.style.overflowY='auto'; }
-      },50);
-      return r;
+  window.openGallery = function(ad){
+    // call original first
+    let r;
+    if(origOpen) r = origOpen(ad);
+    // then fix layout
+    const mainWrap = document.querySelector('.gallery-main-wrap');
+    if(mainWrap){
+      mainWrap.style.display='flex';
+      mainWrap.style.flexDirection='column';
+      mainWrap.style.width='100%';
     }
-  }
-  setInterval(killPhotoDesc, 500);
-  document.addEventListener('DOMContentLoaded', killPhotoDesc);
+    const mainImg = document.getElementById('galleryMain');
+    if(mainImg){ mainImg.style.order='1'; mainImg.style.width='100%'; }
+    let pd = ensurePhotoDesc(ad);
+    if(pd){
+      pd.style.display='block';
+      pd.style.order='2';
+      const idx = window.galleryIndex || 0;
+      const total = (window.galleryImages||ad.images||[]).length;
+      pd.textContent = (photoLabels[idx]||("Zdjęcie "+(idx+1))) + " • Zdjęcie " + (idx+1) + " z " + total + " • " + ad.title;
+    }
+    return r;
+  };
+  const origUpdate = window.updateGallery;
+  window.updateGallery = function(){
+    if(origUpdate) origUpdate();
+    const pd = document.getElementById('photoDesc');
+    if(pd){
+      const idx = window.galleryIndex || 0;
+      const total = (window.galleryImages||[]).length;
+      const title = document.getElementById('galleryTitle')?.textContent || '';
+      pd.textContent = (photoLabels[idx]||("Zdjęcie "+(idx+1))) + " • Zdjęcie " + (idx+1) + " z " + total + (title ? " • " + title : "");
+    }
+  };
 })();
 </script>
 </head>
