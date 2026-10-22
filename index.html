@@ -36,8 +36,7 @@
 .card{background:#181818;border:1px solid #222;border-radius:12px;overflow:hidden;cursor:pointer;position:relative} .card-img-wrap{width:100%;height:160px;position:relative;background:#0f0f0f;overflow:hidden} @media(max-width:900px){.card-img-wrap{height:130px}} .card-img-wrap img{width:100%;height:100%;object-fit:cover;object-position:center center;display:block} .card-img-count{position:absolute;bottom:6px;right:6px;background:rgba(0,0,0,.75);color:#fff;font-size:11px;padding:3px 6px;border-radius:4px} .card-body{padding:9px} .card-title{font-size:13px;min-height:32px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden} .card-price{font-size:14px;font-weight:800;color:#facc15;margin-top:5px} .card-location{font-size:10px;color:#888;margin-top:3px} .card-distance{font-size:10px;color:#22c55e;font-weight:700;margin-top:2px} .owner-actions{position:absolute;top:6px;right:6px;display:flex;gap:4px;z-index:5} .owner-actions button{padding:5px 8px;border-radius:12px;border:0;font-size:10px;font-weight:900;cursor:pointer} .edit{background:#facc15;color:#000} .del{background:#ff3333;color:#fff}
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.92);display:none;align-items:center;justify-content:center;z-index:11000;padding:12px} .modal.open{display:flex} @media(max-width:700px){.modal{align-items:flex-end;padding:0} .modal-box{border-radius:18px 18px 0 0}}
 .modal-box{background:#1a1a1a;border:1px solid #333;border-radius:16px;width:100%;max-width:680px;max-height:94vh;overflow:auto} .modal-header{padding:14px 16px;border-bottom:1px solid #2a2a2a;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:#1a1a1a;z-index:2}
-.gallery-modal .modal-box{max-width:920px;background:#0f0f0f} .gallery-main-wrap{position:relative;width:100%;height:54vh;background:#000;display:flex;align-items:center;justify-content:center} @media(max-width:700px){.gallery-main-wrap{height:44vh}} .gallery-main{max-width:100%;max-height:100%;object-fit:contain;touch-action:pan-y;user-select:none;-webkit-user-drag:none} .gallery-main-wrap{ touch-action:pan-y; } .gallery-nav{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.9);border:0;width:36px;height:36px;border-radius:50%;font-size:21px;cursor:pointer} .gallery-nav.prev{left:10px} .gallery-nav.next{right:10px} .gallery-thumbs{display:flex;gap:6px;overflow:auto;padding:10px;background:#000} .gallery-thumbs img{width:68px;height:50px;object-fit:cover;object-position:center;border-radius:6px;cursor:pointer;border:2px solid transparent;flex-shrink:0} .gallery-thumbs img.active{border-color:#facc15}
-.gallery-info{padding:0;background:#181818} .detail-section{padding:16px;border-bottom:1px solid #222} .detail-title{font-size:23px;font-weight:900;color:#facc15} .detail-subtitle{font-size:15px;color:#fff;margin:4px 0 12px;opacity:.9} .detail-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:12px} @media(max-width:600px){.detail-grid{grid-template-columns:1fr}} .detail-item{background:#222;border:1px solid #2a2a2a;border-radius:10px;padding:10px 12px;display:flex;justify-content:space-between;align-items:center} .detail-item .label{font-size:10px;color:#888;text-transform:uppercase;font-weight:700} .detail-item .value{font-size:13px;font-weight:700;color:#fff} .detail-desc{padding:16px;background:#111} .detail-desc h4{font-size:12px;color:#facc15;margin-bottom:8px;text-transform:uppercase} .detail-desc p{font-size:14px;line-height:1.6;color:#ddd;white-space:pre-wrap} .owner-bar{padding:12px 16px;background:#111;border-top:1px solid #222;display:flex;gap:8px}
+.gallery-modal .modal-box{max-width:860px;background:#151515;border:1px solid #222;border-radius:16px;overflow:hidden;display:flex;flex-direction:column;max-height:92vh} .gallery-main-wrap{position:relative;width:100%;background:#000;display:flex;flex-direction:column;align-items:center;flex-shrink:0} .gallery-main{width:100%;max-height:58vh;object-fit:contain;display:block;background:#000} .gallery-nav{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.92);border:0;width:40px;height:40px;border-radius:50%;font-size:22px;cursor:pointer;z-index:2} .gallery-nav.prev{left:12px} .gallery-nav.next{right:12px} #photoDesc{width:100%;background:#1a1a1a;border-top:1px solid #222;padding:10px 12px;font-size:12px;color:#aaa;text-align:center;display:block} .gallery-thumbs{display:flex;gap:8px;overflow:auto;padding:10px;background:#0e0e0e;border-top:1px solid #1e1e1e;border-bottom:1px solid #1e1e1e;flex-shrink:0} .gallery-thumbs img{width:70px;height:52px;object-fit:cover;border-radius:8px;cursor:pointer;border:2px solid transparent;flex-shrink:0;opacity:0.7} .gallery-thumbs img.active{border-color:#facc15;opacity:1} .gallery-info{padding:0;background:#151515;overflow-y:auto;flex:1} .detail-section{padding:18px;border-bottom:1px solid #222} .detail-title{font-size:24px;font-weight:900;color:#facc15} .detail-subtitle{font-size:15px;color:#fff;margin:6px 0 14px} .detail-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:12px} @media(max-width:600px){.detail-grid{grid-template-columns:1fr}} .detail-item{background:#222;border:1px solid #2a2a2a;border-radius:10px;padding:10px 12px;display:flex;justify-content:space-between;align-items:center} .detail-item .label{font-size:10px;color:#888;text-transform:uppercase;font-weight:700} .detail-item .value{font-size:13px;font-weight:700;color:#fff} .detail-desc{padding:16px;background:#111} .detail-desc h4{font-size:12px;color:#facc15;margin-bottom:8px;text-transform:uppercase} .detail-desc p{font-size:14px;line-height:1.6;color:#ddd;white-space:pre-wrap} .owner-bar{padding:12px 16px;background:#111;border-top:1px solid #222;display:flex;gap:8px}
 .row{display:flex;gap:8px} .row> *{flex:1} .error{background:#3a1111;border:1px solid #a33;color:#ffb3b3;padding:10px;border-radius:8px;margin:8px 12px;font-size:13px} .success{background:#112a11;border:1px solid #3a3;color:#b3ffb3;padding:10px;border-radius:8px;margin:8px 12px} .file-label{background:#222;border:1px dashed #444;padding:18px;text-align:center;border-radius:10px;cursor:pointer;display:block;margin:10px 12px;font-size:13px} #preview{display:flex;gap:6px;flex-wrap:wrap;margin:8px 12px} #preview .p{position:relative} #preview img{width:60px;height:60px;object-fit:cover;border-radius:6px} #preview .x{position:absolute;top:-5px;right:-5px;background:#facc15;color:#000;border-radius:50%;width:16px;height:16px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;cursor:pointer}
 h4{font-size:11px;font-weight:800;letter-spacing:1px;margin:14px 0 6px;color:#facc15;opacity:.8}
 label.small{font-size:10px;opacity:.7;display:block;margin:8px 12px 2px;text-transform:uppercase;font-weight:700;letter-spacing:.5px}
@@ -61,118 +60,6 @@ label.small{font-size:10px;opacity:.7;display:block;margin:8px 12px 2px;text-tra
 .blog-footer p, .blog-footer a{font-size:12px;color:#aaa;line-height:1.6;text-decoration:none}
 .blog-footer a:hover{color:#facc15}
 </style>
-
-<style id="final-fix-v2">
-#galleryModal{position:fixed!important;inset:0!important;background:rgba(0,0,0,0.9)!important;z-index:9999!important;display:none!important;overflow-y:auto!important;padding:0!important}
-#galleryModal.open{display:flex!important;justify-content:center!important;align-items:flex-start!important;padding:16px!important}
-.modal-box{width:100%!important;max-width:860px!important;background:#161616!important;border-radius:16px!important;overflow:hidden!important;display:flex!important;flex-direction:column!important;max-height:92vh!important;border:1px solid #222!important}
-.modal-header{padding:14px 18px!important;background:#161616!important;border-bottom:1px solid #222!important;display:flex!important;justify-content:space-between!important;align-items:center!important;position:sticky!important;top:0!important;z-index:3!important}
-.gallery-main-wrap{position:relative!important;background:#000!important;width:100%!important;display:block!important}
-#galleryMain{width:100%!important;height:auto!important;max-height:60vh!important;object-fit:contain!important;background:#000!important;display:block!important;margin:0 auto!important}
-.gallery-nav{position:absolute!important;top:50%!important;transform:translateY(-50%)!important;background:rgba(255,255,255,0.9)!important;width:42px!important;height:42px!important;border-radius:50%!important;border:0!important;cursor:pointer!important;z-index:2!important;font-size:20px!important}
-.gallery-nav.prev{left:12px!important}.gallery-nav.next{right:12px!important}
-#photoDesc{width:100%!important;background:#1a1a1a!important;color:#bbb!important;padding:10px 14px!important;font-size:12px!important;text-align:center!important;border-top:1px solid #222!important;display:block!important}
-#galleryThumbs{background:#0e0e0e!important;padding:10px!important;display:flex!important;gap:8px!important;overflow-x:auto!important;border-top:1px solid #1e1e1e!important;border-bottom:1px solid #1e1e1e!important}
-#galleryThumbs img{width:70px!important;height:52px!important;object-fit:cover!important;border-radius:8px!important;border:2px solid transparent!important;opacity:0.7!important;flex-shrink:0!important}
-#galleryThumbs img.active{border-color:#facc15!important;opacity:1!important}
-#galleryInfo{padding:18px!important;background:#161616!important;overflow-y:auto!important;max-height:50vh!important}
-.price-big{font-size:24px!important;font-weight:900!important;color:#facc15!important}
-.title-big{font-size:16px!important;font-weight:700!important;margin-top:4px!important}
-.grid2{display:grid!important;grid-template-columns:1fr 1fr!important;gap:8px!important;margin:14px 0!important}
-.box{background:#222!important;border:1px solid #2a2a2a!important;padding:10px!important;border-radius:10px!important;font-size:12px!important;color:#ccc!important}
-.desc-box{background:#0f0f0f!important;border:1px solid #222!important;border-radius:12px!important;padding:14px!important;margin:12px 0!important;font-size:13px!important;line-height:1.6!important;color:#ddd!important;white-space:pre-wrap!important}
-</style>
-<script>
-(function(){
-const labels = ["Przód - zdjęcie główne","Tył / Bok","Wnętrze - bagażnik","Wnętrze - podsufitka","Szyberdach / Dach","Licznik - deska","Kokpit - środek","Zegary","Kokpit - kierownica","Wnętrze - drzwi"];
-function fixAndPopulate(ad){
-  // 1. Ensure photoDesc exists UNDER image
-  let pd = document.getElementById('photoDesc');
-  if(!pd){
-    pd = document.createElement('div');
-    pd.id = 'photoDesc';
-    const wrap = document.querySelector('.gallery-main-wrap');
-    if(wrap) wrap.appendChild(pd);
-  }
-  const idx = window.galleryIndex || 0;
-  const total = (window.galleryImages||ad.images||[]).length;
-  const lab = labels[idx] || ("Zdjęcie "+(idx+1));
-  if(pd){ pd.textContent = lab + " • Zdjęcie " + (idx+1) + " z " + total + " • " + (ad.title||ad.marka||''); pd.style.display='block'; }
-
-  // 2. Populate FULL galleryInfo (was empty on your screenshot)
-  const info = document.getElementById('galleryInfo');
-  if(info){
-    const price = ad.price || ad.cena || '8500';
-    const title = ad.title || ((ad.marka||'') + " " + (ad.model||''));
-    const rok = ad.year || ad.rok || '-';
-    const przeb = ad.przebieg || ad.mileage || '-';
-    const paliwo = ad.fuel || ad.paliwo || '-';
-    const loc = ad.location || ad.lokalizacja || 'Gorzyce';
-    const desc = ad.description || ad.opis || ad.desc || 'Brak opisu';
-    const phone = ad.phone || ad.telefon || '500 100 200';
-    const lat = ad.lat || '49.96';
-    const lng = ad.lng || '18.39';
-    
-    info.innerHTML = `
-      <div class="price-big">${price} PLN</div>
-      <div class="title-big">${title}</div>
-      <div class="grid2">
-        <div class="box"><b>Marka:</b> ${ad.brand||ad.marka||'Volvo'}</div>
-        <div class="box"><b>Model:</b> ${ad.model||'-'}</div>
-        <div class="box"><b>Rok:</b> ${rok}</div>
-        <div class="box"><b>Przebieg:</b> ${przeb}</div>
-        <div class="box"><b>Paliwo:</b> ${paliwo}</div>
-        <div class="box"><b>Lokalizacja:</b> ${loc}</div>
-      </div>
-      <div class="desc-box"><b style="color:#facc15">Opis pojazdu:</b>
-${desc}
-
-<b style="color:#888">Opisy zdjęć:</b>
-${(window.galleryImages||[]).map((_,i)=> (i+1)+". "+(labels[i]||"Zdjęcie "+(i+1))).join(" • ")}</div>
-      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">
-        <a href="tel:${phone}" style="background:#22c55e;color:#fff;padding:12px 18px;border-radius:22px;text-decoration:none;font-weight:800;font-size:13px">📞 Zadzwoń: ${phone}</a>
-        <a href="https://www.google.com/maps/search/?api=1&query=${lat},${lng}" target="_blank" style="background:#0ea5e9;color:#fff;padding:12px 18px;border-radius:22px;text-decoration:none;font-weight:800;font-size:13px">📍 Zobacz na mapie</a>
-      </div>
-      <div style="height:20px"></div>
-    `;
-  }
-}
-
-const origOpen = window.openGallery;
-window.openGallery = function(ad){
-  // ensure globals
-  window.currentAd = ad;
-  window.galleryImages = ad.images || [ad.image_url || ad.image];
-  window.galleryIndex = 0;
-  
-  // call original if exists
-  if(origOpen && origOpen !== window.openGallery){
-    try{ origOpen(ad); }catch(e){}
-  }
-  
-  // fix after
-  setTimeout(()=>fixAndPopulate(ad), 100);
-  
-  // ensure modal visible and scrollable
-  const modal = document.getElementById('galleryModal');
-  if(modal){ modal.classList.add('open'); modal.style.display='flex'; }
-  document.body.style.overflow='hidden';
-};
-
-const origUpdate = window.updateGallery;
-window.updateGallery = function(){
-  if(origUpdate && origUpdate !== window.updateGallery){ try{ origUpdate(); }catch(e){} }
-  const ad = window.currentAd;
-  if(ad) fixAndPopulate(ad);
-};
-
-window.closeGallery = window.closeGallery || function(){
-  const m = document.getElementById('galleryModal');
-  if(m){ m.classList.remove('open'); m.style.display='none'; }
-  document.body.style.overflow='';
-};
-})();
-</script>
 </head>
 <body>
 <div class="header"><div class="logo">WROOMER<span>.PL</span> <span style="font-size:10px;background:#facc15;color:#000;padding:2px 6px;border-radius:10px">v11 8 KAFELI FIXED</span></div><div style="display:flex;gap:6px;align-items:center"><button class="btn btn-dark" id="btnLogin">Zaloguj</button><button class="btn btn-dark" id="btnLogout" style="display:none">Wyloguj</button><button class="btn btn-yellow" id="btnAdd">+ Dodaj</button></div></div>
@@ -235,7 +122,7 @@ window.closeGallery = window.closeGallery || function(){
   <div><h4>KONTAKT</h4><p>RODO: rodo@wroomer.pl<br>Zgłoszenia: zglos@wroomer.pl<br>Kontakt: kontakt@wroomer.pl</p></div>
 </div>
 
-<div class="modal gallery-modal" id="galleryModal"><div class="modal-box"><div class="modal-header"><h3 id="galleryTitle" style="font-size:15px"></h3><button class="btn btn-dark" onclick="closeGallery()">✕</button></div><div class="gallery-main-wrap"><button class="gallery-nav prev" onclick="galleryPrev()">‹</button><img id="galleryMain" class="gallery-main" src=""><button class="gallery-nav next" onclick="galleryNext()">›</button></div><div id="galleryThumbs" class="gallery-thumbs"></div><div id="galleryInfo" class="gallery-info"></div></div></div>
+<div class="modal gallery-modal" id="galleryModal"><div class="modal-box"><div class="modal-header"><h3 id="galleryTitle" style="font-size:15px"></h3><button class="btn btn-dark" onclick="closeGallery()">✕</button></div><div class="gallery-main-wrap"><button class="gallery-nav prev" onclick="galleryPrev()">‹</button><img id="galleryMain" class="gallery-main" src=""></button><div id="photoDesc"></div><button class="gallery-nav next" onclick="galleryNext()">›</button></div><div id="galleryThumbs" class="gallery-thumbs"></div><div id="galleryInfo" class="gallery-info"></div></div></div>
 <div class="modal" id="loginModal"><div class="modal-box"><div class="modal-header"><h3>Zaloguj</h3><button class="btn btn-dark" onclick="closeModals()">✕</button></div><div id="loginError"></div><input class="input" id="loginEmail" placeholder="Email" style="margin:10px 12px 0;width:calc(100% - 24px)"><input class="input" id="loginPass" type="password" placeholder="Hasło" style="margin:0 12px;width:calc(100% - 24px)"><div class="row" style="padding:12px"><button class="btn btn-yellow" style="flex:1;padding:11px" onclick="doLogin()">Zaloguj</button><button class="btn btn-dark" style="flex:1;padding:11px" onclick="doSignup()">Załóż</button></div></div></div>
 <div class="modal" id="addModal"><div class="modal-box"><div class="modal-header"><h3 id="addModalTitle">Dodaj ogłoszenie - GPS</h3><button class="btn btn-dark" onclick="closeModals()">✕</button></div><div id="addError"></div>
 <label class="small" style="color:#facc15">Tytuł *</label><input class="input" id="aTitle" placeholder="np. Fiat Stilo 1.9 JTD" style="margin:0 12px;width:calc(100% - 24px)">
@@ -289,7 +176,97 @@ function removeFile(i){selectedFiles.splice(i,1); renderPreview();}
 document.getElementById('aFiles').onchange=(e)=>{selectedFiles=[...selectedFiles, ...Array.from(e.target.files)].slice(0,10); renderPreview();};
 function compressImage(file, maxW=800, q=0.70){return new Promise(resolve=>{const img=new Image(); const reader=new FileReader(); reader.onload=e=>{img.onload=()=>{const c=document.createElement('canvas'); let w=img.width,h=img.height; if(w>maxW){h=h*(maxW/w);w=maxW;} if(h>maxW){w=w*(maxW/h);h=maxW;} c.width=w;c.height=h; const ctx=c.getContext('2d'); ctx.drawImage(img,0,0,w,h); c.toBlob(b=>{resolve(b);},'image/webp',q);}; img.src=e.target.result;}; reader.readAsDataURL(file);});}
 document.getElementById('btnSave').onclick=async()=>{const title=document.getElementById('aTitle').value.trim(); const brand=document.getElementById('aBrand').value.trim(); const modelVal=document.getElementById('aModelIn').value||'Inny'; const price=parseInt(document.getElementById('aPrice').value)||0; if(!title||!brand||!modelVal){showError('addError','Tytuł, marka i model wymagane');return;} if(!price){showError('addError','Podaj cenę');return;} const btn=document.getElementById('btnSave'); btn.textContent='WYSYŁANIE...'; btn.disabled=true; try{let imageUrls = []; if(editingId){ const ex=allAds.find(a=>a.id===editingId); imageUrls=ex?.images||[]; if(ex?.image_url && !imageUrls.includes(ex.image_url)) imageUrls.unshift(ex.image_url); } for(let i=0;i<selectedFiles.length;i++){const blob=await compressImage(selectedFiles[i]); const fname=Date.now()+'_'+i+'.webp'; const path=currentUser.id+'/'+fname; const up=await supabaseClient.storage.from('ogloszenia').upload(path, blob, {contentType:'image/webp'}); if(up.error) throw up.error; const pub=supabaseClient.storage.from('ogloszenia').getPublicUrl(path); imageUrls.push(pub.data.publicUrl);} const latVal=document.getElementById('aLat').value||''; const lngVal=document.getElementById('aLng').value||''; const extra=`Przebieg: ${document.getElementById('aMileage').value||'-'} km | Paliwo: ${document.getElementById('aFuel').value||'-'} | lat: ${latVal||'-'} | lng: ${lngVal||'-'}`; const fullDesc=(document.getElementById('aDesc').value||'') + "\n\n["+extra+"]"; const payload={title, brand, model:modelVal, price, year:parseInt(document.getElementById('aYear').value)||null, location:document.getElementById('aLocation').value, phone:document.getElementById('aPhone').value, description:fullDesc, image_url:imageUrls[0]||null, images:imageUrls, user_id:currentUser.id}; let result; if(editingId){result=await supabaseClient.from('ogloszenia').update(payload).eq('id', editingId).select();} else {result=await supabaseClient.from('ogloszenia').insert([payload]).select();} if(result.error) throw result.error; setTimeout(()=>{closeModals(); loadAds(); editingId=null; selectedFiles=[];}, 800);}catch(e){showError('addError', e.message);}finally{btn.textContent='Zatwierdź z GPS'; btn.disabled=false;}};
-function openGallery(ad){const modal=document.getElementById('galleryModal'); galleryImages = ad.images && ad.images.length>0 ? ad.images : (ad.image_url?[ad.image_url]:[]); galleryIndex=0; if(galleryImages.length===0){alert('Brak zdjęć'); return;} document.getElementById('galleryTitle').textContent=ad.title; document.getElementById('galleryMain').src=galleryImages[0]; const thumbs=document.getElementById('galleryThumbs'); thumbs.innerHTML=''; galleryImages.forEach((src,i)=>{const img=document.createElement('img'); img.src=src; if(i===0) img.classList.add('active'); img.onclick=()=>{galleryIndex=i; updateGallery();}; thumbs.appendChild(img);}); const ex=parseExtra(ad.description||''); const cleanDesc=(ad.description||'').split('\n\n[')[0].split('\n[')[0]; document.getElementById('galleryInfo').innerHTML=`<div class="detail-section"><div class="detail-title">${ad.price} PLN</div><div class="detail-subtitle">${ad.title}</div></div>`; modal.classList.add('open'); modal.style.display='flex'; document.body.style.overflow='hidden'; }
+function openGallery(ad){
+  const modal=document.getElementById('galleryModal'); 
+  window.currentAd=ad;
+  galleryImages = ad.images && ad.images.length>0 ? ad.images : (ad.image_url?[ad.image_url]:[]); 
+  galleryIndex=0; 
+  if(galleryImages.length===0){alert('Brak zdjęć'); return;} 
+  document.getElementById('galleryTitle').textContent=ad.title; 
+  document.getElementById('galleryMain').src=galleryImages[0]; 
+  
+  // photoDesc - under photo
+  let pd=document.getElementById('photoDesc');
+  if(!pd){
+    pd=document.createElement('div');
+    pd.id='photoDesc';
+    const wrap=document.querySelector('.gallery-main-wrap');
+    if(wrap) wrap.appendChild(pd);
+  }
+  const labels=["Przód - zdjęcie główne","Tył / Bok","Wnętrze - bagażnik","Wnętrze - podsufitka","Szyberdach / Dach","Licznik - deska","Kokpit - środek","Zegary","Kokpit - kierownica","Wnętrze - drzwi"];
+  if(pd){ pd.textContent=labels[0]+" • Zdjęcie 1 z "+galleryImages.length+" • "+ad.title; pd.style.display='block'; }
+  
+  const thumbs=document.getElementById('galleryThumbs'); 
+  thumbs.innerHTML=''; 
+  galleryImages.forEach((src,i)=>{
+    const wrap=document.createElement('div');
+    wrap.style.position='relative';
+    wrap.style.flexShrink='0';
+    const img=document.createElement('img'); 
+    img.src=src; 
+    if(i===0) img.classList.add('active'); 
+    img.onclick=()=>{galleryIndex=i; updateGallery();};
+    const badge=document.createElement('div');
+    badge.textContent=(i+1)+"/"+galleryImages.length;
+    badge.style.cssText='position:absolute;bottom:2px;left:2px;background:rgba(0,0,0,0.7);color:#fff;font-size:9px;padding:1px 4px;border-radius:4px';
+    wrap.appendChild(img);
+    wrap.appendChild(badge);
+    thumbs.appendChild(wrap);
+  }); 
+  
+  const ex=parseExtra(ad.description||''); 
+  const cleanDesc=(ad.description||'').split('\n\n[')[0].split('\n[')[0]; 
+  const price=ad.price||0;
+  const title=ad.title||'';
+  const marka=ad.brand||ad.marka||'';
+  const model=ad.model||'';
+  const rok=ad.year||ex.rok||'-';
+  const przeb=ad.mileage||ex.przebieg||ad.przebieg||'-';
+  const paliwo=ad.fuel||ex.paliwo||ad.paliwo||'-';
+  const lok=ad.location||'Gorzyce';
+  const phone=ex.telefon||ad.phone||'500 100 200';
+  
+  document.getElementById('galleryInfo').innerHTML=`
+    <div class="detail-section">
+      <div class="detail-title">${price} PLN</div>
+      <div class="detail-subtitle">${title}</div>
+      <div class="detail-grid">
+        <div style="background:#222;border:1px solid #2a2a2a;padding:10px;border-radius:10px;font-size:12px"><b>Marka:</b> ${marka}</div>
+        <div style="background:#222;border:1px solid #2a2a2a;padding:10px;border-radius:10px;font-size:12px"><b>Model:</b> ${model}</div>
+        <div style="background:#222;border:1px solid #2a2a2a;padding:10px;border-radius:10px;font-size:12px"><b>Rok:</b> ${rok}</div>
+        <div style="background:#222;border:1px solid #2a2a2a;padding:10px;border-radius:10px;font-size:12px"><b>Przebieg:</b> ${przeb}</div>
+        <div style="background:#222;border:1px solid #2a2a2a;padding:10px;border-radius:10px;font-size:12px"><b>Paliwo:</b> ${paliwo}</div>
+        <div style="background:#222;border:1px solid #2a2a2a;padding:10px;border-radius:10px;font-size:12px"><b>Lokalizacja:</b> ${lok}</div>
+      </div>
+      <div style="background:#0f0f0f;border:1px solid #222;border-radius:12px;padding:14px;margin:14px 0;font-size:13px;line-height:1.6;white-space:pre-wrap;color:#ddd"><b style="color:#facc15">Opis pojazdu:</b>
+${cleanDesc||'Brak opisu'}
+
+<b style="color:#888">Opisy zdjęć:</b>
+${galleryImages.map((_,i)=> (i+1)+". "+(labels[i]||"Zdjęcie "+(i+1))).join(" • ")}</div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px">
+        <a href="tel:${phone}" style="background:#22c55e;color:#fff;padding:12px 18px;border-radius:22px;text-decoration:none;font-weight:800;font-size:13px">📞 Zadzwoń: ${phone}</a>
+        <a href="https://www.google.com/maps/search/?api=1&query=${ad.lat||'49.96'},${ad.lng||'18.39'}" target="_blank" style="background:#0ea5e9;color:#fff;padding:12px 18px;border-radius:22px;text-decoration:none;font-weight:800;font-size:13px">📍 Mapa</a>
+      </div>
+      <div style="height:20px"></div>
+    </div>
+  `; 
+  modal.classList.add('open'); 
+  modal.style.display='flex'; 
+  document.body.style.overflow='hidden'; 
+}
+function updateGallery(){
+  document.getElementById('galleryMain').src=galleryImages[galleryIndex]; 
+  document.getElementById('galleryThumbs').querySelectorAll('img').forEach((im,i)=>{im.classList.toggle('active', i===galleryIndex);});
+  const pd=document.getElementById('photoDesc');
+  const labels=["Przód - zdjęcie główne","Tył / Bok","Wnętrze - bagażnik","Wnętrze - podsufitka","Szyberdach / Dach","Licznik - deska","Kokpit - środek","Zegary","Kokpit - kierownica","Wnętrze - drzwi"];
+  if(pd){
+    const ad=window.currentAd;
+    const title=ad?.title||'';
+    const total=galleryImages.length;
+    const lab=labels[galleryIndex]||("Zdjęcie "+(galleryIndex+1));
+    pd.textContent=lab+" • Zdjęcie "+(galleryIndex+1)+" z "+total+" • "+title;
+  }
+}
 function updateGallery(){document.getElementById('galleryMain').src=galleryImages[galleryIndex]; document.getElementById('galleryThumbs').querySelectorAll('img').forEach((im,i)=>{im.classList.toggle('active', i===galleryIndex);});}
 function galleryPrev(){galleryIndex=(galleryIndex-1+galleryImages.length)%galleryImages.length; updateGallery();}
 function galleryNext(){galleryIndex=(galleryIndex+1)%galleryImages.length; updateGallery();}
