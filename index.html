@@ -105,6 +105,121 @@ label.small{font-size:10px;opacity:.7;display:block;margin:8px 12px 2px;text-tra
   setInterval(glue, 1000);
 })();
 </script>
+
+<style id="one-scroll-fix">
+/* JEDEN SCROLL - całość razem */
+#galleryModal{overflow-y:auto!important;padding:16px!important}
+#galleryModal .modal-box{
+  max-height:none!important;
+  height:auto!important;
+  overflow:visible!important;
+  display:block!important;
+  max-width:860px!important;
+  margin:0 auto!important;
+}
+.gallery-main-wrap{
+  position:relative!important;
+  top:auto!important;
+  width:100%!important;
+  background:#000!important;
+  display:block!important;
+  flex-shrink:0!important;
+  overflow:visible!important;
+}
+#galleryMain{
+  width:100%!important;
+  max-height:none!important;
+  height:auto!important;
+  object-fit:contain!important;
+  display:block!important;
+}
+#photoDesc{
+  position:relative!important;
+  top:auto!important;
+  width:100%!important;
+  background:#1a1a1a!important;
+  border-top:1px solid #222!important;
+  padding:10px 12px!important;
+  font-size:12px!important;
+  color:#bbb!important;
+  text-align:center!important;
+  display:block!important;
+  margin:0!important;
+}
+.gallery-thumbs, #galleryThumbs{
+  position:relative!important;
+  top:auto!important;
+  width:100%!important;
+  background:#0e0e0e!important;
+  display:flex!important;
+  gap:8px!important;
+  overflow-x:auto!important;
+  overflow-y:visible!important;
+  padding:10px!important;
+  border-top:1px solid #1e1e1e!important;
+  border-bottom:1px solid #1e1e1e!important;
+  flex-shrink:0!important;
+}
+.gallery-info, #galleryInfo{
+  overflow:visible!important;
+  max-height:none!important;
+  height:auto!important;
+  flex:none!important;
+  padding:18px!important;
+  background:#151515!important;
+}
+/* Usuń stare sticky i overflow */
+.detail-section{overflow:visible!important;max-height:none!important}
+</style>
+<script>
+(function(){
+  function fixScroll(){
+    const modal = document.getElementById('galleryModal');
+    const box = modal ? modal.querySelector('.modal-box') : null;
+    const mainWrap = document.querySelector('.gallery-main-wrap');
+    const main = document.getElementById('galleryMain');
+    const pd = document.getElementById('photoDesc');
+    const thumbs = document.getElementById('galleryThumbs');
+    const info = document.getElementById('galleryInfo');
+    
+    if(box){
+      box.style.maxHeight='none';
+      box.style.height='auto';
+      box.style.overflow='visible';
+      box.style.display='block';
+    }
+    if(modal){
+      modal.style.overflowY='auto';
+    }
+    if(mainWrap){
+      mainWrap.style.position='relative';
+      mainWrap.style.top='auto';
+      mainWrap.style.overflow='visible';
+      // Ensure order: main -> pd
+      if(main && pd && pd.parentElement===mainWrap){
+        if(pd.previousElementSibling !== main){
+          mainWrap.insertBefore(pd, main.nextSibling);
+        }
+      }
+    }
+    if(info){
+      info.style.overflow='visible';
+      info.style.maxHeight='none';
+      info.style.height='auto';
+    }
+  }
+  const origOpen = window.openGallery;
+  window.openGallery = function(ad){
+    const r = origOpen ? origOpen(ad) : null;
+    setTimeout(fixScroll, 30);
+    setTimeout(fixScroll, 300);
+    return r;
+  };
+  // Fix on load
+  document.addEventListener('DOMContentLoaded', fixScroll);
+  setInterval(fixScroll, 1000);
+})();
+</script>
 </head>
 <body>
 <div class="header"><div class="logo">WROOMER<span>.PL</span> <span style="font-size:10px;background:#facc15;color:#000;padding:2px 6px;border-radius:10px">v11 8 KAFELI FIXED</span></div><div style="display:flex;gap:6px;align-items:center"><button class="btn btn-dark" id="btnLogin">Zaloguj</button><button class="btn btn-dark" id="btnLogout" style="display:none">Wyloguj</button><button class="btn btn-yellow" id="btnAdd">+ Dodaj</button></div></div>
