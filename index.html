@@ -60,6 +60,51 @@ label.small{font-size:10px;opacity:.7;display:block;margin:8px 12px 2px;text-tra
 .blog-footer p, .blog-footer a{font-size:12px;color:#aaa;line-height:1.6;text-decoration:none}
 .blog-footer a:hover{color:#facc15}
 </style>
+
+<style id="glued-fix">
+/* Sklej zdjęcie + opis + miniaturki razem */
+#galleryModal .modal-box{display:flex!important;flex-direction:column!important;max-height:92vh!important;overflow-y:auto!important;-webkit-overflow-scrolling:touch!important}
+.gallery-main-wrap{position:sticky!important;top:0!important;z-index:2!important;background:#000!important;flex-shrink:0!important;display:block!important;width:100%!important}
+#galleryMain{width:100%!important;max-height:60vh!important;object-fit:contain!important;display:block!important}
+#photoDesc{position:relative!important;width:100%!important;background:#1a1a1a!important;border-top:1px solid #222!important;padding:10px 12px!important;font-size:12px!important;color:#bbb!important;text-align:center!important;display:block!important;flex-shrink:0!important;margin:0!important}
+.gallery-thumbs{position:relative!important;flex-shrink:0!important;background:#0e0e0e!important;z-index:2!important}
+.gallery-info{overflow-y:visible!important;max-height:none!important;flex:none!important}
+</style>
+<script>
+(function(){
+  // Move photoDesc directly after galleryMain so it's glued
+  function glue(){
+    const wrap = document.querySelector('.gallery-main-wrap');
+    const main = document.getElementById('galleryMain');
+    const pd = document.getElementById('photoDesc');
+    const thumbs = document.getElementById('galleryThumbs');
+    if(wrap && main && pd){
+      // Ensure order: main -> pd
+      if(pd.parentElement !== wrap || pd.previousElementSibling !== main){
+        wrap.insertBefore(pd, main.nextSibling);
+      }
+      pd.style.position='relative';
+      pd.style.top='0';
+    }
+    // Ensure thumbs is right after wrap, not inside
+    const box = document.querySelector('.modal-box');
+    if(box && wrap && thumbs){
+      if(thumbs.parentElement === wrap){
+        // Move thumbs out of wrap to after wrap
+        box.insertBefore(thumbs, wrap.nextSibling);
+      }
+    }
+  }
+  const origOpen = window.openGallery;
+  window.openGallery = function(ad){
+    const r = origOpen ? origOpen(ad) : null;
+    setTimeout(glue, 50);
+    setTimeout(glue, 300);
+    return r;
+  };
+  setInterval(glue, 1000);
+})();
+</script>
 </head>
 <body>
 <div class="header"><div class="logo">WROOMER<span>.PL</span> <span style="font-size:10px;background:#facc15;color:#000;padding:2px 6px;border-radius:10px">v11 8 KAFELI FIXED</span></div><div style="display:flex;gap:6px;align-items:center"><button class="btn btn-dark" id="btnLogin">Zaloguj</button><button class="btn btn-dark" id="btnLogout" style="display:none">Wyloguj</button><button class="btn btn-yellow" id="btnAdd">+ Dodaj</button></div></div>
