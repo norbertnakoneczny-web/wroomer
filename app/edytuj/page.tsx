@@ -6,6 +6,7 @@ export default async function EdytujPage({ params }: { params: Promise<{ id: str
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   const { data: ogloszenie } = await supabase.from('ogloszenia').select('*').eq('id', id).single()
+  
   if (!ogloszenie || !user || ogloszenie.user_id !== user.id) return notFound()
 
   async function save(formData: FormData) {
