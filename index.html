@@ -62,86 +62,97 @@ label.small{font-size:10px;opacity:.7;display:block;margin:8px 12px 2px;text-tra
 .blog-footer a:hover{color:#facc15}
 </style>
 
-<style id="photodesc-fix">
-#photoDesc, div#photoDesc { 
-  display:block !important; 
-  width:100% !important; 
-  background:#111 !important; 
-  border-top:1px solid #222 !important; 
-  padding:10px 14px !important; 
-  font-size:13px !important; 
-  color:#ccc !important; 
-  text-align:center !important; 
-  order:2 !important;
-  flex-shrink:0 !important;
-}
-.gallery-main-wrap { 
-  display:flex !important; 
-  flex-direction:column !important; 
-  width:100% !important; 
-  background:#000 !important; 
-  align-items:stretch !important;
-}
-#galleryMain { 
-  width:100% !important; 
-  max-height:65vh !important; 
-  object-fit:contain !important; 
-  background:#000 !important; 
-  order:1 !important;
-}
-#galleryModal { overflow-y:auto !important; }
-#galleryModal .modal-box { overflow-y:auto !important; max-height:100vh !important; }
-#galleryInfo { padding-bottom:80px !important; }
+<style id="final-gallery-fix">
+/* MODAL - fixed layout */
+#galleryModal{position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:9999;display:none;overflow-y:auto;padding:20px 12px}
+#galleryModal.open, #galleryModal[style*="flex"]{display:flex !important;justify-content:center;align-items:flex-start}
+.modal-box, #galleryModal .modal-box{background:#151515;border-radius:16px;max-width:920px;width:100%;margin:0 auto;overflow:hidden;display:flex;flex-direction:column;max-height:90vh;overflow-y:auto;border:1px solid #222}
+.modal-header{padding:14px 18px;border-bottom:1px solid #222;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:#151515;z-index:2}
+.gallery-main-wrap{position:relative;background:#000;width:100%;display:flex;flex-direction:column;align-items:center}
+#galleryMain{width:100%;height:auto;max-height:62vh;object-fit:contain;background:#000;display:block}
+.gallery-nav{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.9);border:0;width:40px;height:40px;border-radius:50%;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:2}
+.gallery-nav.prev{left:12px}.gallery-nav.next{right:12px}
+#photoDesc{width:100%;background:#111;border-top:1px solid #222;padding:10px 14px;font-size:12px;color:#aaa;text-align:center;display:block !important}
+#galleryThumbs{width:100%;background:#0f0f0f;padding:10px 12px;display:flex;gap:8px;overflow-x:auto;border-top:1px solid #1a1a1a;border-bottom:1px solid #1a1a1a;flex-shrink:0}
+#galleryThumbs img{width:72px;height:54px;object-fit:cover;border-radius:8px;cursor:pointer;border:2px solid transparent;opacity:0.6;flex-shrink:0}
+#galleryThumbs img.active{border-color:#facc15;opacity:1}
+.thumb-badge{position:absolute;bottom:2px;left:2px;background:rgba(0,0,0,0.75);color:#fff;font-size:9px;padding:1px 4px;border-radius:4px}
+.thumb-wrap{position:relative;flex-shrink:0}
+#galleryInfo{padding:18px;background:#151515;overflow-y:visible}
+.detail-price{font-size:26px;font-weight:900;color:#facc15}
+.detail-title{font-size:16px;font-weight:700;margin-top:4px}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:14px 0}
+.detail-box{background:#1e1e1e;border:1px solid #2a2a2a;padding:10px;border-radius:10px;font-size:12px}
+.detail-desc{background:#0f0f0f;border:1px solid #222;border-radius:12px;padding:14px;margin:12px 0;font-size:13px;line-height:1.6;white-space:pre-wrap;color:#ddd}
+.btn-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+.btn-call{background:#22c55e;color:#fff;padding:12px 18px;border-radius:22px;text-decoration:none;font-weight:800;font-size:13px;display:inline-flex}
+.btn-map{background:#0ea5e9;color:#fff;padding:12px 18px;border-radius:22px;text-decoration:none;font-weight:800;font-size:13px;display:inline-flex}
 </style>
 <script>
-const photoLabels = ["Przód - zdjęcie główne","Tył / Bok","Wnętrze - bagażnik","Wnętrze - podsufitka","Szyberdach / Dach","Licznik - deska","Kokpit - środek","Zegary","Kokpit - kierownica","Wnętrze - drzwi"];
-(function(){
-  function ensurePhotoDesc(ad){
-    let pd = document.getElementById('photoDesc');
+const _photoLabels = ["Przód - zdjęcie główne","Tył / Bok","Wnętrze - bagażnik","Wnętrze - podsufitka","Szyberdach / Dach","Licznik - deska","Kokpit - środek","Zegary","Kokpit - kierownica","Wnętrze - drzwi"];
+function ensurePhotoDesc(){
+  let pd = document.getElementById('photoDesc');
+  if(!pd){
+    pd = document.createElement('div');
+    pd.id = 'photoDesc';
     const wrap = document.querySelector('.gallery-main-wrap');
-    if(!pd && wrap){
-      pd = document.createElement('div');
-      pd.id = 'photoDesc';
-      wrap.appendChild(pd);
-    }
-    return pd;
+    if(wrap) wrap.appendChild(pd);
   }
-  const origOpen = window.openGallery;
-  window.openGallery = function(ad){
-    // call original first
-    let r;
-    if(origOpen) r = origOpen(ad);
-    // then fix layout
+  return pd;
+}
+const __origOpen = window.openGallery;
+window.openGallery = function(ad){
+  // call original if exists
+  let res;
+  if(__origOpen && __origOpen !== window.openGallery){
+    try{ res = __origOpen(ad); }catch(e){}
+  }
+  // force correct layout after original
+  setTimeout(()=>{
+    const modal = document.getElementById('galleryModal');
+    if(modal){ modal.classList.add('open'); modal.style.display='flex'; modal.style.overflowY='auto'; }
+    const box = document.querySelector('.modal-box');
+    if(box){ box.style.display='flex'; box.style.flexDirection='column'; box.style.maxHeight='90vh'; box.style.overflowY='auto'; }
     const mainWrap = document.querySelector('.gallery-main-wrap');
-    if(mainWrap){
-      mainWrap.style.display='flex';
-      mainWrap.style.flexDirection='column';
-      mainWrap.style.width='100%';
-    }
+    if(mainWrap){ mainWrap.style.display='flex'; mainWrap.style.flexDirection='column'; mainWrap.style.width='100%'; mainWrap.style.background='#000'; }
     const mainImg = document.getElementById('galleryMain');
-    if(mainImg){ mainImg.style.order='1'; mainImg.style.width='100%'; }
-    let pd = ensurePhotoDesc(ad);
+    if(mainImg){ mainImg.style.width='100%'; mainImg.style.maxHeight='62vh'; mainImg.style.objectFit='contain'; }
+    // ensure photoDesc is UNDER image, full width
+    let pd = ensurePhotoDesc();
     if(pd){
       pd.style.display='block';
-      pd.style.order='2';
+      pd.style.width='100%';
       const idx = window.galleryIndex || 0;
-      const total = (window.galleryImages||ad.images||[]).length;
-      pd.textContent = (photoLabels[idx]||("Zdjęcie "+(idx+1))) + " • Zdjęcie " + (idx+1) + " z " + total + " • " + ad.title;
+      const total = (window.galleryImages||ad.images||[]).length || 10;
+      const label = _photoLabels[idx] || ("Zdjęcie "+(idx+1));
+      pd.textContent = label + " • Zdjęcie " + (idx+1) + " z " + total + " • " + (ad.title||'');
     }
-    return r;
-  };
-  const origUpdate = window.updateGallery;
-  window.updateGallery = function(){
-    if(origUpdate) origUpdate();
-    const pd = document.getElementById('photoDesc');
-    if(pd){
-      const idx = window.galleryIndex || 0;
-      const total = (window.galleryImages||[]).length;
-      const title = document.getElementById('galleryTitle')?.textContent || '';
-      pd.textContent = (photoLabels[idx]||("Zdjęcie "+(idx+1))) + " • Zdjęcie " + (idx+1) + " z " + total + (title ? " • " + title : "");
-    }
-  };
-})();
+    // fix thumbs not overlapping
+    const thumbs = document.getElementById('galleryThumbs');
+    if(thumbs){ thumbs.style.display='flex'; thumbs.style.position='relative'; thumbs.style.zIndex='1'; }
+    // ensure info is visible and scrollable
+    const info = document.getElementById('galleryInfo');
+    if(info){ info.style.display='block'; info.style.paddingBottom='40px'; }
+  },80);
+  return res;
+};
+const __origUpdate = window.updateGallery;
+window.updateGallery = function(){
+  if(__origUpdate && __origUpdate !== window.updateGallery){ try{ __origUpdate(); }catch(e){} }
+  const pd = document.getElementById('photoDesc');
+  if(pd){
+    const idx = window.galleryIndex || 0;
+    const total = (window.galleryImages||[]).length || 10;
+    const title = document.querySelector('.modal-header')?.textContent || document.getElementById('galleryTitle')?.textContent || '';
+    const label = _photoLabels[idx] || ("Zdjęcie "+(idx+1));
+    pd.textContent = label + " • Zdjęcie " + (idx+1) + " z " + total + (title ? " • " + title.trim() : "");
+  }
+};
+window.closeGallery = function(){
+  const modal = document.getElementById('galleryModal');
+  if(modal){ modal.classList.remove('open'); modal.style.display='none'; }
+  document.body.style.overflow='';
+};
 </script>
 </head>
 <body>
