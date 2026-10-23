@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="pl"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>WROOMER.PL - Ogłoszenia Motoryzacyjne | Kup, Sprzedaj, Zamień Auto</title>
+<meta name="description" content="Ogólnopolska darmowa giełda aut. Wystaw auto za darmo bez limitów, kup bez prowizji i ukrytych opłat, zamień. Tysiące ogłoszeń z całej Polski!">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-34L1GMG3GK"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-34L1GMG3GK');
+</script>
+<link rel="canonical" href="https://www.wroomer.pl/">
+<meta property="og:title" content="WROOMER.PL - Ogólnopolska darmowa giełda aut">
+<meta property="og:description" content="Wystaw auto za darmo, kup bez prowizji, zamień. Darmowa giełda aut z całej Polski.">
+<meta property="og:url" content="https://www.wroomer.pl/">
+<meta property="og:type" content="website">
+<meta name="robots" content="index, follow">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box} body{font-family:Inter,Arial,sans-serif;background:#080808;color:#fff}
+.header{height:54px;background:#000;border-bottom:2px solid #facc15;display:flex;align-items:center;justify-content:space-between;padding:0 14px;position:sticky;top:0;z-index:9999}
+.logo{font-weight:900;font-size:21px} .logo span{color:#facc15}
+.btn{padding:8px 14px;border-radius:20px;border:0;font-weight:800;cursor:pointer;font-size:13px} .btn-yellow{background:#facc15;color:#000} .btn-dark{background:#222;color:#fff;border:1px solid #333} .btn-blue{background:#3b82f6;color:#fff}
+.btn-gps{background:#0ea5e9;color:#fff;border:0;padding:10px 12px;border-radius:8px;font-weight:800;font-size:13px;cursor:pointer;display:flex;align-items:center;gap:6px;width:100%;justify-content:center;margin-bottom:6px}
+.btn-gps.active{background:#22c55e}
+.top-chips{background:#0a0a0a;border-bottom:1px solid #1a1a1a;padding:10px 12px;display:flex;gap:8px;overflow-x:auto;position:sticky;top:54px;z-index:8000} .chip{background:#1a1a1a;border:1px solid #2a2a2a;padding:7px 14px;border-radius:20px;font-size:13px;white-space:nowrap;cursor:pointer;color:#aaa} .chip.active{background:#facc15;color:#000}
+.sidebar-desktop{width:310px;background:#111;border-right:1px solid #1e1e1e;padding:14px;position:sticky;top:96px;height:calc(100vh - 96px);overflow:auto}
+.mobile-top-bar{display:none;background:#111;border-bottom:1px solid #222;padding:10px 12px;position:sticky;top:96px;z-index:7000}
+@media(max-width:900px){.sidebar-desktop{display:none !important} .mobile-top-bar{display:flex !important;gap:8px} .layout{flex-direction:column}}
+@media(min-width:901px){.mobile-top-bar{display:none !important} .mobile-drawer{display:none !important}}
+.mobile-drawer{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:#111;z-index:10000;overflow:auto;padding:16px} .mobile-drawer.open{display:block !important} .mobile-drawer-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;position:sticky;top:0;background:#111;padding:10px 0;z-index:2;border-bottom:1px solid #222}
+.select,.input{width:100%;background:#1a1a1a;border:1px solid #2a2a2a;color:#fff;padding:10px;border-radius:8px;margin-bottom:6px;font-size:14px}
+.gps-info{background:#0f172a;border:1px solid #1e40af;color:#93c5fd;padding:8px 10px;border-radius:8px;font-size:12px;margin:6px 0;display:none} .gps-info.show{display:block} .gps-info.success{background:#052e16;border-color:#15803d;color:#86efac}
+.layout{display:flex;max-width:1600px;margin:0 auto} .grid{flex:1;padding:12px;display:grid;grid-template-columns:repeat(4,1fr);gap:10px} @media(max-width:1300px){.grid{grid-template-columns:repeat(3,1fr)}} @media(max-width:900px){.grid{grid-template-columns:repeat(2,1fr);gap:8px;padding:8px}}
+.card{background:#181818;border:1px solid #222;border-radius:12px;overflow:hidden;cursor:pointer;position:relative} .card-img-wrap{width:100%;height:160px;position:relative;background:#0f0f0f;overflow:hidden} @media(max-width:900px){.card-img-wrap{height:130px}} .card-img-wrap img{width:100%;height:100%;object-fit:cover;object-position:center center;display:block} .card-img-count{position:absolute;bottom:6px;right:6px;background:rgba(0,0,0,.75);color:#fff;font-size:11px;padding:3px 6px;border-radius:4px} .card-body{padding:9px} .card-title{font-size:13px;min-height:32px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden} .card-price{font-size:14px;font-weight:800;color:#facc15;margin-top:5px} .card-location{font-size:10px;color:#888;margin-top:3px} .card-distance{font-size:10px;color:#22c55e;font-weight:700;margin-top:2px} .owner-actions{position:absolute;top:6px;right:6px;display:flex;gap:4px;z-index:5} .owner-actions button{padding:5px 8px;border-radius:12px;border:0;font-size:10px;font-weight:900;cursor:pointer} .edit{background:#facc15;color:#000} .del{background:#ff3333;color:#fff}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.92);display:none;align-items:center;justify-content:center;z-index:11000;padding:12px} .modal.open{display:flex} @media(max-width:700px){.modal{align-items:flex-end;padding:0} .modal-box{border-radius:18px 18px 0 0}}
+.modal-box{background:#1a1a1a;border:1px solid #333;border-radius:16px;width:100%;max-width:680px;max-height:94vh;overflow:auto} .modal-header{padding:14px 16px;border-bottom:1px solid #2a2a2a;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:#1a1a1a;z-index:2}
+.gallery-modal .modal-box{max-width:860px;background:#151515;border:1px solid #222;border-radius:16px;overflow:hidden;display:flex;flex-direction:column;max-height:92vh} .gallery-main-wrap{position:relative;width:100%;background:#000;display:flex;flex-direction:column;align-items:center;flex-shrink:0} .gallery-main{width:100%;max-height:58vh;object-fit:contain;display:block;background:#000} .gallery-nav{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.92);border:0;width:40px;height:40px;border-radius:50%;font-size:22px;cursor:pointer;z-index:2} .gallery-nav.prev{left:12px} .gallery-nav.next{right:12px} #photoDesc{width:100%;background:#1a1a1a;border-top:1px solid #222;padding:10px 12px;font-size:12px;color:#aaa;text-align:center;display:block} .gallery-thumbs{display:flex;gap:8px;overflow:auto;padding:10px;background:#0e0e0e;border-top:1px solid #1e1e1e;border-bottom:1px solid #1e1e1e;flex-shrink:0} .gallery-thumbs img{width:70px;height:52px;object-fit:cover;border-radius:8px;cursor:pointer;border:2px solid transparent;flex-shrink:0;opacity:0.7} .gallery-thumbs img.active{border-color:#facc15;opacity:1} .gallery-info{padding:0;background:#151515;overflow-y:auto;flex:1} .detail-section{padding:18px;border-bottom:1px solid #222} .detail-title{font-size:24px;font-weight:900;color:#facc15} .detail-subtitle{font-size:15px;color:#fff;margin:6px 0 14px} .detail-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:12px} @media(max-width:600px){.detail-grid{grid-template-columns:1fr}} .detail-item{background:#222;border:1px solid #2a2a2a;border-radius:10px;padding:10px 12px;display:flex;justify-content:space-between;align-items:center} .detail-item .label{font-size:10px;color:#888;text-transform:uppercase;font-weight:700} .detail-item .value{font-size:13px;font-weight:700;color:#fff} .detail-desc{padding:16px;background:#111} .detail-desc h4{font-size:12px;color:#facc15;margin-bottom:8px;text-transform:uppercase} .detail-desc p{font-size:14px;line-height:1.6;color:#ddd;white-space:pre-wrap} .owner-bar{padding:12px 16px;background:#111;border-top:1px solid #222;display:flex;gap:8px}
+.row{display:flex;gap:8px} .row> *{flex:1} .error{background:#3a1111;border:1px solid #a33;color:#ffb3b3;padding:10px;border-radius:8px;margin:8px 12px;font-size:13px} .success{background:#112a11;border:1px solid #3a3;color:#b3ffb3;padding:10px;border-radius:8px;margin:8px 12px} .file-label{background:#222;border:1px dashed #444;padding:18px;text-align:center;border-radius:10px;cursor:pointer;display:block;margin:10px 12px;font-size:13px} #preview{display:flex;gap:6px;flex-wrap:wrap;margin:8px 12px} #preview .p{position:relative} #preview img{width:60px;height:60px;object-fit:cover;border-radius:6px} #preview .x{position:absolute;top:-5px;right:-5px;background:#facc15;color:#000;border-radius:50%;width:16px;height:16px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;cursor:pointer}
+h4{font-size:11px;font-weight:800;letter-spacing:1px;margin:14px 0 6px;color:#facc15;opacity:.8}
+label.small{font-size:10px;opacity:.7;display:block;margin:8px 12px 2px;text-transform:uppercase;font-weight:700;letter-spacing:.5px}
+.other-input{display:none;margin:0 12px;width:calc(100% - 24px);background:#222;border:1px solid #facc15;color:#fff;padding:10px;border-radius:8px;font-size:14px} .other-input.show{display:block}
+.blog-section{padding:24px 12px;background:#0a0a0a;border-top:1px solid #1e1e1e;margin-top:20px;max-width:1600px;margin-left:auto;margin-right:auto}
+.blog-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;padding:0 4px}
+.blog-title{font-size:14px;font-weight:900;letter-spacing:1px;color:#fff}
+.blog-title span{color:#facc15}
+.blog-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;width:100%}
+@media(max-width:1100px){.blog-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.blog-grid{grid-template-columns:1fr}}
+.blog-card{background:#181818;border:1px solid #222;border-radius:12px;overflow:hidden;cursor:pointer;transition:transform .2s;width:100%;display:block}
+.blog-card:hover{transform:translateY(-2px);border-color:#333}
+.blog-img{width:100%;height:140px;object-fit:cover;background:#111;display:block}
+.blog-body{padding:12px}
+.blog-card-title{font-size:13px;font-weight:700;line-height:1.3;min-height:36px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;color:#fff}
+.blog-meta{font-size:10px;color:#777;margin-top:6px;display:flex;gap:8px}
+.blog-footer{padding:20px 12px;background:#080808;border-top:1px solid #1e1e1e;margin-top:20px;display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:20px;max-width:1600px;margin-left:auto;margin-right:auto}
+@media(max-width:800px){.blog-footer{grid-template-columns:1fr}}
+.blog-footer h4{font-size:11px;font-weight:900;color:#facc15;margin-bottom:8px;letter-spacing:.5px}
+.blog-footer p, .blog-footer a{font-size:12px;color:#aaa;line-height:1.6;text-decoration:none}
+.blog-footer a:hover{color:#facc15}
+</style>
+
+<style id="glued-fix">
+/* Sklej zdjęcie + opis + miniaturki razem */
+#galleryModal .modal-box{display:flex!important;flex-direction:column!important;max-height:92vh!important;overflow-y:auto!important;-webkit-overflow-scrolling:touch!important}
+.gallery-main-wrap{position:sticky!important;top:0!important;z-index:2!important;background:#000!important;flex-shrink:0!important;display:block!important;width:100%!important}
+#galleryMain{width:100%!important;max-height:60vh!important;object-fit:contain!important;display:block!important}
+#photoDesc{position:relative!important;width:100%!important;background:#1a1a1a!important;border-top:1px solid #222!important;padding:10px 12px!important;font-size:12px!important;color:#bbb!important;text-align:center!important;display:block!important;flex-shrink:0!important;margin:0!important}
+.gallery-thumbs{position:relative!important;flex-shrink:0!important;background:#0e0e0e!important;z-index:2!important}
+.gallery-info{overflow-y:visible!important;max-height:none!important;flex:none!important}
+</style>
+<script>
+(function(){
+  // Move photoDesc directly after galleryMain so it's glued
+  function glue(){
+    const wrap = document.querySelector('.gallery-main-wrap');
+    const main = document.getElementById('galleryMain');
+    const pd = document.getElementById('photoDesc');
+    const thumbs = document.getElementById('galleryThumbs');
+    if(wrap && main && pd){
+      // Ensure order: main -> pd
+      if(pd.parentElement !== wrap || pd.previousElementSibling !== main){
+        wrap.insertBefore(pd, main.nextSibling);
+      }
+      pd.style.position='relative';
+      pd.style.top='0';
+    }
+    // Ensure thumbs is right after wrap, not inside
+    const box = document.querySelector('.modal-box');
+    if(box && wrap && thumbs){
+      if(thumbs.parentElement === wrap){
+        // Move thumbs out of wrap to after wrap
+        box.insertBefore(thumbs, wrap.nextSibling);
+      }
+    }
+  }
+  const origOpen = window.openGallery;
+  window.openGallery = function(ad){
+    const r = origOpen ? origOpen(ad) : null;
+    setTimeout(glue, 50);
+    setTimeout(glue, 300);
+    return r;
+  };
+  setInterval(glue, 1000);
+})();
+</script>
+
+<style id="one-scroll-fix">
+/* JEDEN SCROLL - całość razem */
+#galleryModal{overflow-y:auto!important;padding:16px!important}
+#galleryModal .modal-box{
+  max-height:none!important;
+  height:auto!important;
+  overflow:visible!important;
+  display:block!important;
+  max-width:860px!important;
+  margin:0 auto!important;
+}
+.gallery-main-wrap{
+  position:relative!important;
+  top:auto!important;
+  width:100%!important;
+  background:#000!important;
+  display:block!important;
+  flex-shrink:0!important;
+  overflow:visible!important;
+}
+#galleryMain{
+  width:100%!important;
+  max-height:none!important;
+  height:auto!important;
+  object-fit:contain!important;
+  display:block!important;
+}
+#photoDesc{
+  position:relative!important;
+  top:auto!important;
+  width:100%!important;
+  background:#1a1a1a!important;
+  border-top:1px solid #222!important;
+  padding:10px 12px!important;
+  font-size:12px!important;
+  color:#bbb!important;
+  text-align:center!important;
+  display:block!important;
+  margin:0!important;
+}
+.gallery-thumbs, #galleryThumbs{
+  position:relative!important;
+  top:auto!important;
+  width:100%!important;
+  background:#0e0e0e!important;
+  display:flex!important;
+  gap:8px!important;
+  overflow-x:auto!important;
+  overflow-y:visible!important;
+  padding:10px!important;
+  border-top:1px solid #1e1e1e!important;
+  border-bottom:1px solid #1e1e1e!important;
+  flex-shrink:0!important;
+}
+.gallery-info, #galleryInfo{
+  overflow:visible!important;
+  max-height:none!important;
+  height:auto!important;
+  flex:none!important;
+  padding:18px!important;
+  background:#151515!important;
+}
+/* Usuń stare sticky i overflow */
+.detail-section{overflow:visible!important;max-height:none!important}
+</style>
+<script>
+(function(){
+  function fixScroll(){
+    const modal = document.getElementById('galleryModal');
+    const box = modal ? modal.querySelector('.modal-box') : null;
+    const mainWrap = document.querySelector('.gallery-main-wrap');
+    const main = document.getElementById('galleryMain');
+    const pd = document.getElementById('photoDesc');
+    const thumbs = document.getElementById('galleryThumbs');
+    const info = document.getElementById('galleryInfo');
+    
+    if(box){
+      box.style.maxHeight='none';
+      box.style.height='auto';
+      box.style.overflow='visible';
+      box.style.display='block';
+    }
+    if(modal){
+      modal.style.overflowY='auto';
+    }
+    if(mainWrap){
+      mainWrap.style.position='relative';
+      mainWrap.style.top='auto';
+      mainWrap.style.overflow='visible';
+      // Ensure order: main -> pd
+      if(main && pd && pd.parentElement===mainWrap){
+        if(pd.previousElementSibling !== main){
+          mainWrap.insertBefore(pd, main.nextSibling);
+        }
+      }
+    }
+    if(info){
+      info.style.overflow='visible';
+      info.style.maxHeight='none';
+      info.style.height='auto';
+    }
+  }
+  const origOpen = window.openGallery;
+  window.openGallery = function(ad){
+    const r = origOpen ? origOpen(ad) : null;
+    setTimeout(fixScroll, 30);
+    setTimeout(fixScroll, 300);
+    return r;
+  };
+  // Fix on load
+  document.addEventListener('DOMContentLoaded', fixScroll);
+  setInterval(fixScroll, 1000);
+})();
+</script>
+
+<style id="FIX-BEZ-PASKA-Z-MINIATURKAMI">
+/* TYLKO pasek ukrywamy */
+#photoDesc{
+  display:none !important;
+}
+/* Miniaturki MUSZĄ być widoczne */
+#galleryThumbs, .gallery-thumbs, [id*="Thumbs"]{
+  display:flex !important;
+  visibility:visible !important;
+  opacity:1 !important;
+  height:auto !important;
+  overflow-x:auto !important;
+  gap:8px !important;
+  padding:12px !important;
+  background:#0e0e0e !important;
+  flex-wrap:nowrap !important;
+}
+#galleryThumbs img, .gallery-thumbs img{
+  width:72px !important;
+  height:54px !important;
+  object-fit:cover !important;
+  border-radius:6px !important;
+  cursor:pointer !important;
+  display:block !important;
+}
+/* Usuń stare fixy które robiły 2 paski */
+#photoDesc + div, div:has(> #photoDesc) {
+  display:block !important;
+}
+</style>
+<script>
+(function(){
+  function fixGallery(){
+    const pd=document.getElementById('photoDesc');
+    if(pd) pd.style.display='none';
+    const thumbs=document.getElementById('galleryThumbs');
+    if(thumbs){
+      thumbs.style.display='flex';
+      thumbs.style.visibility='visible';
+      thumbs.style.opacity='1';
+    }
+    // Usuń wszystkie duplikaty pasków z tekstem Przód
+    document.querySelectorAll('div').forEach(d=>{
+      if(d.id!=='galleryThumbs' && d.textContent.trim().startsWith('Przód - zdjęcie główne')){
+        if(d.id!=='photoDesc') d.remove();
+      }
+    });
+  }
+  const orig=window.openGallery;
+  window.openGallery=function(ad){
+    const r=orig?orig.apply(this,arguments):null;
+    setTimeout(fixGallery, 20);
+    setTimeout(fixGallery, 200);
+    setTimeout(fixGallery, 600);
+    return r;
+  };
+  setInterval(fixGallery, 1000);
+})();
+</script>
+
+<style id="FIX-PRZYCIECE-ZDJECIE">
+/* Napraw przycięte zdjęcie - cała wysokość widoczna */
+.gallery-main-wrap, #galleryModal .gallery-main-wrap{
+  position:relative!important;
+  width:100%!important;
+  height:auto!important;
+  max-height:none!important;
+  min-height:0!important;
+  overflow:visible!important;
+  display:flex!important;
+  justify-content:center!important;
+  align-items:center!important;
+  background:#000!important;
+  margin-top:0!important;
+  padding-top:0!important;
+}
+#galleryMain{
+  width:100%!important;
+  height:auto!important;
+  max-height:78vh!important;
+  object-fit:contain!important;
+  object-position:center!important;
+  display:block!important;
+  margin:0 auto!important;
+}
+#galleryModal .modal-box{
+  padding-top:0!important;
+  margin-top:0!important;
+}
+/* Header BMW 218 2014 nie może przesuwać */
+#galleryModal .modal-header{
+  position:relative!important;
+  top:auto!important;
+  margin:0!important;
+  padding:14px 20px!important;
+}
+/* Miniaturki pod zdjęciem */
+#galleryThumbs{
+  display:flex!important;
+  visibility:visible!important;
+  margin-top:0!important;
+}
+</style>
+<script>
+(function(){
+  function naprawZdjecie(){
+    const main=document.getElementById('galleryMain');
+    if(main){
+      main.style.objectFit='contain';
+      main.style.height='auto';
+      main.style.maxHeight='78vh';
+      main.style.width='100%';
+    }
+    const wrap=document.querySelector('.gallery-main-wrap');
+    if(wrap){
+      wrap.style.height='auto';
+      wrap.style.overflow='visible';
+      wrap.style.marginTop='0';
+    }
+    const pd=document.getElementById('photoDesc');
+    if(pd) pd.style.display='none';
+  }
+  const orig=window.openGallery;
+  window.openGallery=function(ad){
+    const r=orig?orig.apply(this,arguments):null;
+    setTimeout(naprawZdjecie, 10);
+    setTimeout(naprawZdjecie, 200);
+    setTimeout(naprawZdjecie, 600);
+    return r;
+  };
+})();
+</script>
+</head>
+<body>
+<div class="header"><div class="logo">WROOMER<span>.PL</span> <span style="font-size:10px;background:#facc15;color:#000;padding:2px 6px;border-radius:10px">v11 8 KAFELI FIXED</span></div><div style="display:flex;gap:6px;align-items:center"><button class="btn btn-dark" id="btnLogin">Zaloguj</button><button class="btn btn-dark" id="btnLogout" style="display:none">Wyloguj</button><button class="btn btn-yellow" id="btnAdd">+ Dodaj</button></div></div>
+<div class="top-chips"><div class="chip active" onclick="quickFilter('')">Wszystkie</div><div class="chip" onclick="quickFilter('Fiat')">Fiat</div><div class="chip" onclick="quickFilter('Volvo')">Volvo</div><div class="chip" onclick="quickFilter('Audi')">Audi</div><div class="chip" onclick="quickFilter('BMW')">BMW</div></div>
+<div class="mobile-top-bar"><button class="btn btn-dark" style="flex:1;padding:12px;background:#fff;color:#000;font-weight:900" onclick="toggleMobileFilters()">🔍 Filtry</button><button class="btn btn-dark" style="flex:1;padding:12px" onclick="toggleMobileFilters()">📍 Promień</button></div>
+<div class="layout">
+<div class="sidebar-desktop">
+<h4>📍 SZUKAJ W PROMIENIU</h4>
+<button class="btn-gps" id="gpsSearchBtnD" onclick="locateForSearch('D')">📍 Zlokalizuj mnie</button>
+<div class="gps-info" id="gpsSearchInfoD"></div>
+<div class="row"><div><label class="small" style="margin:0 0 4px">Promień (km)</label><select class="select" id="fRadiusD"><option value="">Dowolny</option><option value="5">5 km</option><option value="10">10 km</option><option value="25">25 km</option><option value="50">50 km</option><option value="100">100 km</option><option value="200">200 km</option></select></div><div><label class="small" style="margin:0 0 4px">Sort po odległości</label><select class="select" id="fSortDistanceD"><option value="0">Nie</option><option value="1">Najbliższe</option></select></div></div>
+<h4>MARKA / MODELE (19/83+Inne)</h4><select class="select" id="fMarkaD"><option value="">Wszystkie marki</option><option value="Abarth">Abarth</option><option value="Alfa Romeo">Alfa Romeo</option><option value="Audi">Audi</option><option value="BMW">BMW</option><option value="Citroen">Citroen</option><option value="Dacia">Dacia</option><option value="Fiat">Fiat</option><option value="Ford">Ford</option><option value="Hyundai">Hyundai</option><option value="Kia">Kia</option><option value="Mazda">Mazda</option><option value="Mercedes-Benz">Mercedes-Benz</option><option value="Opel">Opel</option><option value="Peugeot">Peugeot</option><option value="Renault">Renault</option><option value="Skoda">Skoda</option><option value="Toyota">Toyota</option><option value="Volkswagen">Volkswagen</option><option value="Volvo">Volvo</option></select><select class="select" id="fModelD"><option value="">Wszystkie modele</option></select>
+<h4>CENA</h4><div class="row"><input class="input" id="fCenaOdD" type="number" placeholder="OD"><input class="input" id="fCenaDoD" type="number" placeholder="DO"></div>
+<h4>ROK</h4><div class="row"><input class="input" id="fRokOdD" type="number" placeholder="OD"><input class="input" id="fRokDoD" type="number" placeholder="DO"></div>
+<h4>PALIWO</h4><select class="select" id="fPaliwoD"><option value="">Wszystkie</option><option>Benzyna</option><option>Diesel</option><option>LPG</option><option>Hybryda</option><option>Elektryczny</option></select>
+<h4>LOKALIZACJA (tekst)</h4><input class="input" id="fLokD" placeholder="Gorzyce">
+<h4>SORT</h4><select class="select" id="fSortD"><option value="newest">Najnowsze</option><option value="price_asc">Cena ↑</option><option value="price_desc">Cena ↓</option><option value="distance">Odległość</option></select>
+<button class="btn btn-yellow" style="width:100%;margin-top:12px;padding:12px" onclick="loadAds()">Szukaj</button>
+<button class="btn btn-dark" style="width:100%;margin-top:6px" onclick="resetFilters()">Wyczyść</button>
+<div style="margin-top:10px;padding:8px;background:#181818;border-radius:8px;font-size:12px" id="countD"></div>
+</div>
+<div class="mobile-drawer" id="mobileDrawer"><div class="mobile-drawer-header"><h3>🔍 Filtry + 📍 Promień</h3><button class="btn btn-yellow" onclick="toggleMobileFilters()">✕ Schowaj</button></div>
+<h4>📍 SZUKAJ W PROMIENIU</h4>
+<button class="btn-gps" id="gpsSearchBtnM" onclick="locateForSearch('M')">📍 Zlokalizuj mnie (GPS)</button>
+<div class="gps-info" id="gpsSearchInfoM"></div>
+<select class="select" id="fRadiusM"><option value="">Dowolny promień</option><option value="5">5 km</option><option value="10">10 km</option><option value="25">25 km</option><option value="50">50 km</option><option value="100">100 km</option><option value="200">200 km</option></select>
+<label class="small" style="margin:8px 0 4px">Sortowanie</label><select class="select" id="fSortDistanceM"><option value="0">Standardowe</option><option value="1">Najbliższe najpierw</option></select>
+<h4>MARKA / MODELE</h4><select class="select" id="fMarkaM"><option value="">Wszystkie marki</option><option value="Abarth">Abarth</option><option value="Alfa Romeo">Alfa Romeo</option><option value="Audi">Audi</option><option value="BMW">BMW</option><option value="Citroen">Citroen</option><option value="Dacia">Dacia</option><option value="Fiat">Fiat</option><option value="Ford">Ford</option><option value="Hyundai">Hyundai</option><option value="Kia">Kia</option><option value="Mazda">Mazda</option><option value="Mercedes-Benz">Mercedes-Benz</option><option value="Opel">Opel</option><option value="Peugeot">Peugeot</option><option value="Renault">Renault</option><option value="Skoda">Skoda</option><option value="Toyota">Toyota</option><option value="Volkswagen">Volkswagen</option><option value="Volvo">Volvo</option></select><select class="select" id="fModelM"><option value="">Wszystkie modele</option></select>
+<h4>CENA</h4><div class="row"><input class="input" id="fCenaOdM" type="number" placeholder="OD"><input class="input" id="fCenaDoM" type="number" placeholder="DO"></div>
+<h4>ROK</h4><div class="row"><input class="input" id="fRokOdM" type="number" placeholder="OD"><input class="input" id="fRokDoM" type="number" placeholder="DO"></div>
+<h4>PALIWO</h4><select class="select" id="fPaliwoM"><option value="">Wszystkie</option><option>Benzyna</option><option>Diesel</option><option>LPG</option><option>Hybryda</option><option>Elektryczny</option></select>
+<h4>LOKALIZACJA</h4><input class="input" id="fLokM" placeholder="Gorzyce">
+<h4>SORT</h4><select class="select" id="fSortM"><option value="newest">Najnowsze</option><option value="price_asc">Cena ↑</option><option value="price_desc">Cena ↓</option><option value="distance">Odległość</option></select>
+<button class="btn btn-yellow" style="width:100%;margin-top:16px;padding:14px;font-size:16px;font-weight:900" onclick="applyMobileAndHide()">✓ POKAŻ WYNIKI I SCHOWAJ</button>
+<button class="btn btn-dark" style="width:100%;margin-top:8px" onclick="toggleMobileFilters()">✕ Anuluj</button>
+<div style="margin-top:12px;padding:8px;background:#181818;border-radius:8px;font-size:12px" id="countM"></div><div style="height:80px"></div></div>
+<div class="grid" id="grid"></div>
+</div>
+
+<div class="blog-section">
+  <div class="blog-header">
+    <div class="blog-title">BLOG <span>WROOMER</span> • PORADNIK KIEROWCY</div>
+    <a href="/blog" style="font-size:11px;color:#aaa;text-decoration:none;border:1px solid #333;padding:6px 12px;border-radius:20px">Zobacz wszystkie →</a>
+  </div>
+  <div class="blog-grid">
+    <div class="blog-card" onclick="location.href='/blog/najmniejsze-spalanie-auta-benzynowe-2026.html'"><img class="blog-img" src="https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=400&h=200&fit=crop"><div class="blog-body"><div class="blog-card-title">Najmniejsze spalanie auta benzynowe 2026</div><div class="blog-meta"><span>🕒 5 min</span></div></div></div>
+    <div class="blog-card" onclick="location.href='/blog/samochody-do-20-tysiecy-dla-rodziny.html'"><img class="blog-img" src="https://images.unsplash.com/photo-1550355291-bbee04a92027?w=400&h=200&fit=crop"><div class="blog-body"><div class="blog-card-title">Samochody do 20 tysięcy dla rodziny</div><div class="blog-meta"><span>🕒 6 min</span></div></div></div>
+    <div class="blog-card" onclick="location.href='/blog/jak-nie-kupic-auta-z-cofnietym-licznikiem.html'"><img class="blog-img" src="https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?w=400&h=200&fit=crop"><div class="blog-body"><div class="blog-card-title">Jak nie kupić auta z cofniętym licznikiem</div><div class="blog-meta"><span>🕒 7 min</span></div></div></div>
+    <div class="blog-card" onclick="location.href='/blog/ile-kosztuje-przerejestrowanie-auta.html'"><img class="blog-img" src="https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=400&h=200&fit=crop"><div class="blog-body"><div class="blog-card-title">Ile kosztuje przerejestrowanie auta 2026</div><div class="blog-meta"><span>🕒 4 min</span></div></div></div>
+    <div class="blog-card" onclick="location.href='/blog/rejestracja-auta-z-niemiec-krok-po-kroku.html'"><img class="blog-img" src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=400&h=200&fit=crop"><div class="blog-body"><div class="blog-card-title">Rejestracja auta z Niemiec krok po kroku</div><div class="blog-meta"><span>🕒 8 min</span></div></div></div>
+    <div class="blog-card" onclick="location.href='/blog/oc-na-miesiac-czy-warto-krotkoterminowe.html'"><img class="blog-img" src="https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=400&h=200&fit=crop"><div class="blog-body"><div class="blog-card-title">OC na miesiąc - czy warto?</div><div class="blog-meta"><span>🕒 4 min</span></div></div></div>
+    <div class="blog-card" onclick="location.href='/blog/jak-szybko-sprzedac-samochod-w-24h.html'"><img class="blog-img" src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=400&h=200&fit=crop"><div class="blog-body"><div class="blog-card-title">Jak szybko sprzedać samochód w 24h</div><div class="blog-meta"><span>🕒 5 min</span></div></div></div>
+    <div class="blog-card" onclick="location.href='/blog/umowa-kupna-sprzedazy-samochodu-wzor-2026.html'"><img class="blog-img" src="https://images.unsplash.com/photo-1589829085413-56de8ae18c73?w=400&h=200&fit=crop"><div class="blog-body"><div class="blog-card-title">Umowa kupna-sprzedaży wzór 2026 PDF</div><div class="blog-meta"><span>🕒 3 min • WZÓR</span></div></div></div>
+  </div>
+</div>
+
+<div class="blog-footer">
+  <div><div style="font-weight:900;font-size:15px">WROOMER.PL <span style="color:#facc15">v11 FIXED 8 KAFELI</span></div><p style="margin-top:6px">Ogólnopolska darmowa giełda aut. Wystaw za darmo bez limitów.</p><p style="margin-top:8px;font-size:11px;color:#666">© 2026 WROOMER.PL</p></div>
+  <div><h4>DOKUMENTY RODO</h4><a href="/polityka-prywatnosci.html">Polityka Prywatności</a><br><a href="/regulamin.html">Regulamin</a><br><a href="/polityka-cookies.html">Polityka Cookies</a></div>
+  <div><h4>KONTAKT</h4><p>RODO: rodo@wroomer.pl<br>Zgłoszenia: zglos@wroomer.pl<br>Kontakt: kontakt@wroomer.pl</p></div>
+</div>
+
+<div class="modal gallery-modal" id="galleryModal"><div class="modal-box"><div class="modal-header"><h3 id="galleryTitle" style="font-size:15px"></h3><button class="btn btn-dark" onclick="closeGallery()">✕</button></div><div class="gallery-main-wrap"><button class="gallery-nav prev" onclick="galleryPrev()">‹</button><img id="galleryMain" class="gallery-main" src=""></button><div id="photoDesc"></div><button class="gallery-nav next" onclick="galleryNext()">›</button></div><div id="galleryThumbs" class="gallery-thumbs"></div><div id="galleryInfo" class="gallery-info"></div></div></div>
+<div class="modal" id="loginModal"><div class="modal-box"><div class="modal-header"><h3>Zaloguj</h3><button class="btn btn-dark" onclick="closeModals()">✕</button></div><div id="loginError"></div><input class="input" id="loginEmail" placeholder="Email" style="margin:10px 12px 0;width:calc(100% - 24px)"><input class="input" id="loginPass" type="password" placeholder="Hasło" style="margin:0 12px;width:calc(100% - 24px)"><div class="row" style="padding:12px"><button class="btn btn-yellow" style="flex:1;padding:11px" onclick="doLogin()">Zaloguj</button><button class="btn btn-dark" style="flex:1;padding:11px" onclick="doSignup()">Załóż</button></div></div></div>
+<div class="modal" id="addModal"><div class="modal-box"><div class="modal-header"><h3 id="addModalTitle">Dodaj ogłoszenie - GPS</h3><button class="btn btn-dark" onclick="closeModals()">✕</button></div><div id="addError"></div>
+<label class="small" style="color:#facc15">Tytuł *</label><input class="input" id="aTitle" placeholder="np. Fiat Stilo 1.9 JTD" style="margin:0 12px;width:calc(100% - 24px)">
+<div class="row" style="padding:0 12px;margin-top:6px"><div><label class="small">Marka *</label><select class="select" id="aBrand"><option value="">Wybierz</option><option value="Abarth">Abarth</option><option value="Alfa Romeo">Alfa Romeo</option><option value="Audi">Audi</option><option value="BMW">BMW</option><option value="Citroen">Citroen</option><option value="Dacia">Dacia</option><option value="Fiat">Fiat</option><option value="Ford">Ford</option><option value="Hyundai">Hyundai</option><option value="Kia">Kia</option><option value="Mazda">Mazda</option><option value="Mercedes-Benz">Mercedes-Benz</option><option value="Opel">Opel</option><option value="Peugeot">Peugeot</option><option value="Renault">Renault</option><option value="Skoda">Skoda</option><option value="Toyota">Toyota</option><option value="Volkswagen">Volkswagen</option><option value="Volvo">Volvo</option></select></div><div><label class="small">Model *</label><select class="select" id="aModelIn"><option value="">Najpierw marka</option></select></div></div>
+<input class="other-input" id="aModelOther" placeholder="Wpisz model">
+<div class="row" style="padding:0 12px"><div><label class="small">Rok *</label><input class="input" id="aYear" type="number" placeholder="2005"></div><div><label class="small">Cena PLN *</label><input class="input" id="aPrice" type="number" placeholder="8500"></div></div>
+<div class="row" style="padding:0 12px"><div><label class="small">Przebieg km</label><input class="input" id="aMileage" type="number" placeholder="250000"></div><div><label class="small">Paliwo</label><select class="select" id="aFuel"><option value="">Wybierz</option><option>Benzyna</option><option>Diesel</option><option>Benzyna+LPG</option><option>LPG</option><option>Hybryda</option><option>Elektryczny</option></select></div></div>
+<div style="margin:10px 12px;padding:12px;background:#0f172a;border:1px solid #1e40af;border-radius:12px">
+<label class="small" style="color:#93c5fd;margin:0 0 6px">📍 LOKALIZACJA GPS</label>
+<button class="btn-gps" id="gpsAddBtn" onclick="locateForAdd()">📍 ZLOKALIZUJ GPS</button>
+<div class="gps-info" id="gpsAddInfo" style="display:none"></div>
+<div class="row" style="margin-top:6px"><div><label class="small">Szerokość (lat)</label><input class="input" id="aLat" placeholder="50.123" readonly style="background:#1e293b"></div><div><label class="small">Długość (lng)</label><input class="input" id="aLng" placeholder="18.456" readonly style="background:#1e293b"></div></div>
+<label class="small" style="margin:6px 0 2px">Miasto / Adres</label><input class="input" id="aLocation" placeholder="Gorzyce">
+</div>
+<div class="row" style="padding:0 12px"><div><label class="small">Telefon</label><input class="input" id="aPhone" placeholder="600 123 456"></div><div><label class="small">Kolor</label><select class="select" id="aColor"><option value="">Wybierz</option><option>Czarny</option><option>Biały</option><option>Srebrny</option><option>Szary</option><option>Niebieski</option><option>Czerwony</option><option>Zielony</option></select></div></div>
+<label class="small">Opis</label><textarea class="input" id="aDesc" rows="3" placeholder="Stan, wyposażenie..." style="margin:0 12px;width:calc(100% - 24px)"></textarea>
+<label class="small" style="color:#facc15">Zdjęcia (max 10)</label><label class="file-label"><span id="fileLabelText">📷 Wybierz zdjęcia</span><input type="file" id="aFiles" multiple accept="image/*" style="display:none"></label><div id="preview"></div>
+<div class="row" style="padding:12px"><button class="btn btn-yellow" style="flex:1;padding:12px;font-weight:900" id="btnSave">Zatwierdź z GPS</button><button class="btn btn-dark" style="flex:1" onclick="closeModals()">Anuluj</button></div>
+</div></div>
+<script>
+const SUPABASE_URL='https://bdpydgsfowtuvjnkyeeg.supabase.co';
+const SUPABASE_ANON='sb_publishable_S1qH_mBZaX7-bzmfJ0IVGA_6hxGbJWd';
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON, {auth:{persistSession:true}});
+const BRAND_MODELS = {"Abarth": ["500", "595"], "Alfa Romeo": ["Giulietta", "Giulia"], "Audi": ["A1", "A3", "A4", "A6", "Q3", "Q5"], "BMW": ["1", "3", "5", "X1", "X3"], "Fiat": ["500", "Panda", "Punto", "Bravo", "Stilo", "Tipo"], "Ford": ["Fiesta", "Focus", "Mondeo"], "Volkswagen": ["Polo", "Golf", "Passat", "Tiguan"], "Volvo": ["V40", "V60", "XC60", "XC90"]};
+let currentUser=null, selectedFiles=[], editingId=null, allAds=[], galleryImages=[], galleryIndex=0, mobileFiltersOpen=false;
+let addLat=null, addLng=null, searchLat=null, searchLng=null;
+function isMobile(){return window.innerWidth<=900;}
+function getP(){return isMobile()?'M':'D';}
+function toggleMobileFilters(){const d=document.getElementById('mobileDrawer'); mobileFiltersOpen=!mobileFiltersOpen; if(mobileFiltersOpen){d.classList.add('open'); document.body.style.overflow='hidden';} else{d.classList.remove('open'); document.body.style.overflow='';}}
+function applyMobileAndHide(){const d=document.getElementById('mobileDrawer'); d.classList.remove('open'); mobileFiltersOpen=false; document.body.style.overflow=''; loadAds(); window.scrollTo({top:0,behavior:'smooth'});}
+function showError(id,msg){const el=document.getElementById(id); if(el) el.innerHTML='<div class="error">'+msg+'</div>';}
+function showSuccess(id,msg){const el=document.getElementById(id); if(el) el.innerHTML='<div class="success">'+msg+'</div>';}
+async function checkUser(){try{const s=await supabaseClient.auth.getSession(); currentUser=s?.data?.session?.user||null; updateAuthUI();}catch(e){}}
+function updateAuthUI(){const bl=document.getElementById('btnLogin'), bo=document.getElementById('btnLogout'); if(currentUser){bl.style.display='none';bo.style.display='inline-block';}else{bl.style.display='inline-block';bo.style.display='none';}}
+document.getElementById('btnLogin').onclick=()=>document.getElementById('loginModal').classList.add('open');
+document.getElementById('btnLogout').onclick=async()=>{await supabaseClient.auth.signOut(); currentUser=null; updateAuthUI(); loadAds();};
+document.getElementById('btnAdd').onclick=()=>{ if(!currentUser){ document.getElementById('loginModal').classList.add('open'); return; } openAddModal(); };
+function closeModals(){const loginM=document.getElementById('loginModal');const addM=document.getElementById('addModal');if(loginM){ loginM.classList.remove('open'); loginM.style.display='none'; }if(addM){ addM.classList.remove('open'); addM.style.display='none'; }closeGallery();}
+function closeGallery(){const m=document.getElementById('galleryModal');if(m){ m.classList.remove('open'); m.style.display='none'; }document.body.style.overflow='';document.body.style.overflowY='auto';document.documentElement.style.overflow='';document.documentElement.style.overflowY='auto';}
+function haversine(lat1, lon1, lat2, lon2){const R=6371; const dLat=(lat2-lat1)*Math.PI/180; const dLon=(lon2-lon1)*Math.PI/180; const a=Math.sin(dLat/2)*Math.sin(dLat/2)+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)*Math.sin(dLon/2); const c=2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a)); return R*c;}
+function parseExtra(desc){const o={mileage:'',fuel:'',gear:'',power:'',capacity:'',body:'',color:'',lat:'',lng:''}; try{const m=(desc||'').match(/\[(.*?)\]/); if(m){m[1].split('|').forEach(p=>{const parts=p.split(':'); if(parts.length<2) return; const k=parts[0].trim(); const v=parts.slice(1).join(':').trim(); const kl=k.toLowerCase(); if(kl.includes('przebieg')) o.mileage=v; else if(kl.includes('paliwo')) o.fuel=v; else if(kl.includes('skrzynia')) o.gear=v; else if(kl.includes('moc') && !kl.includes('pochodzenia')) o.power=v; else if(kl.includes('pojem')) o.capacity=v; else if(kl.includes('nadwozia')) o.body=v; else if(kl.includes('kolor')) o.color=v; else if(kl==='lat') o.lat=v; else if(kl==='lng' || kl==='lon') o.lng=v;});}}catch(e){} return o;}
+function locateForAdd(){const btn=document.getElementById('gpsAddBtn'); const info=document.getElementById('gpsAddInfo'); if(!navigator.geolocation){alert('Brak GPS'); return;} btn.textContent='📡 Pobieram...'; btn.disabled=true; info.style.display='block'; info.textContent='Pobieram lokalizację...'; info.className='gps-info show'; navigator.geolocation.getCurrentPosition(async (pos)=>{addLat=pos.coords.latitude; addLng=pos.coords.longitude; document.getElementById('aLat').value=addLat.toFixed(6); document.getElementById('aLng').value=addLng.toFixed(6); btn.textContent='✅ GPS Pobrany!'; btn.classList.add('active'); btn.disabled=false; info.textContent=`✅ GPS: ${addLat.toFixed(5)}, ${addLng.toFixed(5)}`; info.className='gps-info show success'; try{const res=await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${addLat}&lon=${addLng}&zoom=10`); const data=await res.json(); const city=data.address?.city||data.address?.town||data.address?.village||''; if(city) document.getElementById('aLocation').value=city.split(',')[0];}catch(e){}}, (err)=>{btn.textContent='📍 Zlokalizuj GPS'; btn.disabled=false; info.textContent='❌ Błąd: '+err.message; info.className='gps-info show';}, {enableHighAccuracy:true, timeout:10000});}
+function locateForSearch(prefix){const btn=document.getElementById('gpsSearchBtn'+prefix); const info=document.getElementById('gpsSearchInfo'+prefix); if(!navigator.geolocation){alert('Brak GPS'); return;} btn.textContent='📡 Pobieram...'; btn.disabled=true; info.style.display='block'; info.textContent='Pobieram...'; info.className='gps-info show'; navigator.geolocation.getCurrentPosition(async (pos)=>{searchLat=pos.coords.latitude; searchLng=pos.coords.longitude; btn.textContent='✅ Moja lokalizacja aktywna'; btn.classList.add('active'); btn.disabled=false; info.textContent=`✅ Twoja lokalizacja: ${searchLat.toFixed(4)}, ${searchLng.toFixed(4)}`; info.className='gps-info show success';}, (err)=>{btn.textContent='📍 Zlokalizuj mnie'; btn.disabled=false; info.textContent='❌ Błąd: '+err.message; info.className='gps-info show';}, {enableHighAccuracy:true, timeout:10000});}
+function populateModelSelect(brandId, modelId, selectedModel=null){const brand=document.getElementById(brandId).value; const modelSel=document.getElementById(modelId); if(!modelSel) return; const models=BRAND_MODELS[brand]||[]; modelSel.innerHTML='<option value="">Wybierz model</option>'; models.forEach(m=>{const o=document.createElement('option'); o.value=m; o.textContent=m; if(m===selectedModel) o.selected=true; modelSel.appendChild(o);});}
+function openAddModal(ad=null){editingId=ad?.id||null;document.getElementById('addModalTitle').textContent=ad?'Edytuj ogłoszenie':'Dodaj ogłoszenie - GPS';document.getElementById('aTitle').value=ad?.title||'';document.getElementById('aBrand').value=ad?.brand||'';populateModelSelect('aBrand','aModelIn', ad?.model);document.getElementById('aYear').value=ad?.year||'';document.getElementById('aPrice').value=ad?.price||'';document.getElementById('aLocation').value=ad?.location||'';document.getElementById('aPhone').value=ad?.phone||'';const cleanDesc=(ad?.description||'').split('\n\n[')[0].split('\n[')[0];document.getElementById('aDesc').value=cleanDesc;const ex=parseExtra(ad?.description||'');document.getElementById('aMileage').value=(ex.mileage||'').toString().replace(/[^0-9]/g,'');document.getElementById('aFuel').value=ex.fuel||'';document.getElementById('aLat').value=ex.lat||'';document.getElementById('aLng').value=ex.lng||'';selectedFiles=[]; document.getElementById('preview').innerHTML='';document.getElementById('addModal').classList.add('open'); document.getElementById('addModal').style.display='flex';}
+['fMarkaD','fMarkaM','aBrand'].forEach(id=>{const el=document.getElementById(id); if(el) el.addEventListener('change',()=>{if(id==='fMarkaD') populateModelSelect('fMarkaD','fModelD'); if(id==='fMarkaM') populateModelSelect('fMarkaM','fModelM'); if(id==='aBrand') populateModelSelect('aBrand','aModelIn');});});
+async function doLogin(){const e=document.getElementById('loginEmail').value.trim(); const p=document.getElementById('loginPass').value; if(!e||!p){showError('loginError','Podaj email i hasło');return;} try{const r=await supabaseClient.auth.signInWithPassword({email:e,password:p}); if(r.error) throw r.error; currentUser=r.data.user; updateAuthUI(); closeModals(); loadAds();}catch(err){showError('loginError', err.message);}}
+async function doSignup(){const e=document.getElementById('loginEmail').value.trim(); const p=document.getElementById('loginPass').value; if(!e||p.length<6){showError('loginError','Email i hasło min 6');return;} try{const r=await supabaseClient.auth.signUp({email:e,password:p}); if(r.error) throw r.error; showSuccess('loginError','Konto założone!');}catch(err){showError('loginError', err.message);}}
+function renderPreview(){const preview=document.getElementById('preview'); preview.innerHTML=''; selectedFiles.forEach((f,i)=>{const r=new FileReader(); r.onload=ev=>{const div=document.createElement('div'); div.className='p'; div.innerHTML='<img src="'+ev.target.result+'"><div class="x" onclick="removeFile('+i+')">×</div>'; preview.appendChild(div);}; r.readAsDataURL(f);});}
+function removeFile(i){selectedFiles.splice(i,1); renderPreview();}
+document.getElementById('aFiles').onchange=(e)=>{selectedFiles=[...selectedFiles, ...Array.from(e.target.files)].slice(0,10); renderPreview();};
+function compressImage(file, maxW=800, q=0.70){return new Promise(resolve=>{const img=new Image(); const reader=new FileReader(); reader.onload=e=>{img.onload=()=>{const c=document.createElement('canvas'); let w=img.width,h=img.height; if(w>maxW){h=h*(maxW/w);w=maxW;} if(h>maxW){w=w*(maxW/h);h=maxW;} c.width=w;c.height=h; const ctx=c.getContext('2d'); ctx.drawImage(img,0,0,w,h); c.toBlob(b=>{resolve(b);},'image/webp',q);}; img.src=e.target.result;}; reader.readAsDataURL(file);});}
+document.getElementById('btnSave').onclick=async()=>{const title=document.getElementById('aTitle').value.trim(); const brand=document.getElementById('aBrand').value.trim(); const modelVal=document.getElementById('aModelIn').value||'Inny'; const price=parseInt(document.getElementById('aPrice').value)||0; if(!title||!brand||!modelVal){showError('addError','Tytuł, marka i model wymagane');return;} if(!price){showError('addError','Podaj cenę');return;} const btn=document.getElementById('btnSave'); btn.textContent='WYSYŁANIE...'; btn.disabled=true; try{let imageUrls = []; if(editingId){ const ex=allAds.find(a=>a.id===editingId); imageUrls=ex?.images||[]; if(ex?.image_url && !imageUrls.includes(ex.image_url)) imageUrls.unshift(ex.image_url); } for(let i=0;i<selectedFiles.length;i++){const blob=await compressImage(selectedFiles[i]); const fname=Date.now()+'_'+i+'.webp'; const path=currentUser.id+'/'+fname; const up=await supabaseClient.storage.from('ogloszenia').upload(path, blob, {contentType:'image/webp'}); if(up.error) throw up.error; const pub=supabaseClient.storage.from('ogloszenia').getPublicUrl(path); imageUrls.push(pub.data.publicUrl);} const latVal=document.getElementById('aLat').value||''; const lngVal=document.getElementById('aLng').value||''; const extra=`Przebieg: ${document.getElementById('aMileage').value||'-'} km | Paliwo: ${document.getElementById('aFuel').value||'-'} | lat: ${latVal||'-'} | lng: ${lngVal||'-'}`; const fullDesc=(document.getElementById('aDesc').value||'') + "\n\n["+extra+"]"; const payload={title, brand, model:modelVal, price, year:parseInt(document.getElementById('aYear').value)||null, location:document.getElementById('aLocation').value, phone:document.getElementById('aPhone').value, description:fullDesc, image_url:imageUrls[0]||null, images:imageUrls, user_id:currentUser.id}; let result; if(editingId){result=await supabaseClient.from('ogloszenia').update(payload).eq('id', editingId).select();} else {result=await supabaseClient.from('ogloszenia').insert([payload]).select();} if(result.error) throw result.error; setTimeout(()=>{closeModals(); loadAds(); editingId=null; selectedFiles=[];}, 800);}catch(e){showError('addError', e.message);}finally{btn.textContent='Zatwierdź z GPS'; btn.disabled=false;}};
+function openGallery(ad){
+  const modal=document.getElementById('galleryModal'); 
+  window.currentAd=ad;
+  galleryImages = ad.images && ad.images.length>0 ? ad.images : (ad.image_url?[ad.image_url]:[]); 
+  galleryIndex=0; 
+  if(galleryImages.length===0){alert('Brak zdjęć'); return;} 
+  document.getElementById('galleryTitle').textContent=ad.title; 
+  document.getElementById('galleryMain').src=galleryImages[0]; 
+  
+  // photoDesc - under photo
+  let pd=document.getElementById('photoDesc');
+  if(!pd){
+    pd=document.createElement('div');
+    pd.id='photoDesc';
+    const wrap=document.querySelector('.gallery-main-wrap');
+    if(wrap) wrap.appendChild(pd);
+  }
+  const labels=["Przód - zdjęcie główne","Tył / Bok","Wnętrze - bagażnik","Wnętrze - podsufitka","Szyberdach / Dach","Licznik - deska","Kokpit - środek","Zegary","Kokpit - kierownica","Wnętrze - drzwi"];
+  if(pd){ pd.textContent=labels[0]+" • Zdjęcie 1 z "+galleryImages.length+" • "+ad.title; pd.style.display='block'; }
+  
+  const thumbs=document.getElementById('galleryThumbs'); 
+  thumbs.innerHTML=''; 
+  galleryImages.forEach((src,i)=>{
+    const wrap=document.createElement('div');
+    wrap.style.position='relative';
+    wrap.style.flexShrink='0';
+    const img=document.createElement('img'); 
+    img.src=src; 
+    if(i===0) img.classList.add('active'); 
+    img.onclick=()=>{galleryIndex=i; updateGallery();};
+    const badge=document.createElement('div');
+    badge.textContent=(i+1)+"/"+galleryImages.length;
+    badge.style.cssText='position:absolute;bottom:2px;left:2px;background:rgba(0,0,0,0.7);color:#fff;font-size:9px;padding:1px 4px;border-radius:4px';
+    wrap.appendChild(img);
+    wrap.appendChild(badge);
+    thumbs.appendChild(wrap);
+  }); 
+  
+  const ex=parseExtra(ad.description||''); 
+  const cleanDesc=(ad.description||'').split('\n\n[')[0].split('\n[')[0]; 
+  const price=ad.price||0;
+  const title=ad.title||'';
+  const marka=ad.brand||ad.marka||'';
+  const model=ad.model||'';
+  const rok=ad.year||ex.rok||'-';
+  const przeb=ad.mileage||ex.przebieg||ad.przebieg||'-';
+  const paliwo=ad.fuel||ex.paliwo||ad.paliwo||'-';
+  const lok=ad.location||'Gorzyce';
+  const phone=ex.telefon||ad.phone||'500 100 200';
+  
+  document.getElementById('galleryInfo').innerHTML=`
+    <div class="detail-section">
+      <div class="detail-title">${price} PLN</div>
+      <div class="detail-subtitle">${title}</div>
+      <div class="detail-grid">
+        <div style="background:#222;border:1px solid #2a2a2a;padding:10px;border-radius:10px;font-size:12px"><b>Marka:</b> ${marka}</div>
+        <div style="background:#222;border:1px solid #2a2a2a;padding:10px;border-radius:10px;font-size:12px"><b>Model:</b> ${model}</div>
+        <div style="background:#222;border:1px solid #2a2a2a;padding:10px;border-radius:10px;font-size:12px"><b>Rok:</b> ${rok}</div>
+        <div style="background:#222;border:1px solid #2a2a2a;padding:10px;border-radius:10px;font-size:12px"><b>Przebieg:</b> ${przeb}</div>
+        <div style="background:#222;border:1px solid #2a2a2a;padding:10px;border-radius:10px;font-size:12px"><b>Paliwo:</b> ${paliwo}</div>
+        <div style="background:#222;border:1px solid #2a2a2a;padding:10px;border-radius:10px;font-size:12px"><b>Lokalizacja:</b> ${lok}</div>
+      </div>
+      <div style="background:#0f0f0f;border:1px solid #222;border-radius:12px;padding:14px;margin:14px 0;font-size:13px;line-height:1.6;white-space:pre-wrap;color:#ddd"><b style="color:#facc15">Opis pojazdu:</b>
+${cleanDesc||'Brak opisu'}
+
+<b style="color:#888">Opisy zdjęć:</b>
+${galleryImages.map((_,i)=> (i+1)+". "+(labels[i]||"Zdjęcie "+(i+1))).join(" • ")}</div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px">
+        <a href="tel:${phone}" style="background:#22c55e;color:#fff;padding:12px 18px;border-radius:22px;text-decoration:none;font-weight:800;font-size:13px">📞 Zadzwoń: ${phone}</a>
+        <a href="https://www.google.com/maps/search/?api=1&query=${ad.lat||'49.96'},${ad.lng||'18.39'}" target="_blank" style="background:#0ea5e9;color:#fff;padding:12px 18px;border-radius:22px;text-decoration:none;font-weight:800;font-size:13px">📍 Mapa</a>
+      </div>
+      <div style="height:20px"></div>
+    </div>
+  `; 
+  modal.classList.add('open'); 
+  modal.style.display='flex'; 
+  document.body.style.overflow='hidden'; 
+}
+function updateGallery(){
+  document.getElementById('galleryMain').src=galleryImages[galleryIndex]; 
+  document.getElementById('galleryThumbs').querySelectorAll('img').forEach((im,i)=>{im.classList.toggle('active', i===galleryIndex);});
+  const pd=document.getElementById('photoDesc');
+  const labels=["Przód - zdjęcie główne","Tył / Bok","Wnętrze - bagażnik","Wnętrze - podsufitka","Szyberdach / Dach","Licznik - deska","Kokpit - środek","Zegary","Kokpit - kierownica","Wnętrze - drzwi"];
+  if(pd){
+    const ad=window.currentAd;
+    const title=ad?.title||'';
+    const total=galleryImages.length;
+    const lab=labels[galleryIndex]||("Zdjęcie "+(galleryIndex+1));
+    pd.textContent=lab+" • Zdjęcie "+(galleryIndex+1)+" z "+total+" • "+title;
+  }
+}
+function updateGallery(){document.getElementById('galleryMain').src=galleryImages[galleryIndex]; document.getElementById('galleryThumbs').querySelectorAll('img').forEach((im,i)=>{im.classList.toggle('active', i===galleryIndex);});}
+function galleryPrev(){galleryIndex=(galleryIndex-1+galleryImages.length)%galleryImages.length; updateGallery();}
+function galleryNext(){galleryIndex=(galleryIndex+1)%galleryImages.length; updateGallery();}
+async function deleteAd(id){ if(!confirm('Usunąć?')) return; const r=await supabaseClient.from('ogloszenia').delete().eq('id', id); if(r.error) alert(r.error.message); else {closeGallery(); loadAds();} }
+function quickFilter(brand){const p=getP(); const el=document.getElementById('fMarka'+p); if(el) el.value=brand; document.querySelectorAll('.chip').forEach(c=>c.classList.toggle('active', c.textContent===brand || (brand==='' && c.textContent==='Wszystkie'))); loadAds();}
+async function loadAds(){const grid=document.getElementById('grid'); const p=isMobile()?'M':'D'; const marka=document.getElementById('fMarka'+p)?.value||document.getElementById('fMarkaD')?.value||''; const cenaOd=parseInt(document.getElementById('fCenaOd'+p)?.value||document.getElementById('fCenaOdD')?.value); const cenaDo=parseInt(document.getElementById('fCenaDo'+p)?.value||document.getElementById('fCenaDoD')?.value); const lok=document.getElementById('fLok'+p)?.value||document.getElementById('fLokD')?.value||''; grid.innerHTML='<div style="padding:20px;text-align:center;grid-column:1/-1;opacity:.5">Ładowanie...</div>'; try{let q=supabaseClient.from('ogloszenia').select('*').eq('is_banned', false).order('created_at',{ascending:false}).limit(150); if(marka) q=q.eq('brand', marka); if(cenaOd) q=q.gte('price', cenaOd); if(cenaDo) q=q.lte('price', cenaDo); if(lok) q=q.ilike('location','%'+lok+'%'); const result=await q; if(result.error) throw result.error; allAds=result.data; let filtered=result.data; const cd=document.getElementById('countD'); const cm=document.getElementById('countM'); if(cd) cd.textContent=filtered.length+' ogłoszeń'; if(cm) cm.textContent=filtered.length+' ogłoszeń'; if(filtered.length===0){grid.innerHTML=`<div style="grid-column:1/-1;padding:40px;text-align:center;background:#181818;border-radius:12px"><h3 style="color:#facc15">Brak ogłoszeń</h3></div>`; return;} grid.innerHTML=filtered.map(o=>{const img=o.image_url||(o.images&&o.images[0])||'https://via.placeholder.com/300x200?text=Brak'; const cnt=(o.images&&o.images.length>0)?o.images.length:(o.image_url?1:0); return `<div class="card" onclick="openGallery(allAds.find(a=>a.id==='${o.id}'))"><div class="card-img-wrap"><img src="${img}" loading="lazy"><div class="card-img-count">📷 ${cnt}</div></div><div class="card-body"><div class="card-title">${o.title}</div><div class="card-price">${o.price} PLN</div><div class="card-location">${o.location||''} • ${o.year||''}</div></div></div>`;}).join('');}catch(e){grid.innerHTML='<div style="grid-column:1/-1;padding:20px;background:#3a1111">Błąd: '+(e.message||e)+'</div>';}}
+function resetFilters(){['D','M'].forEach(p=>{['fMarka','fModel','fCenaOd','fCenaDo','fRokOd','fRokDo','fPaliwo','fLok','fRadius'].forEach(k=>{const el=document.getElementById(k+p); if(el) el.value='';});}); loadAds();}
+checkUser(); loadAds();
+</script>
+</body></html>
