@@ -280,6 +280,79 @@ label.small{font-size:10px;opacity:.7;display:block;margin:8px 12px 2px;text-tra
   setInterval(fixGallery, 1000);
 })();
 </script>
+
+<style id="FIX-PRZYCIECE-ZDJECIE">
+/* Napraw przycięte zdjęcie - cała wysokość widoczna */
+.gallery-main-wrap, #galleryModal .gallery-main-wrap{
+  position:relative!important;
+  width:100%!important;
+  height:auto!important;
+  max-height:none!important;
+  min-height:0!important;
+  overflow:visible!important;
+  display:flex!important;
+  justify-content:center!important;
+  align-items:center!important;
+  background:#000!important;
+  margin-top:0!important;
+  padding-top:0!important;
+}
+#galleryMain{
+  width:100%!important;
+  height:auto!important;
+  max-height:78vh!important;
+  object-fit:contain!important;
+  object-position:center!important;
+  display:block!important;
+  margin:0 auto!important;
+}
+#galleryModal .modal-box{
+  padding-top:0!important;
+  margin-top:0!important;
+}
+/* Header BMW 218 2014 nie może przesuwać */
+#galleryModal .modal-header{
+  position:relative!important;
+  top:auto!important;
+  margin:0!important;
+  padding:14px 20px!important;
+}
+/* Miniaturki pod zdjęciem */
+#galleryThumbs{
+  display:flex!important;
+  visibility:visible!important;
+  margin-top:0!important;
+}
+</style>
+<script>
+(function(){
+  function naprawZdjecie(){
+    const main=document.getElementById('galleryMain');
+    if(main){
+      main.style.objectFit='contain';
+      main.style.height='auto';
+      main.style.maxHeight='78vh';
+      main.style.width='100%';
+    }
+    const wrap=document.querySelector('.gallery-main-wrap');
+    if(wrap){
+      wrap.style.height='auto';
+      wrap.style.overflow='visible';
+      wrap.style.marginTop='0';
+    }
+    const pd=document.getElementById('photoDesc');
+    if(pd) pd.style.display='none';
+  }
+  const orig=window.openGallery;
+  window.openGallery=function(ad){
+    const r=orig?orig.apply(this,arguments):null;
+    setTimeout(naprawZdjecie, 10);
+    setTimeout(naprawZdjecie, 200);
+    setTimeout(naprawZdjecie, 600);
+    return r;
+  };
+})();
+</script>
 </head>
 <body>
 <div class="header"><div class="logo">WROOMER<span>.PL</span> <span style="font-size:10px;background:#facc15;color:#000;padding:2px 6px;border-radius:10px">v11 8 KAFELI FIXED</span></div><div style="display:flex;gap:6px;align-items:center"><button class="btn btn-dark" id="btnLogin">Zaloguj</button><button class="btn btn-dark" id="btnLogout" style="display:none">Wyloguj</button><button class="btn btn-yellow" id="btnAdd">+ Dodaj</button></div></div>
