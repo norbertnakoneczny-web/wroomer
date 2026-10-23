@@ -255,6 +255,148 @@ label.small{font-size:10px;opacity:.7;display:block;margin:8px 12px 2px;text-tra
   setInterval(glueBlackBar, 1500);
 })();
 </script>
+
+<style id="black-bar-ON-image">
+/* Czarny pasek NA zdjęciu, nie pod */
+.gallery-main-wrap{
+  position:relative!important;
+}
+#galleryMain{
+  display:block!important;
+  width:100%!important;
+}
+#photoDesc{
+  position:absolute!important;
+  bottom:0!important;
+  left:0!important;
+  right:0!important;
+  background:rgba(0,0,0,0.78)!important;
+  color:#fff!important;
+  padding:10px 14px!important;
+  font-size:12px!important;
+  text-align:center!important;
+  margin:0!important;
+  z-index:5!important;
+  border-top:none!important;
+}
+#galleryThumbs{
+  position:relative!important;
+  background:#0e0e0e!important;
+}
+/* Usuń poprzednie sticky które rozdzielało */
+#galleryModal .modal-box{
+  overflow-y:auto!important;
+}
+</style>
+<script>
+(function(){
+  function placeBarOnImage(){
+    const wrap=document.querySelector('.gallery-main-wrap');
+    const pd=document.getElementById('photoDesc');
+    if(wrap && pd){
+      if(pd.parentElement!==wrap){
+        wrap.appendChild(pd);
+      }
+      pd.style.position='absolute';
+      pd.style.bottom='0';
+      pd.style.left='0';
+      pd.style.right='0';
+    }
+  }
+  const orig=window.openGallery;
+  window.openGallery=function(ad){
+    const r=orig?orig(ad):null;
+    setTimeout(placeBarOnImage, 50);
+    setTimeout(placeBarOnImage, 300);
+    return r;
+  };
+})();
+</script>
+
+<style id="JEDEN-SCROLL-SCALONY">
+/* Usuń wszystkie fixed/sticky które trzymają pasek */
+#photoDesc, #galleryThumbs, .gallery-main-wrap, #galleryModal .modal-header {
+  position: relative !important;
+}
+#galleryModal{
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+}
+#galleryModal .modal-box, #galleryModal .modal-content, #galleryModal .gallery-container{
+  overflow: visible !important;
+  height: auto !important;
+  max-height: none !important;
+}
+/* Główny wrap - relative żeby pasek był NA zdjęciu i jechał z nim */
+.gallery-main-wrap{
+  position: relative !important;
+  width: 100% !important;
+  overflow: hidden !important;
+}
+#galleryMain{
+  width: 100% !important;
+  display: block !important;
+  height: auto !important;
+}
+/* Czarny pasek NA zdjęciu, na dole zdjęcia, scalony z nim */
+#photoDesc{
+  position: absolute !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  background: rgba(0,0,0,0.78) !important;
+  color: #fff !important;
+  padding: 10px 14px !important;
+  font-size: 12px !important;
+  text-align: center !important;
+  z-index: 10 !important;
+  margin: 0 !important;
+  border: none !important;
+  transform: none !important;
+  top: auto !important;
+}
+/* Miniaturki pod spodem, jadą razem */
+#galleryThumbs{
+  position: relative !important;
+  top: auto !important;
+  bottom: auto !important;
+}
+/* Usuń sticky header */
+#galleryModal [style*="sticky"], #galleryModal [style*="fixed"]{
+  position: relative !important;
+}
+</style>
+<script>
+(function(){
+  function scalZObiekt(){
+    const modal=document.getElementById('galleryModal');
+    const wrap=document.querySelector('.gallery-main-wrap');
+    const pd=document.getElementById('photoDesc');
+    const thumbs=document.getElementById('galleryThumbs');
+    if(modal){ modal.style.overflowY='auto'; modal.style.position='fixed'; }
+    if(wrap && pd){
+      if(pd.parentElement!==wrap){ wrap.appendChild(pd); }
+      pd.style.position='absolute';
+      pd.style.bottom='0';
+    }
+    // Usuń inline sticky z JS
+    if(pd){ pd.style.top='auto'; pd.style.transform='none'; }
+    if(thumbs){ thumbs.style.position='relative'; thumbs.style.top='auto'; }
+  }
+  const orig=window.openGallery;
+  window.openGallery=function(ad){
+    const r=orig?orig.apply(this,arguments):null;
+    setTimeout(scalZObiekt, 30);
+    setTimeout(scalZObiekt, 300);
+    return r;
+  };
+  document.addEventListener('click', (e)=>{
+    if(e.target.closest && e.target.closest('[data-action="open-gallery"], .gallery-thumb')){
+      setTimeout(scalZObiekt, 100);
+    }
+  });
+})();
+</script>
 </head>
 <body>
 <div class="header"><div class="logo">WROOMER<span>.PL</span> <span style="font-size:10px;background:#facc15;color:#000;padding:2px 6px;border-radius:10px">v11 8 KAFELI FIXED</span></div><div style="display:flex;gap:6px;align-items:center"><button class="btn btn-dark" id="btnLogin">Zaloguj</button><button class="btn btn-dark" id="btnLogout" style="display:none">Wyloguj</button><button class="btn btn-yellow" id="btnAdd">+ Dodaj</button></div></div>
