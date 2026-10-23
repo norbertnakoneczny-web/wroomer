@@ -1,17 +1,18 @@
 
-WROOMER - FIX NA BUG "2 RAZ NIE WCHODZI NA OGŁOSZENIE"
+# WROOMER.PL v12 - Premium + Promień FIXED
 
-Co naprawia:
-1. params.id musi być await w Next 15
-2. dynamic = force-dynamic - brak cache który wywala 2 wejście
-3. views nie robimy przez UPDATE (blokuje RLS) tylko przez RPC security definer
-4. sessionStorage + useRef żeby nie liczyć 2x przy StrictMode
+## Jak wrzucić na Vercel (nadpisuje wroomer-n6lroecni-norbertnakoneczny-5201.vercel.app)
 
-INSTALACJA:
-1. Skopiuj pliki do swojego projektu (nadpisz app/ogloszenie/[id]/)
-2. Wklej supabase/fix.sql do Supabase SQL Editor i uruchom
-3. Sprawdź .env.local ma NEXT_PUBLIC_SUPABASE_URL i ANON_KEY
-4. npm run build -> vercel --prod
+1. Wejdź na https://vercel.com/norbertnakoneczny-web/wroomer
+2. Zrób `git clone` swojego repo lub wgraj ten folder jako nowy projekt
+3. `npm install && npm run build`
+4. Deploy
 
-Jeśli masz Vercel Protection włączony, wyłącz go w:
-vercel.com -> project -> Settings -> Deployment Protection -> OFF
+Funkcje:
+- Zlokalizuj mnie (geolocation API)
+- Promień haversine 5-100km
+- Sort po odległości
+- UPS / Podbij
+- 8 ogłoszeń z Gorzyc i okolic
+
+Jeśli chcesz podpiąć prawdziwe dane z bazy, podmień const CARS w app/page.tsx na fetch z API.
