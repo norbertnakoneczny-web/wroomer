@@ -36,7 +36,8 @@
 .card{background:#181818;border:1px solid #222;border-radius:12px;overflow:hidden;cursor:pointer;position:relative} .card-img-wrap{width:100%;height:160px;position:relative;background:#0f0f0f;overflow:hidden} @media(max-width:900px){.card-img-wrap{height:130px}} .card-img-wrap img{width:100%;height:100%;object-fit:cover;object-position:center center;display:block} .card-img-count{position:absolute;bottom:6px;right:6px;background:rgba(0,0,0,.75);color:#fff;font-size:11px;padding:3px 6px;border-radius:4px} .card-body{padding:9px} .card-title{font-size:13px;min-height:32px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden} .card-price{font-size:14px;font-weight:800;color:#facc15;margin-top:5px} .card-location{font-size:10px;color:#888;margin-top:3px} .card-distance{font-size:10px;color:#22c55e;font-weight:700;margin-top:2px} .owner-actions{position:absolute;top:6px;right:6px;display:flex;gap:4px;z-index:5} .owner-actions button{padding:5px 8px;border-radius:12px;border:0;font-size:10px;font-weight:900;cursor:pointer} .edit{background:#facc15;color:#000} .del{background:#ff3333;color:#fff}
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.92);display:none;align-items:center;justify-content:center;z-index:11000;padding:12px} .modal.open{display:flex} @media(max-width:700px){.modal{align-items:flex-end;padding:0} .modal-box{border-radius:18px 18px 0 0}}
 .modal-box{background:#1a1a1a;border:1px solid #333;border-radius:16px;width:100%;max-width:680px;max-height:94vh;overflow:auto} .modal-header{padding:14px 16px;border-bottom:1px solid #2a2a2a;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:#1a1a1a;z-index:2}
- .detail-section{padding:16px;border-bottom:1px solid #222} .detail-title{font-size:23px;font-weight:900;color:#facc15} .detail-subtitle{font-size:15px;color:#fff;margin:4px 0 12px;opacity:.9} .detail-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:12px} @media(max-width:600px){.detail-grid{grid-template-columns:1fr}} .detail-item{background:#222;border:1px solid #2a2a2a;border-radius:10px;padding:10px 12px;display:flex;justify-content:space-between;align-items:center} .detail-item .label{font-size:10px;color:#888;text-transform:uppercase;font-weight:700} .detail-item .value{font-size:13px;font-weight:700;color:#fff} .detail-desc{padding:16px;background:#111} .detail-desc h4{font-size:12px;color:#facc15;margin-bottom:8px;text-transform:uppercase} .detail-desc p{font-size:14px;line-height:1.6;color:#ddd;white-space:pre-wrap} .owner-bar{padding:12px 16px;background:#111;border-top:1px solid #222;display:flex;gap:8px}
+.gallery-modal .modal-box{max-width:920px;background:#0f0f0f} .gallery-main-wrap{position:relative;width:100%;height:54vh;background:#000;display:flex;align-items:center;justify-content:center} @media(max-width:700px){.gallery-main-wrap{height:44vh}} .gallery-main{max-width:100%;max-height:100%;object-fit:contain;touch-action:pan-y;user-select:none;-webkit-user-drag:none} .gallery-main-wrap{ touch-action:pan-y; } .gallery-nav{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.9);border:0;width:36px;height:36px;border-radius:50%;font-size:21px;cursor:pointer} .gallery-nav.prev{left:10px} .gallery-nav.next{right:10px} .gallery-thumbs{display:flex;gap:6px;overflow:auto;padding:10px;background:#000} .gallery-thumbs img{width:68px;height:50px;object-fit:cover;object-position:center;border-radius:6px;cursor:pointer;border:2px solid transparent;flex-shrink:0} .gallery-thumbs img.active{border-color:#facc15}
+.gallery-info{padding:0;background:#181818} .detail-section{padding:16px;border-bottom:1px solid #222} .detail-title{font-size:23px;font-weight:900;color:#facc15} .detail-subtitle{font-size:15px;color:#fff;margin:4px 0 12px;opacity:.9} .detail-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:12px} @media(max-width:600px){.detail-grid{grid-template-columns:1fr}} .detail-item{background:#222;border:1px solid #2a2a2a;border-radius:10px;padding:10px 12px;display:flex;justify-content:space-between;align-items:center} .detail-item .label{font-size:10px;color:#888;text-transform:uppercase;font-weight:700} .detail-item .value{font-size:13px;font-weight:700;color:#fff} .detail-desc{padding:16px;background:#111} .detail-desc h4{font-size:12px;color:#facc15;margin-bottom:8px;text-transform:uppercase} .detail-desc p{font-size:14px;line-height:1.6;color:#ddd;white-space:pre-wrap} .owner-bar{padding:12px 16px;background:#111;border-top:1px solid #222;display:flex;gap:8px}
 .row{display:flex;gap:8px} .row> *{flex:1} .error{background:#3a1111;border:1px solid #a33;color:#ffb3b3;padding:10px;border-radius:8px;margin:8px 12px;font-size:13px} .success{background:#112a11;border:1px solid #3a3;color:#b3ffb3;padding:10px;border-radius:8px;margin:8px 12px} .file-label{background:#222;border:1px dashed #444;padding:18px;text-align:center;border-radius:10px;cursor:pointer;display:block;margin:10px 12px;font-size:13px} #preview{display:flex;gap:6px;flex-wrap:wrap;margin:8px 12px} #preview .p{position:relative} #preview img{width:60px;height:60px;object-fit:cover;border-radius:6px} #preview .x{position:absolute;top:-5px;right:-5px;background:#facc15;color:#000;border-radius:50%;width:16px;height:16px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;cursor:pointer}
 h4{font-size:11px;font-weight:800;letter-spacing:1px;margin:14px 0 6px;color:#facc15;opacity:.8}
 label.small{font-size:10px;opacity:.7;display:block;margin:8px 12px 2px;text-transform:uppercase;font-weight:700;letter-spacing:.5px}
@@ -59,27 +60,6 @@ label.small{font-size:10px;opacity:.7;display:block;margin:8px 12px 2px;text-tra
 .blog-footer h4{font-size:11px;font-weight:900;color:#facc15;margin-bottom:8px;letter-spacing:.5px}
 .blog-footer p, .blog-footer a{font-size:12px;color:#aaa;line-height:1.6;text-decoration:none}
 .blog-footer a:hover{color:#facc15}
-</style>
-
-<style id="clean-final-gallery">
-#galleryModal{position:fixed!important;inset:0!important;background:rgba(0,0,0,0.92)!important;z-index:99999!important;display:none!important;overflow-y:auto!important;padding:20px 12px!important}
-#galleryModal.open{display:flex!important;justify-content:center!important;align-items:flex-start!important}
-#galleryModal .modal-box{width:100%!important;max-width:860px!important;background:#151515!important;border:1px solid #222!important;border-radius:16px!important;display:block!important;height:auto!important;max-height:none!important;overflow:visible!important;margin:0 auto!important}
-.modal-header{padding:14px 18px!important;background:#151515!important;border-bottom:1px solid #222!important;display:flex!important;justify-content:space-between!important;align-items:center!important;position:sticky!important;top:0!important;z-index:5!important;border-radius:16px 16px 0 0!important}
-.gallery-main-wrap{position:relative!important;width:100%!important;background:#000!important;display:block!important;overflow:visible!important}
-#galleryMain{width:100%!important;height:auto!important;max-height:70vh!important;object-fit:contain!important;display:block!important;background:#000!important}
-.gallery-nav{position:absolute!important;top:50%!important;transform:translateY(-50%)!important;background:rgba(255,255,255,0.92)!important;width:42px!important;height:42px!important;border-radius:50%!important;border:0!important;font-size:22px!important;cursor:pointer!important;z-index:3!important}
-.gallery-nav.prev{left:12px!important}
-.gallery-nav.next{right:12px!important}
-#photoDesc{width:100%!important;background:#1a1a1a!important;border-top:1px solid #222!important;padding:11px 14px!important;font-size:12px!important;color:#bbb!important;text-align:center!important;display:block!important;margin:0!important}
-#galleryThumbs, .gallery-thumbs{width:100%!important;background:#0e0e0e!important;display:flex!important;gap:8px!important;overflow-x:auto!important;overflow-y:visible!important;padding:10px!important;border-top:1px solid #1e1e1e!important;border-bottom:1px solid #1e1e1e!important}
-#galleryThumbs img, .gallery-thumbs img{width:72px!important;height:54px!important;object-fit:cover!important;border-radius:8px!important;border:2px solid transparent!important;flex-shrink:0!important;opacity:0.7!important}
-#galleryThumbs img.active, .gallery-thumbs img.active{border-color:#facc15!important;opacity:1!important}
-#galleryInfo, .gallery-info{padding:18px!important;background:#151515!important;overflow:visible!important;max-height:none!important;height:auto!important;display:block!important}
-.detail-title{font-size:24px!important;font-weight:900!important;color:#facc15!important}
-.detail-subtitle{font-size:15px!important;color:#fff!important;margin:6px 0 14px!important}
-.detail-grid{display:grid!important;grid-template-columns:1fr 1fr!important;gap:8px!important;margin:14px 0!important}
-.detail-box{background:#222!important;border:1px solid #2a2a2a!important;padding:10px!important;border-radius:10px!important;font-size:12px!important;color:#ccc!important}
 </style>
 </head>
 <body>
@@ -197,114 +177,8 @@ function removeFile(i){selectedFiles.splice(i,1); renderPreview();}
 document.getElementById('aFiles').onchange=(e)=>{selectedFiles=[...selectedFiles, ...Array.from(e.target.files)].slice(0,10); renderPreview();};
 function compressImage(file, maxW=800, q=0.70){return new Promise(resolve=>{const img=new Image(); const reader=new FileReader(); reader.onload=e=>{img.onload=()=>{const c=document.createElement('canvas'); let w=img.width,h=img.height; if(w>maxW){h=h*(maxW/w);w=maxW;} if(h>maxW){w=w*(maxW/h);h=maxW;} c.width=w;c.height=h; const ctx=c.getContext('2d'); ctx.drawImage(img,0,0,w,h); c.toBlob(b=>{resolve(b);},'image/webp',q);}; img.src=e.target.result;}; reader.readAsDataURL(file);});}
 document.getElementById('btnSave').onclick=async()=>{const title=document.getElementById('aTitle').value.trim(); const brand=document.getElementById('aBrand').value.trim(); const modelVal=document.getElementById('aModelIn').value||'Inny'; const price=parseInt(document.getElementById('aPrice').value)||0; if(!title||!brand||!modelVal){showError('addError','Tytuł, marka i model wymagane');return;} if(!price){showError('addError','Podaj cenę');return;} const btn=document.getElementById('btnSave'); btn.textContent='WYSYŁANIE...'; btn.disabled=true; try{let imageUrls = []; if(editingId){ const ex=allAds.find(a=>a.id===editingId); imageUrls=ex?.images||[]; if(ex?.image_url && !imageUrls.includes(ex.image_url)) imageUrls.unshift(ex.image_url); } for(let i=0;i<selectedFiles.length;i++){const blob=await compressImage(selectedFiles[i]); const fname=Date.now()+'_'+i+'.webp'; const path=currentUser.id+'/'+fname; const up=await supabaseClient.storage.from('ogloszenia').upload(path, blob, {contentType:'image/webp'}); if(up.error) throw up.error; const pub=supabaseClient.storage.from('ogloszenia').getPublicUrl(path); imageUrls.push(pub.data.publicUrl);} const latVal=document.getElementById('aLat').value||''; const lngVal=document.getElementById('aLng').value||''; const extra=`Przebieg: ${document.getElementById('aMileage').value||'-'} km | Paliwo: ${document.getElementById('aFuel').value||'-'} | lat: ${latVal||'-'} | lng: ${lngVal||'-'}`; const fullDesc=(document.getElementById('aDesc').value||'') + "\n\n["+extra+"]"; const payload={title, brand, model:modelVal, price, year:parseInt(document.getElementById('aYear').value)||null, location:document.getElementById('aLocation').value, phone:document.getElementById('aPhone').value, description:fullDesc, image_url:imageUrls[0]||null, images:imageUrls, user_id:currentUser.id}; let result; if(editingId){result=await supabaseClient.from('ogloszenia').update(payload).eq('id', editingId).select();} else {result=await supabaseClient.from('ogloszenia').insert([payload]).select();} if(result.error) throw result.error; setTimeout(()=>{closeModals(); loadAds(); editingId=null; selectedFiles=[];}, 800);}catch(e){showError('addError', e.message);}finally{btn.textContent='Zatwierdź z GPS'; btn.disabled=false;}};
-
-function openGallery(ad){
-  const modal=document.getElementById('galleryModal');
-  window.currentAd=ad;
-  window.galleryImages = ad.images && ad.images.length>0 ? ad.images : (ad.image_url?[ad.image_url]:[]);
-  window.galleryIndex=0;
-  if(window.galleryImages.length===0){alert('Brak zdjęć');return;}
-  document.getElementById('galleryTitle').textContent=ad.title;
-  document.getElementById('galleryMain').src=window.galleryImages[0];
-  
-  // GLUED photoDesc - directly after image
-  let pd=document.getElementById('photoDesc');
-  if(!pd){
-    pd=document.createElement('div');
-    pd.id='photoDesc';
-  }
-  const wrap=document.querySelector('.gallery-main-wrap');
-  const mainImg=document.getElementById('galleryMain');
-  if(wrap && mainImg){
-    if(pd.parentElement!==wrap) wrap.insertBefore(pd, mainImg.nextSibling);
-  }
-  const labels=["Przód - zdjęcie główne","Tył / Bok","Wnętrze - bagażnik","Wnętrze - podsufitka","Szyberdach / Dach","Licznik - deska","Kokpit - środek","Zegary","Kokpit - kierownica","Wnętrze - drzwi"];
-  if(pd){
-    pd.textContent=labels[0]+" • Zdjęcie 1 z "+window.galleryImages.length+" • "+ad.title;
-    pd.style.display='block';
-  }
-  
-  const thumbs=document.getElementById('galleryThumbs');
-  thumbs.innerHTML='';
-  window.galleryImages.forEach((src,i)=>{
-    const w=document.createElement('div');
-    w.style.cssText='position:relative;flex-shrink:0';
-    const img=document.createElement('img');
-    img.src=src;
-    if(i===0) img.classList.add('active');
-    img.onclick=()=>{window.galleryIndex=i;updateGallery();};
-    const badge=document.createElement('div');
-    badge.textContent=(i+1)+"/"+window.galleryImages.length;
-    badge.style.cssText='position:absolute;bottom:2px;left:2px;background:rgba(0,0,0,0.75);color:#fff;font-size:9px;padding:1px 4px;border-radius:4px';
-    w.appendChild(img);
-    w.appendChild(badge);
-    thumbs.appendChild(w);
-  });
-  
-  // Ensure thumbs is after wrap (not inside) - glued
-  const box=modal.querySelector('.modal-box');
-  if(box && wrap && thumbs && thumbs.parentElement!==box){
-    // If thumbs is inside wrap, move after wrap
-    if(thumbs.parentElement===wrap){
-      box.insertBefore(thumbs, wrap.nextSibling);
-    }
-  }
-  
-  const ex=parseExtra(ad.description||'');
-  const cleanDesc=(ad.description||'').split('\n\n[')[0].split('\n[')[0];
-  const price=ad.price||0;
-  const title=ad.title||'';
-  const marka=ad.brand||'';
-  const model=ad.model||'';
-  const rok=ad.year||ex.rok||'-';
-  const przeb=ad.mileage||ex.przebieg||ad.przebieg||'-';
-  const paliwo=ad.fuel||ex.paliwo||ad.paliwo||'-';
-  const lok=ad.location||'Gorzyce';
-  const phone=ex.telefon||ad.phone||'500 100 200';
-  
-  document.getElementById('galleryInfo').innerHTML=`
-    <div style="padding:0">
-      <div class="detail-title">${price} PLN</div>
-      <div class="detail-subtitle">${title}</div>
-      <div class="detail-grid">
-        <div class="detail-box"><b>Marka:</b> ${marka}</div>
-        <div class="detail-box"><b>Model:</b> ${model}</div>
-        <div class="detail-box"><b>Rok:</b> ${rok}</div>
-        <div class="detail-box"><b>Przebieg:</b> ${przeb}</div>
-        <div class="detail-box"><b>Paliwo:</b> ${paliwo}</div>
-        <div class="detail-box"><b>Lokalizacja:</b> ${lok}</div>
-      </div>
-      <div style="background:#0f0f0f;border:1px solid #222;border-radius:12px;padding:14px;margin:14px 0;font-size:13px;line-height:1.6;white-space:pre-wrap;color:#ddd"><b style="color:#facc15">Opis pojazdu:</b>
-${cleanDesc||'Brak opisu'}
-
-<b style="color:#888">Opisy zdjęć:</b>
-${window.galleryImages.map((_,i)=> (i+1)+". "+(labels[i]||"Zdjęcie "+(i+1))).join(" • ")}</div>
-      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px">
-        <a href="tel:${phone}" style="background:#22c55e;color:#fff;padding:12px 18px;border-radius:22px;text-decoration:none;font-weight:800;font-size:13px">📞 Zadzwoń: ${phone}</a>
-        <a href="https://www.google.com/maps/search/?api=1&query=${ad.lat||'49.96'},${ad.lng||'18.39'}" target="_blank" style="background:#0ea5e9;color:#fff;padding:12px 18px;border-radius:22px;text-decoration:none;font-weight:800;font-size:13px">📍 Mapa</a>
-      </div>
-      <div style="height:30px"></div>
-    </div>
-  `;
-  modal.classList.add('open');
-  modal.style.display='flex';
-  document.body.style.overflow='hidden';
-}
-function updateGallery(){
-  document.getElementById('galleryMain').src=window.galleryImages[window.galleryIndex];
-  document.getElementById('galleryThumbs').querySelectorAll('img').forEach((im,i)=>{im.classList.toggle('active', i===window.galleryIndex);});
-  const pd=document.getElementById('photoDesc');
-  const labels=["Przód - zdjęcie główne","Tył / Bok","Wnętrze - bagażnik","Wnętrze - podsufitka","Szyberdach / Dach","Licznik - deska","Kokpit - środek","Zegary","Kokpit - kierownica","Wnętrze - drzwi"];
-  if(pd){
-    const ad=window.currentAd;
-    const title=ad?.title||'';
-    const total=window.galleryImages.length;
-    const lab=labels[window.galleryIndex]||("Zdjęcie "+(window.galleryIndex+1));
-    pd.textContent=lab+" • Zdjęcie "+(window.galleryIndex+1)+" z "+total+" • "+title;
-  }
-}
-
-);}
+function openGallery(ad){const modal=document.getElementById('galleryModal'); galleryImages = ad.images && ad.images.length>0 ? ad.images : (ad.image_url?[ad.image_url]:[]); galleryIndex=0; if(galleryImages.length===0){alert('Brak zdjęć'); return;} document.getElementById('galleryTitle').textContent=ad.title; document.getElementById('galleryMain').src=galleryImages[0]; const thumbs=document.getElementById('galleryThumbs'); thumbs.innerHTML=''; galleryImages.forEach((src,i)=>{const img=document.createElement('img'); img.src=src; if(i===0) img.classList.add('active'); img.onclick=()=>{galleryIndex=i; updateGallery();}; thumbs.appendChild(img);}); const ex=parseExtra(ad.description||''); const cleanDesc=(ad.description||'').split('\n\n[')[0].split('\n[')[0]; document.getElementById('galleryInfo').innerHTML=`<div class="detail-section"><div class="detail-title">${ad.price} PLN</div><div class="detail-subtitle">${ad.title}</div></div>`; modal.classList.add('open'); modal.style.display='flex'; document.body.style.overflow='hidden'; }
+function updateGallery(){document.getElementById('galleryMain').src=galleryImages[galleryIndex]; document.getElementById('galleryThumbs').querySelectorAll('img').forEach((im,i)=>{im.classList.toggle('active', i===galleryIndex);});}
 function galleryPrev(){galleryIndex=(galleryIndex-1+galleryImages.length)%galleryImages.length; updateGallery();}
 function galleryNext(){galleryIndex=(galleryIndex+1)%galleryImages.length; updateGallery();}
 async function deleteAd(id){ if(!confirm('Usunąć?')) return; const r=await supabaseClient.from('ogloszenia').delete().eq('id', id); if(r.error) alert(r.error.message); else {closeGallery(); loadAds();} }
@@ -312,5 +186,121 @@ function quickFilter(brand){const p=getP(); const el=document.getElementById('fM
 async function loadAds(){const grid=document.getElementById('grid'); const p=isMobile()?'M':'D'; const marka=document.getElementById('fMarka'+p)?.value||document.getElementById('fMarkaD')?.value||''; const cenaOd=parseInt(document.getElementById('fCenaOd'+p)?.value||document.getElementById('fCenaOdD')?.value); const cenaDo=parseInt(document.getElementById('fCenaDo'+p)?.value||document.getElementById('fCenaDoD')?.value); const lok=document.getElementById('fLok'+p)?.value||document.getElementById('fLokD')?.value||''; grid.innerHTML='<div style="padding:20px;text-align:center;grid-column:1/-1;opacity:.5">Ładowanie...</div>'; try{let q=supabaseClient.from('ogloszenia').select('*').eq('is_banned', false).order('created_at',{ascending:false}).limit(150); if(marka) q=q.eq('brand', marka); if(cenaOd) q=q.gte('price', cenaOd); if(cenaDo) q=q.lte('price', cenaDo); if(lok) q=q.ilike('location','%'+lok+'%'); const result=await q; if(result.error) throw result.error; allAds=result.data; let filtered=result.data; const cd=document.getElementById('countD'); const cm=document.getElementById('countM'); if(cd) cd.textContent=filtered.length+' ogłoszeń'; if(cm) cm.textContent=filtered.length+' ogłoszeń'; if(filtered.length===0){grid.innerHTML=`<div style="grid-column:1/-1;padding:40px;text-align:center;background:#181818;border-radius:12px"><h3 style="color:#facc15">Brak ogłoszeń</h3></div>`; return;} grid.innerHTML=filtered.map(o=>{const img=o.image_url||(o.images&&o.images[0])||'https://via.placeholder.com/300x200?text=Brak'; const cnt=(o.images&&o.images.length>0)?o.images.length:(o.image_url?1:0); return `<div class="card" onclick="openGallery(allAds.find(a=>a.id==='${o.id}'))"><div class="card-img-wrap"><img src="${img}" loading="lazy"><div class="card-img-count">📷 ${cnt}</div></div><div class="card-body"><div class="card-title">${o.title}</div><div class="card-price">${o.price} PLN</div><div class="card-location">${o.location||''} • ${o.year||''}</div></div></div>`;}).join('');}catch(e){grid.innerHTML='<div style="grid-column:1/-1;padding:20px;background:#3a1111">Błąd: '+(e.message||e)+'</div>';}}
 function resetFilters(){['D','M'].forEach(p=>{['fMarka','fModel','fCenaOd','fCenaDo','fRokOd','fRokDo','fPaliwo','fLok','fRadius'].forEach(k=>{const el=document.getElementById(k+p); if(el) el.value='';});}); loadAds();}
 checkUser(); loadAds();
+</script>
+
+<style id="final-override-v12">
+#galleryModal{position:fixed!important;inset:0!important;background:rgba(0,0,0,0.92)!important;z-index:99999!important;display:none!important;overflow-y:auto!important;padding:20px 12px!important}
+#galleryModal.open{display:flex!important;justify-content:center!important;align-items:flex-start!important}
+#galleryModal .modal-box{width:100%!important;max-width:860px!important;background:#151515!important;border:1px solid #222!important;border-radius:16px!important;display:block!important;height:auto!important;max-height:none!important;overflow:visible!important;margin:0 auto!important}
+.gallery-main-wrap{position:relative!important;width:100%!important;background:#000!important;display:block!important;overflow:visible!important}
+#galleryMain{width:100%!important;height:auto!important;max-height:70vh!important;object-fit:contain!important;display:block!important;background:#000!important}
+.gallery-nav{position:absolute!important;top:50%!important;transform:translateY(-50%)!important;background:rgba(255,255,255,0.92)!important;width:42px!important;height:42px!important;border-radius:50%!important;border:0!important;font-size:22px!important;cursor:pointer!important;z-index:3!important}
+.gallery-nav.prev{left:12px!important}
+.gallery-nav.next{right:12px!important}
+#photoDesc{width:100%!important;background:#1a1a1a!important;border-top:1px solid #222!important;padding:11px 14px!important;font-size:12px!important;color:#bbb!important;text-align:center!important;display:block!important;margin:0!important}
+#galleryThumbs, .gallery-thumbs{width:100%!important;background:#0e0e0e!important;display:flex!important;gap:8px!important;overflow-x:auto!important;overflow-y:visible!important;padding:10px!important;border-top:1px solid #1e1e1e!important;border-bottom:1px solid #1e1e1e!important}
+#galleryThumbs img, .gallery-thumbs img{width:72px!important;height:54px!important;object-fit:cover!important;border-radius:8px!important;border:2px solid transparent!important;flex-shrink:0!important;opacity:0.7!important}
+#galleryThumbs img.active, .gallery-thumbs img.active{border-color:#facc15!important;opacity:1!important}
+#galleryInfo, .gallery-info{padding:18px!important;background:#151515!important;overflow:visible!important;max-height:none!important;height:auto!important;display:block!important}
+</style>
+<script>
+// CLEAN OVERRIDE - zachowuje loadAds, tylko galeria
+(function(){
+  const labels=["Przód - zdjęcie główne","Tył / Bok","Wnętrze - bagażnik","Wnętrze - podsufitka","Szyberdach / Dach","Licznik - deska","Kokpit - środek","Zegary","Kokpit - kierownica","Wnętrze - drzwi"];
+  window.openGallery=function(ad){
+    const modal=document.getElementById('galleryModal');
+    window.currentAd=ad;
+    window.galleryImages = ad.images && ad.images.length>0 ? ad.images : (ad.image_url?[ad.image_url]:[]);
+    window.galleryIndex=0;
+    if(window.galleryImages.length===0){alert('Brak zdjęć');return;}
+    document.getElementById('galleryTitle').textContent=ad.title;
+    document.getElementById('galleryMain').src=window.galleryImages[0];
+    let pd=document.getElementById('photoDesc');
+    if(!pd){
+      pd=document.createElement('div');
+      pd.id='photoDesc';
+    }
+    const wrap=document.querySelector('.gallery-main-wrap');
+    if(wrap){
+      if(pd.parentElement!==wrap) wrap.appendChild(pd);
+      // Ensure thumbs is after wrap, not inside
+      const thumbs=document.getElementById('galleryThumbs');
+      if(thumbs && thumbs.parentElement===wrap){
+        wrap.parentElement.insertBefore(thumbs, wrap.nextSibling);
+      }
+    }
+    if(pd){ pd.textContent=labels[0]+" • Zdjęcie 1 z "+window.galleryImages.length+" • "+ad.title; pd.style.display='block'; }
+    const thumbs=document.getElementById('galleryThumbs');
+    thumbs.innerHTML='';
+    window.galleryImages.forEach((src,i)=>{
+      const w=document.createElement('div');
+      w.style.cssText='position:relative;flex-shrink:0';
+      const img=document.createElement('img');
+      img.src=src;
+      if(i===0) img.classList.add('active');
+      img.onclick=()=>{window.galleryIndex=i;window.updateGallery();};
+      const badge=document.createElement('div');
+      badge.textContent=(i+1)+"/"+window.galleryImages.length;
+      badge.style.cssText='position:absolute;bottom:2px;left:2px;background:rgba(0,0,0,0.75);color:#fff;font-size:9px;padding:1px 4px;border-radius:4px';
+      w.appendChild(img);
+      w.appendChild(badge);
+      thumbs.appendChild(w);
+    });
+    const ex=typeof parseExtra==='function'?parseExtra(ad.description||''):{};
+    const cleanDesc=(ad.description||'').split('\n\n[')[0].split('\n[')[0];
+    const price=ad.price||0;
+    const title=ad.title||'';
+    const marka=ad.brand||'';
+    const model=ad.model||'';
+    const rok=ad.year||ex.rok||'-';
+    const przeb=ad.mileage||ex.przebieg||ad.przebieg||'-';
+    const paliwo=ad.fuel||ex.paliwo||ad.paliwo||'-';
+    const lok=ad.location||'Gorzyce';
+    const phone=ex.telefon||ad.phone||'500 100 200';
+    document.getElementById('galleryInfo').innerHTML=`
+      <div style="padding:0">
+        <div style="font-size:24px;font-weight:900;color:#facc15">${price} PLN</div>
+        <div style="font-size:15px;color:#fff;margin:6px 0 14px">${title}</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:14px 0">
+          <div style="background:#222;border:1px solid #2a2a2a;padding:10px;border-radius:10px;font-size:12px;color:#ccc"><b>Marka:</b> ${marka}</div>
+          <div style="background:#222;border:1px solid #2a2a2a;padding:10px;border-radius:10px;font-size:12px;color:#ccc"><b>Model:</b> ${model}</div>
+          <div style="background:#222;border:1px solid #2a2a2a;padding:10px;border-radius:10px;font-size:12px;color:#ccc"><b>Rok:</b> ${rok}</div>
+          <div style="background:#222;border:1px solid #2a2a2a;padding:10px;border-radius:10px;font-size:12px;color:#ccc"><b>Przebieg:</b> ${przeb}</div>
+          <div style="background:#222;border:1px solid #2a2a2a;padding:10px;border-radius:10px;font-size:12px;color:#ccc"><b>Paliwo:</b> ${paliwo}</div>
+          <div style="background:#222;border:1px solid #2a2a2a;padding:10px;border-radius:10px;font-size:12px;color:#ccc"><b>Lokalizacja:</b> ${lok}</div>
+        </div>
+        <div style="background:#0f0f0f;border:1px solid #222;border-radius:12px;padding:14px;margin:14px 0;font-size:13px;line-height:1.6;white-space:pre-wrap;color:#ddd"><b style="color:#facc15">Opis pojazdu:</b>
+${cleanDesc||'Brak opisu'}</div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px">
+          <a href="tel:${phone}" style="background:#22c55e;color:#fff;padding:12px 18px;border-radius:22px;text-decoration:none;font-weight:800;font-size:13px">📞 Zadzwoń: ${phone}</a>
+          <a href="https://www.google.com/maps/search/?api=1&query=${ad.lat||'49.96'},${ad.lng||'18.39'}" target="_blank" style="background:#0ea5e9;color:#fff;padding:12px 18px;border-radius:22px;text-decoration:none;font-weight:800;font-size:13px">📍 Mapa</a>
+        </div>
+        <div style="height:30px"></div>
+      </div>
+    `;
+    modal.classList.add('open');
+    modal.style.display='flex';
+    document.body.style.overflow='hidden';
+  };
+  window.updateGallery=function(){
+    document.getElementById('galleryMain').src=window.galleryImages[window.galleryIndex];
+    document.getElementById('galleryThumbs').querySelectorAll('img').forEach((im,i)=>{im.classList.toggle('active', i===window.galleryIndex);});
+    const pd=document.getElementById('photoDesc');
+    if(pd){
+      const ad=window.currentAd;
+      const title=ad?.title||'';
+      const total=window.galleryImages.length;
+      const lab=labels[window.galleryIndex]||("Zdjęcie "+(window.galleryIndex+1));
+      pd.textContent=lab+" • Zdjęcie "+(window.galleryIndex+1)+" z "+total+" • "+title;
+    }
+  };
+  window.closeGallery=function(){
+    const m=document.getElementById('galleryModal');
+    if(m){m.classList.remove('open');m.style.display='none';}
+    document.body.style.overflow='';
+  };
+  window.galleryPrev=function(){window.galleryIndex=(window.galleryIndex-1+window.galleryImages.length)%window.galleryImages.length;window.updateGallery();};
+  window.galleryNext=function(){window.galleryIndex=(window.galleryIndex+1)%window.galleryImages.length;window.updateGallery();};
+})();
 </script>
 </body></html>
