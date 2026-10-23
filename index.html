@@ -144,6 +144,117 @@ label.small{font-size:10px;opacity:.7;display:block;margin:8px 12px 2px;text-tra
   setInterval(fixThumbs, 1000);
 })();
 </script>
+
+<style id="sticky-black-bar">
+/* Czarny pasek + zdjęcie przyklejone do strony */
+#galleryModal .modal-box{
+  display:flex!important;
+  flex-direction:column!important;
+  max-height:92vh!important;
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+}
+.gallery-main-wrap{
+  position:sticky!important;
+  top:0!important;
+  z-index:10!important;
+  background:#000!important;
+  flex-shrink:0!important;
+}
+#galleryMain{
+  width:100%!important;
+  max-height:58vh!important;
+  object-fit:contain!important;
+  background:#000!important;
+}
+#photoDesc{
+  position:relative!important;
+  background:#1a1a1a!important;
+  border-top:1px solid #222!important;
+}
+#galleryThumbs, .gallery-thumbs{
+  position:sticky!important;
+  top:58vh!important;
+  z-index:9!important;
+  background:#0e0e0e!important;
+  flex-shrink:0!important;
+  border-top:1px solid #1e1e1e!important;
+  border-bottom:1px solid #1e1e1e!important;
+}
+/* Jeśli thumbs jest poza wrap, to przyklej go zaraz pod zdjęciem */
+#galleryModal .modal-box #galleryThumbs{
+  top:0!important;
+}
+/* Doklej thumbs do wrap - jeden sticky blok */
+.sticky-gallery-block{
+  position:sticky!important;
+  top:0!important;
+  z-index:10!important;
+  background:#000!important;
+}
+#galleryInfo{
+  position:relative!important;
+  z-index:1!important;
+  background:#151515!important;
+  overflow:visible!important;
+  max-height:none!important;
+}
+</style>
+<script>
+(function(){
+  function glueBlackBar(){
+    const modal=document.getElementById('galleryModal');
+    const box=modal?modal.querySelector('.modal-box'):null;
+    const wrap=document.querySelector('.gallery-main-wrap');
+    const thumbs=document.getElementById('galleryThumbs');
+    const pd=document.getElementById('photoDesc');
+    const info=document.getElementById('galleryInfo');
+    const header=document.querySelector('#galleryModal .modal-header');
+    if(!box||!wrap||!thumbs) return;
+    // Jeśli thumbs jest poza wrap, stwórz sticky block
+    if(thumbs.parentElement!==wrap){
+      // Sprawdź czy już mamy sticky block
+      let stickyBlock=document.querySelector('.sticky-gallery-block');
+      if(!stickyBlock){
+        stickyBlock=document.createElement('div');
+        stickyBlock.className='sticky-gallery-block';
+        // Wstaw przed info
+        box.insertBefore(stickyBlock, thumbs);
+        // Przenieś wrap, pd i thumbs do stickyBlock
+        if(pd && pd.parentElement===wrap){
+          // pd zostaje w wrap
+        }
+        stickyBlock.appendChild(wrap);
+        if(thumbs.parentElement!==stickyBlock){
+          stickyBlock.appendChild(thumbs);
+        }
+      }
+    } else {
+      // thumbs wewnątrz wrap - upewnij się że wrap jest sticky
+      wrap.style.position='sticky';
+      wrap.style.top='0';
+      wrap.style.zIndex='10';
+      thumbs.style.position='relative';
+      thumbs.style.top='auto';
+    }
+    // Upewnij się że header też sticky
+    if(header){
+      header.style.position='sticky';
+      header.style.top='0';
+      header.style.zIndex='11';
+    }
+  }
+  const origOpen=window.openGallery;
+  window.openGallery=function(ad){
+    const r=origOpen?origOpen(ad):null;
+    setTimeout(glueBlackBar, 30);
+    setTimeout(glueBlackBar, 200);
+    setTimeout(glueBlackBar, 600);
+    return r;
+  };
+  setInterval(glueBlackBar, 1500);
+})();
+</script>
 </head>
 <body>
 <div class="header"><div class="logo">WROOMER<span>.PL</span> <span style="font-size:10px;background:#facc15;color:#000;padding:2px 6px;border-radius:10px">v11 8 KAFELI FIXED</span></div><div style="display:flex;gap:6px;align-items:center"><button class="btn btn-dark" id="btnLogin">Zaloguj</button><button class="btn btn-dark" id="btnLogout" style="display:none">Wyloguj</button><button class="btn btn-yellow" id="btnAdd">+ Dodaj</button></div></div>
