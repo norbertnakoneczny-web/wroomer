@@ -87,9 +87,7 @@ label.small{font-size:10px;opacity:.7;display:block;margin:8px 12px 2px;text-tra
   line-height:1.4 !important;
   letter-spacing:0.2px !important;
 }
-#photoDesc::before{
-  content:"📸 " !important;
-}
+/* bez emoji */
 
 #galleryThumbs{display:flex !important; gap:8px !important; overflow-x:auto !important; padding:12px !important; background:#0e0e0e !important; flex-shrink:0 !important; border-bottom:1px solid #1e1e1e !important;}
 #galleryThumbs img{width:80px !important; height:60px !important; object-fit:cover !important; border-radius:8px !important; flex-shrink:0 !important; border:2px solid transparent !important; opacity:.7 !important; transition:all .2s !important;}
@@ -241,8 +239,7 @@ function openGallery(ad){
     const wrap=document.querySelector('.gallery-main-wrap');
     if(wrap) wrap.appendChild(pd);
   }
-  const labels=["Przód - zdjęcie główne","Tył / Bok","Wnętrze - bagażnik","Wnętrze - podsufitka","Szyberdach / Dach","Licznik - deska","Kokpit - środek","Zegary","Kokpit - kierownica","Wnętrze - drzwi"];
-  if(pd){ pd.textContent=labels[0]+" • Zdjęcie 1 z "+galleryImages.length+" • "+ad.title; pd.style.display='block'; }
+  if(pd){ pd.textContent="Zdjęcie 1 z "+galleryImages.length+" • "+ad.title; pd.style.display='block'; }
   
   const thumbs=document.getElementById('galleryThumbs'); 
   thumbs.innerHTML=''; 
@@ -289,8 +286,7 @@ function openGallery(ad){
       <div style="background:#0f0f0f;border:1px solid #222;border-radius:12px;padding:14px;margin:14px 0;font-size:13px;line-height:1.6;white-space:pre-wrap;color:#ddd"><b style="color:#facc15">Opis pojazdu:</b>
 ${cleanDesc||'Brak opisu'}
 
-<b style="color:#888">Opisy zdjęć:</b>
-${galleryImages.map((_,i)=> (i+1)+". "+(labels[i]||"Zdjęcie "+(i+1))).join(" • ")}</div>
+</div>
       <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px">
         <a href="tel:${phone}" style="background:#22c55e;color:#fff;padding:12px 18px;border-radius:22px;text-decoration:none;font-weight:800;font-size:13px">📞 Zadzwoń: ${phone}</a>
         <a href="https://www.google.com/maps/search/?api=1&query=${ad.lat||'49.96'},${ad.lng||'18.39'}" target="_blank" style="background:#0ea5e9;color:#fff;padding:12px 18px;border-radius:22px;text-decoration:none;font-weight:800;font-size:13px">📍 Mapa</a>
@@ -305,14 +301,12 @@ ${galleryImages.map((_,i)=> (i+1)+". "+(labels[i]||"Zdjęcie "+(i+1))).join(" �
 function updateGallery(){
   document.getElementById('galleryMain').src=galleryImages[galleryIndex]; 
   document.getElementById('galleryThumbs').querySelectorAll('img').forEach((im,i)=>{im.classList.toggle('active', i===galleryIndex);});
-  const pd=document.getElementById('photoDesc');
-  const labels=["Przód - zdjęcie główne","Tył / Bok","Wnętrze - bagażnik","Wnętrze - podsufitka","Szyberdach / Dach","Licznik - deska","Kokpit - środek","Zegary","Kokpit - kierownica","Wnętrze - drzwi"];
+  const pd=document.getElementById('photoDesc');;
   if(pd){
     const ad=window.currentAd;
     const title=ad?.title||'';
     const total=galleryImages.length;
-    const lab=labels[galleryIndex]||("Zdjęcie "+(galleryIndex+1));
-    pd.textContent=lab+" • Zdjęcie "+(galleryIndex+1)+" z "+total+" • "+title;
+    pd.textContent="Zdjęcie "+(galleryIndex+1)+" z "+total+" • "+title;
   }
 }
 
