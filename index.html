@@ -397,6 +397,51 @@ label.small{font-size:10px;opacity:.7;display:block;margin:8px 12px 2px;text-tra
   });
 })();
 </script>
+
+<style id="USUN-PASKI">
+#photoDesc{
+  display:none!important;
+  visibility:hidden!important;
+  height:0!important;
+  overflow:hidden!important;
+}
+.gallery-main-wrap::after{
+  display:none!important;
+}
+/* Napraw podwójne zdjęcie */
+.gallery-main-wrap{
+  position:relative!important;
+  overflow:hidden!important;
+}
+#galleryMain{
+  display:block!important;
+  width:100%!important;
+  height:auto!important;
+}
+#galleryThumbs{
+  position:relative!important;
+}
+</style>
+<script>
+(function(){
+  function usunPaski(){
+    document.querySelectorAll('#photoDesc, [id*="photoDesc"], .photo-desc').forEach(el=>{ el.style.display='none'; el.remove(); });
+    // Usuń duplikaty pasków
+    document.querySelectorAll('div').forEach(d=>{
+      if(d.textContent && d.textContent.includes('Przód - zdjęcie główne') && d.id!=='photoDesc'){
+        if(d.offsetHeight<60) d.style.display='none';
+      }
+    });
+  }
+  const orig=window.openGallery;
+  window.openGallery=function(ad){
+    const r=orig?orig.apply(this,arguments):null;
+    setTimeout(usunPaski, 30);
+    setTimeout(usunPaski, 300);
+    return r;
+  };
+})();
+</script>
 </head>
 <body>
 <div class="header"><div class="logo">WROOMER<span>.PL</span> <span style="font-size:10px;background:#facc15;color:#000;padding:2px 6px;border-radius:10px">v11 8 KAFELI FIXED</span></div><div style="display:flex;gap:6px;align-items:center"><button class="btn btn-dark" id="btnLogin">Zaloguj</button><button class="btn btn-dark" id="btnLogout" style="display:none">Wyloguj</button><button class="btn btn-yellow" id="btnAdd">+ Dodaj</button></div></div>
