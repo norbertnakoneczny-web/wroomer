@@ -61,165 +61,51 @@ label.small{font-size:10px;opacity:.7;display:block;margin:8px 12px 2px;text-tra
 .blog-footer a:hover{color:#facc15}
 </style>
 
-<style id="glued-fix">
-/* Sklej zdjęcie + opis + miniaturki razem */
-#galleryModal .modal-box{display:flex!important;flex-direction:column!important;max-height:92vh!important;overflow-y:auto!important;-webkit-overflow-scrolling:touch!important}
-.gallery-main-wrap{position:sticky!important;top:0!important;z-index:2!important;background:#000!important;flex-shrink:0!important;display:block!important;width:100%!important}
-#galleryMain{width:100%!important;max-height:60vh!important;object-fit:contain!important;display:block!important}
-#photoDesc{position:relative!important;width:100%!important;background:#1a1a1a!important;border-top:1px solid #222!important;padding:10px 12px!important;font-size:12px!important;color:#bbb!important;text-align:center!important;display:block!important;flex-shrink:0!important;margin:0!important}
-.gallery-thumbs{position:relative!important;flex-shrink:0!important;background:#0e0e0e!important;z-index:2!important}
-.gallery-info{overflow-y:visible!important;max-height:none!important;flex:none!important}
-</style>
-<script>
-(function(){
-  // Move photoDesc directly after galleryMain so it's glued
-  function glue(){
-    const wrap = document.querySelector('.gallery-main-wrap');
-    const main = document.getElementById('galleryMain');
-    const pd = document.getElementById('photoDesc');
-    const thumbs = document.getElementById('galleryThumbs');
-    if(wrap && main && pd){
-      // Ensure order: main -> pd
-      if(pd.parentElement !== wrap || pd.previousElementSibling !== main){
-        wrap.insertBefore(pd, main.nextSibling);
-      }
-      pd.style.position='relative';
-      pd.style.top='0';
-    }
-    // Ensure thumbs is right after wrap, not inside
-    const box = document.querySelector('.modal-box');
-    if(box && wrap && thumbs){
-      if(thumbs.parentElement === wrap){
-        // Move thumbs out of wrap to after wrap
-        box.insertBefore(thumbs, wrap.nextSibling);
-      }
-    }
-  }
-  const origOpen = window.openGallery;
-  window.openGallery = function(ad){
-    const r = origOpen ? origOpen(ad) : null;
-    setTimeout(glue, 50);
-    setTimeout(glue, 300);
-    return r;
-  };
-  setInterval(glue, 1000);
-})();
-</script>
 
-<style id="one-scroll-fix">
-/* JEDEN SCROLL - całość razem */
-#galleryModal{overflow-y:auto!important;padding:16px!important}
-#galleryModal .modal-box{
-  max-height:none!important;
-  height:auto!important;
-  overflow:visible!important;
-  display:block!important;
-  max-width:860px!important;
-  margin:0 auto!important;
-}
-.gallery-main-wrap{
-  position:relative!important;
-  top:auto!important;
-  width:100%!important;
-  background:#000!important;
-  display:block!important;
-  flex-shrink:0!important;
-  overflow:visible!important;
-}
-#galleryMain{
-  width:100%!important;
-  max-height:none!important;
-  height:auto!important;
-  object-fit:contain!important;
-  display:block!important;
-}
+
+<style id="WROOMER-FIX-V14-DESC">
+/* V14 - zdjęcie całe + ładny opis pod zdjęciami */
+#galleryModal{padding:16px !important; align-items:flex-start !important; justify-content:center !important; overflow-y:auto !important;}
+#galleryModal .modal-box{max-width:860px !important; width:95% !important; margin:20px auto !important; max-height:92vh !important; display:flex !important; flex-direction:column !important; overflow-y:auto !important; background:#151515 !important;}
+.gallery-main-wrap{position:relative !important; width:100% !important; background:#000 !important; display:block !important; flex-shrink:0 !important; border-radius:12px 12px 0 0 !important; overflow:hidden !important;}
+#galleryMain{width:100% !important; height:auto !important; max-height:68vh !important; object-fit:contain !important; object-position:center !important; display:block !important; background:#000 !important;}
+@media(max-width:700px){#galleryMain{max-height:52vh !important}}
+.gallery-nav{position:absolute !important; top:50% !important; transform:translateY(-50%) !important; z-index:10 !important; background:rgba(255,255,255,0.92) !important; width:44px !important; height:44px !important; border-radius:50% !important; border:0 !important; font-size:24px !important;}
+
+/* PIĘKNY OPIS POD ZDJĘCIEM */
 #photoDesc{
-  position:relative!important;
-  top:auto!important;
-  width:100%!important;
-  background:#1a1a1a!important;
-  border-top:1px solid #222!important;
-  padding:10px 12px!important;
-  font-size:12px!important;
-  color:#bbb!important;
-  text-align:center!important;
-  display:block!important;
-  margin:0!important;
+  display:block !important;
+  width:100% !important;
+  background:linear-gradient(180deg, #1e1e1e 0%, #1a1a1a 100%) !important;
+  border-top:2px solid #facc15 !important;
+  border-bottom:1px solid #222 !important;
+  padding:12px 16px !important;
+  font-size:13px !important;
+  font-weight:700 !important;
+  color:#fff !important;
+  text-align:left !important;
+  line-height:1.4 !important;
+  letter-spacing:0.2px !important;
 }
-.gallery-thumbs, #galleryThumbs{
-  position:relative!important;
-  top:auto!important;
-  width:100%!important;
-  background:#0e0e0e!important;
-  display:flex!important;
-  gap:8px!important;
-  overflow-x:auto!important;
-  overflow-y:visible!important;
-  padding:10px!important;
-  border-top:1px solid #1e1e1e!important;
-  border-bottom:1px solid #1e1e1e!important;
-  flex-shrink:0!important;
-}
-.gallery-info, #galleryInfo{
-  overflow:visible!important;
-  max-height:none!important;
-  height:auto!important;
-  flex:none!important;
-  padding:18px!important;
-  background:#151515!important;
-}
-/* Usuń stare sticky i overflow */
-.detail-section{overflow:visible!important;max-height:none!important}
+/* bez emoji */
+
+#galleryThumbs{display:flex !important; gap:8px !important; overflow-x:auto !important; padding:12px !important; background:#0e0e0e !important; flex-shrink:0 !important; border-bottom:1px solid #1e1e1e !important;}
+#galleryThumbs img{width:80px !important; height:60px !important; object-fit:cover !important; border-radius:8px !important; flex-shrink:0 !important; border:2px solid transparent !important; opacity:.7 !important; transition:all .2s !important;}
+#galleryThumbs img.active{border-color:#facc15 !important; opacity:1 !important; transform:scale(1.05) !important;}
+#galleryThumbs img:hover{opacity:1 !important;}
+
+/* SZCZEGÓŁY OGŁOSZENIA - ładne czytelne kafelki */
+#galleryInfo{flex:1 !important; overflow:visible !important; max-height:none !important; background:#151515 !important; padding:0 !important;}
+.detail-section{padding:20px !important; background:#151515 !important;}
+.detail-title{font-size:28px !important; font-weight:900 !important; color:#facc15 !important; margin-bottom:4px !important;}
+.detail-subtitle{font-size:16px !important; color:#fff !important; margin:8px 0 16px !important; line-height:1.3 !important;}
+.detail-grid{display:grid !important; grid-template-columns:repeat(2,1fr) !important; gap:10px !important; margin-top:16px !important;}
+@media(max-width:600px){.detail-grid{grid-template-columns:1fr !important;}}
+.detail-grid div{background:#1e1e1e !important; border:1px solid #2a2a2a !important; padding:12px 14px !important; border-radius:12px !important; font-size:13px !important; display:flex !important; justify-content:space-between !important; align-items:center !important;}
+.detail-grid div b{color:#facc15 !important; font-size:11px !important; text-transform:uppercase !important; letter-spacing:.5px !important;}
 </style>
-<script>
-(function(){
-  function fixScroll(){
-    const modal = document.getElementById('galleryModal');
-    const box = modal ? modal.querySelector('.modal-box') : null;
-    const mainWrap = document.querySelector('.gallery-main-wrap');
-    const main = document.getElementById('galleryMain');
-    const pd = document.getElementById('photoDesc');
-    const thumbs = document.getElementById('galleryThumbs');
-    const info = document.getElementById('galleryInfo');
-    
-    if(box){
-      box.style.maxHeight='none';
-      box.style.height='auto';
-      box.style.overflow='visible';
-      box.style.display='block';
-    }
-    if(modal){
-      modal.style.overflowY='auto';
-    }
-    if(mainWrap){
-      mainWrap.style.position='relative';
-      mainWrap.style.top='auto';
-      mainWrap.style.overflow='visible';
-      // Ensure order: main -> pd
-      if(main && pd && pd.parentElement===mainWrap){
-        if(pd.previousElementSibling !== main){
-          mainWrap.insertBefore(pd, main.nextSibling);
-        }
-      }
-    }
-    if(info){
-      info.style.overflow='visible';
-      info.style.maxHeight='none';
-      info.style.height='auto';
-    }
-  }
-  const origOpen = window.openGallery;
-  window.openGallery = function(ad){
-    const r = origOpen ? origOpen(ad) : null;
-    setTimeout(fixScroll, 30);
-    setTimeout(fixScroll, 300);
-    return r;
-  };
-  // Fix on load
-  document.addEventListener('DOMContentLoaded', fixScroll);
-  setInterval(fixScroll, 1000);
-})();
-</script>
+
+
 </head>
 <body>
 <div class="header"><div class="logo">WROOMER<span>.PL</span> <span style="font-size:10px;background:#facc15;color:#000;padding:2px 6px;border-radius:10px">v11 8 KAFELI FIXED</span></div><div style="display:flex;gap:6px;align-items:center"><button class="btn btn-dark" id="btnLogin">Zaloguj</button><button class="btn btn-dark" id="btnLogout" style="display:none">Wyloguj</button><button class="btn btn-yellow" id="btnAdd">+ Dodaj</button></div></div>
@@ -282,7 +168,7 @@ label.small{font-size:10px;opacity:.7;display:block;margin:8px 12px 2px;text-tra
   <div><h4>KONTAKT</h4><p>RODO: rodo@wroomer.pl<br>Zgłoszenia: zglos@wroomer.pl<br>Kontakt: kontakt@wroomer.pl</p></div>
 </div>
 
-<div class="modal gallery-modal" id="galleryModal"><div class="modal-box"><div class="modal-header"><h3 id="galleryTitle" style="font-size:15px"></h3><button class="btn btn-dark" onclick="closeGallery()">✕</button></div><div class="gallery-main-wrap"><button class="gallery-nav prev" onclick="galleryPrev()">‹</button><img id="galleryMain" class="gallery-main" src=""></button><div id="photoDesc"></div><button class="gallery-nav next" onclick="galleryNext()">›</button></div><div id="galleryThumbs" class="gallery-thumbs"></div><div id="galleryInfo" class="gallery-info"></div></div></div>
+<div class="modal gallery-modal" id="galleryModal"><div class="modal-box"><div class="modal-header"><h3 id="galleryTitle" style="font-size:15px"></h3><button class="btn btn-dark" onclick="closeGallery()">✕</button></div><div class="gallery-main-wrap"><button class="gallery-nav prev" onclick="galleryPrev()">‹</button><img id="galleryMain" class="gallery-main" src="" alt=""><div id="photoDesc"></div><button class="gallery-nav next" onclick="galleryNext()">›</button></div><div id="galleryThumbs" class="gallery-thumbs"></div><div id="galleryInfo" class="gallery-info"></div></div></div>
 <div class="modal" id="loginModal"><div class="modal-box"><div class="modal-header"><h3>Zaloguj</h3><button class="btn btn-dark" onclick="closeModals()">✕</button></div><div id="loginError"></div><input class="input" id="loginEmail" placeholder="Email" style="margin:10px 12px 0;width:calc(100% - 24px)"><input class="input" id="loginPass" type="password" placeholder="Hasło" style="margin:0 12px;width:calc(100% - 24px)"><div class="row" style="padding:12px"><button class="btn btn-yellow" style="flex:1;padding:11px" onclick="doLogin()">Zaloguj</button><button class="btn btn-dark" style="flex:1;padding:11px" onclick="doSignup()">Załóż</button></div></div></div>
 <div class="modal" id="addModal"><div class="modal-box"><div class="modal-header"><h3 id="addModalTitle">Dodaj ogłoszenie - GPS</h3><button class="btn btn-dark" onclick="closeModals()">✕</button></div><div id="addError"></div>
 <label class="small" style="color:#facc15">Tytuł *</label><input class="input" id="aTitle" placeholder="np. Fiat Stilo 1.9 JTD" style="margin:0 12px;width:calc(100% - 24px)">
@@ -353,8 +239,7 @@ function openGallery(ad){
     const wrap=document.querySelector('.gallery-main-wrap');
     if(wrap) wrap.appendChild(pd);
   }
-  const labels=["Przód - zdjęcie główne","Tył / Bok","Wnętrze - bagażnik","Wnętrze - podsufitka","Szyberdach / Dach","Licznik - deska","Kokpit - środek","Zegary","Kokpit - kierownica","Wnętrze - drzwi"];
-  if(pd){ pd.textContent=labels[0]+" • Zdjęcie 1 z "+galleryImages.length+" • "+ad.title; pd.style.display='block'; }
+  if(pd){ pd.textContent="Zdjęcie 1 z "+galleryImages.length+" • "+ad.title; pd.style.display='block'; }
   
   const thumbs=document.getElementById('galleryThumbs'); 
   thumbs.innerHTML=''; 
@@ -401,8 +286,7 @@ function openGallery(ad){
       <div style="background:#0f0f0f;border:1px solid #222;border-radius:12px;padding:14px;margin:14px 0;font-size:13px;line-height:1.6;white-space:pre-wrap;color:#ddd"><b style="color:#facc15">Opis pojazdu:</b>
 ${cleanDesc||'Brak opisu'}
 
-<b style="color:#888">Opisy zdjęć:</b>
-${galleryImages.map((_,i)=> (i+1)+". "+(labels[i]||"Zdjęcie "+(i+1))).join(" • ")}</div>
+</div>
       <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px">
         <a href="tel:${phone}" style="background:#22c55e;color:#fff;padding:12px 18px;border-radius:22px;text-decoration:none;font-weight:800;font-size:13px">📞 Zadzwoń: ${phone}</a>
         <a href="https://www.google.com/maps/search/?api=1&query=${ad.lat||'49.96'},${ad.lng||'18.39'}" target="_blank" style="background:#0ea5e9;color:#fff;padding:12px 18px;border-radius:22px;text-decoration:none;font-weight:800;font-size:13px">📍 Mapa</a>
@@ -417,17 +301,15 @@ ${galleryImages.map((_,i)=> (i+1)+". "+(labels[i]||"Zdjęcie "+(i+1))).join(" �
 function updateGallery(){
   document.getElementById('galleryMain').src=galleryImages[galleryIndex]; 
   document.getElementById('galleryThumbs').querySelectorAll('img').forEach((im,i)=>{im.classList.toggle('active', i===galleryIndex);});
-  const pd=document.getElementById('photoDesc');
-  const labels=["Przód - zdjęcie główne","Tył / Bok","Wnętrze - bagażnik","Wnętrze - podsufitka","Szyberdach / Dach","Licznik - deska","Kokpit - środek","Zegary","Kokpit - kierownica","Wnętrze - drzwi"];
+  const pd=document.getElementById('photoDesc');;
   if(pd){
     const ad=window.currentAd;
     const title=ad?.title||'';
     const total=galleryImages.length;
-    const lab=labels[galleryIndex]||("Zdjęcie "+(galleryIndex+1));
-    pd.textContent=lab+" • Zdjęcie "+(galleryIndex+1)+" z "+total+" • "+title;
+    pd.textContent="Zdjęcie "+(galleryIndex+1)+" z "+total+" • "+title;
   }
 }
-function updateGallery(){document.getElementById('galleryMain').src=galleryImages[galleryIndex]; document.getElementById('galleryThumbs').querySelectorAll('img').forEach((im,i)=>{im.classList.toggle('active', i===galleryIndex);});}
+
 function galleryPrev(){galleryIndex=(galleryIndex-1+galleryImages.length)%galleryImages.length; updateGallery();}
 function galleryNext(){galleryIndex=(galleryIndex+1)%galleryImages.length; updateGallery();}
 async function deleteAd(id){ if(!confirm('Usunąć?')) return; const r=await supabaseClient.from('ogloszenia').delete().eq('id', id); if(r.error) alert(r.error.message); else {closeGallery(); loadAds();} }
