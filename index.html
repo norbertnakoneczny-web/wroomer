@@ -247,8 +247,6 @@ body{background:radial-gradient(ellipse at 80% 0%,#24200c 0%,#090a0b 38%,#080808
 <h4>ROK</h4><div class="row"><input class="input" id="fRokOdD" type="number" placeholder="OD"><input class="input" id="fRokDoD" type="number" placeholder="DO"></div>
 <h4>PALIWO</h4><select class="select" id="fPaliwoD"><option value="">Wszystkie</option><option>Benzyna</option><option>Diesel</option><option>LPG</option><option>Hybryda</option><option>Elektryczny</option></select>
 <h4>LOKALIZACJA (tekst)</h4><input class="input" id="fLokD" placeholder="Gorzyce">
-
-<button class="btn btn-yellow" style="width:100%;margin-top:12px;padding:12px" onclick="loadAds()">Szukaj</button>
 <button class="btn btn-dark" style="width:100%;margin-top:6px" onclick="resetFilters()">Wyczyść</button>
 <div style="margin-top:10px;padding:8px;background:#181818;border-radius:8px;font-size:12px" id="countD"></div>
 </div>
@@ -264,8 +262,6 @@ body{background:radial-gradient(ellipse at 80% 0%,#24200c 0%,#090a0b 38%,#080808
 <h4>ROK</h4><div class="row"><input class="input" id="fRokOdM" type="number" placeholder="OD"><input class="input" id="fRokDoM" type="number" placeholder="DO"></div>
 <h4>PALIWO</h4><select class="select" id="fPaliwoM"><option value="">Wszystkie</option><option>Benzyna</option><option>Diesel</option><option>LPG</option><option>Hybryda</option><option>Elektryczny</option></select>
 <h4>LOKALIZACJA</h4><input class="input" id="fLokM" placeholder="Gorzyce">
-
-<button class="btn btn-yellow" style="width:100%;margin-top:16px;padding:14px;font-size:16px;font-weight:900" onclick="applyMobileAndHide()">✓ POKAŻ WYNIKI I SCHOWAJ</button>
 <button class="btn btn-dark" style="width:100%;margin-top:8px" onclick="toggleMobileFilters()">✕ Anuluj</button>
 <div style="margin-top:12px;padding:8px;background:#181818;border-radius:8px;font-size:12px" id="countM"></div><div style="height:80px"></div></div>
 <div class="wroomer-results"><div class="wroomer-benefits"><div><b>🚘 Wystaw auto</b><strong>ZUPEŁNIE ZA DARMO</strong></div><div><b>✓ Bez prowizji</b><span>Bez ukrytych opłat</span></div><div><b>📍 Ogłoszenia z Polski</b><span>Znajdź auto blisko siebie</span></div></div><div class="wroomer-results-title">ODKRYJ SWÓJ NASTĘPNY SAMOCHÓD <span>• OGŁOSZENIA</span></div><div class="grid" id="grid"></div></div>
@@ -329,17 +325,18 @@ function showError(id,msg){const el=document.getElementById(id); if(el) el.inner
 function showSuccess(id,msg){const el=document.getElementById(id); if(el) el.innerHTML='<div class="success">'+msg+'</div>';}
 async function checkUser(){try{const s=await supabaseClient.auth.getSession(); currentUser=s?.data?.session?.user||null; updateAuthUI();}catch(e){}}
 function updateAuthUI(){const bl=document.getElementById('btnLogin'), bo=document.getElementById('btnLogout'); if(currentUser){bl.style.display='none';bo.style.display='inline-block';}else{bl.style.display='inline-block';bo.style.display='none';}}
-document.getElementById('btnLogin').onclick=()=>document.getElementById('loginModal').classList.add('open');
+function openLoginModal(){const modal=document.getElementById('loginModal');if(!modal)return;modal.style.display='flex';modal.classList.add('open');document.getElementById('loginError').textContent='';}
+document.getElementById('btnLogin').onclick=openLoginModal;
 document.getElementById('btnLogout').onclick=async()=>{await supabaseClient.auth.signOut(); currentUser=null; updateAuthUI(); loadAds();};
-document.getElementById('btnAdd').onclick=()=>{ if(!currentUser){ document.getElementById('loginModal').classList.add('open'); return; } openAddModal(); };
-function closeModals(){const loginM=document.getElementById('loginModal');const addM=document.getElementById('addModal');if(loginM){ loginM.classList.remove('open'); loginM.style.display='none'; }if(addM){ addM.classList.remove('open'); addM.style.display='none'; }closeGallery();}
+document.getElementById('btnAdd').onclick=()=>{ if(!currentUser){ openLoginModal(); return; } openAddModal(); };
+function closeModals(){const loginM=document.getElementById('loginModal');const addM=document.getElementById('addModal');if(loginM){ loginM.classList.remove('open'); loginM.style.display=''; }if(addM){ addM.classList.remove('open'); addM.style.display=''; }closeGallery();}
 function closeGallery(){const m=document.getElementById('galleryModal');if(m){ m.classList.remove('open'); m.style.display='none'; }document.body.style.overflow='';document.body.style.overflowY='auto';document.documentElement.style.overflow='';document.documentElement.style.overflowY='auto';}
 function haversine(lat1, lon1, lat2, lon2){const R=6371; const dLat=(lat2-lat1)*Math.PI/180; const dLon=(lon2-lon1)*Math.PI/180; const a=Math.sin(dLat/2)*Math.sin(dLat/2)+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)*Math.sin(dLon/2); const c=2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a)); return R*c;}
 function parseExtra(desc){const o={mileage:'',fuel:'',gear:'',power:'',capacity:'',body:'',color:'',lat:'',lng:''}; try{const m=(desc||'').match(/\[(.*?)\]/); if(m){m[1].split('|').forEach(p=>{const parts=p.split(':'); if(parts.length<2) return; const k=parts[0].trim(); const v=parts.slice(1).join(':').trim(); const kl=k.toLowerCase(); if(kl.includes('przebieg')) o.mileage=v; else if(kl.includes('paliwo')) o.fuel=v; else if(kl.includes('skrzynia')) o.gear=v; else if(kl.includes('moc') && !kl.includes('pochodzenia')) o.power=v; else if(kl.includes('pojem')) o.capacity=v; else if(kl.includes('nadwozia')) o.body=v; else if(kl.includes('kolor')) o.color=v; else if(kl==='lat') o.lat=v; else if(kl==='lng' || kl==='lon') o.lng=v;});}}catch(e){} return o;}
 function locateForAdd(){const btn=document.getElementById('gpsAddBtn'); const info=document.getElementById('gpsAddInfo'); if(!navigator.geolocation){alert('Brak GPS'); return;} btn.textContent='📡 Pobieram...'; btn.disabled=true; info.style.display='block'; info.textContent='Pobieram lokalizację...'; info.className='gps-info show'; navigator.geolocation.getCurrentPosition(async (pos)=>{addLat=pos.coords.latitude; addLng=pos.coords.longitude; document.getElementById('aLat').value=addLat.toFixed(6); document.getElementById('aLng').value=addLng.toFixed(6); btn.textContent='✅ GPS Pobrany!'; btn.classList.add('active'); btn.disabled=false; info.textContent=`✅ GPS: ${addLat.toFixed(5)}, ${addLng.toFixed(5)}`; info.className='gps-info show success'; try{const res=await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${addLat}&lon=${addLng}&zoom=10`); const data=await res.json(); const city=data.address?.city||data.address?.town||data.address?.village||''; if(city) document.getElementById('aLocation').value=city.split(',')[0];}catch(e){}}, (err)=>{btn.textContent='📍 Zlokalizuj GPS'; btn.disabled=false; info.textContent='❌ Błąd: '+err.message; info.className='gps-info show';}, {enableHighAccuracy:true, timeout:10000});}
-function locateForSearch(prefix){const btn=document.getElementById('gpsSearchBtn'+prefix); const info=document.getElementById('gpsSearchInfo'+prefix); if(!navigator.geolocation){alert('Brak GPS'); return;} btn.textContent='📡 Pobieram...'; btn.disabled=true; info.style.display='block'; info.textContent='Pobieram...'; info.className='gps-info show'; navigator.geolocation.getCurrentPosition(async (pos)=>{searchLat=pos.coords.latitude; searchLng=pos.coords.longitude; btn.textContent='✅ Moja lokalizacja aktywna'; btn.classList.add('active'); btn.disabled=false; info.textContent=`✅ Twoja lokalizacja: ${searchLat.toFixed(4)}, ${searchLng.toFixed(4)}`; info.className='gps-info show success';}, (err)=>{btn.textContent='📍 Zlokalizuj mnie'; btn.disabled=false; info.textContent='❌ Błąd: '+err.message; info.className='gps-info show';}, {enableHighAccuracy:true, timeout:10000});}
+function locateForSearch(prefix){const btn=document.getElementById('gpsSearchBtn'+prefix); const info=document.getElementById('gpsSearchInfo'+prefix); if(!navigator.geolocation){alert('Brak GPS'); return;} btn.textContent='📡 Pobieram...'; btn.disabled=true; info.style.display='block'; info.textContent='Pobieram...'; info.className='gps-info show'; navigator.geolocation.getCurrentPosition(async (pos)=>{searchLat=pos.coords.latitude; searchLng=pos.coords.longitude; btn.textContent='✅ Moja lokalizacja aktywna'; btn.classList.add('active'); btn.disabled=false; info.textContent=`✅ Twoja lokalizacja: ${searchLat.toFixed(4)}, ${searchLng.toFixed(4)}`; info.className='gps-info show success'; wroomerScheduleFilter(true);}, (err)=>{btn.textContent='📍 Zlokalizuj mnie'; btn.disabled=false; info.textContent='❌ Błąd: '+err.message; info.className='gps-info show';}, {enableHighAccuracy:true, timeout:10000});}
 function populateModelSelect(brandId, modelId, selectedModel=null){const brand=document.getElementById(brandId).value; const modelSel=document.getElementById(modelId); if(!modelSel) return; const models=BRAND_MODELS[brand]||[]; modelSel.innerHTML='<option value="">'+(modelId==='aModelIn'?'Wybierz model':'Wszystkie modele')+'</option>'; models.forEach(m=>{const o=document.createElement('option'); o.value=m; o.textContent=m; if(m===selectedModel) o.selected=true; modelSel.appendChild(o);});}
-function openAddModal(ad=null){editingId=ad?.id||null;document.getElementById('addModalTitle').textContent=ad?'Edytuj ogłoszenie':'Dodaj ogłoszenie - GPS';document.getElementById('aTitle').value=ad?.title||'';document.getElementById('aBrand').value=ad?.brand||'';populateModelSelect('aBrand','aModelIn', ad?.model);document.getElementById('aYear').value=ad?.year||'';document.getElementById('aPrice').value=ad?.price||'';document.getElementById('aLocation').value=ad?.location||'';document.getElementById('aPhone').value=ad?.phone||'';const cleanDesc=(ad?.description||'').split('\n\n[')[0].split('\n[')[0];document.getElementById('aDesc').value=cleanDesc;const ex=parseExtra(ad?.description||'');document.getElementById('aMileage').value=(ex.mileage||'').toString().replace(/[^0-9]/g,'');document.getElementById('aFuel').value=ex.fuel||'';document.getElementById('aLat').value=ex.lat||'';document.getElementById('aLng').value=ex.lng||'';selectedFiles=[]; document.getElementById('preview').innerHTML='';document.getElementById('addModal').classList.add('open'); document.getElementById('addModal').style.display='flex';}
+function openAddModal(ad=null){editingId=ad?.id||null;document.getElementById('addModalTitle').textContent=ad?'Edytuj ogłoszenie':'Dodaj ogłoszenie - GPS';document.getElementById('aTitle').value=ad?.title||'';document.getElementById('aBrand').value=ad?.brand||'';populateModelSelect('aBrand','aModelIn', ad?.model);document.getElementById('aYear').value=ad?.year||'';document.getElementById('aPrice').value=ad?.price||'';document.getElementById('aLocation').value=ad?.location||'';document.getElementById('aPhone').value=ad?.phone||'';const cleanDesc=(ad?.description||'').split('\n\n[')[0].split('\n[')[0];document.getElementById('aDesc').value=cleanDesc;const ex=parseExtra(ad?.description||'');document.getElementById('aMileage').value=(ex.mileage||'').toString().replace(/[^0-9]/g,'');document.getElementById('aFuel').value=ex.fuel||'';document.getElementById('aLat').value=ex.lat||'';document.getElementById('aLng').value=ex.lng||'';selectedFiles=[]; document.getElementById('preview').innerHTML='';document.getElementById('addModal').style.display='flex'; document.getElementById('addModal').classList.add('open');}
 ['fMarkaD','fMarkaM','aBrand'].forEach(id=>{const el=document.getElementById(id); if(el) el.addEventListener('change',()=>{if(id==='fMarkaD') populateModelSelect('fMarkaD','fModelD'); if(id==='fMarkaM') populateModelSelect('fMarkaM','fModelM'); if(id==='aBrand') populateModelSelect('aBrand','aModelIn');});});
 async function doLogin(){const e=document.getElementById('loginEmail').value.trim(); const p=document.getElementById('loginPass').value; if(!e||!p){showError('loginError','Podaj email i hasło');return;} try{const r=await supabaseClient.auth.signInWithPassword({email:e,password:p}); if(r.error) throw r.error; currentUser=r.data.user; updateAuthUI(); closeModals(); loadAds();}catch(err){showError('loginError', err.message);}}
 async function doSignup(){const e=document.getElementById('loginEmail').value.trim(); const p=document.getElementById('loginPass').value; if(!e||p.length<6){showError('loginError','Email i hasło min 6');return;} try{const r=await supabaseClient.auth.signUp({email:e,password:p}); if(r.error) throw r.error; showSuccess('loginError','Konto założone!');}catch(err){showError('loginError', err.message);}}
@@ -447,7 +444,9 @@ function wroomerMatch(ad,search){
   const searchable=wroomerNormalize([ad.brand,ad.model,ad.title,ad.year,ad.location].filter(Boolean).join(' '));
   return words.every(word=>searchable.includes(word));
 }
+let wroomerLatestRequest=0;
 async function loadAds(){
+  const requestId=++wroomerLatestRequest;
   const grid=document.getElementById('grid');
   const p=isMobile()?'M':'D';
   const get=id=>document.getElementById(id+p)?.value??'';
@@ -462,6 +461,7 @@ async function loadAds(){
     if(cenaOd>0)q=q.gte('price',cenaOd);
     if(cenaDo>0)q=q.lte('price',cenaDo);
     const result=await q;
+    if(requestId!==wroomerLatestRequest)return;
     if(result.error)throw result.error;
     allAds=result.data||[];
     let filtered=allAds.filter(ad=>{
@@ -490,11 +490,28 @@ async function loadAds(){
       const cnt=o.images?.length|| (o.image_url?1:0);
       return `<div class="card" onclick="openGallery(allAds.find(a=>a.id==='${o.id}'))"><div class="card-img-wrap"><img src="${img}" loading="lazy" alt=""><div class="card-img-count">📷 ${cnt}</div></div><div class="card-body"><div class="card-title">${o.title||''}</div><div class="card-price">${o.price} PLN</div><div class="card-location">${o.location||''} • ${o.year||''}</div></div></div>`;
     }).join('');
-  }catch(e){grid.innerHTML='<div style="grid-column:1/-1;padding:20px;background:#3a1111">Błąd: '+(e.message||e)+'</div>';}
+  }catch(e){if(requestId!==wroomerLatestRequest)return;grid.innerHTML='<div style="grid-column:1/-1;padding:20px;background:#3a1111">Błąd: '+(e.message||e)+'</div>';}
 }
 function wroomerRunSearch(){loadAds();document.getElementById('grid')?.scrollIntoView({behavior:'smooth',block:'start'});}
 document.getElementById('wroomerQuickSearch')?.addEventListener('keydown',e=>{if(e.key==='Enter')wroomerRunSearch();});
-['D','M'].forEach(p=>document.getElementById('fSort'+p)?.addEventListener('change',loadAds));
+// Filtry działają automatycznie: wybór od razu, wpisywanie z krótkim opóźnieniem.
+let wroomerFilterTimer;
+function wroomerScheduleFilter(immediate=false){
+  clearTimeout(wroomerFilterTimer);
+  if(immediate)loadAds();
+  else wroomerFilterTimer=setTimeout(loadAds,350);
+}
+['D','M'].forEach(p=>{
+  ['fSort','fRadius','fMarka','fModel','fPaliwo'].forEach(id=>{
+    document.getElementById(id+p)?.addEventListener('change',()=>wroomerScheduleFilter(true));
+  });
+  ['fCenaOd','fCenaDo','fRokOd','fRokDo','fLok'].forEach(id=>{
+    const el=document.getElementById(id+p);
+    el?.addEventListener('input',()=>wroomerScheduleFilter());
+    el?.addEventListener('change',()=>wroomerScheduleFilter(true));
+  });
+});
+document.getElementById('wroomerQuickSearch')?.addEventListener('input',()=>wroomerScheduleFilter());
 function resetFilters(){
   ['D','M'].forEach(p=>{
     ['fMarka','fModel','fCenaOd','fCenaDo','fRokOd','fRokDo','fPaliwo','fLok','fRadius','fSort'].forEach(k=>{
