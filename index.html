@@ -106,43 +106,165 @@ label.small{font-size:10px;opacity:.7;display:block;margin:8px 12px 2px;text-tra
 </style>
 
 
+<style id="wroomer-premium-test-2026">
+:root{--gold:#ffcf00;--panel:#141618;--line:#2c2e31}
+body{background:radial-gradient(ellipse at 80% 0%,#24200c 0%,#090a0b 38%,#080808 80%);font-family:Inter,system-ui,Arial,sans-serif}
+.header{height:72px;padding:0 24px;background:rgba(5,6,7,.97);border-bottom:2px solid var(--gold);box-shadow:0 8px 28px #0007}
+.logo{font-size:26px;letter-spacing:-1px}.logo span{color:var(--gold)}
+.header .btn{padding:12px 20px;font-size:13px}.btn-yellow{background:var(--gold);color:#080808}.btn-dark{border:1px solid #414141;background:#1d1e20}
+.wroomer-search{display:flex;align-items:center;gap:10px;max-width:1600px;margin:14px auto 0;padding:0 16px}.wroomer-search span{font-size:26px;color:var(--gold)}.wroomer-search input{flex:1;min-width:0;background:#17191b;border:1px solid #414347;color:#fff;border-radius:28px;padding:13px 18px;font-size:14px;outline:0}.wroomer-search input:focus{border-color:var(--gold)}.wroomer-search button{border:0;border-radius:25px;background:var(--gold);color:#090909;font-weight:900;padding:13px 25px;cursor:pointer}
+.top-chips{position:relative;top:auto;background:transparent;border-bottom:1px solid #222;padding:12px max(16px,calc((100vw - 1600px)/2 + 16px));gap:9px}.chip{background:#1c1e21;border:1px solid #343638;color:#eee;font-weight:650;padding:10px 18px;transition:.2s}.chip:hover{border-color:var(--gold);color:var(--gold)}.chip.active{background:var(--gold);border-color:var(--gold);color:#080808}
+.layout{gap:14px;padding:0 14px;align-items:flex-start}.sidebar-desktop{width:306px;flex-shrink:0;top:12px;height:auto;max-height:calc(100vh - 24px);border:1px solid #343434;border-radius:17px;background:linear-gradient(155deg,#17191b,#101112);padding:18px;box-shadow:0 12px 35px #0005}.sidebar-desktop h4{margin:17px 0 8px;color:var(--gold);font-size:11px;letter-spacing:.6px}.sidebar-desktop h4:first-child{margin-top:0}.select,.input{background:#1c1e20;border:1px solid #37393b;border-radius:9px;padding:11px;color:#f3f3f3}.select:focus,.input:focus{outline:1px solid var(--gold)}.sidebar-desktop .btn-yellow{border-radius:22px;font-weight:900}.btn-gps{border-radius:10px}
+.wroomer-results{flex:1;min-width:0}.wroomer-benefits{display:grid;grid-template-columns:repeat(3,1fr);gap:0;background:linear-gradient(100deg,#171713,#1c1a0d,#131517);border:1px solid #77620e;border-radius:14px;padding:16px 10px;margin:0 0 17px}.wroomer-benefits>div{display:flex;flex-direction:column;gap:5px;padding:0 18px;border-right:1px solid #504820}.wroomer-benefits>div:last-child{border:0}.wroomer-benefits b{font-size:13px}.wroomer-benefits strong{color:var(--gold);font-size:12px}.wroomer-benefits span{color:#a9aaad;font-size:12px}.wroomer-results-title{font-size:13px;font-weight:900;letter-spacing:.45px;padding:0 4px 12px}.wroomer-results-title span{color:var(--gold)}
+.grid{padding:0;gap:13px;align-content:start}.card{background:linear-gradient(150deg,#1b1d1f,#111315);border:1px solid #313337;border-radius:14px;transition:transform .2s,border-color .2s,box-shadow .2s;overflow:hidden}.card:hover{transform:translateY(-4px);border-color:#a78a16;box-shadow:0 12px 30px #0009}.card-img-wrap{height:190px}.card-img-wrap img{transition:transform .25s}.card:hover .card-img-wrap img{transform:scale(1.035)}.card-img-count{background:#080808dd;border-radius:7px;padding:5px 8px}.card-body{padding:13px 14px 16px}.card-title{font-size:14px;font-weight:750;min-height:36px}.card-price{font-size:20px;font-weight:950;color:var(--gold);margin-top:5px}.card-location{font-size:11px;color:#aeb0b4;margin-top:7px}
+@media(max-width:1300px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:1100px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.wroomer-benefits{grid-template-columns:1fr 1fr}.wroomer-benefits>div:last-child{display:none}}
+@media(max-width:900px){.header{height:60px;padding:0 12px}.logo{font-size:20px}.header .btn{padding:9px 12px}.layout{padding:0 8px}.wroomer-search{margin:10px auto 0;padding:0 10px}.wroomer-search input{padding:11px 12px}.wroomer-search button{padding:11px 13px}.top-chips{padding:10px}.wroomer-benefits{margin-top:10px;padding:12px 4px}.wroomer-benefits>div{padding:0 9px}.wroomer-benefits b{font-size:11px}.wroomer-benefits strong,.wroomer-benefits span{font-size:10px}.wroomer-results-title{font-size:11px}.grid{gap:9px}.card-img-wrap{height:145px}.card-body{padding:10px}.card-title{font-size:12px}.card-price{font-size:16px}}
+@media(max-width:430px){.wroomer-search button{font-size:11px;padding:11px}.wroomer-benefits{grid-template-columns:1fr 1fr}.wroomer-benefits>div:nth-child(2){border:0}}
+</style>
+
+<style id="wroomer-detail-mobile-premium-v1">
+/* Tylko szczegóły ogłoszenia. Nie zmienia kart ani bloga. */
+#galleryModal{padding:20px !important;align-items:center !important;background:rgba(0,0,0,.88) !important;overscroll-behavior:contain}
+#galleryModal .modal-box{width:min(1080px,96vw) !important;max-width:1080px !important;max-height:calc(100dvh - 40px) !important;margin:0 auto !important;overflow-y:auto !important;overscroll-behavior:contain;border:1px solid #393939 !important;border-radius:22px !important;background:#101113 !important;box-shadow:0 24px 90px #000c}
+#galleryModal .modal-header{position:sticky;top:0;z-index:20;background:#17191c !important;padding:15px 22px !important;border-bottom:1px solid #303238 !important;min-height:62px}
+#galleryModal .modal-header h3{font-size:16px !important;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:calc(100% - 58px)}
+#galleryModal .modal-header button{width:42px;height:42px;border-radius:50%;font-size:18px;padding:0;flex-shrink:0}
+#galleryModal .gallery-main-wrap{background:#08090a !important;border-radius:0 !important;position:relative !important}
+#galleryModal #galleryMain{width:100% !important;height:min(48vh,470px) !important;max-height:none !important;object-fit:contain !important;background:#08090a !important}
+#galleryModal .gallery-nav{background:#fff !important;color:#111 !important;box-shadow:0 2px 12px #0007}
+#galleryModal #photoDesc{padding:9px 20px !important;border-top:1px solid #303030 !important;border-bottom:0 !important;background:#111214 !important;color:#bcbec2 !important;font-size:12px !important;font-weight:600 !important}
+#galleryModal #galleryThumbs{padding:12px 20px !important;gap:10px !important;background:#111214 !important;scrollbar-width:thin}
+#galleryModal #galleryThumbs img{width:82px !important;height:62px !important;transform:none !important}
+#galleryModal .detail-section{padding:24px 28px 28px !important;background:#151719 !important}
+#galleryModal .detail-heading{display:flex;justify-content:space-between;align-items:flex-start;gap:18px;flex-wrap:wrap;margin-bottom:20px}
+#galleryModal .detail-kicker{font-size:11px;color:#a4a6ac;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;margin-bottom:7px}
+#galleryModal .detail-title{font-size:clamp(30px,4vw,42px) !important;line-height:1.1 !important;letter-spacing:-1px;margin:0 !important;color:#ffd21a !important}
+#galleryModal .detail-subtitle{font-size:clamp(17px,2vw,22px) !important;font-weight:750;color:#fff !important;margin:8px 0 0 !important}
+#galleryModal .detail-grid{display:grid !important;grid-template-columns:repeat(3,minmax(0,1fr)) !important;gap:10px !important;margin:0 0 22px !important}
+#galleryModal .detail-grid .detail-item{display:flex !important;flex-direction:column;align-items:flex-start !important;justify-content:center !important;gap:8px;min-height:78px;background:#202225 !important;border:1px solid #34363a !important;border-radius:13px !important;padding:13px 15px !important;min-width:0}
+#galleryModal .detail-grid .label{color:#aeb1b7 !important;font-size:11px !important;font-weight:750;letter-spacing:.5px}
+#galleryModal .detail-grid .value{color:#f6f7f8 !important;font-size:15px !important;font-weight:800;overflow-wrap:anywhere}
+#galleryModal .detail-desc{padding:20px !important;background:#1c1e20 !important;border:1px solid #34363a;border-radius:14px;margin-bottom:20px}
+#galleryModal .detail-desc h4{font-size:15px !important;margin:0 0 12px !important;color:#ffd21a !important}
+#galleryModal .detail-desc p{font-size:15px !important;line-height:1.75 !important;color:#e2e3e5 !important;margin:0;overflow-wrap:anywhere}
+#galleryModal .detail-actions{display:flex;gap:12px;flex-wrap:wrap}
+#galleryModal .detail-actions a{display:flex;align-items:center;justify-content:center;min-height:52px;padding:12px 22px;border-radius:12px;text-decoration:none;font-size:15px;font-weight:850}
+#galleryModal .detail-call{background:#ffd21a;color:#111 !important;flex:1}
+#galleryModal .detail-map{background:#2b2d31;color:#fff !important;border:1px solid #4a4c51;min-width:150px}
+#galleryModal .detail-actions a:focus-visible,#galleryModal button:focus-visible{outline:3px solid #ffd21a;outline-offset:3px}
+@media(max-width:700px){
+ #galleryModal{padding:0 !important;align-items:stretch !important;overflow:hidden !important}
+ #galleryModal .modal-box{width:100% !important;max-width:none !important;max-height:100dvh !important;height:100dvh !important;margin:0 !important;border:0 !important;border-radius:0 !important;overflow-y:auto !important;padding-bottom:env(safe-area-inset-bottom)}
+ #galleryModal .modal-header{min-height:56px;padding:8px 16px !important}
+ #galleryModal #galleryMain{height:clamp(220px,37dvh,380px) !important;max-height:none !important}
+ #galleryModal .gallery-nav{width:38px !important;height:38px !important;font-size:21px !important}
+ #galleryModal #photoDesc{font-size:11px !important;padding:8px 14px !important}
+ #galleryModal #galleryThumbs{padding:10px 14px !important;gap:8px !important}
+ #galleryModal #galleryThumbs img{width:65px !important;height:52px !important}
+ #galleryModal .detail-section{padding:18px 16px 22px !important}
+ #galleryModal .detail-heading{margin-bottom:17px}
+ #galleryModal .detail-title{font-size:34px !important}
+ #galleryModal .detail-subtitle{font-size:19px !important}
+ #galleryModal .detail-grid{grid-template-columns:repeat(2,minmax(0,1fr)) !important;gap:8px !important;margin-bottom:18px !important}
+ #galleryModal .detail-grid .detail-item{padding:11px 12px !important;min-height:72px}
+ #galleryModal .detail-grid .value{font-size:14px !important}
+ #galleryModal .detail-desc{padding:16px !important;margin-bottom:16px}
+ #galleryModal .detail-desc p{font-size:14px !important;line-height:1.65 !important}
+ #galleryModal .detail-actions{position:sticky;bottom:0;z-index:12;display:flex;flex-wrap:nowrap;background:#151719;border-top:1px solid #383a3e;padding:12px 0 calc(12px + env(safe-area-inset-bottom));margin:0 -16px -22px;padding-left:16px;padding-right:16px;box-shadow:0 -8px 25px #0008}
+ #galleryModal .detail-actions a{font-size:14px;padding:12px 10px;min-height:52px}
+ #galleryModal .detail-map{min-width:0;flex:0 0 32%}
+}
+</style>
+
+<style id="wroomer-gallery-large-v2">
+/* Szczegóły ogłoszenia: duże zdjęcia, układ desktop i mobile-first. */
+@media (min-width: 901px) {
+ #galleryModal{padding:18px !important;align-items:center !important}
+ #galleryModal .modal-box{display:grid !important;grid-template-columns:minmax(0,1.55fr) minmax(330px,.95fr) !important;grid-template-rows:auto minmax(0,1fr) auto !important;max-width:1480px !important;width:min(96vw,1480px) !important;height:min(92dvh,900px) !important;max-height:92dvh !important;overflow:hidden !important;gap:0 !important}
+ #galleryModal .modal-header{grid-column:1/-1 !important;grid-row:1 !important;position:relative !important}
+ #galleryModal .gallery-main-wrap{grid-column:1 !important;grid-row:2 !important;min-height:0 !important;display:flex !important;flex-direction:column !important;justify-content:center !important;overflow:hidden !important}
+ #galleryModal #galleryMain{width:100% !important;height:100% !important;max-height:calc(92dvh - 185px) !important;min-height:0 !important;object-fit:contain !important}
+ #galleryModal #photoDesc{flex-shrink:0 !important}
+ #galleryModal #galleryThumbs{grid-column:1 !important;grid-row:3 !important;padding:14px !important;min-height:98px !important;align-items:center !important}
+ #galleryModal #galleryThumbs img{width:106px !important;height:72px !important}
+ #galleryModal #galleryInfo{grid-column:2 !important;grid-row:2/4 !important;overflow-y:auto !important;min-height:0 !important;border-left:1px solid #303238 !important;scrollbar-width:thin}
+ #galleryModal .detail-section{padding:26px 24px !important}
+ #galleryModal .detail-grid{grid-template-columns:repeat(2,minmax(0,1fr)) !important}
+ #galleryModal .detail-title{font-size:clamp(32px,3vw,44px) !important}
+ #galleryModal .detail-actions{position:sticky !important;bottom:-28px !important;background:#151719 !important;padding:14px 0 18px !important;z-index:5}
+}
+@media (min-width:701px) and (max-width:900px) {
+ #galleryModal .modal-box{width:96vw !important;max-width:900px !important}
+ #galleryModal #galleryMain{height:60dvh !important;max-height:none !important}
+}
+@media (max-width:700px) {
+ #galleryModal .modal-box{display:block !important;overscroll-behavior:contain !important;padding-bottom:calc(92px + env(safe-area-inset-bottom)) !important}
+ #galleryModal .gallery-main-wrap{width:100% !important}
+ #galleryModal #galleryMain{height:clamp(290px,51dvh,560px) !important;width:100% !important;object-fit:contain !important;max-height:none !important}
+ #galleryModal #galleryThumbs{padding:12px 14px !important;gap:10px !important}
+ #galleryModal #galleryThumbs img{width:86px !important;height:66px !important}
+ #galleryModal .detail-title{font-size:clamp(30px,8vw,40px) !important}
+ #galleryModal .detail-section{padding:22px 16px !important}
+ #galleryModal .detail-grid{grid-template-columns:repeat(2,minmax(0,1fr)) !important}
+ #galleryModal .detail-actions{position:fixed !important;left:0 !important;right:0 !important;bottom:0 !important;z-index:11010 !important;margin:0 !important;padding:12px 16px calc(12px + env(safe-area-inset-bottom)) !important;background:#111316 !important;border-top:1px solid #37393c !important;box-shadow:0 -10px 28px #000b !important}
+ #galleryModal .detail-actions a{min-height:52px !important}
+ #galleryModal .detail-call{background:#ffd21a !important;color:#111 !important}
+ #galleryModal .detail-map{background:#292c30 !important;color:#fff !important}
+}
+@media (prefers-reduced-motion:reduce){#galleryModal *{scroll-behavior:auto !important}}
+</style>
+
+<style id="wroomer-filters-unified-20261025">
+/* Spójny układ panelu filtrów: bez sortowania po odległości */
+.sidebar-desktop .select,.sidebar-desktop .input,.mobile-drawer .select,.mobile-drawer .input{box-sizing:border-box!important;width:100%!important;min-width:0!important;height:43px!important;min-height:43px!important;padding:9px 12px!important;margin:0!important;border:1px solid #383b3f!important;border-radius:10px!important;background:#1c1e20!important;color:#f5f5f5!important;font-size:14px!important;line-height:22px!important;box-shadow:none!important;}
+.sidebar-desktop .select:focus,.sidebar-desktop .input:focus,.mobile-drawer .select:focus,.mobile-drawer .input:focus{outline:2px solid #facc15!important;outline-offset:0;}
+.sidebar-desktop .row,.mobile-drawer .row{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;gap:10px!important;width:100%!important;}
+.sidebar-desktop .row>* ,.mobile-drawer .row>*{min-width:0!important;width:100%!important;flex:initial!important;}
+.sidebar-desktop h4,.mobile-drawer h4{margin:20px 0 9px!important;line-height:1.4!important;}
+.sidebar-desktop #fMarkaD,.mobile-drawer #fMarkaM{margin-bottom:9px!important;}
+.sidebar-desktop .btn-gps,.mobile-drawer .btn-gps{min-height:43px!important;margin-bottom:10px!important;}
+.sidebar-desktop label.small,.mobile-drawer label.small{display:block;margin-bottom:7px!important;}
+.sidebar-desktop #fRadiusD,.mobile-drawer #fRadiusM{margin-bottom:3px!important;}
+.sidebar-desktop #fLokD,.mobile-drawer #fLokM{display:block;}
+.mobile-drawer .select,.mobile-drawer .input{font-size:16px!important;}
+</style>
 </head>
 <body>
 <div class="header"><div class="logo">WROOMER<span>.PL</span> <span style="font-size:10px;background:#facc15;color:#000;padding:2px 6px;border-radius:10px">v11 8 KAFELI FIXED</span></div><div style="display:flex;gap:6px;align-items:center"><button class="btn btn-dark" id="btnLogin">Zaloguj</button><button class="btn btn-dark" id="btnLogout" style="display:none">Wyloguj</button><button class="btn btn-yellow" id="btnAdd">+ Dodaj</button></div></div>
+<div class="wroomer-search"><span aria-hidden="true">⌕</span><input id="wroomerQuickSearch" type="search" placeholder="Szukaj marki, modelu lub samochodu..." aria-label="Szukaj samochodu"><button type="button" onclick="wroomerRunSearch()">Szukaj aut</button></div>
 <div class="top-chips"><div class="chip active" onclick="quickFilter('')">Wszystkie</div><div class="chip" onclick="quickFilter('Fiat')">Fiat</div><div class="chip" onclick="quickFilter('Volvo')">Volvo</div><div class="chip" onclick="quickFilter('Audi')">Audi</div><div class="chip" onclick="quickFilter('BMW')">BMW</div></div>
 <div class="mobile-top-bar"><button class="btn btn-dark" style="flex:1;padding:12px;background:#fff;color:#000;font-weight:900" onclick="toggleMobileFilters()">🔍 Filtry</button><button class="btn btn-dark" style="flex:1;padding:12px" onclick="toggleMobileFilters()">📍 Promień</button></div>
 <div class="layout">
 <div class="sidebar-desktop">
+<h4>SORTUJ OGŁOSZENIA</h4><select class="select" id="fSortD"><option value="newest">Najnowsze</option><option value="price_asc">Cena ↑</option><option value="price_desc">Cena ↓</option><option value="distance">Odległość</option></select>
 <h4>📍 SZUKAJ W PROMIENIU</h4>
 <button class="btn-gps" id="gpsSearchBtnD" onclick="locateForSearch('D')">📍 Zlokalizuj mnie</button>
 <div class="gps-info" id="gpsSearchInfoD"></div>
-<div class="row"><div><label class="small" style="margin:0 0 4px">Promień (km)</label><select class="select" id="fRadiusD"><option value="">Dowolny</option><option value="5">5 km</option><option value="10">10 km</option><option value="25">25 km</option><option value="50">50 km</option><option value="100">100 km</option><option value="200">200 km</option></select></div><div><label class="small" style="margin:0 0 4px">Sort po odległości</label><select class="select" id="fSortDistanceD"><option value="0">Nie</option><option value="1">Najbliższe</option></select></div></div>
-<h4>MARKA / MODELE (19/83+Inne)</h4><select class="select" id="fMarkaD"><option value="">Wszystkie marki</option><option value="Abarth">Abarth</option><option value="Alfa Romeo">Alfa Romeo</option><option value="Audi">Audi</option><option value="BMW">BMW</option><option value="Citroen">Citroen</option><option value="Dacia">Dacia</option><option value="Fiat">Fiat</option><option value="Ford">Ford</option><option value="Hyundai">Hyundai</option><option value="Kia">Kia</option><option value="Mazda">Mazda</option><option value="Mercedes-Benz">Mercedes-Benz</option><option value="Opel">Opel</option><option value="Peugeot">Peugeot</option><option value="Renault">Renault</option><option value="Skoda">Skoda</option><option value="Toyota">Toyota</option><option value="Volkswagen">Volkswagen</option><option value="Volvo">Volvo</option></select><select class="select" id="fModelD"><option value="">Wszystkie modele</option></select>
+<label class="small" style="margin:0 0 6px">Promień (km)</label><select class="select" id="fRadiusD"><option value="">Dowolny</option><option value="5">5 km</option><option value="10">10 km</option><option value="25">25 km</option><option value="50" selected>50 km</option><option value="100">100 km</option><option value="200">200 km</option></select>
+<h4>MARKA / MODEL</h4><select class="select" id="fMarkaD"><option value="">Wszystkie marki</option><option value="Abarth">Abarth</option><option value="Alfa Romeo">Alfa Romeo</option><option value="Alpine">Alpine</option><option value="Audi">Audi</option><option value="BAIC">BAIC</option><option value="Bentley">Bentley</option><option value="BMW">BMW</option><option value="BYD">BYD</option><option value="Chevrolet">Chevrolet</option><option value="Chrysler">Chrysler</option><option value="Citroen">Citroen</option><option value="Cupra">Cupra</option><option value="Dacia">Dacia</option><option value="Dacia/Renault">Dacia/Renault</option><option value="Daewoo">Daewoo</option><option value="Daihatsu">Daihatsu</option><option value="Dodge">Dodge</option><option value="DS">DS</option><option value="Ferrari">Ferrari</option><option value="Fiat">Fiat</option><option value="Fiat Professional">Fiat Professional</option><option value="Ford">Ford</option><option value="Genesis">Genesis</option><option value="Honda">Honda</option><option value="Hyundai">Hyundai</option><option value="Infiniti">Infiniti</option><option value="Isuzu">Isuzu</option><option value="Jaecoo">Jaecoo</option><option value="Jaguar">Jaguar</option><option value="Jeep">Jeep</option><option value="Kia">Kia</option><option value="Lada">Lada</option><option value="Lamborghini">Lamborghini</option><option value="Lancia">Lancia</option><option value="Land Rover">Land Rover</option><option value="Lexus">Lexus</option><option value="Maserati">Maserati</option><option value="Mazda">Mazda</option><option value="Mercedes-Benz">Mercedes-Benz</option><option value="MG">MG</option><option value="Mini">Mini</option><option value="Mitsubishi">Mitsubishi</option><option value="Nissan">Nissan</option><option value="Omoda">Omoda</option><option value="Opel">Opel</option><option value="Peugeot">Peugeot</option><option value="Polonez">Polonez</option><option value="Porsche">Porsche</option><option value="Renault">Renault</option><option value="Rolls-Royce">Rolls-Royce</option><option value="Rover">Rover</option><option value="Saab">Saab</option><option value="Seat">Seat</option><option value="Skoda">Skoda</option><option value="Smart">Smart</option><option value="SsangYong">SsangYong</option><option value="Subaru">Subaru</option><option value="Suzuki">Suzuki</option><option value="Tata">Tata</option><option value="Tesla">Tesla</option><option value="Toyota">Toyota</option><option value="Volkswagen">Volkswagen</option><option value="Volvo">Volvo</option></select><select class="select" id="fModelD"><option value="">Wszystkie modele</option></select>
 <h4>CENA</h4><div class="row"><input class="input" id="fCenaOdD" type="number" placeholder="OD"><input class="input" id="fCenaDoD" type="number" placeholder="DO"></div>
 <h4>ROK</h4><div class="row"><input class="input" id="fRokOdD" type="number" placeholder="OD"><input class="input" id="fRokDoD" type="number" placeholder="DO"></div>
 <h4>PALIWO</h4><select class="select" id="fPaliwoD"><option value="">Wszystkie</option><option>Benzyna</option><option>Diesel</option><option>LPG</option><option>Hybryda</option><option>Elektryczny</option></select>
 <h4>LOKALIZACJA (tekst)</h4><input class="input" id="fLokD" placeholder="Gorzyce">
-<h4>SORT</h4><select class="select" id="fSortD"><option value="newest">Najnowsze</option><option value="price_asc">Cena ↑</option><option value="price_desc">Cena ↓</option><option value="distance">Odległość</option></select>
-<button class="btn btn-yellow" style="width:100%;margin-top:12px;padding:12px" onclick="loadAds()">Szukaj</button>
 <button class="btn btn-dark" style="width:100%;margin-top:6px" onclick="resetFilters()">Wyczyść</button>
 <div style="margin-top:10px;padding:8px;background:#181818;border-radius:8px;font-size:12px" id="countD"></div>
 </div>
 <div class="mobile-drawer" id="mobileDrawer"><div class="mobile-drawer-header"><h3>🔍 Filtry + 📍 Promień</h3><button class="btn btn-yellow" onclick="toggleMobileFilters()">✕ Schowaj</button></div>
+<h4>SORTUJ OGŁOSZENIA</h4><select class="select" id="fSortM"><option value="newest">Najnowsze</option><option value="price_asc">Cena ↑</option><option value="price_desc">Cena ↓</option><option value="distance">Odległość</option></select>
 <h4>📍 SZUKAJ W PROMIENIU</h4>
 <button class="btn-gps" id="gpsSearchBtnM" onclick="locateForSearch('M')">📍 Zlokalizuj mnie (GPS)</button>
 <div class="gps-info" id="gpsSearchInfoM"></div>
-<select class="select" id="fRadiusM"><option value="">Dowolny promień</option><option value="5">5 km</option><option value="10">10 km</option><option value="25">25 km</option><option value="50">50 km</option><option value="100">100 km</option><option value="200">200 km</option></select>
-<label class="small" style="margin:8px 0 4px">Sortowanie</label><select class="select" id="fSortDistanceM"><option value="0">Standardowe</option><option value="1">Najbliższe najpierw</option></select>
-<h4>MARKA / MODELE</h4><select class="select" id="fMarkaM"><option value="">Wszystkie marki</option><option value="Abarth">Abarth</option><option value="Alfa Romeo">Alfa Romeo</option><option value="Audi">Audi</option><option value="BMW">BMW</option><option value="Citroen">Citroen</option><option value="Dacia">Dacia</option><option value="Fiat">Fiat</option><option value="Ford">Ford</option><option value="Hyundai">Hyundai</option><option value="Kia">Kia</option><option value="Mazda">Mazda</option><option value="Mercedes-Benz">Mercedes-Benz</option><option value="Opel">Opel</option><option value="Peugeot">Peugeot</option><option value="Renault">Renault</option><option value="Skoda">Skoda</option><option value="Toyota">Toyota</option><option value="Volkswagen">Volkswagen</option><option value="Volvo">Volvo</option></select><select class="select" id="fModelM"><option value="">Wszystkie modele</option></select>
+<select class="select" id="fRadiusM"><option value="">Dowolny promień</option><option value="5">5 km</option><option value="10">10 km</option><option value="25">25 km</option><option value="50" selected>50 km</option><option value="100">100 km</option><option value="200">200 km</option></select>
+
+<h4>MARKA / MODELE</h4><select class="select" id="fMarkaM"><option value="">Wszystkie marki</option><option value="Abarth">Abarth</option><option value="Alfa Romeo">Alfa Romeo</option><option value="Alpine">Alpine</option><option value="Audi">Audi</option><option value="BAIC">BAIC</option><option value="Bentley">Bentley</option><option value="BMW">BMW</option><option value="BYD">BYD</option><option value="Chevrolet">Chevrolet</option><option value="Chrysler">Chrysler</option><option value="Citroen">Citroen</option><option value="Cupra">Cupra</option><option value="Dacia">Dacia</option><option value="Dacia/Renault">Dacia/Renault</option><option value="Daewoo">Daewoo</option><option value="Daihatsu">Daihatsu</option><option value="Dodge">Dodge</option><option value="DS">DS</option><option value="Ferrari">Ferrari</option><option value="Fiat">Fiat</option><option value="Fiat Professional">Fiat Professional</option><option value="Ford">Ford</option><option value="Genesis">Genesis</option><option value="Honda">Honda</option><option value="Hyundai">Hyundai</option><option value="Infiniti">Infiniti</option><option value="Isuzu">Isuzu</option><option value="Jaecoo">Jaecoo</option><option value="Jaguar">Jaguar</option><option value="Jeep">Jeep</option><option value="Kia">Kia</option><option value="Lada">Lada</option><option value="Lamborghini">Lamborghini</option><option value="Lancia">Lancia</option><option value="Land Rover">Land Rover</option><option value="Lexus">Lexus</option><option value="Maserati">Maserati</option><option value="Mazda">Mazda</option><option value="Mercedes-Benz">Mercedes-Benz</option><option value="MG">MG</option><option value="Mini">Mini</option><option value="Mitsubishi">Mitsubishi</option><option value="Nissan">Nissan</option><option value="Omoda">Omoda</option><option value="Opel">Opel</option><option value="Peugeot">Peugeot</option><option value="Polonez">Polonez</option><option value="Porsche">Porsche</option><option value="Renault">Renault</option><option value="Rolls-Royce">Rolls-Royce</option><option value="Rover">Rover</option><option value="Saab">Saab</option><option value="Seat">Seat</option><option value="Skoda">Skoda</option><option value="Smart">Smart</option><option value="SsangYong">SsangYong</option><option value="Subaru">Subaru</option><option value="Suzuki">Suzuki</option><option value="Tata">Tata</option><option value="Tesla">Tesla</option><option value="Toyota">Toyota</option><option value="Volkswagen">Volkswagen</option><option value="Volvo">Volvo</option></select><select class="select" id="fModelM"><option value="">Wszystkie modele</option></select>
 <h4>CENA</h4><div class="row"><input class="input" id="fCenaOdM" type="number" placeholder="OD"><input class="input" id="fCenaDoM" type="number" placeholder="DO"></div>
 <h4>ROK</h4><div class="row"><input class="input" id="fRokOdM" type="number" placeholder="OD"><input class="input" id="fRokDoM" type="number" placeholder="DO"></div>
 <h4>PALIWO</h4><select class="select" id="fPaliwoM"><option value="">Wszystkie</option><option>Benzyna</option><option>Diesel</option><option>LPG</option><option>Hybryda</option><option>Elektryczny</option></select>
 <h4>LOKALIZACJA</h4><input class="input" id="fLokM" placeholder="Gorzyce">
-<h4>SORT</h4><select class="select" id="fSortM"><option value="newest">Najnowsze</option><option value="price_asc">Cena ↑</option><option value="price_desc">Cena ↓</option><option value="distance">Odległość</option></select>
-<button class="btn btn-yellow" style="width:100%;margin-top:16px;padding:14px;font-size:16px;font-weight:900" onclick="applyMobileAndHide()">✓ POKAŻ WYNIKI I SCHOWAJ</button>
 <button class="btn btn-dark" style="width:100%;margin-top:8px" onclick="toggleMobileFilters()">✕ Anuluj</button>
 <div style="margin-top:12px;padding:8px;background:#181818;border-radius:8px;font-size:12px" id="countM"></div><div style="height:80px"></div></div>
-<div class="grid" id="grid"></div>
+<div class="wroomer-results"><div class="wroomer-benefits"><div><b>🚘 Wystaw auto</b><strong>ZUPEŁNIE ZA DARMO</strong></div><div><b>✓ Bez prowizji</b><span>Bez ukrytych opłat</span></div><div><b>📍 Ogłoszenia z Polski</b><span>Znajdź auto blisko siebie</span></div></div><div class="wroomer-results-title">ODKRYJ SWÓJ NASTĘPNY SAMOCHÓD <span>• OGŁOSZENIA</span></div><div class="grid" id="grid"></div></div>
 </div>
 
 <div class="blog-section">
@@ -172,7 +294,7 @@ label.small{font-size:10px;opacity:.7;display:block;margin:8px 12px 2px;text-tra
 <div class="modal" id="loginModal"><div class="modal-box"><div class="modal-header"><h3>Zaloguj</h3><button class="btn btn-dark" onclick="closeModals()">✕</button></div><div id="loginError"></div><input class="input" id="loginEmail" placeholder="Email" style="margin:10px 12px 0;width:calc(100% - 24px)"><input class="input" id="loginPass" type="password" placeholder="Hasło" style="margin:0 12px;width:calc(100% - 24px)"><div class="row" style="padding:12px"><button class="btn btn-yellow" style="flex:1;padding:11px" onclick="doLogin()">Zaloguj</button><button class="btn btn-dark" style="flex:1;padding:11px" onclick="doSignup()">Załóż</button></div></div></div>
 <div class="modal" id="addModal"><div class="modal-box"><div class="modal-header"><h3 id="addModalTitle">Dodaj ogłoszenie - GPS</h3><button class="btn btn-dark" onclick="closeModals()">✕</button></div><div id="addError"></div>
 <label class="small" style="color:#facc15">Tytuł *</label><input class="input" id="aTitle" placeholder="np. Fiat Stilo 1.9 JTD" style="margin:0 12px;width:calc(100% - 24px)">
-<div class="row" style="padding:0 12px;margin-top:6px"><div><label class="small">Marka *</label><select class="select" id="aBrand"><option value="">Wybierz</option><option value="Abarth">Abarth</option><option value="Alfa Romeo">Alfa Romeo</option><option value="Audi">Audi</option><option value="BMW">BMW</option><option value="Citroen">Citroen</option><option value="Dacia">Dacia</option><option value="Fiat">Fiat</option><option value="Ford">Ford</option><option value="Hyundai">Hyundai</option><option value="Kia">Kia</option><option value="Mazda">Mazda</option><option value="Mercedes-Benz">Mercedes-Benz</option><option value="Opel">Opel</option><option value="Peugeot">Peugeot</option><option value="Renault">Renault</option><option value="Skoda">Skoda</option><option value="Toyota">Toyota</option><option value="Volkswagen">Volkswagen</option><option value="Volvo">Volvo</option></select></div><div><label class="small">Model *</label><select class="select" id="aModelIn"><option value="">Najpierw marka</option></select></div></div>
+<div class="row" style="padding:0 12px;margin-top:6px"><div><label class="small">Marka *</label><select class="select" id="aBrand"><option value="">Wybierz markę</option><option value="Abarth">Abarth</option><option value="Alfa Romeo">Alfa Romeo</option><option value="Alpine">Alpine</option><option value="Audi">Audi</option><option value="BAIC">BAIC</option><option value="Bentley">Bentley</option><option value="BMW">BMW</option><option value="BYD">BYD</option><option value="Chevrolet">Chevrolet</option><option value="Chrysler">Chrysler</option><option value="Citroen">Citroen</option><option value="Cupra">Cupra</option><option value="Dacia">Dacia</option><option value="Dacia/Renault">Dacia/Renault</option><option value="Daewoo">Daewoo</option><option value="Daihatsu">Daihatsu</option><option value="Dodge">Dodge</option><option value="DS">DS</option><option value="Ferrari">Ferrari</option><option value="Fiat">Fiat</option><option value="Fiat Professional">Fiat Professional</option><option value="Ford">Ford</option><option value="Genesis">Genesis</option><option value="Honda">Honda</option><option value="Hyundai">Hyundai</option><option value="Infiniti">Infiniti</option><option value="Isuzu">Isuzu</option><option value="Jaecoo">Jaecoo</option><option value="Jaguar">Jaguar</option><option value="Jeep">Jeep</option><option value="Kia">Kia</option><option value="Lada">Lada</option><option value="Lamborghini">Lamborghini</option><option value="Lancia">Lancia</option><option value="Land Rover">Land Rover</option><option value="Lexus">Lexus</option><option value="Maserati">Maserati</option><option value="Mazda">Mazda</option><option value="Mercedes-Benz">Mercedes-Benz</option><option value="MG">MG</option><option value="Mini">Mini</option><option value="Mitsubishi">Mitsubishi</option><option value="Nissan">Nissan</option><option value="Omoda">Omoda</option><option value="Opel">Opel</option><option value="Peugeot">Peugeot</option><option value="Polonez">Polonez</option><option value="Porsche">Porsche</option><option value="Renault">Renault</option><option value="Rolls-Royce">Rolls-Royce</option><option value="Rover">Rover</option><option value="Saab">Saab</option><option value="Seat">Seat</option><option value="Skoda">Skoda</option><option value="Smart">Smart</option><option value="SsangYong">SsangYong</option><option value="Subaru">Subaru</option><option value="Suzuki">Suzuki</option><option value="Tata">Tata</option><option value="Tesla">Tesla</option><option value="Toyota">Toyota</option><option value="Volkswagen">Volkswagen</option><option value="Volvo">Volvo</option></select></div><div><label class="small">Model *</label><select class="select" id="aModelIn"><option value="">Najpierw marka</option></select></div></div>
 <input class="other-input" id="aModelOther" placeholder="Wpisz model">
 <div class="row" style="padding:0 12px"><div><label class="small">Rok *</label><input class="input" id="aYear" type="number" placeholder="2005"></div><div><label class="small">Cena PLN *</label><input class="input" id="aPrice" type="number" placeholder="8500"></div></div>
 <div class="row" style="padding:0 12px"><div><label class="small">Przebieg km</label><input class="input" id="aMileage" type="number" placeholder="250000"></div><div><label class="small">Paliwo</label><select class="select" id="aFuel"><option value="">Wybierz</option><option>Benzyna</option><option>Diesel</option><option>Benzyna+LPG</option><option>LPG</option><option>Hybryda</option><option>Elektryczny</option></select></div></div>
@@ -192,7 +314,7 @@ label.small{font-size:10px;opacity:.7;display:block;margin:8px 12px 2px;text-tra
 const SUPABASE_URL='https://bdpydgsfowtuvjnkyeeg.supabase.co';
 const SUPABASE_ANON='sb_publishable_S1qH_mBZaX7-bzmfJ0IVGA_6hxGbJWd';
 const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON, {auth:{persistSession:true}});
-const BRAND_MODELS = {"Abarth": ["500", "595"], "Alfa Romeo": ["Giulietta", "Giulia"], "Audi": ["A1", "A3", "A4", "A6", "Q3", "Q5"], "BMW": ["1", "3", "5", "X1", "X3"], "Fiat": ["500", "Panda", "Punto", "Bravo", "Stilo", "Tipo"], "Ford": ["Fiesta", "Focus", "Mondeo"], "Volkswagen": ["Polo", "Golf", "Passat", "Tiguan"], "Volvo": ["V40", "V60", "XC60", "XC90"]};
+const BRAND_MODELS = {"Abarth": ["500", "595", "695", "124 Spider", "Grande Punto", "Punto Evo", "Inny"], "Alfa Romeo": ["145", "146", "147", "155", "156", "159", "164", "166", "4C", "Brera", "Giulia", "Giulietta", "GT", "GTV", "MiTo", "Spider", "Stelvio", "Tonale", "Inny"], "Audi": ["80", "100", "A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "Q2", "Q3", "Q4", "Q5", "Q6", "Q7", "Q8", "TT", "R8", "e-tron", "Inny"], "BMW": ["1", "2", "3", "4", "5", "6", "7", "8", "i3", "i4", "i5", "i7", "i8", "iX", "iX1", "iX3", "M2", "M3", "M4", "M5", "X1", "X2", "X3", "X4", "X5", "X6", "X7", "XM", "Z3", "Z4", "Inny"], "Citroen": ["2CV", "Berlingo", "C1", "C2", "C3", "C3 Aircross", "C4", "C4 Cactus", "C4 Picasso", "C5", "C5 Aircross", "C6", "C8", "DS3", "DS4", "DS5", "Jumpy", "Jumper", "Saxo", "Xantia", "Xsara", "Inny"], "Dacia": ["Dokker", "Duster", "Jogger", "Lodgy", "Logan", "Sandero", "Spring", "Bigster", "Inny"], "Fiat": ["500", "500L", "500X", "600", "Bravo", "Brava", "Croma", "Doblo", "Ducato", "Fiorino", "Freemont", "Grande Punto", "Idea", "Linea", "Marea", "Multipla", "Panda", "Punto", "Scudo", "Sedici", "Seicento", "Stilo", "Tipo", "Uno", "Inny"], "Ford": ["B-Max", "C-Max", "EcoSport", "Edge", "Escape", "Explorer", "Fiesta", "Focus", "Fusion", "Galaxy", "Ka", "Kuga", "Mondeo", "Mustang", "Puma", "Ranger", "S-Max", "Tourneo", "Transit", "Inny"], "Honda": ["Accord", "Civic", "CR-V", "CR-Z", "e", "HR-V", "Jazz", "Legend", "Prelude", "S2000", "ZR-V", "Inny"], "Hyundai": ["Accent", "Bayon", "Coupe", "Elantra", "Getz", "i10", "i20", "i30", "i40", "Ioniq", "Ioniq 5", "Ioniq 6", "ix20", "ix35", "Kona", "Santa", "Fe", "Sonata", "Tucson", "Veloster", "Inny"], "Kia": ["Carens", "Carnival", "Ceed", "EV3", "EV6", "EV9", "Niro", "Optima", "Picanto", "ProCeed", "Rio", "Sorento", "Soul", "Sportage", "Stinger", "Stonic", "Venga", "XCeed", "Inny"], "Mazda": ["2", "3", "5", "6", "323", "626", "CX-3", "CX-30", "CX-5", "CX-60", "CX-80", "CX-7", "CX-9", "MX-5", "MX-30", "RX-8", "Inny"], "Mercedes-Benz": ["A", "B", "C", "CLA", "CLC", "CLK", "CLS", "E", "EQB", "EQC", "EQE", "EQS", "G", "GLA", "GLB", "GLC", "GLE", "GLK", "GLS", "M", "R", "S", "SL", "SLK", "Sprinter", "V", "Viano", "Vito", "Inny"], "Mitsubishi": ["ASX", "Colt", "Eclipse Cross", "Galant", "Grandis", "L200", "Lancer", "Outlander", "Pajero", "Space Star", "Inny"], "Nissan": ["350Z", "370Z", "Almera", "Ariya", "Juke", "Leaf", "Micra", "Murano", "Navara", "Note", "Pathfinder", "Patrol", "Primera", "Pulsar", "Qashqai", "Terrano", "X-Trail", "Inny"], "Opel": ["Adam", "Agila", "Ampera", "Antara", "Astra", "Cascada", "Combo", "Corsa", "Crossland", "Frontera", "Grandland", "Insignia", "Karl", "Meriva", "Mokka", "Movano", "Omega", "Signum", "Tigra", "Vectra", "Vivaro", "Zafira", "Inny"], "Peugeot": ["106", "107", "108", "2008", "206", "207", "208", "3008", "301", "307", "308", "4007", "407", "408", "5008", "508", "607", "807", "Boxer", "Expert", "Partner", "Rifter", "RCZ", "Inny"], "Renault": ["Arkana", "Austral", "Captur", "Clio", "Espace", "Fluence", "Grand Scenic", "Kadjar", "Kangoo", "Koleos", "Laguna", "Latitude", "Megane", "Modus", "Rafale", "Scenic", "Talisman", "Trafic", "Twingo", "Zoe", "Inny"], "Seat": ["Alhambra", "Altea", "Arona", "Ateca", "Cordoba", "Exeo", "Ibiza", "Leon", "Tarraco", "Toledo", "Inny"], "Skoda": ["Citigo", "Enyaq", "Fabia", "Favorit", "Felicia", "Kamiq", "Karoq", "Kodiaq", "Octavia", "Rapid", "Roomster", "Scala", "Superb", "Yeti", "Inny"], "Subaru": ["BRZ", "Forester", "Impreza", "Justy", "Legacy", "Levorg", "Outback", "Solterra", "Tribeca", "XV", "Inny"], "Suzuki": ["Across", "Alto", "Baleno", "Grand Vitara", "Ignis", "Jimny", "Kizashi", "Liana", "S-Cross", "Splash", "Swift", "SX4", "Vitara", "Wagon R", "Inny"], "Tesla": ["Model 3", "Model S", "Model X", "Model Y", "Cybertruck", "Inny"], "Toyota": ["Auris", "Avensis", "Aygo", "bZ4X", "C-HR", "Camry", "Carina", "Celica", "Corolla", "Corolla Cross", "GR86", "GT86", "Highlander", "Hilux", "Land Cruiser", "Mirai", "Prius", "Proace", "RAV4", "Supra", "Verso", "Yaris", "Yaris Cross", "Inny"], "Volkswagen": ["Amarok", "Arteon", "Beetle", "Bora", "Caddy", "CC", "Crafter", "Eos", "Fox", "Golf", "ID.3", "ID.4", "ID.5", "ID.7", "Jetta", "Lupo", "Multivan", "Passat", "Phaeton", "Polo", "Scirocco", "Sharan", "T-Cross", "T-Roc", "Taigo", "Tiguan", "Touareg", "Touran", "Transporter", "Up", "Inny"], "Volvo": ["240", "740", "850", "C30", "C40", "C70", "EX30", "EX40", "EX90", "S40", "S60", "S80", "S90", "V40", "V50", "V60", "V70", "V90", "XC40", "XC60", "XC70", "XC90", "Inny"], "Chevrolet": ["Aveo", "Camaro", "Captiva", "Cruze", "Epica", "Lacetti", "Malibu", "Orlando", "Spark", "Trax", "Volt", "Inny"], "Chrysler": ["300C", "Grand Voyager", "Pacifica", "PT Cruiser", "Sebring", "Voyager", "Inny"], "Cupra": ["Ateca", "Born", "Formentor", "Leon", "Tavascan", "Terramar", "Inny"], "Dodge": ["Avenger", "Caliber", "Challenger", "Charger", "Durango", "Journey", "RAM", "Inny"], "DS": ["DS3", "DS4", "DS5", "DS7", "DS9", "Inny"], "Jeep": ["Avenger", "Cherokee", "Commander", "Compass", "Gladiator", "Grand Cherokee", "Patriot", "Renegade", "Wrangler", "Inny"], "Land Rover": ["Defender", "Discovery", "Discovery Sport", "Freelander", "Range Rover", "Range Rover Evoque", "Range Rover Sport", "Velar", "Inny"], "Lexus": ["CT", "ES", "GS", "IS", "LBX", "LS", "NX", "RC", "RX", "RZ", "SC", "UX", "Inny"], "Mini": ["Clubman", "Cooper", "Countryman", "Coupe", "One", "Paceman", "Roadster", "Inny"], "Porsche": ["718", "911", "Boxster", "Cayenne", "Cayman", "Macan", "Panamera", "Taycan", "Inny"], "Saab": ["9-3", "9-5", "900", "9000", "Inny"], "Smart": ["ForFour", "ForTwo", "Roadster", "Inny"], "SsangYong": ["Actyon", "Korando", "Kyron", "Rexton", "Tivoli", "Torres", "Inny"], "MG": ["MG3", "MG4", "MG5", "HS", "ZS", "Inny"], "BYD": ["Atto 3", "Dolphin", "Seal", "Seal U", "Tang", "Inny"], "Jaguar": ["E-Pace", "F-Pace", "F-Type", "I-Pace", "XE", "XF", "XJ", "XK", "Inny"], "Infiniti": ["EX", "FX", "Q30", "Q50", "Q60", "QX30", "QX50", "QX70", "Inny"], "Alpine": ["A110", "Inny"], "Bentley": ["Bentayga", "Continental", "Flying Spur", "Inny"], "Ferrari": ["296", "458", "488", "F8", "Portofino", "Roma", "SF90", "Inny"], "Lamborghini": ["Aventador", "Gallardo", "Huracan", "Revuelto", "Urus", "Inny"], "Maserati": ["Ghibli", "GranTurismo", "Grecale", "Levante", "Quattroporte", "Inny"], "Rolls-Royce": ["Cullinan", "Ghost", "Phantom", "Wraith", "Inny"], "Lada": ["Granta", "Kalina", "Niva", "Samara", "Vesta", "Inny"], "Polonez": ["Atu", "Caro", "Kombi", "Inny"], "Daewoo": ["Espero", "Lanos", "Leganza", "Matiz", "Nubira", "Tico", "Inny"], "Fiat Professional": ["Ducato", "Doblo", "Scudo", "Inny"], "Isuzu": ["D-Max", "MU-X", "Inny"], "Genesis": ["G70", "G80", "GV60", "GV70", "GV80", "Inny"], "Omoda": ["5", "9", "Inny"], "Jaecoo": ["7", "Inny"], "BAIC": ["Beijing 3", "Beijing 5", "Beijing 7", "Inny"], "Daihatsu": ["Cuore", "Materia", "Sirion", "Terios", "Inny"], "Lancia": ["Delta", "Musa", "Thema", "Ypsilon", "Inny"], "Rover": ["25", "45", "75", "200", "400", "600", "Streetwise", "Inny"], "Tata": ["Indica", "Indigo", "Safari", "Xenon", "Inny"], "Dacia/Renault": ["Logan", "Sandero", "Duster", "Inny"]};
 let currentUser=null, selectedFiles=[], editingId=null, allAds=[], galleryImages=[], galleryIndex=0, mobileFiltersOpen=false;
 let addLat=null, addLng=null, searchLat=null, searchLng=null;
 function isMobile(){return window.innerWidth<=900;}
@@ -211,8 +333,8 @@ function closeGallery(){const m=document.getElementById('galleryModal');if(m){ m
 function haversine(lat1, lon1, lat2, lon2){const R=6371; const dLat=(lat2-lat1)*Math.PI/180; const dLon=(lon2-lon1)*Math.PI/180; const a=Math.sin(dLat/2)*Math.sin(dLat/2)+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)*Math.sin(dLon/2); const c=2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a)); return R*c;}
 function parseExtra(desc){const o={mileage:'',fuel:'',gear:'',power:'',capacity:'',body:'',color:'',lat:'',lng:''}; try{const m=(desc||'').match(/\[(.*?)\]/); if(m){m[1].split('|').forEach(p=>{const parts=p.split(':'); if(parts.length<2) return; const k=parts[0].trim(); const v=parts.slice(1).join(':').trim(); const kl=k.toLowerCase(); if(kl.includes('przebieg')) o.mileage=v; else if(kl.includes('paliwo')) o.fuel=v; else if(kl.includes('skrzynia')) o.gear=v; else if(kl.includes('moc') && !kl.includes('pochodzenia')) o.power=v; else if(kl.includes('pojem')) o.capacity=v; else if(kl.includes('nadwozia')) o.body=v; else if(kl.includes('kolor')) o.color=v; else if(kl==='lat') o.lat=v; else if(kl==='lng' || kl==='lon') o.lng=v;});}}catch(e){} return o;}
 function locateForAdd(){const btn=document.getElementById('gpsAddBtn'); const info=document.getElementById('gpsAddInfo'); if(!navigator.geolocation){alert('Brak GPS'); return;} btn.textContent='📡 Pobieram...'; btn.disabled=true; info.style.display='block'; info.textContent='Pobieram lokalizację...'; info.className='gps-info show'; navigator.geolocation.getCurrentPosition(async (pos)=>{addLat=pos.coords.latitude; addLng=pos.coords.longitude; document.getElementById('aLat').value=addLat.toFixed(6); document.getElementById('aLng').value=addLng.toFixed(6); btn.textContent='✅ GPS Pobrany!'; btn.classList.add('active'); btn.disabled=false; info.textContent=`✅ GPS: ${addLat.toFixed(5)}, ${addLng.toFixed(5)}`; info.className='gps-info show success'; try{const res=await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${addLat}&lon=${addLng}&zoom=10`); const data=await res.json(); const city=data.address?.city||data.address?.town||data.address?.village||''; if(city) document.getElementById('aLocation').value=city.split(',')[0];}catch(e){}}, (err)=>{btn.textContent='📍 Zlokalizuj GPS'; btn.disabled=false; info.textContent='❌ Błąd: '+err.message; info.className='gps-info show';}, {enableHighAccuracy:true, timeout:10000});}
-function locateForSearch(prefix){const btn=document.getElementById('gpsSearchBtn'+prefix); const info=document.getElementById('gpsSearchInfo'+prefix); if(!navigator.geolocation){alert('Brak GPS'); return;} btn.textContent='📡 Pobieram...'; btn.disabled=true; info.style.display='block'; info.textContent='Pobieram...'; info.className='gps-info show'; navigator.geolocation.getCurrentPosition(async (pos)=>{searchLat=pos.coords.latitude; searchLng=pos.coords.longitude; btn.textContent='✅ Moja lokalizacja aktywna'; btn.classList.add('active'); btn.disabled=false; info.textContent=`✅ Twoja lokalizacja: ${searchLat.toFixed(4)}, ${searchLng.toFixed(4)}`; info.className='gps-info show success';}, (err)=>{btn.textContent='📍 Zlokalizuj mnie'; btn.disabled=false; info.textContent='❌ Błąd: '+err.message; info.className='gps-info show';}, {enableHighAccuracy:true, timeout:10000});}
-function populateModelSelect(brandId, modelId, selectedModel=null){const brand=document.getElementById(brandId).value; const modelSel=document.getElementById(modelId); if(!modelSel) return; const models=BRAND_MODELS[brand]||[]; modelSel.innerHTML='<option value="">Wybierz model</option>'; models.forEach(m=>{const o=document.createElement('option'); o.value=m; o.textContent=m; if(m===selectedModel) o.selected=true; modelSel.appendChild(o);});}
+function locateForSearch(prefix){const btn=document.getElementById('gpsSearchBtn'+prefix); const info=document.getElementById('gpsSearchInfo'+prefix); if(!navigator.geolocation){alert('Brak GPS'); return;} btn.textContent='📡 Pobieram...'; btn.disabled=true; info.style.display='block'; info.textContent='Pobieram...'; info.className='gps-info show'; navigator.geolocation.getCurrentPosition(async (pos)=>{searchLat=pos.coords.latitude; searchLng=pos.coords.longitude; btn.textContent='✅ Moja lokalizacja aktywna'; btn.classList.add('active'); btn.disabled=false; info.textContent=`✅ Twoja lokalizacja: ${searchLat.toFixed(4)}, ${searchLng.toFixed(4)}`; info.className='gps-info show success'; wroomerScheduleFilter(true);}, (err)=>{btn.textContent='📍 Zlokalizuj mnie'; btn.disabled=false; info.textContent='❌ Błąd: '+err.message; info.className='gps-info show';}, {enableHighAccuracy:true, timeout:10000});}
+function populateModelSelect(brandId, modelId, selectedModel=null){const brand=document.getElementById(brandId).value; const modelSel=document.getElementById(modelId); if(!modelSel) return; const models=BRAND_MODELS[brand]||[]; modelSel.innerHTML='<option value="">'+(modelId==='aModelIn'?'Wybierz model':'Wszystkie modele')+'</option>'; models.forEach(m=>{const o=document.createElement('option'); o.value=m; o.textContent=m; if(m===selectedModel) o.selected=true; modelSel.appendChild(o);});}
 function openAddModal(ad=null){editingId=ad?.id||null;document.getElementById('addModalTitle').textContent=ad?'Edytuj ogłoszenie':'Dodaj ogłoszenie - GPS';document.getElementById('aTitle').value=ad?.title||'';document.getElementById('aBrand').value=ad?.brand||'';populateModelSelect('aBrand','aModelIn', ad?.model);document.getElementById('aYear').value=ad?.year||'';document.getElementById('aPrice').value=ad?.price||'';document.getElementById('aLocation').value=ad?.location||'';document.getElementById('aPhone').value=ad?.phone||'';const cleanDesc=(ad?.description||'').split('\n\n[')[0].split('\n[')[0];document.getElementById('aDesc').value=cleanDesc;const ex=parseExtra(ad?.description||'');document.getElementById('aMileage').value=(ex.mileage||'').toString().replace(/[^0-9]/g,'');document.getElementById('aFuel').value=ex.fuel||'';document.getElementById('aLat').value=ex.lat||'';document.getElementById('aLng').value=ex.lng||'';selectedFiles=[]; document.getElementById('preview').innerHTML='';document.getElementById('addModal').classList.add('open'); document.getElementById('addModal').style.display='flex';}
 ['fMarkaD','fMarkaM','aBrand'].forEach(id=>{const el=document.getElementById(id); if(el) el.addEventListener('change',()=>{if(id==='fMarkaD') populateModelSelect('fMarkaD','fModelD'); if(id==='fMarkaM') populateModelSelect('fMarkaM','fModelM'); if(id==='aBrand') populateModelSelect('aBrand','aModelIn');});});
 async function doLogin(){const e=document.getElementById('loginEmail').value.trim(); const p=document.getElementById('loginPass').value; if(!e||!p){showError('loginError','Podaj email i hasło');return;} try{const r=await supabaseClient.auth.signInWithPassword({email:e,password:p}); if(r.error) throw r.error; currentUser=r.data.user; updateAuthUI(); closeModals(); loadAds();}catch(err){showError('loginError', err.message);}}
@@ -271,29 +393,27 @@ function openGallery(ad){
   const lok=ad.location||'Gorzyce';
   const phone=ex.telefon||ad.phone||'500 100 200';
   
+  const escapeHtml=(v)=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const fmtPrice=Number(price).toLocaleString('pl-PL');
+  const details=[['Marka',marka],['Model',model],['Rok produkcji',rok],['Przebieg',przeb==='-'?'-':String(przeb).includes('km')?przeb:przeb+' km'],['Paliwo',paliwo],['Lokalizacja',lok]];
+  const phoneClean=String(ex.telefon||ad.phone||'').replace(/[^+\d]/g,'');
+  const hasPhone=phoneClean.replace(/\D/g,'').length>=7;
+  const lat=ad.lat||ex.lat, lng=ad.lng||ex.lng;
+  const mapQuery=lat&&lng&&lat!=='-'&&lng!=='-'?`${lat},${lng}`:lok;
   document.getElementById('galleryInfo').innerHTML=`
-    <div class="detail-section">
-      <div class="detail-title">${price} PLN</div>
-      <div class="detail-subtitle">${title}</div>
-      <div class="detail-grid">
-        <div style="background:#222;border:1px solid #2a2a2a;padding:10px;border-radius:10px;font-size:12px"><b>Marka:</b> ${marka}</div>
-        <div style="background:#222;border:1px solid #2a2a2a;padding:10px;border-radius:10px;font-size:12px"><b>Model:</b> ${model}</div>
-        <div style="background:#222;border:1px solid #2a2a2a;padding:10px;border-radius:10px;font-size:12px"><b>Rok:</b> ${rok}</div>
-        <div style="background:#222;border:1px solid #2a2a2a;padding:10px;border-radius:10px;font-size:12px"><b>Przebieg:</b> ${przeb}</div>
-        <div style="background:#222;border:1px solid #2a2a2a;padding:10px;border-radius:10px;font-size:12px"><b>Paliwo:</b> ${paliwo}</div>
-        <div style="background:#222;border:1px solid #2a2a2a;padding:10px;border-radius:10px;font-size:12px"><b>Lokalizacja:</b> ${lok}</div>
+    <section class="detail-section" aria-label="Szczegóły ogłoszenia">
+      <div class="detail-heading"><div>
+        <div class="detail-kicker">Ogłoszenie motoryzacyjne · WROOMER.PL</div>
+        <div class="detail-title">${escapeHtml(fmtPrice)} PLN</div>
+        <div class="detail-subtitle">${escapeHtml(title)}</div>
+      </div></div>
+      <div class="detail-grid">${details.map(([label,value])=>`<div class="detail-item"><span class="label">${escapeHtml(label)}</span><span class="value">${escapeHtml(value||'-')}</span></div>`).join('')}</div>
+      <div class="detail-desc"><h4>Opis pojazdu</h4><p>${escapeHtml(cleanDesc||'Sprzedający nie dodał jeszcze opisu pojazdu.')}</p></div>
+      <div class="detail-actions">
+        ${hasPhone?`<a class="detail-call" href="tel:${escapeHtml(phoneClean)}">☎ Zadzwoń: ${escapeHtml(phoneClean)}</a>`:''}
+        <a class="detail-map" href="https://www.google.com/maps/search/?api=1&amp;query=${encodeURIComponent(mapQuery)}" target="_blank" rel="noopener noreferrer">⌖ Zobacz mapę</a>
       </div>
-      <div style="background:#0f0f0f;border:1px solid #222;border-radius:12px;padding:14px;margin:14px 0;font-size:13px;line-height:1.6;white-space:pre-wrap;color:#ddd"><b style="color:#facc15">Opis pojazdu:</b>
-${cleanDesc||'Brak opisu'}
-
-</div>
-      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px">
-        <a href="tel:${phone}" style="background:#22c55e;color:#fff;padding:12px 18px;border-radius:22px;text-decoration:none;font-weight:800;font-size:13px">📞 Zadzwoń: ${phone}</a>
-        <a href="https://www.google.com/maps/search/?api=1&query=${ad.lat||'49.96'},${ad.lng||'18.39'}" target="_blank" style="background:#0ea5e9;color:#fff;padding:12px 18px;border-radius:22px;text-decoration:none;font-weight:800;font-size:13px">📍 Mapa</a>
-      </div>
-      <div style="height:20px"></div>
-    </div>
-  `; 
+    </section>`;
   modal.classList.add('open'); 
   modal.style.display='flex'; 
   document.body.style.overflow='hidden'; 
@@ -314,8 +434,93 @@ function galleryPrev(){galleryIndex=(galleryIndex-1+galleryImages.length)%galler
 function galleryNext(){galleryIndex=(galleryIndex+1)%galleryImages.length; updateGallery();}
 async function deleteAd(id){ if(!confirm('Usunąć?')) return; const r=await supabaseClient.from('ogloszenia').delete().eq('id', id); if(r.error) alert(r.error.message); else {closeGallery(); loadAds();} }
 function quickFilter(brand){const p=getP(); const el=document.getElementById('fMarka'+p); if(el) el.value=brand; document.querySelectorAll('.chip').forEach(c=>c.classList.toggle('active', c.textContent===brand || (brand==='' && c.textContent==='Wszystkie'))); loadAds();}
-async function loadAds(){const grid=document.getElementById('grid'); const p=isMobile()?'M':'D'; const marka=document.getElementById('fMarka'+p)?.value||document.getElementById('fMarkaD')?.value||''; const cenaOd=parseInt(document.getElementById('fCenaOd'+p)?.value||document.getElementById('fCenaOdD')?.value); const cenaDo=parseInt(document.getElementById('fCenaDo'+p)?.value||document.getElementById('fCenaDoD')?.value); const lok=document.getElementById('fLok'+p)?.value||document.getElementById('fLokD')?.value||''; grid.innerHTML='<div style="padding:20px;text-align:center;grid-column:1/-1;opacity:.5">Ładowanie...</div>'; try{let q=supabaseClient.from('ogloszenia').select('*').eq('is_banned', false).order('created_at',{ascending:false}).limit(150); if(marka) q=q.eq('brand', marka); if(cenaOd) q=q.gte('price', cenaOd); if(cenaDo) q=q.lte('price', cenaDo); if(lok) q=q.ilike('location','%'+lok+'%'); const result=await q; if(result.error) throw result.error; allAds=result.data; let filtered=result.data; const cd=document.getElementById('countD'); const cm=document.getElementById('countM'); if(cd) cd.textContent=filtered.length+' ogłoszeń'; if(cm) cm.textContent=filtered.length+' ogłoszeń'; if(filtered.length===0){grid.innerHTML=`<div style="grid-column:1/-1;padding:40px;text-align:center;background:#181818;border-radius:12px"><h3 style="color:#facc15">Brak ogłoszeń</h3></div>`; return;} grid.innerHTML=filtered.map(o=>{const img=o.image_url||(o.images&&o.images[0])||'https://via.placeholder.com/300x200?text=Brak'; const cnt=(o.images&&o.images.length>0)?o.images.length:(o.image_url?1:0); return `<div class="card" onclick="openGallery(allAds.find(a=>a.id==='${o.id}'))"><div class="card-img-wrap"><img src="${img}" loading="lazy"><div class="card-img-count">📷 ${cnt}</div></div><div class="card-body"><div class="card-title">${o.title}</div><div class="card-price">${o.price} PLN</div><div class="card-location">${o.location||''} • ${o.year||''}</div></div></div>`;}).join('');}catch(e){grid.innerHTML='<div style="grid-column:1/-1;padding:20px;background:#3a1111">Błąd: '+(e.message||e)+'</div>';}}
-function resetFilters(){['D','M'].forEach(p=>{['fMarka','fModel','fCenaOd','fCenaDo','fRokOd','fRokDo','fPaliwo','fLok','fRadius'].forEach(k=>{const el=document.getElementById(k+p); if(el) el.value='';});}); loadAds();}
+function wroomerNormalize(value){
+  return String(value??'').toLocaleLowerCase('pl').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/ł/g,'l').trim();
+}
+function wroomerMatch(ad,search){
+  const words=wroomerNormalize(search).split(/\s+/).filter(Boolean);
+  if(!words.length)return true;
+  const searchable=wroomerNormalize([ad.brand,ad.model,ad.title,ad.year,ad.location].filter(Boolean).join(' '));
+  return words.every(word=>searchable.includes(word));
+}
+let wroomerLatestRequest=0;
+async function loadAds(){
+  const requestId=++wroomerLatestRequest;
+  const grid=document.getElementById('grid');
+  const p=isMobile()?'M':'D';
+  const get=id=>document.getElementById(id+p)?.value??'';
+  const marka=get('fMarka'),model=get('fModel'),lok=get('fLok');
+  const cenaOd=Number(get('fCenaOd')),cenaDo=Number(get('fCenaDo'));
+  const rokOd=Number(get('fRokOd')),rokDo=Number(get('fRokDo'));
+  const paliwo=get('fPaliwo'),sort=get('fSort')||'newest';
+  const search=document.getElementById('wroomerQuickSearch')?.value||'';
+  grid.innerHTML='<div style="padding:20px;text-align:center;grid-column:1/-1;opacity:.7">Ładowanie ogłoszeń...</div>';
+  try{
+    let q=supabaseClient.from('ogloszenia').select('*').eq('is_banned',false).order('created_at',{ascending:false}).limit(500);
+    if(cenaOd>0)q=q.gte('price',cenaOd);
+    if(cenaDo>0)q=q.lte('price',cenaDo);
+    const result=await q;
+    if(requestId!==wroomerLatestRequest)return;
+    if(result.error)throw result.error;
+    allAds=result.data||[];
+    let filtered=allAds.filter(ad=>{
+      const full=wroomerNormalize([ad.brand,ad.model,ad.title].join(' '));
+      if(marka&&!full.includes(wroomerNormalize(marka)))return false;
+      if(model&&!full.includes(wroomerNormalize(model)))return false;
+      if(lok&&!wroomerNormalize(ad.location).includes(wroomerNormalize(lok)))return false;
+      if(rokOd&&Number(ad.year||0)<rokOd)return false;
+      if(rokDo&&Number(ad.year||0)>rokDo)return false;
+      if(paliwo&&!wroomerNormalize(parseExtra(ad.description||'').fuel).includes(wroomerNormalize(paliwo)))return false;
+      return wroomerMatch(ad,search);
+    });
+    if(sort==='price_asc')filtered.sort((a,b)=>Number(a.price||0)-Number(b.price||0));
+    else if(sort==='price_desc')filtered.sort((a,b)=>Number(b.price||0)-Number(a.price||0));
+    else if(sort==='distance'&&searchLat!=null&&searchLng!=null){
+      const distance=ad=>{const ex=parseExtra(ad.description||'');const lat=Number(ex.lat),lng=Number(ex.lng);if(!Number.isFinite(lat)||!Number.isFinite(lng)||!lat||!lng)return Infinity;const rad=Math.PI/180,dLat=(lat-searchLat)*rad,dLng=(lng-searchLng)*rad,a=Math.sin(dLat/2)**2+Math.cos(searchLat*rad)*Math.cos(lat*rad)*Math.sin(dLng/2)**2;return 6371*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));};
+      filtered.sort((a,b)=>distance(a)-distance(b));
+    }else filtered.sort((a,b)=>new Date(b.created_at||0)-new Date(a.created_at||0));
+    ['countD','countM'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=filtered.length+' ogłoszeń';});
+    if(!filtered.length){
+      grid.innerHTML='<div style="grid-column:1/-1;padding:36px;text-align:center;background:#181818;border-radius:12px"><h3 style="color:#facc15">Nie znaleziono ogłoszeń</h3><p style="margin-top:8px;color:#aaa">Spróbuj wpisać np. Peugeot 508 lub usuń część filtrów.</p></div>';
+      return;
+    }
+    grid.innerHTML=filtered.map(o=>{
+      const img=o.image_url||(o.images&&o.images[0])||'';
+      const cnt=o.images?.length|| (o.image_url?1:0);
+      return `<div class="card" onclick="openGallery(allAds.find(a=>a.id==='${o.id}'))"><div class="card-img-wrap"><img src="${img}" loading="lazy" alt=""><div class="card-img-count">📷 ${cnt}</div></div><div class="card-body"><div class="card-title">${o.title||''}</div><div class="card-price">${o.price} PLN</div><div class="card-location">${o.location||''} • ${o.year||''}</div></div></div>`;
+    }).join('');
+  }catch(e){if(requestId!==wroomerLatestRequest)return;grid.innerHTML='<div style="grid-column:1/-1;padding:20px;background:#3a1111">Błąd: '+(e.message||e)+'</div>';}
+}
+function wroomerRunSearch(){loadAds();document.getElementById('grid')?.scrollIntoView({behavior:'smooth',block:'start'});}
+document.getElementById('wroomerQuickSearch')?.addEventListener('keydown',e=>{if(e.key==='Enter')wroomerRunSearch();});
+// Filtry działają automatycznie: wybór od razu, wpisywanie z krótkim opóźnieniem.
+let wroomerFilterTimer;
+function wroomerScheduleFilter(immediate=false){
+  clearTimeout(wroomerFilterTimer);
+  if(immediate)loadAds();
+  else wroomerFilterTimer=setTimeout(loadAds,350);
+}
+['D','M'].forEach(p=>{
+  ['fSort','fRadius','fMarka','fModel','fPaliwo'].forEach(id=>{
+    document.getElementById(id+p)?.addEventListener('change',()=>wroomerScheduleFilter(true));
+  });
+  ['fCenaOd','fCenaDo','fRokOd','fRokDo','fLok'].forEach(id=>{
+    const el=document.getElementById(id+p);
+    el?.addEventListener('input',()=>wroomerScheduleFilter());
+    el?.addEventListener('change',()=>wroomerScheduleFilter(true));
+  });
+});
+document.getElementById('wroomerQuickSearch')?.addEventListener('input',()=>wroomerScheduleFilter());
+function resetFilters(){
+  ['D','M'].forEach(p=>{
+    ['fMarka','fModel','fCenaOd','fCenaDo','fRokOd','fRokDo','fPaliwo','fLok','fRadius','fSort'].forEach(k=>{
+      const el=document.getElementById(k+p);
+      if(el)el.value=k==='fRadius'?'50':k==='fSort'?'newest':'';
+    });
+  });
+  const quick=document.getElementById('wroomerQuickSearch');if(quick)quick.value='';
+  loadAds();
+}
 checkUser(); loadAds();
 </script>
 </body></html>
