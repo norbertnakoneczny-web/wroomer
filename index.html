@@ -122,6 +122,60 @@ body{background:radial-gradient(ellipse at 80% 0%,#24200c 0%,#090a0b 38%,#080808
 @media(max-width:900px){.header{height:60px;padding:0 12px}.logo{font-size:20px}.header .btn{padding:9px 12px}.layout{padding:0 8px}.wroomer-search{margin:10px auto 0;padding:0 10px}.wroomer-search input{padding:11px 12px}.wroomer-search button{padding:11px 13px}.top-chips{padding:10px}.wroomer-benefits{margin-top:10px;padding:12px 4px}.wroomer-benefits>div{padding:0 9px}.wroomer-benefits b{font-size:11px}.wroomer-benefits strong,.wroomer-benefits span{font-size:10px}.wroomer-results-title{font-size:11px}.grid{gap:9px}.card-img-wrap{height:145px}.card-body{padding:10px}.card-title{font-size:12px}.card-price{font-size:16px}}
 @media(max-width:430px){.wroomer-search button{font-size:11px;padding:11px}.wroomer-benefits{grid-template-columns:1fr 1fr}.wroomer-benefits>div:nth-child(2){border:0}}
 </style>
+
+<style id="wroomer-detail-mobile-premium-v1">
+/* Tylko szczegóły ogłoszenia. Nie zmienia kart ani bloga. */
+#galleryModal{padding:20px !important;align-items:center !important;background:rgba(0,0,0,.88) !important;overscroll-behavior:contain}
+#galleryModal .modal-box{width:min(1080px,96vw) !important;max-width:1080px !important;max-height:calc(100dvh - 40px) !important;margin:0 auto !important;overflow-y:auto !important;overscroll-behavior:contain;border:1px solid #393939 !important;border-radius:22px !important;background:#101113 !important;box-shadow:0 24px 90px #000c}
+#galleryModal .modal-header{position:sticky;top:0;z-index:20;background:#17191c !important;padding:15px 22px !important;border-bottom:1px solid #303238 !important;min-height:62px}
+#galleryModal .modal-header h3{font-size:16px !important;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:calc(100% - 58px)}
+#galleryModal .modal-header button{width:42px;height:42px;border-radius:50%;font-size:18px;padding:0;flex-shrink:0}
+#galleryModal .gallery-main-wrap{background:#08090a !important;border-radius:0 !important;position:relative !important}
+#galleryModal #galleryMain{width:100% !important;height:min(48vh,470px) !important;max-height:none !important;object-fit:contain !important;background:#08090a !important}
+#galleryModal .gallery-nav{background:#fff !important;color:#111 !important;box-shadow:0 2px 12px #0007}
+#galleryModal #photoDesc{padding:9px 20px !important;border-top:1px solid #303030 !important;border-bottom:0 !important;background:#111214 !important;color:#bcbec2 !important;font-size:12px !important;font-weight:600 !important}
+#galleryModal #galleryThumbs{padding:12px 20px !important;gap:10px !important;background:#111214 !important;scrollbar-width:thin}
+#galleryModal #galleryThumbs img{width:82px !important;height:62px !important;transform:none !important}
+#galleryModal .detail-section{padding:24px 28px 28px !important;background:#151719 !important}
+#galleryModal .detail-heading{display:flex;justify-content:space-between;align-items:flex-start;gap:18px;flex-wrap:wrap;margin-bottom:20px}
+#galleryModal .detail-kicker{font-size:11px;color:#a4a6ac;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;margin-bottom:7px}
+#galleryModal .detail-title{font-size:clamp(30px,4vw,42px) !important;line-height:1.1 !important;letter-spacing:-1px;margin:0 !important;color:#ffd21a !important}
+#galleryModal .detail-subtitle{font-size:clamp(17px,2vw,22px) !important;font-weight:750;color:#fff !important;margin:8px 0 0 !important}
+#galleryModal .detail-grid{display:grid !important;grid-template-columns:repeat(3,minmax(0,1fr)) !important;gap:10px !important;margin:0 0 22px !important}
+#galleryModal .detail-grid .detail-item{display:flex !important;flex-direction:column;align-items:flex-start !important;justify-content:center !important;gap:8px;min-height:78px;background:#202225 !important;border:1px solid #34363a !important;border-radius:13px !important;padding:13px 15px !important;min-width:0}
+#galleryModal .detail-grid .label{color:#aeb1b7 !important;font-size:11px !important;font-weight:750;letter-spacing:.5px}
+#galleryModal .detail-grid .value{color:#f6f7f8 !important;font-size:15px !important;font-weight:800;overflow-wrap:anywhere}
+#galleryModal .detail-desc{padding:20px !important;background:#1c1e20 !important;border:1px solid #34363a;border-radius:14px;margin-bottom:20px}
+#galleryModal .detail-desc h4{font-size:15px !important;margin:0 0 12px !important;color:#ffd21a !important}
+#galleryModal .detail-desc p{font-size:15px !important;line-height:1.75 !important;color:#e2e3e5 !important;margin:0;overflow-wrap:anywhere}
+#galleryModal .detail-actions{display:flex;gap:12px;flex-wrap:wrap}
+#galleryModal .detail-actions a{display:flex;align-items:center;justify-content:center;min-height:52px;padding:12px 22px;border-radius:12px;text-decoration:none;font-size:15px;font-weight:850}
+#galleryModal .detail-call{background:#ffd21a;color:#111 !important;flex:1}
+#galleryModal .detail-map{background:#2b2d31;color:#fff !important;border:1px solid #4a4c51;min-width:150px}
+#galleryModal .detail-actions a:focus-visible,#galleryModal button:focus-visible{outline:3px solid #ffd21a;outline-offset:3px}
+@media(max-width:700px){
+ #galleryModal{padding:0 !important;align-items:stretch !important;overflow:hidden !important}
+ #galleryModal .modal-box{width:100% !important;max-width:none !important;max-height:100dvh !important;height:100dvh !important;margin:0 !important;border:0 !important;border-radius:0 !important;overflow-y:auto !important;padding-bottom:env(safe-area-inset-bottom)}
+ #galleryModal .modal-header{min-height:56px;padding:8px 16px !important}
+ #galleryModal #galleryMain{height:clamp(220px,37dvh,380px) !important;max-height:none !important}
+ #galleryModal .gallery-nav{width:38px !important;height:38px !important;font-size:21px !important}
+ #galleryModal #photoDesc{font-size:11px !important;padding:8px 14px !important}
+ #galleryModal #galleryThumbs{padding:10px 14px !important;gap:8px !important}
+ #galleryModal #galleryThumbs img{width:65px !important;height:52px !important}
+ #galleryModal .detail-section{padding:18px 16px 22px !important}
+ #galleryModal .detail-heading{margin-bottom:17px}
+ #galleryModal .detail-title{font-size:34px !important}
+ #galleryModal .detail-subtitle{font-size:19px !important}
+ #galleryModal .detail-grid{grid-template-columns:repeat(2,minmax(0,1fr)) !important;gap:8px !important;margin-bottom:18px !important}
+ #galleryModal .detail-grid .detail-item{padding:11px 12px !important;min-height:72px}
+ #galleryModal .detail-grid .value{font-size:14px !important}
+ #galleryModal .detail-desc{padding:16px !important;margin-bottom:16px}
+ #galleryModal .detail-desc p{font-size:14px !important;line-height:1.65 !important}
+ #galleryModal .detail-actions{position:sticky;bottom:0;z-index:12;display:flex;flex-wrap:nowrap;background:#151719;border-top:1px solid #383a3e;padding:12px 0 calc(12px + env(safe-area-inset-bottom));margin:0 -16px -22px;padding-left:16px;padding-right:16px;box-shadow:0 -8px 25px #0008}
+ #galleryModal .detail-actions a{font-size:14px;padding:12px 10px;min-height:52px}
+ #galleryModal .detail-map{min-width:0;flex:0 0 32%}
+}
+</style>
 </head>
 <body>
 <div class="header"><div class="logo">WROOMER<span>.PL</span> <span style="font-size:10px;background:#facc15;color:#000;padding:2px 6px;border-radius:10px">v11 8 KAFELI FIXED</span></div><div style="display:flex;gap:6px;align-items:center"><button class="btn btn-dark" id="btnLogin">Zaloguj</button><button class="btn btn-dark" id="btnLogout" style="display:none">Wyloguj</button><button class="btn btn-yellow" id="btnAdd">+ Dodaj</button></div></div>
@@ -288,29 +342,27 @@ function openGallery(ad){
   const lok=ad.location||'Gorzyce';
   const phone=ex.telefon||ad.phone||'500 100 200';
   
+  const escapeHtml=(v)=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const fmtPrice=Number(price).toLocaleString('pl-PL');
+  const details=[['Marka',marka],['Model',model],['Rok produkcji',rok],['Przebieg',przeb==='-'?'-':String(przeb).includes('km')?przeb:przeb+' km'],['Paliwo',paliwo],['Lokalizacja',lok]];
+  const phoneClean=String(ex.telefon||ad.phone||'').replace(/[^+\d]/g,'');
+  const hasPhone=phoneClean.replace(/\D/g,'').length>=7;
+  const lat=ad.lat||ex.lat, lng=ad.lng||ex.lng;
+  const mapQuery=lat&&lng&&lat!=='-'&&lng!=='-'?`${lat},${lng}`:lok;
   document.getElementById('galleryInfo').innerHTML=`
-    <div class="detail-section">
-      <div class="detail-title">${price} PLN</div>
-      <div class="detail-subtitle">${title}</div>
-      <div class="detail-grid">
-        <div style="background:#222;border:1px solid #2a2a2a;padding:10px;border-radius:10px;font-size:12px"><b>Marka:</b> ${marka}</div>
-        <div style="background:#222;border:1px solid #2a2a2a;padding:10px;border-radius:10px;font-size:12px"><b>Model:</b> ${model}</div>
-        <div style="background:#222;border:1px solid #2a2a2a;padding:10px;border-radius:10px;font-size:12px"><b>Rok:</b> ${rok}</div>
-        <div style="background:#222;border:1px solid #2a2a2a;padding:10px;border-radius:10px;font-size:12px"><b>Przebieg:</b> ${przeb}</div>
-        <div style="background:#222;border:1px solid #2a2a2a;padding:10px;border-radius:10px;font-size:12px"><b>Paliwo:</b> ${paliwo}</div>
-        <div style="background:#222;border:1px solid #2a2a2a;padding:10px;border-radius:10px;font-size:12px"><b>Lokalizacja:</b> ${lok}</div>
+    <section class="detail-section" aria-label="Szczegóły ogłoszenia">
+      <div class="detail-heading"><div>
+        <div class="detail-kicker">Ogłoszenie motoryzacyjne · WROOMER.PL</div>
+        <div class="detail-title">${escapeHtml(fmtPrice)} PLN</div>
+        <div class="detail-subtitle">${escapeHtml(title)}</div>
+      </div></div>
+      <div class="detail-grid">${details.map(([label,value])=>`<div class="detail-item"><span class="label">${escapeHtml(label)}</span><span class="value">${escapeHtml(value||'-')}</span></div>`).join('')}</div>
+      <div class="detail-desc"><h4>Opis pojazdu</h4><p>${escapeHtml(cleanDesc||'Sprzedający nie dodał jeszcze opisu pojazdu.')}</p></div>
+      <div class="detail-actions">
+        ${hasPhone?`<a class="detail-call" href="tel:${escapeHtml(phoneClean)}">☎ Zadzwoń: ${escapeHtml(phoneClean)}</a>`:''}
+        <a class="detail-map" href="https://www.google.com/maps/search/?api=1&amp;query=${encodeURIComponent(mapQuery)}" target="_blank" rel="noopener noreferrer">⌖ Zobacz mapę</a>
       </div>
-      <div style="background:#0f0f0f;border:1px solid #222;border-radius:12px;padding:14px;margin:14px 0;font-size:13px;line-height:1.6;white-space:pre-wrap;color:#ddd"><b style="color:#facc15">Opis pojazdu:</b>
-${cleanDesc||'Brak opisu'}
-
-</div>
-      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px">
-        <a href="tel:${phone}" style="background:#22c55e;color:#fff;padding:12px 18px;border-radius:22px;text-decoration:none;font-weight:800;font-size:13px">📞 Zadzwoń: ${phone}</a>
-        <a href="https://www.google.com/maps/search/?api=1&query=${ad.lat||'49.96'},${ad.lng||'18.39'}" target="_blank" style="background:#0ea5e9;color:#fff;padding:12px 18px;border-radius:22px;text-decoration:none;font-weight:800;font-size:13px">📍 Mapa</a>
-      </div>
-      <div style="height:20px"></div>
-    </div>
-  `; 
+    </section>`;
   modal.classList.add('open'); 
   modal.style.display='flex'; 
   document.body.style.overflow='hidden'; 
