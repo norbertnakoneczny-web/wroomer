@@ -1,0 +1,7 @@
+WROOMER.PL – ujednolicone zgłoszenia i odpowiedzialność
+
+Wszystkie zastrzeżenia, skargi, zgłoszenia treści i żądania RODO: rodo@wroomer.pl.
+Administrator/operator: Norbert Nakoneczny (osoba fizyczna).
+Dokumenty nie mogą skutecznie wyłączyć ustawowej odpowiedzialności operatora; oświadczenia ogłaszających ograniczają ryzyko, ale nie przenoszą obowiązków RODO i DSA.
+Przed publikacją zweryfikuj wymogi informacyjne, adres do korespondencji, status prawny świadczenia usług, zasady Supabase, retencję danych i działanie poczty rodo@wroomer.pl.
+Wgraj tylko na gałąź testową MAIN-KOPIA-25.10.26.
