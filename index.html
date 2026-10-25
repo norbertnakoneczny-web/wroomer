@@ -3,13 +3,7 @@
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>WROOMER.PL - Ogłoszenia Motoryzacyjne | Kup, Sprzedaj, Zamień Auto</title>
 <meta name="description" content="Ogólnopolska darmowa giełda aut. Wystaw auto za darmo bez limitów, kup bez prowizji i ukrytych opłat, zamień. Tysiące ogłoszeń z całej Polski!">
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-34L1GMG3GK"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-34L1GMG3GK');
-</script>
+<script src="/consent.js" defer></script>
 <link rel="canonical" href="https://www.wroomer.pl/">
 <meta property="og:title" content="WROOMER.PL - Ogólnopolska darmowa giełda aut">
 <meta property="og:description" content="Wystaw auto za darmo, kup bez prowizji, zamień. Darmowa giełda aut z całej Polski.">
@@ -229,7 +223,82 @@ body{background:radial-gradient(ellipse at 80% 0%,#24200c 0%,#090a0b 38%,#080808
 .sidebar-desktop #fLokD,.mobile-drawer #fLokM{display:block;}
 .mobile-drawer .select,.mobile-drawer .input{font-size:16px!important;}
 </style>
-</head>
+
+<style id="wroomer-add-premium">
+/* Wyłącznie formularz dodawania/edycji ogłoszenia */
+#addModal{padding:18px 12px;align-items:center;justify-content:center}
+#addModal .modal-box{width:min(760px,100%);max-width:760px;max-height:min(92dvh,950px);overflow-y:auto;overscroll-behavior:contain;background:#141619;border:1px solid #36393d;border-radius:22px;box-shadow:0 26px 100px #000d;padding-bottom:8px;scrollbar-color:#535353 transparent}
+#addModal .modal-header{position:sticky;top:0;z-index:10;background:#17191c;border-bottom:1px solid #343638;padding:18px 20px;display:flex;align-items:center;justify-content:space-between}
+#addModal .modal-header h3{font-size:20px;letter-spacing:-.4px;font-weight:850}
+#addModal .modal-header button{border-radius:50%;width:36px;height:36px;padding:0}
+#addModal .small{display:block;margin:15px 0 6px;font-size:11px;letter-spacing:.6px;font-weight:850;color:#c5c9ce;text-transform:uppercase}
+#addModal>.modal-box>.small{margin-left:20px;margin-right:20px}
+#addModal .input,#addModal .select{width:100%;min-width:0;min-height:46px;border:1px solid #3a3e44;background:#202327;color:#f5f5f5;border-radius:11px;padding:11px 13px;font-size:14px;box-sizing:border-box;transition:border-color .15s,box-shadow .15s}
+#addModal .input:focus,#addModal .select:focus{outline:none;border-color:#facc15;box-shadow:0 0 0 3px #facc1520}
+#addModal .input::placeholder{color:#8d929a}
+#addModal .row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;padding-left:20px!important;padding-right:20px!important;align-items:end}
+#addModal .row>div{min-width:0;flex:unset}
+#addModal #aTitle,#addModal #aDesc{margin-left:20px!important;margin-right:20px!important;width:calc(100% - 40px)!important}
+#addModal #aDesc{min-height:120px;resize:vertical;line-height:1.55}
+#addModal #aModelOther{margin-left:20px;margin-right:20px;max-width:calc(100% - 40px)}
+#addModal .wroomer-add-intro{padding:14px 20px 3px;color:#aeb4bd;font-size:13px;line-height:1.5}
+#addModal .wroomer-add-intro b{color:#facc15}
+#addModal .wroomer-section-title{margin:22px 20px 0;padding:0 0 9px;border-bottom:1px solid #33373b;color:#facc15;font-size:13px;font-weight:850;letter-spacing:.4px}
+#addModal .wroomer-gps-section{margin:18px 20px!important;padding:16px!important;background:#18202a!important;border:1px solid #34465e!important;border-radius:15px!important}
+#addModal .wroomer-gps-section .row{padding-left:0!important;padding-right:0!important}
+#addModal .wroomer-gps-section .small{margin:10px 0 5px}
+#addModal .wroomer-gps-section .btn-gps{min-height:44px;border-radius:10px}
+#addModal .wroomer-photo-note{margin:5px 20px 12px;color:#a9afb7;font-size:12px;line-height:1.5}
+#addModal .file-label{display:flex;align-items:center;justify-content:center;min-height:105px;margin:0 20px 12px;padding:16px;background:#1d2024;border:2px dashed #55585d;border-radius:14px;cursor:pointer;color:#f5f5f5;font-size:14px;font-weight:750;transition:border-color .15s,background .15s}
+#addModal .file-label:hover,#addModal .file-label:focus-within{border-color:#facc15;background:#26251e}
+#addModal #preview{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:9px;margin:0 20px}
+#addModal #preview .p{position:relative;aspect-ratio:4/3;overflow:hidden;border:1px solid #444;border-radius:10px;background:#0d0e10}
+#addModal #preview .p img{width:100%;height:100%;object-fit:cover;display:block}
+#addModal #preview .p .x{position:absolute;right:4px;top:4px;display:grid;place-items:center;background:#141414e8;color:white;border:1px solid #777;border-radius:50%;width:26px;height:26px;cursor:pointer;font-size:19px}
+#addModal #preview .p .photo-number{position:absolute;left:5px;bottom:5px;background:#000b;border-radius:5px;padding:2px 5px;font-size:10px}
+#addModal .wroomer-photo-status{margin:0 20px 10px;font-size:12px;color:#cbd0d6}
+#addModal .wroomer-save-row{position:sticky;bottom:0;z-index:8;background:#17191cf5;border-top:1px solid #343638;margin-top:20px;padding:14px 20px!important;display:flex;gap:12px}
+#addModal .wroomer-save-row .btn{min-height:48px;border-radius:12px;font-size:14px;font-weight:850}
+#addModal .wroomer-save-row #btnSave{background:#facc15;color:#090909}
+@media(max-width:600px){
+ #addModal{padding:0;align-items:stretch}
+ #addModal .modal-box{width:100%;max-width:none;max-height:100dvh;height:100dvh;border:0;border-radius:0;padding-bottom:env(safe-area-inset-bottom)}
+ #addModal .modal-header{padding:15px 16px}
+ #addModal .modal-header h3{font-size:18px}
+ #addModal .wroomer-add-intro{padding:12px 16px 0}
+ #addModal>.modal-box>.small{margin-left:16px;margin-right:16px}
+ #addModal #aTitle,#addModal #aDesc{margin-left:16px!important;margin-right:16px!important;width:calc(100% - 32px)!important}
+ #addModal .row{padding-left:16px!important;padding-right:16px!important;gap:9px}
+ #addModal .wroomer-section-title{margin-left:16px;margin-right:16px}
+ #addModal .wroomer-gps-section{margin:16px!important;padding:13px!important}
+ #addModal .wroomer-photo-note,#addModal .wroomer-photo-status{margin-left:16px;margin-right:16px}
+ #addModal .file-label{margin-left:16px;margin-right:16px}
+ #addModal #preview{margin:0 16px;grid-template-columns:repeat(3,minmax(0,1fr))}
+ #addModal .wroomer-save-row{padding:12px 16px calc(12px + env(safe-area-inset-bottom))!important}
+}
+@media(max-width:360px){#addModal .row{grid-template-columns:1fr}#addModal #preview{grid-template-columns:repeat(2,minmax(0,1fr))}}
+</style>
+<style id="wroomer-owner-edit-css">
+.wroomer-owner-tools{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:18px 0;padding:14px;border:1px solid #64531b;background:#28230f;border-radius:13px;color:#facc15;font-weight:800}
+.wroomer-owner-edit{background:#facc15;color:#111;border:0;border-radius:11px;padding:13px 18px;font-size:14px;font-weight:900;cursor:pointer}
+.wroomer-owner-edit:hover{background:#ffe16a}
+@media(max-width:600px){.wroomer-owner-tools{flex-direction:column;align-items:stretch;margin-bottom:88px}.wroomer-owner-edit{min-height:48px;width:100%}}
+</style><style id="wroomer-legal-style">.wroomer-legal{margin:16px 20px;padding:14px;border:1px solid #484039;border-radius:12px;background:#1b1c1e;font-size:12px;line-height:1.55;color:#d8d8d8}.wroomer-legal label{display:flex;align-items:flex-start;gap:10px;margin:12px 0;cursor:pointer}.wroomer-legal input{accent-color:#facc15;width:19px;height:19px;flex-shrink:0;margin-top:2px}.wroomer-legal a{color:#facc15;text-decoration:underline}.wroomer-legal p{margin:7px 0}.wroomer-cookie{position:fixed;z-index:99999;bottom:12px;left:12px;right:12px;max-width:620px;margin:auto;background:#191b1e;color:#f6f6f6;border:1px solid #facc15;border-radius:16px;padding:18px;box-shadow:0 8px 60px #000d;font-size:13px;line-height:1.5}.wroomer-cookie h3{color:#facc15;margin:0 0 8px}.wroomer-cookie a{color:#facc15}.wroomer-cookie .actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.wroomer-cookie button{padding:10px 14px;border-radius:10px;border:1px solid #555;background:#292c30;color:white;font-weight:750;cursor:pointer}.wroomer-cookie button:first-child{background:#facc15;color:black;border-color:#facc15}.wroomer-cookie .choices{padding:10px 0}.wroomer-cookie .choices label{display:block;margin:8px 0}.wroomer-cookie input{accent-color:#facc15}@media(max-width:600px){.wroomer-legal{margin:14px 16px}.wroomer-cookie{bottom:0;left:0;right:0;border-radius:15px 15px 0 0}}</style><style id="wroomer-mask-style">
+#addModal #preview .p{aspect-ratio:auto;overflow:visible;display:flex;flex-direction:column}#addModal #preview .p img{aspect-ratio:4/3;border-radius:10px 10px 0 0}#addModal .wroomer-mask-button{background:#38332a;color:#ffdc67;border:0;border-top:1px solid #555;font-size:11px;font-weight:800;padding:8px 4px;cursor:pointer;min-height:36px;border-radius:0 0 10px 10px}.wroomer-mask-overlay{position:fixed;inset:0;z-index:999999;background:#000e;display:grid;place-items:center;padding:14px}.wroomer-mask-panel{width:min(900px,100%);max-height:96dvh;overflow:auto;background:#17191c;border:1px solid #555;border-radius:16px;padding:18px;color:#fff}.wroomer-mask-panel b{color:#facc15;font-size:19px}.wroomer-mask-panel p{font-size:13px;color:#ccc}.wroomer-mask-panel canvas{width:100%;height:auto;max-height:65dvh;object-fit:contain;display:block;background:#000;touch-action:none;cursor:crosshair}.wroomer-mask-actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:14px}.wroomer-mask-actions button{border:1px solid #555;background:#272727;color:#fff;border-radius:9px;padding:11px 13px;cursor:pointer}.wroomer-mask-actions .wroomer-mask-save{background:#facc15;color:#111;font-weight:900;border:0}
+</style><style id="wroomer-report-css">
+.wroomer-report-wrap{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:15px 0;color:#b7b7b7;font-size:12px}
+.wroomer-report-btn{background:#25282d;border:1px solid #737373;border-radius:9px;color:#eee;cursor:pointer;padding:11px 14px;font-weight:750}
+.wroomer-report-btn:hover{border-color:#facc15;color:#facc15}
+#wroomerReportModal{position:fixed;inset:0;z-index:100000;background:#000d;display:none;align-items:center;justify-content:center;padding:15px}
+#wroomerReportModal .report-card{width:min(540px,100%);max-height:90dvh;overflow:auto;background:#191b1e;border:1px solid #444;border-radius:18px;padding:22px;color:#eee}
+#wroomerReportModal label{display:block;margin:14px 0 6px;font-weight:750;font-size:13px}
+#wroomerReportModal input,#wroomerReportModal textarea,#wroomerReportModal select{width:100%;box-sizing:border-box;border:1px solid #51545a;border-radius:9px;padding:12px;background:#272a2f;color:white;font:inherit}
+#wroomerReportModal textarea{min-height:110px;resize:vertical}
+#wroomerReportModal .report-actions{display:flex;gap:10px;margin-top:18px}
+#wroomerReportModal button{border:0;border-radius:9px;padding:12px 15px;font-weight:850;cursor:pointer}
+#wroomerReportModal button[type=submit]{background:#facc15;color:#111;flex:1}
+#wroomerReportModal button[type=button]{background:#3a3c40;color:white}
+</style></head>
 <body>
 <div class="header"><div class="logo">WROOMER<span>.PL</span> <span style="font-size:10px;background:#facc15;color:#000;padding:2px 6px;border-radius:10px">v11 8 KAFELI FIXED</span></div><div style="display:flex;gap:6px;align-items:center"><button class="btn btn-dark" id="btnLogin">Zaloguj</button><button class="btn btn-dark" id="btnLogout" style="display:none">Wyloguj</button><button class="btn btn-yellow" id="btnAdd">+ Dodaj</button></div></div>
 <div class="wroomer-search"><span aria-hidden="true">⌕</span><input id="wroomerQuickSearch" type="search" placeholder="Szukaj marki, modelu lub samochodu..." aria-label="Szukaj samochodu"><button type="button" onclick="wroomerRunSearch()">Szukaj aut</button></div>
@@ -286,36 +355,37 @@ body{background:radial-gradient(ellipse at 80% 0%,#24200c 0%,#090a0b 38%,#080808
 
 <div class="blog-footer">
   <div><div style="font-weight:900;font-size:15px">WROOMER.PL <span style="color:#facc15">v11 FIXED 8 KAFELI</span></div><p style="margin-top:6px">Ogólnopolska darmowa giełda aut. Wystaw za darmo bez limitów.</p><p style="margin-top:8px;font-size:11px;color:#666">© 2026 WROOMER.PL</p></div>
-  <div><h4>DOKUMENTY RODO</h4><a href="/polityka-prywatnosci.html">Polityka Prywatności</a><br><a href="/regulamin.html">Regulamin</a><br><a href="/polityka-cookies.html">Polityka Cookies</a></div>
-  <div><h4>KONTAKT</h4><p>RODO: rodo@wroomer.pl<br>Zgłoszenia: zglos@wroomer.pl<br>Kontakt: kontakt@wroomer.pl</p></div>
+  <div><h4>DOKUMENTY RODO</h4><a href="/polityka-prywatnosci.html">Polityka Prywatności</a><br><a href="/regulamin.html">Regulamin</a><br><a href="/polityka-cookies.html">Polityka Cookies</a><br><a href="#" onclick="openCookieSettings();return false">Ustawienia cookies</a></div>
+  <div><h4>KONTAKT</h4><p>RODO: rodo@wroomer.pl<br>Zgłoszenia: rodo@wroomer.pl<br>Kontakt: rodo@wroomer.pl</p></div>
 </div>
 
-<div class="modal gallery-modal" id="galleryModal"><div class="modal-box"><div class="modal-header"><h3 id="galleryTitle" style="font-size:15px"></h3><button class="btn btn-dark" onclick="closeGallery()">✕</button></div><div class="gallery-main-wrap"><button class="gallery-nav prev" onclick="galleryPrev()">‹</button><img id="galleryMain" class="gallery-main" src="" alt=""><div id="photoDesc"></div><button class="gallery-nav next" onclick="galleryNext()">›</button></div><div id="galleryThumbs" class="gallery-thumbs"></div><div id="galleryInfo" class="gallery-info"></div></div></div>
-<div class="modal" id="loginModal"><div class="modal-box"><div class="modal-header"><h3>Zaloguj</h3><button class="btn btn-dark" onclick="closeModals()">✕</button></div><div id="loginError"></div><input class="input" id="loginEmail" placeholder="Email" style="margin:10px 12px 0;width:calc(100% - 24px)"><input class="input" id="loginPass" type="password" placeholder="Hasło" style="margin:0 12px;width:calc(100% - 24px)"><div class="row" style="padding:12px"><button class="btn btn-yellow" style="flex:1;padding:11px" onclick="doLogin()">Zaloguj</button><button class="btn btn-dark" style="flex:1;padding:11px" onclick="doSignup()">Załóż</button></div></div></div>
-<div class="modal" id="addModal"><div class="modal-box"><div class="modal-header"><h3 id="addModalTitle">Dodaj ogłoszenie - GPS</h3><button class="btn btn-dark" onclick="closeModals()">✕</button></div><div id="addError"></div>
+<div id="cookieBanner" class="wroomer-cookie" role="dialog" aria-label="Ustawienia plików cookies" style="display:none"><h3>Twoja prywatność na WROOMER.PL</h3><p>Niezbędne technologie obsługują logowanie i działanie strony. Opcjonalna analityka i marketing wymagają Twojego wyboru. Możesz odmówić bez utraty dostępu do ogłoszeń. <a href="/polityka-cookies.html">Polityka cookies</a>.</p><div id="cookieCustom" class="choices" style="display:none"><label><input type="checkbox" checked disabled> Niezbędne (zawsze aktywne)</label><label><input type="checkbox" id="cAnalytics"> Analityczne</label><label><input type="checkbox" id="cMarketing"> Marketingowe</label></div><div class="actions"><button type="button" onclick="rejectAllCookies()">Odrzuć opcjonalne</button><button type="button" onclick="acceptAllCookies()">Akceptuj wszystkie</button><button type="button" onclick="document.getElementById('cookieCustom').style.display='block';document.getElementById('cookieSave').style.display='inline-block'">Dostosuj</button><button type="button" id="cookieSave" style="display:none" onclick="saveCustomCookies()">Zapisz wybór</button></div></div><div class="modal gallery-modal" id="galleryModal"><div class="modal-box"><div class="modal-header"><h3 id="galleryTitle" style="font-size:15px"></h3><button class="btn btn-dark" onclick="closeGallery()">✕</button></div><div class="gallery-main-wrap"><button class="gallery-nav prev" onclick="galleryPrev()">‹</button><img id="galleryMain" class="gallery-main" src="" alt=""><div id="photoDesc"></div><button class="gallery-nav next" onclick="galleryNext()">›</button></div><div id="galleryThumbs" class="gallery-thumbs"></div><div id="galleryInfo" class="gallery-info"></div></div></div>
+<div class="modal" id="passwordResetModal"><div class="modal-box" style="max-width:480px"><div class="modal-header"><h3>Ustaw nowe hasło</h3><button class="btn btn-dark" onclick="closePasswordResetModal()">✕</button></div><div id="passwordResetError" aria-live="polite"></div><p style="padding:12px 14px;color:#ccc;font-size:13px">Wpisz nowe hasło do konta WROOMER.PL (minimum 8 znaków).</p><input id="passwordResetNew" class="input" type="password" autocomplete="new-password" placeholder="Nowe hasło" style="margin:0 12px 8px;width:calc(100% - 24px)"><input id="passwordResetConfirm" class="input" type="password" autocomplete="new-password" placeholder="Powtórz nowe hasło" style="margin:0 12px 8px;width:calc(100% - 24px)"><button class="btn btn-yellow" id="passwordResetSubmit" style="margin:10px 12px 16px;width:calc(100% - 24px)" onclick="saveNewPassword()">Zapisz nowe hasło</button></div></div>
+<div class="modal" id="loginModal"><div class="modal-box"><div class="modal-header"><h3>Zaloguj</h3><button class="btn btn-dark" onclick="closeModals()">✕</button></div><div id="loginError"></div><input class="input" id="loginEmail" placeholder="Email" style="margin:10px 12px 0;width:calc(100% - 24px)"><input class="input" id="loginPass" type="password" placeholder="Hasło" style="margin:0 12px;width:calc(100% - 24px)"><div class="wroomer-legal" id="wroomerRegisterLegal"><label><input id="registerTerms" type="checkbox"><span>Zapoznałem/am się z <a href="/regulamin.html" target="_blank" rel="noopener">Regulaminem</a> i akceptuję go. <b>(wymagane do założenia konta)</b></span></label><p>Informacje o przetwarzaniu danych konta: <a href="/polityka-prywatnosci.html" target="_blank" rel="noopener">Polityka prywatności</a>. Nie wymagamy odrębnej zgody RODO na dane niezbędne do prowadzenia konta.</p></div><div style="text-align:right;padding:0 14px 8px"><button type="button" onclick="requestPasswordReset()" style="background:none;border:0;color:#facc15;text-decoration:underline;cursor:pointer;font-size:13px">Nie pamiętasz hasła?</button></div><div class="row wroomer-save-row" style="padding:12px"><button class="btn btn-yellow" style="flex:1;padding:11px" onclick="doLogin()">Zaloguj</button><button class="btn btn-dark" style="flex:1;padding:11px" onclick="doSignup()">Załóż</button></div></div></div>
+<div class="modal" id="addModal"><div class="modal-box"><div class="modal-header"><h3 id="addModalTitle">Dodaj ogłoszenie - GPS</h3><button class="btn btn-dark" onclick="closeModals()">✕</button></div><div id="addError"></div><div class="wroomer-add-intro">Uzupełnij dane samochodu i dodaj zdjęcia. <b>Ogłoszenie jest bezpłatne.</b></div><div class="wroomer-section-title">01 · Informacje o samochodzie</div>
 <label class="small" style="color:#facc15">Tytuł *</label><input class="input" id="aTitle" placeholder="np. Fiat Stilo 1.9 JTD" style="margin:0 12px;width:calc(100% - 24px)">
 <div class="row" style="padding:0 12px;margin-top:6px"><div><label class="small">Marka *</label><select class="select" id="aBrand"><option value="">Wybierz markę</option><option value="Abarth">Abarth</option><option value="Alfa Romeo">Alfa Romeo</option><option value="Alpine">Alpine</option><option value="Audi">Audi</option><option value="BAIC">BAIC</option><option value="Bentley">Bentley</option><option value="BMW">BMW</option><option value="BYD">BYD</option><option value="Chevrolet">Chevrolet</option><option value="Chrysler">Chrysler</option><option value="Citroen">Citroen</option><option value="Cupra">Cupra</option><option value="Dacia">Dacia</option><option value="Dacia/Renault">Dacia/Renault</option><option value="Daewoo">Daewoo</option><option value="Daihatsu">Daihatsu</option><option value="Dodge">Dodge</option><option value="DS">DS</option><option value="Ferrari">Ferrari</option><option value="Fiat">Fiat</option><option value="Fiat Professional">Fiat Professional</option><option value="Ford">Ford</option><option value="Genesis">Genesis</option><option value="Honda">Honda</option><option value="Hyundai">Hyundai</option><option value="Infiniti">Infiniti</option><option value="Isuzu">Isuzu</option><option value="Jaecoo">Jaecoo</option><option value="Jaguar">Jaguar</option><option value="Jeep">Jeep</option><option value="Kia">Kia</option><option value="Lada">Lada</option><option value="Lamborghini">Lamborghini</option><option value="Lancia">Lancia</option><option value="Land Rover">Land Rover</option><option value="Lexus">Lexus</option><option value="Maserati">Maserati</option><option value="Mazda">Mazda</option><option value="Mercedes-Benz">Mercedes-Benz</option><option value="MG">MG</option><option value="Mini">Mini</option><option value="Mitsubishi">Mitsubishi</option><option value="Nissan">Nissan</option><option value="Omoda">Omoda</option><option value="Opel">Opel</option><option value="Peugeot">Peugeot</option><option value="Polonez">Polonez</option><option value="Porsche">Porsche</option><option value="Renault">Renault</option><option value="Rolls-Royce">Rolls-Royce</option><option value="Rover">Rover</option><option value="Saab">Saab</option><option value="Seat">Seat</option><option value="Skoda">Skoda</option><option value="Smart">Smart</option><option value="SsangYong">SsangYong</option><option value="Subaru">Subaru</option><option value="Suzuki">Suzuki</option><option value="Tata">Tata</option><option value="Tesla">Tesla</option><option value="Toyota">Toyota</option><option value="Volkswagen">Volkswagen</option><option value="Volvo">Volvo</option></select></div><div><label class="small">Model *</label><select class="select" id="aModelIn"><option value="">Najpierw marka</option></select></div></div>
 <input class="other-input" id="aModelOther" placeholder="Wpisz model">
 <div class="row" style="padding:0 12px"><div><label class="small">Rok *</label><input class="input" id="aYear" type="number" placeholder="2005"></div><div><label class="small">Cena PLN *</label><input class="input" id="aPrice" type="number" placeholder="8500"></div></div>
 <div class="row" style="padding:0 12px"><div><label class="small">Przebieg km</label><input class="input" id="aMileage" type="number" placeholder="250000"></div><div><label class="small">Paliwo</label><select class="select" id="aFuel"><option value="">Wybierz</option><option>Benzyna</option><option>Diesel</option><option>Benzyna+LPG</option><option>LPG</option><option>Hybryda</option><option>Elektryczny</option></select></div></div>
-<div style="margin:10px 12px;padding:12px;background:#0f172a;border:1px solid #1e40af;border-radius:12px">
+<div class="wroomer-gps-section">
 <label class="small" style="color:#93c5fd;margin:0 0 6px">📍 LOKALIZACJA GPS</label>
 <button class="btn-gps" id="gpsAddBtn" onclick="locateForAdd()">📍 ZLOKALIZUJ GPS</button>
 <div class="gps-info" id="gpsAddInfo" style="display:none"></div>
 <div class="row" style="margin-top:6px"><div><label class="small">Szerokość (lat)</label><input class="input" id="aLat" placeholder="50.123" readonly style="background:#1e293b"></div><div><label class="small">Długość (lng)</label><input class="input" id="aLng" placeholder="18.456" readonly style="background:#1e293b"></div></div>
 <label class="small" style="margin:6px 0 2px">Miasto / Adres</label><input class="input" id="aLocation" placeholder="Gorzyce">
 </div>
-<div class="row" style="padding:0 12px"><div><label class="small">Telefon</label><input class="input" id="aPhone" placeholder="600 123 456"></div><div><label class="small">Kolor</label><select class="select" id="aColor"><option value="">Wybierz</option><option>Czarny</option><option>Biały</option><option>Srebrny</option><option>Szary</option><option>Niebieski</option><option>Czerwony</option><option>Zielony</option></select></div></div>
+<div class="wroomer-section-title">02 · Kontakt i opis</div><div class="row" style="padding:0 12px"><div><label class="small">Telefon</label><input class="input" id="aPhone" placeholder="600 123 456"></div><div><label class="small">Kolor</label><select class="select" id="aColor"><option value="">Wybierz</option><option>Czarny</option><option>Biały</option><option>Srebrny</option><option>Szary</option><option>Niebieski</option><option>Czerwony</option><option>Zielony</option></select></div></div>
 <label class="small">Opis</label><textarea class="input" id="aDesc" rows="3" placeholder="Stan, wyposażenie..." style="margin:0 12px;width:calc(100% - 24px)"></textarea>
-<label class="small" style="color:#facc15">Zdjęcia (max 10)</label><label class="file-label"><span id="fileLabelText">📷 Wybierz zdjęcia</span><input type="file" id="aFiles" multiple accept="image/*" style="display:none"></label><div id="preview"></div>
-<div class="row" style="padding:12px"><button class="btn btn-yellow" style="flex:1;padding:12px;font-weight:900" id="btnSave">Zatwierdź z GPS</button><button class="btn btn-dark" style="flex:1" onclick="closeModals()">Anuluj</button></div>
+<div class="wroomer-section-title">03 · Zdjęcia samochodu</div><div class="wroomer-photo-note">Dodaj maksymalnie 20 zdjęć. Automatycznie zmniejszamy ich rozmiar i zapisujemy w lekkim formacie WebP (lub JPEG, jeśli przeglądarka nie obsługuje WebP). Pierwsze zdjęcie będzie główne.</div><label class="file-label"><span id="fileLabelText">📷 Dodaj zdjęcia · maks. 20</span><input type="file" id="aFiles" multiple accept="image/*" style="display:none"></label><div id="photoStatus" class="wroomer-photo-status" aria-live="polite">0 z 20 nowych zdjęć</div><div id="preview"></div><div class="wroomer-photo-note">🔒 Przed publikacją zasłoń tablice rejestracyjne i twarze. Kliknij „Zasłoń tablicę” pod miniaturą, zaznacz obszar i zapisz. Zakrycie jest trwałe — oryginał nie zostanie wysłany.</div>
+<div class="wroomer-legal"><label><input type="checkbox" id="adTerms"><span>Akceptuję <a href="/regulamin.html" target="_blank" rel="noopener">Regulamin</a>. Oświadczam, że odpowiadam za prawdziwość i legalność ogłoszenia, mam prawo oferować pojazd, dysponuję prawami do zdjęć i podstawą prawną do ujawnienia danych lub wizerunków innych osób, jeżeli takie zamieszczam. <b>(wymagane)</b></span></label><label><input type="checkbox" id="adContact"><span>Rozumiem, że numer telefonu podany w ogłoszeniu będzie publicznie widoczny i dostępny dla odwiedzających serwis. <b>(wymagane, jeśli podano numer)</b></span></label><label><input type="checkbox" id="adPhoto"><span>Potwierdzam, że zdjęcia i treści są publikowane przeze mnie zgodnie z prawem i z wymaganymi zgodami lub inną podstawą prawną; sprawdziłem/am zdjęcia pod kątem danych osób trzecich; jeśli publikacja danych lub wizerunków wymaga podstawy prawnej, posiadam taką podstawę lub zakryłem/am te elementy. <b>(wymagane)</b></span></label><p>Przetwarzanie danych potrzebnych do publikacji ogłoszenia opisuje <a href="/polityka-prywatnosci.html" target="_blank" rel="noopener">Polityka prywatności</a>. Zgłoszenia naruszeń, zastrzeżenia i żądania dotyczące danych lub zdjęć: <a href="mailto:rodo@wroomer.pl">rodo@wroomer.pl</a>. WROOMER.PL nie jest stroną transakcji ani gwarantem treści ogłoszeń; odpowiedzialność Operatora określają przepisy prawa i Regulamin. Nie jest to zgoda marketingowa. Zgłoszenia rozpatrujemy indywidualnie. Dokładnych współrzędnych GPS nie zapisujemy w nowych ogłoszeniach. Podawaj tylko miasto; lokalizacja GPS służy wyłącznie do pomocniczego ustalenia miejsca podczas tworzenia ogłoszenia.</p></div><div class="row" style="padding:12px"><button class="btn btn-yellow" style="flex:1;padding:12px;font-weight:900" id="btnSave">Zatwierdź z GPS</button><button class="btn btn-dark" style="flex:1" onclick="closeModals()">Anuluj</button></div>
 </div></div>
 <script>
 const SUPABASE_URL='https://bdpydgsfowtuvjnkyeeg.supabase.co';
 const SUPABASE_ANON='sb_publishable_S1qH_mBZaX7-bzmfJ0IVGA_6hxGbJWd';
 const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON, {auth:{persistSession:true}});
 const BRAND_MODELS = {"Abarth": ["500", "595", "695", "124 Spider", "Grande Punto", "Punto Evo", "Inny"], "Alfa Romeo": ["145", "146", "147", "155", "156", "159", "164", "166", "4C", "Brera", "Giulia", "Giulietta", "GT", "GTV", "MiTo", "Spider", "Stelvio", "Tonale", "Inny"], "Audi": ["80", "100", "A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "Q2", "Q3", "Q4", "Q5", "Q6", "Q7", "Q8", "TT", "R8", "e-tron", "Inny"], "BMW": ["1", "2", "3", "4", "5", "6", "7", "8", "i3", "i4", "i5", "i7", "i8", "iX", "iX1", "iX3", "M2", "M3", "M4", "M5", "X1", "X2", "X3", "X4", "X5", "X6", "X7", "XM", "Z3", "Z4", "Inny"], "Citroen": ["2CV", "Berlingo", "C1", "C2", "C3", "C3 Aircross", "C4", "C4 Cactus", "C4 Picasso", "C5", "C5 Aircross", "C6", "C8", "DS3", "DS4", "DS5", "Jumpy", "Jumper", "Saxo", "Xantia", "Xsara", "Inny"], "Dacia": ["Dokker", "Duster", "Jogger", "Lodgy", "Logan", "Sandero", "Spring", "Bigster", "Inny"], "Fiat": ["500", "500L", "500X", "600", "Bravo", "Brava", "Croma", "Doblo", "Ducato", "Fiorino", "Freemont", "Grande Punto", "Idea", "Linea", "Marea", "Multipla", "Panda", "Punto", "Scudo", "Sedici", "Seicento", "Stilo", "Tipo", "Uno", "Inny"], "Ford": ["B-Max", "C-Max", "EcoSport", "Edge", "Escape", "Explorer", "Fiesta", "Focus", "Fusion", "Galaxy", "Ka", "Kuga", "Mondeo", "Mustang", "Puma", "Ranger", "S-Max", "Tourneo", "Transit", "Inny"], "Honda": ["Accord", "Civic", "CR-V", "CR-Z", "e", "HR-V", "Jazz", "Legend", "Prelude", "S2000", "ZR-V", "Inny"], "Hyundai": ["Accent", "Bayon", "Coupe", "Elantra", "Getz", "i10", "i20", "i30", "i40", "Ioniq", "Ioniq 5", "Ioniq 6", "ix20", "ix35", "Kona", "Santa", "Fe", "Sonata", "Tucson", "Veloster", "Inny"], "Kia": ["Carens", "Carnival", "Ceed", "EV3", "EV6", "EV9", "Niro", "Optima", "Picanto", "ProCeed", "Rio", "Sorento", "Soul", "Sportage", "Stinger", "Stonic", "Venga", "XCeed", "Inny"], "Mazda": ["2", "3", "5", "6", "323", "626", "CX-3", "CX-30", "CX-5", "CX-60", "CX-80", "CX-7", "CX-9", "MX-5", "MX-30", "RX-8", "Inny"], "Mercedes-Benz": ["A", "B", "C", "CLA", "CLC", "CLK", "CLS", "E", "EQB", "EQC", "EQE", "EQS", "G", "GLA", "GLB", "GLC", "GLE", "GLK", "GLS", "M", "R", "S", "SL", "SLK", "Sprinter", "V", "Viano", "Vito", "Inny"], "Mitsubishi": ["ASX", "Colt", "Eclipse Cross", "Galant", "Grandis", "L200", "Lancer", "Outlander", "Pajero", "Space Star", "Inny"], "Nissan": ["350Z", "370Z", "Almera", "Ariya", "Juke", "Leaf", "Micra", "Murano", "Navara", "Note", "Pathfinder", "Patrol", "Primera", "Pulsar", "Qashqai", "Terrano", "X-Trail", "Inny"], "Opel": ["Adam", "Agila", "Ampera", "Antara", "Astra", "Cascada", "Combo", "Corsa", "Crossland", "Frontera", "Grandland", "Insignia", "Karl", "Meriva", "Mokka", "Movano", "Omega", "Signum", "Tigra", "Vectra", "Vivaro", "Zafira", "Inny"], "Peugeot": ["106", "107", "108", "2008", "206", "207", "208", "3008", "301", "307", "308", "4007", "407", "408", "5008", "508", "607", "807", "Boxer", "Expert", "Partner", "Rifter", "RCZ", "Inny"], "Renault": ["Arkana", "Austral", "Captur", "Clio", "Espace", "Fluence", "Grand Scenic", "Kadjar", "Kangoo", "Koleos", "Laguna", "Latitude", "Megane", "Modus", "Rafale", "Scenic", "Talisman", "Trafic", "Twingo", "Zoe", "Inny"], "Seat": ["Alhambra", "Altea", "Arona", "Ateca", "Cordoba", "Exeo", "Ibiza", "Leon", "Tarraco", "Toledo", "Inny"], "Skoda": ["Citigo", "Enyaq", "Fabia", "Favorit", "Felicia", "Kamiq", "Karoq", "Kodiaq", "Octavia", "Rapid", "Roomster", "Scala", "Superb", "Yeti", "Inny"], "Subaru": ["BRZ", "Forester", "Impreza", "Justy", "Legacy", "Levorg", "Outback", "Solterra", "Tribeca", "XV", "Inny"], "Suzuki": ["Across", "Alto", "Baleno", "Grand Vitara", "Ignis", "Jimny", "Kizashi", "Liana", "S-Cross", "Splash", "Swift", "SX4", "Vitara", "Wagon R", "Inny"], "Tesla": ["Model 3", "Model S", "Model X", "Model Y", "Cybertruck", "Inny"], "Toyota": ["Auris", "Avensis", "Aygo", "bZ4X", "C-HR", "Camry", "Carina", "Celica", "Corolla", "Corolla Cross", "GR86", "GT86", "Highlander", "Hilux", "Land Cruiser", "Mirai", "Prius", "Proace", "RAV4", "Supra", "Verso", "Yaris", "Yaris Cross", "Inny"], "Volkswagen": ["Amarok", "Arteon", "Beetle", "Bora", "Caddy", "CC", "Crafter", "Eos", "Fox", "Golf", "ID.3", "ID.4", "ID.5", "ID.7", "Jetta", "Lupo", "Multivan", "Passat", "Phaeton", "Polo", "Scirocco", "Sharan", "T-Cross", "T-Roc", "Taigo", "Tiguan", "Touareg", "Touran", "Transporter", "Up", "Inny"], "Volvo": ["240", "740", "850", "C30", "C40", "C70", "EX30", "EX40", "EX90", "S40", "S60", "S80", "S90", "V40", "V50", "V60", "V70", "V90", "XC40", "XC60", "XC70", "XC90", "Inny"], "Chevrolet": ["Aveo", "Camaro", "Captiva", "Cruze", "Epica", "Lacetti", "Malibu", "Orlando", "Spark", "Trax", "Volt", "Inny"], "Chrysler": ["300C", "Grand Voyager", "Pacifica", "PT Cruiser", "Sebring", "Voyager", "Inny"], "Cupra": ["Ateca", "Born", "Formentor", "Leon", "Tavascan", "Terramar", "Inny"], "Dodge": ["Avenger", "Caliber", "Challenger", "Charger", "Durango", "Journey", "RAM", "Inny"], "DS": ["DS3", "DS4", "DS5", "DS7", "DS9", "Inny"], "Jeep": ["Avenger", "Cherokee", "Commander", "Compass", "Gladiator", "Grand Cherokee", "Patriot", "Renegade", "Wrangler", "Inny"], "Land Rover": ["Defender", "Discovery", "Discovery Sport", "Freelander", "Range Rover", "Range Rover Evoque", "Range Rover Sport", "Velar", "Inny"], "Lexus": ["CT", "ES", "GS", "IS", "LBX", "LS", "NX", "RC", "RX", "RZ", "SC", "UX", "Inny"], "Mini": ["Clubman", "Cooper", "Countryman", "Coupe", "One", "Paceman", "Roadster", "Inny"], "Porsche": ["718", "911", "Boxster", "Cayenne", "Cayman", "Macan", "Panamera", "Taycan", "Inny"], "Saab": ["9-3", "9-5", "900", "9000", "Inny"], "Smart": ["ForFour", "ForTwo", "Roadster", "Inny"], "SsangYong": ["Actyon", "Korando", "Kyron", "Rexton", "Tivoli", "Torres", "Inny"], "MG": ["MG3", "MG4", "MG5", "HS", "ZS", "Inny"], "BYD": ["Atto 3", "Dolphin", "Seal", "Seal U", "Tang", "Inny"], "Jaguar": ["E-Pace", "F-Pace", "F-Type", "I-Pace", "XE", "XF", "XJ", "XK", "Inny"], "Infiniti": ["EX", "FX", "Q30", "Q50", "Q60", "QX30", "QX50", "QX70", "Inny"], "Alpine": ["A110", "Inny"], "Bentley": ["Bentayga", "Continental", "Flying Spur", "Inny"], "Ferrari": ["296", "458", "488", "F8", "Portofino", "Roma", "SF90", "Inny"], "Lamborghini": ["Aventador", "Gallardo", "Huracan", "Revuelto", "Urus", "Inny"], "Maserati": ["Ghibli", "GranTurismo", "Grecale", "Levante", "Quattroporte", "Inny"], "Rolls-Royce": ["Cullinan", "Ghost", "Phantom", "Wraith", "Inny"], "Lada": ["Granta", "Kalina", "Niva", "Samara", "Vesta", "Inny"], "Polonez": ["Atu", "Caro", "Kombi", "Inny"], "Daewoo": ["Espero", "Lanos", "Leganza", "Matiz", "Nubira", "Tico", "Inny"], "Fiat Professional": ["Ducato", "Doblo", "Scudo", "Inny"], "Isuzu": ["D-Max", "MU-X", "Inny"], "Genesis": ["G70", "G80", "GV60", "GV70", "GV80", "Inny"], "Omoda": ["5", "9", "Inny"], "Jaecoo": ["7", "Inny"], "BAIC": ["Beijing 3", "Beijing 5", "Beijing 7", "Inny"], "Daihatsu": ["Cuore", "Materia", "Sirion", "Terios", "Inny"], "Lancia": ["Delta", "Musa", "Thema", "Ypsilon", "Inny"], "Rover": ["25", "45", "75", "200", "400", "600", "Streetwise", "Inny"], "Tata": ["Indica", "Indigo", "Safari", "Xenon", "Inny"], "Dacia/Renault": ["Logan", "Sandero", "Duster", "Inny"]};
-let currentUser=null, selectedFiles=[], editingId=null, allAds=[], galleryImages=[], galleryIndex=0, mobileFiltersOpen=false;
+let currentUser=null, selectedFiles=[], existingPhotoUrls=[], editingId=null, allAds=[], galleryImages=[], galleryIndex=0, mobileFiltersOpen=false;
 let addLat=null, addLng=null, searchLat=null, searchLng=null;
 function isMobile(){return window.innerWidth<=900;}
 function getP(){return isMobile()?'M':'D';}
@@ -325,25 +395,138 @@ function showError(id,msg){const el=document.getElementById(id); if(el) el.inner
 function showSuccess(id,msg){const el=document.getElementById(id); if(el) el.innerHTML='<div class="success">'+msg+'</div>';}
 async function checkUser(){try{const s=await supabaseClient.auth.getSession(); currentUser=s?.data?.session?.user||null; updateAuthUI();}catch(e){}}
 function updateAuthUI(){const bl=document.getElementById('btnLogin'), bo=document.getElementById('btnLogout'); if(currentUser){bl.style.display='none';bo.style.display='inline-block';}else{bl.style.display='inline-block';bo.style.display='none';}}
-document.getElementById('btnLogin').onclick=()=>document.getElementById('loginModal').classList.add('open');
+function openLoginModal(){const modal=document.getElementById('loginModal');if(!modal)return;modal.style.display='flex';modal.classList.add('open');document.getElementById('loginError').textContent='';}
+document.getElementById('btnLogin').onclick=openLoginModal;
 document.getElementById('btnLogout').onclick=async()=>{await supabaseClient.auth.signOut(); currentUser=null; updateAuthUI(); loadAds();};
-document.getElementById('btnAdd').onclick=()=>{ if(!currentUser){ document.getElementById('loginModal').classList.add('open'); return; } openAddModal(); };
-function closeModals(){const loginM=document.getElementById('loginModal');const addM=document.getElementById('addModal');if(loginM){ loginM.classList.remove('open'); loginM.style.display='none'; }if(addM){ addM.classList.remove('open'); addM.style.display='none'; }closeGallery();}
+document.getElementById('btnAdd').onclick=()=>{ if(!currentUser){ openLoginModal(); return; } openAddModal(); };
+function closeModals(){const loginM=document.getElementById('loginModal');const addM=document.getElementById('addModal');if(loginM){ loginM.classList.remove('open'); loginM.style.display=''; }if(addM){ addM.classList.remove('open'); addM.style.display=''; }closeGallery();}
 function closeGallery(){const m=document.getElementById('galleryModal');if(m){ m.classList.remove('open'); m.style.display='none'; }document.body.style.overflow='';document.body.style.overflowY='auto';document.documentElement.style.overflow='';document.documentElement.style.overflowY='auto';}
 function haversine(lat1, lon1, lat2, lon2){const R=6371; const dLat=(lat2-lat1)*Math.PI/180; const dLon=(lon2-lon1)*Math.PI/180; const a=Math.sin(dLat/2)*Math.sin(dLat/2)+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)*Math.sin(dLon/2); const c=2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a)); return R*c;}
 function parseExtra(desc){const o={mileage:'',fuel:'',gear:'',power:'',capacity:'',body:'',color:'',lat:'',lng:''}; try{const m=(desc||'').match(/\[(.*?)\]/); if(m){m[1].split('|').forEach(p=>{const parts=p.split(':'); if(parts.length<2) return; const k=parts[0].trim(); const v=parts.slice(1).join(':').trim(); const kl=k.toLowerCase(); if(kl.includes('przebieg')) o.mileage=v; else if(kl.includes('paliwo')) o.fuel=v; else if(kl.includes('skrzynia')) o.gear=v; else if(kl.includes('moc') && !kl.includes('pochodzenia')) o.power=v; else if(kl.includes('pojem')) o.capacity=v; else if(kl.includes('nadwozia')) o.body=v; else if(kl.includes('kolor')) o.color=v; else if(kl==='lat') o.lat=v; else if(kl==='lng' || kl==='lon') o.lng=v;});}}catch(e){} return o;}
 function locateForAdd(){const btn=document.getElementById('gpsAddBtn'); const info=document.getElementById('gpsAddInfo'); if(!navigator.geolocation){alert('Brak GPS'); return;} btn.textContent='📡 Pobieram...'; btn.disabled=true; info.style.display='block'; info.textContent='Pobieram lokalizację...'; info.className='gps-info show'; navigator.geolocation.getCurrentPosition(async (pos)=>{addLat=pos.coords.latitude; addLng=pos.coords.longitude; document.getElementById('aLat').value=addLat.toFixed(6); document.getElementById('aLng').value=addLng.toFixed(6); btn.textContent='✅ GPS Pobrany!'; btn.classList.add('active'); btn.disabled=false; info.textContent=`✅ GPS: ${addLat.toFixed(5)}, ${addLng.toFixed(5)}`; info.className='gps-info show success'; try{const res=await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${addLat}&lon=${addLng}&zoom=10`); const data=await res.json(); const city=data.address?.city||data.address?.town||data.address?.village||''; if(city) document.getElementById('aLocation').value=city.split(',')[0];}catch(e){}}, (err)=>{btn.textContent='📍 Zlokalizuj GPS'; btn.disabled=false; info.textContent='❌ Błąd: '+err.message; info.className='gps-info show';}, {enableHighAccuracy:true, timeout:10000});}
 function locateForSearch(prefix){const btn=document.getElementById('gpsSearchBtn'+prefix); const info=document.getElementById('gpsSearchInfo'+prefix); if(!navigator.geolocation){alert('Brak GPS'); return;} btn.textContent='📡 Pobieram...'; btn.disabled=true; info.style.display='block'; info.textContent='Pobieram...'; info.className='gps-info show'; navigator.geolocation.getCurrentPosition(async (pos)=>{searchLat=pos.coords.latitude; searchLng=pos.coords.longitude; btn.textContent='✅ Moja lokalizacja aktywna'; btn.classList.add('active'); btn.disabled=false; info.textContent=`✅ Twoja lokalizacja: ${searchLat.toFixed(4)}, ${searchLng.toFixed(4)}`; info.className='gps-info show success'; wroomerScheduleFilter(true);}, (err)=>{btn.textContent='📍 Zlokalizuj mnie'; btn.disabled=false; info.textContent='❌ Błąd: '+err.message; info.className='gps-info show';}, {enableHighAccuracy:true, timeout:10000});}
 function populateModelSelect(brandId, modelId, selectedModel=null){const brand=document.getElementById(brandId).value; const modelSel=document.getElementById(modelId); if(!modelSel) return; const models=BRAND_MODELS[brand]||[]; modelSel.innerHTML='<option value="">'+(modelId==='aModelIn'?'Wybierz model':'Wszystkie modele')+'</option>'; models.forEach(m=>{const o=document.createElement('option'); o.value=m; o.textContent=m; if(m===selectedModel) o.selected=true; modelSel.appendChild(o);});}
-function openAddModal(ad=null){editingId=ad?.id||null;document.getElementById('addModalTitle').textContent=ad?'Edytuj ogłoszenie':'Dodaj ogłoszenie - GPS';document.getElementById('aTitle').value=ad?.title||'';document.getElementById('aBrand').value=ad?.brand||'';populateModelSelect('aBrand','aModelIn', ad?.model);document.getElementById('aYear').value=ad?.year||'';document.getElementById('aPrice').value=ad?.price||'';document.getElementById('aLocation').value=ad?.location||'';document.getElementById('aPhone').value=ad?.phone||'';const cleanDesc=(ad?.description||'').split('\n\n[')[0].split('\n[')[0];document.getElementById('aDesc').value=cleanDesc;const ex=parseExtra(ad?.description||'');document.getElementById('aMileage').value=(ex.mileage||'').toString().replace(/[^0-9]/g,'');document.getElementById('aFuel').value=ex.fuel||'';document.getElementById('aLat').value=ex.lat||'';document.getElementById('aLng').value=ex.lng||'';selectedFiles=[]; document.getElementById('preview').innerHTML='';document.getElementById('addModal').classList.add('open'); document.getElementById('addModal').style.display='flex';}
+function openAddModal(ad=null){editingId=ad?.id||null;document.getElementById('addModalTitle').textContent=ad?'Edytuj ogłoszenie':'Dodaj ogłoszenie - GPS';document.getElementById('aTitle').value=ad?.title||'';document.getElementById('aBrand').value=ad?.brand||'';populateModelSelect('aBrand','aModelIn', ad?.model);document.getElementById('aYear').value=ad?.year||'';document.getElementById('aPrice').value=ad?.price||'';document.getElementById('aLocation').value=ad?.location||'';document.getElementById('aPhone').value=ad?.phone||'';const cleanDesc=(ad?.description||'').split('\n\n[')[0].split('\n[')[0];document.getElementById('aDesc').value=cleanDesc;const ex=parseExtra(ad?.description||'');document.getElementById('aMileage').value=(ex.mileage||'').toString().replace(/[^0-9]/g,'');document.getElementById('aFuel').value=ex.fuel||'';document.getElementById('aLat').value=ex.lat||'';document.getElementById('aLng').value=ex.lng||'';selectedFiles=[];existingPhotoUrls=ad?[...new Set([...(Array.isArray(ad.images)?ad.images:[]),ad.image_url].filter(Boolean))]:[]; ['adTerms','adContact','adPhoto'].forEach(id=>document.getElementById(id).checked=false);renderPreview();document.getElementById('btnSave').textContent=ad?'Zapisz zmiany':'Zatwierdź z GPS';document.getElementById('addModal').style.display='flex'; document.getElementById('addModal').classList.add('open');}
 ['fMarkaD','fMarkaM','aBrand'].forEach(id=>{const el=document.getElementById(id); if(el) el.addEventListener('change',()=>{if(id==='fMarkaD') populateModelSelect('fMarkaD','fModelD'); if(id==='fMarkaM') populateModelSelect('fMarkaM','fModelM'); if(id==='aBrand') populateModelSelect('aBrand','aModelIn');});});
+let wroomerPasswordRecoveryActive=false;
+async function requestPasswordReset(){
+ const email=document.getElementById('loginEmail').value.trim();
+ if(!email||!/^\S+@\S+\.\S+$/.test(email)){showError('loginError','Wpisz najpierw swój adres e-mail w polu logowania.');return;}
+ try{
+  const redirectTo=window.location.origin+window.location.pathname;
+  const {error}=await supabaseClient.auth.resetPasswordForEmail(email,{redirectTo});
+  if(error)throw error;
+  showSuccess('loginError','Jeśli konto istnieje, otrzymasz e-mail z linkiem do ustawienia nowego hasła. Sprawdź też spam.');
+ }catch(e){showError('loginError','Nie udało się wysłać wiadomości: '+e.message);}
+}
+function openPasswordResetModal(){wroomerPasswordRecoveryActive=true;document.getElementById('loginModal').classList.remove('open');document.getElementById('passwordResetModal').classList.add('open');}
+function closePasswordResetModal(){document.getElementById('passwordResetModal').classList.remove('open');wroomerPasswordRecoveryActive=false;}
+async function saveNewPassword(){
+ const password=document.getElementById('passwordResetNew').value;
+ const confirmPassword=document.getElementById('passwordResetConfirm').value;
+ if(password.length<8){showError('passwordResetError','Hasło musi mieć co najmniej 8 znaków.');return;}
+ if(password!==confirmPassword){showError('passwordResetError','Hasła nie są identyczne.');return;}
+ const btn=document.getElementById('passwordResetSubmit');btn.disabled=true;
+ try{
+  const {error}=await supabaseClient.auth.updateUser({password});
+  if(error)throw error;
+  showSuccess('passwordResetError','Hasło zostało zmienione. Możesz teraz zalogować się nowym hasłem.');
+  document.getElementById('passwordResetNew').value='';document.getElementById('passwordResetConfirm').value='';
+  await supabaseClient.auth.signOut();
+  setTimeout(()=>{closePasswordResetModal();openLoginModal();},1800);
+ }catch(e){showError('passwordResetError','Nie udało się zmienić hasła: '+e.message);}
+ finally{btn.disabled=false;}
+}
+supabaseClient.auth.onAuthStateChange((event)=>{
+ if(event==='PASSWORD_RECOVERY')openPasswordResetModal();
+});
+if(new URLSearchParams(window.location.hash.slice(1)).get('type')==='recovery'){
+ // Supabase odczyta token z adresu i wyemituje PASSWORD_RECOVERY.
+}
 async function doLogin(){const e=document.getElementById('loginEmail').value.trim(); const p=document.getElementById('loginPass').value; if(!e||!p){showError('loginError','Podaj email i hasło');return;} try{const r=await supabaseClient.auth.signInWithPassword({email:e,password:p}); if(r.error) throw r.error; currentUser=r.data.user; updateAuthUI(); closeModals(); loadAds();}catch(err){showError('loginError', err.message);}}
-async function doSignup(){const e=document.getElementById('loginEmail').value.trim(); const p=document.getElementById('loginPass').value; if(!e||p.length<6){showError('loginError','Email i hasło min 6');return;} try{const r=await supabaseClient.auth.signUp({email:e,password:p}); if(r.error) throw r.error; showSuccess('loginError','Konto założone!');}catch(err){showError('loginError', err.message);}}
-function renderPreview(){const preview=document.getElementById('preview'); preview.innerHTML=''; selectedFiles.forEach((f,i)=>{const r=new FileReader(); r.onload=ev=>{const div=document.createElement('div'); div.className='p'; div.innerHTML='<img src="'+ev.target.result+'"><div class="x" onclick="removeFile('+i+')">×</div>'; preview.appendChild(div);}; r.readAsDataURL(f);});}
-function removeFile(i){selectedFiles.splice(i,1); renderPreview();}
-document.getElementById('aFiles').onchange=(e)=>{selectedFiles=[...selectedFiles, ...Array.from(e.target.files)].slice(0,10); renderPreview();};
-function compressImage(file, maxW=800, q=0.70){return new Promise(resolve=>{const img=new Image(); const reader=new FileReader(); reader.onload=e=>{img.onload=()=>{const c=document.createElement('canvas'); let w=img.width,h=img.height; if(w>maxW){h=h*(maxW/w);w=maxW;} if(h>maxW){w=w*(maxW/h);h=maxW;} c.width=w;c.height=h; const ctx=c.getContext('2d'); ctx.drawImage(img,0,0,w,h); c.toBlob(b=>{resolve(b);},'image/webp',q);}; img.src=e.target.result;}; reader.readAsDataURL(file);});}
-document.getElementById('btnSave').onclick=async()=>{const title=document.getElementById('aTitle').value.trim(); const brand=document.getElementById('aBrand').value.trim(); const modelVal=document.getElementById('aModelIn').value||'Inny'; const price=parseInt(document.getElementById('aPrice').value)||0; if(!title||!brand||!modelVal){showError('addError','Tytuł, marka i model wymagane');return;} if(!price){showError('addError','Podaj cenę');return;} const btn=document.getElementById('btnSave'); btn.textContent='WYSYŁANIE...'; btn.disabled=true; try{let imageUrls = []; if(editingId){ const ex=allAds.find(a=>a.id===editingId); imageUrls=ex?.images||[]; if(ex?.image_url && !imageUrls.includes(ex.image_url)) imageUrls.unshift(ex.image_url); } for(let i=0;i<selectedFiles.length;i++){const blob=await compressImage(selectedFiles[i]); const fname=Date.now()+'_'+i+'.webp'; const path=currentUser.id+'/'+fname; const up=await supabaseClient.storage.from('ogloszenia').upload(path, blob, {contentType:'image/webp'}); if(up.error) throw up.error; const pub=supabaseClient.storage.from('ogloszenia').getPublicUrl(path); imageUrls.push(pub.data.publicUrl);} const latVal=document.getElementById('aLat').value||''; const lngVal=document.getElementById('aLng').value||''; const extra=`Przebieg: ${document.getElementById('aMileage').value||'-'} km | Paliwo: ${document.getElementById('aFuel').value||'-'} | lat: ${latVal||'-'} | lng: ${lngVal||'-'}`; const fullDesc=(document.getElementById('aDesc').value||'') + "\n\n["+extra+"]"; const payload={title, brand, model:modelVal, price, year:parseInt(document.getElementById('aYear').value)||null, location:document.getElementById('aLocation').value, phone:document.getElementById('aPhone').value, description:fullDesc, image_url:imageUrls[0]||null, images:imageUrls, user_id:currentUser.id}; let result; if(editingId){result=await supabaseClient.from('ogloszenia').update(payload).eq('id', editingId).select();} else {result=await supabaseClient.from('ogloszenia').insert([payload]).select();} if(result.error) throw result.error; setTimeout(()=>{closeModals(); loadAds(); editingId=null; selectedFiles=[];}, 800);}catch(e){showError('addError', e.message);}finally{btn.textContent='Zatwierdź z GPS'; btn.disabled=false;}};
+async function doSignup(){const e=document.getElementById('loginEmail').value.trim(); const p=document.getElementById('loginPass').value; if(!e||p.length<6){showError('loginError','Email i hasło min 6');return;} if(!document.getElementById('registerTerms').checked){showError('loginError','Aby założyć konto, zaakceptuj regulamin.');return;} try{const r=await supabaseClient.auth.signUp({email:e,password:p}); if(r.error) throw r.error; showSuccess('loginError','Konto założone!');}catch(err){showError('loginError', err.message);}}
+let wroomerPreviewUrls=[];
+function wroomerExistingPhotos(){return existingPhotoUrls.length;}
+function wroomerPhotoMessage(msg){
+ const status=document.getElementById('photoStatus');
+ if(status)status.textContent=msg||`${selectedFiles.length} nowych zdjęć · ${wroomerExistingPhotos()} istniejących · limit 20`;
+}
+function renderPreview(){
+ wroomerPreviewUrls.forEach(url=>URL.revokeObjectURL(url));
+ wroomerPreviewUrls=[];
+ const preview=document.getElementById('preview');
+ preview.replaceChildren();
+ existingPhotoUrls.forEach((url,i)=>{
+  const div=document.createElement('div');div.className='p';
+  const img=document.createElement('img');img.src=url;img.alt=`Zapisane zdjęcie ${i+1}`;img.loading='lazy';
+  const remove=document.createElement('button');remove.type='button';remove.className='x';remove.textContent='×';remove.setAttribute('aria-label','Usuń zapisane zdjęcie '+(i+1));
+  remove.onclick=()=>{existingPhotoUrls.splice(i,1);renderPreview();};
+  const num=document.createElement('span');num.className='photo-number';num.textContent=`${i+1} · zapisane`;
+  div.append(img,remove,num);preview.append(div);
+ });
+ selectedFiles.forEach((file,i)=>{
+  const url=URL.createObjectURL(file);wroomerPreviewUrls.push(url);
+  const div=document.createElement('div');div.className='p';
+  const img=document.createElement('img');img.src=url;img.alt=`Nowe zdjęcie ${i+1}`;img.loading='lazy';
+  const remove=document.createElement('button');remove.type='button';remove.className='x';remove.textContent='×';remove.setAttribute('aria-label','Usuń nowe zdjęcie '+(i+1));remove.onclick=()=>removeFile(i);
+  const num=document.createElement('span');num.className='photo-number';num.textContent=`${existingPhotoUrls.length+i+1} · nowe`;
+  const mask=document.createElement('button');mask.type='button';mask.className='wroomer-mask-button';mask.textContent='▦ Zasłoń tablicę / twarz';mask.onclick=()=>openPhotoMask(i);
+  div.append(img,remove,num,mask);preview.append(div);
+ });
+ wroomerPhotoMessage();
+}
+async function openPhotoMask(i){
+ const file=selectedFiles[i];if(!file)return;
+ const url=URL.createObjectURL(file);let img=new Image();
+ try{await new Promise((res,rej)=>{img.onload=res;img.onerror=rej;img.src=url;});}catch(e){URL.revokeObjectURL(url);alert('Nie udało się otworzyć zdjęcia');return;}
+ const overlay=document.createElement('div');overlay.className='wroomer-mask-overlay';
+ const panel=document.createElement('div');panel.className='wroomer-mask-panel';
+ const heading=document.createElement('div');heading.innerHTML='<b>Zasłoń tablicę lub twarz</b><p>Przeciągnij palcem lub myszą po obszarze zdjęcia. Możesz zaznaczyć kilka obszarów. Zakrycie jest nieodwracalne.</p>';
+ const canvas=document.createElement('canvas');const scale=Math.min(1,1600/Math.max(img.naturalWidth,img.naturalHeight));canvas.width=Math.max(1,Math.round(img.naturalWidth*scale));canvas.height=Math.max(1,Math.round(img.naturalHeight*scale));
+ const ctx=canvas.getContext('2d');ctx.drawImage(img,0,0,canvas.width,canvas.height);URL.revokeObjectURL(url);
+ let start=null,base=ctx.getImageData(0,0,canvas.width,canvas.height);
+ function coords(ev){const r=canvas.getBoundingClientRect();return {x:(ev.clientX-r.left)*canvas.width/r.width,y:(ev.clientY-r.top)*canvas.height/r.height};}
+ function rect(a,b){return {x:Math.max(0,Math.min(a.x,b.x)),y:Math.max(0,Math.min(a.y,b.y)),w:Math.abs(a.x-b.x),h:Math.abs(a.y-b.y)}}
+ canvas.onpointerdown=ev=>{start=coords(ev);canvas.setPointerCapture(ev.pointerId);};
+ canvas.onpointermove=ev=>{if(!start)return;ctx.putImageData(base,0,0);const r=rect(start,coords(ev));ctx.fillStyle='#121212';ctx.fillRect(r.x,r.y,r.w,r.h);};
+ canvas.onpointerup=ev=>{if(!start)return;const r=rect(start,coords(ev));start=null;if(r.w<3||r.h<3){ctx.putImageData(base,0,0);return;}ctx.fillStyle='#121212';ctx.fillRect(r.x,r.y,r.w,r.h);base=ctx.getImageData(0,0,canvas.width,canvas.height);};
+ const actions=document.createElement('div');actions.className='wroomer-mask-actions';
+ const cancel=document.createElement('button');cancel.type='button';cancel.textContent='Anuluj';cancel.onclick=()=>overlay.remove();
+ const reset=document.createElement('button');reset.type='button';reset.textContent='Cofnij zakrycia';reset.onclick=()=>{ctx.clearRect(0,0,canvas.width,canvas.height);ctx.drawImage(img,0,0,canvas.width,canvas.height);base=ctx.getImageData(0,0,canvas.width,canvas.height);};
+ const save=document.createElement('button');save.type='button';save.textContent='Zapisz zasłonięte zdjęcie';save.className='wroomer-mask-save';save.onclick=async()=>{const blob=await new Promise(resolve=>canvas.toBlob(resolve,'image/jpeg',0.92));if(!blob){alert('Nie udało się zapisać zdjęcia');return;}selectedFiles[i]=new File([blob],file.name.replace(/\.[^.]+$/,'')+'-zasloniete.jpg',{type:'image/jpeg'});overlay.remove();renderPreview();};
+ actions.append(cancel,reset,save);panel.append(heading,canvas,actions);overlay.append(panel);document.body.append(overlay);
+}
+function removeFile(i){selectedFiles.splice(i,1);renderPreview();}
+document.getElementById('aFiles').onchange=e=>{
+ const incoming=Array.from(e.target.files||[]).filter(f=>f.type.startsWith('image/'));
+ const allowed=Math.max(0,20-wroomerExistingPhotos()-selectedFiles.length);
+ selectedFiles.push(...incoming.slice(0,allowed));
+ e.target.value='';
+ renderPreview();
+ if(incoming.length>allowed)wroomerPhotoMessage(`Limit 20 zdjęć łącznie. Dodano ${Math.min(incoming.length,allowed)} z ${incoming.length} wybranych.`);
+};
+async function compressImage(file,maxW=1600,q=0.78){
+ // Przetwarzanie odbywa się lokalnie w przeglądarce, przed wysłaniem.
+ const url=URL.createObjectURL(file);
+ try{
+  const img=new Image();
+  await new Promise((resolve,reject)=>{img.onload=resolve;img.onerror=()=>reject(new Error('Nie można odczytać zdjęcia: '+file.name));img.src=url;});
+  const scale=Math.min(1,maxW/Math.max(img.naturalWidth,img.naturalHeight));
+  const w=Math.max(1,Math.round(img.naturalWidth*scale)),h=Math.max(1,Math.round(img.naturalHeight*scale));
+  const canvas=document.createElement('canvas');canvas.width=w;canvas.height=h;
+  const ctx=canvas.getContext('2d',{alpha:false});
+  if(!ctx)throw new Error('Brak obsługi kompresji zdjęć w przeglądarce.');
+  ctx.fillStyle='#fff';ctx.fillRect(0,0,w,h);ctx.drawImage(img,0,0,w,h);
+  const makeBlob=type=>new Promise(resolve=>canvas.toBlob(resolve,type,q));
+  let blob=await makeBlob('image/webp');
+  let type='image/webp';
+  if(!blob||blob.type!=='image/webp'){blob=await makeBlob('image/jpeg');type='image/jpeg';}
+  if(!blob)throw new Error('Nie udało się skompresować zdjęcia: '+file.name);
+  canvas.width=0;canvas.height=0;
+  return {blob,type,ext:type==='image/webp'?'webp':'jpg'};
+ }finally{URL.revokeObjectURL(url);}
+}
+document.getElementById('btnSave').onclick=async()=>{const title=document.getElementById('aTitle').value.trim(); const brand=document.getElementById('aBrand').value.trim(); const modelVal=document.getElementById('aModelIn').value||'Inny'; const price=parseInt(document.getElementById('aPrice').value)||0; if(!title||!brand||!modelVal){showError('addError','Tytuł, marka i model wymagane');return;} if(!price){showError('addError','Podaj cenę');return;} if(!document.getElementById('adTerms').checked||!document.getElementById('adPhoto').checked){showError('addError','Potwierdź regulamin i prawa do zdjęć.');return;} if(document.getElementById('aPhone').value.trim()&&!document.getElementById('adContact').checked){showError('addError','Potwierdź publiczne wyświetlanie numeru telefonu lub usuń numer.');return;} const btn=document.getElementById('btnSave'); btn.textContent='WYSYŁANIE...'; btn.disabled=true; try{let imageUrls = []; if(editingId){ imageUrls=[...existingPhotoUrls]; } if(imageUrls.length+selectedFiles.length>20)throw new Error('Maksymalnie 20 zdjęć na ogłoszenie.'); for(let i=0;i<selectedFiles.length;i++){btn.textContent=`Zdjęcia ${i+1}/${selectedFiles.length}...`;wroomerPhotoMessage(`Optymalizacja i wysyłanie zdjęcia ${i+1} z ${selectedFiles.length}...`);const optimized=await compressImage(selectedFiles[i]);const fname=Date.now()+'_'+i+'_'+Math.random().toString(36).slice(2,8)+'.'+optimized.ext;const path=currentUser.id+'/'+fname;const up=await supabaseClient.storage.from('ogloszenia').upload(path,optimized.blob,{contentType:optimized.type});if(up.error)throw up.error;const pub=supabaseClient.storage.from('ogloszenia').getPublicUrl(path);imageUrls.push(pub.data.publicUrl);}btn.textContent='Zapisywanie ogłoszenia...'; const extra=`Przebieg: ${document.getElementById('aMileage').value||'-'} km | Paliwo: ${document.getElementById('aFuel').value||'-'}`; const fullDesc=(document.getElementById('aDesc').value||'') + "\n\n["+extra+"]"; const payload={title, brand, model:modelVal, price, year:parseInt(document.getElementById('aYear').value)||null, location:document.getElementById('aLocation').value, phone:document.getElementById('aPhone').value, description:fullDesc, image_url:imageUrls[0]||null, images:imageUrls, user_id:currentUser.id}; let result; if(editingId){result=await supabaseClient.from('ogloszenia').update(payload).eq('id', editingId).eq('user_id',currentUser.id).select();} else {result=await supabaseClient.from('ogloszenia').insert([payload]).select();} if(result.error) throw result.error; if(editingId && !result.data?.length)throw new Error('Nie masz uprawnień do edycji tego ogłoszenia.'); setTimeout(()=>{closeModals(); loadAds(); editingId=null; selectedFiles=[];}, 800);}catch(e){showError('addError', e.message);}finally{btn.textContent=editingId?'Zapisz zmiany':'Zatwierdź z GPS'; btn.disabled=false;wroomerPhotoMessage();}};
 function openGallery(ad){
   const modal=document.getElementById('galleryModal'); 
   window.currentAd=ad;
@@ -409,6 +592,8 @@ function openGallery(ad){
       </div></div>
       <div class="detail-grid">${details.map(([label,value])=>`<div class="detail-item"><span class="label">${escapeHtml(label)}</span><span class="value">${escapeHtml(value||'-')}</span></div>`).join('')}</div>
       <div class="detail-desc"><h4>Opis pojazdu</h4><p>${escapeHtml(cleanDesc||'Sprzedający nie dodał jeszcze opisu pojazdu.')}</p></div>
+      ${currentUser && String(ad.user_id||'')===String(currentUser.id) ? `<div class="wroomer-owner-tools"><span>Twoje ogłoszenie</span><button type="button" class="wroomer-owner-edit" onclick="editOwnListing('${String(ad.id).replace(/[^a-zA-Z0-9_-]/g,'')}')">✎ Edytuj ogłoszenie</button></div>` : ''}
+      <div class="wroomer-report-wrap"><button type="button" class="wroomer-report-btn" onclick="wroomerReportListing()">⚑ Zgłoś treść ogłoszenia</button><span>Zgłoszenie przygotujesz na rodo@wroomer.pl</span></div>
       <div class="detail-actions">
         ${hasPhone?`<a class="detail-call" href="tel:${escapeHtml(phoneClean)}">☎ Zadzwoń: ${escapeHtml(phoneClean)}</a>`:''}
         <a class="detail-map" href="https://www.google.com/maps/search/?api=1&amp;query=${encodeURIComponent(mapQuery)}" target="_blank" rel="noopener noreferrer">⌖ Zobacz mapę</a>
@@ -417,6 +602,15 @@ function openGallery(ad){
   modal.classList.add('open'); 
   modal.style.display='flex'; 
   document.body.style.overflow='hidden'; 
+}
+function editOwnListing(id){
+ const ad=allAds.find(item=>String(item.id)===String(id));
+ if(!currentUser||!ad||String(ad.user_id)!==String(currentUser.id)){
+  alert('Tylko właściciel może edytować to ogłoszenie.');return;
+ }
+ closeGallery();
+ openAddModal(ad);
+ document.getElementById('btnSave').textContent='Zapisz zmiany';
 }
 function updateGallery(){
   document.getElementById('galleryMain').src=galleryImages[galleryIndex]; 
@@ -523,4 +717,44 @@ function resetFilters(){
 }
 checkUser(); loadAds();
 </script>
-</body></html>
+<div id="wroomerReportModal" role="dialog" aria-modal="true" aria-labelledby="wroomerReportHeading">
+<form class="report-card" id="wroomerReportForm">
+<h3 id="wroomerReportHeading">⚑ Zgłoś ogłoszenie</h3>
+<p style="font-size:13px;color:#bdbdbd">Wskaż powód i opisz naruszenie. Po kliknięciu „Przygotuj e-mail” otworzy się Twoja aplikacja pocztowa. <strong>Wiadomość trzeba samodzielnie wysłać.</strong></p>
+<label for="wroomerReportUrl">Adres zgłaszanego ogłoszenia</label><input id="wroomerReportUrl" readonly>
+<label for="wroomerReportEmail">Adres e-mail do odpowiedzi</label><input id="wroomerReportEmail" type="email" required autocomplete="email" placeholder="twoj@email.pl"><label for="wroomerReportName">Imię i nazwisko / nazwa zgłaszającego</label><input id="wroomerReportName" required maxlength="120" autocomplete="name" placeholder="Imię i nazwisko"><label for="wroomerReportReason">Rodzaj zgłoszenia</label><select id="wroomerReportReason" required><option value="">Wybierz powód</option><option>Nielegalna treść lub oszustwo</option><option>Naruszenie prywatności / dane osobowe</option><option>Naruszenie praw do zdjęć / praw autorskich</option><option>Fałszywe lub wprowadzające w błąd informacje</option><option>Inne naruszenie</option></select>
+<label for="wroomerReportDetails">Uzasadnienie zgłoszenia</label><textarea id="wroomerReportDetails" required minlength="15" maxlength="4000" placeholder="Opisz, które informacje są niezgodne z prawem lub regulaminem i dlaczego."></textarea>
+<label><input id="wroomerReportGoodFaith" type="checkbox" required style="width:auto"> Potwierdzam, że w dobrej wierze uważam zgłoszone informacje za prawdziwe i kompletne.</label>
+<div class="report-actions"><button type="submit">Przygotuj e-mail</button><button type="button" onclick="document.getElementById('wroomerReportModal').style.display='none'">Anuluj</button></div>
+</form></div><script id="wroomer-report-script">
+function wroomerReportListing(){
+ const ad=window.currentAd;
+ const url=ad ? location.origin+location.pathname+'?ogloszenie='+encodeURIComponent(ad.id) : location.href;
+ document.getElementById('wroomerReportUrl').value=url;
+ document.getElementById('wroomerReportReason').value='';
+ document.getElementById('wroomerReportDetails').value='';
+ document.getElementById('wroomerReportGoodFaith').checked=false;
+ document.getElementById('wroomerReportModal').style.display='flex';
+}
+document.getElementById('wroomerReportForm').addEventListener('submit',function(e){
+ e.preventDefault();
+ const ad=window.currentAd;
+ const reason=document.getElementById('wroomerReportReason').value;
+ const details=document.getElementById('wroomerReportDetails').value.trim();
+ if(!reason||details.length<15||!document.getElementById('wroomerReportGoodFaith').checked)return;
+ const reportEmail=document.getElementById('wroomerReportEmail').value.trim();
+ const reportName=document.getElementById('wroomerReportName').value.trim();
+ if(!reportEmail||!reportName)return;
+ const body=[
+  'Zgłaszający: '+reportName,
+  'E-mail: '+reportEmail,
+  'Adres ogłoszenia: '+document.getElementById('wroomerReportUrl').value,
+  'Id ogłoszenia: '+(ad?.id||'brak'),
+  'Tytuł: '+(ad?.title||'brak'),
+  'Powód: '+reason,
+  'Uzasadnienie: '+details,
+  'Oświadczam, że zgłaszam w dobrej wierze.'
+ ].join('\n');
+ location.href='mailto:rodo@wroomer.pl?subject='+encodeURIComponent('Zgłoszenie WROOMER.PL – '+reason)+'&body='+encodeURIComponent(body);
+});
+</script></body></html>
