@@ -176,6 +176,44 @@ body{background:radial-gradient(ellipse at 80% 0%,#24200c 0%,#090a0b 38%,#080808
  #galleryModal .detail-map{min-width:0;flex:0 0 32%}
 }
 </style>
+
+<style id="wroomer-gallery-large-v2">
+/* Szczegóły ogłoszenia: duże zdjęcia, układ desktop i mobile-first. */
+@media (min-width: 901px) {
+ #galleryModal{padding:18px !important;align-items:center !important}
+ #galleryModal .modal-box{display:grid !important;grid-template-columns:minmax(0,1.55fr) minmax(330px,.95fr) !important;grid-template-rows:auto minmax(0,1fr) auto !important;max-width:1480px !important;width:min(96vw,1480px) !important;height:min(92dvh,900px) !important;max-height:92dvh !important;overflow:hidden !important;gap:0 !important}
+ #galleryModal .modal-header{grid-column:1/-1 !important;grid-row:1 !important;position:relative !important}
+ #galleryModal .gallery-main-wrap{grid-column:1 !important;grid-row:2 !important;min-height:0 !important;display:flex !important;flex-direction:column !important;justify-content:center !important;overflow:hidden !important}
+ #galleryModal #galleryMain{width:100% !important;height:100% !important;max-height:calc(92dvh - 185px) !important;min-height:0 !important;object-fit:contain !important}
+ #galleryModal #photoDesc{flex-shrink:0 !important}
+ #galleryModal #galleryThumbs{grid-column:1 !important;grid-row:3 !important;padding:14px !important;min-height:98px !important;align-items:center !important}
+ #galleryModal #galleryThumbs img{width:106px !important;height:72px !important}
+ #galleryModal #galleryInfo{grid-column:2 !important;grid-row:2/4 !important;overflow-y:auto !important;min-height:0 !important;border-left:1px solid #303238 !important;scrollbar-width:thin}
+ #galleryModal .detail-section{padding:26px 24px !important}
+ #galleryModal .detail-grid{grid-template-columns:repeat(2,minmax(0,1fr)) !important}
+ #galleryModal .detail-title{font-size:clamp(32px,3vw,44px) !important}
+ #galleryModal .detail-actions{position:sticky !important;bottom:-28px !important;background:#151719 !important;padding:14px 0 18px !important;z-index:5}
+}
+@media (min-width:701px) and (max-width:900px) {
+ #galleryModal .modal-box{width:96vw !important;max-width:900px !important}
+ #galleryModal #galleryMain{height:60dvh !important;max-height:none !important}
+}
+@media (max-width:700px) {
+ #galleryModal .modal-box{display:block !important;overscroll-behavior:contain !important;padding-bottom:calc(92px + env(safe-area-inset-bottom)) !important}
+ #galleryModal .gallery-main-wrap{width:100% !important}
+ #galleryModal #galleryMain{height:clamp(290px,51dvh,560px) !important;width:100% !important;object-fit:contain !important;max-height:none !important}
+ #galleryModal #galleryThumbs{padding:12px 14px !important;gap:10px !important}
+ #galleryModal #galleryThumbs img{width:86px !important;height:66px !important}
+ #galleryModal .detail-title{font-size:clamp(30px,8vw,40px) !important}
+ #galleryModal .detail-section{padding:22px 16px !important}
+ #galleryModal .detail-grid{grid-template-columns:repeat(2,minmax(0,1fr)) !important}
+ #galleryModal .detail-actions{position:fixed !important;left:0 !important;right:0 !important;bottom:0 !important;z-index:11010 !important;margin:0 !important;padding:12px 16px calc(12px + env(safe-area-inset-bottom)) !important;background:#111316 !important;border-top:1px solid #37393c !important;box-shadow:0 -10px 28px #000b !important}
+ #galleryModal .detail-actions a{min-height:52px !important}
+ #galleryModal .detail-call{background:#ffd21a !important;color:#111 !important}
+ #galleryModal .detail-map{background:#292c30 !important;color:#fff !important}
+}
+@media (prefers-reduced-motion:reduce){#galleryModal *{scroll-behavior:auto !important}}
+</style>
 </head>
 <body>
 <div class="header"><div class="logo">WROOMER<span>.PL</span> <span style="font-size:10px;background:#facc15;color:#000;padding:2px 6px;border-radius:10px">v11 8 KAFELI FIXED</span></div><div style="display:flex;gap:6px;align-items:center"><button class="btn btn-dark" id="btnLogin">Zaloguj</button><button class="btn btn-dark" id="btnLogout" style="display:none">Wyloguj</button><button class="btn btn-yellow" id="btnAdd">+ Dodaj</button></div></div>
