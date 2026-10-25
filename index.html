@@ -592,7 +592,7 @@ function openGallery(ad){
       </div></div>
       <div class="detail-grid">${details.map(([label,value])=>`<div class="detail-item"><span class="label">${escapeHtml(label)}</span><span class="value">${escapeHtml(value||'-')}</span></div>`).join('')}</div>
       <div class="detail-desc"><h4>Opis pojazdu</h4><p>${escapeHtml(cleanDesc||'Sprzedający nie dodał jeszcze opisu pojazdu.')}</p></div>
-      ${currentUser && String(ad.user_id||'')===String(currentUser.id) ? `<div class="wroomer-owner-tools"><span>Twoje ogłoszenie</span><button type="button" class="wroomer-owner-edit" onclick="editOwnListing('${String(ad.id).replace(/[^a-zA-Z0-9_-]/g,'')}')">✎ Edytuj ogłoszenie</button></div>` : ''}
+      ${currentUser && String(ad.user_id||'')===String(currentUser.id) ? `<div class="wroomer-owner-tools"><span>Twoje ogłoszenie</span><button type="button" class="wroomer-owner-edit" onclick="editOwnListing('${String(ad.id).replace(/[^a-zA-Z0-9_-]/g,'')}')">✎ Edytuj ogłoszenie</button><button type="button" class="wroomer-owner-edit" style="background:#dc2626;color:#fff" onclick="deleteAd('${String(ad.id).replace(/[^a-zA-Z0-9_-]/g,'')}')">🗑 Usuń ogłoszenie</button></div>` : ''}
       <div class="wroomer-report-wrap"><button type="button" class="wroomer-report-btn" onclick="wroomerReportListing()">⚑ Zgłoś treść ogłoszenia</button><span>Zgłoszenie przygotujesz na rodo@wroomer.pl</span></div>
       <div class="detail-actions">
         ${hasPhone?`<a class="detail-call" href="tel:${escapeHtml(phoneClean)}">☎ Zadzwoń: ${escapeHtml(phoneClean)}</a>`:''}
@@ -626,7 +626,16 @@ function updateGallery(){
 
 function galleryPrev(){galleryIndex=(galleryIndex-1+galleryImages.length)%galleryImages.length; updateGallery();}
 function galleryNext(){galleryIndex=(galleryIndex+1)%galleryImages.length; updateGallery();}
-async function deleteAd(id){ if(!confirm('Usunąć?')) return; const r=await supabaseClient.from('ogloszenia').delete().eq('id', id); if(r.error) alert(r.error.message); else {closeGallery(); loadAds();} }
+async function deleteAd(id){
+ if(!currentUser){alert('Zaloguj się, aby usunąć ogłoszenie.');return;}
+ const ad=allAds.find(item=>String(item.id)===String(id));
+ if(!ad||String(ad.user_id)!==String(currentUser.id)){alert('Możesz usunąć tylko własne ogłoszenie.');return;}
+ if(!confirm('Czy na pewno chcesz trwale usunąć swoje ogłoszenie? Tej operacji nie można cofnąć.'))return;
+ const {data,error}=await supabaseClient.from('ogloszenia').delete().eq('id',id).eq('user_id',currentUser.id).select('id');
+ if(error){alert('Nie udało się usunąć ogłoszenia: '+error.message);return;}
+ if(!data||data.length!==1){alert('Nie usunięto ogłoszenia. Sprawdź uprawnienia w bazie danych.');return;}
+ closeGallery();await loadAds();alert('Ogłoszenie zostało usunięte.');
+}
 function quickFilter(brand){const p=getP(); const el=document.getElementById('fMarka'+p); if(el) el.value=brand; document.querySelectorAll('.chip').forEach(c=>c.classList.toggle('active', c.textContent===brand || (brand==='' && c.textContent==='Wszystkie'))); loadAds();}
 function wroomerNormalize(value){
   return String(value??'').toLocaleLowerCase('pl').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/ł/g,'l').trim();
