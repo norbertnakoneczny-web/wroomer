@@ -285,6 +285,19 @@ body{background:radial-gradient(ellipse at 80% 0%,#24200c 0%,#090a0b 38%,#080808
 @media(max-width:600px){.wroomer-owner-tools{flex-direction:column;align-items:stretch;margin-bottom:88px}.wroomer-owner-edit{min-height:48px;width:100%}}
 </style><style id="wroomer-legal-style">.wroomer-legal{margin:16px 20px;padding:14px;border:1px solid #484039;border-radius:12px;background:#1b1c1e;font-size:12px;line-height:1.55;color:#d8d8d8}.wroomer-legal label{display:flex;align-items:flex-start;gap:10px;margin:12px 0;cursor:pointer}.wroomer-legal input{accent-color:#facc15;width:19px;height:19px;flex-shrink:0;margin-top:2px}.wroomer-legal a{color:#facc15;text-decoration:underline}.wroomer-legal p{margin:7px 0}.wroomer-cookie{position:fixed;z-index:99999;bottom:12px;left:12px;right:12px;max-width:620px;margin:auto;background:#191b1e;color:#f6f6f6;border:1px solid #facc15;border-radius:16px;padding:18px;box-shadow:0 8px 60px #000d;font-size:13px;line-height:1.5}.wroomer-cookie h3{color:#facc15;margin:0 0 8px}.wroomer-cookie a{color:#facc15}.wroomer-cookie .actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.wroomer-cookie button{padding:10px 14px;border-radius:10px;border:1px solid #555;background:#292c30;color:white;font-weight:750;cursor:pointer}.wroomer-cookie button:first-child{background:#facc15;color:black;border-color:#facc15}.wroomer-cookie .choices{padding:10px 0}.wroomer-cookie .choices label{display:block;margin:8px 0}.wroomer-cookie input{accent-color:#facc15}@media(max-width:600px){.wroomer-legal{margin:14px 16px}.wroomer-cookie{bottom:0;left:0;right:0;border-radius:15px 15px 0 0}}</style><style id="wroomer-mask-style">
 #addModal #preview .p{aspect-ratio:auto;overflow:visible;display:flex;flex-direction:column}#addModal #preview .p img{aspect-ratio:4/3;border-radius:10px 10px 0 0}#addModal .wroomer-mask-button{background:#38332a;color:#ffdc67;border:0;border-top:1px solid #555;font-size:11px;font-weight:800;padding:8px 4px;cursor:pointer;min-height:36px;border-radius:0 0 10px 10px}.wroomer-mask-overlay{position:fixed;inset:0;z-index:999999;background:#000e;display:grid;place-items:center;padding:14px}.wroomer-mask-panel{width:min(900px,100%);max-height:96dvh;overflow:auto;background:#17191c;border:1px solid #555;border-radius:16px;padding:18px;color:#fff}.wroomer-mask-panel b{color:#facc15;font-size:19px}.wroomer-mask-panel p{font-size:13px;color:#ccc}.wroomer-mask-panel canvas{width:100%;height:auto;max-height:65dvh;object-fit:contain;display:block;background:#000;touch-action:none;cursor:crosshair}.wroomer-mask-actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:14px}.wroomer-mask-actions button{border:1px solid #555;background:#272727;color:#fff;border-radius:9px;padding:11px 13px;cursor:pointer}.wroomer-mask-actions .wroomer-mask-save{background:#facc15;color:#111;font-weight:900;border:0}
+</style><style id="wroomer-report-css">
+.wroomer-report-wrap{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:15px 0;color:#b7b7b7;font-size:12px}
+.wroomer-report-btn{background:#25282d;border:1px solid #737373;border-radius:9px;color:#eee;cursor:pointer;padding:11px 14px;font-weight:750}
+.wroomer-report-btn:hover{border-color:#facc15;color:#facc15}
+#wroomerReportModal{position:fixed;inset:0;z-index:100000;background:#000d;display:none;align-items:center;justify-content:center;padding:15px}
+#wroomerReportModal .report-card{width:min(540px,100%);max-height:90dvh;overflow:auto;background:#191b1e;border:1px solid #444;border-radius:18px;padding:22px;color:#eee}
+#wroomerReportModal label{display:block;margin:14px 0 6px;font-weight:750;font-size:13px}
+#wroomerReportModal input,#wroomerReportModal textarea,#wroomerReportModal select{width:100%;box-sizing:border-box;border:1px solid #51545a;border-radius:9px;padding:12px;background:#272a2f;color:white;font:inherit}
+#wroomerReportModal textarea{min-height:110px;resize:vertical}
+#wroomerReportModal .report-actions{display:flex;gap:10px;margin-top:18px}
+#wroomerReportModal button{border:0;border-radius:9px;padding:12px 15px;font-weight:850;cursor:pointer}
+#wroomerReportModal button[type=submit]{background:#facc15;color:#111;flex:1}
+#wroomerReportModal button[type=button]{background:#3a3c40;color:white}
 </style></head>
 <body>
 <div class="header"><div class="logo">WROOMER<span>.PL</span> <span style="font-size:10px;background:#facc15;color:#000;padding:2px 6px;border-radius:10px">v11 8 KAFELI FIXED</span></div><div style="display:flex;gap:6px;align-items:center"><button class="btn btn-dark" id="btnLogin">Zaloguj</button><button class="btn btn-dark" id="btnLogout" style="display:none">Wyloguj</button><button class="btn btn-yellow" id="btnAdd">+ Dodaj</button></div></div>
@@ -364,7 +377,7 @@ body{background:radial-gradient(ellipse at 80% 0%,#24200c 0%,#090a0b 38%,#080808
 <div class="wroomer-section-title">02 · Kontakt i opis</div><div class="row" style="padding:0 12px"><div><label class="small">Telefon</label><input class="input" id="aPhone" placeholder="600 123 456"></div><div><label class="small">Kolor</label><select class="select" id="aColor"><option value="">Wybierz</option><option>Czarny</option><option>Biały</option><option>Srebrny</option><option>Szary</option><option>Niebieski</option><option>Czerwony</option><option>Zielony</option></select></div></div>
 <label class="small">Opis</label><textarea class="input" id="aDesc" rows="3" placeholder="Stan, wyposażenie..." style="margin:0 12px;width:calc(100% - 24px)"></textarea>
 <div class="wroomer-section-title">03 · Zdjęcia samochodu</div><div class="wroomer-photo-note">Dodaj maksymalnie 20 zdjęć. Automatycznie zmniejszamy ich rozmiar i zapisujemy w lekkim formacie WebP (lub JPEG, jeśli przeglądarka nie obsługuje WebP). Pierwsze zdjęcie będzie główne.</div><label class="file-label"><span id="fileLabelText">📷 Dodaj zdjęcia · maks. 20</span><input type="file" id="aFiles" multiple accept="image/*" style="display:none"></label><div id="photoStatus" class="wroomer-photo-status" aria-live="polite">0 z 20 nowych zdjęć</div><div id="preview"></div><div class="wroomer-photo-note">🔒 Przed publikacją zasłoń tablice rejestracyjne i twarze. Kliknij „Zasłoń tablicę” pod miniaturą, zaznacz obszar i zapisz. Zakrycie jest trwałe — oryginał nie zostanie wysłany.</div>
-<div class="wroomer-legal"><label><input type="checkbox" id="adTerms"><span>Akceptuję <a href="/regulamin.html" target="_blank" rel="noopener">Regulamin</a>. Oświadczam, że odpowiadam za prawdziwość i legalność ogłoszenia, mam prawo oferować pojazd, dysponuję prawami do zdjęć i podstawą prawną do ujawnienia danych lub wizerunków innych osób, jeżeli takie zamieszczam. <b>(wymagane)</b></span></label><label><input type="checkbox" id="adContact"><span>Rozumiem, że numer telefonu podany w ogłoszeniu będzie publicznie widoczny i dostępny dla odwiedzających serwis. <b>(wymagane, jeśli podano numer)</b></span></label><label><input type="checkbox" id="adPhoto"><span>Potwierdzam, że zdjęcia i treści są publikowane przeze mnie zgodnie z prawem i z wymaganymi zgodami lub inną podstawą prawną; sprawdziłem/am zdjęcia oraz zasłoniłem/am widoczne tablice rejestracyjne i twarze. <b>(wymagane)</b></span></label><p>Przetwarzanie danych potrzebnych do publikacji ogłoszenia opisuje <a href="/polityka-prywatnosci.html" target="_blank" rel="noopener">Polityka prywatności</a>. Zgłoszenia naruszeń, zastrzeżenia i żądania dotyczące danych lub zdjęć: <a href="mailto:rodo@wroomer.pl">rodo@wroomer.pl</a>. WROOMER.PL nie jest stroną transakcji ani gwarantem treści ogłoszeń; odpowiedzialność Operatora określają przepisy prawa i Regulamin. Nie jest to zgoda marketingowa. Dokładnych współrzędnych GPS nie zapisujemy w nowych ogłoszeniach. Podawaj tylko miasto; lokalizacja GPS służy wyłącznie do pomocniczego ustalenia miejsca podczas tworzenia ogłoszenia.</p></div><div class="row" style="padding:12px"><button class="btn btn-yellow" style="flex:1;padding:12px;font-weight:900" id="btnSave">Zatwierdź z GPS</button><button class="btn btn-dark" style="flex:1" onclick="closeModals()">Anuluj</button></div>
+<div class="wroomer-legal"><label><input type="checkbox" id="adTerms"><span>Akceptuję <a href="/regulamin.html" target="_blank" rel="noopener">Regulamin</a>. Oświadczam, że odpowiadam za prawdziwość i legalność ogłoszenia, mam prawo oferować pojazd, dysponuję prawami do zdjęć i podstawą prawną do ujawnienia danych lub wizerunków innych osób, jeżeli takie zamieszczam. <b>(wymagane)</b></span></label><label><input type="checkbox" id="adContact"><span>Rozumiem, że numer telefonu podany w ogłoszeniu będzie publicznie widoczny i dostępny dla odwiedzających serwis. <b>(wymagane, jeśli podano numer)</b></span></label><label><input type="checkbox" id="adPhoto"><span>Potwierdzam, że zdjęcia i treści są publikowane przeze mnie zgodnie z prawem i z wymaganymi zgodami lub inną podstawą prawną; sprawdziłem/am zdjęcia pod kątem danych osób trzecich; jeśli publikacja danych lub wizerunków wymaga podstawy prawnej, posiadam taką podstawę lub zakryłem/am te elementy. <b>(wymagane)</b></span></label><p>Przetwarzanie danych potrzebnych do publikacji ogłoszenia opisuje <a href="/polityka-prywatnosci.html" target="_blank" rel="noopener">Polityka prywatności</a>. Zgłoszenia naruszeń, zastrzeżenia i żądania dotyczące danych lub zdjęć: <a href="mailto:rodo@wroomer.pl">rodo@wroomer.pl</a>. WROOMER.PL nie jest stroną transakcji ani gwarantem treści ogłoszeń; odpowiedzialność Operatora określają przepisy prawa i Regulamin. Nie jest to zgoda marketingowa. Zgłoszenia rozpatrujemy indywidualnie. Dokładnych współrzędnych GPS nie zapisujemy w nowych ogłoszeniach. Podawaj tylko miasto; lokalizacja GPS służy wyłącznie do pomocniczego ustalenia miejsca podczas tworzenia ogłoszenia.</p></div><div class="row" style="padding:12px"><button class="btn btn-yellow" style="flex:1;padding:12px;font-weight:900" id="btnSave">Zatwierdź z GPS</button><button class="btn btn-dark" style="flex:1" onclick="closeModals()">Anuluj</button></div>
 </div></div>
 <script>
 const SUPABASE_URL='https://bdpydgsfowtuvjnkyeeg.supabase.co';
@@ -540,6 +553,7 @@ function openGallery(ad){
       <div class="detail-grid">${details.map(([label,value])=>`<div class="detail-item"><span class="label">${escapeHtml(label)}</span><span class="value">${escapeHtml(value||'-')}</span></div>`).join('')}</div>
       <div class="detail-desc"><h4>Opis pojazdu</h4><p>${escapeHtml(cleanDesc||'Sprzedający nie dodał jeszcze opisu pojazdu.')}</p></div>
       ${currentUser && String(ad.user_id||'')===String(currentUser.id) ? `<div class="wroomer-owner-tools"><span>Twoje ogłoszenie</span><button type="button" class="wroomer-owner-edit" onclick="editOwnListing('${String(ad.id).replace(/[^a-zA-Z0-9_-]/g,'')}')">✎ Edytuj ogłoszenie</button></div>` : ''}
+      <div class="wroomer-report-wrap"><button type="button" class="wroomer-report-btn" onclick="wroomerReportListing()">⚑ Zgłoś treść ogłoszenia</button><span>Zgłoszenie przygotujesz na rodo@wroomer.pl</span></div>
       <div class="detail-actions">
         ${hasPhone?`<a class="detail-call" href="tel:${escapeHtml(phoneClean)}">☎ Zadzwoń: ${escapeHtml(phoneClean)}</a>`:''}
         <a class="detail-map" href="https://www.google.com/maps/search/?api=1&amp;query=${encodeURIComponent(mapQuery)}" target="_blank" rel="noopener noreferrer">⌖ Zobacz mapę</a>
@@ -663,4 +677,44 @@ function resetFilters(){
 }
 checkUser(); loadAds();
 </script>
-</body></html>
+<div id="wroomerReportModal" role="dialog" aria-modal="true" aria-labelledby="wroomerReportHeading">
+<form class="report-card" id="wroomerReportForm">
+<h3 id="wroomerReportHeading">⚑ Zgłoś ogłoszenie</h3>
+<p style="font-size:13px;color:#bdbdbd">Wskaż powód i opisz naruszenie. Po kliknięciu „Przygotuj e-mail” otworzy się Twoja aplikacja pocztowa. <strong>Wiadomość trzeba samodzielnie wysłać.</strong></p>
+<label for="wroomerReportUrl">Adres zgłaszanego ogłoszenia</label><input id="wroomerReportUrl" readonly>
+<label for="wroomerReportEmail">Adres e-mail do odpowiedzi</label><input id="wroomerReportEmail" type="email" required autocomplete="email" placeholder="twoj@email.pl"><label for="wroomerReportName">Imię i nazwisko / nazwa zgłaszającego</label><input id="wroomerReportName" required maxlength="120" autocomplete="name" placeholder="Imię i nazwisko"><label for="wroomerReportReason">Rodzaj zgłoszenia</label><select id="wroomerReportReason" required><option value="">Wybierz powód</option><option>Nielegalna treść lub oszustwo</option><option>Naruszenie prywatności / dane osobowe</option><option>Naruszenie praw do zdjęć / praw autorskich</option><option>Fałszywe lub wprowadzające w błąd informacje</option><option>Inne naruszenie</option></select>
+<label for="wroomerReportDetails">Uzasadnienie zgłoszenia</label><textarea id="wroomerReportDetails" required minlength="15" maxlength="4000" placeholder="Opisz, które informacje są niezgodne z prawem lub regulaminem i dlaczego."></textarea>
+<label><input id="wroomerReportGoodFaith" type="checkbox" required style="width:auto"> Potwierdzam, że w dobrej wierze uważam zgłoszone informacje za prawdziwe i kompletne.</label>
+<div class="report-actions"><button type="submit">Przygotuj e-mail</button><button type="button" onclick="document.getElementById('wroomerReportModal').style.display='none'">Anuluj</button></div>
+</form></div><script id="wroomer-report-script">
+function wroomerReportListing(){
+ const ad=window.currentAd;
+ const url=ad ? location.origin+location.pathname+'?ogloszenie='+encodeURIComponent(ad.id) : location.href;
+ document.getElementById('wroomerReportUrl').value=url;
+ document.getElementById('wroomerReportReason').value='';
+ document.getElementById('wroomerReportDetails').value='';
+ document.getElementById('wroomerReportGoodFaith').checked=false;
+ document.getElementById('wroomerReportModal').style.display='flex';
+}
+document.getElementById('wroomerReportForm').addEventListener('submit',function(e){
+ e.preventDefault();
+ const ad=window.currentAd;
+ const reason=document.getElementById('wroomerReportReason').value;
+ const details=document.getElementById('wroomerReportDetails').value.trim();
+ if(!reason||details.length<15||!document.getElementById('wroomerReportGoodFaith').checked)return;
+ const reportEmail=document.getElementById('wroomerReportEmail').value.trim();
+ const reportName=document.getElementById('wroomerReportName').value.trim();
+ if(!reportEmail||!reportName)return;
+ const body=[
+  'Zgłaszający: '+reportName,
+  'E-mail: '+reportEmail,
+  'Adres ogłoszenia: '+document.getElementById('wroomerReportUrl').value,
+  'Id ogłoszenia: '+(ad?.id||'brak'),
+  'Tytuł: '+(ad?.title||'brak'),
+  'Powód: '+reason,
+  'Uzasadnienie: '+details,
+  'Oświadczam, że zgłaszam w dobrej wierze.'
+ ].join('\n');
+ location.href='mailto:rodo@wroomer.pl?subject='+encodeURIComponent('Zgłoszenie WROOMER.PL – '+reason)+'&body='+encodeURIComponent(body);
+});
+</script></body></html>
