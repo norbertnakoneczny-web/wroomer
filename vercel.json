@@ -2,6 +2,10 @@
   "cleanUrls": false,
   "rewrites": [
     {
+      "source": "/sitemap-ogloszenia.xml",
+      "destination": "/api/sitemap"
+    },
+    {
       "source": "/auto/:slug",
       "destination": "/auto.html"
     },
