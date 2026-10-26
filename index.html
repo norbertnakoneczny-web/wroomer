@@ -671,7 +671,9 @@ function openGallery(ad){
   const validField=v=>v!==null&&v!==undefined&&String(v).trim()!==''&&!/^(?:-|(?:-\s*km)|null|undefined)$/i.test(String(v).trim());
   const przeb=[ad.mileage,ex.mileage,ad.przebieg].find(validField)||'-';
   const paliwo=[ad.fuel,ex.fuel,ad.paliwo].find(validField)||'-';
-  const lok=ad.location||'Nie podano lokalizacji';
+  const locationText=String(ad.location??'').trim();
+  const hasLocation=locationText!==''&&!/^(?:-|brak danych|null|undefined)$/i.test(locationText);
+  const lok=hasLocation?locationText:'Nie podano lokalizacji';
   
   const escapeHtml=(v)=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const fmtPrice=Number(price).toLocaleString('pl-PL');
@@ -684,8 +686,8 @@ function openGallery(ad){
   const hasPhone=phoneDigits.length>=7&&phoneDigits.length<=15&&/^(?:\+?\d+)$/.test(phoneClean);
   const lat=ad.lat||ex.lat, lng=ad.lng||ex.lng;
   const hasCoords=lat!==null&&lat!==undefined&&lng!==null&&lng!==undefined&&String(lat).trim()!==''&&String(lng).trim()!==''&&Number.isFinite(Number(lat))&&Number.isFinite(Number(lng))&&Math.abs(Number(lat))<=90&&Math.abs(Number(lng))<=180;
-  const hasMap=Boolean(hasCoords||(ad.location&&String(ad.location).trim()));
-  const mapQuery=hasCoords?`${lat},${lng}`:String(ad.location||'').trim();
+  const hasMap=Boolean(hasCoords||hasLocation);
+  const mapQuery=hasCoords?`${lat},${lng}`:locationText;
   document.getElementById('galleryInfo').innerHTML=`
     <section class="detail-section" aria-label="Szczegóły ogłoszenia">
       <div class="detail-heading"><div>
