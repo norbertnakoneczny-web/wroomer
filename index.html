@@ -783,26 +783,28 @@ document.getElementById('wroomerReportForm').addEventListener('submit',function(
  location.href='mailto:rodo@wroomer.pl?subject='+encodeURIComponent('Zgłoszenie WROOMER.PL – '+reason)+'&body='+encodeURIComponent(body);
 });
 </script><script>
-/* Swipe horizontally on the main gallery photo; retain vertical page scrolling. */
+/* Swipe photos on touchscreens, including Safari/iPhone. */
 (function(){
- let startX=0,startY=0,tracking=false;
- document.addEventListener('touchstart',function(e){
-   if(!e.target.closest('#galleryModal .gallery-main-wrap')||e.target.closest('button'))return;
-   if(!document.getElementById('galleryModal').classList.contains('open'))return;
+ const photo=document.getElementById('galleryMain');
+ if(!photo)return;
+ photo.draggable=false;
+ let x=0,y=0,active=false;
+ function start(e){
    if(e.touches.length!==1)return;
-   startX=e.touches[0].clientX;startY=e.touches[0].clientY;tracking=true;
- },{passive:true});
- document.addEventListener('touchend',function(e){
-   if(!tracking)return;
-   tracking=false;
-   if(!e.changedTouches.length)return;
-   const dx=e.changedTouches[0].clientX-startX;
-   const dy=e.changedTouches[0].clientY-startY;
-   if(Math.abs(dx)<45||Math.abs(dx)<Math.abs(dy)*1.3)return;
-   if(typeof galleryImages==='undefined'||galleryImages.length<2)return;
+   x=e.touches[0].clientX;y=e.touches[0].clientY;active=true;
+ }
+ function end(e){
+   if(!active||!e.changedTouches.length)return;
+   active=false;
+   const dx=e.changedTouches[0].clientX-x;
+   const dy=e.changedTouches[0].clientY-y;
+   if(Math.abs(dx)<35||Math.abs(dx)<=Math.abs(dy)*1.2)return;
+   if(!Array.isArray(galleryImages)||galleryImages.length<2)return;
    if(dx<0)galleryNext();else galleryPrev();
- },{passive:true});
- document.addEventListener('touchcancel',function(){tracking=false;},{passive:true});
+ }
+ photo.addEventListener('touchstart',start,{passive:true});
+ photo.addEventListener('touchend',end,{passive:true});
+ photo.addEventListener('touchcancel',()=>{active=false;},{passive:true});
 })();
 </script>
 </body></html>
