@@ -674,7 +674,9 @@ function openGallery(ad){
   
   const escapeHtml=(v)=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const fmtPrice=Number(price).toLocaleString('pl-PL');
-  const details=[['Marka',marka],['Model',model],['Rok produkcji',rok],['Przebieg',przeb==='-'?'-':String(przeb).includes('km')?przeb:przeb+' km'],['Paliwo',paliwo],['Lokalizacja',lok]];
+  const mileageText=String(przeb??'').trim();
+  const mileageDisplay=/^(?:-|(?:-\s*km)|brak danych)?$/i.test(mileageText)?'-':/\bkm\b/i.test(mileageText)?mileageText:mileageText+' km';
+  const details=[['Marka',marka],['Model',model],['Rok produkcji',rok],['Przebieg',mileageDisplay],['Paliwo',paliwo],['Lokalizacja',lok]];
   const phoneClean=String(ex.telefon||ad.phone||'').replace(/[^+\d]/g,'');
   const hasPhone=phoneClean.replace(/\D/g,'').length>=7;
   const lat=ad.lat||ex.lat, lng=ad.lng||ex.lng;
