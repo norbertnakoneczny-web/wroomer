@@ -723,9 +723,12 @@ function editOwnListing(id){
  document.getElementById('btnSave').textContent='Zapisz zmiany';
 }
 function updateGallery(){
-  document.getElementById('galleryMain').src=galleryImages[galleryIndex]; 
-  document.getElementById('galleryThumbs').querySelectorAll('img').forEach((im,i)=>{im.classList.toggle('active', i===galleryIndex);});
-  const pd=document.getElementById('photoDesc');;
+  if(!galleryImages.length)return;
+  galleryIndex=Math.max(0,Math.min(galleryIndex,galleryImages.length-1));
+  const main=document.getElementById('galleryMain');
+  if(main)main.src=galleryImages[galleryIndex];
+  document.getElementById('galleryThumbs')?.querySelectorAll('img').forEach((im,i)=>{im.classList.toggle('active', i===galleryIndex);});
+  const pd=document.getElementById('photoDesc');
   if(pd){
     const ad=window.currentAd;
     const title=ad?.title||'';
