@@ -11,7 +11,7 @@ export default async function handler(req,res){
     const response=await fetch(API+'/rest/v1/ogloszenia?'+field+'=eq.'+encodeURIComponent(slug)+'&select=*&limit=1',{
       headers:{apikey:KEY,Authorization:'Bearer '+KEY},signal:AbortSignal.timeout(7000)});
     if(!response.ok)throw new Error('Backend response '+response.status);
-    const rows=await response.json(), car=rows[0];
+    const rows=await response.json(), car=Array.isArray(rows)?rows[0]:null;
     if(!car){res.status(404).send('Nie znaleziono ogłoszenia');return;}
     const title=String(car.title||[car.brand,car.model,car.year].filter(Boolean).join(' ')||'Samochód').slice(0,110);
     const url='https://www.wroomer.pl/auto/'+encodeURIComponent(slug);
