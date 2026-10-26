@@ -96,7 +96,7 @@ function updateListingSeo(car, slug) {
   const titleText=String(car.title || [car.brand,car.model,car.year].filter(Boolean).join(' ') || 'Ogłoszenie samochodu').trim().slice(0,110);
   const locationText=String(car.location || '').trim();
   document.title=titleText + (locationText ? ' – '+locationText : '') + ' | WROOMER.PL';
-  const description=[titleText, locationText, car.price ? Number(car.price).toLocaleString('pl-PL')+' zł' : '', 'Zdjęcia i szczegóły ogłoszenia na WROOMER.PL.'].filter(Boolean).join(' • ').slice(0,160);
+  const description=[titleText, locationText, Number.isFinite(Number(car.price)) && Number(car.price)>0 ? Number(car.price).toLocaleString('pl-PL')+' zł' : '', 'Zdjęcia i szczegóły ogłoszenia na WROOMER.PL.'].filter(Boolean).join(' • ').slice(0,160);
   document.querySelector('meta[name="description"]').setAttribute('content',description);
   const canonical=new URL('/auto/'+encodeURIComponent(slug), 'https://www.wroomer.pl');
   let canonicalLink=document.querySelector('link[rel="canonical"]');
