@@ -2,7 +2,7 @@
 const API='https://bdpydgsfowtuvjnkyeeg.supabase.co';
 const KEY='sb_publishable_S1qH_mBZaX7-bzmfJ0IVGA_6hxGbJWd';
 const BASE='https://www.wroomer.pl';
-// Static pages are published separately via /sitemap.xml.\nconst pages=['/','/blog/','/blog/najmniejsze-spalanie-auta-benzynowe-2026.html','/blog/samochody-do-20-tysiecy-dla-rodziny.html','/blog/jak-nie-kupic-auta-z-cofnietym-licznikiem.html','/blog/ile-kosztuje-przerejestrowanie-auta-2026.html','/blog/rejestracja-auta-z-niemiec-krok-po-kroku.html','/blog/oc-na-miesiac-czy-warto-krotkoterminowe.html','/blog/jak-szybko-sprzedac-samochod-24h.html','/blog/umowa-kupna-sprzedazy-samochodu-wzor-2026.html','/polityka-prywatnosci.html','/regulamin.html'];
+// Static pages are published separately via /sitemap.xml.
 export default async function handler(req,res){
  if(req.method!=='GET'){res.setHeader('Allow','GET');return res.status(405).end();}
  try{
@@ -19,6 +19,7 @@ export default async function handler(req,res){
    if(rows.length<500)break;
    if(offset===9500)throw Error('Sitemap pagination limit exceeded');
   }
+  if(urls.size===0)throw Error('No public listings returned');
   const xml='<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+[...urls].map(url=>'  <url><loc>'+url.replace(/&/g,'&amp;')+'</loc></url>').join('\n')+'\n</urlset>';
   res.setHeader('Content-Type','application/xml; charset=utf-8');
   res.setHeader('Cache-Control','public, s-maxage=600, stale-while-revalidate=3600');
