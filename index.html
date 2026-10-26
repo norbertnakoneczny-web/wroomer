@@ -303,6 +303,30 @@ body{background:radial-gradient(ellipse at 80% 0%,#24200c 0%,#090a0b 38%,#080808
 #galleryModal .gallery-main-wrap{touch-action:auto}
 @media(max-width:700px){#galleryModal .gallery-nav{width:52px !important;height:52px !important;font-size:30px !important}}
 </style>
+<style id="wroomer-mobile-layout-fix-v1">
+@media(max-width:700px){
+ html,body{max-width:100%;overflow-x:clip}
+ .header{width:100%;min-width:0;padding:0 8px !important;gap:5px}
+ .header .logo{min-width:0;flex:0 1 auto;font-size:clamp(15px,4.4vw,19px) !important;white-space:nowrap}
+ .header .logo>span[style]{display:none !important}
+ .header>div:last-child{min-width:0;flex:0 0 auto;gap:4px !important}
+ .header .btn{font-size:11px !important;padding:8px 9px !important;white-space:nowrap}
+ .wroomer-search{width:100%;min-width:0;gap:6px;padding:0 8px !important}
+ .wroomer-search span{font-size:20px}
+ .wroomer-search input{min-width:0;width:0;flex:1 1 auto;padding:10px !important;font-size:13px}
+ .wroomer-search button{flex:0 0 auto;max-width:34vw;font-size:11px !important;padding:10px 11px !important}
+ .mobile-top-bar{width:100%;min-width:0}
+ .mobile-top-bar .btn{min-width:0;white-space:normal;font-size:12px;padding:10px 8px !important}
+ #galleryModal .modal-header{gap:8px}
+ #galleryModal .modal-header h3{min-width:0}
+ #galleryModal .gallery-nav{width:44px !important;height:44px !important;font-size:25px !important}
+}
+@media(max-width:370px){
+ .header .btn{padding:7px 6px !important;font-size:10px !important}
+ .header .logo{font-size:15px !important}
+ .wroomer-search button{padding:10px 8px !important}
+}
+</style>
 </head>
 <body>
 <div class="header"><div class="logo">WROOMER<span>.PL</span> <span style="font-size:10px;background:#facc15;color:#000;padding:2px 6px;border-radius:10px">v11 8 KAFELI FIXED</span></div><div style="display:flex;gap:6px;align-items:center"><button class="btn btn-dark" id="btnLogin">Zaloguj</button><button class="btn btn-dark" id="btnLogout" style="display:none">Wyloguj</button><button class="btn btn-yellow" id="btnAdd">+ Dodaj</button></div></div>
