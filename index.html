@@ -699,8 +699,9 @@ async function loadAds(){
     }
     grid.innerHTML=filtered.map(o=>{
       const img=o.image_url||(o.images&&o.images[0])||'';
+      const thumb=img.includes('/storage/v1/object/public/ogloszenia/')?img.replace('/storage/v1/object/public/','/storage/v1/render/image/public/')+(img.includes('?')?'&':'?')+'width=480&quality=75&resize=contain':img;
       const cnt=o.images?.length|| (o.image_url?1:0);
-      return `<div class="card" onclick="openGallery(allAds.find(a=>a.id==='${o.id}'))"><div class="card-img-wrap"><img src="${img}" loading="lazy" alt=""><div class="card-img-count">📷 ${cnt}</div></div><div class="card-body"><div class="card-title">${o.title||''}</div><div class="card-price">${o.price} PLN</div><div class="card-location">${o.location||''} • ${o.year||''}</div></div></div>`;
+      return `<div class="card" onclick="openGallery(allAds.find(a=>a.id==='${o.id}'))"><div class="card-img-wrap"><img src="${thumb}" loading="lazy" decoding="async" alt="" onerror="if(this.src!==this.dataset.original){this.src=this.dataset.original}" data-original="${img}"><div class="card-img-count">📷 ${cnt}</div></div><div class="card-body"><div class="card-title">${o.title||''}</div><div class="card-price">${o.price} PLN</div><div class="card-location">${o.location||''} • ${o.year||''}</div></div></div>`;
     }).join('');
   }catch(e){if(requestId!==wroomerLatestRequest)return;grid.innerHTML='<div style="grid-column:1/-1;padding:20px;background:#3a1111">Błąd: '+(e.message||e)+'</div>';}
 }
