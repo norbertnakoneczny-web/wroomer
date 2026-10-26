@@ -6,6 +6,11 @@
 <title>Ogłoszenie samochodu | WROOMER.PL</title>
 <meta name="description" content="Sprawdź szczegóły samochodu, zdjęcia, wyposażenie i dane sprzedającego na WROOMER.PL.">
 <meta name="robots" content="index,follow">
+<meta property="og:type" content="product">
+<meta property="og:site_name" content="WROOMER.PL">
+<meta property="og:title" content="Ogłoszenie samochodu | WROOMER.PL">
+<meta property="og:description" content="Sprawdź samochód na WROOMER.PL.">
+<meta name="twitter:card" content="summary_large_image">
 
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -102,6 +107,11 @@ function updateListingSeo(car, slug) {
   let canonicalLink=document.querySelector('link[rel="canonical"]');
   if(!canonicalLink){canonicalLink=document.createElement('link');canonicalLink.rel='canonical';document.head.appendChild(canonicalLink);}
   canonicalLink.href=canonical.href;
+  const setMeta=(selector,attr,value)=>{let el=document.querySelector(selector);if(!el){el=document.createElement('meta');el.setAttribute(attr,selector.includes('property=')?selector.match(/property="([^"]+)/)[1]:selector.match(/name="([^"]+)/)[1]);document.head.appendChild(el);}el.setAttribute('content',value);};
+  setMeta('meta[property="og:title"]','property',document.title);
+  setMeta('meta[property="og:description"]','property',description);
+  setMeta('meta[property="og:url"]','property',canonical.href);
+  if(imgs.length)setMeta('meta[property="og:image"]','property',imgs[0]);
   const old=document.getElementById('listing-structured-data'); if(old)old.remove();
   const json=document.createElement('script');
   json.type='application/ld+json';json.id='listing-structured-data';
