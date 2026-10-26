@@ -732,8 +732,8 @@ function updateGallery(){
   }
 }
 
-function galleryPrev(){galleryIndex=(galleryIndex-1+galleryImages.length)%galleryImages.length; updateGallery();}
-function galleryNext(){galleryIndex=(galleryIndex+1)%galleryImages.length; updateGallery();}
+function galleryPrev(){if(!galleryImages.length)return;galleryIndex=(galleryIndex-1+galleryImages.length)%galleryImages.length;updateGallery();}
+function galleryNext(){if(!galleryImages.length)return;galleryIndex=(galleryIndex+1)%galleryImages.length;updateGallery();}
 async function deleteAd(id){
  if(!currentUser){alert('Zaloguj się, aby usunąć ogłoszenie.');return;}
  const ad=allAds.find(item=>String(item.id)===String(id));
