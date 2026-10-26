@@ -802,7 +802,7 @@ async function loadAds(){
       return;
     }
     grid.innerHTML=filtered.map(o=>{
-      const img=String(o.image_url||(o.images&&o.images[0])||'');
+      const img=String(o.image_url||(Array.isArray(o.images)?o.images[0]:'')||'');
       const safeImg=(()=>{try{const u=new URL(img);return (u.protocol==='https:'||u.protocol==='http:')?u.href:'';}catch{return '';}})();
       const thumb=safeImg.includes('/storage/v1/object/public/ogloszenia/')?safeImg.replace('/storage/v1/object/public/','/storage/v1/render/image/public/')+(safeImg.includes('?')?'&':'?')+'width=480&quality=75&resize=contain':safeImg;
       const cnt=Array.isArray(o.images)?o.images.length:(o.image_url?1:0);
