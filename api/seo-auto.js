@@ -20,7 +20,7 @@ export default async function handler(req,res){
     if(typeof car.images==='string'){try{pictures=JSON.parse(car.images)}catch{pictures=[car.images]}}
     if(!Array.isArray(pictures))pictures=[];
     if(car.image_url)pictures.unshift(car.image_url);
-    pictures=pictures.filter(x=>typeof x==='string'&&/^https:\/\//.test(x)).slice(0,8);
+    pictures=[...new Set(pictures.filter(x=>typeof x==='string').map(x=>x.trim()).filter(x=>{try{const u=new URL(x);return u.protocol==='https:';}catch{return false;}}))].slice(0,8);
     const schema={'@context':'https://schema.org','@type':'Car',name:title,url,description:String(car.description||title).slice(0,500),...(car.brand?{brand:{'@type':'Brand',name:car.brand}}:{}),...(car.model?{model:car.model}:{}),...(pictures.length?{image:pictures}:{})};
     const price=Number.isFinite(Number(car.price))&&Number(car.price)>0?Number(car.price).toLocaleString('pl-PL')+' zł':'';
     res.setHeader('Content-Type','text/html; charset=utf-8');
