@@ -87,7 +87,7 @@ function render(){
   const lbc=document.getElementById('lbcounter'); if(lbc) lbc.innerText = `${cur+1} / ${imgs.length}`;
   document.querySelectorAll('.thumbs img').forEach((el,i)=>el.classList.toggle('active', i===cur));
 }
-function openLB(i){ if(!imgs.length)return; cur=i; document.getElementById('lbimg').src=imgs[cur]; document.getElementById('lightbox').classList.add('open'); render(); }
+function openLB(i){ if(!imgs.length)return; cur=Math.max(0,Math.min(Number(i)||0,imgs.length-1)); document.getElementById('lbimg').src=imgs[cur]; document.getElementById('lightbox').classList.add('open'); render(); }
 function closeLB(){ document.getElementById('lightbox').classList.remove('open'); }
 function nextImg(){ if(!imgs.length)return; cur=(cur+1)%imgs.length; document.getElementById('mainImg').src=imgs[cur]; document.getElementById('lbimg').src=imgs[cur]; render(); }
 function prevImg(){ if(!imgs.length)return; cur=(cur-1+imgs.length)%imgs.length; document.getElementById('mainImg').src=imgs[cur]; document.getElementById('lbimg').src=imgs[cur]; render(); }
