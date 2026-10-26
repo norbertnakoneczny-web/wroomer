@@ -641,7 +641,7 @@ function openGallery(ad){
   }); 
   
   const ex=parseExtra(ad.description||''); 
-  const cleanDesc=(ad.description||'').split('\n\n[')[0].split('\n[')[0]; 
+  const cleanDesc=String(ad.description||'').replace(/\s*\[(?:Przebieg|Paliwo)\s*:[^\]\r\n]*\]\s*$/i,'').trim(); 
   const price=ad.price||0;
   const title=ad.title||'';
   const marka=ad.brand||ad.marka||'';
