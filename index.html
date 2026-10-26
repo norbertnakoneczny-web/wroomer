@@ -457,8 +457,9 @@ function isMobile(){return window.innerWidth<=900;}
 function getP(){return isMobile()?'M':'D';}
 function toggleMobileFilters(){const d=document.getElementById('mobileDrawer'); mobileFiltersOpen=!mobileFiltersOpen; if(mobileFiltersOpen){d.classList.add('open'); document.body.style.overflow='hidden';} else{d.classList.remove('open'); document.body.style.overflow='';}}
 function applyMobileAndHide(){const d=document.getElementById('mobileDrawer'); d.classList.remove('open'); mobileFiltersOpen=false; document.body.style.overflow=''; loadAds(); window.scrollTo({top:0,behavior:'smooth'});}
-function showError(id,msg){const el=document.getElementById(id); if(el) el.innerHTML='<div class="error">'+msg+'</div>';}
-function showSuccess(id,msg){const el=document.getElementById(id); if(el) el.innerHTML='<div class="success">'+msg+'</div>';}
+function showNotice(id,msg,type){const el=document.getElementById(id);if(!el)return;const notice=document.createElement('div');notice.className=type;notice.textContent=String(msg??'');el.replaceChildren(notice);}
+function showError(id,msg){showNotice(id,msg,'error');}
+function showSuccess(id,msg){showNotice(id,msg,'success');}
 async function checkUser(){try{const s=await supabaseClient.auth.getSession(); currentUser=s?.data?.session?.user||null; updateAuthUI();}catch(e){}}
 function updateAuthUI(){const bl=document.getElementById('btnLogin'), bo=document.getElementById('btnLogout'); if(currentUser){bl.style.display='none';bo.style.display='inline-block';}else{bl.style.display='inline-block';bo.style.display='none';}}
 function openLoginModal(){const modal=document.getElementById('loginModal');if(!modal)return;modal.style.display='flex';modal.classList.add('open');document.getElementById('loginError').textContent='';}
