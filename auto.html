@@ -6,7 +6,7 @@
 <title>Ogłoszenie samochodu | WROOMER.PL</title>
 <meta name="description" content="Sprawdź szczegóły samochodu, zdjęcia, wyposażenie i dane sprzedającego na WROOMER.PL.">
 <meta name="robots" content="index,follow">
-<link rel="canonical" href="https://www.wroomer.pl/">
+
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{width:100%;overflow-x:hidden}
@@ -94,7 +94,9 @@ function updateListingSeo(car, slug) {
   const description=[titleText, locationText, car.price ? Number(car.price).toLocaleString('pl-PL')+' zł' : '', 'Zdjęcia i szczegóły ogłoszenia na WROOMER.PL.'].filter(Boolean).join(' • ').slice(0,160);
   document.querySelector('meta[name="description"]').setAttribute('content',description);
   const canonical=new URL('/auto/'+encodeURIComponent(slug), 'https://www.wroomer.pl');
-  document.querySelector('link[rel="canonical"]').setAttribute('href',canonical.href);
+  let canonicalLink=document.querySelector('link[rel="canonical"]');
+  if(!canonicalLink){canonicalLink=document.createElement('link');canonicalLink.rel='canonical';document.head.appendChild(canonicalLink);}
+  canonicalLink.href=canonical.href;
   const old=document.getElementById('listing-structured-data'); if(old)old.remove();
   const json=document.createElement('script');
   json.type='application/ld+json';json.id='listing-structured-data';
