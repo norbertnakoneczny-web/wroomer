@@ -627,7 +627,7 @@ document.getElementById('btnSave').onclick=async()=>{if(!(await wroomerCanEditAd
 function openGallery(ad){
   const modal=document.getElementById('galleryModal'); 
   window.currentAd=ad;
-  galleryImages = ad.images && ad.images.length>0 ? ad.images : (ad.image_url?[ad.image_url]:[]); 
+  galleryImages=[...new Set([...(Array.isArray(ad.images)?ad.images:[]),ad.image_url].filter(url=>typeof url==='string'&&/^https?:\/\//i.test(url.trim())).map(url=>url.trim()))]; 
   galleryIndex=0; 
   if(galleryImages.length===0){alert('Brak zdjęć'); return;} 
   document.getElementById('galleryTitle').textContent=ad.title; 
