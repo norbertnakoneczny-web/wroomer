@@ -18,6 +18,7 @@ export default async function handler(req,res){
     const description=[title,car.location,car.price?Number(car.price).toLocaleString('pl-PL')+' zł':'','Oferta na WROOMER.PL'].filter(Boolean).join(' • ').slice(0,160);
     let pictures=Array.isArray(car.images)?car.images:[];
     if(typeof car.images==='string'){try{pictures=JSON.parse(car.images)}catch{pictures=[car.images]}}
+    if(!Array.isArray(pictures))pictures=[];
     if(car.image_url)pictures.unshift(car.image_url);
     pictures=pictures.filter(x=>typeof x==='string'&&/^https:\/\//.test(x)).slice(0,8);
     const schema={'@context':'https://schema.org','@type':'Car',name:title,url,description:String(car.description||title).slice(0,500),...(car.brand?{brand:{'@type':'Brand',name:car.brand}}:{}),...(car.model?{model:car.model}:{}),...(pictures.length?{image:pictures}:{})};
