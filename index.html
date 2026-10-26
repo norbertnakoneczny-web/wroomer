@@ -657,7 +657,9 @@ function openGallery(ad){
   const phoneClean=String(ex.telefon||ad.phone||'').replace(/[^+\d]/g,'');
   const hasPhone=phoneClean.replace(/\D/g,'').length>=7;
   const lat=ad.lat||ex.lat, lng=ad.lng||ex.lng;
-  const mapQuery=lat&&lng&&lat!=='-'&&lng!=='-'?`${lat},${lng}`:lok;
+  const hasCoords=lat&&lng&&lat!=='-'&&lng!=='-'&&Number.isFinite(Number(lat))&&Number.isFinite(Number(lng));
+  const hasMap=Boolean(hasCoords||(ad.location&&String(ad.location).trim()));
+  const mapQuery=hasCoords?`${lat},${lng}`:String(ad.location||'').trim();
   document.getElementById('galleryInfo').innerHTML=`
     <section class="detail-section" aria-label="Szczegóły ogłoszenia">
       <div class="detail-heading"><div>
@@ -671,7 +673,7 @@ function openGallery(ad){
       <div class="wroomer-report-wrap"><button type="button" class="wroomer-report-btn" onclick="wroomerReportListing()">⚑ Zgłoś treść ogłoszenia</button><span>Zgłoszenie przygotujesz na rodo@wroomer.pl</span></div>
       <div class="detail-actions">
         ${hasPhone?`<a class="detail-call" href="tel:${escapeHtml(phoneClean)}">☎ Zadzwoń: ${escapeHtml(phoneClean)}</a>`:''}
-        <a class="detail-map" href="https://www.google.com/maps/search/?api=1&amp;query=${encodeURIComponent(mapQuery)}" target="_blank" rel="noopener noreferrer">⌖ Zobacz mapę</a>
+        ${hasMap?`<a class="detail-map" href="https://www.google.com/maps/search/?api=1&amp;query=${encodeURIComponent(mapQuery)}" target="_blank" rel="noopener noreferrer">⌖ Zobacz mapę</a>`:""}
       </div>
     </section>`;
   modal.classList.add('open'); 
