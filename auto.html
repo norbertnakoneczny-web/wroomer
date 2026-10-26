@@ -3,7 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
-<title>Wroomer</title>
+<title>Ogłoszenie samochodu | WROOMER.PL</title>
+<meta name="description" content="Sprawdź szczegóły samochodu, zdjęcia, wyposażenie i dane sprzedającego na WROOMER.PL.">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="https://www.wroomer.pl/">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{width:100%;overflow-x:hidden}
@@ -83,6 +86,31 @@ function openLB(i){ cur=i; document.getElementById('lbimg').src=imgs[cur]; docum
 function closeLB(){ document.getElementById('lightbox').classList.remove('open'); }
 function nextImg(){ cur=(cur+1)%imgs.length; document.getElementById('mainImg').src=imgs[cur]; document.getElementById('lbimg').src=imgs[cur]; render(); }
 function prevImg(){ cur=(cur-1+imgs.length)%imgs.length; document.getElementById('mainImg').src=imgs[cur]; document.getElementById('lbimg').src=imgs[cur]; render(); }
+
+function updateListingSeo(car, slug) {
+  const titleText=String(car.title || [car.brand,car.model,car.year].filter(Boolean).join(' ') || 'Ogłoszenie samochodu').trim().slice(0,110);
+  const locationText=String(car.location || '').trim();
+  document.title=titleText + (locationText ? ' – '+locationText : '') + ' | WROOMER.PL';
+  const description=[titleText, locationText, car.price ? Number(car.price).toLocaleString('pl-PL')+' zł' : '', 'Zdjęcia i szczegóły ogłoszenia na WROOMER.PL.'].filter(Boolean).join(' • ').slice(0,160);
+  document.querySelector('meta[name="description"]').setAttribute('content',description);
+  const canonical=new URL('/auto/'+encodeURIComponent(slug), 'https://www.wroomer.pl');
+  document.querySelector('link[rel="canonical"]').setAttribute('href',canonical.href);
+  const old=document.getElementById('listing-structured-data'); if(old)old.remove();
+  const json=document.createElement('script');
+  json.type='application/ld+json';json.id='listing-structured-data';
+  json.textContent=JSON.stringify({
+    '@context':'https://schema.org','@type':'Car',
+    name:titleText,
+    description:String(car.description || titleText).slice(0,500),
+    url:canonical.href,
+    ...(imgs.length ? {image:imgs.slice(0,5)} : {}),
+    ...(car.brand ? {brand:{'@type':'Brand',name:String(car.brand)}} : {}),
+    ...(car.model ? {model:String(car.model)} : {}),
+    ...(car.year && /^\\d{4}$/.test(String(car.year)) ? {vehicleModelDate:String(car.year)} : {})
+  }).replace(/</g,'\\u003c');
+  document.head.appendChild(json);
+}
+
 async function load(){
   const slug=location.pathname.split('/').pop().split('?')[0];
   const el=document.getElementById('content');
@@ -90,8 +118,8 @@ async function load(){
     const r=await fetch(`${SUPABASE_URL}/rest/v1/ogloszenia?slug=eq.${slug}&select=*`,{headers:{apikey:SUPABASE_KEY,Authorization:`Bearer ${SUPABASE_KEY}`}});
     const [car]=await r.json();
     if(!car){ el.innerHTML=`<div style="padding:40px"><h1>Nie znaleziono</h1></div>`; return; }
-    document.title=car.title+" - Wroomer.pl";
     imgs=getImages(car);
+    updateListingSeo(car, slug);
     if(imgs.length===0) imgs=['https://via.placeholder.com/800x600/151515/666?text=Brak+zdjec'];
     el.innerHTML=`
       <div class="gallery-main" id="galleryMain">
