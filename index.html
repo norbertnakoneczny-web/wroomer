@@ -763,15 +763,16 @@ async function loadAds(){
   const p=isMobile()?'M':'D';
   const get=id=>document.getElementById(id+p)?.value??'';
   const marka=get('fMarka'),model=get('fModel'),lok=get('fLok');
-  const cenaOd=Number(get('fCenaOd')),cenaDo=Number(get('fCenaDo'));
-  const rokOd=Number(get('fRokOd')),rokDo=Number(get('fRokDo'));
+  const parseFilterNumber=value=>{const raw=String(value??'').trim();return raw!==''&&Number.isFinite(Number(raw))?Number(raw):null;};
+  const cenaOd=parseFilterNumber(get('fCenaOd')),cenaDo=parseFilterNumber(get('fCenaDo'));
+  const rokOd=parseFilterNumber(get('fRokOd')),rokDo=parseFilterNumber(get('fRokDo'));
   const paliwo=get('fPaliwo'),sort=get('fSort')||'newest';
   const search=document.getElementById('wroomerQuickSearch')?.value||'';
   grid.innerHTML="<div class=\"card\" aria-hidden=\"true\"><div class=\"card-img-wrap\"></div><div class=\"card-body\"><div class=\"card-title\">Ładowanie ogłoszeń…</div></div></div><div class=\"card\" aria-hidden=\"true\"><div class=\"card-img-wrap\"></div><div class=\"card-body\"><div class=\"card-title\">Ładowanie ogłoszeń…</div></div></div><div class=\"card\" aria-hidden=\"true\"><div class=\"card-img-wrap\"></div><div class=\"card-body\"><div class=\"card-title\">Ładowanie ogłoszeń…</div></div></div><div class=\"card\" aria-hidden=\"true\"><div class=\"card-img-wrap\"></div><div class=\"card-body\"><div class=\"card-title\">Ładowanie ogłoszeń…</div></div></div><div class=\"card\" aria-hidden=\"true\"><div class=\"card-img-wrap\"></div><div class=\"card-body\"><div class=\"card-title\">Ładowanie ogłoszeń…</div></div></div><div class=\"card\" aria-hidden=\"true\"><div class=\"card-img-wrap\"></div><div class=\"card-body\"><div class=\"card-title\">Ładowanie ogłoszeń…</div></div></div><div class=\"card\" aria-hidden=\"true\"><div class=\"card-img-wrap\"></div><div class=\"card-body\"><div class=\"card-title\">Ładowanie ogłoszeń…</div></div></div><div class=\"card\" aria-hidden=\"true\"><div class=\"card-img-wrap\"></div><div class=\"card-body\"><div class=\"card-title\">Ładowanie ogłoszeń…</div></div></div><div class=\"card\" aria-hidden=\"true\"><div class=\"card-img-wrap\"></div><div class=\"card-body\"><div class=\"card-title\">Ładowanie ogłoszeń…</div></div></div><div class=\"card\" aria-hidden=\"true\"><div class=\"card-img-wrap\"></div><div class=\"card-body\"><div class=\"card-title\">Ładowanie ogłoszeń…</div></div></div><div class=\"card\" aria-hidden=\"true\"><div class=\"card-img-wrap\"></div><div class=\"card-body\"><div class=\"card-title\">Ładowanie ogłoszeń…</div></div></div><div class=\"card\" aria-hidden=\"true\"><div class=\"card-img-wrap\"></div><div class=\"card-body\"><div class=\"card-title\">Ładowanie ogłoszeń…</div></div></div>";
   try{
     let q=supabaseClient.from('ogloszenia').select('*').eq('is_banned',false).order('created_at',{ascending:false}).limit(500);
-    if(cenaOd>0)q=q.gte('price',cenaOd);
-    if(cenaDo>0)q=q.lte('price',cenaDo);
+    if(cenaOd!==null&&cenaOd>=0)q=q.gte('price',cenaOd);
+    if(cenaDo!==null&&cenaDo>=0)q=q.lte('price',cenaDo);
     const result=await q;
     if(requestId!==wroomerLatestRequest)return;
     if(result.error)throw result.error;
@@ -781,8 +782,8 @@ async function loadAds(){
       if(marka&&!full.includes(wroomerNormalize(marka)))return false;
       if(model&&!full.includes(wroomerNormalize(model)))return false;
       if(lok&&!wroomerNormalize(ad.location).includes(wroomerNormalize(lok)))return false;
-      if(rokOd&&Number(ad.year||0)<rokOd)return false;
-      if(rokDo&&Number(ad.year||0)>rokDo)return false;
+      if(rokOd!==null&&Number(ad.year||0)<rokOd)return false;
+      if(rokDo!==null&&Number(ad.year||0)>rokDo)return false;
       if(paliwo&&!wroomerNormalize(parseExtra(ad.description||'').fuel).includes(wroomerNormalize(paliwo)))return false;
       return wroomerMatch(ad,search);
     });
