@@ -67,12 +67,14 @@ h1{margin:0;font-size:30px}.meta{color:#888;margin:8px 0}.price{font-size:36px;c
 const SUPABASE_URL="https://bdpydgsfowtuvjnkyeeg.supabase.co";
 const SUPABASE_KEY="sb_publishable_S1qH_mBZaX7-bzmfJ0IVGA_6hxGbJWd";
 let imgs=[], cur=0, startX=0;
+const escapeHtml=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const safeImage=x=>{try{const u=new URL(String(x));return ['https:','http:'].includes(u.protocol)?u.href:'';}catch{return '';}};
 function getImages(car){
   let a=[];
   if(Array.isArray(car.images)) a=car.images;
   else if(typeof car.images==='string'){ try{a=JSON.parse(car.images)}catch{a=[car.images]} }
   if(car.image_url) a.unshift(car.image_url);
-  return [...new Set(a.filter(Boolean).map(s=>String(s).trim()))].slice(0,20);
+  return [...new Set(a.map(s=>safeImage(s)).filter(Boolean))].slice(0,20);
 }
 function render(){
   const mainImg = document.getElementById('mainImg');
@@ -119,25 +121,29 @@ async function load(){
   try{
     const lookupField=/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(slug)?'id':'slug';
     const r=await fetch(`${SUPABASE_URL}/rest/v1/ogloszenia?${lookupField}=eq.${encodeURIComponent(slug)}&select=*`,{headers:{apikey:SUPABASE_KEY,Authorization:`Bearer ${SUPABASE_KEY}`}});
-    const [car]=await r.json();
+    if(!r.ok)throw new Error('Nie udało się pobrać ogłoszenia');
+    const rows=await r.json();
+    const car=Array.isArray(rows)?rows[0]:null;
     if(!car){ el.innerHTML=`<div style="padding:40px"><h1>Nie znaleziono</h1></div>`; return; }
     imgs=getImages(car);
     updateListingSeo(car, slug);
-    if(imgs.length===0) imgs=['https://via.placeholder.com/800x600/151515/666?text=Brak+zdjec'];
+    if(imgs.length===0) imgs=['https://placehold.co/800x600/151515/999999?text=Brak+zdjec'];
+    const phone=String(car.phone||'').trim();
+    const safePhone=/^\+?[0-9 ()-]{6,24}$/.test(phone)&&phone.replace(/\D/g,'').length>=6?phone:'';
     el.innerHTML=`
       <div class="gallery-main" id="galleryMain">
-        <img id="mainImg" src="${imgs[0]}" onclick="openLB(0)">
+        <img id="mainImg" src="${escapeHtml(imgs[0])}" onclick="openLB(0)">
         <span class="nav prev" onclick="event.stopPropagation(); prevImg()">‹</span>
         <span class="nav next" onclick="event.stopPropagation(); nextImg()">›</span>
         <span class="counter" id="mainCounter">1 / ${imgs.length}</span>
       </div>
-      <div class="thumbs">${imgs.map((s,i)=>`<img src="${s}" class="${i===0?'active':''}" onclick="cur=${i}; document.getElementById('mainImg').src=imgs[${i}]; render()" loading="lazy">`).join('')}</div>
+      <div class="thumbs">${imgs.map((s,i)=>`<img src="${escapeHtml(s)}" class="${i===0?'active':''}" onclick="cur=${i}; document.getElementById('mainImg').src=imgs[${i}]; render()" loading="lazy">`).join('')}</div>
       <div class="info">
-        <h1>${car.title||''}</h1>
-        <div class="meta">${car.brand||''} ${car.model||''} • ${car.location||''} • ${car.year||''}r</div>
+        <h1>${escapeHtml(car.title||'')}</h1>
+        <div class="meta">${escapeHtml(car.brand||'')} ${escapeHtml(car.model||'')} • ${escapeHtml(car.location||'')} • ${escapeHtml(car.year||'')}r</div>
         <div class="price">${car.price?Number(car.price).toLocaleString('pl-PL')+' PLN':''}</div>
-        <div class="desc">${car.description||''}</div>
-        <a class="btn" href="tel:${car.phone||'501705817'}">📞 ZADZWOŃ: ${car.phone||'501705817'}</a>
+        <div class="desc">${escapeHtml(car.description||'')}</div>
+        ${safePhone?`<a class="btn" href="tel:${escapeHtml(safePhone.replace(/[^+\d]/g,''))}">📞 ZADZWOŃ: ${escapeHtml(safePhone)}</a>`:'<div class="meta">Numer telefonu niedostępny</div>'}
         <div style="margin-top:20px"><a href="/" style="color:#666;text-decoration:none">← Wróć do listy</a></div>
       </div>
     `;
@@ -153,7 +159,7 @@ async function load(){
       const dx=e.changedTouches[0].clientX-startX;
       if(Math.abs(dx)>50){ dx<0?nextImg():prevImg(); }
     });
-  }catch(e){ el.innerHTML='Błąd: '+e.message; }
+  }catch(e){ el.textContent='Nie udało się wczytać ogłoszenia. Spróbuj ponownie później.'; }
 }
 load();
 </script>
