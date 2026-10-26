@@ -790,7 +790,7 @@ async function loadAds(){
     const validPrice=ad=>ad.price!==null&&ad.price!==undefined&&String(ad.price).trim()!==''&&Number.isFinite(Number(ad.price))&&Number(ad.price)>=0?Number(ad.price):null;
     if(sort==='price_asc'||sort==='price_desc')filtered.sort((a,b)=>{const ap=validPrice(a),bp=validPrice(b);if(ap===null)return bp===null?0:1;if(bp===null)return -1;return sort==='price_asc'?ap-bp:bp-ap;});
     else if(sort==='distance'&&searchLat!=null&&searchLng!=null){
-      const distance=ad=>{const ex=parseExtra(ad.description||'');const lat=Number(ex.lat),lng=Number(ex.lng);if(!Number.isFinite(lat)||!Number.isFinite(lng)||!lat||!lng)return Infinity;const rad=Math.PI/180,dLat=(lat-searchLat)*rad,dLng=(lng-searchLng)*rad,a=Math.sin(dLat/2)**2+Math.cos(searchLat*rad)*Math.cos(lat*rad)*Math.sin(dLng/2)**2;return 6371*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));};
+      const distance=ad=>{const ex=parseExtra(ad.description||'');const lat=Number(ex.lat),lng=Number(ex.lng);if(ex.lat===undefined||ex.lat===null||String(ex.lat).trim()===''||ex.lng===undefined||ex.lng===null||String(ex.lng).trim()===''||!Number.isFinite(lat)||!Number.isFinite(lng)||Math.abs(lat)>90||Math.abs(lng)>180)return Infinity;const rad=Math.PI/180,dLat=(lat-searchLat)*rad,dLng=(lng-searchLng)*rad,a=Math.sin(dLat/2)**2+Math.cos(searchLat*rad)*Math.cos(lat*rad)*Math.sin(dLng/2)**2;return 6371*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));};
       filtered.sort((a,b)=>distance(a)-distance(b));
     }else filtered.sort((a,b)=>new Date(b.created_at||0)-new Date(a.created_at||0));
     ['countD','countM'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=filtered.length+' ogłoszeń';});
