@@ -106,8 +106,8 @@ function updateListingSeo(car, slug) {
     ...(imgs.length ? {image:imgs.slice(0,5)} : {}),
     ...(car.brand ? {brand:{'@type':'Brand',name:String(car.brand)}} : {}),
     ...(car.model ? {model:String(car.model)} : {}),
-    ...(car.year && /^\\d{4}$/.test(String(car.year)) ? {vehicleModelDate:String(car.year)} : {})
-  }).replace(/</g,'\\u003c');
+    ...(car.year && /^\d{4}$/.test(String(car.year)) ? {vehicleModelDate:String(car.year)} : {})
+  }).replace(/</g,'\u003c');
   document.head.appendChild(json);
 }
 
