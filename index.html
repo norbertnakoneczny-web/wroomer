@@ -668,8 +668,9 @@ function openGallery(ad){
   const marka=ad.brand||ad.marka||'';
   const model=ad.model||'';
   const rok=ad.year||ex.rok||'-';
-  const przeb=ad.mileage||ex.mileage||ad.przebieg||'-';
-  const paliwo=ad.fuel||ex.fuel||ad.paliwo||'-';
+  const validField=v=>v!==null&&v!==undefined&&String(v).trim()!==''&&!/^(?:-|(?:-\s*km)|null|undefined)$/i.test(String(v).trim());
+  const przeb=[ad.mileage,ex.mileage,ad.przebieg].find(validField)||'-';
+  const paliwo=[ad.fuel,ex.fuel,ad.paliwo].find(validField)||'-';
   const lok=ad.location||'Nie podano lokalizacji';
   
   const escapeHtml=(v)=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
