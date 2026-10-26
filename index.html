@@ -334,6 +334,30 @@ body{background:radial-gradient(ellipse at 80% 0%,#24200c 0%,#090a0b 38%,#080808
 .layout{min-width:0;width:100%}
 }
 </style>
+
+<style id="WROOMER-CONTRACT-CARD-TEST">
+.contract-blog-card{cursor:default;display:flex;flex-direction:column;border-color:#353535;background:#151515}
+.contract-blog-card:hover{border-color:#facc15}
+.contract-visual{min-height:140px;display:flex;align-items:center;justify-content:center;gap:17px;padding:14px 12px;background:linear-gradient(135deg,#242424,#111);box-sizing:border-box}
+.contract-sheet{width:78px;height:108px;background:#fafafa;border-radius:5px;padding:12px 9px;box-sizing:border-box;box-shadow:6px 7px 0 rgba(250,204,21,.9);display:flex;flex-direction:column;gap:7px;color:#161616;flex-shrink:0;transform:rotate(-4deg)}
+.contract-sheet-icon{font-size:17px;line-height:16px;color:#bc9015}
+.contract-sheet>span:nth-child(2){font-size:10px;font-weight:900;letter-spacing:1px}
+.contract-sheet i{height:3px;width:100%;background:#d1d5db;border-radius:3px}
+.contract-sheet i:nth-of-type(2){width:80%}.contract-sheet i:nth-of-type(3){width:90%}
+.contract-sheet small{margin-top:auto;text-align:right;font-size:10px;font-weight:900}
+.contract-visual-copy{display:flex;flex-direction:column;gap:7px;max-width:160px}
+.contract-visual-copy strong{font-size:16px;line-height:1.2;color:#fff}
+.contract-visual-copy span{font-size:11px;color:#facc15;font-weight:700}
+.contract-content{padding:12px;display:flex;flex-direction:column;gap:9px;flex:1}
+.contract-content .blog-card-title{min-height:0;display:block}
+.contract-downloads{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.contract-downloads a{padding:10px 3px;text-align:center;text-decoration:none;border-radius:8px;font-size:11px;font-weight:800;color:#111;background:#facc15;white-space:nowrap}
+.contract-downloads a:nth-child(2){background:#2b2b2b;color:#fff;border:1px solid #666;padding:9px 2px}
+.contract-downloads a:hover{filter:brightness(1.13)}
+.contract-qr{display:flex;align-items:center;justify-content:center;gap:11px;padding-top:8px;border-top:1px solid #333}
+.contract-qr img{width:62px;height:62px;object-fit:contain;background:#fff;padding:4px;border-radius:6px;box-sizing:border-box}
+.contract-qr span{font-size:11px;color:#fff;font-weight:700;line-height:1.5}.contract-qr small{font-size:10px;color:#aaa;font-weight:400}
+</style>
 </head>
 <body>
 <div class="header"><div class="logo">WROOMER<span>.PL</span> <span style="font-size:10px;background:#facc15;color:#000;padding:2px 6px;border-radius:10px">v11 8 KAFELI FIXED</span></div><div style="display:flex;gap:6px;align-items:center"><button class="btn btn-dark" id="btnLogin">Zaloguj</button><button class="btn btn-dark" id="btnLogout" style="display:none">Wyloguj</button><button class="btn btn-yellow" id="btnAdd">+ Dodaj</button></div></div>
@@ -385,7 +409,10 @@ body{background:radial-gradient(ellipse at 80% 0%,#24200c 0%,#090a0b 38%,#080808
     <div class="blog-card" onclick="location.href='/blog/rejestracja-auta-z-niemiec-krok-po-kroku.html'"><img class="blog-img" src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=400&h=200&fit=crop" alt="Rejestracja auta z Niemiec krok po kroku" loading="lazy"><div class="blog-body"><div class="blog-card-title">Rejestracja auta z Niemiec krok po kroku</div><div class="blog-meta"><span>🕒 8 min</span></div></div></div>
     <div class="blog-card" onclick="location.href='/blog/oc-na-miesiac-czy-warto-krotkoterminowe.html'"><img class="blog-img" src="https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=400&h=200&fit=crop" alt="OC na miesiąc - czy warto?" loading="lazy"><div class="blog-body"><div class="blog-card-title">OC na miesiąc - czy warto?</div><div class="blog-meta"><span>🕒 4 min</span></div></div></div>
     <div class="blog-card" onclick="location.href='/blog/jak-szybko-sprzedac-samochod-w-24h.html'"><img class="blog-img" src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=400&h=200&fit=crop" alt="Jak szybko sprzedać samochód w 24h" loading="lazy"><div class="blog-body"><div class="blog-card-title">Jak szybko sprzedać samochód w 24h</div><div class="blog-meta"><span>🕒 5 min</span></div></div></div>
-    <div class="blog-card" onclick="location.href='/blog/umowa-kupna-sprzedazy-samochodu-wzor-2026.html'"><img class="blog-img" src="https://images.unsplash.com/photo-1589829085413-56de8ae18c73?w=400&h=200&fit=crop" alt="Umowa kupna-sprzedaży wzór 2026 PDF" loading="lazy"><div class="blog-body"><div class="blog-card-title">Umowa kupna-sprzedaży wzór 2026 PDF</div><div class="blog-meta"><span>🕒 3 min • WZÓR</span></div></div></div>
+    <div class="blog-card contract-blog-card" aria-label="Darmowa umowa kupna-sprzedaży samochodu 2026">
+      <div class="contract-visual"><div class="contract-sheet" aria-hidden="true"><span class="contract-sheet-icon">▤</span><span>UMOWA</span><i></i><i></i><i></i><small>2026</small></div><div class="contract-visual-copy"><strong>Umowa kupna-sprzedaży</strong><span>Samochodu • wzór 2026</span></div></div>
+      <div class="contract-content"><div class="blog-card-title">Darmowy wzór umowy 2026</div><div class="contract-downloads"><a href="/blog/pliki/umowa-kupna-sprzedazy-2026.pdf" download="umowa-kupna-sprzedazy-2026.pdf" aria-label="Pobierz wzór umowy w PDF">↓ Pobierz PDF</a><a href="/blog/pliki/umowa-kupna-sprzedazy-2026.docx" download="umowa-kupna-sprzedazy-2026.docx" aria-label="Pobierz edytowalny wzór umowy DOCX">↓ Pobierz DOCX</a></div><div class="contract-qr"><img src="/blog/pliki/qr-umowa-kupna-sprzedazy.png" alt="Kod QR do umowy kupna-sprzedaży" loading="lazy"><span>Zeskanuj kod QR<br><small>Umowa na telefonie</small></span></div></div>
+    </div>
   </div>
 </div>
 
