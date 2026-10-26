@@ -681,7 +681,7 @@ function openGallery(ad){
   const rawPhone=String(ad.phone||ex.telefon||'').trim();
   const phoneClean=rawPhone.replace(/[^+\d]/g,'').replace(/(?!^)\+/g,'');
   const phoneDigits=phoneClean.replace(/\D/g,'');
-  const hasPhone=phoneDigits.length>=7&&phoneDigits.length<=15;
+  const hasPhone=phoneDigits.length>=7&&phoneDigits.length<=15&&/^(?:\+?\d+)$/.test(phoneClean);
   const lat=ad.lat||ex.lat, lng=ad.lng||ex.lng;
   const hasCoords=lat!==null&&lat!==undefined&&lng!==null&&lng!==undefined&&String(lat).trim()!==''&&String(lng).trim()!==''&&Number.isFinite(Number(lat))&&Number.isFinite(Number(lng))&&Math.abs(Number(lat))<=90&&Math.abs(Number(lng))<=180;
   const hasMap=Boolean(hasCoords||(ad.location&&String(ad.location).trim()));
