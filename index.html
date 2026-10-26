@@ -676,7 +676,8 @@ function openGallery(ad){
   const lok=hasLocation?locationText:'Nie podano lokalizacji';
   
   const escapeHtml=(v)=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  const fmtPrice=Number(price).toLocaleString('pl-PL');
+  const priceNumber=Number(price);
+  const fmtPrice=Number.isFinite(priceNumber)&&priceNumber>=0?priceNumber.toLocaleString('pl-PL'):'Cena do uzgodnienia';
   const mileageText=String(przeb??'').trim();
   const mileageDisplay=/^(?:-|(?:-\s*km)|brak danych)?$/i.test(mileageText)?'-':/\bkm\b/i.test(mileageText)?mileageText:mileageText+' km';
   const details=[['Marka',marka],['Model',model],['Rok produkcji',rok],['Przebieg',mileageDisplay],['Paliwo',paliwo],['Lokalizacja',lok]];
@@ -692,7 +693,7 @@ function openGallery(ad){
     <section class="detail-section" aria-label="Szczegóły ogłoszenia">
       <div class="detail-heading"><div>
         <div class="detail-kicker">Ogłoszenie motoryzacyjne · WROOMER.PL</div>
-        <div class="detail-title">${escapeHtml(fmtPrice)} PLN</div>
+        <div class="detail-title">${escapeHtml(fmtPrice)}${Number.isFinite(priceNumber)&&priceNumber>=0?" PLN":""}</div>
         <div class="detail-subtitle">${escapeHtml(title)}</div>
       </div></div>
       <div class="detail-grid">${details.map(([label,value])=>`<div class="detail-item"><span class="label">${escapeHtml(label)}</span><span class="value">${escapeHtml(value||'-')}</span></div>`).join('')}</div>
