@@ -472,7 +472,7 @@ function parseExtra(desc){
   const o={mileage:'',fuel:'',gear:'',power:'',capacity:'',body:'',color:'',lat:'',lng:''};
   try{
     const matches=[...String(desc||'').matchAll(/\[([^\]\r\n]*)\]/g)];
-    const metadata=matches.reverse().find(m=>/^Przebieg\s*:[^|]*\|\s*Paliwo\s*:/i.test(m[1]));
+    const metadata=matches.reverse().find(m=>/^Przebieg\s*:[^|]*\|\s*Paliwo\s*:/i.test(m[1])&&String(desc||'').slice(m.index+m[0].length).trim()==='');
     if(!metadata)return o;
     metadata[1].split('|').forEach(p=>{
       const parts=p.split(':');if(parts.length<2)return;
