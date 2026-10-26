@@ -16,7 +16,7 @@ export default async function handler(req,res){
     const title=String(car.title||[car.brand,car.model,car.year].filter(Boolean).join(' ')||'Samochód').slice(0,110);
     const url='https://www.wroomer.pl/auto/'+encodeURIComponent(slug);
     const description=[title,car.location,Number.isFinite(Number(car.price))&&Number(car.price)>0?Number(car.price).toLocaleString('pl-PL')+' zł':'','Oferta na WROOMER.PL'].filter(Boolean).join(' • ').slice(0,160);
-    let pictures=Array.isArray(car.images)?car.images:[];
+    let pictures=Array.isArray(car.images)?[...car.images]:[];
     if(typeof car.images==='string'){try{pictures=JSON.parse(car.images)}catch{pictures=[car.images]}}
     if(!Array.isArray(pictures))pictures=[];
     if(car.image_url)pictures.unshift(car.image_url);
