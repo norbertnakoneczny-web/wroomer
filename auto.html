@@ -73,10 +73,13 @@ function getImages(car){
   let a=[];
   if(Array.isArray(car.images)) a=car.images;
   else if(typeof car.images==='string'){ try{a=JSON.parse(car.images)}catch{a=[car.images]} }
+  if(!Array.isArray(a))a=[];
   if(car.image_url) a.unshift(car.image_url);
   return [...new Set(a.map(s=>safeImage(s)).filter(Boolean))].slice(0,20);
 }
 function render(){
+  if(!imgs.length)return;
+  cur=Math.max(0,Math.min(cur,imgs.length-1));
   const mainImg = document.getElementById('mainImg');
   if(mainImg) mainImg.src = imgs[cur];
   const mc=document.getElementById('mainCounter'); if(mc) mc.innerText = `${cur+1} / ${imgs.length}`;
@@ -84,10 +87,10 @@ function render(){
   const lbc=document.getElementById('lbcounter'); if(lbc) lbc.innerText = `${cur+1} / ${imgs.length}`;
   document.querySelectorAll('.thumbs img').forEach((el,i)=>el.classList.toggle('active', i===cur));
 }
-function openLB(i){ cur=i; document.getElementById('lbimg').src=imgs[cur]; document.getElementById('lightbox').classList.add('open'); render(); }
+function openLB(i){ if(!imgs.length)return; cur=i; document.getElementById('lbimg').src=imgs[cur]; document.getElementById('lightbox').classList.add('open'); render(); }
 function closeLB(){ document.getElementById('lightbox').classList.remove('open'); }
-function nextImg(){ cur=(cur+1)%imgs.length; document.getElementById('mainImg').src=imgs[cur]; document.getElementById('lbimg').src=imgs[cur]; render(); }
-function prevImg(){ cur=(cur-1+imgs.length)%imgs.length; document.getElementById('mainImg').src=imgs[cur]; document.getElementById('lbimg').src=imgs[cur]; render(); }
+function nextImg(){ if(!imgs.length)return; cur=(cur+1)%imgs.length; document.getElementById('mainImg').src=imgs[cur]; document.getElementById('lbimg').src=imgs[cur]; render(); }
+function prevImg(){ if(!imgs.length)return; cur=(cur-1+imgs.length)%imgs.length; document.getElementById('mainImg').src=imgs[cur]; document.getElementById('lbimg').src=imgs[cur]; render(); }
 
 function updateListingSeo(car, slug) {
   const titleText=String(car.title || [car.brand,car.model,car.year].filter(Boolean).join(' ') || 'Ogłoszenie samochodu').trim().slice(0,110);
@@ -116,9 +119,10 @@ function updateListingSeo(car, slug) {
 }
 
 async function load(){
-  const slug=location.pathname.split('/').pop().split('?')[0];
+  const slug=decodeURIComponent(location.pathname.split('/').pop().split('?')[0]);
   const el=document.getElementById('content');
   try{
+    if(!/^[a-zA-Z0-9_-]{1,150}$/.test(slug)){el.textContent='Nieprawidłowy adres ogłoszenia';return;}
     const lookupField=/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(slug)?'id':'slug';
     const r=await fetch(`${SUPABASE_URL}/rest/v1/ogloszenia?${lookupField}=eq.${encodeURIComponent(slug)}&select=*`,{headers:{apikey:SUPABASE_KEY,Authorization:`Bearer ${SUPABASE_KEY}`}});
     if(!r.ok)throw new Error('Nie udało się pobrać ogłoszenia');
@@ -141,7 +145,7 @@ async function load(){
       <div class="info">
         <h1>${escapeHtml(car.title||'')}</h1>
         <div class="meta">${escapeHtml(car.brand||'')} ${escapeHtml(car.model||'')} • ${escapeHtml(car.location||'')} • ${escapeHtml(car.year||'')}r</div>
-        <div class="price">${car.price?Number(car.price).toLocaleString('pl-PL')+' PLN':''}</div>
+        <div class="price">${car.price!==null&&car.price!==undefined&&String(car.price).trim()!==''&&Number.isFinite(Number(car.price))&&Number(car.price)>0?Number(car.price).toLocaleString('pl-PL')+' PLN':'Cena do uzgodnienia'}</div>
         <div class="desc">${escapeHtml(car.description||'')}</div>
         ${safePhone?`<a class="btn" href="tel:${escapeHtml(safePhone.replace(/[^+\d]/g,''))}">📞 ZADZWOŃ: ${escapeHtml(safePhone)}</a>`:'<div class="meta">Numer telefonu niedostępny</div>'}
         <div style="margin-top:20px"><a href="/" style="color:#666;text-decoration:none">← Wróć do listy</a></div>
