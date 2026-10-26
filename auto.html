@@ -71,7 +71,7 @@ const escapeHtml=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;'
 const safeImage=x=>{try{const u=new URL(String(x));return ['https:','http:'].includes(u.protocol)?u.href:'';}catch{return '';}};
 function getImages(car){
   let a=[];
-  if(Array.isArray(car.images)) a=car.images;
+  if(Array.isArray(car.images)) a=[...car.images];
   else if(typeof car.images==='string'){ try{a=JSON.parse(car.images)}catch{a=[car.images]} }
   if(!Array.isArray(a))a=[];
   if(car.image_url) a.unshift(car.image_url);
@@ -89,8 +89,8 @@ function render(){
 }
 function openLB(i){ if(!imgs.length)return; cur=Math.max(0,Math.min(Number(i)||0,imgs.length-1)); document.getElementById('lbimg').src=imgs[cur]; document.getElementById('lightbox').classList.add('open'); render(); }
 function closeLB(){ document.getElementById('lightbox').classList.remove('open'); }
-function nextImg(){ if(!imgs.length)return; cur=(cur+1)%imgs.length; document.getElementById('mainImg').src=imgs[cur]; document.getElementById('lbimg').src=imgs[cur]; render(); }
-function prevImg(){ if(!imgs.length)return; cur=(cur-1+imgs.length)%imgs.length; document.getElementById('mainImg').src=imgs[cur]; document.getElementById('lbimg').src=imgs[cur]; render(); }
+function nextImg(){ if(!imgs.length)return; cur=(cur+1)%imgs.length; const lb=document.getElementById('lbimg');if(lb)lb.src=imgs[cur]; render(); }
+function prevImg(){ if(!imgs.length)return; cur=(cur-1+imgs.length)%imgs.length; const lb=document.getElementById('lbimg');if(lb)lb.src=imgs[cur]; render(); }
 
 function updateListingSeo(car, slug) {
   const titleText=String(car.title || [car.brand,car.model,car.year].filter(Boolean).join(' ') || 'Ogłoszenie samochodu').trim().slice(0,110);
@@ -114,7 +114,7 @@ function updateListingSeo(car, slug) {
     ...(car.brand ? {brand:{'@type':'Brand',name:String(car.brand)}} : {}),
     ...(car.model ? {model:String(car.model)} : {}),
     ...(car.year && /^\d{4}$/.test(String(car.year)) ? {vehicleModelDate:String(car.year)} : {})
-  }).replace(/</g,'\u003c');
+  }).replace(/</g,'\\u003c');
   document.head.appendChild(json);
 }
 
