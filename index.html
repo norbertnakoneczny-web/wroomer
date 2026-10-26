@@ -468,7 +468,28 @@ document.getElementById('btnAdd').onclick=()=>{ if(!currentUser){ openLoginModal
 function closeModals(){const loginM=document.getElementById('loginModal');const addM=document.getElementById('addModal');if(loginM){ loginM.classList.remove('open'); loginM.style.display=''; }if(addM){ addM.classList.remove('open'); addM.style.display=''; }closeGallery();}
 function closeGallery(){const m=document.getElementById('galleryModal');if(m){ m.classList.remove('open'); m.style.display='none'; }document.body.style.overflow='';document.body.style.overflowY='auto';document.documentElement.style.overflow='';document.documentElement.style.overflowY='auto';}
 function haversine(lat1, lon1, lat2, lon2){const R=6371; const dLat=(lat2-lat1)*Math.PI/180; const dLon=(lon2-lon1)*Math.PI/180; const a=Math.sin(dLat/2)*Math.sin(dLat/2)+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)*Math.sin(dLon/2); const c=2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a)); return R*c;}
-function parseExtra(desc){const o={mileage:'',fuel:'',gear:'',power:'',capacity:'',body:'',color:'',lat:'',lng:''}; try{const m=(desc||'').match(/\[(.*?)\]/); if(m){m[1].split('|').forEach(p=>{const parts=p.split(':'); if(parts.length<2) return; const k=parts[0].trim(); const v=parts.slice(1).join(':').trim(); const kl=k.toLowerCase(); if(kl.includes('przebieg')) o.mileage=v; else if(kl.includes('paliwo')) o.fuel=v; else if(kl.includes('skrzynia')) o.gear=v; else if(kl.includes('moc') && !kl.includes('pochodzenia')) o.power=v; else if(kl.includes('pojem')) o.capacity=v; else if(kl.includes('nadwozia')) o.body=v; else if(kl.includes('kolor')) o.color=v; else if(kl==='lat') o.lat=v; else if(kl==='lng' || kl==='lon') o.lng=v;});}}catch(e){} return o;}
+function parseExtra(desc){
+  const o={mileage:'',fuel:'',gear:'',power:'',capacity:'',body:'',color:'',lat:'',lng:''};
+  try{
+    const matches=[...String(desc||'').matchAll(/\[([^\]\r\n]*)\]/g)];
+    const metadata=matches.reverse().find(m=>/(?:^|\|)\s*(?:Przebieg|Paliwo)\s*:/i.test(m[1]));
+    if(!metadata)return o;
+    metadata[1].split('|').forEach(p=>{
+      const parts=p.split(':');if(parts.length<2)return;
+      const k=parts[0].trim().toLowerCase(),v=parts.slice(1).join(':').trim();
+      if(k.includes('przebieg'))o.mileage=v;
+      else if(k.includes('paliwo'))o.fuel=v;
+      else if(k.includes('skrzynia'))o.gear=v;
+      else if(k.includes('moc')&&!k.includes('pochodzenia'))o.power=v;
+      else if(k.includes('pojem'))o.capacity=v;
+      else if(k.includes('nadwozia'))o.body=v;
+      else if(k.includes('kolor'))o.color=v;
+      else if(k==='lat')o.lat=v;
+      else if(k==='lng'||k==='lon')o.lng=v;
+    });
+  }catch(e){}
+  return o;
+}
 function locateForAdd(){const btn=document.getElementById('gpsAddBtn'); const info=document.getElementById('gpsAddInfo'); if(!navigator.geolocation){alert('Brak GPS'); return;} btn.textContent='📡 Pobieram...'; btn.disabled=true; info.style.display='block'; info.textContent='Pobieram lokalizację...'; info.className='gps-info show'; navigator.geolocation.getCurrentPosition(async (pos)=>{addLat=pos.coords.latitude; addLng=pos.coords.longitude; document.getElementById('aLat').value=addLat.toFixed(6); document.getElementById('aLng').value=addLng.toFixed(6); btn.textContent='✅ GPS Pobrany!'; btn.classList.add('active'); btn.disabled=false; info.textContent=`✅ GPS: ${addLat.toFixed(5)}, ${addLng.toFixed(5)}`; info.className='gps-info show success'; try{const res=await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${addLat}&lon=${addLng}&zoom=10`); const data=await res.json(); const city=data.address?.city||data.address?.town||data.address?.village||''; if(city) document.getElementById('aLocation').value=city.split(',')[0];}catch(e){}}, (err)=>{btn.textContent='📍 Zlokalizuj GPS'; btn.disabled=false; info.textContent='❌ Błąd: '+err.message; info.className='gps-info show';}, {enableHighAccuracy:true, timeout:10000});}
 function locateForSearch(prefix){const btn=document.getElementById('gpsSearchBtn'+prefix); const info=document.getElementById('gpsSearchInfo'+prefix); if(!navigator.geolocation){alert('Brak GPS'); return;} btn.textContent='📡 Pobieram...'; btn.disabled=true; info.style.display='block'; info.textContent='Pobieram...'; info.className='gps-info show'; navigator.geolocation.getCurrentPosition(async (pos)=>{searchLat=pos.coords.latitude; searchLng=pos.coords.longitude; btn.textContent='✅ Moja lokalizacja aktywna'; btn.classList.add('active'); btn.disabled=false; info.textContent=`✅ Twoja lokalizacja: ${searchLat.toFixed(4)}, ${searchLng.toFixed(4)}`; info.className='gps-info show success'; wroomerScheduleFilter(true);}, (err)=>{btn.textContent='📍 Zlokalizuj mnie'; btn.disabled=false; info.textContent='❌ Błąd: '+err.message; info.className='gps-info show';}, {enableHighAccuracy:true, timeout:10000});}
 function populateModelSelect(brandId, modelId, selectedModel=null){const brand=document.getElementById(brandId).value; const modelSel=document.getElementById(modelId); if(!modelSel) return; const models=BRAND_MODELS[brand]||[]; modelSel.innerHTML='<option value="">'+(modelId==='aModelIn'?'Wybierz model':'Wszystkie modele')+'</option>'; models.forEach(m=>{const o=document.createElement('option'); o.value=m; o.textContent=m; if(m===selectedModel) o.selected=true; modelSel.appendChild(o);});}
