@@ -678,7 +678,8 @@ function openGallery(ad){
   const mileageText=String(przeb??'').trim();
   const mileageDisplay=/^(?:-|(?:-\s*km)|brak danych)?$/i.test(mileageText)?'-':/\bkm\b/i.test(mileageText)?mileageText:mileageText+' km';
   const details=[['Marka',marka],['Model',model],['Rok produkcji',rok],['Przebieg',mileageDisplay],['Paliwo',paliwo],['Lokalizacja',lok]];
-  const phoneClean=String(ex.telefon||ad.phone||'').replace(/[^+\d]/g,'');
+  const rawPhone=String(ad.phone||ex.telefon||'').trim();
+  const phoneClean=rawPhone.replace(/[^+\d]/g,'').replace(/(?!^)\+/g,'');
   const phoneDigits=phoneClean.replace(/\D/g,'');
   const hasPhone=phoneDigits.length>=7&&phoneDigits.length<=15;
   const lat=ad.lat||ex.lat, lng=ad.lng||ex.lng;
