@@ -782,8 +782,8 @@ async function loadAds(){
       if(marka&&!full.includes(wroomerNormalize(marka)))return false;
       if(model&&!full.includes(wroomerNormalize(model)))return false;
       if(lok&&!wroomerNormalize(ad.location).includes(wroomerNormalize(lok)))return false;
-      if(rokOd!==null&&Number(ad.year||0)<rokOd)return false;
-      if(rokDo!==null&&Number(ad.year||0)>rokDo)return false;
+      if(rokOd!==null&&(ad.year===null||ad.year===undefined||String(ad.year).trim()===''||!Number.isFinite(Number(ad.year))||Number(ad.year)<rokOd))return false;
+      if(rokDo!==null&&(ad.year===null||ad.year===undefined||String(ad.year).trim()===''||!Number.isFinite(Number(ad.year))||Number(ad.year)>rokDo))return false;
       if(paliwo&&!wroomerNormalize(parseExtra(ad.description||'').fuel).includes(wroomerNormalize(paliwo)))return false;
       return wroomerMatch(ad,search);
     });
