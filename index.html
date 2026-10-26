@@ -663,7 +663,7 @@ function openGallery(ad){
   
   const ex=parseExtra(ad.description||''); 
   const cleanDesc=String(ad.description||'').replace(/\s*\[Przebieg\s*:[^\]\r\n|]*\|\s*Paliwo\s*:[^\]\r\n]*\]\s*$/i,'').trim(); 
-  const price=ad.price||0;
+  const price=ad.price;
   const title=ad.title||'';
   const marka=ad.brand||ad.marka||'';
   const model=ad.model||'';
