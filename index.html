@@ -689,6 +689,8 @@ function openGallery(ad){
   const phoneClean=rawPhone.replace(/[^+\d]/g,'').replace(/(?!^)\+/g,'');
   const phoneDigits=phoneClean.replace(/\D/g,'');
   const hasPhone=phoneDigits.length>=7&&phoneDigits.length<=15&&/^(?:\+?\d+)$/.test(phoneClean);
+  const whatsappNumber=hasPhone?(phoneDigits.length===9?'48'+phoneDigits:(phoneDigits.length>=10?phoneDigits:'')):'';
+  const whatsappUrl=whatsappNumber?'https://wa.me/'+whatsappNumber+'?text='+encodeURIComponent('Dzień dobry, piszę w sprawie ogłoszenia na Wroomer.pl: '+title):'';
   const lat=ad.lat||ex.lat, lng=ad.lng||ex.lng;
   const hasCoords=lat!==null&&lat!==undefined&&lng!==null&&lng!==undefined&&String(lat).trim()!==''&&String(lng).trim()!==''&&Number.isFinite(Number(lat))&&Number.isFinite(Number(lng))&&Math.abs(Number(lat))<=90&&Math.abs(Number(lng))<=180;
   const hasMap=Boolean(hasCoords||hasLocation);
@@ -706,12 +708,21 @@ function openGallery(ad){
       <div class="wroomer-report-wrap"><button type="button" class="wroomer-report-btn" onclick="wroomerReportListing()">⚑ Zgłoś treść ogłoszenia</button><span>Zgłoszenie przygotujesz na rodo@wroomer.pl</span></div>
       <div class="detail-actions">
         ${hasPhone?`<a class="detail-call" href="tel:${escapeHtml(phoneClean)}">☎ Zadzwoń: ${escapeHtml(phoneClean)}</a>`:''}
+        ${whatsappUrl?`<a class="detail-call" style="background:#25d366;color:#081b10" href="${escapeHtml(whatsappUrl)}" target="_blank" rel="noopener noreferrer">✉ Napisz na WhatsApp</a>`:''}
+        ${hasPhone?`<button type="button" class="detail-map" onclick="wroomerCopySellerPhone('${escapeHtml(phoneClean)}')">⧉ Kopiuj numer</button>`:''}
         ${hasMap?`<a class="detail-map" href="https://www.google.com/maps/search/?api=1&amp;query=${encodeURIComponent(mapQuery)}" target="_blank" rel="noopener noreferrer">⌖ Zobacz mapę</a>`:""}
       </div>
     </section>`;
   modal.classList.add('open'); 
   modal.style.display='flex'; 
   document.body.style.overflow='hidden'; 
+}
+async function wroomerCopySellerPhone(phone){
+  try{
+    if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(phone);}
+    else {const input=document.createElement('textarea');input.value=phone;input.style.position='fixed';input.style.opacity='0';document.body.appendChild(input);input.select();if(!document.execCommand('copy'))throw new Error('copy failed');input.remove();}
+    alert('Numer telefonu skopiowany.');
+  }catch(error){prompt('Skopiuj numer telefonu:',phone);}
 }
 function editOwnListing(id){
  const ad=allAds.find(item=>String(item.id)===String(id));
