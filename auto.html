@@ -158,6 +158,16 @@ async function load(){
         <div class="price">${car.price!==null&&car.price!==undefined&&String(car.price).trim()!==''&&Number.isFinite(Number(car.price))&&Number(car.price)>0?Number(car.price).toLocaleString('pl-PL')+' PLN':'Cena do uzgodnienia'}</div>
         <div class="desc">${escapeHtml(car.description||'')}</div>
         ${safePhone?`<a class="btn" href="tel:${escapeHtml(safePhone.replace(/[^+\d]/g,''))}">📞 ZADZWOŃ: ${escapeHtml(safePhone)}</a>`:'<div class="meta">Numer telefonu niedostępny</div>'}
+        ${safePhone?(() => {
+          const digits=safePhone.replace(/\D/g,'');
+          const international=digits.startsWith('48')?digits:'48'+digits;
+          const message='Dzień dobry, piszę w sprawie ogłoszenia na Wroomer.pl: '+location.href;
+          const whatsapp='https://wa.me/'+international+'?text='+encodeURIComponent(message);
+          const sms='sms:'+safePhone.replace(/[^+\d]/g,'')+'?body='+encodeURIComponent(message);
+          return '<div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:12px">'+
+            '<a class="btn" style="background:#25D366;color:#111;flex:1;text-align:center" target="_blank" rel="noopener noreferrer" href="'+escapeHtml(whatsapp)+'">💬 WhatsApp</a>'+
+            '<a class="btn" style="background:#f59e0b;color:#111;flex:1;text-align:center" href="'+escapeHtml(sms)+'">✉️ SMS</a></div>';
+        })():''}
         <div style="margin-top:20px"><a href="/" style="color:#666;text-decoration:none">← Wróć do listy</a></div>
       </div>
     `;
