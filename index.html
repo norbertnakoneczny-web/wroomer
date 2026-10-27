@@ -774,23 +774,27 @@ async function loadAds(){
   grid.innerHTML="<div class=\"card\" aria-hidden=\"true\"><div class=\"card-img-wrap\"></div><div class=\"card-body\"><div class=\"card-title\">Ładowanie ogłoszeń…</div></div></div><div class=\"card\" aria-hidden=\"true\"><div class=\"card-img-wrap\"></div><div class=\"card-body\"><div class=\"card-title\">Ładowanie ogłoszeń…</div></div></div><div class=\"card\" aria-hidden=\"true\"><div class=\"card-img-wrap\"></div><div class=\"card-body\"><div class=\"card-title\">Ładowanie ogłoszeń…</div></div></div><div class=\"card\" aria-hidden=\"true\"><div class=\"card-img-wrap\"></div><div class=\"card-body\"><div class=\"card-title\">Ładowanie ogłoszeń…</div></div></div><div class=\"card\" aria-hidden=\"true\"><div class=\"card-img-wrap\"></div><div class=\"card-body\"><div class=\"card-title\">Ładowanie ogłoszeń…</div></div></div><div class=\"card\" aria-hidden=\"true\"><div class=\"card-img-wrap\"></div><div class=\"card-body\"><div class=\"card-title\">Ładowanie ogłoszeń…</div></div></div><div class=\"card\" aria-hidden=\"true\"><div class=\"card-img-wrap\"></div><div class=\"card-body\"><div class=\"card-title\">Ładowanie ogłoszeń…</div></div></div><div class=\"card\" aria-hidden=\"true\"><div class=\"card-img-wrap\"></div><div class=\"card-body\"><div class=\"card-title\">Ładowanie ogłoszeń…</div></div></div><div class=\"card\" aria-hidden=\"true\"><div class=\"card-img-wrap\"></div><div class=\"card-body\"><div class=\"card-title\">Ładowanie ogłoszeń…</div></div></div><div class=\"card\" aria-hidden=\"true\"><div class=\"card-img-wrap\"></div><div class=\"card-body\"><div class=\"card-title\">Ładowanie ogłoszeń…</div></div></div><div class=\"card\" aria-hidden=\"true\"><div class=\"card-img-wrap\"></div><div class=\"card-body\"><div class=\"card-title\">Ładowanie ogłoszeń…</div></div></div><div class=\"card\" aria-hidden=\"true\"><div class=\"card-img-wrap\"></div><div class=\"card-body\"><div class=\"card-title\">Ładowanie ogłoszeń…</div></div></div>";
   try{
     let q=supabaseClient.from('ogloszenia').select('*').eq('is_banned',false).order('created_at',{ascending:false}).limit(500);
-    if(cenaOd!==null&&cenaOd>=0)q=q.gte('price',cenaOd);
-    if(cenaDo!==null&&cenaDo>=0)q=q.lte('price',cenaDo);
+    // Price is filtered after loading: legacy ads may store the price in `cena` instead of `price`.
     const result=await q;
     if(requestId!==wroomerLatestRequest)return;
     if(result.error)throw result.error;
     allAds=result.data||[];
     let filtered=allAds.filter(ad=>{
-      const full=wroomerNormalize([ad.brand,ad.model,ad.title].join(' '));
+      const full=wroomerNormalize([ad.brand||ad.marka,ad.model,ad.title].join(' '));
+      const adPrice=Number(ad.price??ad.cena);
+      const hasPrice=(ad.price??ad.cena)!==null&&(ad.price??ad.cena)!==undefined&&String(ad.price??ad.cena).trim()!==''&&Number.isFinite(adPrice);
+      if(cenaOd!==null&&(!hasPrice||adPrice<cenaOd))return false;
+      if(cenaDo!==null&&(!hasPrice||adPrice>cenaDo))return false;
       if(marka&&!full.includes(wroomerNormalize(marka)))return false;
       if(model&&!full.includes(wroomerNormalize(model)))return false;
-      if(lok&&!wroomerNormalize(ad.location).includes(wroomerNormalize(lok)))return false;
-      if(rokOd!==null&&(ad.year===null||ad.year===undefined||String(ad.year).trim()===''||!Number.isFinite(Number(ad.year))||Number(ad.year)<rokOd))return false;
-      if(rokDo!==null&&(ad.year===null||ad.year===undefined||String(ad.year).trim()===''||!Number.isFinite(Number(ad.year))||Number(ad.year)>rokDo))return false;
+      if(lok&&!wroomerNormalize(ad.location||ad.lokalizacja||ad.miasto).includes(wroomerNormalize(lok)))return false;
+      const adYear=ad.year??ad.rocznik;
+      if(rokOd!==null&&(adYear===null||adYear===undefined||String(adYear).trim()===''||!Number.isFinite(Number(adYear))||Number(adYear)<rokOd))return false;
+      if(rokDo!==null&&(adYear===null||adYear===undefined||String(adYear).trim()===''||!Number.isFinite(Number(adYear))||Number(adYear)>rokDo))return false;
       if(paliwo&&!wroomerNormalize(parseExtra(ad.description||'').fuel).includes(wroomerNormalize(paliwo)))return false;
       return wroomerMatch(ad,search);
     });
-    const validPrice=ad=>ad.price!==null&&ad.price!==undefined&&String(ad.price).trim()!==''&&Number.isFinite(Number(ad.price))&&Number(ad.price)>=0?Number(ad.price):null;
+    const validPrice=ad=>{const value=ad.price??ad.cena;return value!==null&&value!==undefined&&String(value).trim()!==''&&Number.isFinite(Number(value))&&Number(value)>=0?Number(value):null;};
     if(sort==='price_asc'||sort==='price_desc')filtered.sort((a,b)=>{const ap=validPrice(a),bp=validPrice(b);if(ap===null)return bp===null?0:1;if(bp===null)return -1;return sort==='price_asc'?ap-bp:bp-ap;});
     else if(sort==='distance'&&searchLat!=null&&searchLng!=null){
       const distance=ad=>{const ex=parseExtra(ad.description||'');const lat=Number(ex.lat),lng=Number(ex.lng);if(ex.lat===undefined||ex.lat===null||String(ex.lat).trim()===''||ex.lng===undefined||ex.lng===null||String(ex.lng).trim()===''||!Number.isFinite(lat)||!Number.isFinite(lng)||Math.abs(lat)>90||Math.abs(lng)>180)return Infinity;const rad=Math.PI/180,dLat=(lat-searchLat)*rad,dLng=(lng-searchLng)*rad,a=Math.sin(dLat/2)**2+Math.cos(searchLat*rad)*Math.cos(lat*rad)*Math.sin(dLng/2)**2;return 6371*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));};
@@ -802,15 +806,16 @@ async function loadAds(){
       return;
     }
     grid.innerHTML=filtered.map(o=>{
-      const img=String(o.image_url||(Array.isArray(o.images)?o.images[0]:'')||'');
+      const firstImage=Array.isArray(o.images)&&o.images.length?o.images[0]:Array.isArray(o.zdjecia)&&o.zdjecia.length?o.zdjecia[0]:null;
+      const img=String(o.image_url||o.image||(typeof firstImage==='string'?firstImage:(firstImage?.url||firstImage?.src||firstImage?.image_url))||'');
       const safeImg=(()=>{try{const u=new URL(img);return (u.protocol==='https:'||u.protocol==='http:')?u.href:'';}catch{return '';}})();
       const thumb=safeImg.includes('/storage/v1/object/public/ogloszenia/')?safeImg.replace('/storage/v1/object/public/','/storage/v1/render/image/public/')+(safeImg.includes('?')?'&':'?')+'width=480&quality=75&resize=contain':safeImg;
-      const cnt=Array.isArray(o.images)?o.images.length:(o.image_url?1:0);
+      const cnt=Array.isArray(o.images)&&o.images.length?o.images.length:Array.isArray(o.zdjecia)&&o.zdjecia.length?o.zdjecia.length:(o.image_url||o.image?1:0);
       const safeId=String(o.id||'').replace(/[^a-zA-Z0-9_-]/g,'');
       const safeListingText=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
       const listingSlug=typeof o.slug==='string' && /^[a-zA-Z0-9_-]{1,150}$/.test(o.slug)?o.slug:(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(String(o.id||''))?String(o.id):null);
       const listingLink=listingSlug?`<a href="/auto/${encodeURIComponent(listingSlug)}" onclick="event.stopPropagation()" style="color:inherit;text-decoration:underline;text-decoration-color:#facc15;text-underline-offset:3px" aria-label="Zobacz ogłoszenie: ${safeListingText(o.title||'Samochód')}">${safeListingText(o.title||'Samochód')}</a>`:safeListingText(o.title||'');
-      return `<div class="card" onclick="openGallery(allAds.find(a=>String(a.id)==='${safeId}'))"><div class="card-img-wrap"><img src="${safeListingText(thumb)}" loading="lazy" decoding="async" alt="" onerror="if(!this.dataset.fallbackTried &amp;&amp; this.dataset.original &amp;&amp; this.src!==this.dataset.original){this.dataset.fallbackTried=&#39;1&#39;;this.src=this.dataset.original;}else{this.onerror=null;this.style.visibility=&#39;hidden&#39;;}" data-original="${safeListingText(safeImg)}"><div class="card-img-count">📷 ${Number(cnt)||0}</div></div><div class="card-body"><div class="card-title">${listingLink}</div><div class="card-price">${Number.isFinite(Number(o.price)) && o.price!==null && String(o.price).trim()!==''?safeListingText(Number(o.price).toLocaleString('pl-PL'))+' PLN':'Cena do uzgodnienia'}</div><div class="card-location">${safeListingText(o.location||'')} • ${safeListingText(o.year||'')}</div></div></div>`;
+      return `<div class="card" onclick="openGallery(allAds.find(a=>String(a.id)==='${safeId}'))"><div class="card-img-wrap"><img src="${safeListingText(thumb)}" loading="lazy" decoding="async" alt="" onerror="if(!this.dataset.fallbackTried &amp;&amp; this.dataset.original &amp;&amp; this.src!==this.dataset.original){this.dataset.fallbackTried=&#39;1&#39;;this.src=this.dataset.original;}else{this.onerror=null;this.style.visibility=&#39;hidden&#39;;}" data-original="${safeListingText(safeImg)}"><div class="card-img-count">📷 ${Number(cnt)||0}</div></div><div class="card-body"><div class="card-title">${listingLink}</div><div class="card-price">${validPrice(o)!==null?safeListingText(validPrice(o).toLocaleString('pl-PL'))+' PLN':'Cena do uzgodnienia'}</div><div class="card-location">${safeListingText(o.location||o.lokalizacja||o.miasto||'')} • ${safeListingText(o.year||o.rocznik||'')}</div></div></div>`;
     }).join('');
   }catch(e){if(requestId!==wroomerLatestRequest)return;grid.replaceChildren();const errorBox=document.createElement('div');errorBox.style.cssText='grid-column:1/-1;padding:20px;background:#3a1111';errorBox.textContent='Nie udało się wczytać ogłoszeń. Spróbuj ponownie później.';grid.appendChild(errorBox);console.warn('Błąd wczytywania ogłoszeń:',e);}
 }
