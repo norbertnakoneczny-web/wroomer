@@ -10,7 +10,7 @@ export default async function handler(req,res){
   if(!/^[a-zA-Z0-9_-]{1,150}$/.test(slug)){res.status(400).send('Nieprawidłowy adres');return;}
   try{
     const field=/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(slug)?'id':'slug';
-    const response=await fetch(API+'/rest/v1/ogloszenia?'+field+'=eq.'+encodeURIComponent(slug)+'&select=*&limit=1',{
+    const response=await fetch(API+'/rest/v1/ogloszenia?'+field+'=eq.'+encodeURIComponent(slug)+'&is_banned=eq.false&select=*&limit=1',{
       headers:{apikey:KEY,Authorization:'Bearer '+KEY},signal:AbortSignal.timeout(7000)});
     if(!response.ok)throw new Error('Backend response '+response.status);
     const rows=await response.json(), car=Array.isArray(rows)?rows[0]:null;
