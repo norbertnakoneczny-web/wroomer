@@ -4,6 +4,7 @@ const BASE='https://www.wroomer.pl';
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'}[c]));
 const brands={bmw:'BMW',audi:'Audi',opel:'Opel',volvo:'Volvo',peugeot:'Peugeot',fiat:'Fiat'};
 const cities={gorzyce:'Gorzyce',katowice:'Katowice',wroclaw:'Wrocław'};
+const cityIn={gorzyce:'Gorzycach',katowice:'Katowicach',wroclaw:'Wrocławiu'};
 const norm=s=>String(s??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
 export default async function handler(req,res){
  if(req.method!=='GET')return res.status(405).end();
@@ -16,7 +17,7 @@ export default async function handler(req,res){
   const rows=data.filter(x=>norm(x.brand||x.marka)===norm(brands[brand])&&(!city||norm(x.location||x.lokalizacja||x.miasto).includes(norm(cities[city])))).filter(x=>/^[a-zA-Z0-9_-]{1,150}$/.test(String(x.slug||x.id||'')));
   if(!rows.length)return res.status(404).type('text/plain').send('Brak aktualnych ogłoszeń w tej kategorii');
   const title=brands[brand]+' używane'+(city?' – '+cities[city]:'')+' | Ogłoszenia Wroomer.pl';
-  const heading='Samochody '+brands[brand]+(city?' w '+cities[city]:' – ogłoszenia');
+  const heading='Samochody '+brands[brand]+(city?' w '+cityIn[city]:' – ogłoszenia');
   const description='Sprawdź aktualne ogłoszenia '+brands[brand]+(city?' z lokalizacji '+cities[city]:'')+'. Kupuj i sprzedawaj samochody bez prowizji na Wroomer.pl.';
   const path='/samochody/'+brand+(city?'/'+city:'');
   const url=BASE+path;
