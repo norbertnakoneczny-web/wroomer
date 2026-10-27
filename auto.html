@@ -104,7 +104,7 @@ function updateListingSeo(car, slug) {
   const titleText=String(car.title || [car.brand||car.marka,car.model,car.year||car.rocznik].filter(Boolean).join(' ') || 'Ogłoszenie samochodu').trim().slice(0,110);
   const locationText=String(car.location || car.lokalizacja || car.miasto || '').trim();
   document.title=titleText + (locationText ? ' – '+locationText : '') + ' | WROOMER.PL';
-  const description=[titleText, locationText, Number.isFinite(Number(car.price)) && Number(car.price)>0 ? Number(car.price).toLocaleString('pl-PL')+' zł' : '', 'Zdjęcia i szczegóły ogłoszenia na WROOMER.PL.'].filter(Boolean).join(' • ').slice(0,160);
+  const description=[titleText, locationText, Number.isFinite(Number(car.price||car.cena)) && Number(car.price||car.cena)>0 ? Number(car.price||car.cena).toLocaleString('pl-PL')+' zł' : '', 'Zdjęcia i szczegóły ogłoszenia na WROOMER.PL.'].filter(Boolean).join(' • ').slice(0,160);
   document.querySelector('meta[name="description"]').setAttribute('content',description);
   const canonical=new URL('/auto/'+encodeURIComponent(slug), 'https://www.wroomer.pl');
   let canonicalLink=document.querySelector('link[rel="canonical"]');
@@ -121,12 +121,12 @@ function updateListingSeo(car, slug) {
   json.textContent=JSON.stringify({
     '@context':'https://schema.org','@type':'Car',
     name:titleText,
-    description:String(car.description || titleText).slice(0,500),
+    description:String(car.description || car.opis || titleText).slice(0,500),
     url:canonical.href,
     ...(imgs.length ? {image:imgs.slice(0,5)} : {}),
-    ...(car.brand ? {brand:{'@type':'Brand',name:String(car.brand)}} : {}),
+    ...((car.brand||car.marka) ? {brand:{'@type':'Brand',name:String(car.brand||car.marka)}} : {}),
     ...(car.model ? {model:String(car.model)} : {}),
-    ...(car.year && /^\d{4}$/.test(String(car.year)) ? {vehicleModelDate:String(car.year)} : {})
+    ...((car.year||car.rocznik) && /^\d{4}$/.test(String(car.year||car.rocznik)) ? {vehicleModelDate:String(car.year||car.rocznik)} : {})
   }).replace(/</g,'\\u003c');
   document.head.appendChild(json);
 }
