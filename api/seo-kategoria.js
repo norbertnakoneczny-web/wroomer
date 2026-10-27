@@ -21,7 +21,7 @@ export default async function handler(req,res){
   }
   if(!Array.isArray(data))throw Error('Invalid listing data');
   const rows=data.filter(x=>norm(x.brand||x.marka)===norm(brands[brand])&&(!city||norm(x.location||x.lokalizacja||x.miasto).includes(norm(cities[city])))).filter(x=>/^[a-zA-Z0-9_-]{1,150}$/.test(String(x.slug||x.id||'')));
-  if(!rows.length)return res.status(404).type('text/plain').send('Brak aktualnych ogłoszeń w tej kategorii');
+  if(!rows.length){res.setHeader('Content-Type','text/plain; charset=utf-8');res.setHeader('X-Robots-Tag','noindex, nofollow');return res.status(404).send('Brak aktualnych ogłoszeń w tej kategorii');}
   const title=brands[brand]+' używane'+(city?' – '+cities[city]:'')+' | Ogłoszenia Wroomer.pl';
   const heading='Samochody '+brands[brand]+(city?' w '+cityIn[city]:' – ogłoszenia');
   const description='Sprawdź aktualne ogłoszenia '+brands[brand]+(city?' z lokalizacji '+cities[city]:'')+'. Kupuj i sprzedawaj samochody bez prowizji na Wroomer.pl.';
