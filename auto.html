@@ -156,10 +156,10 @@ async function load(){
       </div>
       <div class="thumbs">${imgs.map((s,i)=>`<img src="${escapeHtml(s)}" class="${i===0?'active':''}" onclick="cur=${i}; document.getElementById('mainImg').src=imgs[${i}]; render()" loading="lazy">`).join('')}</div>
       <div class="info">
-        <h1>${escapeHtml(car.title||'')}</h1>
-        <div class="meta">${escapeHtml(car.brand||'')} ${escapeHtml(car.model||'')} • ${escapeHtml(car.location||'')} • ${escapeHtml(car.year||'')}r</div>
+        <h1>${escapeHtml(car.title||[car.brand||car.marka,car.model,car.year||car.rocznik].filter(Boolean).join(' '))}</h1>
+        <div class="meta">${escapeHtml(car.brand||car.marka||'')} ${escapeHtml(car.model||'')} • ${escapeHtml(car.location||car.lokalizacja||car.miasto||'')} • ${escapeHtml(car.year||car.rocznik||'')}r</div>
         <div class="price">${car.price!==null&&car.price!==undefined&&String(car.price).trim()!==''&&Number.isFinite(Number(car.price))&&Number(car.price)>0?Number(car.price).toLocaleString('pl-PL')+' PLN':'Cena do uzgodnienia'}</div>
-        <div class="desc">${escapeHtml(car.description||'')}</div>
+        <div class="desc">${escapeHtml(car.description||car.opis||'')}</div>
         ${safePhone?`<a class="btn" href="tel:${escapeHtml(safePhone.replace(/[^+\d]/g,''))}">📞 ZADZWOŃ: ${escapeHtml(safePhone)}</a>`:'<div class="meta">Numer telefonu niedostępny</div>'}
         ${safePhone?(() => {
           const digits=safePhone.replace(/\D/g,'');
