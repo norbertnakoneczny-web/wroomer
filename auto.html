@@ -2,7 +2,7 @@
 <html lang="pl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Ogłoszenie samochodu | WROOMER.PL</title>
 <meta name="description" content="Sprawdź szczegóły samochodu, zdjęcia, wyposażenie i dane sprzedającego na WROOMER.PL.">
 <meta name="robots" content="index,follow">
@@ -48,7 +48,7 @@ h1{margin:0;font-size:30px}.meta{color:#888;margin:8px 0}.price{font-size:36px;c
   .container{max-width:100vw!important;width:100vw!important;padding:0!important;margin:0!important}
   .card{width:100vw!important;max-width:100vw!important;border-radius:0!important;border:0!important;margin:0!important;background:#000}
   .gallery-main{width:100vw!important;height:68vw!important;min-height:300px;max-height:75vh!important;border-radius:0!important;margin:0!important}
-  .gallery-main img{width:100vw!important;object-fit:cover} /* cover żeby wypełniało całą szerokość */
+  .gallery-main img{width:100vw!important;object-fit:contain} /* pokazuj całe zdjęcie bez obcinania pojazdu */
   .thumbs{width:100vw!important;padding:8px 6px;background:#000;margin:0}
   .info{width:100vw!important;padding:16px 14px 30px 14px!important;background:#111;margin:0;box-sizing:border-box}
   h1{font-size:20px;line-height:1.2}
@@ -73,35 +73,40 @@ const SUPABASE_URL="https://bdpydgsfowtuvjnkyeeg.supabase.co";
 const SUPABASE_KEY="sb_publishable_S1qH_mBZaX7-bzmfJ0IVGA_6hxGbJWd";
 let imgs=[], cur=0, startX=0;
 const escapeHtml=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const safeImage=x=>{try{const u=new URL(String(x));return ['https:','http:'].includes(u.protocol)?u.href:'';}catch{return '';}};
+const safeImage=x=>{try{const raw=typeof x==='string'?x:(x&&typeof x==='object'?(x.url||x.src||x.image_url||''):'');const u=new URL(String(raw));return ['https:','http:'].includes(u.protocol)?u.href:'';}catch{return '';}};
 function getImages(car){
   let a=[];
   if(Array.isArray(car.images)) a=[...car.images];
   else if(typeof car.images==='string'){ try{a=JSON.parse(car.images)}catch{a=[car.images]} }
   if(!Array.isArray(a))a=[];
+  if(!a.length){if(Array.isArray(car.zdjecia))a=[...car.zdjecia];else if(typeof car.zdjecia==='string'){try{a=JSON.parse(car.zdjecia)}catch{a=[car.zdjecia]}}}
+  if(!Array.isArray(a))a=[];
   if(car.image_url) a.unshift(car.image_url);
+  if(car.image) a.push(car.image);
   return [...new Set(a.map(s=>safeImage(s)).filter(Boolean))].slice(0,20);
 }
 function render(){
   if(!imgs.length)return;
   cur=Math.max(0,Math.min(cur,imgs.length-1));
   const mainImg = document.getElementById('mainImg');
-  if(mainImg) mainImg.src = imgs[cur];
+  if(mainImg){ mainImg.onerror=()=>{mainImg.onerror=null;mainImg.removeAttribute('src');mainImg.alt='Zdjęcie jest chwilowo niedostępne';}; mainImg.src=imgs[cur]; }
   const mc=document.getElementById('mainCounter'); if(mc) mc.innerText = `${cur+1} / ${imgs.length}`;
   const hc=document.getElementById('hcount'); if(hc) hc.innerText = `${imgs.length} zdjęć`;
   const lbc=document.getElementById('lbcounter'); if(lbc) lbc.innerText = `${cur+1} / ${imgs.length}`;
+  const lbimg=document.getElementById('lbimg'); if(lbimg&&document.getElementById('lightbox').classList.contains('open')&&lbimg.getAttribute('src')!==imgs[cur]) lbimg.src=imgs[cur];
   document.querySelectorAll('.thumbs img').forEach((el,i)=>el.classList.toggle('active', i===cur));
 }
-function openLB(i){ if(!imgs.length)return; cur=Math.max(0,Math.min(Number(i)||0,imgs.length-1)); document.getElementById('lbimg').src=imgs[cur]; document.getElementById('lightbox').classList.add('open'); render(); }
+function openLB(i){ if(!imgs.length)return; cur=Math.max(0,Math.min(Number(i)||0,imgs.length-1)); const lb=document.getElementById('lbimg'); lb.onerror=()=>{lb.onerror=null;lb.removeAttribute('src');lb.alt='Zdjęcie jest chwilowo niedostępne';}; lb.src=imgs[cur]; document.getElementById('lightbox').classList.add('open'); render(); }
 function closeLB(){ document.getElementById('lightbox').classList.remove('open'); }
+document.addEventListener("keydown",e=>{if(!document.getElementById("lightbox").classList.contains("open"))return;if(e.key==="Escape")closeLB();else if(e.key==="ArrowRight")nextImg();else if(e.key==="ArrowLeft")prevImg();});
 function nextImg(){ if(!imgs.length)return; cur=(cur+1)%imgs.length; const lb=document.getElementById('lbimg');if(lb)lb.src=imgs[cur]; render(); }
 function prevImg(){ if(!imgs.length)return; cur=(cur-1+imgs.length)%imgs.length; const lb=document.getElementById('lbimg');if(lb)lb.src=imgs[cur]; render(); }
 
 function updateListingSeo(car, slug) {
-  const titleText=String(car.title || [car.brand,car.model,car.year].filter(Boolean).join(' ') || 'Ogłoszenie samochodu').trim().slice(0,110);
-  const locationText=String(car.location || '').trim();
+  const titleText=String(car.title || [car.brand||car.marka,car.model,car.year||car.rocznik].filter(Boolean).join(' ') || 'Ogłoszenie samochodu').trim().slice(0,110);
+  const locationText=String(car.location || car.lokalizacja || car.miasto || '').trim();
   document.title=titleText + (locationText ? ' – '+locationText : '') + ' | WROOMER.PL';
-  const description=[titleText, locationText, Number.isFinite(Number(car.price)) && Number(car.price)>0 ? Number(car.price).toLocaleString('pl-PL')+' zł' : '', 'Zdjęcia i szczegóły ogłoszenia na WROOMER.PL.'].filter(Boolean).join(' • ').slice(0,160);
+  const description=[titleText, locationText, Number.isFinite(Number(car.price??car.cena)) && Number(car.price??car.cena)>0 ? Number(car.price??car.cena).toLocaleString('pl-PL')+' zł' : '', 'Zdjęcia i szczegóły ogłoszenia na WROOMER.PL.'].filter(Boolean).join(' • ').slice(0,160);
   document.querySelector('meta[name="description"]').setAttribute('content',description);
   const canonical=new URL('/auto/'+encodeURIComponent(slug), 'https://www.wroomer.pl');
   let canonicalLink=document.querySelector('link[rel="canonical"]');
@@ -118,32 +123,32 @@ function updateListingSeo(car, slug) {
   json.textContent=JSON.stringify({
     '@context':'https://schema.org','@type':'Car',
     name:titleText,
-    description:String(car.description || titleText).slice(0,500),
+    description:String(car.description || car.opis || titleText).slice(0,500),
     url:canonical.href,
     ...(imgs.length ? {image:imgs.slice(0,5)} : {}),
-    ...(car.brand ? {brand:{'@type':'Brand',name:String(car.brand)}} : {}),
+    ...((car.brand||car.marka) ? {brand:{'@type':'Brand',name:String(car.brand||car.marka)}} : {}),
     ...(car.model ? {model:String(car.model)} : {}),
-    ...(car.year && /^\d{4}$/.test(String(car.year)) ? {vehicleModelDate:String(car.year)} : {})
+    ...((car.year||car.rocznik) && /^\d{4}$/.test(String(car.year||car.rocznik)) ? {vehicleModelDate:String(car.year||car.rocznik)} : {})
   }).replace(/</g,'\\u003c');
   document.head.appendChild(json);
 }
 
 async function load(){
-  const slug=decodeURIComponent(location.pathname.split('/').pop().split('?')[0]);
   const el=document.getElementById('content');
   try{
+    const slug=decodeURIComponent(location.pathname.split('/').pop().split('?')[0]);
     if(!/^[a-zA-Z0-9_-]{1,150}$/.test(slug)){el.textContent='Nieprawidłowy adres ogłoszenia';return;}
     const lookupField=/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(slug)?'id':'slug';
-    const r=await fetch(`${SUPABASE_URL}/rest/v1/ogloszenia?${lookupField}=eq.${encodeURIComponent(slug)}&select=*`,{headers:{apikey:SUPABASE_KEY,Authorization:`Bearer ${SUPABASE_KEY}`}});
+    const r=await fetch(`${SUPABASE_URL}/rest/v1/ogloszenia?${lookupField}=eq.${encodeURIComponent(slug)}&select=id,slug,title,brand,marka,model,year,rocznik,location,lokalizacja,miasto,price,cena,description,opis,images,zdjecia,image,image_url,phone,telefon,owner_email`,{headers:{apikey:SUPABASE_KEY,Authorization:`Bearer ${SUPABASE_KEY}`}});
     if(!r.ok)throw new Error('Nie udało się pobrać ogłoszenia');
     const rows=await r.json();
     const car=Array.isArray(rows)?rows[0]:null;
     if(!car){ el.innerHTML=`<div style="padding:40px"><h1>Nie znaleziono</h1></div>`; return; }
     imgs=getImages(car);
     updateListingSeo(car, slug);
-    if(imgs.length===0) imgs=['https://placehold.co/800x600/151515/999999?text=Brak+zdjec'];
-    const phone=String(car.phone||'').trim();
-    const safePhone=/^\+?[0-9 ()-]{6,24}$/.test(phone)&&phone.replace(/\D/g,'').length>=6?phone:'';
+    if(imgs.length===0) imgs=['data:image/svg+xml;charset=utf-8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600"><rect width="800" height="600" fill="#151515"/><text x="400" y="300" fill="#aaa" font-family="sans-serif" font-size="32" text-anchor="middle">Brak zdjęcia</text></svg>')];
+    const phone=String(car.phone||car.telefon||'').trim();
+    const safePhone=/^\+?[0-9 ()-]{6,24}$/.test(phone)&&phone.replace(/\D/g,'').length>=9&&phone.replace(/\D/g,'').length<=15?phone:'';
     el.innerHTML=`
       <div class="gallery-main" id="galleryMain">
         <img id="mainImg" src="${escapeHtml(imgs[0])}" onclick="openLB(0)">
@@ -153,14 +158,37 @@ async function load(){
       </div>
       <div class="thumbs">${imgs.map((s,i)=>`<img src="${escapeHtml(s)}" class="${i===0?'active':''}" onclick="cur=${i}; document.getElementById('mainImg').src=imgs[${i}]; render()" loading="lazy">`).join('')}</div>
       <div class="info">
-        <h1>${escapeHtml(car.title||'')}</h1>
-        <div class="meta">${escapeHtml(car.brand||'')} ${escapeHtml(car.model||'')} • ${escapeHtml(car.location||'')} • ${escapeHtml(car.year||'')}r</div>
-        <div class="price">${car.price!==null&&car.price!==undefined&&String(car.price).trim()!==''&&Number.isFinite(Number(car.price))&&Number(car.price)>0?Number(car.price).toLocaleString('pl-PL')+' PLN':'Cena do uzgodnienia'}</div>
-        <div class="desc">${escapeHtml(car.description||'')}</div>
+        <h1>${escapeHtml(car.title||[car.brand||car.marka,car.model,car.year||car.rocznik].filter(Boolean).join(' '))}</h1>
+        <div class="meta">${escapeHtml(car.brand||car.marka||'')} ${escapeHtml(car.model||'')} • ${escapeHtml(car.location||car.lokalizacja||car.miasto||'')} • ${escapeHtml(car.year||car.rocznik||'')}r</div>
+        <div class="price">${Number.isFinite(Number(car.price??car.cena))&&Number(car.price??car.cena)>0?Number(car.price??car.cena).toLocaleString('pl-PL')+' PLN':'Cena do uzgodnienia'}</div>
+        <div class="desc">${escapeHtml(car.description||car.opis||'')}</div>
         ${safePhone?`<a class="btn" href="tel:${escapeHtml(safePhone.replace(/[^+\d]/g,''))}">📞 ZADZWOŃ: ${escapeHtml(safePhone)}</a>`:'<div class="meta">Numer telefonu niedostępny</div>'}
+        ${safePhone?(() => {
+          const digits=safePhone.replace(/\D/g,'');
+          const international=safePhone.startsWith('+')?digits:(digits.length===9?'48'+digits:(digits.length===11&&digits.startsWith('48')?digits:''));
+          const message='Dzień dobry, piszę w sprawie ogłoszenia na Wroomer.pl: '+location.href;
+          const whatsapp='https://wa.me/'+international+'?text='+encodeURIComponent(message);
+          const sms='sms:'+safePhone.replace(/[^+\d]/g,'')+'?body='+encodeURIComponent(message);
+          return '<div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:12px">'+
+            (international?'<a class="btn" style="background:#25D366;color:#111;flex:1;text-align:center" target="_blank" rel="noopener noreferrer" href="'+escapeHtml(whatsapp)+'">💬 WhatsApp</a>':'')+
+            '<a class="btn" style="background:#f59e0b;color:#111;flex:1;text-align:center" href="'+escapeHtml(sms)+'">✉️ SMS</a></div>';
+        })():''}
+        ${/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(car.owner_email||''))?'<div style="margin-top:14px;padding:15px;border:1px solid #333;border-radius:12px"><h3 style="margin:0 0 10px">Napisz do sprzedającego</h3><form id="sellerContactForm"><label style="display:block;margin-bottom:8px">Twoje imię <input name="buyerName" maxlength="70" required style="display:block;width:100%;padding:10px;margin-top:4px;border-radius:7px"></label><label style="display:block;margin-bottom:8px">Twój numer telefonu (obowiązkowy) <input name="buyerPhone" type="tel" inputmode="tel" minlength="9" maxlength="24" required placeholder="+48 600 000 000" style="display:block;width:100%;padding:10px;margin-top:4px;border-radius:7px"></label><label style="display:block;margin-bottom:8px">Wiadomość <textarea name="buyerMessage" maxlength="2000" required rows="4" style="display:block;width:100%;padding:10px;margin-top:4px;border-radius:7px">Dzień dobry, czy ogłoszenie jest aktualne?</textarea></label><p style="font-size:12px;color:#bbb;margin:8px 0">Twój numer telefonu i wiadomość zostaną przekazane sprzedającemu. Kliknięcie otworzy program pocztowy, z którego wyślesz wiadomość.</p><button type="submit" class="btn" style="width:100%">✉️ Przygotuj e-mail do sprzedającego</button></form></div>':''}
         <div style="margin-top:20px"><a href="/" style="color:#666;text-decoration:none">← Wróć do listy</a></div>
       </div>
     `;
+    const contactForm=document.getElementById('sellerContactForm');
+    if(contactForm)contactForm.addEventListener('submit',event=>{
+      event.preventDefault();
+      const data=new FormData(contactForm);
+      const name=String(data.get('buyerName')||'').trim();
+      const phone=String(data.get('buyerPhone')||'').trim();
+      const message=String(data.get('buyerMessage')||'').trim();
+      if(!name||!/^[+\d ()-]{9,24}$/.test(phone)||phone.replace(/\D/g,'').length<9||phone.replace(/\D/g,'').length>15||!message){alert('Podaj imię, prawidłowy numer telefonu i wiadomość.');return;}
+      const subject='Zapytanie o ogłoszenie Wroomer.pl: '+String(car.title||'samochód');
+      const body='Imię: '+name+'\nTelefon: '+phone+'\nOgłoszenie: '+location.href+'\n\n'+message;
+      location.href='mailto:'+encodeURIComponent(String(car.owner_email).trim())+'?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(body);
+    });
     const gm=document.getElementById('galleryMain');
     gm.addEventListener('touchstart', e=>startX=e.touches[0].clientX, {passive:true});
     gm.addEventListener('touchend', e=>{

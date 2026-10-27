@@ -6,7 +6,7 @@ const KEY='sb_publishable_S1qH_mBZaX7-bzmfJ0IVGA_6hxGbJWd';
 const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 export default async function handler(req,res){
   if(req.method!=='GET'){res.setHeader('Allow','GET');return res.status(405).end();}
-  const slug=String(req.query.slug||'').trim();
+  const slug=String(Array.isArray(req.query.slug)?req.query.slug[0]:(req.query.slug||'')).trim();
   if(!/^[a-zA-Z0-9_-]{1,150}$/.test(slug)){res.status(400).send('Nieprawidłowy adres');return;}
   try{
     const field=/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(slug)?'id':'slug';
@@ -15,31 +15,34 @@ export default async function handler(req,res){
     if(!response.ok)throw new Error('Backend response '+response.status);
     const rows=await response.json(), car=Array.isArray(rows)?rows[0]:null;
     if(!car){res.status(404).send('Nie znaleziono ogłoszenia');return;}
-    const title=String(car.title||[car.brand,car.model,car.year].filter(Boolean).join(' ')||'Samochód').slice(0,110);
+    const title=String(car.title||[car.brand||car.marka,car.model,car.year||car.rocznik].filter(Boolean).join(' ')||'Samochód').slice(0,110);
     const url='https://www.wroomer.pl/auto/'+encodeURIComponent(slug);
-    const description=[title,car.location,Number.isFinite(Number(car.price))&&Number(car.price)>0?Number(car.price).toLocaleString('pl-PL')+' zł':'','Oferta na WROOMER.PL'].filter(Boolean).join(' • ').slice(0,160);
+    const description=[title,car.location||car.lokalizacja||car.miasto,Number.isFinite(Number(car.price??car.cena))&&Number(car.price??car.cena)>0?Number(car.price??car.cena).toLocaleString('pl-PL')+' zł':'','Oferta na WROOMER.PL'].filter(Boolean).join(' • ').slice(0,160);
     let pictures=Array.isArray(car.images)?[...car.images]:[];
     if(typeof car.images==='string'){try{pictures=JSON.parse(car.images)}catch{pictures=[car.images]}}
     if(!Array.isArray(pictures))pictures=[];
-    if(car.image_url)pictures.unshift(car.image_url);
+    if(!pictures.length&&Array.isArray(car.zdjecia))pictures=[...car.zdjecia];
+    if(!pictures.length&&typeof car.zdjecia==='string'){try{pictures=JSON.parse(car.zdjecia)}catch{pictures=[car.zdjecia]}}
+    pictures=pictures.map(p=>typeof p==='string'?p:(p&&typeof p==='object'?(p.url||p.src||p.image_url||''):''));
+    if(car.image_url||car.image)pictures.unshift(car.image_url||car.image);
     pictures=[...new Set(pictures.filter(x=>typeof x==='string').map(x=>x.trim()).filter(x=>/^https:\/\/[^\s<>"']+$/i.test(x)))].slice(0,20);
-    const schema={'@context':'https://schema.org','@type':'Car',name:title,url,description:String(car.description||title).slice(0,500),...(car.brand?{brand:{'@type':'Brand',name:car.brand}}:{}),...(car.model?{model:car.model}:{}),...(pictures.length?{image:pictures}:{})};
-    const phone=String(car.phone||'').trim();
-    const safePhone=/^\+?[0-9 ()-]{6,24}$/.test(phone)&&phone.replace(/\D/g,'').length>=6?phone:'';
+    const schema={'@context':'https://schema.org','@type':'Car',name:title,url,description:String(car.description||car.opis||title).slice(0,500),...((car.brand||car.marka)?{brand:{'@type':'Brand',name:car.brand||car.marka}}:{}),...(car.model?{model:car.model}:{}),...(pictures.length?{image:pictures}:{})};
+    const phone=String(car.phone||car.telefon||'').trim();
+    const safePhone=/^\+?[0-9 ()-]{6,24}$/.test(phone)&&phone.replace(/\D/g,'').length>=9&&phone.replace(/\D/g,'').length<=15?phone:'';
     const phoneHref=safePhone.replace(/[^+\d]/g,'');
-    const price=Number.isFinite(Number(car.price))&&Number(car.price)>0?Number(car.price).toLocaleString('pl-PL')+' zł':'';
+    const price=Number.isFinite(Number(car.price??car.cena))&&Number(car.price??car.cena)>0?Number(car.price??car.cena).toLocaleString('pl-PL')+' zł':'';
     res.setHeader('Content-Type','text/html; charset=utf-8');
     res.setHeader('Cache-Control','public, s-maxage=60, stale-while-revalidate=300');
     // Reuse the original interactive listing page instead of replacing it with a reduced SSR-only view.
     const template=readFileSync(join(process.cwd(),'auto.html'),'utf8');
     const placeholder='<div id="content" class="card">Ładowanie...</div>';
     if(!template.includes(placeholder))throw Error('Listing template mismatch');
-    const image=pictures[0]||'https://placehold.co/800x600/151515/999999?text=Brak+zdjec';
+    const image=pictures[0]||'data:image/svg+xml;charset=utf-8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600"><rect width="800" height="600" fill="#151515"/><text x="400" y="300" text-anchor="middle" fill="#aaa" font-size="36" font-family="Arial">Brak zdjęcia</text></svg>');
     const gallery='<div class="gallery-main" id="galleryMain"><img id="mainImg" src="'+esc(image)+'" alt="'+esc(title)+'" loading="eager">'+
       (pictures.length?'<span class="counter" id="mainCounter">1 / '+pictures.length+'</span>':'')+'</div>'+
-      (pictures.length?'<div class="thumbs">'+pictures.map((p,i)=>'<img src="'+esc(p)+'" class="'+(i===0?'active':'')+'" loading="lazy" alt="'+esc(title)+'">').join('')+'</div>':'');
-    const details='<div class="info"><h1>'+esc(title)+'</h1><div class="meta">'+esc([car.brand,car.model,car.location,car.year].filter(Boolean).join(' • '))+'</div>'+
-      '<div class="price">'+esc(price||'Cena do uzgodnienia')+'</div><div class="desc">'+esc(car.description||'')+'</div>'+
+      (pictures.length?'<div class="thumbs">'+pictures.map((p,i)=>'<img src="'+esc(p)+'" class="'+(i===0?'active':'')+'" loading="lazy" alt="'+esc(title)+' — zdjęcie '+(i+1)+'" onclick="document.getElementById(\'mainImg\').src=this.src;document.querySelectorAll(\'.thumbs img\').forEach(x=>x.classList.remove(\'active\'));this.classList.add(\'active\');document.getElementById(\'mainCounter\').textContent=\''+(i+1)+' / '+pictures.length+'\'">').join('')+'</div>':'');
+    const details='<div class="info"><h1>'+esc(title)+'</h1><div class="meta">'+esc([car.brand||car.marka,car.model,car.location||car.lokalizacja||car.miasto,car.year||car.rocznik].filter(Boolean).join(' • '))+'</div>'+
+      '<div class="price">'+esc(price||'Cena do uzgodnienia')+'</div><div class="desc">'+esc(car.description||car.opis||'')+'</div>'+
       (safePhone?'<a class="btn" href="tel:'+esc(phoneHref)+'">📞 ZADZWOŃ: '+esc(safePhone)+'</a>':'<div class="meta">Numer telefonu niedostępny</div>')+
       '<div style="margin-top:20px"><a href="/" style="color:#888">← Wróć do listy</a></div></div>';
     const jsonLd=JSON.stringify(schema).replace(/</g,'\\u003c');
