@@ -145,7 +145,7 @@ async function load(){
     if(!car){ el.innerHTML=`<div style="padding:40px"><h1>Nie znaleziono</h1></div>`; return; }
     imgs=getImages(car);
     updateListingSeo(car, slug);
-    if(imgs.length===0) imgs=['https://placehold.co/800x600/151515/999999?text=Brak+zdjec'];
+    if(imgs.length===0) imgs=['data:image/svg+xml;charset=utf-8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600"><rect width="800" height="600" fill="#151515"/><text x="400" y="300" fill="#aaa" font-family="sans-serif" font-size="32" text-anchor="middle">Brak zdjęcia</text></svg>')];
     const phone=String(car.phone||car.telefon||'').trim();
     const safePhone=/^\+?[0-9 ()-]{6,24}$/.test(phone)&&phone.replace(/\D/g,'').length>=9&&phone.replace(/\D/g,'').length<=15?phone:'';
     el.innerHTML=`
