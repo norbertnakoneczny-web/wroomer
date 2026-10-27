@@ -168,9 +168,22 @@ async function load(){
             '<a class="btn" style="background:#25D366;color:#111;flex:1;text-align:center" target="_blank" rel="noopener noreferrer" href="'+escapeHtml(whatsapp)+'">💬 WhatsApp</a>'+
             '<a class="btn" style="background:#f59e0b;color:#111;flex:1;text-align:center" href="'+escapeHtml(sms)+'">✉️ SMS</a></div>';
         })():''}
+        ${/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(String(car.email||''))?'<div style="margin-top:14px;padding:15px;border:1px solid #333;border-radius:12px"><h3 style="margin:0 0 10px">Napisz do sprzedającego</h3><form id="sellerContactForm"><label style="display:block;margin-bottom:8px">Twoje imię <input name="buyerName" maxlength="70" required style="display:block;width:100%;padding:10px;margin-top:4px;border-radius:7px"></label><label style="display:block;margin-bottom:8px">Twój numer telefonu (obowiązkowy) <input name="buyerPhone" type="tel" inputmode="tel" minlength="9" maxlength="24" required placeholder="+48 600 000 000" style="display:block;width:100%;padding:10px;margin-top:4px;border-radius:7px"></label><label style="display:block;margin-bottom:8px">Wiadomość <textarea name="buyerMessage" maxlength="2000" required rows="4" style="display:block;width:100%;padding:10px;margin-top:4px;border-radius:7px">Dzień dobry, czy ogłoszenie jest aktualne?</textarea></label><p style="font-size:12px;color:#bbb;margin:8px 0">Twój numer telefonu i wiadomość zostaną przekazane sprzedającemu. Kliknięcie otworzy program pocztowy, z którego wyślesz wiadomość.</p><button type="submit" class="btn" style="width:100%">✉️ Przygotuj e-mail do sprzedającego</button></form></div>':''}
         <div style="margin-top:20px"><a href="/" style="color:#666;text-decoration:none">← Wróć do listy</a></div>
       </div>
     `;
+    const contactForm=document.getElementById('sellerContactForm');
+    if(contactForm)contactForm.addEventListener('submit',event=>{
+      event.preventDefault();
+      const data=new FormData(contactForm);
+      const name=String(data.get('buyerName')||'').trim();
+      const phone=String(data.get('buyerPhone')||'').trim();
+      const message=String(data.get('buyerMessage')||'').trim();
+      if(!name||!/^[+\\d ()-]{9,24}$/.test(phone)||phone.replace(/\\D/g,'').length<9||!message){alert('Podaj imię, prawidłowy numer telefonu i wiadomość.');return;}
+      const subject='Zapytanie o ogłoszenie Wroomer.pl: '+String(car.title||'samochód');
+      const body='Imię: '+name+'\\nTelefon: '+phone+'\\nOgłoszenie: '+location.href+'\\n\\n'+message;
+      location.href='mailto:'+encodeURIComponent(String(car.email).trim())+'?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(body);
+    });
     const gm=document.getElementById('galleryMain');
     gm.addEventListener('touchstart', e=>startX=e.touches[0].clientX, {passive:true});
     gm.addEventListener('touchend', e=>{
