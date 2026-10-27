@@ -756,7 +756,7 @@ function wroomerNormalize(value){
 function wroomerMatch(ad,search){
   const words=wroomerNormalize(search).split(/\s+/).filter(Boolean);
   if(!words.length)return true;
-  const searchable=wroomerNormalize([ad.brand,ad.model,ad.title,ad.year,ad.location].filter(Boolean).join(' '));
+  const searchable=wroomerNormalize([ad.brand||ad.marka,ad.model,ad.title,ad.year??ad.rocznik,ad.location||ad.lokalizacja||ad.miasto].filter(Boolean).join(' '));
   return words.every(word=>searchable.includes(word));
 }
 let wroomerLatestRequest=0;
