@@ -1,3 +1,5 @@
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 // Server-rendered vehicle detail page for crawlers and visitors.
 const API='https://bdpydgsfowtuvjnkyeeg.supabase.co';
 const KEY='sb_publishable_S1qH_mBZaX7-bzmfJ0IVGA_6hxGbJWd';
@@ -20,7 +22,7 @@ export default async function handler(req,res){
     if(typeof car.images==='string'){try{pictures=JSON.parse(car.images)}catch{pictures=[car.images]}}
     if(!Array.isArray(pictures))pictures=[];
     if(car.image_url)pictures.unshift(car.image_url);
-    pictures=[...new Set(pictures.filter(x=>typeof x==='string').map(x=>x.trim()).filter(x=>/^https:\/\/[^\s<>"']+$/i.test(x)))].slice(0,8);
+    pictures=[...new Set(pictures.filter(x=>typeof x==='string').map(x=>x.trim()).filter(x=>/^https:\/\/[^\s<>"']+$/i.test(x)))].slice(0,20);
     const schema={'@context':'https://schema.org','@type':'Car',name:title,url,description:String(car.description||title).slice(0,500),...(car.brand?{brand:{'@type':'Brand',name:car.brand}}:{}),...(car.model?{model:car.model}:{}),...(pictures.length?{image:pictures}:{})};
     const phone=String(car.phone||'').trim();
     const safePhone=/^\+?[0-9 ()-]{6,24}$/.test(phone)&&phone.replace(/\D/g,'').length>=6?phone:'';
@@ -28,6 +30,30 @@ export default async function handler(req,res){
     const price=Number.isFinite(Number(car.price))&&Number(car.price)>0?Number(car.price).toLocaleString('pl-PL')+' zł':'';
     res.setHeader('Content-Type','text/html; charset=utf-8');
     res.setHeader('Cache-Control','public, s-maxage=60, stale-while-revalidate=300');
-    res.status(200).send(`<!doctype html><html lang="pl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(title)} | WROOMER.PL</title><meta name="description" content="${esc(description)}"><link rel="canonical" href="${esc(url)}"><meta property="og:type" content="product"><meta property="og:title" content="${esc(title)}"><meta property="og:description" content="${esc(description)}"><meta property="og:url" content="${esc(url)}">${pictures[0]?`<meta property="og:image" content="${esc(pictures[0])}">`:''}<script type="application/ld+json">${JSON.stringify(schema).replace(/</g,'\\u003c')}</script><style>*{box-sizing:border-box}body{margin:0;background:#0c0c0c;color:#fff;font:16px system-ui,Arial}.wrap{max-width:900px;margin:auto;padding:20px}a{color:#facc15}h1{font-size:clamp(24px,5vw,36px)}.photo{width:100%;max-height:550px;object-fit:contain;background:#000;border-radius:14px}.price{font-size:30px;font-weight:bold;color:#facc15}.desc{white-space:pre-wrap;line-height:1.6}</style></head><body><main class="wrap"><a href="/">← WROOMER.PL</a><article><h1>${esc(title)}</h1><p>${esc([car.brand,car.model,car.year,car.location].filter(Boolean).join(' • '))}</p>${pictures[0]?`<img class="photo" src="${esc(pictures[0])}" alt="${esc(title)}">`:''}<p class="price">${esc(price)}</p><p class="desc">${esc(car.description)}</p>${safePhone?`<p><a href="tel:${esc(phoneHref)}">Zadzwoń: ${esc(safePhone)}</a></p>`:""}${safePhone?`<p><a href="tel:${esc(phoneHref)}">📞 Zadzwoń: ${esc(safePhone)}</a></p>`:""}<p><a href="/">Zobacz pozostałe ogłoszenia</a></p></article></main></body></html>`);
+    // Reuse the original interactive listing page instead of replacing it with a reduced SSR-only view.
+    const template=readFileSync(join(process.cwd(),'auto.html'),'utf8');
+    const placeholder='<div id="content" class="card">Ładowanie...</div>';
+    if(!template.includes(placeholder))throw Error('Listing template mismatch');
+    const image=pictures[0]||'https://placehold.co/800x600/151515/999999?text=Brak+zdjec';
+    const gallery='<div class="gallery-main" id="galleryMain"><img id="mainImg" src="'+esc(image)+'" alt="'+esc(title)+'" loading="eager">'+
+      (pictures.length?'<span class="counter" id="mainCounter">1 / '+pictures.length+'</span>':'')+'</div>'+
+      (pictures.length?'<div class="thumbs">'+pictures.map((p,i)=>'<img src="'+esc(p)+'" class="'+(i===0?'active':'')+'" loading="lazy" alt="'+esc(title)+'">').join('')+'</div>':'');
+    const details='<div class="info"><h1>'+esc(title)+'</h1><div class="meta">'+esc([car.brand,car.model,car.location,car.year].filter(Boolean).join(' • '))+'</div>'+
+      '<div class="price">'+esc(price||'Cena do uzgodnienia')+'</div><div class="desc">'+esc(car.description||'')+'</div>'+
+      (safePhone?'<a class="btn" href="tel:'+esc(phoneHref)+'">📞 ZADZWOŃ: '+esc(safePhone)+'</a>':'<div class="meta">Numer telefonu niedostępny</div>')+
+      '<div style="margin-top:20px"><a href="/" style="color:#888">← Wróć do listy</a></div></div>';
+    const jsonLd=JSON.stringify(schema).replace(/</g,'\\u003c');
+    const head='<link rel="canonical" href="'+esc(url)+'">'+
+      '<meta property="og:url" content="'+esc(url)+'">'+
+      (pictures.length?'<meta property="og:image" content="'+esc(pictures[0])+'">':'')+
+      '<script type="application/ld+json" id="listing-structured-data">'+jsonLd+'</script>';
+    const html=template
+      .replace(/<title>[^<]*<\/title>/i,'<title>'+esc(title)+' | WROOMER.PL</title>')
+      .replace(/<meta name="description" content="[^"]*">/i,'<meta name="description" content="'+esc(description)+'">')
+      .replace(/<meta property="og:title" content="[^"]*">/i,'<meta property="og:title" content="'+esc(title)+'">')
+      .replace(/<meta property="og:description" content="[^"]*">/i,'<meta property="og:description" content="'+esc(description)+'">')
+      .replace('</head>',head+'</head>')
+      .replace(placeholder,'<div id="content" class="card">'+gallery+details+'</div>');
+    res.status(200).send(html);
   }catch(e){res.status(502).send('Błąd odczytu ogłoszenia');}
 }
