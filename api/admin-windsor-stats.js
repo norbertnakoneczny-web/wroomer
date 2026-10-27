@@ -13,11 +13,11 @@ export default async function handler(req,res){
   if(!auth.ok||(await auth.json())!==true)return res.status(403).json({error:'Brak uprawnień administratora'});
   const period=req.query.period==='30'?'last_30d':'last_7d';
   const key=process.env.WINDSOR_API_KEY;
-  if(!key)return res.status(200).json({...SNAPSHOT,mode:'snapshot',message:'Historyczny odczyt z Windsor.ai. Automatyczna aktualizacja wymaga konfiguracji WINDSOR_API_KEY w Vercel.'});
+  if(!key){if(period!=='last_7d')return res.status(503).json({error:'Dane za 30 dni są dostępne po skonfigurowaniu WINDSOR_API_KEY. Aktualnie dostępne jest tylko archiwum za 7 dni.'});return res.status(200).json({...SNAPSHOT,mode:'snapshot',message:'Historyczny odczyt z Windsor.ai. Automatyczna aktualizacja wymaga konfiguracji WINDSOR_API_KEY w Vercel.'});}
   const cacheKey=period;
   if(cache?.key===cacheKey&&Date.now()-cache.time<15*60*1000)return res.status(200).json({...cache.value,mode:'live-cache'});
   const u=new URL('https://connectors.windsor.ai/googleanalytics4');
-  u.searchParams.set('api_key',key);u.searchParams.set('fields','date,source,sessions,screen_page_views');u.searchParams.set('date_preset',period);u.searchParams.set('_renderer','json');
+  u.searchParams.set('api_key',key);u.searchParams.set('fields','date,source,sessions,screen_page_views');u.searchParams.set('date_preset',period);u.searchParams.set('select_accounts','559043739');u.searchParams.set('_renderer','json');
   const controller=new AbortController();const timeout=setTimeout(()=>controller.abort(),18000);
   let response;try{response=await fetch(u,{signal:controller.signal,headers:{Accept:'application/json'}})}finally{clearTimeout(timeout)}
   if(!response.ok)throw new Error('Windsor HTTP '+response.status);
