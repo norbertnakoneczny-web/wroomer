@@ -19,7 +19,7 @@ export default async function handler(req,res){
    if(rows.length<500)break;
    if(offset===9500)throw Error('Sitemap pagination limit exceeded');
   }
-  if(urls.size===0)throw Error('No public listings returned');
+  // An empty marketplace is valid: return an empty sitemap rather than a 503 error.
   const xml='<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+[...urls].map(url=>'  <url><loc>'+url.replace(/&/g,'&amp;')+'</loc></url>').join('\n')+'\n</urlset>';
   res.setHeader('Content-Type','application/xml; charset=utf-8');
   res.setHeader('Cache-Control','public, s-maxage=600, stale-while-revalidate=3600');
