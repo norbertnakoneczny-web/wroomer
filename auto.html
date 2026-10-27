@@ -2,7 +2,7 @@
 <html lang="pl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Ogłoszenie samochodu | WROOMER.PL</title>
 <meta name="description" content="Sprawdź szczegóły samochodu, zdjęcia, wyposażenie i dane sprzedającego na WROOMER.PL.">
 <meta name="robots" content="index,follow">
@@ -97,6 +97,7 @@ function render(){
 }
 function openLB(i){ if(!imgs.length)return; cur=Math.max(0,Math.min(Number(i)||0,imgs.length-1)); document.getElementById('lbimg').src=imgs[cur]; document.getElementById('lightbox').classList.add('open'); render(); }
 function closeLB(){ document.getElementById('lightbox').classList.remove('open'); }
+document.addEventListener("keydown",e=>{if(!document.getElementById("lightbox").classList.contains("open"))return;if(e.key==="Escape")closeLB();else if(e.key==="ArrowRight")nextImg();else if(e.key==="ArrowLeft")prevImg();});
 function nextImg(){ if(!imgs.length)return; cur=(cur+1)%imgs.length; const lb=document.getElementById('lbimg');if(lb)lb.src=imgs[cur]; render(); }
 function prevImg(){ if(!imgs.length)return; cur=(cur-1+imgs.length)%imgs.length; const lb=document.getElementById('lbimg');if(lb)lb.src=imgs[cur]; render(); }
 
