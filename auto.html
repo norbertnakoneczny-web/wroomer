@@ -89,7 +89,7 @@ function render(){
   if(!imgs.length)return;
   cur=Math.max(0,Math.min(cur,imgs.length-1));
   const mainImg = document.getElementById('mainImg');
-  if(mainImg) mainImg.src = imgs[cur];
+  if(mainImg){ mainImg.onerror=()=>{mainImg.onerror=null;mainImg.removeAttribute('src');mainImg.alt='Zdjęcie jest chwilowo niedostępne';}; mainImg.src=imgs[cur]; }
   const mc=document.getElementById('mainCounter'); if(mc) mc.innerText = `${cur+1} / ${imgs.length}`;
   const hc=document.getElementById('hcount'); if(hc) hc.innerText = `${imgs.length} zdjęć`;
   const lbc=document.getElementById('lbcounter'); if(lbc) lbc.innerText = `${cur+1} / ${imgs.length}`;
