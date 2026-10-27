@@ -79,7 +79,10 @@ function getImages(car){
   if(Array.isArray(car.images)) a=[...car.images];
   else if(typeof car.images==='string'){ try{a=JSON.parse(car.images)}catch{a=[car.images]} }
   if(!Array.isArray(a))a=[];
+  if(!a.length){if(Array.isArray(car.zdjecia))a=[...car.zdjecia];else if(typeof car.zdjecia==='string'){try{a=JSON.parse(car.zdjecia)}catch{a=[car.zdjecia]}}}
+  if(!Array.isArray(a))a=[];
   if(car.image_url) a.unshift(car.image_url);
+  if(car.image) a.push(car.image);
   return [...new Set(a.map(s=>safeImage(s)).filter(Boolean))].slice(0,20);
 }
 function render(){
