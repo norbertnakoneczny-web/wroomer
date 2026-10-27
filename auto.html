@@ -146,7 +146,7 @@ async function load(){
     updateListingSeo(car, slug);
     if(imgs.length===0) imgs=['https://placehold.co/800x600/151515/999999?text=Brak+zdjec'];
     const phone=String(car.phone||car.telefon||'').trim();
-    const safePhone=/^\+?[0-9 ()-]{6,24}$/.test(phone)&&phone.replace(/\D/g,'').length>=6?phone:'';
+    const safePhone=/^\+?[0-9 ()-]{6,24}$/.test(phone)&&phone.replace(/\D/g,'').length>=9&&phone.replace(/\D/g,'').length<=15?phone:'';
     el.innerHTML=`
       <div class="gallery-main" id="galleryMain">
         <img id="mainImg" src="${escapeHtml(imgs[0])}" onclick="openLB(0)">
