@@ -142,7 +142,7 @@ async function load(){
     imgs=getImages(car);
     updateListingSeo(car, slug);
     if(imgs.length===0) imgs=['https://placehold.co/800x600/151515/999999?text=Brak+zdjec'];
-    const phone=String(car.phone||'').trim();
+    const phone=String(car.phone||car.telefon||'').trim();
     const safePhone=/^\+?[0-9 ()-]{6,24}$/.test(phone)&&phone.replace(/\D/g,'').length>=6?phone:'';
     el.innerHTML=`
       <div class="gallery-main" id="galleryMain">
