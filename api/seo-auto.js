@@ -41,9 +41,18 @@ export default async function handler(req,res){
     const gallery='<div class="gallery-main" id="galleryMain"><img id="mainImg" src="'+esc(image)+'" alt="'+esc(title)+'" loading="eager">'+
       (pictures.length?'<span class="counter" id="mainCounter">1 / '+pictures.length+'</span>':'')+'</div>'+
       (pictures.length?'<div class="thumbs">'+pictures.map((p,i)=>'<img src="'+esc(p)+'" class="'+(i===0?'active':'')+'" loading="lazy" alt="'+esc(title)+' — zdjęcie '+(i+1)+'" onclick="document.getElementById(\'mainImg\').src=this.src;document.querySelectorAll(\'.thumbs img\').forEach(x=>x.classList.remove(\'active\'));this.classList.add(\'active\');document.getElementById(\'mainCounter\').textContent=\''+(i+1)+' / '+pictures.length+'\'">').join('')+'</div>':'');
+    const digits=safePhone.replace(/\D/g,'');
+    const international=safePhone.startsWith('+')?digits:(digits.length===9?'48'+digits:(digits.length===11&&digits.startsWith('48')?digits:''));
+    const contactMessage='Dzień dobry, piszę w sprawie ogłoszenia na Wroomer.pl: '+url;
+    const contactButtons=safePhone?'<div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:12px">'+
+      (international?'<a class="btn" style="background:#25D366;color:#111;flex:1;text-align:center" target="_blank" rel="noopener noreferrer" href="https://wa.me/'+esc(international)+'?text='+esc(encodeURIComponent(contactMessage))+'">💬 WhatsApp</a>':'')+
+      '<a class="btn" style="background:#f59e0b;color:#111;flex:1;text-align:center" href="sms:'+esc(phoneHref)+'?body='+esc(encodeURIComponent(contactMessage))+'">✉️ SMS</a></div>':'';
+    const sellerEmail=String(car.owner_email||'').trim();
+    const emailContact=/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(sellerEmail)?'<div style="margin-top:14px"><a class="btn" href="mailto:'+esc(sellerEmail)+'?subject='+esc(encodeURIComponent('Zapytanie o ogłoszenie Wroomer.pl'))+'&body='+esc(encodeURIComponent(contactMessage))+'">✉️ Napisz do sprzedającego</a></div>':'';
     const details='<div class="info"><h1>'+esc(title)+'</h1><div class="meta">'+esc([car.brand||car.marka,car.model,car.location||car.lokalizacja||car.miasto,car.year||car.rocznik].filter(Boolean).join(' • '))+'</div>'+
       '<div class="price">'+esc(price||'Cena do uzgodnienia')+'</div><div class="desc">'+esc(car.description||car.opis||'')+'</div>'+
       (safePhone?'<a class="btn" href="tel:'+esc(phoneHref)+'">📞 ZADZWOŃ: '+esc(safePhone)+'</a>':'<div class="meta">Numer telefonu niedostępny</div>')+
+      contactButtons+emailContact+
       '<div style="margin-top:20px"><a href="/" style="color:#888">← Wróć do listy</a></div></div>';
     const jsonLd=JSON.stringify(schema).replace(/</g,'\\u003c');
     const head='<link rel="canonical" href="'+esc(url)+'">'+
