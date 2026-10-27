@@ -101,8 +101,8 @@ function nextImg(){ if(!imgs.length)return; cur=(cur+1)%imgs.length; const lb=do
 function prevImg(){ if(!imgs.length)return; cur=(cur-1+imgs.length)%imgs.length; const lb=document.getElementById('lbimg');if(lb)lb.src=imgs[cur]; render(); }
 
 function updateListingSeo(car, slug) {
-  const titleText=String(car.title || [car.brand,car.model,car.year].filter(Boolean).join(' ') || 'Ogłoszenie samochodu').trim().slice(0,110);
-  const locationText=String(car.location || '').trim();
+  const titleText=String(car.title || [car.brand||car.marka,car.model,car.year||car.rocznik].filter(Boolean).join(' ') || 'Ogłoszenie samochodu').trim().slice(0,110);
+  const locationText=String(car.location || car.lokalizacja || car.miasto || '').trim();
   document.title=titleText + (locationText ? ' – '+locationText : '') + ' | WROOMER.PL';
   const description=[titleText, locationText, Number.isFinite(Number(car.price)) && Number(car.price)>0 ? Number(car.price).toLocaleString('pl-PL')+' zł' : '', 'Zdjęcia i szczegóły ogłoszenia na WROOMER.PL.'].filter(Boolean).join(' • ').slice(0,160);
   document.querySelector('meta[name="description"]').setAttribute('content',description);
