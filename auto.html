@@ -93,9 +93,10 @@ function render(){
   const mc=document.getElementById('mainCounter'); if(mc) mc.innerText = `${cur+1} / ${imgs.length}`;
   const hc=document.getElementById('hcount'); if(hc) hc.innerText = `${imgs.length} zdjęć`;
   const lbc=document.getElementById('lbcounter'); if(lbc) lbc.innerText = `${cur+1} / ${imgs.length}`;
+  const lbimg=document.getElementById('lbimg'); if(lbimg&&document.getElementById('lightbox').classList.contains('open')&&lbimg.getAttribute('src')!==imgs[cur]) lbimg.src=imgs[cur];
   document.querySelectorAll('.thumbs img').forEach((el,i)=>el.classList.toggle('active', i===cur));
 }
-function openLB(i){ if(!imgs.length)return; cur=Math.max(0,Math.min(Number(i)||0,imgs.length-1)); document.getElementById('lbimg').src=imgs[cur]; document.getElementById('lightbox').classList.add('open'); render(); }
+function openLB(i){ if(!imgs.length)return; cur=Math.max(0,Math.min(Number(i)||0,imgs.length-1)); const lb=document.getElementById('lbimg'); lb.onerror=()=>{lb.onerror=null;lb.removeAttribute('src');lb.alt='Zdjęcie jest chwilowo niedostępne';}; lb.src=imgs[cur]; document.getElementById('lightbox').classList.add('open'); render(); }
 function closeLB(){ document.getElementById('lightbox').classList.remove('open'); }
 document.addEventListener("keydown",e=>{if(!document.getElementById("lightbox").classList.contains("open"))return;if(e.key==="Escape")closeLB();else if(e.key==="ArrowRight")nextImg();else if(e.key==="ArrowLeft")prevImg();});
 function nextImg(){ if(!imgs.length)return; cur=(cur+1)%imgs.length; const lb=document.getElementById('lbimg');if(lb)lb.src=imgs[cur]; render(); }
