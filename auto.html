@@ -182,7 +182,7 @@ async function load(){
       const name=String(data.get('buyerName')||'').trim();
       const phone=String(data.get('buyerPhone')||'').trim();
       const message=String(data.get('buyerMessage')||'').trim();
-      if(!name||!/^[+\d ()-]{9,24}$/.test(phone)||phone.replace(/\D/g,'').length<9||!message){alert('Podaj imię, prawidłowy numer telefonu i wiadomość.');return;}
+      if(!name||!/^[+\d ()-]{9,24}$/.test(phone)||phone.replace(/\D/g,'').length<9||phone.replace(/\D/g,'').length>15||!message){alert('Podaj imię, prawidłowy numer telefonu i wiadomość.');return;}
       const subject='Zapytanie o ogłoszenie Wroomer.pl: '+String(car.title||'samochód');
       const body='Imię: '+name+'\nTelefon: '+phone+'\nOgłoszenie: '+location.href+'\n\n'+message;
       location.href='mailto:'+encodeURIComponent(String(car.owner_email).trim())+'?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(body);
