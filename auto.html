@@ -73,7 +73,7 @@ const SUPABASE_URL="https://bdpydgsfowtuvjnkyeeg.supabase.co";
 const SUPABASE_KEY="sb_publishable_S1qH_mBZaX7-bzmfJ0IVGA_6hxGbJWd";
 let imgs=[], cur=0, startX=0;
 const escapeHtml=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const safeImage=x=>{try{const u=new URL(String(x));return ['https:','http:'].includes(u.protocol)?u.href:'';}catch{return '';}};
+const safeImage=x=>{try{const raw=typeof x==='string'?x:(x&&typeof x==='object'?(x.url||x.src||x.image_url||''):'');const u=new URL(String(raw));return ['https:','http:'].includes(u.protocol)?u.href:'';}catch{return '';}};
 function getImages(car){
   let a=[];
   if(Array.isArray(car.images)) a=[...car.images];
