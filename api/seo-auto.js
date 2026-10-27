@@ -22,6 +22,7 @@ export default async function handler(req,res){
     if(typeof car.images==='string'){try{pictures=JSON.parse(car.images)}catch{pictures=[car.images]}}
     if(!Array.isArray(pictures))pictures=[];
     if(!pictures.length&&Array.isArray(car.zdjecia))pictures=[...car.zdjecia];
+    if(!pictures.length&&typeof car.zdjecia==='string'){try{pictures=JSON.parse(car.zdjecia)}catch{pictures=[car.zdjecia]}}
     pictures=pictures.map(p=>typeof p==='string'?p:(p&&typeof p==='object'?(p.url||p.src||p.image_url||''):''));
     if(car.image_url||car.image)pictures.unshift(car.image_url||car.image);
     pictures=[...new Set(pictures.filter(x=>typeof x==='string').map(x=>x.trim()).filter(x=>/^https:\/\/[^\s<>"']+$/i.test(x)))].slice(0,20);
