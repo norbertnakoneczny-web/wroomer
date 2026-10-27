@@ -8,7 +8,7 @@ export default async function handler(req,res){
  try{
   const urls=new Set();
   for(let offset=0;offset<10000;offset+=500){
-   const response=await fetch(API+'/rest/v1/ogloszenia?select=id,slug&order=id.asc&limit=500&offset='+offset,{headers:{apikey:KEY,Authorization:'Bearer '+KEY},signal:AbortSignal.timeout(6500)});
+   const response=await fetch(API+'/rest/v1/ogloszenia?select=id,slug&is_banned=eq.false&order=id.asc&limit=500&offset='+offset,{headers:{apikey:KEY,Authorization:'Bearer '+KEY},signal:AbortSignal.timeout(6500)});
    if(!response.ok)throw Error('API error');
    const rows=await response.json();
    if(!Array.isArray(rows))throw Error('Invalid response');
