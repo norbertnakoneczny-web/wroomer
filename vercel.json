@@ -7,7 +7,7 @@
     },
     {
       "source": "/auto/:slug",
-      "destination": "/auto.html"
+      "destination": "/api/seo-auto?slug=:slug"
     },
     {
       "source": "/polityka-prywatnosci",
@@ -25,5 +25,10 @@
       "source": "/rodo",
       "destination": "/rodo.html"
     }
-  ]
+  ],
+  "functions": {
+    "api/seo-auto.js": {
+      "includeFiles": "auto.html"
+    }
+  }
 }
