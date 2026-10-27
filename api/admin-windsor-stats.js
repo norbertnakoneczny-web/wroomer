@@ -11,20 +11,23 @@ export default async function handler(req,res){
  try{
   const auth=await fetch(SUPABASE_URL+'/rest/v1/rpc/is_wroomer_admin',{method:'POST',headers:{apikey:PUBLISHABLE_KEY,Authorization:'Bearer '+token,'Content-Type':'application/json'},body:'{}'});
   if(!auth.ok||(await auth.json())!==true)return res.status(403).json({error:'Brak uprawnień administratora'});
-  const period=req.query.period==='30'?'last_30d':'last_7d';
+  const hourly=req.query.period==='24h';
+  const period=hourly?'last_2dT':req.query.period==='30'?'last_30d':'last_7d';
   const key=process.env.WINDSOR_API_KEY;
   if(!key){if(period!=='last_7d')return res.status(503).json({error:'Dane za 30 dni są dostępne po skonfigurowaniu WINDSOR_API_KEY. Aktualnie dostępne jest tylko archiwum za 7 dni.'});return res.status(200).json({...SNAPSHOT,mode:'snapshot',message:'Historyczny odczyt z Windsor.ai. Automatyczna aktualizacja wymaga konfiguracji WINDSOR_API_KEY w Vercel.'});}
   const cacheKey=period;
   if(cache?.key===cacheKey&&Date.now()-cache.time<15*60*1000)return res.status(200).json({...cache.value,mode:'live-cache'});
   const u=new URL('https://connectors.windsor.ai/googleanalytics4');
-  u.searchParams.set('api_key',key);u.searchParams.set('fields','date,source,sessions,screen_page_views');u.searchParams.set('date_preset',period);u.searchParams.set('select_accounts','559043739');u.searchParams.set('_renderer','json');
+  u.searchParams.set('api_key',key);u.searchParams.set('fields',hourly?'date_hour,sessions,screen_page_views':'date,source,sessions,screen_page_views');u.searchParams.set('date_preset',period);u.searchParams.set('select_accounts','559043739');u.searchParams.set('_renderer','json');
   const controller=new AbortController();const timeout=setTimeout(()=>controller.abort(),18000);
   let response;try{response=await fetch(u,{signal:controller.signal,headers:{Accept:'application/json'}})}finally{clearTimeout(timeout)}
   if(!response.ok)throw new Error('Windsor HTTP '+response.status);
   const payload=await response.json();const raw=Array.isArray(payload)?payload:Array.isArray(payload.data)?payload.data:null;
   if(!raw)throw new Error('Nieoczekiwany format odpowiedzi Windsor');
-  const rows=raw.map(x=>({date:String(x.date||''),source:String(x.source||'(not set)'),sessions:Number(x.sessions)||0,screen_page_views:Number(x.screen_page_views)||0}));
-  const value={rows,capturedAt:new Date().toISOString(),period:period==='last_30d'?'Ostatnie 30 dni':'Ostatnie 7 dni'};cache={key:cacheKey,time:Date.now(),value};
+  const rows=hourly?raw.map(x=>({date_hour:String(x.date_hour||''),sessions:Number(x.sessions)||0,screen_page_views:Number(x.screen_page_views)||0})):raw.map(x=>({date:String(x.date||''),source:String(x.source||'(not set)'),sessions:Number(x.sessions)||0,screen_page_views:Number(x.screen_page_views)||0}));
+  const value=hourly?{rows:buildHourly24(rows),capturedAt:new Date().toISOString(),period:'Ostatnie 24 godziny (pełne przedziały godzinowe)',timezone:'Europe/Warsaw',hourly:true}:{rows,capturedAt:new Date().toISOString(),period:period==='last_30d'?'Ostatnie 30 dni':'Ostatnie 7 dni'};cache={key:cacheKey,time:Date.now(),value};
   return res.status(200).json({...value,mode:'live'});
  }catch(e){return res.status(502).json({error:'Nie można pobrać statystyk Windsor.ai. '+String(e.message||'Błąd serwera').replace(/api_key=[^& ]+/g,'api_key=[redacted]')});}
 }
+
+function buildHourly24(rows){const fmt=new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/Warsaw',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',hourCycle:'h23'});const bucket=d=>{const parts=Object.fromEntries(fmt.formatToParts(d).map(p=>[p.type,p.value]));return parts.year+parts.month+parts.day+parts.hour};const now=Date.now(),slots=Array.from({length:24},(_,i)=>{const d=new Date(now-(23-i)*3600000);return {date_hour:bucket(d),label:new Intl.DateTimeFormat('pl-PL',{timeZone:'Europe/Warsaw',day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).format(d),sessions:0,screen_page_views:0}});const grouped=new Map();rows.forEach(r=>{if(!/^\d{10}$/.test(r.date_hour))return;const prev=grouped.get(r.date_hour)||{sessions:0,screen_page_views:0};prev.sessions+=r.sessions;prev.screen_page_views+=r.screen_page_views;grouped.set(r.date_hour,prev)});slots.forEach(s=>{const r=grouped.get(s.date_hour);if(r){s.sessions=r.sessions;s.screen_page_views=r.screen_page_views}});return slots}
