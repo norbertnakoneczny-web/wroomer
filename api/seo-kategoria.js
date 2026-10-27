@@ -11,9 +11,15 @@ export default async function handler(req,res){
  const brand=String(req.query.brand||'').toLowerCase(),city=String(req.query.city||'').toLowerCase();
  if(!brands[brand]||(city&&!cities[city]))return res.status(404).send('Nie znaleziono kategorii');
  try{
-  const r=await fetch(API+'/rest/v1/ogloszenia?select=*&is_banned=eq.false&limit=500',{headers:{apikey:KEY,Authorization:'Bearer '+KEY},signal:AbortSignal.timeout(7000)});
-  if(!r.ok)throw Error('Database unavailable');
-  const data=await r.json();
+  let data=null;
+  for(let attempt=0;attempt<2;attempt++){
+   try{
+    const r=await fetch(API+'/rest/v1/ogloszenia?select=id,slug,title,brand,marka,model,year,rocznik,price,cena,location,lokalizacja,miasto&is_banned=eq.false&limit=500',{headers:{apikey:KEY,Authorization:'Bearer '+KEY},signal:AbortSignal.timeout(9000)});
+    if(!r.ok)throw Error('Database response '+r.status);
+    data=await r.json();break;
+   }catch(e){if(attempt===1)throw e;}
+  }
+  if(!Array.isArray(data))throw Error('Invalid listing data');
   const rows=data.filter(x=>norm(x.brand||x.marka)===norm(brands[brand])&&(!city||norm(x.location||x.lokalizacja||x.miasto).includes(norm(cities[city])))).filter(x=>/^[a-zA-Z0-9_-]{1,150}$/.test(String(x.slug||x.id||'')));
   if(!rows.length)return res.status(404).type('text/plain').send('Brak aktualnych ogłoszeń w tej kategorii');
   const title=brands[brand]+' używane'+(city?' – '+cities[city]:'')+' | Ogłoszenia Wroomer.pl';
