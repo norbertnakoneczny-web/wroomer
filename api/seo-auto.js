@@ -26,7 +26,9 @@ export default async function handler(req,res){
     pictures=pictures.map(p=>typeof p==='string'?p:(p&&typeof p==='object'?(p.url||p.src||p.image_url||''):''));
     if(car.image_url||car.image)pictures.unshift(car.image_url||car.image);
     pictures=[...new Set(pictures.filter(x=>typeof x==='string').map(x=>x.trim()).filter(x=>/^https:\/\/[^\s<>"']+$/i.test(x)))].slice(0,20);
-    const schema={'@context':'https://schema.org','@type':'Car',name:title,url,description:String(car.description||car.opis||title).slice(0,500),...((car.brand||car.marka)?{brand:{'@type':'Brand',name:car.brand||car.marka}}:{}),...(car.model?{model:car.model}:{}),...(pictures.length?{image:pictures}:{})};
+    const numericPrice=Number(car.price??car.cena);
+    const validPrice=Number.isFinite(numericPrice)&&numericPrice>0;
+    const schema={'@context':'https://schema.org','@type':'Car',name:title,url,description:String(car.description||car.opis||title).slice(0,500),...((car.brand||car.marka)?{brand:{'@type':'Brand',name:car.brand||car.marka}}:{}),...(car.model?{model:car.model}:{}),...(pictures.length?{image:pictures}:{}),...(validPrice?{offers:{'@type':'Offer',url,price:numericPrice,priceCurrency:'PLN'}}:{})};
     const phone=String(car.phone||car.telefon||'').trim();
     const safePhone=/^\+?[0-9 ()-]{6,24}$/.test(phone)&&phone.replace(/\D/g,'').length>=9&&phone.replace(/\D/g,'').length<=15?phone:'';
     const phoneHref=safePhone.replace(/[^+\d]/g,'');

@@ -6,6 +6,14 @@
       "destination": "/api/sitemap"
     },
     {
+      "source": "/samochody/:brand/:city",
+      "destination": "/api/seo-kategoria?brand=:brand&city=:city"
+    },
+    {
+      "source": "/samochody/:brand",
+      "destination": "/api/seo-kategoria?brand=:brand"
+    },
+    {
       "source": "/auto/:slug",
       "destination": "/api/seo-auto?slug=:slug"
     },
