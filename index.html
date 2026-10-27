@@ -706,6 +706,8 @@ function openGallery(ad){
       <div class="wroomer-report-wrap"><button type="button" class="wroomer-report-btn" onclick="wroomerReportListing()">⚑ Zgłoś treść ogłoszenia</button><span>Zgłoszenie przygotujesz na rodo@wroomer.pl</span></div>
       <div class="detail-actions">
         ${hasPhone?`<a class="detail-call" href="tel:${escapeHtml(phoneClean)}">☎ Zadzwoń: ${escapeHtml(phoneClean)}</a>`:''}
+        ${hasPhone&&((phoneDigits.length===9)||((phoneDigits.length===11)&&phoneDigits.startsWith('48'))||phoneClean.startsWith('+'))?`<a class="detail-call" style="background:#25D366;color:#111" target="_blank" rel="noopener noreferrer" href="https://wa.me/${escapeHtml(phoneClean.startsWith('+')?phoneDigits:(phoneDigits.length===9?'48'+phoneDigits:phoneDigits))}?text=${encodeURIComponent('Dzień dobry, piszę w sprawie ogłoszenia na Wroomer.pl: '+location.origin+'/auto/'+(ad.slug||ad.id))}">💬 WhatsApp</a>`:''}
+        ${hasPhone?`<a class="detail-call" style="background:#f59e0b;color:#111" href="sms:${escapeHtml(phoneClean)}?body=${encodeURIComponent('Dzień dobry, piszę w sprawie ogłoszenia na Wroomer.pl: '+location.origin+'/auto/'+(ad.slug||ad.id))}">✉ SMS</a>`:''}
         ${hasMap?`<a class="detail-map" href="https://www.google.com/maps/search/?api=1&amp;query=${encodeURIComponent(mapQuery)}" target="_blank" rel="noopener noreferrer">⌖ Zobacz mapę</a>`:""}
       </div>
     </section>`;
