@@ -36,7 +36,7 @@ export default async function handler(req,res){
     const template=readFileSync(join(process.cwd(),'auto.html'),'utf8');
     const placeholder='<div id="content" class="card">Ładowanie...</div>';
     if(!template.includes(placeholder))throw Error('Listing template mismatch');
-    const image=pictures[0]||'https://placehold.co/800x600/151515/999999?text=Brak+zdjec';
+    const image=pictures[0]||'data:image/svg+xml;charset=utf-8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600"><rect width="800" height="600" fill="#151515"/><text x="400" y="300" text-anchor="middle" fill="#aaa" font-size="36" font-family="Arial">Brak zdjęcia</text></svg>');
     const gallery='<div class="gallery-main" id="galleryMain"><img id="mainImg" src="'+esc(image)+'" alt="'+esc(title)+'" loading="eager">'+
       (pictures.length?'<span class="counter" id="mainCounter">1 / '+pictures.length+'</span>':'')+'</div>'+
       (pictures.length?'<div class="thumbs">'+pictures.map((p,i)=>'<img src="'+esc(p)+'" class="'+(i===0?'active':'')+'" loading="lazy" alt="'+esc(title)+'">').join('')+'</div>':'');
