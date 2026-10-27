@@ -492,7 +492,32 @@ function parseExtra(desc){
   return o;
 }
 function locateForAdd(){const btn=document.getElementById('gpsAddBtn'); const info=document.getElementById('gpsAddInfo'); if(!navigator.geolocation){alert('Brak GPS'); return;} btn.textContent='📡 Pobieram...'; btn.disabled=true; info.style.display='block'; info.textContent='Pobieram lokalizację...'; info.className='gps-info show'; navigator.geolocation.getCurrentPosition(async (pos)=>{addLat=pos.coords.latitude; addLng=pos.coords.longitude; document.getElementById('aLat').value=addLat.toFixed(6); document.getElementById('aLng').value=addLng.toFixed(6); btn.textContent='✅ GPS Pobrany!'; btn.classList.add('active'); btn.disabled=false; info.textContent=`✅ GPS: ${addLat.toFixed(5)}, ${addLng.toFixed(5)}`; info.className='gps-info show success'; try{const res=await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${addLat}&lon=${addLng}&zoom=10`); const data=await res.json(); const city=data.address?.city||data.address?.town||data.address?.village||''; if(city) document.getElementById('aLocation').value=city.split(',')[0];}catch(e){}}, (err)=>{btn.textContent='📍 Zlokalizuj GPS'; btn.disabled=false; info.textContent='❌ Błąd: '+err.message; info.className='gps-info show';}, {enableHighAccuracy:true, timeout:10000});}
-function locateForSearch(prefix){const btn=document.getElementById('gpsSearchBtn'+prefix); const info=document.getElementById('gpsSearchInfo'+prefix); if(!navigator.geolocation){alert('Brak GPS'); return;} btn.textContent='📡 Pobieram...'; btn.disabled=true; info.style.display='block'; info.textContent='Pobieram...'; info.className='gps-info show'; navigator.geolocation.getCurrentPosition(async (pos)=>{searchLat=pos.coords.latitude; searchLng=pos.coords.longitude; btn.textContent='✅ Moja lokalizacja aktywna'; btn.classList.add('active'); btn.disabled=false; info.textContent=`✅ Twoja lokalizacja: ${searchLat.toFixed(4)}, ${searchLng.toFixed(4)}`; info.className='gps-info show success'; wroomerScheduleFilter(true);}, (err)=>{btn.textContent='📍 Zlokalizuj mnie'; btn.disabled=false; info.textContent='❌ Błąd: '+err.message; info.className='gps-info show';}, {enableHighAccuracy:true, timeout:10000});}
+function locateForSearch(prefix){
+ const btn=document.getElementById('gpsSearchBtn'+prefix);
+ const info=document.getElementById('gpsSearchInfo'+prefix);
+ if(!btn||!info)return;
+ const show=(message,success=false)=>{info.style.display='block';info.textContent=message;info.className='gps-info show'+(success?' success':'');};
+ const reset=()=>{btn.textContent='📍 Zlokalizuj mnie';btn.disabled=false;};
+ if(!window.isSecureContext){show('GPS wymaga bezpiecznego połączenia HTTPS. Możesz też wpisać miejscowość w filtrze Lokalizacja.');return;}
+ if(!navigator.geolocation){show('Ta przeglądarka nie udostępnia GPS. Wpisz miejscowość w filtrze Lokalizacja.');return;}
+ btn.textContent='📡 Pobieram lokalizację...';btn.disabled=true;
+ show('Przeglądarka może poprosić o dostęp do lokalizacji. Zezwól na używanie lokalizacji dla tej witryny.');
+ const success=pos=>{
+  searchLat=pos.coords.latitude;searchLng=pos.coords.longitude;
+  btn.textContent='✅ Moja lokalizacja aktywna';btn.classList.add('active');btn.disabled=false;
+  show('✅ Lokalizacja aktywna. Dokładność: około '+Math.round(pos.coords.accuracy)+' m.',true);
+  wroomerScheduleFilter(true);
+ };
+ const error=err=>{
+  reset();
+  const details=err.code===1?'Dostęp do lokalizacji został zablokowany. W Safari otwórz ustawienia witryny i zezwól na lokalizację, a potem spróbuj ponownie.':err.code===2?'Nie udało się ustalić pozycji. Sprawdź usługi lokalizacji urządzenia lub wpisz miejscowość ręcznie.':err.code===3?'Ustalanie pozycji trwało zbyt długo. Spróbuj ponownie lub wpisz miejscowość ręcznie.':'Nie udało się odczytać lokalizacji. Wpisz miejscowość ręcznie.';
+  show('⚠️ '+details);
+ };
+ navigator.geolocation.getCurrentPosition(success,firstError=>{
+  if(firstError.code!==3){error(firstError);return;}
+  navigator.geolocation.getCurrentPosition(success,error,{enableHighAccuracy:false,timeout:20000,maximumAge:300000});
+ },{enableHighAccuracy:false,timeout:15000,maximumAge:300000});
+}
 function populateModelSelect(brandId, modelId, selectedModel=null){const brand=document.getElementById(brandId).value; const modelSel=document.getElementById(modelId); if(!modelSel) return; const models=BRAND_MODELS[brand]||[]; modelSel.innerHTML='<option value="">'+(modelId==='aModelIn'?'Wybierz model':'Wszystkie modele')+'</option>'; models.forEach(m=>{const o=document.createElement('option'); o.value=m; o.textContent=m; if(m===selectedModel) o.selected=true; modelSel.appendChild(o);});}
 const WROOMER_BLOCKED_MESSAGE='Twoje konto zostało zablokowane przez administratora WROOMER.PL. Nie możesz dodawać ani edytować ogłoszeń.';
 async function wroomerCanEditAds(){
