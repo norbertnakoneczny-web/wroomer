@@ -38,7 +38,28 @@ function showTab(id){document.querySelectorAll('[data-tab]').forEach(x=>x.classL
 let adminPhotos=[];
 function adminCurrentUrls(ad){const list=Array.isArray(ad.images)?ad.images.filter(x=>typeof x==='string'&&/^https:\/\//.test(x)):[];if(ad.image_url&&/^https:\/\//.test(ad.image_url)&&!list.includes(ad.image_url))list.unshift(ad.image_url);return [...new Set(list)]}
 function adminPhotoNote(text){el('adminPhotoMessage').textContent=text}
-function renderAdminPhotos(){const target=el('adminPhotoList');target.replaceChildren();adminPhotos.forEach((entry,i)=>{const item=node('div',undefined,'admin-photo-item'),img=node('img');img.src=entry.url;img.alt='Zdjęcie '+(i+1);item.append(img,node('div',i===0?'★ Zdjęcie główne':'Zdjęcie '+(i+1),'admin-photo-main'));const buttons=node('div',undefined,'admin-photo-actions');const action=(label,fn,disabled)=>{const b=node('button',label);b.type='button';b.disabled=disabled;b.addEventListener('click',fn);buttons.append(b)};action('←',()=>{[adminPhotos[i-1],adminPhotos[i]]=[adminPhotos[i],adminPhotos[i-1]];renderAdminPhotos()},i===0);action('→',()=>{[adminPhotos[i],adminPhotos[i+1]]=[adminPhotos[i+1],adminPhotos[i]];renderAdminPhotos()},i===adminPhotos.length-1);action('Na główne',()=>{adminPhotos.unshift(adminPhotos.splice(i,1)[0]);renderAdminPhotos()},i===0);action('Usuń',()=>{if(entry.preview)URL.revokeObjectURL(entry.url);adminPhotos.splice(i,1);renderAdminPhotos()},false);item.append(buttons);target.append(item)});adminPhotoNote(adminPhotos.length+' / 20 zdjęć. Zapisz zmiany, aby zatwierdzić.')}
+async function adminDownloadPhoto(entry,index){
+  const link=entry.url;
+  const extension=(link.match(/\.(jpe?g|png|webp)(?:[?#]|$)/i)||[])[1]||'jpg';
+  const safeTitle=(el('editTitle').value||'samochod').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/gi,'-').replace(/^-|-$/g,'').slice(0,70)||'samochod';
+  const filename=safeTitle+'-zdjecie-'+String(index+1).padStart(2,'0')+'.'+extension;
+  try {
+    const response=await fetch(link);
+    if(!response.ok)throw Error('HTTP '+response.status);
+    const blob=await response.blob();
+    if(!blob.type.startsWith('image/'))throw Error('Nieprawidlowy format obrazu');
+    const local=URL.createObjectURL(blob);
+    const anchor=document.createElement('a');anchor.href=local;anchor.download=filename;
+    document.body.append(anchor);anchor.click();anchor.remove();
+    setTimeout(()=>URL.revokeObjectURL(local),30000);
+  } catch(error) {
+    if(entry.preview){adminPhotoNote('Nie udalo sie pobrac zdjecia: '+error.message);return;}
+    const anchor=document.createElement('a');anchor.href=link;anchor.target='_blank';anchor.rel='noopener noreferrer';anchor.download=filename;
+    document.body.append(anchor);anchor.click();anchor.remove();
+    adminPhotoNote('Jesli zdjecie otworzylo sie w nowej karcie, uzyj opcji Zapisz obraz jako. Serwer moze blokowac bezposrednie pobieranie.');
+  }
+}
+function renderAdminPhotos(){const target=el('adminPhotoList');target.replaceChildren();adminPhotos.forEach((entry,i)=>{const item=node('div',undefined,'admin-photo-item'),img=node('img');img.src=entry.url;img.alt='Zdjęcie '+(i+1);item.append(img,node('div',i===0?'★ Zdjęcie główne':'Zdjęcie '+(i+1),'admin-photo-main'));const buttons=node('div',undefined,'admin-photo-actions');const action=(label,fn,disabled)=>{const b=node('button',label);b.type='button';b.disabled=disabled;b.addEventListener('click',fn);buttons.append(b)};action('←',()=>{[adminPhotos[i-1],adminPhotos[i]]=[adminPhotos[i],adminPhotos[i-1]];renderAdminPhotos()},i===0);action('→',()=>{[adminPhotos[i],adminPhotos[i+1]]=[adminPhotos[i+1],adminPhotos[i]];renderAdminPhotos()},i===adminPhotos.length-1);action('Na główne',()=>{adminPhotos.unshift(adminPhotos.splice(i,1)[0]);renderAdminPhotos()},i===0);action('⬇ Pobierz',()=>adminDownloadPhoto(entry,i),false);action('Usuń',()=>{if(entry.preview)URL.revokeObjectURL(entry.url);adminPhotos.splice(i,1);renderAdminPhotos()},false);item.append(buttons);target.append(item)});adminPhotoNote(adminPhotos.length+' / 20 zdjęć. Zapisz zmiany, aby zatwierdzić.')}
 function openEdit(ad){editPreviousTab='ads';el('editId').value=ad.id;el('editTitle').value=ad.title||'';el('editBrand').value=ad.brand||'';el('editModel').value=ad.model||'';el('editPrice').value=ad.price||'';el('editLocation').value=ad.location||'';el('editDescription').value=ad.description??ad.opis??'';adminPhotos.forEach(p=>{if(p.preview)URL.revokeObjectURL(p.url)});adminPhotos=adminCurrentUrls(ad).map(url=>({url,preview:false}));el('adminPhotoFiles').value='';renderAdminPhotos();showTab('editAd');el('editTitle').focus()}
 async function saveEdit(event){
  event.preventDefault();const id=el('editId').value;const previous=rows.find(x=>String(x.id)===id);
