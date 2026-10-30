@@ -817,7 +817,7 @@ async function loadAds(){
   const search=document.getElementById('wroomerQuickSearch')?.value||'';
   grid.innerHTML="<div class=\"card\" aria-hidden=\"true\"><div class=\"card-img-wrap\"></div><div class=\"card-body\"><div class=\"card-title\">Ładowanie ogłoszeń…</div></div></div><div class=\"card\" aria-hidden=\"true\"><div class=\"card-img-wrap\"></div><div class=\"card-body\"><div class=\"card-title\">Ładowanie ogłoszeń…</div></div></div><div class=\"card\" aria-hidden=\"true\"><div class=\"card-img-wrap\"></div><div class=\"card-body\"><div class=\"card-title\">Ładowanie ogłoszeń…</div></div></div><div class=\"card\" aria-hidden=\"true\"><div class=\"card-img-wrap\"></div><div class=\"card-body\"><div class=\"card-title\">Ładowanie ogłoszeń…</div></div></div><div class=\"card\" aria-hidden=\"true\"><div class=\"card-img-wrap\"></div><div class=\"card-body\"><div class=\"card-title\">Ładowanie ogłoszeń…</div></div></div><div class=\"card\" aria-hidden=\"true\"><div class=\"card-img-wrap\"></div><div class=\"card-body\"><div class=\"card-title\">Ładowanie ogłoszeń…</div></div></div><div class=\"card\" aria-hidden=\"true\"><div class=\"card-img-wrap\"></div><div class=\"card-body\"><div class=\"card-title\">Ładowanie ogłoszeń…</div></div></div><div class=\"card\" aria-hidden=\"true\"><div class=\"card-img-wrap\"></div><div class=\"card-body\"><div class=\"card-title\">Ładowanie ogłoszeń…</div></div></div><div class=\"card\" aria-hidden=\"true\"><div class=\"card-img-wrap\"></div><div class=\"card-body\"><div class=\"card-title\">Ładowanie ogłoszeń…</div></div></div><div class=\"card\" aria-hidden=\"true\"><div class=\"card-img-wrap\"></div><div class=\"card-body\"><div class=\"card-title\">Ładowanie ogłoszeń…</div></div></div><div class=\"card\" aria-hidden=\"true\"><div class=\"card-img-wrap\"></div><div class=\"card-body\"><div class=\"card-title\">Ładowanie ogłoszeń…</div></div></div><div class=\"card\" aria-hidden=\"true\"><div class=\"card-img-wrap\"></div><div class=\"card-body\"><div class=\"card-title\">Ładowanie ogłoszeń…</div></div></div>";
   try{
-    let q=supabaseClient.from('ogloszenia').select('*').eq('is_banned',false).order('created_at',{ascending:false}).limit(500);
+    let q=supabaseClient.from('ogloszenia').select('*').eq('is_banned',false).order('bumped_at',{ascending:false,nullsFirst:false}).order('created_at',{ascending:false}).limit(1000);
     // Price is filtered after loading: legacy ads may store the price in `cena` instead of `price`.
     const result=await q;
     if(requestId!==wroomerLatestRequest)return;
@@ -861,7 +861,7 @@ async function loadAds(){
           ?haversine(searchLat,searchLng,lat,lng):Infinity;
       };
       filtered.sort((a,b)=>distance(a)-distance(b));
-    }else filtered.sort((a,b)=>new Date(b.created_at||0)-new Date(a.created_at||0));
+    }else filtered.sort((a,b)=>new Date(b.bumped_at||b.created_at||0)-new Date(a.bumped_at||a.created_at||0));
     ['countD','countM'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=filtered.length+' ogłoszeń';});
     if(!filtered.length){
       grid.innerHTML='<div style="grid-column:1/-1;padding:36px;text-align:center;background:#181818;border-radius:12px"><h3 style="color:#facc15">Nie znaleziono ogłoszeń</h3><p style="margin-top:8px;color:#aaa">Spróbuj wpisać np. Peugeot 508 lub usuń część filtrów.</p></div>';
