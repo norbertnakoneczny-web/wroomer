@@ -538,7 +538,7 @@ function wroomerShowBlockedNotice(){
 
 // Wyposażenie: bez migracji bazy, zapis wybranych wartości w dedykowanym znaczniku opisu.
 const WROOMER_EQUIPMENT={"Komfort":["Klimatyzacja","Klimatyzacja automatyczna","Tempomat","Tempomat adaptacyjny","Podgrzewane fotele","Elektrycznie regulowane fotele","Elektryczne szyby","Elektryczne lusterka","Centralny zamek","Wspomaganie kierownicy","Skórzana tapicerka","Komputer pokładowy","Nawigacja GPS","Bluetooth","Apple CarPlay","Android Auto","Czujnik deszczu","Kierownica wielofunkcyjna"],"Bezpieczeństwo":["ABS","ESP","ASR","Poduszki powietrzne","Immobilizer","Asystent pasa ruchu","Asystent martwego pola","System awaryjnego hamowania","Czujniki parkowania przód","Czujniki parkowania tył","Kamera cofania","Kamera 360°","ISOFIX","Kontrola ciśnienia opon"],"Wygląd i oświetlenie":["Światła LED","Światła przeciwmgielne","Światła do jazdy dziennej","Reflektory ksenonowe","Felgi aluminiowe","Przyciemniane szyby","Dach panoramiczny","Szyberdach","Relingi dachowe","Hak holowniczy"],"Użytkowe":["Drzwi boczne przesuwne","Dwoje drzwi bocznych przesuwnych","Czujniki cofania","Przegroda przestrzeni ładunkowej","Zabudowa ładunkowa","Napęd 4x4","Tryby jazdy","Elektryczna klapa bagażnika"]};
-const WROOMER_EQ_RE=/\\n?\\[\\[WROOMER_EQ:([A-Za-z0-9%._~-]+)\\]\\]/g;
+const WROOMER_EQ_RE=/\n?\[\[WROOMER_EQ:([A-Za-z0-9%._~-]+)\]\]/g;
 function wroomerEqExtract(description){
   const raw=String(description||'');
   const match=[...raw.matchAll(WROOMER_EQ_RE)].at(-1);
@@ -575,7 +575,7 @@ function wroomerEqSelected(){
 }
 function wroomerEqEncode(){
  const selected=wroomerEqSelected();if(!Object.values(selected).some(v=>v.length))return '';
- return '\\n[[WROOMER_EQ:'+encodeURIComponent(JSON.stringify(selected))+']]';
+ return '\n[[WROOMER_EQ:'+encodeURIComponent(JSON.stringify(selected))+']]';
 }
 function wroomerEqHtml(description){
  const groups=wroomerEqExtract(description);
