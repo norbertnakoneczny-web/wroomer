@@ -367,6 +367,16 @@ body{background:radial-gradient(ellipse at 80% 0%,#24200c 0%,#090a0b 38%,#080808
 <style id="wroomer-city-radius-style">
 .city-radius-panel{background:linear-gradient(130deg,#1d1d1a,#131516);border:1px solid #414039;border-radius:16px;margin:0 0 18px;padding:18px;box-shadow:0 8px 28px #0004}.city-radius-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:15px}.city-radius-heading strong{font-size:18px;font-weight:900;color:#fff}.city-radius-heading p{margin-top:5px;color:#aaa;font-size:12px;line-height:1.5}.city-radius-pill{flex-shrink:0;border:1px solid #6c5921;color:#facc15;border-radius:30px;padding:6px 10px;font-size:10px;font-weight:900;letter-spacing:.5px}.city-radius-buttons{display:flex;flex-wrap:wrap;gap:8px}.city-radius-button{background:#252629;border:1px solid #48494c;color:#e5e5e5;border-radius:999px;cursor:pointer;font-size:12px;font-weight:750;padding:10px 14px;min-height:39px;transition:background .15s,border-color .15s,color .15s}.city-radius-button:hover,.city-radius-button:focus-visible{border-color:#facc15;outline-offset:2px}.city-radius-button.active{color:#121212;background:#facc15;border-color:#facc15}.city-radius-status{color:#aaa;font-size:12px;margin:12px 0 0}@media(max-width:600px){.city-radius-panel{padding:13px;border-radius:12px}.city-radius-heading{align-items:flex-start;flex-direction:column;gap:7px}.city-radius-heading strong{font-size:16px}.city-radius-buttons{gap:7px}.city-radius-button{font-size:12px;padding:9px 12px}}
 .city-radius-toggle{display:none}@media(max-width:900px){.city-radius-panel{padding:10px 12px;margin-bottom:12px}.city-radius-heading{display:none}.city-radius-toggle{display:flex;width:100%;min-height:45px;justify-content:space-between;align-items:center;text-align:left;padding:10px 13px;border:1px solid #555046;border-radius:10px;background:#22231f;color:#facc15;font-size:14px;font-weight:850;cursor:pointer}.city-radius-chevron{font-size:22px;line-height:1;transition:transform .2s}.city-radius-panel.expanded .city-radius-chevron{transform:rotate(180deg)}.city-radius-buttons{display:none;max-height:260px;overflow-y:auto;padding:12px 2px 2px}.city-radius-panel.expanded .city-radius-buttons{display:flex}.city-radius-status{margin:8px 3px 0;font-size:11px}.city-radius-panel:not(.expanded) .city-radius-status{display:none}} 
+</style><style id="wroomer-mobile-detail-actions-fix">
+@media(max-width:700px){
+ #galleryModal .detail-section,#galleryModal .detail-actions{min-width:0;max-width:100%;box-sizing:border-box}
+ #galleryModal .detail-actions{display:grid !important;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px !important;width:100%;padding:0 !important}
+ #galleryModal .detail-actions a,#galleryModal .detail-actions button{width:100% !important;max-width:100% !important;min-width:0 !important;min-height:40px !important;padding:9px 7px !important;box-sizing:border-box !important;display:flex !important;align-items:center;justify-content:center;text-align:center;line-height:1.25;font-size:12px !important;font-weight:750 !important;white-space:normal;overflow-wrap:anywhere;border-radius:9px !important}
+ #galleryModal .detail-actions .detail-call{flex:none !important}
+ #galleryModal .detail-actions .detail-map{min-width:0 !important}
+ #galleryModal #galleryInfo{max-width:100%;min-width:0;overflow-x:hidden}
+}
+@media(max-width:380px){#galleryModal .detail-actions a,#galleryModal .detail-actions button{font-size:11px !important;padding:8px 5px !important}}
 </style></head>
 <body>
 <div class="header"><div class="logo">WROOMER<span>.PL</span> </div><div style="display:flex;gap:6px;align-items:center"><button class="btn btn-dark" id="btnLogin">Zaloguj</button><button class="btn btn-dark" id="btnLogout" style="display:none">Wyloguj</button><button class="btn btn-yellow" id="btnAdd">+ Dodaj</button></div></div>
@@ -717,7 +727,7 @@ function openGallery(ad){
       <div class="detail-actions">
         ${hasPhone?`<a class="detail-call" href="tel:${escapeHtml(phoneClean)}">☎ Zadzwoń: ${escapeHtml(phoneClean)}</a>`:''}
         ${whatsappUrl?`<a class="detail-call" style="background:#25d366;color:#081b10" href="${escapeHtml(whatsappUrl)}" target="_blank" rel="noopener noreferrer">✉ Napisz na WhatsApp</a>`:''}
-        ${hasPhone?`<button type="button" class="detail-map" onclick="wroomerCopySellerPhone('${escapeHtml(phoneClean)}')">⧉ Kopiuj numer</button>`:''}
+        ${hasPhone?`<a class="detail-map" href="sms:${escapeHtml(phoneClean)}">✉ Napisz SMS</a>`:''}
         ${hasMap?`<a class="detail-map" href="https://www.google.com/maps/search/?api=1&amp;query=${encodeURIComponent(mapQuery)}" target="_blank" rel="noopener noreferrer">⌖ Zobacz mapę</a>`:""}
       </div>
     </section>`;
