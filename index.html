@@ -727,6 +727,15 @@ function openGallery(ad){
   window.currentAd=ad;
   const targetUrl=new URL(location.href);targetUrl.searchParams.set('ogloszenie',String(ad.id));if(location.href!==targetUrl.href)history.replaceState(null,'',targetUrl.pathname+targetUrl.search+targetUrl.hash);
   window.wroomerTrack?.('listing_view',{listing_id:String(ad.id||'').slice(0,80)});
+  try {
+    const viewKey='wroomer_view_'+String(ad.id||'');
+    const last=Number(sessionStorage.getItem(viewKey)||0);
+    if(Date.now()-last>30*60*1000){
+      sessionStorage.setItem(viewKey,String(Date.now()));
+      supabaseClient.from('ogloszenie_wyswietlenia').insert({ogloszenie_id:ad.id}).then(({error})=>{if(error)console.warn('Statystyki odsłon:',error.message);});
+    }
+  } catch(e){console.warn('Licznik odsłon:',e);}
+
   galleryImages=[...new Set([...(Array.isArray(ad.images)?ad.images:[]),ad.image_url].filter(url=>{if(typeof url!=='string')return false;try{const parsed=new URL(url.trim());return parsed.protocol==='https:'||parsed.protocol==='http:';}catch{return false;}}).map(url=>url.trim()))]; 
   const requestedPhoto=Number(new URLSearchParams(location.search).get('zdjecie'));galleryIndex=Number.isInteger(requestedPhoto)&&requestedPhoto>=1&&requestedPhoto<=galleryImages.length?requestedPhoto-1:0; 
   if(galleryImages.length===0){alert('Brak zdjęć'); return;} 
