@@ -377,6 +377,15 @@ body{background:radial-gradient(ellipse at 80% 0%,#24200c 0%,#090a0b 38%,#080808
  #galleryModal #galleryInfo{max-width:100%;min-width:0;overflow-x:hidden}
 }
 @media(max-width:380px){#galleryModal .detail-actions a,#galleryModal .detail-actions button{font-size:11px !important;padding:8px 5px !important}}
+</style><style id="wroomer-lightbox-style">
+#wroomerLightbox[hidden]{display:none!important}
+#wroomerLightbox{position:fixed;inset:0;z-index:2147483647;background:rgba(0,0,0,.97);display:flex;justify-content:center;align-items:center;overflow:hidden;touch-action:pan-y}
+#wroomerLightboxImage{display:block;width:100%;height:100%;object-fit:contain;user-select:none;-webkit-user-select:none;pointer-events:none}
+#wroomerLightboxClose{position:absolute;right:max(14px,env(safe-area-inset-right));top:max(14px,env(safe-area-inset-top));width:44px;height:44px;border:0;border-radius:50%;background:#303030;color:white;font-size:22px;z-index:2;cursor:pointer}
+#wroomerLightboxCounter{position:absolute;top:max(22px,env(safe-area-inset-top));left:18px;color:white;background:#181818b8;border-radius:20px;padding:6px 12px;font-size:13px;z-index:2}
+#wroomerLightbox .wroomer-lightbox-arrow{position:absolute;top:50%;transform:translateY(-50%);width:37px;height:52px;border:0;background:#252525a8;color:#fff;font-size:32px;border-radius:9px;z-index:2;cursor:pointer}
+#wroomerLightboxPrev{left:4px}#wroomerLightboxNext{right:4px}
+@media(min-width:701px){#galleryMain{cursor:zoom-in}}@media(max-width:700px){#galleryMain{cursor:zoom-in;touch-action:pan-y}#wroomerLightbox .wroomer-lightbox-arrow{width:30px;background:#25252577}}
 </style></head>
 <body>
 <div class="header"><div class="logo">WROOMER<span>.PL</span> </div><div style="display:flex;gap:6px;align-items:center"><button class="btn btn-dark" id="btnLogin">Zaloguj</button><button class="btn btn-dark" id="btnLogout" style="display:none">Wyloguj</button><button class="btn btn-yellow" id="btnAdd">+ Dodaj</button></div></div>
@@ -1014,5 +1023,24 @@ function choose(city){
 for(const city of cities){const b=document.createElement('button');b.type='button';b.className='city-radius-button';b.dataset.city=city[0];b.textContent=city[0];b.setAttribute('aria-pressed','false');b.addEventListener('click',()=>choose(city));wrap.appendChild(b);}
 wrap.querySelector('[data-city=""]')?.addEventListener('click',()=>choose(null));
 window.wroomerCityRadiusClear=function(){if(selectedCity)choose(null)};
+})();
+</script><div id="wroomerLightbox" role="dialog" aria-modal="true" aria-label="Podgląd zdjęć ogłoszenia" hidden><button type="button" id="wroomerLightboxClose" aria-label="Zamknij zdjęcie">✕</button><div id="wroomerLightboxCounter" aria-live="polite"></div><button type="button" id="wroomerLightboxPrev" class="wroomer-lightbox-arrow" aria-label="Poprzednie zdjęcie">‹</button><img id="wroomerLightboxImage" alt="Duże zdjęcie samochodu"><button type="button" id="wroomerLightboxNext" class="wroomer-lightbox-arrow" aria-label="Następne zdjęcie">›</button></div><script id="wroomer-lightbox-script">
+(function(){
+const overlay=document.getElementById('wroomerLightbox'),large=document.getElementById('wroomerLightboxImage'),counter=document.getElementById('wroomerLightboxCounter'),main=document.getElementById('galleryMain');
+if(!overlay||!main)return;
+let previousFocus=null,startX=0,startY=0;
+function refresh(){if(!galleryImages.length){close();return}large.src=galleryImages[galleryIndex];counter.textContent=(galleryIndex+1)+' / '+galleryImages.length;}
+function open(){if(!galleryImages.length)return;previousFocus=document.activeElement;overlay.hidden=false;refresh();document.getElementById('wroomerLightboxClose').focus();}
+function close(){overlay.hidden=true;large.removeAttribute('src');if(previousFocus&&previousFocus.isConnected)previousFocus.focus();}
+main.addEventListener('click',open);
+document.getElementById('wroomerLightboxClose').addEventListener('click',close);
+function step(delta){if(galleryImages.length<2)return;galleryIndex=(galleryIndex+delta+galleryImages.length)%galleryImages.length;updateGallery();refresh();}
+document.getElementById('wroomerLightboxPrev').addEventListener('click',()=>step(-1));
+document.getElementById('wroomerLightboxNext').addEventListener('click',()=>step(1));
+overlay.addEventListener('touchstart',e=>{if(e.touches.length!==1)return;startX=e.touches[0].clientX;startY=e.touches[0].clientY},{passive:true});
+overlay.addEventListener('touchend',e=>{if(e.changedTouches.length!==1)return;const dx=e.changedTouches[0].clientX-startX,dy=e.changedTouches[0].clientY-startY;if(Math.abs(dx)>55&&Math.abs(dx)>Math.abs(dy)*1.25)step(dx<0?1:-1)},{passive:true});
+overlay.addEventListener('click',e=>{if(e.target===overlay)close()});
+document.addEventListener('keydown',e=>{if(overlay.hidden)return;if(e.key==='Escape')close();else if(e.key==='ArrowLeft')step(-1);else if(e.key==='ArrowRight')step(1);});
+window.wroomerCloseLightbox=close;
 })();
 </script></body></html>
