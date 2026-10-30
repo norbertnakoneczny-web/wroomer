@@ -385,7 +385,7 @@ body{background:radial-gradient(ellipse at 80% 0%,#24200c 0%,#090a0b 38%,#080808
 #wroomerLightboxCounter{position:absolute;top:max(22px,env(safe-area-inset-top));left:18px;color:white;background:#181818b8;border-radius:20px;padding:6px 12px;font-size:13px;z-index:2}
 #wroomerLightbox .wroomer-lightbox-arrow{position:absolute;top:50%;transform:translateY(-50%);width:37px;height:52px;border:0;background:#252525a8;color:#fff;font-size:32px;border-radius:9px;z-index:2;cursor:pointer}
 #wroomerLightboxPrev{left:4px}#wroomerLightboxNext{right:4px}
-@media(min-width:701px){#galleryMain{cursor:zoom-in}}@media(max-width:700px){#galleryMain{cursor:zoom-in;touch-action:pan-y}#wroomerLightbox .wroomer-lightbox-arrow{width:30px;background:#25252577}}
+@media(min-width:701px){#galleryMain{cursor:zoom-in}#wroomerLightboxImage{max-width:min(94vw,1600px);max-height:94vh;object-fit:contain}#wroomerLightbox .wroomer-lightbox-arrow{width:54px;height:70px;font-size:42px}#wroomerLightboxPrev{left:22px}#wroomerLightboxNext{right:22px}#wroomerLightbox .wroomer-lightbox-arrow:hover{background:#454545}}@media(max-width:700px){#galleryMain{cursor:zoom-in;touch-action:pan-y}#wroomerLightbox .wroomer-lightbox-arrow{width:30px;background:#25252577}}
 </style></head>
 <body>
 <div class="header"><div class="logo">WROOMER<span>.PL</span> </div><div style="display:flex;gap:6px;align-items:center"><button class="btn btn-dark" id="btnLogin">Zaloguj</button><button class="btn btn-dark" id="btnLogout" style="display:none">Wyloguj</button><button class="btn btn-yellow" id="btnAdd">+ Dodaj</button></div></div>
@@ -1033,6 +1033,11 @@ function refresh(){if(!galleryImages.length){close();return}large.src=galleryIma
 function open(){if(!galleryImages.length)return;previousFocus=document.activeElement;overlay.hidden=false;refresh();document.getElementById('wroomerLightboxClose').focus();}
 function close(){overlay.hidden=true;large.removeAttribute('src');if(previousFocus&&previousFocus.isConnected)previousFocus.focus();}
 main.addEventListener('click',open);
+main.setAttribute('tabindex','0');
+main.setAttribute('role','button');
+main.setAttribute('aria-label','Otwórz zdjęcie w dużym podglądzie');
+main.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();open();}});
+document.getElementById('galleryThumbs')?.addEventListener('dblclick',e=>{if(e.target.closest('img'))open();});
 document.getElementById('wroomerLightboxClose').addEventListener('click',close);
 function step(delta){if(galleryImages.length<2)return;galleryIndex=(galleryIndex+delta+galleryImages.length)%galleryImages.length;updateGallery();refresh();}
 document.getElementById('wroomerLightboxPrev').addEventListener('click',()=>step(-1));
@@ -1040,7 +1045,8 @@ document.getElementById('wroomerLightboxNext').addEventListener('click',()=>step
 overlay.addEventListener('touchstart',e=>{if(e.touches.length!==1)return;startX=e.touches[0].clientX;startY=e.touches[0].clientY},{passive:true});
 overlay.addEventListener('touchend',e=>{if(e.changedTouches.length!==1)return;const dx=e.changedTouches[0].clientX-startX,dy=e.changedTouches[0].clientY-startY;if(Math.abs(dx)>55&&Math.abs(dx)>Math.abs(dy)*1.25)step(dx<0?1:-1)},{passive:true});
 overlay.addEventListener('click',e=>{if(e.target===overlay)close()});
-document.addEventListener('keydown',e=>{if(overlay.hidden)return;if(e.key==='Escape')close();else if(e.key==='ArrowLeft')step(-1);else if(e.key==='ArrowRight')step(1);});
+document.addEventListener('keydown',e=>{if(overlay.hidden)return;if(e.key==='Escape'){e.preventDefault();close();}else if(e.key==='ArrowLeft'){e.preventDefault();step(-1);}else if(e.key==='ArrowRight'){e.preventDefault();step(1);}});
+overlay.addEventListener('wheel',e=>{if(overlay.hidden||galleryImages.length<2||Math.abs(e.deltaY)<25)return;e.preventDefault();if(!overlay._lastWheel||Date.now()-overlay._lastWheel>400){overlay._lastWheel=Date.now();step(e.deltaY>0?1:-1)}},{passive:false});
 window.wroomerCloseLightbox=close;
 })();
 </script></body></html>
