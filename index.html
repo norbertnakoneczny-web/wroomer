@@ -867,8 +867,9 @@ async function loadAds(){
         }else{
           // Ogłoszenia bez GPS: sprawdzamy miejscowość, nie odrzucamy ich automatycznie.
           const city=wroomerKnownCity(ad.location||ad.lokalizacja||ad.miasto);
-          const selected=window.wroomerSelectedRadiusCity;
-          if(!city||!selected||haversine(searchLat,searchLng,city[1],city[2])>radiusKm)return false;
+          // Również przy wyszukiwaniu od aktualnej pozycji GPS użytkownika:
+          // porównujemy środek rozpoznanej miejscowości z punktem wyszukiwania.
+          if(!city||haversine(searchLat,searchLng,city[1],city[2])>radiusKm)return false;
         }
       }
       return wroomerMatch(ad,search);
