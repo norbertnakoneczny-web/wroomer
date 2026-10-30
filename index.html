@@ -397,7 +397,7 @@ body{background:radial-gradient(ellipse at 80% 0%,#24200c 0%,#090a0b 38%,#080808
 #galleryModal .detail-grid .detail-item .value{font-size:12px !important;line-height:1.3 !important;overflow-wrap:anywhere}
 @media(max-width:600px){#galleryModal .detail-grid{grid-template-columns:repeat(2,minmax(0,1fr)) !important;gap:6px !important}}
 </style>
-</head>
+<style>.owner-photo-actions{display:flex;gap:4px;justify-content:center;flex-wrap:wrap;padding:5px}.owner-photo-actions button{border:1px solid #ff8a00;background:#191919;color:#fff;border-radius:6px;padding:5px 7px;font-size:12px;cursor:pointer}.owner-photo-actions button:disabled{opacity:.38;cursor:default}</style></head>
 <body>
 <div class="header"><div class="logo">WROOMER<span>.PL</span> </div><div style="display:flex;gap:6px;align-items:center"><button class="btn btn-dark" id="btnLogin">Zaloguj</button><button class="btn btn-dark" id="btnLogout" style="display:none">Wyloguj</button><button class="btn btn-yellow" id="btnAdd">+ Dodaj</button></div></div>
 <div class="wroomer-search"><span aria-hidden="true">⌕</span><input id="wroomerQuickSearch" type="search" placeholder="Szukaj marki, modelu lub samochodu..." aria-label="Szukaj samochodu"><button type="button" onclick="wroomerRunSearch()">Szukaj aut</button></div>
@@ -595,7 +595,7 @@ function wroomerEqHtml(description){
  items.map(item=>'<div class="wroomer-eq-pill">'+escapeHtml(item)+'</div>').join('')+'</div>').join('')+'</div>';
 }
 
-async function openAddModal(ad=null){if(!(await wroomerCanEditAds())){wroomerShowBlockedNotice();return;}editingId=ad?.id||null;document.getElementById('addModalTitle').textContent=ad?'Edytuj ogłoszenie':'Dodaj ogłoszenie - GPS';document.getElementById('aTitle').value=ad?.title||'';document.getElementById('aBrand').value=ad?.brand||'';populateModelSelect('aBrand','aModelIn', ad?.model);document.getElementById('aYear').value=ad?.year||'';document.getElementById('aPrice').value=ad?.price||'';document.getElementById('aLocation').value=ad?.location||'';document.getElementById('aPhone').value=ad?.phone||'';wroomerEqRenderEditor(wroomerEqExtract(ad?.description||''));const cleanDesc=wroomerEqStrip(ad?.description||'').replace(/\s*\[Przebieg\s*:[^\]\r\n]*\]\s*$/i,'').trim();document.getElementById('aDesc').value=cleanDesc;const ex=parseExtra(ad?.description||'');document.getElementById('aMileage').value=(ex.mileage||'').toString().replace(/[^0-9]/g,'');document.getElementById('aFuel').value=ex.fuel||'';document.getElementById('aCapacity').value=(ex.capacity||'').toString().replace(/[^0-9]/g,'');document.getElementById('aLat').value=ex.lat||'';document.getElementById('aLng').value=ex.lng||'';selectedFiles=[];existingPhotoUrls=ad?[...new Set([...(Array.isArray(ad.images)?ad.images:[]),ad.image_url].filter(Boolean))]:[]; ['adTerms','adContact','adPhoto'].forEach(id=>document.getElementById(id).checked=false);renderPreview();document.getElementById('btnSave').textContent=ad?'Zapisz zmiany':'Zatwierdź z GPS';document.getElementById('addModal').style.display='flex'; document.getElementById('addModal').classList.add('open');}
+async function openAddModal(ad=null){if(!(await wroomerCanEditAds())){wroomerShowBlockedNotice();return;}editingId=ad?.id||null;document.getElementById('addModalTitle').textContent=ad?'Edytuj ogłoszenie':'Dodaj ogłoszenie - GPS';document.getElementById('aTitle').value=ad?.title||'';document.getElementById('aBrand').value=ad?.brand||'';populateModelSelect('aBrand','aModelIn', ad?.model);document.getElementById('aYear').value=ad?.year||'';document.getElementById('aPrice').value=ad?.price||'';document.getElementById('aLocation').value=ad?.location||'';document.getElementById('aPhone').value=ad?.phone||'';wroomerEqRenderEditor(wroomerEqExtract(ad?.description||''));const cleanDesc=wroomerEqStrip(ad?.description||'').replace(/\s*\[Przebieg\s*:[^\]\r\n]*\]\s*$/i,'').trim();document.getElementById('aDesc').value=cleanDesc;const ex=parseExtra(ad?.description||'');document.getElementById('aMileage').value=(ex.mileage||'').toString().replace(/[^0-9]/g,'');document.getElementById('aFuel').value=ex.fuel||'';document.getElementById('aCapacity').value=(ex.capacity||'').toString().replace(/[^0-9]/g,'');document.getElementById('aLat').value=ex.lat||'';document.getElementById('aLng').value=ex.lng||'';selectedFiles=[];existingPhotoUrls=ad?[...new Set([...(Array.isArray(ad.images)?ad.images:[]),ad.image_url].filter(Boolean))]:[];ownerPhotoOrder=existingPhotoUrls.map(url=>({kind:'existing',url})); ['adTerms','adContact','adPhoto'].forEach(id=>document.getElementById(id).checked=false);renderPreview();document.getElementById('btnSave').textContent=ad?'Zapisz zmiany':'Zatwierdź z GPS';document.getElementById('addModal').style.display='flex'; document.getElementById('addModal').classList.add('open');}
 ['fMarkaD','fMarkaM','aBrand'].forEach(id=>{const el=document.getElementById(id); if(el) el.addEventListener('change',()=>{if(id==='fMarkaD') populateModelSelect('fMarkaD','fModelD'); if(id==='fMarkaM') populateModelSelect('fMarkaM','fModelM'); if(id==='aBrand') populateModelSelect('aBrand','aModelIn');});});
 let wroomerPasswordRecoveryActive=false;
 async function requestPasswordReset(){
@@ -635,34 +635,30 @@ if(new URLSearchParams(window.location.hash.slice(1)).get('type')==='recovery'){
 async function doLogin(){const e=document.getElementById('loginEmail').value.trim(); const p=document.getElementById('loginPass').value; if(!e||!p){showError('loginError','Podaj email i hasło');return;} try{const r=await supabaseClient.auth.signInWithPassword({email:e,password:p}); if(r.error) throw r.error; currentUser=r.data.user; updateAuthUI(); closeModals(); loadAds();}catch(err){showError('loginError', err.message);}}
 async function doSignup(){const e=document.getElementById('loginEmail').value.trim(); const p=document.getElementById('loginPass').value; if(!e||p.length<6){showError('loginError','Email i hasło min 6');return;} if(!document.getElementById('registerTerms').checked){showError('loginError','Aby założyć konto, zaakceptuj regulamin.');return;} try{const r=await supabaseClient.auth.signUp({email:e,password:p}); if(r.error) throw r.error; showSuccess('loginError','Konto założone!');}catch(err){showError('loginError', err.message);}}
 let wroomerPreviewUrls=[];
+let ownerPhotoOrder=[];
+function ownerSyncPhotos(){existingPhotoUrls=ownerPhotoOrder.filter(p=>p.kind==='existing').map(p=>p.url);selectedFiles=ownerPhotoOrder.filter(p=>p.kind==='new').map(p=>p.file);}
+function ownerMovePhoto(i,target){if(target<0||target>=ownerPhotoOrder.length||target===i)return;const entry=ownerPhotoOrder.splice(i,1)[0];ownerPhotoOrder.splice(target,0,entry);ownerSyncPhotos();renderPreview();}
+function ownerDeletePhoto(i){ownerPhotoOrder.splice(i,1);ownerSyncPhotos();renderPreview();}
+function ownerPhotoButtons(div,i){const bar=document.createElement('div');bar.className='owner-photo-actions';const add=(label,title,target,disabled=false)=>{const b=document.createElement('button');b.type='button';b.textContent=label;b.title=title;b.disabled=disabled;b.onclick=()=>ownerMovePhoto(i,target);bar.append(b);};add('←','Przesuń w lewo',i-1,i===0);add('→','Przesuń w prawo',i+1,i===ownerPhotoOrder.length-1);add(i===0?'★ Główne':'★ Na główne','Ustaw jako zdjęcie główne',0,i===0);div.append(bar);}
+
 function wroomerExistingPhotos(){return existingPhotoUrls.length;}
 function wroomerPhotoMessage(msg){
  const status=document.getElementById('photoStatus');
  if(status)status.textContent=msg||`${selectedFiles.length} nowych zdjęć · ${wroomerExistingPhotos()} istniejących · limit 20`;
 }
 function renderPreview(){
- wroomerPreviewUrls.forEach(url=>URL.revokeObjectURL(url));
- wroomerPreviewUrls=[];
- const preview=document.getElementById('preview');
- preview.replaceChildren();
- existingPhotoUrls.forEach((url,i)=>{
-  const div=document.createElement('div');div.className='p';
-  const img=document.createElement('img');img.src=url;img.alt=`Zapisane zdjęcie ${i+1}`;img.loading='lazy';
-  const remove=document.createElement('button');remove.type='button';remove.className='x';remove.textContent='×';remove.setAttribute('aria-label','Usuń zapisane zdjęcie '+(i+1));
-  remove.onclick=()=>{existingPhotoUrls.splice(i,1);renderPreview();};
-  const num=document.createElement('span');num.className='photo-number';num.textContent=`${i+1} · zapisane`;
-  div.append(img,remove,num);preview.append(div);
- });
- selectedFiles.forEach((file,i)=>{
-  const url=URL.createObjectURL(file);wroomerPreviewUrls.push(url);
-  const div=document.createElement('div');div.className='p';
-  const img=document.createElement('img');img.src=url;img.alt=`Nowe zdjęcie ${i+1}`;img.loading='lazy';
-  const remove=document.createElement('button');remove.type='button';remove.className='x';remove.textContent='×';remove.setAttribute('aria-label','Usuń nowe zdjęcie '+(i+1));remove.onclick=()=>removeFile(i);
-  const num=document.createElement('span');num.className='photo-number';num.textContent=`${existingPhotoUrls.length+i+1} · nowe`;
-  const mask=document.createElement('button');mask.type='button';mask.className='wroomer-mask-button';mask.textContent='▦ Zasłoń tablicę / twarz';mask.onclick=()=>openPhotoMask(i);
-  div.append(img,remove,num,mask);preview.append(div);
- });
- wroomerPhotoMessage();
+ wroomerPreviewUrls.forEach(url=>URL.revokeObjectURL(url));wroomerPreviewUrls=[];
+ const preview=document.getElementById('preview');preview.replaceChildren();
+ ownerPhotoOrder.forEach((entry,i)=>{
+  const div=document.createElement('div');div.className='p';const img=document.createElement('img');img.loading='lazy';
+  if(entry.kind==='existing'){img.src=entry.url;}else{img.src=URL.createObjectURL(entry.file);wroomerPreviewUrls.push(img.src);}
+  img.alt='Zdjęcie '+(i+1);
+  const remove=document.createElement('button');remove.type='button';remove.className='x';remove.textContent='×';remove.setAttribute('aria-label','Usuń zdjęcie '+(i+1));remove.onclick=()=>ownerDeletePhoto(i);
+  const num=document.createElement('span');num.className='photo-number';num.textContent=(i===0?'★ GŁÓWNE · ':'')+(i+1)+(entry.kind==='existing'?' · zapisane':' · nowe');
+  div.append(img,remove,num);
+  if(entry.kind==='new'){const mask=document.createElement('button');mask.type='button';mask.className='wroomer-mask-button';mask.textContent='▦ Zasłoń tablicę / twarz';mask.onclick=()=>openPhotoMask(selectedFiles.indexOf(entry.file));div.append(mask);}
+  ownerPhotoButtons(div,i);preview.append(div);
+ });wroomerPhotoMessage();
 }
 async function openPhotoMask(i){
  const file=selectedFiles[i];if(!file)return;
@@ -685,11 +681,11 @@ async function openPhotoMask(i){
  const save=document.createElement('button');save.type='button';save.textContent='Zapisz zasłonięte zdjęcie';save.className='wroomer-mask-save';save.onclick=async()=>{const blob=await new Promise(resolve=>canvas.toBlob(resolve,'image/jpeg',0.92));if(!blob){alert('Nie udało się zapisać zdjęcia');return;}selectedFiles[i]=new File([blob],file.name.replace(/\.[^.]+$/,'')+'-zasloniete.jpg',{type:'image/jpeg'});overlay.remove();renderPreview();};
  actions.append(cancel,reset,save);panel.append(heading,canvas,actions);overlay.append(panel);document.body.append(overlay);
 }
-function removeFile(i){selectedFiles.splice(i,1);renderPreview();}
+function removeFile(i){const item=ownerPhotoOrder.findIndex(e=>e.kind==='new'&&e.file===selectedFiles[i]);if(item>=0)ownerDeletePhoto(item);}
 document.getElementById('aFiles').onchange=e=>{
  const incoming=Array.from(e.target.files||[]).filter(f=>f.type.startsWith('image/'));
  const allowed=Math.max(0,20-wroomerExistingPhotos()-selectedFiles.length);
- selectedFiles.push(...incoming.slice(0,allowed));
+ ownerPhotoOrder.push(...incoming.slice(0,allowed).map(file=>({kind:'new',file})));ownerSyncPhotos();
  e.target.value='';
  renderPreview();
  if(incoming.length>allowed)wroomerPhotoMessage(`Limit 20 zdjęć łącznie. Dodano ${Math.min(incoming.length,allowed)} z ${incoming.length} wybranych.`);
@@ -715,7 +711,19 @@ async function compressImage(file,maxW=1600,q=0.78){
   return {blob,type,ext:type==='image/webp'?'webp':'jpg'};
  }finally{URL.revokeObjectURL(url);}
 }
-document.getElementById('btnSave').onclick=async()=>{if(!(await wroomerCanEditAds())){showError('addError',WROOMER_BLOCKED_MESSAGE);return;}const title=document.getElementById('aTitle').value.trim(); const brand=document.getElementById('aBrand').value.trim(); const modelVal=document.getElementById('aModelIn').value||'Inny'; const price=Number(document.getElementById('aPrice').value); if(!title||!brand||!modelVal){showError('addError','Tytuł, marka i model wymagane');return;} if(!Number.isFinite(price)||price<=0||!Number.isSafeInteger(price)){showError('addError','Podaj poprawną cenę w pełnych złotych');return;} if(!document.getElementById('adTerms').checked||!document.getElementById('adPhoto').checked){showError('addError','Potwierdź regulamin i prawa do zdjęć.');return;} if(document.getElementById('aPhone').value.trim()&&!document.getElementById('adContact').checked){showError('addError','Potwierdź publiczne wyświetlanie numeru telefonu lub usuń numer.');return;} const btn=document.getElementById('btnSave'); btn.textContent='WYSYŁANIE...'; btn.disabled=true; try{let imageUrls = []; if(editingId){ imageUrls=[...existingPhotoUrls]; } if(imageUrls.length+selectedFiles.length>20)throw new Error('Maksymalnie 20 zdjęć na ogłoszenie.'); for(let i=0;i<selectedFiles.length;i++){btn.textContent=`Zdjęcia ${i+1}/${selectedFiles.length}...`;wroomerPhotoMessage(`Optymalizacja i wysyłanie zdjęcia ${i+1} z ${selectedFiles.length}...`);const optimized=await compressImage(selectedFiles[i]);const fname=Date.now()+'_'+i+'_'+Math.random().toString(36).slice(2,8)+'.'+optimized.ext;const path=currentUser.id+'/'+fname;const up=await supabaseClient.storage.from('ogloszenia').upload(path,optimized.blob,{contentType:optimized.type});if(up.error)throw up.error;const pub=supabaseClient.storage.from('ogloszenia').getPublicUrl(path);imageUrls.push(pub.data.publicUrl);}btn.textContent='Zapisywanie ogłoszenia...'; const engineCapacity=document.getElementById('aCapacity').value.trim(); if(engineCapacity&&(!/^\d+$/.test(engineCapacity)||Number(engineCapacity)<1||Number(engineCapacity)>20000)){alert('Podaj prawidłową pojemność silnika w cm³.');btn.disabled=false;return;} const gpsLat=document.getElementById('aLat').value.trim(),gpsLng=document.getElementById('aLng').value.trim(); const extra=`Przebieg: ${document.getElementById('aMileage').value||'-'} km | Paliwo: ${document.getElementById('aFuel').value||'-'} | Pojemność: ${engineCapacity||'-'}${gpsLat&&gpsLng&&Number.isFinite(Number(gpsLat))&&Number.isFinite(Number(gpsLng))?' | Lat: '+gpsLat+' | Lng: '+gpsLng:''}`; const sellerDesc=String(document.getElementById('aDesc').value||'').replace(/\s*\[Przebieg\s*:[^\]\r\n|]*\|\s*Paliwo\s*:[^\]\r\n]*\]\s*$/i,'').trim(); const fullDesc=sellerDesc + "\n\n["+extra+"]"; const eqDescription=sellerDesc+wroomerEqEncode()+"\n\n["+extra+"]"; const payload={title, brand, model:modelVal, price, year:parseInt(document.getElementById('aYear').value)||null, location:document.getElementById('aLocation').value, phone:document.getElementById('aPhone').value, description:eqDescription, image_url:imageUrls[0]||null, images:imageUrls, user_id:currentUser.id}; let result; if(editingId){result=await supabaseClient.from('ogloszenia').update(payload).eq('id', editingId).eq('user_id',currentUser.id).select();} else {result=await supabaseClient.from('ogloszenia').insert([payload]).select();} if(result.error) throw result.error; if(!result.data?.length)throw new Error('Nie masz uprawnień do edycji tego ogłoszenia.'); if(!editingId)window.wroomerTrack?.('listing_published',{listing_id:String(result.data[0]?.id||'').slice(0,80)}); editingId=null; selectedFiles=[]; closeModals(); await loadAds();}catch(e){showError('addError', (e.code==='42501'||/permission denied|row-level security|violates row-level/i.test(e.message||''))?WROOMER_BLOCKED_MESSAGE:e.message);}finally{btn.textContent=editingId?'Zapisz zmiany':'Zatwierdź z GPS'; btn.disabled=false;wroomerPhotoMessage();}};
+document.getElementById('btnSave').onclick=async()=>{if(!(await wroomerCanEditAds())){showError('addError',WROOMER_BLOCKED_MESSAGE);return;}const title=document.getElementById('aTitle').value.trim(); const brand=document.getElementById('aBrand').value.trim(); const modelVal=document.getElementById('aModelIn').value||'Inny'; const price=Number(document.getElementById('aPrice').value); if(!title||!brand||!modelVal){showError('addError','Tytuł, marka i model wymagane');return;} if(!Number.isFinite(price)||price<=0||!Number.isSafeInteger(price)){showError('addError','Podaj poprawną cenę w pełnych złotych');return;} if(!document.getElementById('adTerms').checked||!document.getElementById('adPhoto').checked){showError('addError','Potwierdź regulamin i prawa do zdjęć.');return;} if(document.getElementById('aPhone').value.trim()&&!document.getElementById('adContact').checked){showError('addError','Potwierdź publiczne wyświetlanie numeru telefonu lub usuń numer.');return;} const btn=document.getElementById('btnSave'); btn.textContent='WYSYŁANIE...'; btn.disabled=true; try{let imageUrls=[];if(ownerPhotoOrder.length>20)throw new Error('Maksymalnie 20 zdjęć na ogłoszenie.');
+ let uploaded=0;for(const entry of ownerPhotoOrder){
+ if(entry.kind==='existing'){imageUrls.push(entry.url);continue;}
+ const i=uploaded++;btn.textContent='Zdjęcia '+(i+1)+'/'+selectedFiles.length+'...';
+ wroomerPhotoMessage('Optymalizacja i wysyłanie zdjęcia '+(i+1)+' z '+selectedFiles.length+'...');
+ const optimized=await compressImage(entry.file);
+ const fname=Date.now()+'_'+i+'_'+Math.random().toString(36).slice(2,8)+'.'+optimized.ext;
+ const path=currentUser.id+'/'+fname;
+ const up=await supabaseClient.storage.from('ogloszenia').upload(path,optimized.blob,{contentType:optimized.type});
+ if(up.error)throw up.error;
+ imageUrls.push(supabaseClient.storage.from('ogloszenia').getPublicUrl(path).data.publicUrl);
+ }
+ btn.textContent='Zapisywanie ogłoszenia...'; const engineCapacity=document.getElementById('aCapacity').value.trim(); if(engineCapacity&&(!/^\d+$/.test(engineCapacity)||Number(engineCapacity)<1||Number(engineCapacity)>20000)){alert('Podaj prawidłową pojemność silnika w cm³.');btn.disabled=false;return;} const gpsLat=document.getElementById('aLat').value.trim(),gpsLng=document.getElementById('aLng').value.trim(); const extra=`Przebieg: ${document.getElementById('aMileage').value||'-'} km | Paliwo: ${document.getElementById('aFuel').value||'-'} | Pojemność: ${engineCapacity||'-'}${gpsLat&&gpsLng&&Number.isFinite(Number(gpsLat))&&Number.isFinite(Number(gpsLng))?' | Lat: '+gpsLat+' | Lng: '+gpsLng:''}`; const sellerDesc=String(document.getElementById('aDesc').value||'').replace(/\s*\[Przebieg\s*:[^\]\r\n|]*\|\s*Paliwo\s*:[^\]\r\n]*\]\s*$/i,'').trim(); const fullDesc=sellerDesc + "\n\n["+extra+"]"; const eqDescription=sellerDesc+wroomerEqEncode()+"\n\n["+extra+"]"; const payload={title, brand, model:modelVal, price, year:parseInt(document.getElementById('aYear').value)||null, location:document.getElementById('aLocation').value, phone:document.getElementById('aPhone').value, description:eqDescription, image_url:imageUrls[0]||null, images:imageUrls, user_id:currentUser.id}; let result; if(editingId){result=await supabaseClient.from('ogloszenia').update(payload).eq('id', editingId).eq('user_id',currentUser.id).select();} else {result=await supabaseClient.from('ogloszenia').insert([payload]).select();} if(result.error) throw result.error; if(!result.data?.length)throw new Error('Nie masz uprawnień do edycji tego ogłoszenia.'); if(!editingId)window.wroomerTrack?.('listing_published',{listing_id:String(result.data[0]?.id||'').slice(0,80)}); editingId=null; selectedFiles=[]; closeModals(); await loadAds();}catch(e){showError('addError', (e.code==='42501'||/permission denied|row-level security|violates row-level/i.test(e.message||''))?WROOMER_BLOCKED_MESSAGE:e.message);}finally{btn.textContent=editingId?'Zapisz zmiany':'Zatwierdź z GPS'; btn.disabled=false;wroomerPhotoMessage();}};
 function wroomerPhotoUrl(){if(!window.currentAd||!galleryImages.length)return '';const u=new URL(wroomerListingUrl(window.currentAd));u.searchParams.set('zdjecie',String(galleryIndex+1));return u.href;}
 async function wroomerCopyPhotoUrl(direct=false){const url=direct?galleryImages[galleryIndex]:wroomerPhotoUrl();if(!url)return;try{await navigator.clipboard.writeText(url);alert(direct?'Skopiowano bezpośredni adres zdjęcia!':'Skopiowano link do wybranego zdjęcia!');}catch(e){prompt('Skopiuj adres zdjęcia:',url);}}
 function wroomerListingUrl(ad){const u=new URL('/',location.origin);u.searchParams.set('ogloszenie',String(ad.id));return u.href;}
