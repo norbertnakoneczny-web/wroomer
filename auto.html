@@ -121,6 +121,9 @@ document.addEventListener("keydown",e=>{if(!document.getElementById("lightbox").
 function nextImg(){ if(!imgs.length)return; cur=(cur+1)%imgs.length; const lb=document.getElementById('lbimg');if(lb)lb.src=imgs[cur]; render(); }
 function prevImg(){ if(!imgs.length)return; cur=(cur-1+imgs.length)%imgs.length; const lb=document.getElementById('lbimg');if(lb)lb.src=imgs[cur]; render(); }
 
+function cleanPublicDescription(value){
+ return String(value??'').replace(/\[WROOMER_EQ:[^\]\r\n]*\]/gi,'').replace(/\[(?=[^\]\r\n]*\bPrzebieg\s*:)(?=[^\]\r\n]*\bPaliwo\s*:)[^\]\r\n]*\]/gi,'').replace(/\n[ \t]*\n[ \t]*\n/g,'\n\n').trim();
+}
 function updateListingSeo(car, slug) {
   const titleText=String(car.title || [car.brand||car.marka,car.model,car.year||car.rocznik].filter(Boolean).join(' ') || 'Ogłoszenie samochodu').trim().slice(0,110);
   const locationText=String(car.location || car.lokalizacja || car.miasto || '').trim();
@@ -142,7 +145,7 @@ function updateListingSeo(car, slug) {
   json.textContent=JSON.stringify({
     '@context':'https://schema.org','@type':'Car',
     name:titleText,
-    description:String(car.description || car.opis || titleText).slice(0,500),
+    description:cleanPublicDescription(car.description || car.opis || titleText).slice(0,500),
     url:canonical.href,
     ...(imgs.length ? {image:imgs.slice(0,5)} : {}),
     ...((car.brand||car.marka) ? {brand:{'@type':'Brand',name:String(car.brand||car.marka)}} : {}),
@@ -181,7 +184,7 @@ async function load(){
         <h1>${escapeHtml(car.title||[car.brand||car.marka,car.model,car.year||car.rocznik].filter(Boolean).join(' '))}</h1>
         <div class="meta">${escapeHtml(car.brand||car.marka||'')} ${escapeHtml(car.model||'')} • ${escapeHtml(car.location||car.lokalizacja||car.miasto||'')} • ${escapeHtml(car.year||car.rocznik||'')}r</div>
         <div class="price">${Number.isFinite(Number(car.price??car.cena))&&Number(car.price??car.cena)>0?Number(car.price??car.cena).toLocaleString('pl-PL')+' PLN':'Cena do uzgodnienia'}</div>
-        <div class="desc">${escapeHtml(car.description||car.opis||'')}</div>
+        <div class="desc">${escapeHtml(cleanPublicDescription(car.description||car.opis||''))}</div>
         ${safePhone?`<a class="btn" href="tel:${escapeHtml(safePhone.replace(/[^+\d]/g,''))}">📞 ZADZWOŃ: ${escapeHtml(safePhone)}</a>`:'<div class="meta">Numer telefonu niedostępny</div>'}
         ${safePhone?(() => {
           const digits=safePhone.replace(/\D/g,'');
