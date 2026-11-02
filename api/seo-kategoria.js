@@ -2,9 +2,9 @@ const API='https://bdpydgsfowtuvjnkyeeg.supabase.co';
 const KEY='sb_publishable_S1qH_mBZaX7-bzmfJ0IVGA_6hxGbJWd';
 const BASE='https://www.wroomer.pl';
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'}[c]));
-const brands={bmw:'BMW',audi:'Audi',opel:'Opel',volvo:'Volvo',peugeot:'Peugeot',fiat:'Fiat'};
-const cities={gorzyce:'Gorzyce',katowice:'Katowice',wroclaw:'Wrocław'};
-const cityIn={gorzyce:'Gorzycach',katowice:'Katowicach',wroclaw:'Wrocławiu'};
+const brands={bmw:'BMW',audi:'Audi',opel:'Opel',volvo:'Volvo',peugeot:'Peugeot',fiat:'Fiat',ford:'Ford',hyundai:'Hyundai',volkswagen:'Volkswagen','mercedes-benz':'Mercedes-Benz'};
+const cities={gorzyce:'Gorzyce',katowice:'Katowice',rybnik:'Rybnik','wodzislaw-slaski':'Wodzisław Śląski',raciborz:'Racibórz','jastrzebie-zdroj':'Jastrzębie-Zdrój',gliwice:'Gliwice',zory:'Żory'};
+const cityIn={gorzyce:'Gorzycach',katowice:'Katowicach',rybnik:'Rybniku','wodzislaw-slaski':'Wodzisławiu Śląskim',raciborz:'Raciborzu','jastrzebie-zdroj':'Jastrzębiu-Zdroju',gliwice:'Gliwicach',zory:'Żorach'};
 const norm=s=>String(s??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
 export default async function handler(req,res){
  if(req.method!=='GET')return res.status(405).end();
