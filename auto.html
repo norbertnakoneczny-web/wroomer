@@ -104,6 +104,22 @@ function getImages(car){
   if(car.image) a.push(car.image);
   return [...new Set(a.map(s=>safeImage(s)).filter(Boolean))].slice(0,20);
 }
+const galleryPreloads=new Map();
+function preloadNearbyImages(){
+  if(imgs.length<2)return;
+  for(const offset of [-1,1]){
+    const url=imgs[(cur+offset+imgs.length)%imgs.length];
+    if(galleryPreloads.has(url))continue;
+    const image=new Image();
+    galleryPreloads.set(url,image);
+    image.decoding='async';
+    image.src=url;
+  }
+}
+function onGalleryImageLoaded(){
+  if('requestIdleCallback' in window) window.requestIdleCallback(preloadNearbyImages,{timeout:1200});
+  else setTimeout(preloadNearbyImages,250);
+}
 function render(){
   if(!imgs.length)return;
   cur=Math.max(0,Math.min(cur,imgs.length-1));
@@ -174,7 +190,7 @@ async function load(){
     const safePhone=/^\+?[0-9 ()-]{6,24}$/.test(phone)&&phone.replace(/\D/g,'').length>=9&&phone.replace(/\D/g,'').length<=15?phone:'';
     el.innerHTML=`
       <div class="gallery-main" id="galleryMain">
-        <img id="mainImg" src="${escapeHtml(imgs[0])}" fetchpriority="high" decoding="async" onclick="openLB(cur)">
+        <img id="mainImg" src="${escapeHtml(imgs[0])}" fetchpriority="high" decoding="async" onload="onGalleryImageLoaded()" onclick="openLB(cur)">
         <span class="nav prev" onclick="event.stopPropagation(); prevImg()">‹</span>
         <span class="nav next" onclick="event.stopPropagation(); nextImg()">›</span>
         <span class="counter" id="mainCounter">1 / ${imgs.length}</span>
