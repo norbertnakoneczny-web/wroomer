@@ -126,7 +126,7 @@ function mobilePhotoUrl(url){
  try{
   const u=new URL(url);
   if(u.hostname!=='bdpydgsfowtuvjnkyeeg.supabase.co'||!u.pathname.includes('/storage/v1/object/public/ogloszenia/'))return url;
-  u.pathname=u.pathname.replace(/(\\.[^.\/]+)$/,'_mobile$1');
+  u.pathname=u.pathname.replace(/\.[^./]+$/,'_mobile.webp');
   return u.href;
  }catch{return url;}
 }
@@ -139,7 +139,7 @@ function render(){
   if(!imgs.length)return;
   cur=Math.max(0,Math.min(cur,imgs.length-1));
   const mainImg = document.getElementById('mainImg');
-  if(mainImg){ mainImg.onerror=()=>{mainImg.onerror=null;mainImg.removeAttribute('src');mainImg.alt='Zdjęcie jest chwilowo niedostępne';}; loadGalleryPhoto(mainImg,imgs[cur]); }
+  if(mainImg){ loadGalleryPhoto(mainImg,imgs[cur]); }
   const mc=document.getElementById('mainCounter'); if(mc) mc.innerText = `${cur+1} / ${imgs.length}`;
   const hc=document.getElementById('hcount'); if(hc) hc.innerText = `${imgs.length} zdjęć`;
   const lbc=document.getElementById('lbcounter'); if(lbc) lbc.innerText = `${cur+1} / ${imgs.length}`;
@@ -205,7 +205,7 @@ async function load(){
     const safePhone=/^\+?[0-9 ()-]{6,24}$/.test(phone)&&phone.replace(/\D/g,'').length>=9&&phone.replace(/\D/g,'').length<=15?phone:'';
     el.innerHTML=`
       <div class="gallery-main" id="galleryMain">
-        <img id="mainImg" src="${escapeHtml(mobilePhotoUrl(imgs[0]))}" onerror="this.onerror=null;this.src=imgs[0]" fetchpriority="high" decoding="async" onload="onGalleryImageLoaded()" onclick="openLB(cur)">
+        <img id="mainImg" src="${escapeHtml(imgs[0])}" fetchpriority="high" decoding="async" onload="onGalleryImageLoaded()" onclick="openLB(cur)">
         <span class="nav prev" onclick="event.stopPropagation(); prevImg()">‹</span>
         <span class="nav next" onclick="event.stopPropagation(); nextImg()">›</span>
         <span class="counter" id="mainCounter">1 / ${imgs.length}</span>
