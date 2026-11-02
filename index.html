@@ -1185,7 +1185,7 @@ window.wroomerCityRadiusClear=function(){if(selectedCity)choose(null)};
 const overlay=document.getElementById('wroomerLightbox'),large=document.getElementById('wroomerLightboxImage'),counter=document.getElementById('wroomerLightboxCounter'),main=document.getElementById('galleryMain');
 if(!overlay||!main)return;
 let previousFocus=null,startX=0,startY=0;
-function refresh(){if(!galleryImages.length){close();return}large.src=galleryImages[galleryIndex];counter.textContent=(galleryIndex+1)+' / '+galleryImages.length;}
+function refresh(){if(!galleryImages.length){close();return}wroomerSetMobileImage(large,galleryImages[galleryIndex]);counter.textContent=(galleryIndex+1)+' / '+galleryImages.length;}
 function open(){if(!galleryImages.length)return;previousFocus=document.activeElement;overlay.hidden=false;refresh();document.getElementById('wroomerLightboxClose').focus();}
 function close(){overlay.hidden=true;large.removeAttribute('src');if(previousFocus&&previousFocus.isConnected)previousFocus.focus();}
 main.addEventListener('click',open);
