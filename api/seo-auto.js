@@ -10,14 +10,14 @@ const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&
 export default async function handler(req,res){
   if(req.method!=='GET'){res.setHeader('Allow','GET');return res.status(405).end();}
   const slug=String(Array.isArray(req.query.slug)?req.query.slug[0]:(req.query.slug||'')).trim();
-  if(!/^[a-zA-Z0-9_-]{1,150}$/.test(slug)){res.status(400).send('Nieprawidłowy adres');return;}
+  if(!/^[a-zA-Z0-9_-]{1,150}$/.test(slug)){res.setHeader('X-Robots-Tag','noindex, nofollow');res.status(400).send('Nieprawidłowy adres');return;}
   try{
     const field=/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(slug)?'id':'slug';
     const response=await fetch(API+'/rest/v1/ogloszenia?'+field+'=eq.'+encodeURIComponent(slug)+'&is_banned=eq.false&select=*&limit=1',{
       headers:{apikey:KEY,Authorization:'Bearer '+KEY},signal:AbortSignal.timeout(7000)});
     if(!response.ok)throw new Error('Backend response '+response.status);
     const rows=await response.json(), car=Array.isArray(rows)?rows[0]:null;
-    if(!car){res.status(404).send('Nie znaleziono ogłoszenia');return;}
+    if(!car){res.setHeader('X-Robots-Tag','noindex, nofollow');res.status(404).send('Nie znaleziono ogłoszenia');return;}
     const title=String(car.title||[car.brand||car.marka,car.model,car.year||car.rocznik].filter(Boolean).join(' ')||'Samochód').slice(0,110);
     const url='https://www.wroomer.pl/auto/'+encodeURIComponent(slug);
     const description=[title,car.location||car.lokalizacja||car.miasto,Number.isFinite(Number(car.price??car.cena))&&Number(car.price??car.cena)>0?Number(car.price??car.cena).toLocaleString('pl-PL')+' zł':'','Oferta na WROOMER.PL'].filter(Boolean).join(' • ').slice(0,160);
@@ -63,5 +63,5 @@ export default async function handler(req,res){
       .replace('</head>',head+'</head>')
       .replace(placeholder,'<div id="content" class="card">'+gallery+details+'</div>');
     res.status(200).send(html);
-  }catch(e){res.status(502).send('Błąd odczytu ogłoszenia');}
+  }catch(e){res.setHeader('X-Robots-Tag','noindex, nofollow');res.setHeader('Cache-Control','no-store');res.status(502).send('Błąd odczytu ogłoszenia');}
 }
