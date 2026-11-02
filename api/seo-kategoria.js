@@ -11,13 +11,20 @@ export default async function handler(req,res){
  const brand=String(req.query.brand||'').toLowerCase(),city=String(req.query.city||'').toLowerCase();
  if(!brands[brand]||(city&&!cities[city]))return res.status(404).send('Nie znaleziono kategorii');
  try{
-  let data=null;
-  for(let attempt=0;attempt<2;attempt++){
-   try{
-    const r=await fetch(API+'/rest/v1/ogloszenia?select=id,slug,title,brand,marka,model,year,rocznik,price,cena,location,lokalizacja,miasto&is_banned=eq.false&limit=500',{headers:{apikey:KEY,Authorization:'Bearer '+KEY},signal:AbortSignal.timeout(9000)});
-    if(!r.ok)throw Error('Database response '+r.status);
-    data=await r.json();break;
-   }catch(e){if(attempt===1)throw e;}
+  const data=[];
+  for(let offset=0;offset<10000;offset+=500){
+   let page=null;
+   for(let attempt=0;attempt<2;attempt++){
+    try{
+     const r=await fetch(API+'/rest/v1/ogloszenia?select=id,slug,title,brand,marka,model,year,rocznik,price,cena,location,lokalizacja,miasto&is_banned=eq.false&order=id.asc&limit=500&offset='+offset,{headers:{apikey:KEY,Authorization:'Bearer '+KEY},signal:AbortSignal.timeout(9000)});
+     if(!r.ok)throw Error('Database response '+r.status);
+     page=await r.json();break;
+    }catch(e){if(attempt===1)throw e;}
+   }
+   if(!Array.isArray(page))throw Error('Invalid listing data');
+   data.push(...page);
+   if(page.length<500)break;
+   if(offset===9500)throw Error('Category pagination limit exceeded');
   }
   if(!Array.isArray(data))throw Error('Invalid listing data');
   const rows=data.filter(x=>norm(x.brand||x.marka)===norm(brands[brand])&&(!city||norm(x.location||x.lokalizacja||x.miasto).includes(norm(cities[city])))).filter(x=>/^[a-zA-Z0-9_-]{1,150}$/.test(String(x.slug||x.id||'')));
