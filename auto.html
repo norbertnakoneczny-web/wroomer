@@ -113,7 +113,8 @@ function preloadNearbyImages(){
     const image=new Image();
     galleryPreloads.set(url,image);
     image.decoding='async';
-    image.src=url;
+    image.src=mobilePhotoUrl(url);
+  image.onerror=()=>{image.onerror=null;image.src=url;};
   }
 }
 function onGalleryImageLoaded(){
