@@ -281,9 +281,9 @@ function syncSelectedFiles(){
 
 document.getElementById('aFiles').onchange=(e)=>{
   const files=Array.from(e.target.files);
-  const canAdd = 20 - imageList.length;
+  const canAdd = Math.max(0, 30 - imageList.length);
   const toAdd = files.slice(0, canAdd);
-  if(files.length>canAdd){ alert('Możesz dodać max 20 zdjęć. Dodano '+toAdd.length+' z '+files.length); }
+  if(files.length>canAdd){ alert('Możesz dodać max 30 zdjęć. Dodano '+toAdd.length+' z '+files.length); }
   toAdd.forEach(f=>{
     const previewUrl=URL.createObjectURL(f);
     imageList.push({id:'new_'+Date.now()+'_'+Math.random(), type:'new', url:null, file:f, preview:previewUrl});
@@ -300,7 +300,7 @@ document.getElementById('btnSave').onclick=async()=>{
   const price=parseInt(document.getElementById('aPrice').value)||0;
   if(!title||!brand||!modelVal){showError('addError','Tytuł, marka i model wymagane (Inne -> wpisz)');return;}
   if(!price){showError('addError','Podaj cenę');return;}
-  if(imageList.length>20){showError('addError','Max 20 zdjęć');return;}
+  if(imageList.length>30){showError('addError','Max 30 zdjęć');return;}
   const btn=document.getElementById('btnSave'); btn.textContent='WYSYŁANIE...'; btn.disabled=true;
   try{
     let imageUrls = [];
