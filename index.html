@@ -948,17 +948,22 @@ async function loadAds(){
   const search=document.getElementById('wroomerQuickSearch')?.value||'';
   grid.innerHTML="<div class=\"card\" aria-hidden=\"true\"><div class=\"card-img-wrap\"></div><div class=\"card-body\"><div class=\"card-title\">Ładowanie ogłoszeń…</div></div></div><div class=\"card\" aria-hidden=\"true\"><div class=\"card-img-wrap\"></div><div class=\"card-body\"><div class=\"card-title\">Ładowanie ogłoszeń…</div></div></div><div class=\"card\" aria-hidden=\"true\"><div class=\"card-img-wrap\"></div><div class=\"card-body\"><div class=\"card-title\">Ładowanie ogłoszeń…</div></div></div><div class=\"card\" aria-hidden=\"true\"><div class=\"card-img-wrap\"></div><div class=\"card-body\"><div class=\"card-title\">Ładowanie ogłoszeń…</div></div></div><div class=\"card\" aria-hidden=\"true\"><div class=\"card-img-wrap\"></div><div class=\"card-body\"><div class=\"card-title\">Ładowanie ogłoszeń…</div></div></div><div class=\"card\" aria-hidden=\"true\"><div class=\"card-img-wrap\"></div><div class=\"card-body\"><div class=\"card-title\">Ładowanie ogłoszeń…</div></div></div><div class=\"card\" aria-hidden=\"true\"><div class=\"card-img-wrap\"></div><div class=\"card-body\"><div class=\"card-title\">Ładowanie ogłoszeń…</div></div></div><div class=\"card\" aria-hidden=\"true\"><div class=\"card-img-wrap\"></div><div class=\"card-body\"><div class=\"card-title\">Ładowanie ogłoszeń…</div></div></div><div class=\"card\" aria-hidden=\"true\"><div class=\"card-img-wrap\"></div><div class=\"card-body\"><div class=\"card-title\">Ładowanie ogłoszeń…</div></div></div><div class=\"card\" aria-hidden=\"true\"><div class=\"card-img-wrap\"></div><div class=\"card-body\"><div class=\"card-title\">Ładowanie ogłoszeń…</div></div></div><div class=\"card\" aria-hidden=\"true\"><div class=\"card-img-wrap\"></div><div class=\"card-body\"><div class=\"card-title\">Ładowanie ogłoszeń…</div></div></div><div class=\"card\" aria-hidden=\"true\"><div class=\"card-img-wrap\"></div><div class=\"card-body\"><div class=\"card-title\">Ładowanie ogłoszeń…</div></div></div>";
   try{
-    let q=supabaseClient.from('ogloszenia').select('*').eq('is_banned',false).order('bumped_at',{ascending:false,nullsFirst:false}).order('created_at',{ascending:false}).limit(1000);
-    // Price is filtered after loading: legacy ads may store the price in `cena` instead of `price`.
-    let result=await q;
-    if(requestId!==wroomerLatestRequest)return;
-    if(result.error){
-      console.warn('Zapytanie z sortowaniem nie powiodło się, ponawiam bez sortowania:',result.error);
-      result=await supabaseClient.from('ogloszenia').select('*').eq('is_banned',false).limit(1000);
+    // Pobieraj pełne strony wyników: limit 1000 w Supabase nie może ukrywać nowszych ogłoszeń.
+    const collected=[];
+    for(let offset=0;offset<10000;offset+=500){
+      let result=await supabaseClient.from('ogloszenia').select('*').eq('is_banned',false).order('bumped_at',{ascending:false,nullsFirst:false}).order('created_at',{ascending:false}).order('id',{ascending:true}).range(offset,offset+499);
       if(requestId!==wroomerLatestRequest)return;
+      if(result.error){
+        console.warn('Zapytanie z sortowaniem nie powiodło się, ponawiam bez sortowania:',result.error);
+        result=await supabaseClient.from('ogloszenia').select('*').eq('is_banned',false).order('id',{ascending:true}).range(offset,offset+499);
+        if(requestId!==wroomerLatestRequest)return;
+      }
+      if(result.error)throw result.error;
+      const page=result.data||[];
+      collected.push(...page);
+      if(page.length<500)break;
     }
-    if(result.error)throw result.error;
-    allAds=result.data||[];
+    allAds=collected;
     const sharedId=new URLSearchParams(location.search).get('ogloszenie');
     if(sharedId&&window.wroomerOpenedSharedId!==sharedId){
       window.wroomerOpenedSharedId=sharedId;
