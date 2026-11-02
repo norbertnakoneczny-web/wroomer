@@ -10,7 +10,7 @@ const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&
 export default async function handler(req,res){
   if(req.method!=='GET'){res.setHeader('Allow','GET');return res.status(405).end();}
   const slug=String(Array.isArray(req.query.slug)?req.query.slug[0]:(req.query.slug||'')).trim();
-  if(!/^[a-zA-Z0-9_-]{1,150}$/.test(slug)){res.status(400).send('Nieprawidłowy adres');return;}
+  if(!/^[a-zA-Z0-9_-]{1,150}$/.test(slug)){res.setHeader('X-Robots-Tag','noindex, nofollow');res.status(404).send('Nie znaleziono ogłoszenia');return;}
   try{
     const field=/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(slug)?'id':'slug';
     const response=await fetch(API+'/rest/v1/ogloszenia?'+field+'=eq.'+encodeURIComponent(slug)+'&is_banned=eq.false&select=*&limit=1',{

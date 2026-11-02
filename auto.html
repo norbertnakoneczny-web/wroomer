@@ -104,11 +104,42 @@ function getImages(car){
   if(car.image) a.push(car.image);
   return [...new Set(a.map(s=>safeImage(s)).filter(Boolean))].slice(0,20);
 }
+const galleryPreloads=new Map();
+function preloadNearbyImages(){
+  if(imgs.length<2)return;
+  for(const offset of [-1,1]){
+    const url=imgs[(cur+offset+imgs.length)%imgs.length];
+    if(galleryPreloads.has(url))continue;
+    const image=new Image();
+    galleryPreloads.set(url,image);
+    image.decoding='async';
+    image.src=url;
+  image.onerror=()=>{image.onerror=null;image.src=url;};
+  }
+}
+function onGalleryImageLoaded(){
+  if('requestIdleCallback' in window) window.requestIdleCallback(preloadNearbyImages,{timeout:1200});
+  else setTimeout(preloadNearbyImages,250);
+}
+function mobilePhotoUrl(url){
+ if(!window.matchMedia('(max-width: 767px)').matches)return url;
+ try{
+  const u=new URL(url);
+  if(u.hostname!=='bdpydgsfowtuvjnkyeeg.supabase.co'||!u.pathname.includes('/storage/v1/object/public/ogloszenia/'))return url;
+  u.pathname=u.pathname.replace(/\.[^./]+$/,'_mobile.webp');
+  return u.href;
+ }catch{return url;}
+}
+function loadGalleryPhoto(el,url){
+ const small=mobilePhotoUrl(url);
+ el.onerror=()=>{el.onerror=null;if(el.getAttribute('src')!==url)el.src=url;else{el.removeAttribute('src');el.alt='Zdjęcie jest chwilowo niedostępne';}};
+ if(el.getAttribute('src')!==url)el.src=url;
+}
 function render(){
   if(!imgs.length)return;
   cur=Math.max(0,Math.min(cur,imgs.length-1));
   const mainImg = document.getElementById('mainImg');
-  if(mainImg){ mainImg.onerror=()=>{mainImg.onerror=null;mainImg.removeAttribute('src');mainImg.alt='Zdjęcie jest chwilowo niedostępne';}; mainImg.src=imgs[cur]; }
+  if(mainImg){ loadGalleryPhoto(mainImg,imgs[cur]); }
   const mc=document.getElementById('mainCounter'); if(mc) mc.innerText = `${cur+1} / ${imgs.length}`;
   const hc=document.getElementById('hcount'); if(hc) hc.innerText = `${imgs.length} zdjęć`;
   const lbc=document.getElementById('lbcounter'); if(lbc) lbc.innerText = `${cur+1} / ${imgs.length}`;
@@ -174,12 +205,12 @@ async function load(){
     const safePhone=/^\+?[0-9 ()-]{6,24}$/.test(phone)&&phone.replace(/\D/g,'').length>=9&&phone.replace(/\D/g,'').length<=15?phone:'';
     el.innerHTML=`
       <div class="gallery-main" id="galleryMain">
-        <img id="mainImg" src="${escapeHtml(imgs[0])}" onclick="openLB(0)">
+        <img id="mainImg" src="${escapeHtml(imgs[0])}" fetchpriority="high" decoding="async" onload="onGalleryImageLoaded()" onclick="openLB(cur)">
         <span class="nav prev" onclick="event.stopPropagation(); prevImg()">‹</span>
         <span class="nav next" onclick="event.stopPropagation(); nextImg()">›</span>
         <span class="counter" id="mainCounter">1 / ${imgs.length}</span>
       </div>
-      <div class="thumbs">${imgs.map((s,i)=>`<img src="${escapeHtml(s)}" class="${i===0?'active':''}" onclick="cur=${i}; document.getElementById('mainImg').src=imgs[${i}]; render()" loading="lazy">`).join('')}</div>
+      <div class="thumbs">${imgs.map((s,i)=>`<img src="${escapeHtml(s)}" class="${i===0?'active':''}" onclick="cur=${i}; render()" loading="lazy" decoding="async">`).join('')}</div>
       <div class="info">
         <h1>${escapeHtml(car.title||[car.brand||car.marka,car.model,car.year||car.rocznik].filter(Boolean).join(' '))}</h1>
         <div class="meta">${escapeHtml(car.brand||car.marka||'')} ${escapeHtml(car.model||'')} • ${escapeHtml(car.location||car.lokalizacja||car.miasto||'')} • ${escapeHtml(car.year||car.rocznik||'')}r</div>
