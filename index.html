@@ -721,11 +721,18 @@ function wroomerSetMobileImage(img,url){
  if(!img)return;
  img.onerror=null;
  if(!matchMedia('(max-width: 767px)').matches){img.src=url;return;}
- const mobile=wroomerMobileImageUrl(url);
- if(mobile===url){img.src=url;return;}
- img.onerror=()=>{img.onerror=null;img.src=url;};
- img.src=mobile;
+ // Mobile gallery: request a resized image directly, avoiding a missing-copy 404
+ // followed by a full-resolution original download for older listings.
+ const prefix='/storage/v1/object/public/ogloszenia/';
+ if(url.includes(prefix)){
+   const resized=url.replace(prefix,'/storage/v1/render/image/public/ogloszenia/');
+   const join=resized.includes('?')?'&':'?';
+   const optimized=resized+join+'width=960&quality=78&resize=contain';
+   img.onerror=()=>{img.onerror=null;img.src=url;};
+   img.src=optimized;
+ }else img.src=url;
 }
+
 document.getElementById('btnSave').onclick=async()=>{if(!(await wroomerCanEditAds())){showError('addError',WROOMER_BLOCKED_MESSAGE);return;}const title=document.getElementById('aTitle').value.trim(); const brand=document.getElementById('aBrand').value.trim(); const modelVal=document.getElementById('aModelIn').value||'Inny'; const price=Number(document.getElementById('aPrice').value); if(!title||!brand||!modelVal){showError('addError','Tytuł, marka i model wymagane');return;} if(!Number.isFinite(price)||price<=0||!Number.isSafeInteger(price)){showError('addError','Podaj poprawną cenę w pełnych złotych');return;} if(!document.getElementById('adTerms').checked||!document.getElementById('adPhoto').checked){showError('addError','Potwierdź regulamin i prawa do zdjęć.');return;} if(document.getElementById('aPhone').value.trim()&&!document.getElementById('adContact').checked){showError('addError','Potwierdź publiczne wyświetlanie numeru telefonu lub usuń numer.');return;} const btn=document.getElementById('btnSave'); btn.textContent='WYSYŁANIE...'; btn.disabled=true; try{let imageUrls=[];if(ownerPhotoOrder.length>20)throw new Error('Maksymalnie 20 zdjęć na ogłoszenie.');
  let uploaded=0;for(const entry of ownerPhotoOrder){
  if(entry.kind==='existing'){imageUrls.push(entry.url);continue;}
