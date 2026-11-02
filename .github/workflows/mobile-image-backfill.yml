@@ -1,0 +1,21 @@
+name: Generate mobile copies of existing photos
+on:
+  workflow_dispatch:
+jobs:
+  backfill:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feature/mobile-image-copies-20261102
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install image processing dependencies
+        run: npm install --no-save --no-package-lock @supabase/supabase-js@2 sharp@0.34
+      - name: Generate independent mobile images
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: node scripts/backfill-mobile-images.mjs
