@@ -113,7 +113,7 @@ function preloadNearbyImages(){
     const image=new Image();
     galleryPreloads.set(url,image);
     image.decoding='async';
-    image.src=mobilePhotoUrl(url);
+    image.src=url;
   image.onerror=()=>{image.onerror=null;image.src=url;};
   }
 }
@@ -133,7 +133,7 @@ function mobilePhotoUrl(url){
 function loadGalleryPhoto(el,url){
  const small=mobilePhotoUrl(url);
  el.onerror=()=>{el.onerror=null;if(el.getAttribute('src')!==url)el.src=url;else{el.removeAttribute('src');el.alt='Zdjęcie jest chwilowo niedostępne';}};
- if(el.getAttribute('src')!==small)el.src=small;
+ if(el.getAttribute('src')!==url)el.src=url;
 }
 function render(){
   if(!imgs.length)return;
