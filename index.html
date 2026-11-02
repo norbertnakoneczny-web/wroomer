@@ -545,7 +545,7 @@ function wroomerShowBlockedNotice(){
 }
 
 // Wyposażenie: bez migracji bazy, zapis wybranych wartości w dedykowanym znaczniku opisu.
-const WROOMER_EQUIPMENT={"Komfort":["Klimatyzacja","Klimatyzacja automatyczna","Tempomat","Tempomat adaptacyjny","Podgrzewane fotele","Elektrycznie regulowane fotele","Elektryczne szyby","Elektryczne lusterka","Centralny zamek","Wspomaganie kierownicy","Skórzana tapicerka","Komputer pokładowy","Nawigacja GPS","Bluetooth","Apple CarPlay","Android Auto","Czujnik deszczu","Kierownica wielofunkcyjna"],"Bezpieczeństwo":["ABS","ESP","ASR","Poduszki powietrzne","Immobilizer","Asystent pasa ruchu","Asystent martwego pola","System awaryjnego hamowania","Czujniki parkowania przód","Czujniki parkowania tył","Kamera cofania","Kamera 360°","ISOFIX","Kontrola ciśnienia opon"],"Wygląd i oświetlenie":["Światła LED","Światła przeciwmgielne","Światła do jazdy dziennej","Reflektory ksenonowe","Felgi aluminiowe","Przyciemniane szyby","Dach panoramiczny","Szyberdach","Relingi dachowe","Hak holowniczy"],"Użytkowe":["Drzwi boczne przesuwne","Dwoje drzwi bocznych przesuwnych","Czujniki cofania","Przegroda przestrzeni ładunkowej","Zabudowa ładunkowa","Napęd 4x4","Tryby jazdy","Elektryczna klapa bagażnika"]};
+const WROOMER_EQUIPMENT={"Komfort":["Klimatyzacja","Klimatyzacja automatyczna","Tempomat","Tempomat adaptacyjny","Podgrzewane fotele","Elektrycznie regulowane fotele","Elektryczne szyby","Elektryczne lusterka","Centralny zamek","Wspomaganie kierownicy","Skórzana tapicerka","Komputer pokładowy","Nawigacja GPS","Bluetooth","Apple CarPlay","Android Auto","Czujnik deszczu","Kierownica wielofunkcyjna"],"Bezpieczeństwo":["ABS","ESP","ASR","Poduszki powietrzne","Immobilizer","Asystent pasa ruchu","Asystent martwego pola","System awaryjnego hamowania","Czujniki parkowania przód","Czujniki parkowania tył","Kamera cofania","Kamera 360°","ISOFIX","Kontrola ciśnienia opon"],"Wygląd i oświetlenie":["Światła LED","Światła przeciwmgielne","Światła do jazdy dziennej","Reflektory ksenonowe","Felgi aluminiowe","Przyciemniane szyby","Dach panoramiczny","Szyberdach","Relingi dachowe","Hak holowniczy"],"Użytkowe":["Drzwi boczne przesuwne","Dwoje drzwi bocznych przesuwnych","Czujniki cofania","Przegroda przestrzeni ładunkowej","Zabudowa ładunkowa","Napęd 4x4","Tryby jazdy","Elektryczna klapa bagażnika"],"Informacje dodatkowe":["Książka serwisowa","Dwa kluczyki","Nowe opony"]};
 const WROOMER_EQ_RE=/\n?\[\[WROOMER_EQ:([A-Za-z0-9%._~-]+)\]\]/g;
 function wroomerEqExtract(description){
   const raw=String(description||'');
@@ -833,7 +833,7 @@ function openGallery(ad){
   const fmtPrice=hasPrice?priceNumber.toLocaleString('pl-PL'):'Cena do uzgodnienia';
   const mileageText=String(przeb??'').trim();
   const mileageDisplay=/^(?:-|(?:-\s*km)|brak danych)?$/i.test(mileageText)?'-':/\bkm\b/i.test(mileageText)?mileageText:mileageText+' km';
-  const details=[['Marka',marka],['Model',model],['Rok produkcji',rok],['Przebieg',mileageDisplay],['Paliwo',paliwo],['Pojemność silnika',validField(ex.capacity)?ex.capacity+' cm³':'-'],['Lokalizacja',lok]];
+  const details=[['Marka',marka],['Model',model],['Rok produkcji',rok],['Przebieg',mileageDisplay],['Paliwo',paliwo],['Pojemność silnika',validField(ad.capacity)?ad.capacity+' cm³':validField(ex.capacity)?ex.capacity+' cm³':'-'],['Lokalizacja',lok]];
   const rawPhone=String(ad.phone||ex.telefon||'').trim();
   const phoneClean=rawPhone.replace(/[^+\d]/g,'').replace(/(?!^)\+/g,'');
   const phoneDigits=phoneClean.replace(/\D/g,'');
