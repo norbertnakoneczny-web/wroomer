@@ -122,6 +122,7 @@ function onGalleryImageLoaded(){
   else setTimeout(preloadNearbyImages,250);
 }
 function mobilePhotoUrl(url){
+ if(!window.matchMedia('(max-width: 767px)').matches)return url;
  try{
   const u=new URL(url);
   if(u.hostname!=='bdpydgsfowtuvjnkyeeg.supabase.co'||!u.pathname.includes('/storage/v1/object/public/ogloszenia/'))return url;
