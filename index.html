@@ -498,7 +498,7 @@ function applyMobileAndHide(){const d=document.getElementById('mobileDrawer'); d
 function showNotice(id,msg,type){const el=document.getElementById(id);if(!el)return;const notice=document.createElement('div');notice.className=type;notice.textContent=String(msg??'');el.replaceChildren(notice);if(id==='addError'){const near=document.getElementById('saveFeedback');if(near){near.replaceChildren(notice.cloneNode(true));near.style.display='block';near.setAttribute('role','alert');near.scrollIntoView({behavior:'smooth',block:'nearest'});}}}
 function showError(id,msg){showNotice(id,msg,'error');}
 function showSuccess(id,msg){showNotice(id,msg,'success');}
-async function checkUser(){try{const s=await supabaseClient.auth.getSession(); currentUser=s?.data?.session?.user||null; updateAuthUI();}catch(e){}}
+async function checkUser(){try{const s=await supabaseClient.auth.getSession(); currentUser=s?.data?.session?.user||null; updateAuthUI();if(window.currentAd&&document.getElementById('galleryModal')?.classList.contains('open'))openGallery(window.currentAd);}catch(e){}}
 function updateAuthUI(){const bl=document.getElementById('btnLogin'), bo=document.getElementById('btnLogout'); if(currentUser){bl.style.display='none';bo.style.display='inline-block';}else{bl.style.display='inline-block';bo.style.display='none';}}
 function openLoginModal(){const modal=document.getElementById('loginModal');if(!modal)return;modal.style.display='flex';modal.classList.add('open');document.getElementById('loginError').textContent='';}
 document.getElementById('btnLogin').onclick=openLoginModal;
@@ -874,7 +874,7 @@ async function wroomerCopySellerPhone(phone){
   }catch(error){prompt('Skopiuj numer telefonu:',phone);}
 }
 function editOwnListing(id){
- const ad=allAds.find(item=>String(item.id)===String(id));
+ const ad=allAds.find(item=>String(item.id)===String(id))||(String(window.currentAd?.id)===String(id)?window.currentAd:null);
  if(!currentUser||!ad||String(ad.user_id)!==String(currentUser.id)){
   alert('Tylko właściciel może edytować to ogłoszenie.');return;
  }
@@ -1073,7 +1073,7 @@ function resetFilters(){
   const quick=document.getElementById('wroomerQuickSearch');if(quick)quick.value='';
   loadAds();
 }
-checkUser(); loadAds();
+checkUser().finally(()=>loadAds());
 </script>
 <div id="wroomerReportModal" role="dialog" aria-modal="true" aria-labelledby="wroomerReportHeading">
 <form class="report-card" id="wroomerReportForm">
