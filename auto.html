@@ -64,7 +64,7 @@ h1{margin:0;font-size:30px}.meta{color:#888;margin:8px 0}.price{font-size:36px;c
  window.wroomerTrack=function(name,data){
   try{
    const c=JSON.parse(localStorage.getItem(key)||'null');
-   if(!c?.analytics||Date.now()-c.timestamp>180*24*3600*1000||typeof window.gtag!=='function')return;
+   if(localStorage.getItem('wroomer_exclude_own_visits')==='1'||!c?.analytics||Date.now()-c.timestamp>180*24*3600*1000||typeof window.gtag!=='function')return;
    window.gtag('event',name,{...data,site_area:'vehicle_detail'});
   }catch(e){}
  };
