@@ -13,14 +13,15 @@ export default async function handler(req,res){
   if(!/^[a-zA-Z0-9_-]{1,150}$/.test(slug)){res.setHeader('X-Robots-Tag','noindex, nofollow');res.status(400).send('Nieprawidłowy adres');return;}
   try{
     const field=/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(slug)?'id':'slug';
-    const response=await fetch(API+'/rest/v1/ogloszenia?'+field+'=eq.'+encodeURIComponent(slug)+'&is_banned=eq.false&select=*&limit=1',{
+    const response=await fetch(API+'/rest/v1/ogloszenia?'+field+'=eq.'+encodeURIComponent(slug)+'&is_banned=eq.false&status=eq.active&select=*&limit=1',{
       headers:{apikey:KEY,Authorization:'Bearer '+KEY},signal:AbortSignal.timeout(7000)});
     if(!response.ok)throw new Error('Backend response '+response.status);
     const rows=await response.json(), car=Array.isArray(rows)?rows[0]:null;
     if(!car){res.setHeader('X-Robots-Tag','noindex, nofollow');res.status(404).send('Nie znaleziono ogłoszenia');return;}
     const title=String(car.title||[car.brand||car.marka,car.model,car.year||car.rocznik].filter(Boolean).join(' ')||'Samochód').slice(0,110);
     const url='https://www.wroomer.pl/auto/'+encodeURIComponent(slug);
-    const description=[title,car.location||car.lokalizacja||car.miasto,Number.isFinite(Number(car.price??car.cena))&&Number(car.price??car.cena)>0?Number(car.price??car.cena).toLocaleString('pl-PL')+' zł':'','Oferta na WROOMER.PL'].filter(Boolean).join(' • ').slice(0,160);
+    const publicDescription=cleanPublicDescription(car.description||car.opis||'');
+    const description=[title,car.location||car.lokalizacja||car.miasto,Number.isFinite(Number(car.price??car.cena))&&Number(car.price??car.cena)>0?Number(car.price??car.cena).toLocaleString('pl-PL')+' zł':'',publicDescription.replace(/\s+/g,' ').slice(0,95)].filter(Boolean).join(' • ').slice(0,160);
     let pictures=Array.isArray(car.images)?[...car.images]:[];
     if(typeof car.images==='string'){try{pictures=JSON.parse(car.images)}catch{pictures=[car.images]}}
     if(!Array.isArray(pictures))pictures=[];
@@ -28,10 +29,10 @@ export default async function handler(req,res){
     if(!pictures.length&&typeof car.zdjecia==='string'){try{pictures=JSON.parse(car.zdjecia)}catch{pictures=[car.zdjecia]}}
     pictures=pictures.map(p=>typeof p==='string'?p:(p&&typeof p==='object'?(p.url||p.src||p.image_url||''):''));
     if(car.image_url||car.image)pictures.unshift(car.image_url||car.image);
-    pictures=[...new Set(pictures.filter(x=>typeof x==='string').map(x=>x.trim()).filter(x=>/^https:\/\/[^\s<>"']+$/i.test(x)))].slice(0,20);
+    pictures=[...new Set(pictures.filter(x=>typeof x==='string').map(x=>x.trim()).filter(x=>/^https:\/\/[^\s<>"']+$/i.test(x)))].slice(0,30);
     const numericPrice=Number(car.price??car.cena);
     const validPrice=Number.isFinite(numericPrice)&&numericPrice>0;
-    const schema={'@context':'https://schema.org','@type':'Car',name:title,url,description:cleanPublicDescription(car.description||car.opis||title).slice(0,500),...((car.brand||car.marka)?{brand:{'@type':'Brand',name:car.brand||car.marka}}:{}),...(car.model?{model:car.model}:{}),...(pictures.length?{image:pictures}:{}),...(validPrice?{offers:{'@type':'Offer',url,price:numericPrice,priceCurrency:'PLN'}}:{})};
+    const schema={'@context':'https://schema.org','@type':'Car',name:title,url,description:(publicDescription||title).slice(0,500),...((car.brand||car.marka)?{brand:{'@type':'Brand',name:car.brand||car.marka}}:{}),...(car.model?{model:car.model}:{}),...(pictures.length?{image:pictures}:{}),...(validPrice?{offers:{'@type':'Offer',url,price:numericPrice,priceCurrency:'PLN'}}:{})};
     const phone=String(car.phone||car.telefon||'').trim();
     const safePhone=/^\+?[0-9 ()-]{6,24}$/.test(phone)&&phone.replace(/\D/g,'').length>=9&&phone.replace(/\D/g,'').length<=15?phone:'';
     const phoneHref=safePhone.replace(/[^+\d]/g,'');
@@ -50,11 +51,17 @@ export default async function handler(req,res){
       '<div class="price">'+esc(price||'Cena do uzgodnienia')+'</div><div class="desc">'+esc(cleanPublicDescription(car.description||car.opis||''))+'</div>'+
       (safePhone?'<a class="btn" href="tel:'+esc(phoneHref)+'">📞 ZADZWOŃ: '+esc(safePhone)+'</a>':'<div class="meta">Numer telefonu niedostępny</div>')+
       '<div style="margin-top:20px"><a href="/" style="color:#888">← Wróć do listy</a></div></div>';
+    const breadcrumb={'@context':'https://schema.org','@type':'BreadcrumbList',itemListElement:[{'@type':'ListItem',position:1,name:'Ogłoszenia samochodowe',item:'https://www.wroomer.pl/'},{'@type':'ListItem',position:2,name:title,item:url}]};
     const jsonLd=JSON.stringify(schema).replace(/</g,'\\u003c');
+    const breadcrumbLd=JSON.stringify(breadcrumb).replace(/</g,'\\u003c');
     const head='<link rel="canonical" href="'+esc(url)+'">'+
       '<meta property="og:url" content="'+esc(url)+'">'+
       (pictures.length?'<meta property="og:image" content="'+esc(pictures[0])+'">':'')+
-      '<script type="application/ld+json" id="listing-structured-data">'+jsonLd+'</script>';
+      '<meta name="twitter:title" content="'+esc(title)+'">'+
+      '<meta name="twitter:description" content="'+esc(description)+'">'+
+      (pictures.length?'<meta name="twitter:image" content="'+esc(pictures[0])+'">':'')+
+      '<script type="application/ld+json" id="listing-structured-data">'+jsonLd+'</script>'+
+      '<script type="application/ld+json" id="listing-breadcrumbs">'+breadcrumbLd+'</script>';
     const html=template
       .replace(/<title>[^<]*<\/title>/i,'<title>'+esc(title)+' | WROOMER.PL</title>')
       .replace(/<meta name="description" content="[^"]*">/i,'<meta name="description" content="'+esc(description)+'">')

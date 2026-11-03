@@ -2,10 +2,10 @@ const API='https://bdpydgsfowtuvjnkyeeg.supabase.co';
 const KEY='sb_publishable_S1qH_mBZaX7-bzmfJ0IVGA_6hxGbJWd';
 const BASE='https://www.wroomer.pl';
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'}[c]));
-const brands={bmw:'BMW',audi:'Audi',opel:'Opel',volvo:'Volvo',peugeot:'Peugeot',fiat:'Fiat',ford:'Ford',hyundai:'Hyundai',volkswagen:'Volkswagen','mercedes-benz':'Mercedes-Benz'};
+const brands={bmw:'BMW',audi:'Audi',opel:'Opel',volvo:'Volvo',peugeot:'Peugeot',fiat:'Fiat',ford:'Ford',hyundai:'Hyundai',volkswagen:'Volkswagen','mercedes-benz':'Mercedes-Benz','mazda':'Mazda','skoda':'Škoda','toyota':'Toyota','renault':'Renault','seat':'SEAT','kia':'Kia','nissan':'Nissan','citroen':'Citroën','honda':'Honda','suzuki':'Suzuki','dacia':'Dacia'};
 const cities={gorzyce:'Gorzyce',katowice:'Katowice',rybnik:'Rybnik','wodzislaw-slaski':'Wodzisław Śląski',raciborz:'Racibórz','jastrzebie-zdroj':'Jastrzębie-Zdrój',gliwice:'Gliwice',zory:'Żory'};
 const cityIn={gorzyce:'Gorzycach',katowice:'Katowicach',rybnik:'Rybniku','wodzislaw-slaski':'Wodzisławiu Śląskim',raciborz:'Raciborzu','jastrzebie-zdroj':'Jastrzębiu-Zdroju',gliwice:'Gliwicach',zory:'Żorach'};
-const norm=s=>String(s??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
+const norm=s=>String(s??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/ł/g,'l').toLowerCase().trim();
 export default async function handler(req,res){
  if(req.method!=='GET')return res.status(405).end();
  const brand=String(req.query.brand||'').toLowerCase(),city=String(req.query.city||'').toLowerCase();
@@ -16,7 +16,7 @@ export default async function handler(req,res){
    let page=null;
    for(let attempt=0;attempt<2;attempt++){
     try{
-     const r=await fetch(API+'/rest/v1/ogloszenia?select=id,slug,title,brand,marka,model,year,rocznik,price,cena,location,lokalizacja,miasto&is_banned=eq.false&order=id.asc&limit=500&offset='+offset,{headers:{apikey:KEY,Authorization:'Bearer '+KEY},signal:AbortSignal.timeout(9000)});
+     const r=await fetch(API+'/rest/v1/ogloszenia?select=id,slug,title,brand,marka,model,year,rocznik,price,cena,location,lokalizacja,miasto&is_banned=eq.false&status=eq.active&order=id.asc&limit=500&offset='+offset,{headers:{apikey:KEY,Authorization:'Bearer '+KEY},signal:AbortSignal.timeout(9000)});
      if(!r.ok)throw Error('Database response '+r.status);
      page=await r.json();break;
     }catch(e){if(attempt===1)throw e;}
@@ -29,9 +29,9 @@ export default async function handler(req,res){
   if(!Array.isArray(data))throw Error('Invalid listing data');
   const rows=data.filter(x=>norm(x.brand||x.marka)===norm(brands[brand])&&(!city||norm(x.location||x.lokalizacja||x.miasto).includes(norm(cities[city])))).filter(x=>/^[a-zA-Z0-9_-]{1,150}$/.test(String(x.slug||x.id||'')));
   if(!rows.length){res.setHeader('Content-Type','text/plain; charset=utf-8');res.setHeader('X-Robots-Tag','noindex, nofollow');return res.status(404).send('Brak aktualnych ogłoszeń w tej kategorii');}
-  const title=brands[brand]+' używane'+(city?' – '+cities[city]:'')+' | Ogłoszenia Wroomer.pl';
+  const title='Używane '+brands[brand]+(city?' – '+cities[city]:' – auta na sprzedaż')+' | WROOMER.PL';
   const heading='Samochody '+brands[brand]+(city?' w '+cityIn[city]:' – ogłoszenia');
-  const description='Sprawdź aktualne ogłoszenia '+brands[brand]+(city?' z lokalizacji '+cities[city]:'')+'. Kupuj i sprzedawaj samochody bez prowizji na Wroomer.pl.';
+  const description='Sprawdź używane samochody '+brands[brand]+(city?' w '+cityIn[city]:' na Śląsku')+'. Porównaj oferty, ceny i roczniki na WROOMER.PL.';
   const path='/samochody/'+brand+(city?'/'+city:'');
   const url=BASE+path;
   const links=Object.keys(brands).map(b=>'<a href="/samochody/'+b+'">'+esc(brands[b])+'</a>').join(' · ');

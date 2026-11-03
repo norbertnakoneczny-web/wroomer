@@ -102,7 +102,7 @@ function getImages(car){
   if(!Array.isArray(a))a=[];
   if(car.image_url) a.unshift(car.image_url);
   if(car.image) a.push(car.image);
-  return [...new Set(a.map(s=>safeImage(s)).filter(Boolean))].slice(0,20);
+  return [...new Set(a.map(s=>safeImage(s)).filter(Boolean))].slice(0,30);
 }
 function render(){
   if(!imgs.length)return;
@@ -161,7 +161,7 @@ async function load(){
     const slug=decodeURIComponent(location.pathname.split('/').pop().split('?')[0]);
     if(!/^[a-zA-Z0-9_-]{1,150}$/.test(slug)){el.textContent='Nieprawidłowy adres ogłoszenia';return;}
     const lookupField=/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(slug)?'id':'slug';
-    const r=await fetch(`${SUPABASE_URL}/rest/v1/ogloszenia?${lookupField}=eq.${encodeURIComponent(slug)}&select=id,slug,title,brand,marka,model,year,rocznik,location,lokalizacja,miasto,price,cena,description,opis,images,zdjecia,image,image_url,phone,telefon,owner_email`,{headers:{apikey:SUPABASE_KEY,Authorization:`Bearer ${SUPABASE_KEY}`}});
+    const r=await fetch(`${SUPABASE_URL}/rest/v1/ogloszenia?${lookupField}=eq.${encodeURIComponent(slug)}&status=eq.active&is_banned=eq.false&select=id,slug,title,brand,marka,model,year,rocznik,location,lokalizacja,miasto,price,cena,description,opis,images,zdjecia,image,image_url,phone,telefon,owner_email`,{headers:{apikey:SUPABASE_KEY,Authorization:`Bearer ${SUPABASE_KEY}`}});
     if(!r.ok)throw new Error('Nie udało się pobrać ogłoszenia');
     const rows=await r.json();
     const car=Array.isArray(rows)?rows[0]:null;
