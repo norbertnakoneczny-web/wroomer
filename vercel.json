@@ -2,6 +2,10 @@
   "cleanUrls": false,
   "rewrites": [
     {
+      "source": "/sitemap-artykuly.xml",
+      "destination": "/api/sitemap-artykuly"
+    },
+    {
       "source": "/sitemap-ogloszenia.xml",
       "destination": "/api/sitemap"
     },
@@ -37,6 +41,9 @@
   "functions": {
     "api/seo-auto.js": {
       "includeFiles": "auto.html"
+    },
+    "api/sitemap-artykuly.js": {
+      "includeFiles": "blog/**"
     }
   }
 }
