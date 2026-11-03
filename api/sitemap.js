@@ -12,7 +12,7 @@ const xmlEscape=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(
 const validSlug=s=>/^[a-zA-Z0-9_-]{1,150}$/.test(s);
 
 async function fetchPage(offset){
- const url=API+'/rest/v1/ogloszenia?select=id,slug,brand,marka,location,lokalizacja,miasto&is_banned=eq.false&order=id.asc&limit='+PAGE_SIZE+'&offset='+offset;
+ const url=API+'/rest/v1/ogloszenia?select=id,slug,brand,marka,location,lokalizacja,miasto&is_banned=eq.false&status=eq.active&order=id.asc&limit='+PAGE_SIZE+'&offset='+offset;
  let lastError;
  for(let attempt=0;attempt<2;attempt++){
   try{
