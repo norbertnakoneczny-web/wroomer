@@ -5,7 +5,7 @@ const KEY='sb_publishable_S1qH_mBZaX7-bzmfJ0IVGA_6hxGbJWd';
 const BASE='https://www.wroomer.pl';
 const PAGE_SIZE=500;
 const MAX_PAGES=20; // Fail explicitly rather than silently publish an incomplete sitemap.
-const brands={'bmw':'bmw','audi':'audi','opel':'opel','volvo':'volvo','peugeot':'peugeot','fiat':'fiat','ford':'ford','hyundai':'hyundai','volkswagen':'volkswagen','mercedes benz':'mercedes-benz'};
+const brands={'bmw':'bmw','audi':'audi','opel':'opel','volvo':'volvo','peugeot':'peugeot','fiat':'fiat','ford':'ford','hyundai':'hyundai','volkswagen':'volkswagen','mercedes benz':'mercedes-benz','mazda':'mazda','skoda':'skoda','toyota':'toyota','renault':'renault','seat':'seat','kia':'kia','nissan':'nissan','citroen':'citroen','honda':'honda','suzuki':'suzuki','dacia':'dacia'};
 const cities={'gorzyce':'gorzyce','katowice':'katowice','rybnik':'rybnik','wodzislaw slaski':'wodzislaw-slaski','raciborz':'raciborz','jastrzebie zdroj':'jastrzebie-zdroj','gliwice':'gliwice','zory':'zory'};
 const norm=v=>String(v??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim().replace(/\s+/g,' ');
 const xmlEscape=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&apos;');
