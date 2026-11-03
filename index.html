@@ -506,10 +506,27 @@ let currentUser=null, selectedFiles=[], existingPhotoUrls=[], editingId=null, al
 let addLat=null, addLng=null, searchLat=null, searchLng=null;
 function isMobile(){return window.innerWidth<=900;}
 function getP(){return isMobile()?'M':'D';}
-function toggleMobileFilters(){const d=document.getElementById('mobileDrawer'); mobileFiltersOpen=!mobileFiltersOpen; if(mobileFiltersOpen){d.classList.add('open'); document.body.style.overflow='hidden';} else{d.classList.remove('open'); document.body.style.overflow='';}}
-function applyMobileAndHide(){
+function wroomerHideMobileFilters(){
  const d=document.getElementById('mobileDrawer');
- d.classList.remove('open');mobileFiltersOpen=false;document.body.style.overflow='';
+ d?.classList.remove('open');mobileFiltersOpen=false;document.body.style.overflow='';
+}
+function toggleMobileFilters(){
+ if(mobileFiltersOpen){
+  if(history.state?.wroomerOverlay==='filters'){history.back();return;}
+  wroomerHideMobileFilters();return;
+ }
+ const d=document.getElementById('mobileDrawer');
+ mobileFiltersOpen=true;d.classList.add('open');document.body.style.overflow='hidden';
+ history.pushState({...history.state,wroomerOverlay:'filters'},'',location.href);
+}
+window.addEventListener('popstate',()=>{
+ // The physical Android Back button closes the current overlay before navigating away.
+ if(mobileFiltersOpen&&history.state?.wroomerOverlay!=='filters')wroomerHideMobileFilters();
+ if(document.getElementById('galleryModal')?.classList.contains('open')&&history.state?.wroomerOverlay!=='gallery')closeGallery(true);
+});
+function applyMobileAndHide(){
+ if(mobileFiltersOpen&&history.state?.wroomerOverlay==='filters')history.back();
+ else wroomerHideMobileFilters();
  loadAds();
  const target=document.querySelector('.wroomer-results');
  if(target)target.scrollIntoView({behavior:'smooth',block:'start'});
@@ -533,7 +550,13 @@ document.getElementById('btnLogin').onclick=openLoginModal;
 document.getElementById('btnLogout').onclick=async()=>{await supabaseClient.auth.signOut(); currentUser=null; updateAuthUI(); loadAds();};
 document.getElementById('btnAdd').onclick=()=>{ if(!currentUser){ openLoginModal(); return; } openAddModal(); };
 function closeModals(){const loginM=document.getElementById('loginModal');const addM=document.getElementById('addModal');if(loginM){ loginM.classList.remove('open'); loginM.style.display=''; }if(addM){ addM.classList.remove('open'); addM.style.display=''; }closeGallery();}
-function closeGallery(){ if(new URLSearchParams(location.search).has('ogloszenie')){const u=new URL(location.href);u.searchParams.delete('ogloszenie');u.searchParams.delete('zdjecie');history.replaceState(null,'',u.pathname+u.search+u.hash);} const m=document.getElementById('galleryModal');if(m){ m.classList.remove('open'); m.style.display='none'; }document.body.style.overflow='';document.body.style.overflowY='auto';document.documentElement.style.overflow='';document.documentElement.style.overflowY='auto';}
+function closeGallery(fromPopstate=false){
+ if(!fromPopstate&&history.state?.wroomerOverlay==='gallery'){history.back();return;}
+ if(!fromPopstate&&new URLSearchParams(location.search).has('ogloszenie')){
+  const u=new URL(location.href);u.searchParams.delete('ogloszenie');u.searchParams.delete('zdjecie');
+  history.replaceState(history.state,'',u.pathname+u.search+u.hash);
+ }
+ const m=document.getElementById('galleryModal');if(m){ m.classList.remove('open'); m.style.display='none'; }document.body.style.overflow='';document.body.style.overflowY='auto';document.documentElement.style.overflow='';document.documentElement.style.overflowY='auto';}
 function haversine(lat1, lon1, lat2, lon2){const R=6371; const dLat=(lat2-lat1)*Math.PI/180; const dLon=(lon2-lon1)*Math.PI/180; const a=Math.sin(dLat/2)*Math.sin(dLat/2)+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)*Math.sin(dLon/2); const c=2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a)); return R*c;}
 function parseExtra(desc){
   const o={mileage:'',fuel:'',gear:'',power:'',capacity:'',body:'',color:'',lat:'',lng:''};
@@ -796,7 +819,10 @@ function openGallery(ad){
   if(!ad || typeof ad!=='object'){console.warn('Nie znaleziono wybranego ogłoszenia');return;}
   const modal=document.getElementById('galleryModal'); 
   window.currentAd=ad;
-  const targetUrl=new URL(location.href);targetUrl.searchParams.set('ogloszenie',String(ad.id));if(location.href!==targetUrl.href)history.replaceState(null,'',targetUrl.pathname+targetUrl.search+targetUrl.hash);
+  const targetUrl=new URL(location.href);targetUrl.searchParams.set('ogloszenie',String(ad.id));if(location.href!==targetUrl.href){
+  // A detail opened from the grid gets one real browser-history step.
+  history.pushState({...history.state,wroomerOverlay:'gallery'},'',targetUrl.pathname+targetUrl.search+targetUrl.hash);
+ }
   window.wroomerTrack?.('listing_view',{listing_id:String(ad.id||'').slice(0,80)});
   try {
     const viewKey='wroomer_view_'+String(ad.id||'');
