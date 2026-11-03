@@ -102,7 +102,7 @@ function getImages(car){
   if(!Array.isArray(a))a=[];
   if(car.image_url) a.unshift(car.image_url);
   if(car.image) a.push(car.image);
-  return [...new Set(a.map(s=>safeImage(s)).filter(Boolean))].slice(0,20);
+  return [...new Set(a.map(s=>safeImage(s)).filter(Boolean))].slice(0,30);
 }
 function render(){
   if(!imgs.length)return;
