@@ -773,7 +773,7 @@ function openGallery(ad){
   try {
     const viewKey='wroomer_view_'+String(ad.id||'');
     const last=Number(sessionStorage.getItem(viewKey)||0);
-    if(Date.now()-last>30*60*1000){
+    if(localStorage.getItem('wroomer_exclude_own_visits')!=='1'&&Date.now()-last>30*60*1000){
       sessionStorage.setItem(viewKey,String(Date.now()));
       supabaseClient.from('ogloszenie_wyswietlenia').insert({ogloszenie_id:ad.id}).then(({error})=>{if(error)console.warn('Statystyki odsłon:',error.message);});
     }
@@ -1149,7 +1149,7 @@ document.getElementById('wroomerReportForm').addEventListener('submit',function(
  window.wroomerTrack=function(name,data){
    try{
      const choice=JSON.parse(localStorage.getItem(COOKIE_KEY)||'null');
-     if(!choice?.analytics||Date.now()-choice.timestamp>180*24*3600*1000||typeof window.gtag!=='function')return;
+     if(localStorage.getItem('wroomer_exclude_own_visits')==='1'||!choice?.analytics||Date.now()-choice.timestamp>180*24*3600*1000||typeof window.gtag!=='function')return;
      window.gtag('event',name,{...data,site_area:'marketplace'});
    }catch(e){}
  };
