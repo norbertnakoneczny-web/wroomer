@@ -16,7 +16,7 @@ export default async function handler(req,res){
    let page=null;
    for(let attempt=0;attempt<2;attempt++){
     try{
-     const r=await fetch(API+'/rest/v1/ogloszenia?select=id,slug,title,brand,marka,model,year,rocznik,price,cena,location,lokalizacja,miasto&is_banned=eq.false&order=id.asc&limit=500&offset='+offset,{headers:{apikey:KEY,Authorization:'Bearer '+KEY},signal:AbortSignal.timeout(9000)});
+     const r=await fetch(API+'/rest/v1/ogloszenia?select=id,slug,title,brand,marka,model,year,rocznik,price,cena,location,lokalizacja,miasto&is_banned=eq.false&status=eq.active&order=id.asc&limit=500&offset='+offset,{headers:{apikey:KEY,Authorization:'Bearer '+KEY},signal:AbortSignal.timeout(9000)});
      if(!r.ok)throw Error('Database response '+r.status);
      page=await r.json();break;
     }catch(e){if(attempt===1)throw e;}
