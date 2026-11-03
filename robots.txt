@@ -2,3 +2,4 @@ User-agent: *
 Allow: /
 Sitemap: https://www.wroomer.pl/sitemap.xml
 Sitemap: https://www.wroomer.pl/sitemap-ogloszenia.xml
+Sitemap: https://www.wroomer.pl/sitemap-artykuly.xml
