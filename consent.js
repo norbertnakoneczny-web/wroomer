@@ -9,8 +9,8 @@
  function read(){try{const x=JSON.parse(localStorage.getItem(KEY)||'null');return x&&Date.now()-x.timestamp<MAX_AGE?x:null;}catch{return null;}}
  function show(){const b=document.getElementById('cookieBanner');if(b)b.style.display='block';}
  function hide(){const b=document.getElementById('cookieBanner');if(b)b.style.display='none';}
- function loadGA(){if(gaLoaded)return;gaLoaded=true;const script=document.createElement('script');script.async=true;script.src='https://www.googletagmanager.com/gtag/js?id='+encodeURIComponent(GA);document.head.appendChild(script);window.gtag('js',new Date());window.gtag('config',GA,{anonymize_ip:true});}
- function apply(c){window.gtag('consent','update',{analytics_storage:c.analytics?'granted':'denied',ad_storage:c.marketing?'granted':'denied',ad_user_data:c.marketing?'granted':'denied',ad_personalization:c.marketing?'granted':'denied'});if(c.analytics)loadGA();}
+ function loadGA(){if(localStorage.getItem('wroomer_exclude_own_visits')==='1')return;if(gaLoaded)return;gaLoaded=true;const script=document.createElement('script');script.async=true;script.src='https://www.googletagmanager.com/gtag/js?id='+encodeURIComponent(GA);document.head.appendChild(script);window.gtag('js',new Date());window.gtag('config',GA,{anonymize_ip:true});}
+ function apply(c){const own=localStorage.getItem('wroomer_exclude_own_visits')==='1';window['ga-disable-'+GA]=own;window.gtag('consent','update',{analytics_storage:(c.analytics&&!own)?'granted':'denied',ad_storage:c.marketing?'granted':'denied',ad_user_data:c.marketing?'granted':'denied',ad_personalization:c.marketing?'granted':'denied'});if(c.analytics&&!own)loadGA();}
  function save(analytics,marketing){const c={analytics:!!analytics,marketing:!!marketing,timestamp:Date.now()};localStorage.setItem(KEY,JSON.stringify(c));apply(c);hide();}
  window.acceptAllCookies=()=>save(true,true);
  window.rejectAllCookies=()=>save(false,false);
