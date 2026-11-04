@@ -1,5 +1,13 @@
 {
   "cleanUrls": false,
+  "headers": [
+    {
+      "source": "/auto.html",
+      "headers": [
+        { "key": "X-Robots-Tag", "value": "noindex" }
+      ]
+    }
+  ],
   "rewrites": [
     {
       "source": "/sitemap-artykuly.xml",
