@@ -4,7 +4,10 @@
     {
       "source": "/auto.html",
       "headers": [
-        { "key": "X-Robots-Tag", "value": "noindex" }
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex"
+        }
       ]
     }
   ],
@@ -53,5 +56,20 @@
     "api/sitemap-artykuly.js": {
       "includeFiles": "blog/**"
     }
-  }
+  },
+  "redirects": [
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "query",
+          "key": "id",
+          "value": "(?<listingId>[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})"
+        }
+      ],
+      "destination": "/auto/:listingId",
+      "statusCode": 301,
+      "preserveQueryParams": false
+    }
+  ]
 }
