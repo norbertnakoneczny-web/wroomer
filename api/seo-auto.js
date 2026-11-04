@@ -33,6 +33,7 @@ export default async function handler(req,res){
     const numericPrice=Number(car.price??car.cena);
     const validPrice=Number.isFinite(numericPrice)&&numericPrice>0;
     const schema={'@context':'https://schema.org','@type':'Car',name:title,url,description:(publicDescription||title).slice(0,500),...((car.brand||car.marka)?{brand:{'@type':'Brand',name:car.brand||car.marka}}:{}),...(car.model?{model:car.model}:{}),...(pictures.length?{image:pictures}:{}),...(validPrice?{offers:{'@type':'Offer',url,price:numericPrice,priceCurrency:'PLN'}}:{})};
+    const messengerUrl=/^https:\/\/www\.facebook\.com\/marketplace\/item\/\d+\/$/.test(car.messenger_url||'')?car.messenger_url:'';
     const phone=String(car.phone||car.telefon||'').trim();
     const safePhone=/^\+?[0-9 ()-]{6,24}$/.test(phone)&&phone.replace(/\D/g,'').length>=9&&phone.replace(/\D/g,'').length<=15?phone:'';
     const phoneHref=safePhone.replace(/[^+\d]/g,'');
@@ -49,7 +50,8 @@ export default async function handler(req,res){
       (pictures.length?'<div class="thumbs">'+pictures.map((p,i)=>'<img src="'+esc(p)+'" class="'+(i===0?'active':'')+'" loading="lazy" alt="'+esc(title)+' — zdjęcie '+(i+1)+'" onclick="document.getElementById(\'mainImg\').src=this.src;document.querySelectorAll(\'.thumbs img\').forEach(x=>x.classList.remove(\'active\'));this.classList.add(\'active\');document.getElementById(\'mainCounter\').textContent=\''+(i+1)+' / '+pictures.length+'\'">').join('')+'</div>':'');
     const details='<div class="info"><h1>'+esc(title)+'</h1><div class="meta">'+esc([car.brand||car.marka,car.model,car.location||car.lokalizacja||car.miasto,car.year||car.rocznik].filter(Boolean).join(' • '))+'</div>'+
       '<div class="price">'+esc(price||'Cena do uzgodnienia')+'</div><div class="desc">'+esc(cleanPublicDescription(car.description||car.opis||''))+'</div>'+
-      (safePhone?'<a class="btn" href="tel:'+esc(phoneHref)+'">📞 ZADZWOŃ: '+esc(safePhone)+'</a>':'<div class="meta">Numer telefonu niedostępny</div>')+
+      (safePhone?'<a class="btn" href="tel:'+esc(phoneHref)+'">📞 ZADZWOŃ: '+esc(safePhone)+'</a>':messengerUrl?'':'<div class="meta">Numer telefonu niedostępny</div>')+
+      (messengerUrl?'<a class="btn" href="'+esc(messengerUrl)+'" target="_blank" rel="noopener noreferrer">Napisz na Messengerze</a>':'')+
       '<div style="margin-top:20px"><a href="/" style="color:#888">← Wróć do listy</a></div></div>';
     const breadcrumb={'@context':'https://schema.org','@type':'BreadcrumbList',itemListElement:[{'@type':'ListItem',position:1,name:'Ogłoszenia samochodowe',item:'https://www.wroomer.pl/'},{'@type':'ListItem',position:2,name:title,item:url}]};
     const jsonLd=JSON.stringify(schema).replace(/</g,'\\u003c');

@@ -161,7 +161,7 @@ async function load(){
     const slug=decodeURIComponent(location.pathname.split('/').pop().split('?')[0]);
     if(!/^[a-zA-Z0-9_-]{1,150}$/.test(slug)){el.textContent='Nieprawidłowy adres ogłoszenia';return;}
     const lookupField=/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(slug)?'id':'slug';
-    const r=await fetch(`${SUPABASE_URL}/rest/v1/ogloszenia?${lookupField}=eq.${encodeURIComponent(slug)}&status=eq.active&is_banned=eq.false&select=id,slug,title,brand,marka,model,year,rocznik,location,lokalizacja,miasto,price,cena,description,opis,images,zdjecia,image,image_url,phone,telefon,owner_email`,{headers:{apikey:SUPABASE_KEY,Authorization:`Bearer ${SUPABASE_KEY}`}});
+    const r=await fetch(`${SUPABASE_URL}/rest/v1/ogloszenia?${lookupField}=eq.${encodeURIComponent(slug)}&status=eq.active&is_banned=eq.false&select=id,slug,title,brand,marka,model,year,rocznik,location,lokalizacja,miasto,price,cena,description,opis,images,zdjecia,image,image_url,phone,telefon,owner_email,messenger_url`,{headers:{apikey:SUPABASE_KEY,Authorization:`Bearer ${SUPABASE_KEY}`}});
     if(!r.ok)throw new Error('Nie udało się pobrać ogłoszenia');
     const rows=await r.json();
     const car=Array.isArray(rows)?rows[0]:null;
@@ -170,6 +170,7 @@ async function load(){
     updateListingSeo(car, slug);
     window.wroomerTrack?.('listing_view',{listing_slug:slug});
     if(imgs.length===0) imgs=['data:image/svg+xml;charset=utf-8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600"><rect width="800" height="600" fill="#151515"/><text x="400" y="300" fill="#aaa" font-family="sans-serif" font-size="32" text-anchor="middle">Brak zdjęcia</text></svg>')];
+    const messengerUrl=/^https:\/\/www\.facebook\.com\/marketplace\/item\/\d+\/$/.test(car.messenger_url||'')?car.messenger_url:'';
     const phone=String(car.phone||car.telefon||'').trim();
     const safePhone=/^\+?[0-9 ()-]{6,24}$/.test(phone)&&phone.replace(/\D/g,'').length>=9&&phone.replace(/\D/g,'').length<=15?phone:'';
     el.innerHTML=`
@@ -185,7 +186,8 @@ async function load(){
         <div class="meta">${escapeHtml(car.brand||car.marka||'')} ${escapeHtml(car.model||'')} • ${escapeHtml(car.location||car.lokalizacja||car.miasto||'')} • ${escapeHtml(car.year||car.rocznik||'')}r</div>
         <div class="price">${Number.isFinite(Number(car.price??car.cena))&&Number(car.price??car.cena)>0?Number(car.price??car.cena).toLocaleString('pl-PL')+' PLN':'Cena do uzgodnienia'}</div>
         <div class="desc">${escapeHtml(cleanPublicDescription(car.description||car.opis||''))}</div>
-        ${safePhone?`<a class="btn" href="tel:${escapeHtml(safePhone.replace(/[^+\d]/g,''))}">📞 ZADZWOŃ: ${escapeHtml(safePhone)}</a>`:'<div class="meta">Numer telefonu niedostępny</div>'}
+        ${safePhone?`<a class="btn" href="tel:${escapeHtml(safePhone.replace(/[^+\d]/g,''))}">📞 ZADZWOŃ: ${escapeHtml(safePhone)}</a>`:messengerUrl?'':'<div class="meta">Numer telefonu niedostępny</div>'}
+        ${messengerUrl?`<a class="btn" href="${escapeHtml(messengerUrl)}" target="_blank" rel="noopener noreferrer">Napisz na Messengerze</a>`: ''}
         ${safePhone?(() => {
           const digits=safePhone.replace(/\D/g,'');
           const international=safePhone.startsWith('+')?digits:(digits.length===9?'48'+digits:(digits.length===11&&digits.startsWith('48')?digits:''));
@@ -194,7 +196,7 @@ async function load(){
           const sms='sms:'+safePhone.replace(/[^+\d]/g,'')+'?body='+encodeURIComponent(message);
           return '<div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:12px">'+
             (international?'<a class="btn" style="background:#25D366;color:#111;flex:1;text-align:center" target="_blank" rel="noopener noreferrer" href="'+escapeHtml(whatsapp)+'">💬 WhatsApp</a>':'')+
-            '<a class="btn" style="background:#f59e0b;color:#111;flex:1;text-align:center" href="'+escapeHtml(sms)+'">✉️ SMS</a></div>';
+            (messengerUrl?'':'<a class="btn" style="background:#f59e0b;color:#111;flex:1;text-align:center" href="'+escapeHtml(sms)+'">✉️ SMS</a>')+'</div>';
         })():''}
         ${/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(car.owner_email||''))?'<div style="margin-top:14px;padding:15px;border:1px solid #333;border-radius:12px"><h3 style="margin:0 0 10px">Napisz do sprzedającego</h3><form id="sellerContactForm"><label style="display:block;margin-bottom:8px">Twoje imię <input name="buyerName" maxlength="70" required style="display:block;width:100%;padding:10px;margin-top:4px;border-radius:7px"></label><label style="display:block;margin-bottom:8px">Twój numer telefonu (obowiązkowy) <input name="buyerPhone" type="tel" inputmode="tel" minlength="9" maxlength="24" required placeholder="+48 600 000 000" style="display:block;width:100%;padding:10px;margin-top:4px;border-radius:7px"></label><label style="display:block;margin-bottom:8px">Wiadomość <textarea name="buyerMessage" maxlength="2000" required rows="4" style="display:block;width:100%;padding:10px;margin-top:4px;border-radius:7px">Dzień dobry, czy ogłoszenie jest aktualne?</textarea></label><p style="font-size:12px;color:#bbb;margin:8px 0">Twój numer telefonu i wiadomość zostaną przekazane sprzedającemu. Kliknięcie otworzy program pocztowy, z którego wyślesz wiadomość.</p><button type="submit" class="btn" style="width:100%">✉️ Przygotuj e-mail do sprzedającego</button></form></div>':''}
         <div style="margin-top:20px"><a href="/" style="color:#666;text-decoration:none">← Wróć do listy</a></div>
