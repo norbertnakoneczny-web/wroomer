@@ -68,8 +68,7 @@
         }
       ],
       "destination": "/auto/:listingId",
-      "statusCode": 301,
-      "preserveQueryParams": false
+      "statusCode": 301
     }
   ]
 }
