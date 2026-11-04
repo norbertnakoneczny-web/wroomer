@@ -58,6 +58,9 @@ label.small{font-size:10px;opacity:.7;display:block;margin:8px 12px 2px;text-tra
 .blog-footer h4{font-size:11px;font-weight:900;color:#facc15;margin-bottom:8px;letter-spacing:.5px}
 .blog-footer p, .blog-footer a{font-size:12px;color:#aaa;line-height:1.6;text-decoration:none}
 .blog-footer a:hover{color:#facc15}
+ .region-filters{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px}
+.region-filters button[aria-pressed="true"]{background:#facc15;color:#171717}
+.card-city-badge{position:absolute;top:8px;left:8px;max-width:65%;padding:5px 9px;border-radius:6px;background:#171717;color:#fff;font-size:12px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 </style>
 
 
@@ -444,7 +447,11 @@ body{background:radial-gradient(ellipse at 80% 0%,#24200c 0%,#090a0b 38%,#080808
 <h4>LOKALIZACJA</h4><input class="input" id="fLokM" placeholder="Gorzyce">
 <button type="button" class="btn btn-dark" style="width:100%;margin-top:8px" onclick="resetFilters();applyMobileAndHide()">Wyczyść filtry</button>
 <div style="margin-top:12px;padding:8px;background:#181818;border-radius:8px;font-size:12px" id="countM"></div><div style="height:94px"></div><div class="wroomer-mobile-filter-actions"><button type="button" id="wroomerShowResults" onclick="applyMobileAndHide()">🔎 Pokaż wyniki</button></div></div>
-<div class="wroomer-results"><section class="city-radius-panel" aria-label="Szybkie filtrowanie samochodów według miasta"><div class="city-radius-heading"><div><strong>📍 Samochody blisko Ciebie</strong><p>Wybierz miasto — pokażemy ogłoszenia w promieniu 10 km od jego centrum.</p></div><span class="city-radius-pill">PROMIEŃ 10 KM</span></div><button type="button" id="cityRadiusToggle" class="city-radius-toggle" aria-expanded="false" aria-controls="cityRadiusButtons"><span>📍 <span id="cityRadiusToggleLabel">Wybierz miasto · 10 km</span></span><span class="city-radius-chevron" aria-hidden="true">⌄</span></button><div class="city-radius-buttons" id="cityRadiusButtons" role="group" aria-label="Miasta Śląska"><button type="button" class="city-radius-button active" data-city="" aria-pressed="true">Wszystkie miasta</button></div><p id="cityRadiusStatus" class="city-radius-status" aria-live="polite">Wybierz miasto, aby zawęzić ogłoszenia.</p></section><h1 class="wroomer-results-title" style="font-size:inherit;font-weight:inherit">Śląska giełda samochodowa – auta używane <span>• LOKALNE OGŁOSZENIA</span></h1><p class="wroomer-region-intro" style="margin:8px 0 16px;color:#bdbdbd;font-size:13px;line-height:1.6">Śląska giełda samochodowa — przeglądaj darmowe ogłoszenia z Katowic, Rybnika, Gliwic, Zabrza, Bytomia, Tychów, Bielska-Białej, Częstochowy, Żor, Wodzisławia Śląskiego i Raciborza. Znajdź auto blisko siebie lub dodaj własne ogłoszenie bez opłat.</p><div class="grid" id="grid" aria-live="polite"><div class="card" aria-hidden="true"><div class="card-img-wrap"></div><div class="card-body"><div class="card-title">Ładowanie ogłoszeń…</div></div></div><div class="card" aria-hidden="true"><div class="card-img-wrap"></div><div class="card-body"><div class="card-title">Ładowanie ogłoszeń…</div></div></div><div class="card" aria-hidden="true"><div class="card-img-wrap"></div><div class="card-body"><div class="card-title">Ładowanie ogłoszeń…</div></div></div><div class="card" aria-hidden="true"><div class="card-img-wrap"></div><div class="card-body"><div class="card-title">Ładowanie ogłoszeń…</div></div></div><div class="card" aria-hidden="true"><div class="card-img-wrap"></div><div class="card-body"><div class="card-title">Ładowanie ogłoszeń…</div></div></div><div class="card" aria-hidden="true"><div class="card-img-wrap"></div><div class="card-body"><div class="card-title">Ładowanie ogłoszeń…</div></div></div><div class="card" aria-hidden="true"><div class="card-img-wrap"></div><div class="card-body"><div class="card-title">Ładowanie ogłoszeń…</div></div></div><div class="card" aria-hidden="true"><div class="card-img-wrap"></div><div class="card-body"><div class="card-title">Ładowanie ogłoszeń…</div></div></div><div class="card" aria-hidden="true"><div class="card-img-wrap"></div><div class="card-body"><div class="card-title">Ładowanie ogłoszeń…</div></div></div><div class="card" aria-hidden="true"><div class="card-img-wrap"></div><div class="card-body"><div class="card-title">Ładowanie ogłoszeń…</div></div></div><div class="card" aria-hidden="true"><div class="card-img-wrap"></div><div class="card-body"><div class="card-title">Ładowanie ogłoszeń…</div></div></div><div class="card" aria-hidden="true"><div class="card-img-wrap"></div><div class="card-body"><div class="card-title">Ładowanie ogłoszeń…</div></div></div></div></div>
+<div class="wroomer-results"><section class="city-radius-panel" aria-label="Szybkie filtrowanie samochodów według miasta"><div class="city-radius-heading"><div><strong>📍 Samochody blisko Ciebie</strong><p>Wybierz miasto — pokażemy ogłoszenia w promieniu 10 km od jego centrum.</p></div><span class="city-radius-pill">PROMIEŃ 10 KM</span></div><button type="button" id="cityRadiusToggle" class="city-radius-toggle" aria-expanded="false" aria-controls="cityRadiusButtons"><span>📍 <span id="cityRadiusToggleLabel">Wybierz miasto · 10 km</span></span><span class="city-radius-chevron" aria-hidden="true">⌄</span></button><div class="city-radius-buttons" id="cityRadiusButtons" role="group" aria-label="Miasta Śląska"><button type="button" class="city-radius-button active" data-city="" aria-pressed="true">Wszystkie miasta</button></div><p id="cityRadiusStatus" class="city-radius-status" aria-live="polite">Wybierz miasto, aby zawęzić ogłoszenia.</p></section><h1 class="wroomer-results-title" style="font-size:inherit;font-weight:inherit">Śląska giełda samochodowa – auta używane <span>• LOKALNE OGŁOSZENIA</span></h1><p class="wroomer-region-intro" style="margin:8px 0 16px;color:#bdbdbd;font-size:13px;line-height:1.6">Śląska giełda samochodowa — przeglądaj darmowe ogłoszenia z Katowic, Rybnika, Gliwic, Zabrza, Bytomia, Tychów, Bielska-Białej, Częstochowy, Żor, Wodzisławia Śląskiego i Raciborza. Znajdź auto blisko siebie lub dodaj własne ogłoszenie bez opłat.</p><div class="region-filters" role="group" aria-label="Region ogłoszeń" id="regionFilters">
+<button type="button" class="btn btn-dark" data-region="silesia" aria-pressed="true">Śląskie</button>
+<button type="button" class="btn btn-dark" data-region="outside" aria-pressed="false">Poza Śląskiem</button>
+<button type="button" class="btn btn-dark" data-region="all" aria-pressed="false">Wszystkie regiony</button>
+</div><div class="grid" id="grid" aria-live="polite"><div class="card" aria-hidden="true"><div class="card-img-wrap"></div><div class="card-body"><div class="card-title">Ładowanie ogłoszeń…</div></div></div><div class="card" aria-hidden="true"><div class="card-img-wrap"></div><div class="card-body"><div class="card-title">Ładowanie ogłoszeń…</div></div></div><div class="card" aria-hidden="true"><div class="card-img-wrap"></div><div class="card-body"><div class="card-title">Ładowanie ogłoszeń…</div></div></div><div class="card" aria-hidden="true"><div class="card-img-wrap"></div><div class="card-body"><div class="card-title">Ładowanie ogłoszeń…</div></div></div><div class="card" aria-hidden="true"><div class="card-img-wrap"></div><div class="card-body"><div class="card-title">Ładowanie ogłoszeń…</div></div></div><div class="card" aria-hidden="true"><div class="card-img-wrap"></div><div class="card-body"><div class="card-title">Ładowanie ogłoszeń…</div></div></div><div class="card" aria-hidden="true"><div class="card-img-wrap"></div><div class="card-body"><div class="card-title">Ładowanie ogłoszeń…</div></div></div><div class="card" aria-hidden="true"><div class="card-img-wrap"></div><div class="card-body"><div class="card-title">Ładowanie ogłoszeń…</div></div></div><div class="card" aria-hidden="true"><div class="card-img-wrap"></div><div class="card-body"><div class="card-title">Ładowanie ogłoszeń…</div></div></div><div class="card" aria-hidden="true"><div class="card-img-wrap"></div><div class="card-body"><div class="card-title">Ładowanie ogłoszeń…</div></div></div><div class="card" aria-hidden="true"><div class="card-img-wrap"></div><div class="card-body"><div class="card-title">Ładowanie ogłoszeń…</div></div></div><div class="card" aria-hidden="true"><div class="card-img-wrap"></div><div class="card-body"><div class="card-title">Ładowanie ogłoszeń…</div></div></div></div></div>
 </div>
 
 <div class="blog-section">
@@ -983,6 +990,33 @@ function wroomerMatch(ad,search){
   const searchable=wroomerNormalize([ad.brand||ad.marka,ad.model,ad.title,ad.year??ad.rocznik,ad.location||ad.lokalizacja||ad.miasto].filter(Boolean).join(' '));
   return words.every(word=>searchable.includes(word));
 }
+const outsideRegions=new Set([
+  'dolnoslaskie','kujawsko-pomorskie','lubelskie','lubuskie','lodzkie','malopolskie',
+  'mazowieckie','opolskie','podkarpackie','podlaskie','pomorskie','swietokrzyskie',
+  'warminsko-mazurskie','wielkopolskie','zachodniopomorskie'
+]);
+function wroomerListingCity(ad){
+  return (ad.miasto||ad.location||ad.lokalizacja||'').split(',')[0].trim();
+}
+function wroomerOutsideSilesia(ad){
+  const regions=[ad.location,ad.lokalizacja].flatMap(value=>wroomerNormalize(value).split(','))
+    .map(part=>part.trim().replace(/^(?:woj\.?|wojewodztwo)\s+/, ''));
+  if(regions.includes('slaskie'))return false;
+  return regions.some(region=>outsideRegions.has(region))||wroomerNormalize(wroomerListingCity(ad))==='kutno';
+}
+let listingRegion='silesia';
+function wroomerSetRegion(region){
+  listingRegion=region;
+  document.querySelectorAll('#regionFilters button').forEach(button=>{
+    button.setAttribute('aria-pressed',String(button.dataset.region===region));
+  });
+}
+document.querySelectorAll('#regionFilters button').forEach(button=>{
+  button.addEventListener('click',()=>{
+    wroomerSetRegion(button.dataset.region);
+    wroomerScheduleFilter(true);
+  });
+});
 let wroomerLatestRequest=0;
 async function loadAds(){
   const requestId=++wroomerLatestRequest;
@@ -1023,6 +1057,7 @@ async function loadAds(){
       else supabaseClient.from('ogloszenia').select('*').eq('id',sharedId).eq('is_banned',false).eq('status','active').maybeSingle().then(({data})=>{if(data&&new URLSearchParams(location.search).get('ogloszenie')===sharedId)openGallery(data);}).catch(()=>{});
     }
     let filtered=allAds.filter(ad=>{
+      if(listingRegion!=='all'&&wroomerOutsideSilesia(ad)!==(listingRegion==='outside'))return false;
       const full=wroomerNormalize([ad.brand||ad.marka,ad.model,ad.title].join(' '));
       const adPrice=Number(ad.price??ad.cena);
       const hasPrice=(ad.price??ad.cena)!==null&&(ad.price??ad.cena)!==undefined&&String(ad.price??ad.cena).trim()!==''&&Number.isFinite(adPrice);
@@ -1082,9 +1117,10 @@ async function loadAds(){
       const cnt=Array.isArray(o.images)&&o.images.length?o.images.length:Array.isArray(o.zdjecia)&&o.zdjecia.length?o.zdjecia.length:(o.image_url||o.image?1:0);
       const safeId=String(o.id||'').replace(/[^a-zA-Z0-9_-]/g,'');
       const safeListingText=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+      const city=wroomerOutsideSilesia(o)?wroomerListingCity(o):'';
       const listingSlug=typeof o.slug==='string' && /^[a-zA-Z0-9_-]{1,150}$/.test(o.slug)?o.slug:(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(String(o.id||''))?String(o.id):null);
       const listingLink=listingSlug?`<a href="/?ogloszenie=${encodeURIComponent(String(o.id))}" onclick="event.stopPropagation()" style="color:inherit;text-decoration:underline;text-decoration-color:#facc15;text-underline-offset:3px" aria-label="Zobacz ogłoszenie: ${safeListingText(o.title||'Samochód')}">${safeListingText(o.title||'Samochód')}</a>`:safeListingText(o.title||'');
-      return `<div class="card" onclick="openGallery(allAds.find(a=>String(a.id)==='${safeId}'))"><div class="card-img-wrap"><img src="${safeListingText(thumb)}" loading="lazy" decoding="async" width="480" height="320" alt="" onerror="if(!this.dataset.fallbackTried &amp;&amp; this.dataset.original &amp;&amp; this.src!==this.dataset.original){this.dataset.fallbackTried=&#39;1&#39;;this.src=this.dataset.original;}else{this.onerror=null;this.style.visibility=&#39;hidden&#39;;}" data-original="${safeListingText(safeImg)}"><div class="card-img-count">📷 ${Number(cnt)||0}</div></div><div class="card-body"><div class="card-title">${listingLink}</div><div class="card-price">${validPrice(o)!==null?safeListingText(validPrice(o).toLocaleString('pl-PL'))+' PLN':'Cena do uzgodnienia'}</div><div class="card-location">${safeListingText(o.location||o.lokalizacja||o.miasto||'')} • ${safeListingText(o.year||o.rocznik||'')}</div></div></div>`;
+      return `<div class="card" onclick="openGallery(allAds.find(a=>String(a.id)==='${safeId}'))"><div class="card-img-wrap"><img src="${safeListingText(thumb)}" loading="lazy" decoding="async" width="480" height="320" alt="" onerror="if(!this.dataset.fallbackTried &amp;&amp; this.dataset.original &amp;&amp; this.src!==this.dataset.original){this.dataset.fallbackTried=&#39;1&#39;;this.src=this.dataset.original;}else{this.onerror=null;this.style.visibility=&#39;hidden&#39;;}" data-original="${safeListingText(safeImg)}"><div class="card-img-count">📷 ${Number(cnt)||0}</div>${city?`<span class="card-city-badge">${safeListingText(city)}</span>`:''}</div><div class="card-body"><div class="card-title">${listingLink}</div><div class="card-price">${validPrice(o)!==null?safeListingText(validPrice(o).toLocaleString('pl-PL'))+' PLN':'Cena do uzgodnienia'}</div><div class="card-location">${safeListingText(o.location||o.lokalizacja||o.miasto||'')} • ${safeListingText(o.year||o.rocznik||'')}</div></div></div>`;
     }).join('');
   }catch(e){if(requestId!==wroomerLatestRequest)return;grid.replaceChildren();const errorBox=document.createElement('div');errorBox.style.cssText='grid-column:1/-1;padding:20px;background:#3a1111';errorBox.textContent='Nie udało się wczytać ogłoszeń. ';const retry=document.createElement('button');retry.textContent='↻ Spróbuj ponownie';retry.className='btn btn-yellow';retry.style.marginLeft='12px';retry.onclick=()=>loadAds();errorBox.append(retry);grid.appendChild(errorBox);console.warn('Błąd wczytywania ogłoszeń:',e);}
 }
@@ -1109,6 +1145,7 @@ function wroomerScheduleFilter(immediate=false){
 });
 document.getElementById('wroomerQuickSearch')?.addEventListener('input',()=>wroomerScheduleFilter());
 function resetFilters(){
+  wroomerSetRegion('silesia');
   ['D','M'].forEach(p=>{
     ['fMarka','fModel','fCenaOd','fCenaDo','fRokOd','fRokDo','fPaliwo','fLok','fRadius','fSort'].forEach(k=>{
       const el=document.getElementById(k+p);
