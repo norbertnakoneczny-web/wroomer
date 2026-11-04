@@ -912,8 +912,7 @@ function openGallery(ad){
         ${hasPhone?`<a class="detail-call" href="tel:${escapeHtml(phoneClean)}">☎ Zadzwoń: ${escapeHtml(phoneClean)}</a>`:''}
         ${messengerUrl?`<a class="detail-call" href="${escapeHtml(messengerUrl)}" target="_blank" rel="noopener noreferrer">Napisz na Messengerze</a>`:''}
         ${whatsappUrl?`<a class="detail-call" style="background:#25d366;color:#081b10" href="${escapeHtml(whatsappUrl)}" target="_blank" rel="noopener noreferrer">✉ Napisz na WhatsApp</a>`:''}
-        ${hasPhone&&!messengerUrl?`<a class="detail-map" href="sms:${escapeHtml(phoneClean)}">✉ Napisz SMS</a>`:''}
-        ${hasMap?`<a class="detail-map" href="https://www.google.com/maps/search/?api=1&amp;query=${encodeURIComponent(mapQuery)}" target="_blank" rel="noopener noreferrer">⌖ Zobacz mapę</a>`:""}
+        ${hasPhone?`<a class="detail-map" href="sms:${escapeHtml(phoneClean)}">✉ Napisz SMS</a>`:''}
       </div>
     </section>`;
   modal.classList.add('open'); 
