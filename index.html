@@ -768,16 +768,19 @@ function wroomerMobileImageUrl(url){
  if(!/\/storage\/v1\/object\/public\/ogloszenia\//.test(url))return url;
  try{const u=new URL(url);const prefix='/storage/v1/object/public/ogloszenia/';const path=decodeURIComponent(u.pathname.split(prefix)[1]);if(!path||path.includes('/mobile/'))return url;u.pathname=prefix+wroomerMobilePath(path).split('/').map(encodeURIComponent).join('/');return u.href;}catch{return url;}
 }
-// Test-only adaptation for the Suzuki Vitara from Puszczew. Originals are never modified.
-function wroomerVitaraVariant(url,width,quality){
- if(typeof url!=='string'||!url.includes('/storage/v1/object/public/images/')||!url.includes('/vito-vitara-IhdNU/'))return url;
+// Mobile-only image variants for the six selected Puszczew listings.
+// Original Storage files and desktop presentation remain unchanged.
+function wroomerPuszczewVariant(url,width,quality){
+ if(typeof url!=='string'||!url.includes('/storage/v1/object/public/images/'))return url;
+ const folders=['vito-vitara-IhdNU','vito-mondeo-IiWPI','vito-mondeo-Iiaa4','vito-mondeo-Ii9Vh','vito-smax-Ij5LM','vito-yaris-IhdR0'];
+ if(!folders.some(folder=>url.includes('/'+folder+'/')))return url;
  return url.replace('/storage/v1/object/public/images/','/storage/v1/render/image/public/images/')+(url.includes('?')?'&':'?')+'width='+width+'&quality='+quality+'&resize=contain';
 }
 function wroomerSetMobileImage(img,url){
  if(!img)return;
  img.onerror=null;
  if(!matchMedia('(max-width: 767px)').matches){img.src=url;return;}
- const vitaraOptimized=wroomerVitaraVariant(url,960,78);
+ const puszczewOptimized=wroomerPuszczewVariant(url,960,78);
  if(vitaraOptimized!==url){
    img.onerror=()=>{img.onerror=null;img.src=url;};
    img.src=vitaraOptimized;return;
@@ -865,7 +868,7 @@ function openGallery(ad){
     wrap.style.position='relative';
     wrap.style.flexShrink='0';
     const img=document.createElement('img'); 
-    const vitaraThumb=matchMedia('(max-width: 767px)').matches?wroomerVitaraVariant(src,320,68):src;
+    const puszczewThumb=matchMedia('(max-width: 767px)').matches?wroomerPuszczewVariant(src,320,68):src;
     img.loading='lazy';img.decoding='async';
     if(vitaraThumb!==src){img.onerror=()=>{img.onerror=null;img.src=src;};}
     img.src=vitaraThumb;
@@ -1129,7 +1132,7 @@ async function loadAds(){
       const img=String(o.image_url||o.image||(typeof firstImage==='string'?firstImage:(firstImage?.url||firstImage?.src||firstImage?.image_url))||'');
       const safeImg=(()=>{try{const u=new URL(img);return (u.protocol==='https:'||u.protocol==='http:')?u.href:'';}catch{return '';}})();
       const renderedThumb=safeImg.includes('/storage/v1/object/public/ogloszenia/')?safeImg.replace('/storage/v1/object/public/','/storage/v1/render/image/public/')+(safeImg.includes('?')?'&':'?')+'width=480&quality=70&resize=contain':safeImg;
-      const thumb=matchMedia('(max-width: 767px)').matches?wroomerVitaraVariant(renderedThumb,320,68):(safeImg.includes('/storage/v1/object/public/ogloszenia/')?safeImg.replace('/storage/v1/object/public/','/storage/v1/render/image/public/')+(safeImg.includes('?')?'&':'?')+'width=480&quality=75&resize=contain':safeImg);
+      const thumb=matchMedia('(max-width: 767px)').matches?wroomerPuszczewVariant(renderedThumb,320,68):(safeImg.includes('/storage/v1/object/public/ogloszenia/')?safeImg.replace('/storage/v1/object/public/','/storage/v1/render/image/public/')+(safeImg.includes('?')?'&':'?')+'width=480&quality=75&resize=contain':safeImg);
       const cnt=Array.isArray(o.images)&&o.images.length?o.images.length:Array.isArray(o.zdjecia)&&o.zdjecia.length?o.zdjecia.length:(o.image_url||o.image?1:0);
       const safeId=String(o.id||'').replace(/[^a-zA-Z0-9_-]/g,'');
       const safeListingText=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
