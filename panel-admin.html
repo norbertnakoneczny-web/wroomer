@@ -97,7 +97,7 @@ async function saveEdit(event){
  if(!previous){msg('Nie znaleziono ogłoszenia. Odśwież dane.');return}
  const payload={title:el('editTitle').value.trim(),brand:el('editBrand').value.trim(),model:el('editModel').value.trim(),location:el('editLocation').value.trim(),price:Number(el('editPrice').value),description:el('editDescription').value.trim()};
  if(!payload.title||!payload.brand||!payload.model||!Number.isFinite(payload.price)||payload.price<=0){msg('Uzupełnij tytuł, markę, model i poprawną cenę.');return}
- if(adminPhotos.length>30){msg('Maksymalnie 30 zdjęć.');return}
+ if(adminPhotos.length>30 && adminPhotos.some(entry=>entry.file)){msg('Maksymalnie 30 zdjęć przy dodawaniu nowych. Możesz bez ograniczeń przestawiać dotychczasowe zdjęcia.');return}
  if(!confirm('Zapisać zmiany ogłoszenia i zdjęć „'+(previous.title||id)+'”?'))return;
  const btn=el('editSave');btn.disabled=true;
  try{
