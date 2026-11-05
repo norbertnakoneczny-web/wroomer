@@ -3,8 +3,26 @@ import { join } from 'node:path';
 // Server-rendered vehicle detail page for crawlers and visitors.
 const API='https://bdpydgsfowtuvjnkyeeg.supabase.co';
 const KEY='sb_publishable_S1qH_mBZaX7-bzmfJ0IVGA_6hxGbJWd';
+
+const WROOMER_PUBLIC_EQUIPMENT={"Komfort":["Klimatyzacja","Klimatyzacja automatyczna","Tempomat","Tempomat adaptacyjny","Podgrzewane fotele","Elektrycznie regulowane fotele","Elektryczne szyby","Elektryczne lusterka","Centralny zamek","Radio","Czujnik parkowania","Wspomaganie kierownicy","Skórzana tapicerka","Komputer pokładowy","Nawigacja GPS","Bluetooth","Apple CarPlay","Android Auto","Czujnik deszczu","Kierownica wielofunkcyjna","Klimatyzacja dwustrefowa","Elektrycznie składane lusterka","Podgrzewana przednia szyba","USB","Tapicerka półskórzana","Ekran dotykowy"],"Bezpieczeństwo":["ABS","ESP","ASR","Autoalarm","Poduszki powietrzne","Immobilizer","Asystent pasa ruchu","Asystent martwego pola","System awaryjnego hamowania","Czujniki parkowania przód","Czujniki parkowania tył","Kamera cofania","Kamera 360°","ISOFIX","Kontrola ciśnienia opon"],"Wygląd i oświetlenie":["Światła LED","Światła przeciwmgielne","Halogeny","Światła do jazdy dziennej","Reflektory ksenonowe","Felgi aluminiowe","Przyciemniane szyby","Dach panoramiczny","Szyberdach","Relingi dachowe","Hak holowniczy"],"Użytkowe":["Drzwi boczne przesuwne","Dwoje drzwi bocznych przesuwnych","Czujniki cofania","Przegroda przestrzeni ładunkowej","Zabudowa ładunkowa","Napęd 4x4","Tryby jazdy","Elektryczna klapa bagażnika"],"Informacje dodatkowe":["Książka serwisowa","Dwa kluczyki","Nowe opony"]};
+function wroomerPublicEquipment(description,escape){
+ const matches=[...String(description||'').matchAll(/\[\[WROOMER_EQ:([A-Za-z0-9%._~-]+)\]\]/g)];
+ if(!matches.length)return '';
+ try{
+  const selected=JSON.parse(decodeURIComponent(matches.at(-1)[1]));
+  if(!selected||typeof selected!=='object'||Array.isArray(selected))return '';
+  const sections=[];
+  for(const [group,allowed] of Object.entries(WROOMER_PUBLIC_EQUIPMENT)){
+   const items=Array.isArray(selected[group])?[...new Set(selected[group].filter(item=>allowed.includes(item)))]:[];
+   if(items.length)sections.push('<h4 style="margin:16px 0 9px">'+escape(group)+'</h4><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:8px">'+items.map(item=>'<span class="wroomer-eq-pill" style="display:flex;align-items:center;gap:7px;font-size:13px"><span aria-hidden="true" style="display:inline-grid;place-items:center;background:#14833d;color:white;width:17px;height:17px;border-radius:50%;flex-shrink:0">✓</span>'+escape(item)+'</span>').join('')+'</div>');
+  }
+  return sections.length?'<section class="wroomer-eq-display" style="margin:20px 0;padding:17px;border:1px solid #353535;border-radius:12px;background:#191919"><h3 style="color:#ff8b20">Wyposażenie i opcje</h3>'+sections.join('')+'</section>':'';
+ }catch(_){return '';}
+}
+function wroomerVideoLink(html){return html.replaceAll('https://www.youtube.com/@vitoocarsadamwitos','<a href="https://www.youtube.com/@vitoocarsadamwitos" target="_blank" rel="noopener noreferrer" style="color:#ff8b20;text-decoration:underline">https://www.youtube.com/@vitoocarsadamwitos</a>');}
+
 function cleanPublicDescription(value){
- return String(value??'').replace(/\[WROOMER_EQ:[^\]\r\n]*\]/gi,'').replace(/\[(?=[^\]\r\n]*\bPrzebieg\s*:)(?=[^\]\r\n]*\bPaliwo\s*:)[^\]\r\n]*\]/gi,'').replace(/\n[ \t]*\n[ \t]*\n/g,'\n\n').trim();
+ return String(value??'').replace(/\n?\[\[WROOMER_EQ:[^\]\r\n]*\]\]/gi,'').replace(/\[WROOMER_EQ:[^\]\r\n]*\]/gi,'').replace(/\[(?=[^\]\r\n]*\bPrzebieg\s*:)(?=[^\]\r\n]*\bPaliwo\s*:)[^\]\r\n]*\]/gi,'').replace(/\n[ \t]*\n[ \t]*\n/g,'\n\n').trim();
 }
 const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 export default async function handler(req,res){
@@ -49,7 +67,7 @@ export default async function handler(req,res){
       (pictures.length?'<span class="counter" id="mainCounter">1 / '+pictures.length+'</span>':'')+'</div>'+
       (pictures.length?'<div class="thumbs">'+pictures.map((p,i)=>'<img src="'+esc(p)+'" class="'+(i===0?'active':'')+'" loading="lazy" alt="'+esc(title)+' — zdjęcie '+(i+1)+'" onclick="document.getElementById(\'mainImg\').src=this.src;document.querySelectorAll(\'.thumbs img\').forEach(x=>x.classList.remove(\'active\'));this.classList.add(\'active\');document.getElementById(\'mainCounter\').textContent=\''+(i+1)+' / '+pictures.length+'\'">').join('')+'</div>':'');
     const details='<div class="info"><h1>'+esc(title)+'</h1><div class="meta">'+esc([car.brand||car.marka,car.model,car.location||car.lokalizacja||car.miasto,car.year||car.rocznik].filter(Boolean).join(' • '))+'</div>'+
-      '<div class="price">'+esc(price||'Cena do uzgodnienia')+'</div><div class="desc">'+esc(cleanPublicDescription(car.description||car.opis||''))+'</div>'+
+      '<div class="price">'+esc(price||'Cena do uzgodnienia')+'</div>'+wroomerPublicEquipment(car.description||car.opis||'',esc)+'<div class="desc">'+wroomerVideoLink(esc(cleanPublicDescription(car.description||car.opis||'')))+'</div>'+
       (safePhone?'<a class="btn" href="tel:'+esc(phoneHref)+'">📞 ZADZWOŃ: '+esc(safePhone)+'</a>':messengerUrl?'':'<div class="meta">Numer telefonu niedostępny</div>')+
       (messengerUrl?'<a class="btn" href="'+esc(messengerUrl)+'" target="_blank" rel="noopener noreferrer">Napisz na Messengerze</a>':'')+
       '<div style="margin-top:20px"><a href="/" style="color:#888">← Wróć do listy</a></div></div>';
