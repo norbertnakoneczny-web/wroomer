@@ -781,9 +781,9 @@ function wroomerSetMobileImage(img,url){
  img.onerror=null;
  if(!matchMedia('(max-width: 767px)').matches){img.src=url;return;}
  const puszczewOptimized=wroomerPuszczewVariant(url,960,78);
- if(vitaraOptimized!==url){
+ if(puszczewOptimized!==url){
    img.onerror=()=>{img.onerror=null;img.src=url;};
-   img.src=vitaraOptimized;return;
+   img.src=puszczewOptimized;return;
  }
  const mobile=wroomerMobileImageUrl(url);
  if(mobile===url){img.src=url;return;}
@@ -870,8 +870,8 @@ function openGallery(ad){
     const img=document.createElement('img'); 
     const puszczewThumb=matchMedia('(max-width: 767px)').matches?wroomerPuszczewVariant(src,320,68):src;
     img.loading='lazy';img.decoding='async';
-    if(vitaraThumb!==src){img.onerror=()=>{img.onerror=null;img.src=src;};}
-    img.src=vitaraThumb;
+    if(puszczewThumb!==src){img.onerror=()=>{img.onerror=null;img.src=src;};}
+    img.src=puszczewThumb;
     if(i===galleryIndex) img.classList.add('active'); 
     img.onclick=()=>{galleryIndex=i; updateGallery();};
     const badge=document.createElement('div');
