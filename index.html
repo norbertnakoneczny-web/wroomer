@@ -769,10 +769,10 @@ function wroomerMobileImageUrl(url){
  try{const u=new URL(url);const prefix='/storage/v1/object/public/ogloszenia/';const path=decodeURIComponent(u.pathname.split(prefix)[1]);if(!path||path.includes('/mobile/'))return url;u.pathname=prefix+wroomerMobilePath(path).split('/').map(encodeURIComponent).join('/');return u.href;}catch{return url;}
 }
 // Mobile-only variants for the five approved Ford/Toyota listings from Puszczew.
-// Nissan Qashqai (Niepolomice) added; Suzuki Vitara and all original Storage files remain unchanged.
+// Added Audi Q2, Renault Scenic, Fiat Bravo and Suzuki Vitara; original Storage files remain unchanged.
 function wroomerPuszczewVariant(url,width,quality){
  if(typeof url!=='string'||!url.includes('/storage/v1/object/public/images/'))return url;
- const folders=['vito-mondeo-IiWPI','vito-mondeo-Iiaa4','vito-mondeo-Ii9Vh','vito-smax-Ij5LM','vito-yaris-IhdR0','mbm-qashqai-2019'];
+ const folders=['vito-mondeo-IiWPI','vito-mondeo-Iiaa4','vito-mondeo-Ii9Vh','vito-smax-Ij5LM','vito-yaris-IhdR0','mbm-qashqai-2019','mbm-audi-q2-2019','mbm-scenic-2011','bogacz-bravo-2011','vito-vitara-IhdNU'];
  if(!folders.some(folder=>url.includes('/'+folder+'/')))return url;
  return url.replace('/storage/v1/object/public/images/','/storage/v1/render/image/public/images/')+(url.includes('?')?'&':'?')+'width='+width+'&quality='+quality+'&resize=contain';
 }
