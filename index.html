@@ -768,12 +768,11 @@ function wroomerMobileImageUrl(url){
  if(!/\/storage\/v1\/object\/public\/ogloszenia\//.test(url))return url;
  try{const u=new URL(url);const prefix='/storage/v1/object/public/ogloszenia/';const path=decodeURIComponent(u.pathname.split(prefix)[1]);if(!path||path.includes('/mobile/'))return url;u.pathname=prefix+wroomerMobilePath(path).split('/').map(encodeURIComponent).join('/');return u.href;}catch{return url;}
 }
-// Mobile-only image variants for the six selected Puszczew listings.
-// Original Storage files and desktop presentation remain unchanged.
+// One-listing mobile image test: Ford Mondeo 217 tys. km, 36 999 PLN (Puszczew).
+// All other listings and original Storage files remain untouched.
 function wroomerPuszczewVariant(url,width,quality){
  if(typeof url!=='string'||!url.includes('/storage/v1/object/public/images/'))return url;
- const folders=['vito-vitara-IhdNU','vito-mondeo-IiWPI','vito-mondeo-Iiaa4','vito-mondeo-Ii9Vh','vito-smax-Ij5LM','vito-yaris-IhdR0'];
- if(!folders.some(folder=>url.includes('/'+folder+'/')))return url;
+ if(!url.includes('/vito-mondeo-IiWPI/'))return url;
  return url.replace('/storage/v1/object/public/images/','/storage/v1/render/image/public/images/')+(url.includes('?')?'&':'?')+'width='+width+'&quality='+quality+'&resize=contain';
 }
 function wroomerSetMobileImage(img,url){
