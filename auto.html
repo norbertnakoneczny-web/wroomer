@@ -92,7 +92,7 @@ h1{margin:0;font-size:30px}.meta{color:#888;margin:8px 0}.price{font-size:36px;c
  },true);
 })();
 </script>
-</head>
+<script src="/photo-variants.js"></script><style>.gallery-main picture,.thumbs picture{display:contents}</style></head>
 <body>
 <div class="header"><a href="/">← WROOMER.PL</a><span class="count" id="hcount"></span></div>
 <div class="container"><div id="content" class="card">Ładowanie...</div></div>
@@ -109,10 +109,6 @@ const SUPABASE_KEY="sb_publishable_S1qH_mBZaX7-bzmfJ0IVGA_6hxGbJWd";
 let imgs=[], cur=0, startX=0;
 const escapeHtml=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const safeImage=x=>{try{const raw=typeof x==='string'?x:(x&&typeof x==='object'?(x.url||x.src||x.image_url||''):'');const u=new URL(String(raw));return ['https:','http:'].includes(u.protocol)?u.href:'';}catch{return '';}};
-function wroomerDkImportMobileUrl(url){
-  const gallery = /^(https:\/\/bdpydgsfowtuvjnkyeeg\.supabase\.co\/storage\/v1\/object\/public\/images\/[\da-f-]+\/dkimport-(?:4f82945f|f9a1f80d|e113cf9f)\/)(\d+\.webp)$/;
-  return url.replace(gallery,'$1mobile/$2');
-}
 function getImages(car){
   let a=[];
   if(Array.isArray(car.images)) a=[...car.images];
@@ -128,18 +124,18 @@ function render(){
   if(!imgs.length)return;
   cur=Math.max(0,Math.min(cur,imgs.length-1));
   const mainImg = document.getElementById('mainImg');
-  if(mainImg){ mainImg.onerror=()=>{mainImg.onerror=null;mainImg.removeAttribute('src');mainImg.alt='Zdjęcie jest chwilowo niedostępne';}; mainImg.src=imgs[cur]; }
+  WroomerPhotos.set(mainImg,imgs[cur]);
   const mc=document.getElementById('mainCounter'); if(mc) mc.innerText = `${cur+1} / ${imgs.length}`;
   const hc=document.getElementById('hcount'); if(hc) hc.innerText = `${imgs.length} zdjęć`;
   const lbc=document.getElementById('lbcounter'); if(lbc) lbc.innerText = `${cur+1} / ${imgs.length}`;
-  const lbimg=document.getElementById('lbimg'); if(lbimg&&document.getElementById('lightbox').classList.contains('open')&&lbimg.getAttribute('src')!==imgs[cur]) lbimg.src=imgs[cur];
+  const lbimg=document.getElementById('lbimg'); if(lbimg&&document.getElementById('lightbox').classList.contains('open')) WroomerPhotos.set(lbimg,imgs[cur]);
   document.querySelectorAll('.thumbs img').forEach((el,i)=>el.classList.toggle('active', i===cur));
 }
-function openLB(i){ if(!imgs.length)return; cur=Math.max(0,Math.min(Number(i)||0,imgs.length-1)); const lb=document.getElementById('lbimg'); lb.onerror=()=>{lb.onerror=null;lb.removeAttribute('src');lb.alt='Zdjęcie jest chwilowo niedostępne';}; lb.src=imgs[cur]; document.getElementById('lightbox').classList.add('open'); render(); }
+function openLB(i){ if(!imgs.length)return; cur=Math.max(0,Math.min(Number(i)||0,imgs.length-1)); document.getElementById('lightbox').classList.add('open'); render(); }
 function closeLB(){ document.getElementById('lightbox').classList.remove('open'); }
 document.addEventListener("keydown",e=>{if(!document.getElementById("lightbox").classList.contains("open"))return;if(e.key==="Escape")closeLB();else if(e.key==="ArrowRight")nextImg();else if(e.key==="ArrowLeft")prevImg();});
-function nextImg(){ if(!imgs.length)return; cur=(cur+1)%imgs.length; const lb=document.getElementById('lbimg');if(lb)lb.src=imgs[cur]; render(); }
-function prevImg(){ if(!imgs.length)return; cur=(cur-1+imgs.length)%imgs.length; const lb=document.getElementById('lbimg');if(lb)lb.src=imgs[cur]; render(); }
+function nextImg(){ if(!imgs.length)return; cur=(cur+1)%imgs.length; render(); }
+function prevImg(){ if(!imgs.length)return; cur=(cur-1+imgs.length)%imgs.length; render(); }
 
 
 const WROOMER_PUBLIC_EQUIPMENT={"Komfort":["Klimatyzacja","Klimatyzacja automatyczna","Tempomat","Tempomat adaptacyjny","Podgrzewane fotele","Elektrycznie regulowane fotele","Elektryczne szyby","Elektryczne lusterka","Centralny zamek","Radio","Czujnik parkowania","Wspomaganie kierownicy","Skórzana tapicerka","Komputer pokładowy","Nawigacja GPS","Bluetooth","Apple CarPlay","Android Auto","Czujnik deszczu","Kierownica wielofunkcyjna","Klimatyzacja dwustrefowa","Elektrycznie składane lusterka","Podgrzewana przednia szyba","USB","Tapicerka półskórzana","Ekran dotykowy"],"Bezpieczeństwo":["ABS","ESP","ASR","Autoalarm","Poduszki powietrzne","Immobilizer","Asystent pasa ruchu","Asystent martwego pola","System awaryjnego hamowania","Czujniki parkowania przód","Czujniki parkowania tył","Kamera cofania","Kamera 360°","ISOFIX","Kontrola ciśnienia opon"],"Wygląd i oświetlenie":["Światła LED","Światła przeciwmgielne","Halogeny","Światła do jazdy dziennej","Reflektory ksenonowe","Felgi aluminiowe","Przyciemniane szyby","Dach panoramiczny","Szyberdach","Relingi dachowe","Hak holowniczy"],"Użytkowe":["Drzwi boczne przesuwne","Dwoje drzwi bocznych przesuwnych","Czujniki cofania","Przegroda przestrzeni ładunkowej","Zabudowa ładunkowa","Napęd 4x4","Tryby jazdy","Elektryczna klapa bagażnika"],"Informacje dodatkowe":["Książka serwisowa","Dwa kluczyki","Nowe opony"]};
@@ -205,7 +201,6 @@ async function load(){
     const car=Array.isArray(rows)?rows[0]:null;
     if(!car){ el.innerHTML=`<div style="padding:40px"><h1>Nie znaleziono</h1></div>`; return; }
     imgs=getImages(car);
-    if(matchMedia('(max-width: 767px)').matches) imgs=imgs.map(wroomerDkImportMobileUrl);
     updateListingSeo(car, slug);
     window.wroomerTrack?.('listing_view',{listing_slug:slug});
     if(imgs.length===0) imgs=['data:image/svg+xml;charset=utf-8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600"><rect width="800" height="600" fill="#151515"/><text x="400" y="300" fill="#aaa" font-family="sans-serif" font-size="32" text-anchor="middle">Brak zdjęcia</text></svg>')];
@@ -214,12 +209,12 @@ async function load(){
     const safePhone=/^\+?[0-9 ()-]{6,24}$/.test(phone)&&phone.replace(/\D/g,'').length>=9&&phone.replace(/\D/g,'').length<=15?phone:'';
     el.innerHTML=`
       <div class="gallery-main" id="galleryMain">
-        <img id="mainImg" src="${escapeHtml(imgs[0])}" onclick="openLB(0)">
+        <img id="mainImg" onclick="openLB(0)">
         <span class="nav prev" onclick="event.stopPropagation(); prevImg()">‹</span>
         <span class="nav next" onclick="event.stopPropagation(); nextImg()">›</span>
         <span class="counter" id="mainCounter">1 / ${imgs.length}</span>
       </div>
-      <div class="thumbs">${imgs.map((s,i)=>`<img src="${escapeHtml(s)}" class="${i===0?'active':''}" onclick="cur=${i}; document.getElementById('mainImg').src=imgs[${i}]; render()" loading="lazy">`).join('')}</div>
+      <div class="thumbs">${imgs.map((s,i)=>`<img data-photo="${escapeHtml(s)}" class="${i===0?'active':''}" onclick="cur=${i}; render()" loading="lazy" decoding="async">`).join('')}</div>
       <div class="info">
         <h1>${escapeHtml(car.title||[car.brand||car.marka,car.model,car.year||car.rocznik].filter(Boolean).join(' '))}</h1>
         <div class="meta">${escapeHtml(car.brand||car.marka||'')} ${escapeHtml(car.model||'')} • ${escapeHtml(car.location||car.lokalizacja||car.miasto||'')} • ${escapeHtml(car.year||car.rocznik||'')}r</div>
@@ -253,6 +248,8 @@ async function load(){
       const body='Imię: '+name+'\nTelefon: '+phone+'\nOgłoszenie: '+location.href+'\n\n'+message;
       location.href='mailto:'+encodeURIComponent(String(car.owner_email).trim())+'?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(body);
     });
+    render();
+    document.querySelectorAll('.thumbs img[data-photo]').forEach(img=>WroomerPhotos.set(img,img.dataset.photo));
     const gm=document.getElementById('galleryMain');
     gm.addEventListener('touchstart', e=>startX=e.touches[0].clientX, {passive:true});
     gm.addEventListener('touchend', e=>{
