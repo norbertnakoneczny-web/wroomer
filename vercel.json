@@ -13,6 +13,10 @@
   ],
   "rewrites": [
     {
+      "source": "/miasta/rybnik.html",
+      "destination": "/api/miasto-rybnik"
+    },
+    {
       "source": "/sitemap-artykuly.xml",
       "destination": "/api/sitemap-artykuly"
     },
@@ -55,6 +59,9 @@
     },
     "api/sitemap-artykuly.js": {
       "includeFiles": "blog/**"
+    },
+    "api/miasto-rybnik.js": {
+      "includeFiles": "miasta/rybnik.html"
     }
   },
   "redirects": [
