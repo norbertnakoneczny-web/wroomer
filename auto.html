@@ -92,7 +92,7 @@ h1{margin:0;font-size:30px}.meta{color:#888;margin:8px 0}.price{font-size:36px;c
  },true);
 })();
 </script>
-<script src="/photo-variants.js"></script><style>.gallery-main picture,.thumbs picture{display:contents}</style><style>.trade-badge{display:inline-block;width:fit-content;margin-top:6px;padding:3px 9px;border:1px solid #45875c;border-radius:999px;background:#123523;color:#b0f4c5;font-size:.8rem;font-weight:750;line-height:1.35}</style></head>
+<script src="/photo-variants.js"></script><style>.gallery-main picture,.thumbs picture{display:contents}</style><style>.trade-badge{position:absolute;z-index:2;top:8px;right:8px;padding:5px 9px;border:1px solid #57a46e;border-radius:6px;background:#166534;color:#fff;font-size:12px;font-weight:700;line-height:1.35;pointer-events:none}</style></head>
 <body>
 <div class="header"><a href="/">← WROOMER.PL</a><span class="count" id="hcount"></span></div>
 <div class="container"><div id="content" class="card">Ładowanie...</div></div>
@@ -210,6 +210,7 @@ async function load(){
     el.innerHTML=`
       <div class="gallery-main" id="galleryMain">
         <img id="mainImg" onclick="openLB(0)">
+        ${car.accepts_trade===true?'<span class="trade-badge">Zamiana</span>':''}
         <span class="nav prev" onclick="event.stopPropagation(); prevImg()">‹</span>
         <span class="nav next" onclick="event.stopPropagation(); nextImg()">›</span>
         <span class="counter" id="mainCounter">1 / ${imgs.length}</span>
@@ -219,7 +220,7 @@ async function load(){
         <h1>${escapeHtml(car.title||[car.brand||car.marka,car.model,car.year||car.rocznik].filter(Boolean).join(' '))}</h1>
         <div class="meta">${escapeHtml(car.brand||car.marka||'')} ${escapeHtml(car.model||'')} • ${escapeHtml(car.location||car.lokalizacja||car.miasto||'')} • ${escapeHtml(car.year||car.rocznik||'')}r</div>
         <div class="price">${Number.isFinite(Number(car.price??car.cena))&&Number(car.price??car.cena)>0?Number(car.price??car.cena).toLocaleString('pl-PL')+' PLN':'Cena do uzgodnienia'}</div>
-        ${car.accepts_trade===true?'<span class="trade-badge">Zamiana</span>':''}
+
         ${wroomerPublicEquipment(car.description||car.opis||'',escapeHtml)}<div class="desc">${wroomerVideoLink(escapeHtml(cleanPublicDescription(car.description||car.opis||'')))}</div>
         ${safePhone?`<a class="btn" href="tel:${escapeHtml(safePhone.replace(/[^+\d]/g,''))}">📞 ZADZWOŃ: ${escapeHtml(safePhone)}</a>`:messengerUrl?'':'<div class="meta">Numer telefonu niedostępny</div>'}
         ${messengerUrl?`<a class="btn" href="${escapeHtml(messengerUrl)}" target="_blank" rel="noopener noreferrer">Napisz na Messengerze</a>`: ''}
