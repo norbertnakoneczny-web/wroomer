@@ -1,3 +1,4 @@
+import '../photo-variants.js';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 // Server-rendered vehicle detail page for crawlers and visitors.
@@ -63,9 +64,14 @@ export default async function handler(req,res){
     const placeholder='<div id="content" class="card">Ładowanie...</div>';
     if(!template.includes(placeholder))throw Error('Listing template mismatch');
     const image=pictures[0]||'data:image/svg+xml;charset=utf-8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600"><rect width="800" height="600" fill="#151515"/><text x="400" y="300" text-anchor="middle" fill="#aaa" font-size="36" font-family="Arial">Brak zdjęcia</text></svg>');
-    const gallery='<div class="gallery-main" id="galleryMain"><img id="mainImg" src="'+esc(image)+'" alt="'+esc(title)+'" loading="eager">'+
+    const responsivePhoto=(url,attrs)=>{
+      const mobile=globalThis.WroomerPhotos.variants(url)[0];
+      const img='<img src="'+esc(url)+'" '+attrs+(mobile?' data-original="'+esc(url)+'" onerror="WroomerPhotos.retry(this)"':'')+'>';
+      return mobile?'<picture><source media="(max-width: 767px)" srcset="'+esc(mobile)+'">'+img+'</picture>':img;
+    };
+    const gallery='<div class="gallery-main" id="galleryMain">'+responsivePhoto(image,'id="mainImg" alt="'+esc(title)+'" loading="eager"')+
       (pictures.length?'<span class="counter" id="mainCounter">1 / '+pictures.length+'</span>':'')+'</div>'+
-      (pictures.length?'<div class="thumbs">'+pictures.map((p,i)=>'<img src="'+esc(p)+'" class="'+(i===0?'active':'')+'" loading="lazy" alt="'+esc(title)+' — zdjęcie '+(i+1)+'" onclick="document.getElementById(\'mainImg\').src=this.src;document.querySelectorAll(\'.thumbs img\').forEach(x=>x.classList.remove(\'active\'));this.classList.add(\'active\');document.getElementById(\'mainCounter\').textContent=\''+(i+1)+' / '+pictures.length+'\'">').join('')+'</div>':'');
+      (pictures.length?'<div class="thumbs">'+pictures.map((url,index)=>responsivePhoto(url,'class="'+(index===0?'active':'')+'" loading="lazy" alt="'+esc(title)+' — zdjęcie '+(index+1)+'"')).join('')+'</div>':'');
     const details='<div class="info"><h1>'+esc(title)+'</h1><div class="meta">'+esc([car.brand||car.marka,car.model,car.location||car.lokalizacja||car.miasto,car.year||car.rocznik].filter(Boolean).join(' • '))+'</div>'+
       '<div class="price">'+esc(price||'Cena do uzgodnienia')+'</div>'+wroomerPublicEquipment(car.description||car.opis||'',esc)+'<div class="desc">'+wroomerVideoLink(esc(cleanPublicDescription(car.description||car.opis||'')))+'</div>'+
       (safePhone?'<a class="btn" href="tel:'+esc(phoneHref)+'">📞 ZADZWOŃ: '+esc(safePhone)+'</a>':messengerUrl?'':'<div class="meta">Numer telefonu niedostępny</div>')+
