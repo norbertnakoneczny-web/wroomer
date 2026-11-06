@@ -11,19 +11,34 @@ export default async function handler(req,res){
  try{
   const auth=await fetch(SUPABASE_URL+'/rest/v1/rpc/is_wroomer_admin',{method:'POST',headers:{apikey:PUBLISHABLE_KEY,Authorization:'Bearer '+token,'Content-Type':'application/json'},body:'{}'});
   if(!auth.ok||(await auth.json())!==true)return res.status(403).json({error:'Brak uprawnień administratora'});
-  const hourly=req.query.period==='24h';
-  const period=hourly?'last_2dT':req.query.period==='30'?'last_30d':'last_7d';
+  const rybnik=req.query.report==='rybnik';
+  const hourly=!rybnik&&req.query.period==='24h';
+  const period=hourly?'last_2dT':req.query.period==='30'?'last_30d':rybnik?'last_7dT':'last_7d';
   const key=process.env.WINDSOR_API_KEY;
+  if(!key&&rybnik)return res.status(503).json({error:'Brak połączenia Windsor.ai dla raportu Rybnika'});
   if(!key){if(period!=='last_7d')return res.status(503).json({error:'Dane za 30 dni są dostępne po skonfigurowaniu WINDSOR_API_KEY. Aktualnie dostępne jest tylko archiwum za 7 dni.'});return res.status(200).json({...SNAPSHOT,mode:'snapshot',message:'Historyczny odczyt z Windsor.ai. Automatyczna aktualizacja wymaga konfiguracji WINDSOR_API_KEY w Vercel.'});}
-  const cacheKey=period;
+  const cacheKey=(rybnik?'rybnik:':'traffic:')+period;
   if(cache?.key===cacheKey&&Date.now()-cache.time<15*60*1000)return res.status(200).json({...cache.value,mode:'live-cache'});
   const u=new URL('https://connectors.windsor.ai/googleanalytics4');
-  u.searchParams.set('api_key',key);u.searchParams.set('fields',hourly?'date_hour,sessions,screen_page_views':'date,source,sessions,screen_page_views');u.searchParams.set('date_preset',period);u.searchParams.set('select_accounts','559043739');u.searchParams.set('_renderer','json');
+  u.searchParams.set('api_key',key);u.searchParams.set('fields',rybnik?'source,event_name,event_count':hourly?'date_hour,sessions,screen_page_views':'date,source,sessions,screen_page_views');u.searchParams.set('date_preset',period);u.searchParams.set('select_accounts','559043739');u.searchParams.set('_renderer','json');
   const controller=new AbortController();const timeout=setTimeout(()=>controller.abort(),18000);
   let response;try{response=await fetch(u,{signal:controller.signal,headers:{Accept:'application/json'}})}finally{clearTimeout(timeout)}
   if(!response.ok)throw new Error('Windsor HTTP '+response.status);
   const payload=await response.json();const raw=Array.isArray(payload)?payload:Array.isArray(payload.data)?payload.data:null;
   if(!raw)throw new Error('Nieoczekiwany format odpowiedzi Windsor');
+  if(rybnik){
+    const events=['rybnik_page_view','rybnik_listing_view','rybnik_phone_click','rybnik_whatsapp_click'];
+    const grouped=Object.fromEntries(['Facebook','Google','Pozostałe'].map(source=>[source,Object.fromEntries(events.map(event=>[event,0]))]));
+    for(const row of raw){
+      if(!events.includes(row.event_name))continue;
+      const source=String(row.source||'').toLowerCase();
+      const label=/^(?:(?:[a-z0-9-]+\.)*facebook\.com|facebook|fb|fb\.me)$/.test(source)?'Facebook':/^(?:google|(?:www\.)?google\.(?:com|pl))$/.test(source)?'Google':'Pozostałe';
+      grouped[label][row.event_name]+=Number(row.event_count)||0;
+    }
+    const value={rows:Object.entries(grouped).map(([source,counts])=>({source,...counts})),capturedAt:new Date().toISOString()};
+    cache={key:cacheKey,time:Date.now(),value};
+    return res.status(200).json({...value,mode:'live'});
+  }
   const rows=hourly?raw.map(x=>({date_hour:String(x.date_hour||''),sessions:Number(x.sessions)||0,screen_page_views:Number(x.screen_page_views)||0})):raw.map(x=>({date:String(x.date||''),source:String(x.source||'(not set)'),sessions:Number(x.sessions)||0,screen_page_views:Number(x.screen_page_views)||0}));
   const value=hourly?{rows:buildHourly24(rows),capturedAt:new Date().toISOString(),period:'Ostatnie 24 godziny (pełne przedziały godzinowe)',timezone:'Europe/Warsaw',hourly:true}:{rows,capturedAt:new Date().toISOString(),period:period==='last_30d'?'Ostatnie 30 dni':'Ostatnie 7 dni'};cache={key:cacheKey,time:Date.now(),value};
   return res.status(200).json({...value,mode:'live'});
