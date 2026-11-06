@@ -764,7 +764,13 @@ async function compressImage(file,maxW=1600,q=0.78){
 }
 // WROOMER: niezależne kopie zdjęć na telefony, oryginały pozostają nietknięte.
 function wroomerMobilePath(path){const parts=path.split('/');const file=parts.pop();return parts.join('/')+'/mobile/'+file.replace(/\.[^.]+$/, '')+'.webp';}
+function wroomerDkImportMobileUrl(url){
+  const gallery = /^(https:\/\/bdpydgsfowtuvjnkyeeg\.supabase\.co\/storage\/v1\/object\/public\/images\/[\da-f-]+\/dkimport-(?:4f82945f|f9a1f80d|e113cf9f)\/)(\d+\.webp)$/;
+  return url.replace(gallery,'$1mobile/$2');
+}
 function wroomerMobileImageUrl(url){
+ const dkImportUrl=wroomerDkImportMobileUrl(url);
+ if(dkImportUrl!==url)return dkImportUrl;
  if(!/\/storage\/v1\/object\/public\/ogloszenia\//.test(url))return url;
  try{const u=new URL(url);const prefix='/storage/v1/object/public/ogloszenia/';const path=decodeURIComponent(u.pathname.split(prefix)[1]);if(!path||path.includes('/mobile/'))return url;u.pathname=prefix+wroomerMobilePath(path).split('/').map(encodeURIComponent).join('/');return u.href;}catch{return url;}
 }
@@ -1132,7 +1138,7 @@ async function loadAds(){
       const img=String(o.image_url||o.image||(typeof firstImage==='string'?firstImage:(firstImage?.url||firstImage?.src||firstImage?.image_url))||'');
       const safeImg=(()=>{try{const u=new URL(img);return (u.protocol==='https:'||u.protocol==='http:')?u.href:'';}catch{return '';}})();
       const renderedThumb=safeImg.includes('/storage/v1/object/public/ogloszenia/')?safeImg.replace('/storage/v1/object/public/','/storage/v1/render/image/public/')+(safeImg.includes('?')?'&':'?')+'width=480&quality=70&resize=contain':safeImg;
-      const thumb=matchMedia('(max-width: 767px)').matches?wroomerPuszczewVariant(renderedThumb,320,68):(safeImg.includes('/storage/v1/object/public/ogloszenia/')?safeImg.replace('/storage/v1/object/public/','/storage/v1/render/image/public/')+(safeImg.includes('?')?'&':'?')+'width=480&quality=75&resize=contain':safeImg);
+      const thumb=matchMedia('(max-width: 767px)').matches?wroomerDkImportMobileUrl(wroomerPuszczewVariant(renderedThumb,320,68)):(safeImg.includes('/storage/v1/object/public/ogloszenia/')?safeImg.replace('/storage/v1/object/public/','/storage/v1/render/image/public/')+(safeImg.includes('?')?'&':'?')+'width=480&quality=75&resize=contain':safeImg);
       const cnt=Array.isArray(o.images)&&o.images.length?o.images.length:Array.isArray(o.zdjecia)&&o.zdjecia.length?o.zdjecia.length:(o.image_url||o.image?1:0);
       const safeId=String(o.id||'').replace(/[^a-zA-Z0-9_-]/g,'');
       const safeListingText=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
