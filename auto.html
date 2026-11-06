@@ -92,7 +92,7 @@ h1{margin:0;font-size:30px}.meta{color:#888;margin:8px 0}.price{font-size:36px;c
  },true);
 })();
 </script>
-<script src="/photo-variants.js"></script><style>.gallery-main picture,.thumbs picture{display:contents}</style><style>.trade-badge{position:absolute;z-index:2;top:8px;right:8px;padding:5px 9px;border:1px solid #57a46e;border-radius:6px;background:#166534;color:#fff;font-size:12px;font-weight:700;line-height:1.35;pointer-events:none}</style></head>
+<script src="/photo-variants.js"></script><style>.gallery-main picture,.thumbs picture{display:contents}</style></head>
 <body>
 <div class="header"><a href="/">← WROOMER.PL</a><span class="count" id="hcount"></span></div>
 <div class="container"><div id="content" class="card">Ładowanie...</div></div>
@@ -210,7 +210,6 @@ async function load(){
     el.innerHTML=`
       <div class="gallery-main" id="galleryMain">
         <img id="mainImg" onclick="openLB(0)">
-        ${car.accepts_trade===true?'<span class="trade-badge">Zamiana</span>':''}
         <span class="nav prev" onclick="event.stopPropagation(); prevImg()">‹</span>
         <span class="nav next" onclick="event.stopPropagation(); nextImg()">›</span>
         <span class="counter" id="mainCounter">1 / ${imgs.length}</span>
