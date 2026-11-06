@@ -545,7 +545,8 @@ function updateAuthUI(){const bl=document.getElementById('btnLogin'), bo=documen
 function openLoginModal(){const modal=document.getElementById('loginModal');if(!modal)return;modal.style.display='flex';modal.classList.add('open');document.getElementById('loginError').textContent='';}
 document.getElementById('btnLogin').onclick=openLoginModal;
 document.getElementById('btnLogout').onclick=async()=>{await supabaseClient.auth.signOut(); currentUser=null; updateAuthUI(); loadAds();};
-document.getElementById('btnAdd').onclick=()=>{ if(!currentUser){ openLoginModal(); return; } openAddModal(); };
+let wroomerAddFromBlog=new URLSearchParams(location.search).get('dodaj')==='1';
+document.getElementById('btnAdd').onclick=()=>{ if(!currentUser){ openLoginModal(); return; } wroomerAddFromBlog=false; openAddModal(); };
 function closeModals(){const loginM=document.getElementById('loginModal');const addM=document.getElementById('addModal');if(loginM){ loginM.classList.remove('open'); loginM.style.display=''; }if(addM){ addM.classList.remove('open'); addM.style.display=''; }closeGallery();}
 function closeGallery(fromPopstate=false){
  if(!fromPopstate&&history.state?.wroomerOverlay==='gallery'){history.back();return;}
@@ -682,7 +683,7 @@ supabaseClient.auth.onAuthStateChange((event)=>{
 if(new URLSearchParams(window.location.hash.slice(1)).get('type')==='recovery'){
  // Supabase odczyta token z adresu i wyemituje PASSWORD_RECOVERY.
 }
-async function doLogin(){const e=document.getElementById('loginEmail').value.trim(); const p=document.getElementById('loginPass').value; if(!e||!p){showError('loginError','Podaj email i hasło');return;} try{const r=await supabaseClient.auth.signInWithPassword({email:e,password:p}); if(r.error) throw r.error; currentUser=r.data.user; updateAuthUI(); closeModals(); loadAds();}catch(err){showError('loginError', err.message);}}
+async function doLogin(){const e=document.getElementById('loginEmail').value.trim(); const p=document.getElementById('loginPass').value; if(!e||!p){showError('loginError','Podaj email i hasło');return;} try{const r=await supabaseClient.auth.signInWithPassword({email:e,password:p}); if(r.error) throw r.error; currentUser=r.data.user; updateAuthUI(); closeModals(); loadAds(); if(wroomerAddFromBlog)document.getElementById('btnAdd').click();}catch(err){showError('loginError', err.message);}}
 async function doSignup(){const e=document.getElementById('loginEmail').value.trim(); const p=document.getElementById('loginPass').value; if(!e||p.length<6){showError('loginError','Email i hasło min 6');return;} if(!document.getElementById('registerTerms').checked){showError('loginError','Aby założyć konto, zaakceptuj regulamin.');return;} try{const r=await supabaseClient.auth.signUp({email:e,password:p}); if(r.error) throw r.error; showSuccess('loginError','Konto założone!');}catch(err){showError('loginError', err.message);}}
 const WROOMER_MAX_PHOTOS=30;
 let wroomerPreviewUrls=[];
@@ -1180,7 +1181,10 @@ function resetFilters(){
   const quick=document.getElementById('wroomerQuickSearch');if(quick)quick.value='';
   loadAds();
 }
-checkUser().finally(()=>loadAds());
+checkUser().finally(()=>{
+  loadAds();
+  if(wroomerAddFromBlog)document.getElementById('btnAdd').click();
+});
 </script>
 <div id="wroomerReportModal" role="dialog" aria-modal="true" aria-labelledby="wroomerReportHeading">
 <form class="report-card" id="wroomerReportForm">
