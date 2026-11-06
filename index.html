@@ -400,7 +400,7 @@ body{background:radial-gradient(ellipse at 80% 0%,#24200c 0%,#090a0b 38%,#080808
 #galleryModal .detail-grid .detail-item .value{font-size:12px !important;line-height:1.3 !important;overflow-wrap:anywhere}
 @media(max-width:600px){#galleryModal .detail-grid{grid-template-columns:repeat(2,minmax(0,1fr)) !important;gap:6px !important}}
 </style>
-<style>.owner-photo-actions{display:flex;gap:4px;justify-content:center;flex-wrap:wrap;padding:5px}.owner-photo-actions button{border:1px solid #ff8a00;background:#191919;color:#fff;border-radius:6px;padding:5px 7px;font-size:12px;cursor:pointer}.owner-photo-actions button:disabled{opacity:.38;cursor:default}</style></head>
+<style>.owner-photo-actions{display:flex;gap:4px;justify-content:center;flex-wrap:wrap;padding:5px}.owner-photo-actions button{border:1px solid #ff8a00;background:#191919;color:#fff;border-radius:6px;padding:5px 7px;font-size:12px;cursor:pointer}.owner-photo-actions button:disabled{opacity:.38;cursor:default}</style><script src="/photo-variants.js"></script></head>
 <body>
 <div class="header"><div class="logo">WROOMER<span>.PL</span> </div><div style="display:flex;gap:6px;align-items:center"><button class="btn btn-dark" id="btnLogin">Zaloguj</button><button class="btn btn-dark" id="btnLogout" style="display:none">Wyloguj</button><button class="btn btn-yellow" id="btnAdd">+ Dodaj</button></div></div>
 <div class="wroomer-search"><span aria-hidden="true">⌕</span><input id="wroomerQuickSearch" type="search" placeholder="Szukaj marki, modelu lub samochodu..." aria-label="Szukaj samochodu"><button type="button" onclick="wroomerRunSearch()">Szukaj aut</button></div>
@@ -742,39 +742,6 @@ document.getElementById('aFiles').onchange=e=>{
  renderPreview();
  if(incoming.length>allowed)wroomerPhotoMessage(`Limit ${WROOMER_MAX_PHOTOS} zdjęć łącznie. Dodano ${Math.min(incoming.length,allowed)} z ${incoming.length} wybranych.`);
 };
-async function compressImage(file,maxW=1600,q=0.78){
- // Przetwarzanie odbywa się lokalnie w przeglądarce, przed wysłaniem.
- const url=URL.createObjectURL(file);
- try{
-  const img=new Image();
-  await new Promise((resolve,reject)=>{img.onload=resolve;img.onerror=()=>reject(new Error('Nie można odczytać zdjęcia: '+file.name));img.src=url;});
-  const scale=Math.min(1,maxW/Math.max(img.naturalWidth,img.naturalHeight));
-  const w=Math.max(1,Math.round(img.naturalWidth*scale)),h=Math.max(1,Math.round(img.naturalHeight*scale));
-  const canvas=document.createElement('canvas');canvas.width=w;canvas.height=h;
-  const ctx=canvas.getContext('2d',{alpha:false});
-  if(!ctx)throw new Error('Brak obsługi kompresji zdjęć w przeglądarce.');
-  ctx.fillStyle='#fff';ctx.fillRect(0,0,w,h);ctx.drawImage(img,0,0,w,h);
-  const makeBlob=type=>new Promise(resolve=>canvas.toBlob(resolve,type,q));
-  let blob=await makeBlob('image/webp');
-  let type='image/webp';
-  if(!blob||blob.type!=='image/webp'){blob=await makeBlob('image/jpeg');type='image/jpeg';}
-  if(!blob)throw new Error('Nie udało się skompresować zdjęcia: '+file.name);
-  canvas.width=0;canvas.height=0;
-  return {blob,type,ext:type==='image/webp'?'webp':'jpg'};
- }finally{URL.revokeObjectURL(url);}
-}
-// WROOMER: niezależne kopie zdjęć na telefony, oryginały pozostają nietknięte.
-function wroomerMobilePath(path){const parts=path.split('/');const file=parts.pop();return parts.join('/')+'/mobile/'+file.replace(/\.[^.]+$/, '')+'.webp';}
-function wroomerDkImportMobileUrl(url){
-  const gallery = /^(https:\/\/bdpydgsfowtuvjnkyeeg\.supabase\.co\/storage\/v1\/object\/public\/images\/[\da-f-]+\/dkimport-(?:4f82945f|f9a1f80d|e113cf9f)\/)(\d+\.webp)$/;
-  return url.replace(gallery,'$1mobile/$2');
-}
-function wroomerMobileImageUrl(url){
- const dkImportUrl=wroomerDkImportMobileUrl(url);
- if(dkImportUrl!==url)return dkImportUrl;
- if(!/\/storage\/v1\/object\/public\/ogloszenia\//.test(url))return url;
- try{const u=new URL(url);const prefix='/storage/v1/object/public/ogloszenia/';const path=decodeURIComponent(u.pathname.split(prefix)[1]);if(!path||path.includes('/mobile/'))return url;u.pathname=prefix+wroomerMobilePath(path).split('/').map(encodeURIComponent).join('/');return u.href;}catch{return url;}
-}
 // Mobile-only variants for the five approved Ford/Toyota listings from Puszczew.
 // Added Audi Q2, Renault Scenic, Fiat Bravo and Suzuki Vitara; original Storage files remain unchanged.
 function wroomerPuszczewVariant(url,width,quality){
@@ -785,20 +752,10 @@ function wroomerPuszczewVariant(url,width,quality){
 }
 function wroomerSetMobileImage(img,url){
  if(!img)return;
- img.onerror=null;
- if(!matchMedia('(max-width: 767px)').matches){img.src=url;return;}
- const puszczewOptimized=wroomerPuszczewVariant(url,960,78);
- if(puszczewOptimized!==url){
-   img.onerror=()=>{img.onerror=null;img.src=url;};
-   img.src=puszczewOptimized;return;
- }
- const mobile=wroomerMobileImageUrl(url);
- if(mobile===url){img.src=url;return;}
- const prefix='/storage/v1/object/public/ogloszenia/';
- const resized=url.includes(prefix)?url.replace(prefix,'/storage/v1/render/image/public/ogloszenia/')+(url.includes('?')?'&':'?')+'width=960&quality=78&resize=contain':url;
- // Existing copies load first; older photos fall back to resized originals.
- img.onerror=()=>{img.onerror=null;img.src=resized;};
- img.src=mobile;
+ const resized=WroomerPhotos.mobile()?wroomerPuszczewVariant(url,960,78):url;
+ if(resized===url){WroomerPhotos.set(img,url);return;}
+ img.onerror=()=>{img.onerror=null;WroomerPhotos.set(img,url,0);};
+ img.src=resized;
 }
 
 document.getElementById('btnSave').onclick=async()=>{const saveButton=document.getElementById('btnSave');if(saveButton.disabled)return;saveButton.disabled=true;let canEditAds=false;try{canEditAds=await wroomerCanEditAds();}catch(permissionError){console.warn('Nie udało się sprawdzić uprawnień:',permissionError);}if(!canEditAds){showError('addError','Nie można potwierdzić uprawnień do publikacji. Sprawdź połączenie i spróbuj ponownie.');saveButton.disabled=false;return;}const title=document.getElementById('aTitle').value.trim(); const brand=document.getElementById('aBrand').value.trim(); const modelVal=document.getElementById('aModelIn').value||'Inny'; const price=Number(document.getElementById('aPrice').value); if(!title||!brand||!modelVal){showError('addError','Tytuł, marka i model wymagane');saveButton.disabled=false;return;} if(!Number.isFinite(price)||price<=0||!Number.isSafeInteger(price)){showError('addError','Podaj poprawną cenę w pełnych złotych');saveButton.disabled=false;return;} if(!document.getElementById('adTerms').checked||!document.getElementById('adPhoto').checked){showError('addError','Potwierdź regulamin i prawa do zdjęć.');saveButton.disabled=false;return;} if(document.getElementById('aPhone').value.trim()&&!document.getElementById('adContact').checked){showError('addError','Potwierdź publiczne wyświetlanie numeru telefonu lub usuń numer.');saveButton.disabled=false;return;} const engineCapacityBeforeUpload=document.getElementById('aCapacity').value.trim();if(engineCapacityBeforeUpload&&(!/^\d+$/.test(engineCapacityBeforeUpload)||Number(engineCapacityBeforeUpload)<1||Number(engineCapacityBeforeUpload)>20000)){showError('addError','Podaj prawidłową pojemność silnika w cm³.');saveButton.disabled=false;return;} const btn=document.getElementById('btnSave'); btn.textContent='WYSYŁANIE...'; btn.disabled=true; const newPhotoPaths=[]; let listingSaved=false; try{let imageUrls=[];if(ownerPhotoOrder.length>WROOMER_MAX_PHOTOS)throw new Error(`Maksymalnie ${WROOMER_MAX_PHOTOS} zdjęć na ogłoszenie.`);
@@ -806,27 +763,7 @@ document.getElementById('btnSave').onclick=async()=>{const saveButton=document.g
  if(entry.kind==='existing'){imageUrls.push(entry.url);continue;}
  const i=uploaded++;btn.textContent='Zdjęcia '+(i+1)+'/'+selectedFiles.length+'...';
  wroomerPhotoMessage('Optymalizacja i wysyłanie zdjęcia '+(i+1)+' z '+selectedFiles.length+'...');
- const optimized=await compressImage(entry.file);
- const fname=Date.now()+'_'+i+'_'+Math.random().toString(36).slice(2,8)+'.'+optimized.ext;
- const path=currentUser.id+'/'+fname;
- const up=await supabaseClient.storage.from('ogloszenia').upload(path,optimized.blob,{contentType:optimized.type});
- if(up.error)throw up.error;
- newPhotoPaths.push(path);
- imageUrls.push(supabaseClient.storage.from('ogloszenia').getPublicUrl(path).data.publicUrl);
- // Osobny lekki plik mobilny: nie podmieniaj pliku oryginalnego.
- try{
-   const mobile=await compressImage(entry.file,800,0.65);
-   if(mobile.type!=='image/webp')throw new Error('Przeglądarka nie obsługuje mobilnego formatu WebP.');
-   const mobilePath=wroomerMobilePath(path);
-   const mu=await supabaseClient.storage.from('ogloszenia').upload(mobilePath,mobile.blob,{contentType:mobile.type,upsert:false});
-   if(mu.error)throw new Error('Nie udało się zapisać kopii mobilnej: '+mu.error.message);
-   newPhotoPaths.push(mobilePath);
- }catch(mobileError){
-   // Kopia mobilna jest optymalizacją, nie warunkiem opublikowania zdjęcia.
-   // Oryginał zostaje zapisany; telefon skorzysta z istniejącego fallbacku.
-   console.warn('Kopia mobilna niedostępna, zachowano oryginał:',mobileError);
- }
-
+ imageUrls.push(await WroomerPhotos.upload(supabaseClient.storage.from('ogloszenia'),currentUser.id,entry.file,i,newPhotoPaths));
  }
  btn.textContent='Zapisywanie ogłoszenia...'; const engineCapacity=engineCapacityBeforeUpload; const gpsLat=document.getElementById('aLat').value.trim(),gpsLng=document.getElementById('aLng').value.trim(); const extra=`Przebieg: ${document.getElementById('aMileage').value||'-'} km | Paliwo: ${document.getElementById('aFuel').value||'-'} | Pojemność: ${engineCapacity||'-'}${gpsLat&&gpsLng&&Number.isFinite(Number(gpsLat))&&Number.isFinite(Number(gpsLng))?' | Lat: '+gpsLat+' | Lng: '+gpsLng:''}`; const sellerDesc=String(document.getElementById('aDesc').value||'').replace(/\s*\[Przebieg\s*:[^\]\r\n|]*\|\s*Paliwo\s*:[^\]\r\n]*\]\s*$/i,'').trim(); const fullDesc=sellerDesc + "\n\n["+extra+"]"; const eqDescription=sellerDesc+wroomerEqEncode()+"\n\n["+extra+"]"; const payload={title, brand, model:modelVal, price, year:parseInt(document.getElementById('aYear').value)||null, location:document.getElementById('aLocation').value, phone:document.getElementById('aPhone').value, description:eqDescription, image_url:imageUrls[0]||null, images:imageUrls, user_id:currentUser.id, status:'active'}; let result; if(editingId){result=await supabaseClient.from('ogloszenia').update(payload).eq('id', editingId).eq('user_id',currentUser.id).select();} else {result=await supabaseClient.from('ogloszenia').insert([payload]).select();} if(result.error) throw result.error; if(!result.data?.length)throw new Error('Nie masz uprawnień do edycji tego ogłoszenia.'); listingSaved=true; if(!editingId){try{window.wroomerTrack?.('listing_published',{listing_id:String(result.data[0]?.id||'').slice(0,80)});}catch(trackError){console.warn('Analityka nie powiodła się:',trackError);}} editingId=null; selectedFiles=[]; closeModals(); try{await loadAds();}catch(refreshError){console.warn('Nie udało się odświeżyć listy po zapisie:',refreshError);}}catch(e){if(!listingSaved&&newPhotoPaths.length){try{const cleanup=await supabaseClient.storage.from('ogloszenia').remove(newPhotoPaths);if(cleanup.error)console.warn('Nie udało się wyczyścić zdjęć po błędzie publikacji:',cleanup.error.message);}catch(cleanupError){console.warn('Czyszczenie zdjęć nie powiodło się:',cleanupError);}}showError('addError', (e.code==='42501'||/permission denied|row-level security|violates row-level/i.test(e.message||''))?WROOMER_BLOCKED_MESSAGE:e.message);}finally{btn.textContent=editingId?'Zapisz zmiany':'Zatwierdź z GPS'; btn.disabled=false;wroomerPhotoMessage();}};
 function wroomerPhotoUrl(){if(!window.currentAd||!galleryImages.length)return '';const u=new URL(wroomerListingUrl(window.currentAd));u.searchParams.set('zdjecie',String(galleryIndex+1));return u.href;}
@@ -878,7 +815,7 @@ function openGallery(ad){
     const puszczewThumb=matchMedia('(max-width: 767px)').matches?wroomerPuszczewVariant(src,320,68):src;
     img.loading='lazy';img.decoding='async';
     if(puszczewThumb!==src){img.onerror=()=>{img.onerror=null;img.src=src;};}
-    img.src=puszczewThumb;
+    if(puszczewThumb!==src)img.src=puszczewThumb;else WroomerPhotos.set(img,src);
     if(i===galleryIndex) img.classList.add('active'); 
     img.onclick=()=>{galleryIndex=i; updateGallery();};
     const badge=document.createElement('div');
@@ -1139,14 +1076,14 @@ async function loadAds(){
       const img=String(o.image_url||o.image||(typeof firstImage==='string'?firstImage:(firstImage?.url||firstImage?.src||firstImage?.image_url))||'');
       const safeImg=(()=>{try{const u=new URL(img);return (u.protocol==='https:'||u.protocol==='http:')?u.href:'';}catch{return '';}})();
       const renderedThumb=safeImg.includes('/storage/v1/object/public/ogloszenia/')?safeImg.replace('/storage/v1/object/public/','/storage/v1/render/image/public/')+(safeImg.includes('?')?'&':'?')+'width=480&quality=70&resize=contain':safeImg;
-      const thumb=matchMedia('(max-width: 767px)').matches?wroomerDkImportMobileUrl(wroomerPuszczewVariant(renderedThumb,320,68)):(safeImg.includes('/storage/v1/object/public/ogloszenia/')?safeImg.replace('/storage/v1/object/public/','/storage/v1/render/image/public/')+(safeImg.includes('?')?'&':'?')+'width=480&quality=75&resize=contain':safeImg);
+      const thumb=matchMedia('(max-width: 767px)').matches?(WroomerPhotos.variants(safeImg)[0]||wroomerPuszczewVariant(renderedThumb,320,68)):(safeImg.includes('/storage/v1/object/public/ogloszenia/')?safeImg.replace('/storage/v1/object/public/','/storage/v1/render/image/public/')+(safeImg.includes('?')?'&':'?')+'width=480&quality=75&resize=contain':safeImg);
       const cnt=Array.isArray(o.images)&&o.images.length?o.images.length:Array.isArray(o.zdjecia)&&o.zdjecia.length?o.zdjecia.length:(o.image_url||o.image?1:0);
       const safeId=String(o.id||'').replace(/[^a-zA-Z0-9_-]/g,'');
       const safeListingText=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
       const city=wroomerOutsideSilesia(o)?wroomerListingCity(o):'';
       const listingSlug=typeof o.slug==='string' && /^[a-zA-Z0-9_-]{1,150}$/.test(o.slug)?o.slug:(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(String(o.id||''))?String(o.id):null);
       const listingLink=listingSlug?`<a href="/?ogloszenie=${encodeURIComponent(String(o.id))}" onclick="event.stopPropagation()" style="color:inherit;text-decoration:underline;text-decoration-color:#facc15;text-underline-offset:3px" aria-label="Zobacz ogłoszenie: ${safeListingText(o.title||'Samochód')}">${safeListingText(o.title||'Samochód')}</a>`:safeListingText(o.title||'');
-      return `<div class="card" onclick="openGallery(allAds.find(a=>String(a.id)==='${safeId}'))"><div class="card-img-wrap"><img src="${safeListingText(thumb)}" loading="lazy" decoding="async" width="480" height="320" alt="" onerror="if(!this.dataset.fallbackTried &amp;&amp; this.dataset.original &amp;&amp; this.src!==this.dataset.original){this.dataset.fallbackTried=&#39;1&#39;;this.src=this.dataset.original;}else{this.onerror=null;this.style.visibility=&#39;hidden&#39;;}" data-original="${safeListingText(safeImg)}"><div class="card-img-count">📷 ${Number(cnt)||0}</div>${city?`<span class="card-city-badge">${safeListingText(city)}</span>`:''}</div><div class="card-body"><div class="card-title">${listingLink}</div><div class="card-price">${validPrice(o)!==null?safeListingText(validPrice(o).toLocaleString('pl-PL'))+' PLN':'Cena do uzgodnienia'}</div><div class="card-location">${safeListingText(o.location||o.lokalizacja||o.miasto||'')} • ${safeListingText(o.year||o.rocznik||'')}</div></div></div>`;
+      return `<div class="card" onclick="openGallery(allAds.find(a=>String(a.id)==='${safeId}'))"><div class="card-img-wrap"><img src="${safeListingText(thumb)}" loading="lazy" decoding="async" width="480" height="320" alt="" onerror="if(this.dataset.original){this.onerror=null;WroomerPhotos.retry(this);}else{this.onerror=null;this.style.visibility=&#39;hidden&#39;;}" data-original="${safeListingText(safeImg)}"><div class="card-img-count">📷 ${Number(cnt)||0}</div>${city?`<span class="card-city-badge">${safeListingText(city)}</span>`:''}</div><div class="card-body"><div class="card-title">${listingLink}</div><div class="card-price">${validPrice(o)!==null?safeListingText(validPrice(o).toLocaleString('pl-PL'))+' PLN':'Cena do uzgodnienia'}</div><div class="card-location">${safeListingText(o.location||o.lokalizacja||o.miasto||'')} • ${safeListingText(o.year||o.rocznik||'')}</div></div></div>`;
     }).join('');
   }catch(e){if(requestId!==wroomerLatestRequest)return;grid.replaceChildren();const errorBox=document.createElement('div');errorBox.style.cssText='grid-column:1/-1;padding:20px;background:#3a1111';errorBox.textContent='Nie udało się wczytać ogłoszeń. ';const retry=document.createElement('button');retry.textContent='↻ Spróbuj ponownie';retry.className='btn btn-yellow';retry.style.marginLeft='12px';retry.onclick=()=>loadAds();errorBox.append(retry);grid.appendChild(errorBox);console.warn('Błąd wczytywania ogłoszeń:',e);}
 }
