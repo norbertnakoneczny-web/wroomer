@@ -61,11 +61,27 @@ h1{margin:0;font-size:30px}.meta{color:#888;margin:8px 0}.price{font-size:36px;c
 <script id="wroomer-detail-analytics">
 (function(){
  const key='wroomer_cookie_choice_2026_10';
+ let fromRybnik=false;
+ try{
+   const previous=new URL(document.referrer);
+   fromRybnik=previous.origin===location.origin&&previous.pathname==='/miasta/rybnik.html';
+ }catch{}
+ let pendingRybnikView=null;
+ window.addEventListener('wroomer-analytics-ready',()=>{
+   if(pendingRybnikView){window.wroomerTrack('rybnik_listing_view',pendingRybnikView);pendingRybnikView=null;}
+ },{once:true});
  window.wroomerTrack=function(name,data){
   try{
    const c=JSON.parse(localStorage.getItem(key)||'null');
-   if(localStorage.getItem('wroomer_exclude_own_visits')==='1'||!c?.analytics||Date.now()-c.timestamp>180*24*3600*1000||typeof window.gtag!=='function')return;
+   if(localStorage.getItem('wroomer_exclude_own_visits')==='1')return;
+   if(!c?.analytics||Date.now()-c.timestamp>180*24*3600*1000||typeof window.gtag!=='function'){
+     if(fromRybnik&&name==='listing_view')pendingRybnikView=data;
+     return;
+   }
    window.gtag('event',name,{...data,site_area:'vehicle_detail'});
+   if(fromRybnik&&['listing_view','phone_click','whatsapp_click'].includes(name)){
+     window.gtag('event','rybnik_'+name);
+   }
   }catch(e){}
  };
  document.addEventListener('click',function(e){
