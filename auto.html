@@ -92,7 +92,7 @@ h1{margin:0;font-size:30px}.meta{color:#888;margin:8px 0}.price{font-size:36px;c
  },true);
 })();
 </script>
-<script src="/photo-variants.js"></script><style>.gallery-main picture,.thumbs picture{display:contents}</style></head>
+<script src="/photo-variants.js"></script><style>.gallery-main picture,.thumbs picture{display:contents}</style><style>.trade-badge{display:inline-block;width:fit-content;margin-top:6px;padding:3px 9px;border:1px solid #45875c;border-radius:999px;background:#123523;color:#b0f4c5;font-size:.8rem;font-weight:750;line-height:1.35}</style></head>
 <body>
 <div class="header"><a href="/">← WROOMER.PL</a><span class="count" id="hcount"></span></div>
 <div class="container"><div id="content" class="card">Ładowanie...</div></div>
@@ -195,7 +195,7 @@ async function load(){
     const slug=decodeURIComponent(location.pathname.split('/').pop().split('?')[0]);
     if(!/^[a-zA-Z0-9_-]{1,150}$/.test(slug)){el.textContent='Nieprawidłowy adres ogłoszenia';return;}
     const lookupField=/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(slug)?'id':'slug';
-    const r=await fetch(`${SUPABASE_URL}/rest/v1/ogloszenia?${lookupField}=eq.${encodeURIComponent(slug)}&status=eq.active&is_banned=eq.false&select=id,slug,title,brand,marka,model,year,rocznik,location,lokalizacja,miasto,price,cena,description,opis,images,zdjecia,image,image_url,phone,telefon,owner_email,messenger_url`,{headers:{apikey:SUPABASE_KEY,Authorization:`Bearer ${SUPABASE_KEY}`}});
+    const r=await fetch(`${SUPABASE_URL}/rest/v1/ogloszenia?${lookupField}=eq.${encodeURIComponent(slug)}&status=eq.active&is_banned=eq.false&select=id,slug,title,brand,marka,model,year,rocznik,location,lokalizacja,miasto,price,cena,description,opis,images,zdjecia,image,image_url,phone,telefon,owner_email,messenger_url,accepts_trade`,{headers:{apikey:SUPABASE_KEY,Authorization:`Bearer ${SUPABASE_KEY}`}});
     if(!r.ok)throw new Error('Nie udało się pobrać ogłoszenia');
     const rows=await r.json();
     const car=Array.isArray(rows)?rows[0]:null;
@@ -219,6 +219,7 @@ async function load(){
         <h1>${escapeHtml(car.title||[car.brand||car.marka,car.model,car.year||car.rocznik].filter(Boolean).join(' '))}</h1>
         <div class="meta">${escapeHtml(car.brand||car.marka||'')} ${escapeHtml(car.model||'')} • ${escapeHtml(car.location||car.lokalizacja||car.miasto||'')} • ${escapeHtml(car.year||car.rocznik||'')}r</div>
         <div class="price">${Number.isFinite(Number(car.price??car.cena))&&Number(car.price??car.cena)>0?Number(car.price??car.cena).toLocaleString('pl-PL')+' PLN':'Cena do uzgodnienia'}</div>
+        ${car.accepts_trade===true?'<span class="trade-badge">Zamiana</span>':''}
         ${wroomerPublicEquipment(car.description||car.opis||'',escapeHtml)}<div class="desc">${wroomerVideoLink(escapeHtml(cleanPublicDescription(car.description||car.opis||'')))}</div>
         ${safePhone?`<a class="btn" href="tel:${escapeHtml(safePhone.replace(/[^+\d]/g,''))}">📞 ZADZWOŃ: ${escapeHtml(safePhone)}</a>`:messengerUrl?'':'<div class="meta">Numer telefonu niedostępny</div>'}
         ${messengerUrl?`<a class="btn" href="${escapeHtml(messengerUrl)}" target="_blank" rel="noopener noreferrer">Napisz na Messengerze</a>`: ''}
