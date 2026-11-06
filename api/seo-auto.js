@@ -70,7 +70,7 @@ export default async function handler(req,res){
       return mobile?'<picture><source media="(max-width: 767px)" srcset="'+esc(mobile)+'">'+img+'</picture>':img;
     };
     const gallery='<div class="gallery-main" id="galleryMain">'+responsivePhoto(image,'id="mainImg" alt="'+esc(title)+'" loading="eager"')+
-      (car.accepts_trade===true?'<span class="trade-badge">Zamiana</span>':'')+(pictures.length?'<span class="counter" id="mainCounter">1 / '+pictures.length+'</span>':'')+'</div>'+
+      (pictures.length?'<span class="counter" id="mainCounter">1 / '+pictures.length+'</span>':'')+'</div>'+
       (pictures.length?'<div class="thumbs">'+pictures.map((url,index)=>responsivePhoto(url,'class="'+(index===0?'active':'')+'" loading="lazy" alt="'+esc(title)+' — zdjęcie '+(index+1)+'"')).join('')+'</div>':'');
     const details='<div class="info"><h1>'+esc(title)+'</h1><div class="meta">'+esc([car.brand||car.marka,car.model,car.location||car.lokalizacja||car.miasto,car.year||car.rocznik].filter(Boolean).join(' • '))+'</div>'+
       '<div class="price">'+esc(price||'Cena do uzgodnienia')+'</div>'+wroomerPublicEquipment(car.description||car.opis||'',esc)+'<div class="desc">'+wroomerVideoLink(esc(cleanPublicDescription(car.description||car.opis||'')))+'</div>'+
