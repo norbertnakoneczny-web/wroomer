@@ -59,9 +59,6 @@
     },
     "api/sitemap-artykuly.js": {
       "includeFiles": "blog/**"
-    },
-    "api/miasto-rybnik.js": {
-      "includeFiles": "miasta/rybnik.html"
     }
   },
   "redirects": [
