@@ -93,6 +93,10 @@ const SUPABASE_KEY="sb_publishable_S1qH_mBZaX7-bzmfJ0IVGA_6hxGbJWd";
 let imgs=[], cur=0, startX=0;
 const escapeHtml=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const safeImage=x=>{try{const raw=typeof x==='string'?x:(x&&typeof x==='object'?(x.url||x.src||x.image_url||''):'');const u=new URL(String(raw));return ['https:','http:'].includes(u.protocol)?u.href:'';}catch{return '';}};
+function wroomerDkImportMobileUrl(url){
+  const gallery = /^(https:\/\/bdpydgsfowtuvjnkyeeg\.supabase\.co\/storage\/v1\/object\/public\/images\/[\da-f-]+\/dkimport-(?:4f82945f|f9a1f80d|e113cf9f)\/)(\d+\.webp)$/;
+  return url.replace(gallery,'$1mobile/$2');
+}
 function getImages(car){
   let a=[];
   if(Array.isArray(car.images)) a=[...car.images];
@@ -185,6 +189,7 @@ async function load(){
     const car=Array.isArray(rows)?rows[0]:null;
     if(!car){ el.innerHTML=`<div style="padding:40px"><h1>Nie znaleziono</h1></div>`; return; }
     imgs=getImages(car);
+    if(matchMedia('(max-width: 767px)').matches) imgs=imgs.map(wroomerDkImportMobileUrl);
     updateListingSeo(car, slug);
     window.wroomerTrack?.('listing_view',{listing_slug:slug});
     if(imgs.length===0) imgs=['data:image/svg+xml;charset=utf-8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600"><rect width="800" height="600" fill="#151515"/><text x="400" y="300" fill="#aaa" font-family="sans-serif" font-size="32" text-anchor="middle">Brak zdjęcia</text></svg>')];
