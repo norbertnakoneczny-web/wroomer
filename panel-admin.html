@@ -235,7 +235,7 @@ document.querySelectorAll('[data-tab]').forEach(b=>b.addEventListener('click',()
    $('windsorSessions').textContent=rows.length?num(total):'Brak danych';
    $('windsorViews').textContent=rows.length?num(views):'Brak danych';
    $('windsorSummary').textContent=rows.length
-    ?'W wybranym okresie zarejestrowano '+num(total)+' wizyt i '+num(views)+' wyświetleń stron. Wizyty mogą obejmować powroty tych samych osób.'
+    ?'Liczba zarejestrowanych wizyt: '+num(total)+'. Wyświetlenia stron: '+num(views)+'. Wizyty mogą obejmować powroty tych samych osób.'
     :'Brak danych dla wybranego okresu. Spróbuj odświeżyć raport później.';
    const dates=new Map(),sources=new Map();
    rows.forEach(row=>{
