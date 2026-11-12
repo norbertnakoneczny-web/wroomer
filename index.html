@@ -776,7 +776,7 @@ document.getElementById('btnSave').onclick=async()=>{const saveButton=document.g
  wroomerPhotoMessage('Optymalizacja i wysyłanie zdjęcia '+(i+1)+' z '+selectedFiles.length+'...');
  imageUrls.push(await WroomerPhotos.upload(supabaseClient.storage.from('ogloszenia'),currentUser.id,entry.file,i,newPhotoPaths));
  }
- btn.textContent='Zapisywanie ogłoszenia...'; const engineCapacity=engineCapacityBeforeUpload; const gpsLat=document.getElementById('aLat').value.trim(),gpsLng=document.getElementById('aLng').value.trim(); const extra=`Przebieg: ${document.getElementById('aMileage').value||'-'} km | Paliwo: ${document.getElementById('aFuel').value||'-'} | Pojemność: ${engineCapacity||'-'}${gpsLat&&gpsLng&&Number.isFinite(Number(gpsLat))&&Number.isFinite(Number(gpsLng))?' | Lat: '+gpsLat+' | Lng: '+gpsLng:''}`; const sellerDesc=String(document.getElementById('aDesc').value||'').replace(/\s*\[Przebieg\s*:[^\]\r\n|]*\|\s*Paliwo\s*:[^\]\r\n]*\]\s*$/i,'').trim(); const fullDesc=sellerDesc + "\n\n["+extra+"]"; const eqDescription=sellerDesc+wroomerEqEncode()+"\n\n["+extra+"]"; const payload={title, brand, model:modelVal, price, accepts_trade:document.getElementById('aAcceptsTrade').checked, year:parseInt(document.getElementById('aYear').value)||null, location:document.getElementById('aLocation').value, phone:document.getElementById('aPhone').value, description:eqDescription, image_url:imageUrls[0]||null, images:imageUrls, user_id:currentUser.id, status:'active'}; let result; if(editingId){result=await supabaseClient.from('ogloszenia').update(payload).eq('id', editingId).eq('user_id',currentUser.id).select();} else {result=await supabaseClient.from('ogloszenia').insert([payload]).select();} if(result.error) throw result.error; if(!result.data?.length)throw new Error('Nie masz uprawnień do edycji tego ogłoszenia.'); listingSaved=true; if(!editingId){try{window.wroomerTrack?.('listing_published',{listing_id:String(result.data[0]?.id||'').slice(0,80)});}catch(trackError){console.warn('Analityka nie powiodła się:',trackError);}} editingId=null; selectedFiles=[]; closeModals(); try{await loadAds();}catch(refreshError){console.warn('Nie udało się odświeżyć listy po zapisie:',refreshError);}}catch(e){if(!listingSaved&&newPhotoPaths.length){try{const cleanup=await supabaseClient.storage.from('ogloszenia').remove(newPhotoPaths);if(cleanup.error)console.warn('Nie udało się wyczyścić zdjęć po błędzie publikacji:',cleanup.error.message);}catch(cleanupError){console.warn('Czyszczenie zdjęć nie powiodło się:',cleanupError);}}showError('addError', (e.code==='42501'||/permission denied|row-level security|violates row-level/i.test(e.message||''))?WROOMER_BLOCKED_MESSAGE:e.message);}finally{btn.textContent=editingId?'Zapisz zmiany':'Zatwierdź z GPS'; btn.disabled=false;wroomerPhotoMessage();}};
+ btn.textContent='Zapisywanie ogłoszenia...'; const engineCapacity=engineCapacityBeforeUpload; const gpsLat=document.getElementById('aLat').value.trim(),gpsLng=document.getElementById('aLng').value.trim(); const extra=`Przebieg: ${document.getElementById('aMileage').value||'-'} km | Paliwo: ${document.getElementById('aFuel').value||'-'} | Pojemność: ${engineCapacity||'-'}${gpsLat&&gpsLng&&Number.isFinite(Number(gpsLat))&&Number.isFinite(Number(gpsLng))?' | Lat: '+gpsLat+' | Lng: '+gpsLng:''}`; const sellerDesc=String(document.getElementById('aDesc').value||'').replace(/\s*\[Przebieg\s*:[^\]\r\n|]*\|\s*Paliwo\s*:[^\]\r\n]*\]\s*$/i,'').trim(); const fullDesc=sellerDesc + "\n\n["+extra+"]"; const eqDescription=sellerDesc+wroomerEqEncode()+"\n\n["+extra+"]"; const payload={title, brand, model:modelVal, price, accepts_trade:document.getElementById('aAcceptsTrade').checked, year:parseInt(document.getElementById('aYear').value)||null, location:document.getElementById('aLocation').value, phone:document.getElementById('aPhone').value, description:eqDescription, image_url:imageUrls[0]||null, images:imageUrls, user_id:currentUser.id, status:'active'}; const wasNewListing=!editingId; let result; if(editingId){result=await supabaseClient.from('ogloszenia').update(payload).eq('id', editingId).eq('user_id',currentUser.id).select();} else {result=await supabaseClient.from('ogloszenia').insert([payload]).select();} if(result.error) throw result.error; if(!result.data?.length)throw new Error('Nie masz uprawnień do edycji tego ogłoszenia.'); listingSaved=true; if(!editingId){try{window.wroomerTrack?.('listing_published',{listing_id:String(result.data[0]?.id||'').slice(0,80)});}catch(trackError){console.warn('Analityka nie powiodła się:',trackError);}} editingId=null; selectedFiles=[]; closeModals(); try{await loadAds();}catch(refreshError){console.warn('Nie udało się odświeżyć listy po zapisie:',refreshError);} if(wasNewListing){try{window.wroomerShareAfterPublish?.(result.data[0]);}catch(shareError){console.warn('Panel udostępniania nie otworzył się:',shareError);}}}catch(e){if(!listingSaved&&newPhotoPaths.length){try{const cleanup=await supabaseClient.storage.from('ogloszenia').remove(newPhotoPaths);if(cleanup.error)console.warn('Nie udało się wyczyścić zdjęć po błędzie publikacji:',cleanup.error.message);}catch(cleanupError){console.warn('Czyszczenie zdjęć nie powiodło się:',cleanupError);}}showError('addError', (e.code==='42501'||/permission denied|row-level security|violates row-level/i.test(e.message||''))?WROOMER_BLOCKED_MESSAGE:e.message);}finally{btn.textContent=editingId?'Zapisz zmiany':'Zatwierdź z GPS'; btn.disabled=false;wroomerPhotoMessage();}};
 function wroomerPhotoUrl(){if(!window.currentAd||!galleryImages.length)return '';const u=new URL(wroomerListingUrl(window.currentAd));u.searchParams.set('zdjecie',String(galleryIndex+1));return u.href;}
 async function wroomerCopyPhotoUrl(direct=false){const url=direct?galleryImages[galleryIndex]:wroomerPhotoUrl();if(!url)return;try{await navigator.clipboard.writeText(url);alert(direct?'Skopiowano bezpośredni adres zdjęcia!':'Skopiowano link do wybranego zdjęcia!');}catch(e){prompt('Skopiuj adres zdjęcia:',url);}}
 function wroomerListingUrl(ad){const u=new URL('/',location.origin);u.searchParams.set('ogloszenie',String(ad.id));return u.href;}
@@ -1278,4 +1278,42 @@ document.addEventListener('keydown',e=>{if(overlay.hidden)return;if(e.key==='Esc
 overlay.addEventListener('wheel',e=>{if(overlay.hidden||galleryImages.length<2||Math.abs(e.deltaY)<25)return;e.preventDefault();if(!overlay._lastWheel||Date.now()-overlay._lastWheel>400){overlay._lastWheel=Date.now();step(e.deltaY>0?1:-1)}},{passive:false});
 window.wroomerCloseLightbox=close;
 })();
-</script></body></html>
+</script>
+<link rel="stylesheet" href="/share-to-group.css">
+<script src="/share-to-group.js"></script>
+<script>
+(function(){
+  function stripShareDescription(row){
+    var raw=String((row&&row.description)||'');
+    if(typeof window.wroomerEqStrip==='function'){try{raw=window.wroomerEqStrip(raw);}catch(err){}}
+    return raw.replace(/\n?\[\[WROOMER_EQ:[^\]\r\n]+\]\]/g,'').replace(/\s*\[Przebieg\s*:[^\]\r\n]*\]\s*$/i,'').trim();
+  }
+  function buildShareListing(row){
+    if(!row)return null;
+    var extra=(typeof parseExtra==='function')?parseExtra(row.description||''):{};
+    var mileage=String(extra.mileage||'').replace(/[^0-9]/g,'');
+    var images=Array.isArray(row.images)?row.images:[];
+    return {
+      id:row.id||'',
+      slug:row.slug||'',
+      title:row.title||'',
+      year:row.year||row.rocznik||'',
+      price:row.price!=null?row.price:row.cena,
+      mileage:mileage,
+      fuel:extra.fuel||'',
+      gear:extra.gear||'',
+      location:row.location||row.lokalizacja||row.miasto||'',
+      url:'/auto/'+(row.slug||row.id||''),
+      image:images[0]||row.image_url||row.image||'',
+      description:stripShareDescription(row)
+    };
+  }
+  window.wroomerBuildShareListing=buildShareListing;
+  window.wroomerShareAfterPublish=function(row){
+    if(!row||!window.WroomerShare)return null;
+    try{return window.WroomerShare.openModal(buildShareListing(row),{role:'seller'});}
+    catch(err){console.warn('Nie udało się otworzyć panelu udostępniania:',err);return null;}
+  };
+})();
+</script>
+</body></html>
