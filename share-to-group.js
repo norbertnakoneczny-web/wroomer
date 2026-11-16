@@ -221,13 +221,15 @@
     if (listing.gear) detailBits.push(String(listing.gear));
     if (detailBits.length) lines.push(detailBits.join(', '));
 
-    var desc = shortDescription(listing.description || listing.opis, 180);
+    var desc = role === 'admin' ? String(listing.description || listing.opis || '').trim() : shortDescription(listing.description || listing.opis, 180);
     if (desc) {
       lines.push('');
       lines.push(desc);
     }
 
     lines.push('');
+    var photoCount = Array.isArray(listing.images) ? listing.images.length : (listing.image ? 1 : 0);
+    if (role === 'admin' && photoCount > 5) lines.push('📷 Pozostałe ' + (photoCount - 5) + ' zdjęć znajdziesz na WROOMER.PL');
     lines.push('➡️ Szczegóły i zdjęcia: ' + withUtm(listing.url, role));
     lines.push('');
 
@@ -374,6 +376,69 @@
       });
   }
 
+
+  function photoUrls(listing) {
+    var urls = Array.isArray(listing.images) ? listing.images : [];
+    return Array.from(new Set([listing.image].concat(urls).filter(function (url) {
+      return typeof url === 'string' && /^https:\/\//i.test(url);
+    }))).slice(0, 5);
+  }
+
+  // ZIP w formacie STORE, bez bibliotek zewnętrznych ani wielu wyskakujących pobrań.
+  function makePhotoZip(files) {
+    var encoder = new TextEncoder(), parts = [], directory = [], offset = 0;
+    var table = Array.from({length:256}, function(_, n) {
+      for(var k=0;k<8;k++) n = (n&1) ? (0xedb88320 ^ (n>>>1)) : (n>>>1);
+      return n>>>0;
+    });
+    function crc32(bytes) {
+      var c = 0xffffffff;
+      for(var i=0;i<bytes.length;i++) c=table[(c^bytes[i])&255]^(c>>>8);
+      return (c^0xffffffff)>>>0;
+    }
+    function dv(n) { return new DataView(new ArrayBuffer(n)); }
+    function push(bytes) { parts.push(bytes); offset+=bytes.byteLength; }
+    files.forEach(function(file) {
+      var name=encoder.encode(file.name), bytes=file.bytes, crc=crc32(bytes), start=offset;
+      var local=dv(30);
+      local.setUint32(0,0x04034b50,true);local.setUint16(4,20,true);
+      local.setUint32(14,crc,true);local.setUint32(18,bytes.length,true);
+      local.setUint32(22,bytes.length,true);local.setUint16(26,name.length,true);
+      push(new Uint8Array(local.buffer));push(name);push(bytes);
+      var central=dv(46);
+      central.setUint32(0,0x02014b50,true);central.setUint16(4,20,true);
+      central.setUint16(6,20,true);central.setUint32(16,crc,true);
+      central.setUint32(20,bytes.length,true);central.setUint32(24,bytes.length,true);
+      central.setUint16(28,name.length,true);central.setUint32(42,start,true);
+      directory.push(new Uint8Array(central.buffer),name);
+    });
+    var start=offset;
+    directory.forEach(push);
+    var end=dv(22);
+    end.setUint32(0,0x06054b50,true);
+    end.setUint16(8,files.length,true);end.setUint16(10,files.length,true);
+    end.setUint32(12,offset-start,true);end.setUint32(16,start,true);
+    push(new Uint8Array(end.buffer));
+    return new Blob(parts,{type:'application/zip'});
+  }
+
+  async function downloadPhotosZip(listing) {
+    var urls=photoUrls(listing);
+    if(!urls.length) return {ok:false,reason:'brak-zdjecia'};
+    var files=[];
+    for(var i=0;i<urls.length;i++) {
+      var response=await fetch(urls[i],{mode:'cors',credentials:'omit'});
+      if(!response.ok) throw new Error('Zdjęcie '+(i+1)+': HTTP '+response.status);
+      var blob=await response.blob(), ext='jpg';
+      try { blob=await blobToJpeg(blob,1600); }
+      catch(e) { ext=blob.type==='image/png'?'png':blob.type==='image/webp'?'webp':'jpg'; }
+      files.push({name:'zdjecie-'+String(i+1).padStart(2,'0')+'.'+ext,
+        bytes:new Uint8Array(await blob.arrayBuffer())});
+    }
+    saveBlob(makePhotoZip(files),fileNameFor(listing,'zip'));
+    return {ok:true,count:files.length};
+  }
+
   /* --------------------------------- UI -------------------------------- */
 
   function el(tag, className, text) {
@@ -403,7 +468,7 @@
     var head = el('div', 'wsg__head');
     head.appendChild(el('h3', 'wsg__title', role === 'admin' ? 'Udostępnij w grupie (admin)' : 'Udostępnij w grupie i sprzedaj szybciej'));
     head.appendChild(el('p', 'wsg__hint', role === 'admin'
-      ? 'Skopiuj tekst, pobierz zdjęcie i wklej post ręcznie w grupie. Jeden post na ogłoszenie.'
+      ? 'Skopiuj pełny opis, pobierz do 5 zdjęć w ZIP, rozpakuj zdjęcia i dodaj do posta na Facebooku.'
       : 'Wklej gotowy post w grupie — auto z linkiem dotrze do większej liczby kupujących.'));
     panel.appendChild(head);
 
@@ -416,9 +481,11 @@
     var actions = el('div', 'wsg__actions');
     var copyBtn = makeButton('Kopiuj post', 'primary');
     var imageBtn = makeButton('Pobierz zdjęcie');
+    var photosBtn = role === 'admin' ? makeButton('Pobierz 5 zdjęć (ZIP)') : null;
     var groupBtn = makeButton('Otwórz grupę');
     actions.appendChild(copyBtn);
     actions.appendChild(imageBtn);
+    if(photosBtn) actions.appendChild(photosBtn);
     actions.appendChild(groupBtn);
     panel.appendChild(actions);
 
@@ -475,6 +542,16 @@
           track('share_download_fallback', { listing_id: listingKey(listing) });
         }
       });
+    });
+
+    if(photosBtn) photosBtn.addEventListener('click',function() {
+      photosBtn.disabled=true;
+      setStatus(status,'Przygotowuję zdjęcia…');
+      downloadPhotosZip(listing).then(function(result) {
+        setStatus(status,result.ok?'Pobrano '+result.count+' zdjęć w ZIP. Rozpakuj i dodaj zdjęcia do posta.':'Brak zdjęć.',result.ok?'ok':'warn');
+      }).catch(function(error) {
+        setStatus(status,'Nie udało się pobrać zdjęć: '+error.message,'warn');
+      }).finally(function(){photosBtn.disabled=false;});
     });
 
     groupBtn.addEventListener('click', function () {
