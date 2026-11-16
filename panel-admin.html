@@ -169,6 +169,7 @@ function buildAdminShareListing(ad){
   location:ad.location||ad.lokalizacja||'',
   url:'/auto/'+(ad.slug||ad.id||''),
   image:ad.image_url||images[0]||'',
+  images:[...new Set([ad.image_url,...images].filter(url=>typeof url==='string'&&/^https:\/\//i.test(url)))],
   description:details.description
  };
 }
